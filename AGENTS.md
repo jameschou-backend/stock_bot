@@ -36,3 +36,14 @@
 
 ## 6) Troubleshooting
 - pip SSL 若失敗，可在「個人環境」手動用 trusted-host，但不要把 trusted-host 寫死到 Makefile 的正常路徑；只放 README troubleshooting。
+- 若 GitHub repo 顯示 empty，通常是遠端缺少 default branch（例如 main）。可用：
+- `git push -u origin <current_branch>:main`
+- 或到 GitHub 設定 default branch。
+
+## 7) Push / PR 規範
+- 每次完成一組可驗收的 commits，且 `make test` 通過後，必須 push 到遠端分支：
+- 首次：`git push -u origin HEAD`
+- 後續：`git push`
+- 不得 force push。
+- 不得直接推 main（除非明確要求）；預設推 feature branch，並以 PR 合併到 main。
+- 若 push 失敗（權限/認證），需輸出完整錯誤訊息與建議解法（PAT/SSH）。
