@@ -22,6 +22,8 @@ def _normalize_prices(df: pd.DataFrame) -> pd.DataFrame:
         "date": "trading_date",
         "Trading_Volume": "volume",
         "trading_volume": "volume",
+        "max": "high",
+        "min": "low",
     }
     df = df.rename(columns=rename_map)
     required = {"stock_id", "trading_date", "open", "high", "low", "close"}
@@ -38,6 +40,9 @@ def _normalize_prices(df: pd.DataFrame) -> pd.DataFrame:
         df["volume"] = None
 
     df = df.dropna(subset=["stock_id", "trading_date"])
+    df["stock_id"] = df["stock_id"].astype(str)
+    # FinMind 可能包含指數/產業字串，僅保留台股四碼代碼。
+    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]
     return df[["stock_id", "trading_date", "open", "high", "low", "close", "volume"]].drop_duplicates(
         subset=["stock_id", "trading_date"]
     )
