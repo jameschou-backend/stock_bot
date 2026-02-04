@@ -10,6 +10,7 @@ artifacts/models/*.txt
 artifacts/models/*.joblib
 artifacts/ai_prompts/
 artifacts/ai_answers/
+artifacts/reports/
 logs/
 .cache/
 .pytest_cache/

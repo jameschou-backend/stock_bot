@@ -72,6 +72,9 @@ def run_daily_pipeline() -> None:
     from skills import daily_pick
     run_skill("daily_pick", daily_pick.run)
 
+    from skills import export_report
+    run_skill("export_report", export_report.run)
+
 
 if __name__ == "__main__":
     run_daily_pipeline()
