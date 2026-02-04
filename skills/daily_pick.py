@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from typing import Dict, List
 
-import joblib
+try:
+    import joblib
+except ModuleNotFoundError as exc:
+    raise RuntimeError("Missing dependency 'joblib'. Install with `pip install -r requirements.txt`.") from exc
 import numpy as np
 import pandas as pd
 from sqlalchemy import func, select

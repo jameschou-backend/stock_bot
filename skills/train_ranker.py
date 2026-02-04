@@ -5,7 +5,10 @@ import hashlib
 from pathlib import Path
 from typing import Dict
 
-import joblib
+try:
+    import joblib
+except ModuleNotFoundError as exc:
+    raise RuntimeError("Missing dependency 'joblib'. Install with `pip install -r requirements.txt`.") from exc
 import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
@@ -76,7 +79,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         feature_names = list(feature_matrix.columns)
-        feature_set_hash = hashlib.sha256(\",\".join(sorted(feature_names)).encode(\"utf-8\")).hexdigest()[:16]
+        feature_set_hash = hashlib.sha256(",".join(sorted(feature_names)).encode("utf-8")).hexdigest()[:16]
         model_id = f"ranker_{train_start:%Y%m%d}_{train_end:%Y%m%d}_{feature_set_hash}"
 
         existing = db_session.query(ModelVersion).filter(ModelVersion.model_id == model_id).first()
