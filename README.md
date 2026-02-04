@@ -20,6 +20,7 @@
 
 6. 產出報表：
    - `make report`（輸出到 `artifacts/reports/<YYYY-MM-DD>/`）
+
 ## 測試
 - `make test`
 
