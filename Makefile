@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline api test dashboard ai-prompt report
+.PHONY: migrate pipeline api test dashboard ai-prompt
 
 migrate:
 	python scripts/migrate.py
@@ -14,9 +14,6 @@ test:
 
 dashboard:
 	streamlit run app/dashboard.py
-
-report:
-	python scripts/export_report.py
 
 ai-prompt:
 	AI_ASSIST_ENABLED=0 python scripts/ai_prompt_demo.py
