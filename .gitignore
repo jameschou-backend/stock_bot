@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+.venv
+.envrc
+.DS_Store
+artifacts/models/*.pkl
+artifacts/models/*.txt
+artifacts/models/*.joblib
+logs/
+.cache/
+.pytest_cache/
