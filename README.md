@@ -18,8 +18,27 @@
 5. 啟動 Dashboard：
    - `make dashboard`
 
+6. 產出報表：
+   - `make report`（輸出到 `artifacts/reports/<YYYY-MM-DD>/`）
+
 ## 測試
 - `make test`
+
+## L2 自動化（GitHub Actions）
+### 需要設定的 Secrets
+- `FINMIND_TOKEN`
+- `MYSQL_ROOT_PASSWORD`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHAT_ID`
+
+### 本機手動跑 L2
+- `make migrate`
+- `make pipeline`
+- 報表輸出在 `artifacts/reports/<YYYY-MM-DD>/`
+
+### 注意事項
+- Actions 使用臨時 MySQL 容器，每次 run 都是 fresh 資料。
+- 若需要資料累積，請改成外部 DB（TODO）。
 
 ## API
 - 詳細說明：`docs/api.md`
