@@ -24,31 +24,53 @@ def _should_train(config) -> bool:
 def run_daily_pipeline() -> None:
     config = load_config()
 
+    def run_skill(skill_name, runner):
+        try:
+            with get_session() as session:
+                return runner(config, session)
+        except Exception as exc:
+            import inspect
+            import platform
+            import sys
+            from skills import ai_assist
+
+            with get_session() as session:
+                runner_path = inspect.getsourcefile(runner)
+                context_files = [__file__]
+                if runner_path:
+                    context_files.append(runner_path)
+                ai_assist.run(
+                    config,
+                    session,
+                    job_name=skill_name,
+                    error=exc,
+                    context_files=context_files,
+                    extra_context={
+                        "os": platform.platform(),
+                        "python": sys.version.split()[0],
+                    },
+                )
+            raise
+
     # 延遲匯入技能模組，避免啟動時載入不必要依賴，並降低 import-time 失敗風險。
     from skills import ingest_prices
-    with get_session() as session:
-        ingest_prices.run(config, session)
+    run_skill("ingest_prices", ingest_prices.run)
 
     from skills import ingest_institutional
-    with get_session() as session:
-        ingest_institutional.run(config, session)
+    run_skill("ingest_institutional", ingest_institutional.run)
 
     from skills import build_features
-    with get_session() as session:
-        build_features.run(config, session)
+    run_skill("build_features", build_features.run)
 
     from skills import build_labels
-    with get_session() as session:
-        build_labels.run(config, session)
+    run_skill("build_labels", build_labels.run)
 
     if _should_train(config):
         from skills import train_ranker
-        with get_session() as session:
-            train_ranker.run(config, session)
+        run_skill("train_ranker", train_ranker.run)
 
     from skills import daily_pick
-    with get_session() as session:
-        daily_pick.run(config, session)
+    run_skill("daily_pick", daily_pick.run)
 
 
 if __name__ == "__main__":

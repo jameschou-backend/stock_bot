@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline api test
+.PHONY: migrate pipeline api test ai-prompt
 
 migrate:
 	python scripts/migrate.py
@@ -7,7 +7,10 @@ pipeline:
 	python scripts/run_daily.py
 
 api:
-	uvicorn app.api:app --host 0.0.0.0 --port 8000
+	python scripts/run_api.py
 
 test:
-	pytest -q
+	python scripts/run_tests.py
+
+ai-prompt:
+	AI_ASSIST_ENABLED=0 python scripts/ai_prompt_demo.py
