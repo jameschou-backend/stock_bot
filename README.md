@@ -15,6 +15,9 @@
 4. 啟動 API：
    - `make api`
 
+5. 啟動 Dashboard：
+   - `make dashboard`
+
 ## 測試
 - `make test`
 
