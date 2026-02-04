@@ -13,6 +13,20 @@ from app.job_utils import finish_job, start_job
 from app.models import Label, RawPrice
 
 
+def _compute_labels(df: pd.DataFrame, horizon: int) -> pd.DataFrame:
+    df = df.copy()
+    df["trading_date"] = pd.to_datetime(df["trading_date"]).dt.date
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.sort_values(["stock_id", "trading_date"])
+
+    def apply_group(group: pd.DataFrame) -> pd.DataFrame:
+        group = group.sort_values("trading_date").copy()
+        group["future_ret_h"] = group["close"].shift(-horizon) / group["close"] - 1
+        return group
+
+    return df.groupby("stock_id", group_keys=False).apply(apply_group)
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "build_labels")
     try:
@@ -47,15 +61,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        df["close"] = pd.to_numeric(df["close"], errors="coerce")
-        df = df.sort_values(["stock_id", "trading_date"])
-
-        def apply_group(group: pd.DataFrame) -> pd.DataFrame:
-            group = group.sort_values("trading_date").copy()
-            group["future_ret_h"] = group["close"].shift(-horizon) / group["close"] - 1
-            return group
-
-        df = df.groupby("stock_id", group_keys=False).apply(apply_group)
+        df = _compute_labels(df, horizon)
         df = df[df["trading_date"] <= max_label_date]
         df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["future_ret_h"])
         if df.empty:
