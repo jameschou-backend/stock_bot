@@ -34,6 +34,11 @@ class AppConfig:
     api_host: str
     api_port: int
     force_train: bool = False
+    openai_api_key: str = ""
+    openai_model: str = "gpt-4.1-mini"
+    ai_assist_enabled: bool = False
+    ai_assist_max_code_lines: int = 200
+    ai_assist_max_log_lines: int = 200
 
     @property
     def db_url(self) -> str:
@@ -93,4 +98,9 @@ def load_config() -> AppConfig:
         api_host=str(pick("API_HOST", "0.0.0.0")),
         api_port=int(pick("API_PORT", 8000)),
         force_train=str(pick("FORCE_TRAIN", "0")) in {"1", "true", "True"},
+        openai_api_key=str(pick("OPENAI_API_KEY", "")),
+        openai_model=str(pick("OPENAI_MODEL", "gpt-4.1-mini")),
+        ai_assist_enabled=str(pick("AI_ASSIST_ENABLED", "0")) in {"1", "true", "True"},
+        ai_assist_max_code_lines=int(pick("AI_ASSIST_MAX_CODE_LINES", 200)),
+        ai_assist_max_log_lines=int(pick("AI_ASSIST_MAX_LOG_LINES", 200)),
     )
