@@ -42,6 +42,9 @@ class AppConfig:
     bootstrap_days: int = 365
     min_avg_volume: int = 0
     fallback_days: int = 10
+    # API Rate Limiting
+    finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
+    chunk_days: int = 180  # 資料抓取每個 chunk 的天數
 
     @property
     def db_url(self) -> str:
@@ -109,4 +112,6 @@ def load_config() -> AppConfig:
         bootstrap_days=int(pick("BOOTSTRAP_DAYS", 365)),
         min_avg_volume=int(pick("MIN_AVG_VOLUME", 0)),
         fallback_days=int(pick("FALLBACK_DAYS", 10)),
+        finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),
+        chunk_days=int(pick("CHUNK_DAYS", 180)),
     )

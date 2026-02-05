@@ -15,3 +15,6 @@ API_PORT: 8000
 BOOTSTRAP_DAYS: 365
 MIN_AVG_VOLUME: 0
 FALLBACK_DAYS: 10
+# API Rate Limiting
+FINMIND_REQUESTS_PER_HOUR: 6000  # FinMind API 每小時請求限制（付費會員 6000，免費 600）
+CHUNK_DAYS: 180  # 資料抓取每個 chunk 的天數（建議 180 天減少 API 次數）

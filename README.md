@@ -62,6 +62,38 @@ Pipeline 會在 ingest 後執行資料品質檢查：
 - 可透過 `BOOTSTRAP_DAYS` 環境變數調整
 - Backfill 結果記錄於 `jobs.logs_json`
 
+### 歷史資料回補（5 年）
+
+使用 `backfill_history.py` 腳本抓取過去 5 年資料：
+
+```bash
+# 估算 API 用量
+make backfill-estimate
+
+# 執行回補（支援中斷續傳）
+make backfill
+
+# 查看回補進度
+make backfill-status
+
+# 指定日期範圍
+python scripts/backfill_history.py --start 2021-01-01 --end 2026-02-05
+
+# 重新開始（清除進度）
+python scripts/backfill_history.py --reset --years 5
+```
+
+**API 用量優化說明：**
+
+| 模式 | 5 年資料 API 次數 | 預估時間 |
+|------|------------------|----------|
+| 全市場模式（chunk=180天） | ~23 次 | ~1 分鐘 |
+| 逐檔批次模式（chunk=180天） | ~400 次 | ~5 分鐘 |
+
+**相關設定（config.yaml 或環境變數）：**
+- `FINMIND_REQUESTS_PER_HOUR`: 每小時 API 限制（付費 6000，免費 600）
+- `CHUNK_DAYS`: 每個 chunk 天數（預設 180 天）
+
 ## L2 自動化（GitHub Actions）
 ### 需要設定的 Secrets
 - `FINMIND_TOKEN`

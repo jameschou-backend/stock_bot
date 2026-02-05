@@ -8,7 +8,10 @@
 ## 2) 永遠遵守的限制
 - 不可把 `FINMIND_TOKEN`、DB 密碼或任何 secret 寫入 repo。
 - 不可修改 `.env`（只可修改 `.env.example`）。
-- 不可直接改 `main`（除非明確要求）；預設在 feature branch 工作。
+- **允許直接在 `main` 作業**（依使用者要求），但必須遵守：
+  - 每個明確問題修完就 commit（小步提交，禁止 WIP commit）
+  - push 前必跑 `make test`；涉及 pipeline/DB/資料 ingest 變更時，必跑第 3 點完整驗收
+  - 若造成回歸，必須使用 `git revert` 回滾（禁止 reset/force push）
 - 不可引入「silent fallback」造成不同環境不同行為；缺依賴必須用明確錯誤訊息指引安裝。
 
 ## 3) 必跑驗收命令（每次改動後）
@@ -47,9 +50,11 @@
 - 或到 GitHub 設定 default branch。
 
 ## 8) Push / PR 規範
-- 每次完成一組可驗收的 commits，且 `make test` 通過後，必須 push 到遠端分支：
-- 首次：`git push -u origin HEAD`
-- 後續：`git push`
+- 每次完成一組可驗收的 commits，且 `make test` 通過後，必須 push 到遠端：
+  - `git push`
 - 不得 force push。
-- 不得直接推 main（除非明確要求）；預設推 feature branch，並以 PR 合併到 main。
+- **允許直接推 main**（依使用者要求），但 push 前需滿足：
+  - `make test` 通過
+  - 涉及 pipeline/DB/ingest 變更時，需完整跑第 3 點驗收（pipeline + api + curls）
+  - 發現回歸優先用 `git revert` 回滾提交
 - 若 push 失敗（權限/認證），需輸出完整錯誤訊息與建議解法（PAT/SSH）。
