@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline api test dashboard ai-prompt report
+.PHONY: migrate pipeline api test dashboard ai-prompt report cron-daily
 
 migrate:
 	python scripts/migrate.py
@@ -17,6 +17,9 @@ dashboard:
 
 report:
 	python scripts/export_report.py
+
+cron-daily:
+	bash scripts/cron_daily.sh
 
 ai-prompt:
 	AI_ASSIST_ENABLED=0 python scripts/ai_prompt_demo.py
