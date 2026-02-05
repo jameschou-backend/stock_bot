@@ -36,6 +36,11 @@
 - `make pipeline`
 - 報表輸出在 `artifacts/reports/<YYYY-MM-DD>/`
 
+### 本機 crontab 設定
+- 週一到週五 17:30：`30 17 * * 1-5 /bin/bash -lc "bash <repo>/scripts/cron_daily.sh"`
+- 測試方式：先改成每分鐘跑一次，例如 `* * * * * /bin/bash -lc "bash <repo>/scripts/cron_daily.sh"`
+- 常見坑：cron PATH、venv、dotenv（需確保 `.env` 可被讀取）
+
 ### 注意事項
 - Actions 使用臨時 MySQL 容器，每次 run 都是 fresh 資料。
 - 若需要資料累積，請改成外部 DB（TODO）。
