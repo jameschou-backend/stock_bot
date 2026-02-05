@@ -53,6 +53,9 @@ def run_daily_pipeline() -> None:
             raise
 
     # 延遲匯入技能模組，避免啟動時載入不必要依賴，並降低 import-time 失敗風險。
+    from skills import bootstrap_history
+    run_skill("bootstrap_history", bootstrap_history.run)
+
     from skills import ingest_prices
     run_skill("ingest_prices", ingest_prices.run)
 

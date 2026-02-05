@@ -39,6 +39,9 @@ class AppConfig:
     ai_assist_enabled: bool = False
     ai_assist_max_code_lines: int = 200
     ai_assist_max_log_lines: int = 200
+    bootstrap_days: int = 365
+    min_avg_volume: int = 0
+    fallback_days: int = 10
 
     @property
     def db_url(self) -> str:
@@ -103,4 +106,7 @@ def load_config() -> AppConfig:
         ai_assist_enabled=str(pick("AI_ASSIST_ENABLED", "0")) in {"1", "true", "True"},
         ai_assist_max_code_lines=int(pick("AI_ASSIST_MAX_CODE_LINES", 200)),
         ai_assist_max_log_lines=int(pick("AI_ASSIST_MAX_LOG_LINES", 200)),
+        bootstrap_days=int(pick("BOOTSTRAP_DAYS", 365)),
+        min_avg_volume=int(pick("MIN_AVG_VOLUME", 0)),
+        fallback_days=int(pick("FALLBACK_DAYS", 10)),
     )
