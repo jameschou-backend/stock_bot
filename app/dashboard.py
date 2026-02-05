@@ -72,6 +72,61 @@ def fetch_raw_price_freshness(engine) -> dict:
     return {"latest_date": latest_date, "rows": rows}
 
 
+def fetch_data_freshness(engine, table_name: str) -> dict:
+    """通用資料新鮮度查詢"""
+    try:
+        max_q = text(f"SELECT MAX(trading_date) AS trading_date FROM {table_name}")
+        max_df = pd.read_sql(max_q, engine)
+        latest_date = _to_date(max_df.loc[0, "trading_date"]) if not max_df.empty else None
+        if latest_date is None:
+            return {"latest_date": None, "rows": 0, "lag_days": None}
+        
+        count_q = text(f"SELECT COUNT(*) AS rows FROM {table_name} WHERE trading_date = :date")
+        count_df = pd.read_sql(count_q, engine, params={"date": latest_date})
+        rows = int(count_df.loc[0, "rows"]) if not count_df.empty else 0
+        
+        lag_days = (date.today() - latest_date).days
+        return {"latest_date": latest_date, "rows": rows, "lag_days": lag_days}
+    except Exception:
+        return {"latest_date": None, "rows": 0, "lag_days": None, "error": "table not found"}
+
+
+def fetch_recent_coverage(engine, table_name: str, days: int = 10) -> pd.DataFrame:
+    """查詢最近 N 天的每日股票數覆蓋"""
+    try:
+        query = text(f"""
+            SELECT trading_date, COUNT(DISTINCT stock_id) AS stock_count
+            FROM {table_name}
+            GROUP BY trading_date
+            ORDER BY trading_date DESC
+            LIMIT :days
+        """)
+        df = pd.read_sql(query, engine, params={"days": days})
+        return df.sort_values("trading_date")
+    except Exception:
+        return pd.DataFrame()
+
+
+def fetch_stock_universe_summary(engine) -> dict:
+    """查詢股票 universe 統計"""
+    try:
+        query = text("""
+            SELECT 
+                COUNT(*) AS total,
+                SUM(CASE WHEN security_type = 'stock' THEN 1 ELSE 0 END) AS stocks,
+                SUM(CASE WHEN security_type = 'etf' THEN 1 ELSE 0 END) AS etfs,
+                SUM(CASE WHEN is_listed = 1 THEN 1 ELSE 0 END) AS listed,
+                SUM(CASE WHEN is_listed = 0 THEN 1 ELSE 0 END) AS delisted
+            FROM stocks
+        """)
+        df = pd.read_sql(query, engine)
+        if df.empty:
+            return {"total": 0, "stocks": 0, "etfs": 0, "listed": 0, "delisted": 0}
+        return df.iloc[0].to_dict()
+    except Exception:
+        return {"total": 0, "stocks": 0, "etfs": 0, "listed": 0, "delisted": 0, "error": "table not found"}
+
+
 def fetch_picks(engine, pick_date: date) -> pd.DataFrame:
     query = text(
         """
@@ -181,29 +236,94 @@ st.title("台股 ML 選股 Dashboard")
 config = load_config()
 engine = get_engine()
 
+# ========== 資料層狀態總覽 ==========
+st.subheader("資料層狀態")
+
+# 查詢各資料表新鮮度
+prices_freshness = fetch_data_freshness(engine, "raw_prices")
+inst_freshness = fetch_data_freshness(engine, "raw_institutional")
+margin_freshness = fetch_data_freshness(engine, "raw_margin_short")
+stock_universe = fetch_stock_universe_summary(engine)
+
+# 使用 columns 排版
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric(
+        label="raw_prices",
+        value=str(prices_freshness.get("latest_date") or "無資料"),
+        delta=f"落後 {prices_freshness.get('lag_days', '?')} 天" if prices_freshness.get("lag_days") else None,
+    )
+    st.caption(f"最新筆數: {prices_freshness.get('rows', 0):,}")
+
+with col2:
+    st.metric(
+        label="raw_institutional",
+        value=str(inst_freshness.get("latest_date") or "無資料"),
+        delta=f"落後 {inst_freshness.get('lag_days', '?')} 天" if inst_freshness.get("lag_days") else None,
+    )
+    st.caption(f"最新筆數: {inst_freshness.get('rows', 0):,}")
+
+with col3:
+    st.metric(
+        label="raw_margin_short",
+        value=str(margin_freshness.get("latest_date") or "無資料"),
+        delta=f"落後 {margin_freshness.get('lag_days', '?')} 天" if margin_freshness.get("lag_days") else None,
+    )
+    st.caption(f"最新筆數: {margin_freshness.get('rows', 0):,}")
+
+with col4:
+    st.metric(
+        label="股票 Universe",
+        value=f"{stock_universe.get('listed', 0):,} 上市",
+    )
+    st.caption(f"股票: {stock_universe.get('stocks', 0)}, ETF: {stock_universe.get('etfs', 0)}")
+
+# 近 10 日覆蓋率趨勢
+st.subheader("近 10 交易日覆蓋率")
+prices_coverage = fetch_recent_coverage(engine, "raw_prices", 10)
+inst_coverage = fetch_recent_coverage(engine, "raw_institutional", 10)
+margin_coverage = fetch_recent_coverage(engine, "raw_margin_short", 10)
+
+if not prices_coverage.empty or not inst_coverage.empty:
+    coverage_dfs = []
+    if not prices_coverage.empty:
+        prices_coverage = prices_coverage.rename(columns={"stock_count": "prices"})
+        coverage_dfs.append(prices_coverage.set_index("trading_date")["prices"])
+    if not inst_coverage.empty:
+        inst_coverage = inst_coverage.rename(columns={"stock_count": "institutional"})
+        coverage_dfs.append(inst_coverage.set_index("trading_date")["institutional"])
+    if not margin_coverage.empty:
+        margin_coverage = margin_coverage.rename(columns={"stock_count": "margin"})
+        coverage_dfs.append(margin_coverage.set_index("trading_date")["margin"])
+    
+    if coverage_dfs:
+        combined = pd.concat(coverage_dfs, axis=1)
+        st.line_chart(combined)
+else:
+    st.info("無覆蓋率資料")
+
+st.divider()
+
+# ========== Pipeline 狀態 ==========
+st.subheader("最近 Job 狀態")
 latest_job = fetch_latest_job(engine)
 freshness = fetch_raw_price_freshness(engine)
 
-st.subheader("Pipeline 狀態")
 if latest_job:
+    job_status = latest_job.get("status", "unknown")
+    status_color = "green" if job_status == "success" else "red" if job_status == "failed" else "orange"
+    st.markdown(f"**{latest_job.get('job_name')}**: :{status_color}[{job_status}]")
     st.write(
         {
-            "job_name": latest_job.get("job_name"),
-            "status": latest_job.get("status"),
             "ended_at": latest_job.get("ended_at"),
-            "error_text": (latest_job.get("error_text") or "")[:200],
+            "error_text": (latest_job.get("error_text") or "")[:200] or None,
         }
     )
 else:
     st.write("尚無 job records")
 
-st.subheader("資料新鮮度")
-st.write(
-    {
-        "raw_prices_latest_date": freshness.get("latest_date"),
-        "raw_prices_rows": freshness.get("rows"),
-    }
-)
+st.divider()
 
 latest_pick_date = fetch_latest_pick_date(engine)
 if latest_pick_date is None:

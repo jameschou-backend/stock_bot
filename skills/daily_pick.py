@@ -14,11 +14,29 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import Feature, ModelVersion, Pick, RawPrice
+from app.models import Feature, ModelVersion, Pick, RawPrice, Stock
 from skills.build_features import FEATURE_COLUMNS
 
 
 REASON_FEATURES = FEATURE_COLUMNS[:8]
+
+
+def _get_valid_stock_universe(session: Session) -> set:
+    """取得有效股票 universe（排除 ETF、權證等）
+    
+    過濾條件：
+    - security_type = 'stock' 
+    - is_listed = True
+    
+    若 stocks 表為空，回傳空集合（不會阻擋流程，但會記錄 warning）
+    """
+    stmt = (
+        select(Stock.stock_id)
+        .where(Stock.security_type == "stock")
+        .where(Stock.is_listed == True)
+    )
+    rows = session.execute(stmt).fetchall()
+    return {row[0] for row in rows}
 
 
 def _load_latest_model(session: Session) -> ModelVersion | None:
@@ -198,12 +216,28 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         artifact = joblib.load(model_version.artifact_path)
         model = artifact["model"]
         feature_names = artifact["feature_names"]
-
-        stmt = (
-            select(Feature.stock_id, Feature.trading_date, Feature.features_json)
-            .where(Feature.trading_date.in_(candidate_dates))
-            .order_by(Feature.stock_id, Feature.trading_date)
-        )
+        
+        # 取得有效股票 universe（排除 ETF、權證等）
+        valid_stocks = _get_valid_stock_universe(db_session)
+        coverage_stats["valid_stock_universe_count"] = len(valid_stocks)
+        
+        if not valid_stocks:
+            # stocks 表為空時，不過濾（向後相容）
+            coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
+            stmt = (
+                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                .where(Feature.trading_date.in_(candidate_dates))
+                .order_by(Feature.stock_id, Feature.trading_date)
+            )
+        else:
+            coverage_stats["stock_universe_filter"] = "enabled"
+            stmt = (
+                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                .where(Feature.trading_date.in_(candidate_dates))
+                .where(Feature.stock_id.in_(valid_stocks))
+                .order_by(Feature.stock_id, Feature.trading_date)
+            )
+        
         df = pd.read_sql(stmt, db_session.get_bind())
         
         coverage_stats["total_feature_rows"] = len(df)

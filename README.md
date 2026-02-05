@@ -9,16 +9,20 @@
 2. 建表：
    - `make migrate`
 
-3. 執行每日 pipeline：
-   - `make pipeline`
+3. **初始化歷史資料（首次使用必跑）**：
+   - `make backfill-10y`（10 年完整回補，包含價格/法人/融資融券）
+   - 支援中斷續傳，可隨時 Ctrl+C 再重新執行
 
-4. 啟動 API：
+4. 執行每日 pipeline：
+   - `make pipeline`（會自動更新當日資料並產生選股）
+
+5. 啟動 API：
    - `make api`
 
-5. 啟動 Dashboard：
+6. 啟動 Dashboard：
    - `make dashboard`
 
-6. 產出報表：
+7. 產出報表：
    - `make report`（輸出到 `artifacts/reports/<YYYY-MM-DD>/`）
 
 ## 測試
@@ -33,18 +37,34 @@
 |--------|-----------------|------|------|
 | `raw_prices` | `TaiwanStockPrice` | 日頻 | 股價 OHLCV |
 | `raw_institutional` | `TaiwanStockInstitutionalInvestorsBuySell` | 日頻 (21:00 更新) | 三大法人買賣超 |
+| `raw_margin_short` | `TaiwanStockMarginPurchaseShortSale` | 日頻 | 融資融券（選用） |
+| `stocks` | `TaiwanStockInfo` + `TaiwanStockDelisting` | 日更新 | 股票基本資料 |
 
-### Data Quality Check
-Pipeline 會在 ingest 後執行資料品質檢查：
+### 股票 Universe 過濾
+選股時會自動過濾：
+- `security_type = 'stock'`（排除 ETF、權證等）
+- `is_listed = 1`（排除已下市股票）
 
-1. **raw_prices**:
-   - 最新 trading_date 不可落後超過 5 天
-   - 最近 10 個交易日，每日 distinct stock_id >= 1200
+### Data Quality Check（L2 Hardening）
+Pipeline 會在 ingest 後執行資料品質檢查，採用**比例 + 最小值雙門檻**：
 
-2. **raw_institutional**:
-   - 最新 trading_date 不可落後 raw_prices 超過 1 天
-   - 最近 10 個交易日，每日 distinct stock_id >= 800
+1. **raw_prices**（必要）:
+   - 最新 trading_date 落後 <= 1 交易日
+   - 覆蓋率 >= 70%，每日 distinct stock_id >= 1200
+
+2. **raw_institutional**（必要）:
+   - 最新 trading_date 落後 <= 1 交易日
+   - 覆蓋率 >= 50%，每日 distinct stock_id >= 800
    - 0050 最近 30 交易日筆數 >= 20（驗證日頻）
+
+3. **raw_margin_short**（選用，不影響核心流程）:
+   - 覆蓋率 >= 50%，每日 distinct stock_id >= 800
+
+**門檻可在 `.env` 中配置：**
+- `DQ_MIN_STOCKS_PRICES`: prices 每日最小股票數（預設 1200）
+- `DQ_MIN_STOCKS_INSTITUTIONAL`: institutional 每日最小股票數（預設 800）
+- `DQ_COVERAGE_RATIO_PRICES`: prices 覆蓋率門檻（預設 0.7）
+- `DQ_MAX_LAG_TRADING_DAYS`: 允許最大落後交易日（預設 1）
 
 ### 常見資料不齊原因與解法
 
@@ -56,43 +76,52 @@ Pipeline 會在 ingest 後執行資料品質檢查：
 | `wrong_frequency` | 法人資料非日頻（月/週頻） | 確認 dataset 為 `TaiwanStockInstitutionalInvestorsBuySell` |
 | `universe_too_small` | 每日股票數過少 | 檢查 token 權限或 API 限流 |
 | `prices_stale` | 資料過舊 | 確認排程正常執行，或手動 `make pipeline` |
+| `raw_prices empty` | 資料庫為空 | 執行 `make backfill-10y` |
 
-### Backfill 機制
-- Fresh DB 或資料不足時，自動回補近 365 日曆天
-- 可透過 `BOOTSTRAP_DAYS` 環境變數調整
-- Backfill 結果記錄於 `jobs.logs_json`
+### 歷史資料回補
 
-### 歷史資料回補（5 年）
-
-使用 `backfill_history.py` 腳本抓取過去 5 年資料：
-
+**首次使用 - 10 年完整回補：**
 ```bash
 # 估算 API 用量
 make backfill-estimate
 
-# 執行回補（支援中斷續傳）
-make backfill
+# 執行 10 年回補（prices + institutional + margin）
+make backfill-10y
 
 # 查看回補進度
 make backfill-status
+```
+
+**日常增量更新：**
+- `make pipeline` 會自動更新當日增量資料
+- 若 DB 為空，會提示先執行 `make backfill-10y`
+
+**其他回補指令：**
+```bash
+# 只回補 5 年（較快）
+make backfill
+
+# 只回補融資融券
+make backfill-margin
 
 # 指定日期範圍
-python scripts/backfill_history.py --start 2021-01-01 --end 2026-02-05
+python scripts/backfill_history.py --start 2016-01-01 --end 2026-02-05
 
 # 重新開始（清除進度）
-python scripts/backfill_history.py --reset --years 5
+python scripts/backfill_history.py --reset --years 10
 ```
 
 **API 用量優化說明：**
 
-| 模式 | 5 年資料 API 次數 | 預估時間 |
+| 模式 | 10 年資料 API 次數 | 預估時間 |
 |------|------------------|----------|
-| 全市場模式（chunk=180天） | ~23 次 | ~1 分鐘 |
-| 逐檔批次模式（chunk=180天） | ~400 次 | ~5 分鐘 |
+| 全市場模式（chunk=180天） | ~46 次 | ~2 分鐘 |
+| 逐檔批次模式（chunk=180天） | ~800 次 | ~10 分鐘 |
 
-**相關設定（config.yaml 或環境變數）：**
+**相關設定（`.env` 或環境變數）：**
 - `FINMIND_REQUESTS_PER_HOUR`: 每小時 API 限制（付費 6000，免費 600）
 - `CHUNK_DAYS`: 每個 chunk 天數（預設 180 天）
+- `BACKFILL_YEARS`: 預設回補年數（預設 10）
 
 ## L2 自動化（GitHub Actions）
 ### 需要設定的 Secrets

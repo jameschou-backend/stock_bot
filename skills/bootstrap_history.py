@@ -1,16 +1,16 @@
 """Bootstrap History 模組
 
-負責檢查 DB 是否需要 backfill，並自動回補近 N 日曆天的歷史資料。
+負責檢查 DB 資料狀態，並執行小規模增量回補（bootstrap_days）。
 
-Backfill 觸發條件：
-1. raw_prices 或 raw_institutional 表為空
-2. 資料跨度不足 required_days
+重要：
+- 此模組只負責 bootstrap_days 範圍的增量回補（預設 365 天）
+- 10 年完整 backfill 需要使用 `make backfill-10y` 顯式觸發
+- 若 DB 完全為空，會提示使用者先執行 backfill-10y
 
-若 backfill 後資料仍不足，會產生詳細錯誤訊息：
-- 價格缺資料 (prices_insufficient)
-- 法人 dataset 錯頻率 (inst_wrong_frequency)
-- Universe 太小 (universe_too_small)
-- Token/Limit 問題 (api_issue)
+行為邏輯：
+1. 若 DB 為空 → 提示需要先執行 make backfill-10y，不自動回補
+2. 若 DB 有資料但跨度不足 bootstrap_days → 執行增量回補補足
+3. 若 DB 資料充足 → 跳過
 """
 
 from __future__ import annotations
@@ -70,21 +70,33 @@ def _should_backfill(
     inst_max: date | None,
     required_days: int,
 ) -> HistoryStatus:
+    """檢查是否需要 backfill
+    
+    Returns:
+        HistoryStatus，其中 reason_category 可能為：
+        - 'empty': DB 完全為空，需要先執行 make backfill-10y
+        - 'insufficient': 資料不足，可執行增量回補
+        - 'ok': 資料充足
+    """
     price_span = _span_days(price_min, price_max)
     inst_span = _span_days(inst_min, inst_max)
+    
+    # DB 完全為空 - 需要先執行 backfill-10y
     if price_span is None:
         return HistoryStatus(
-            True, "raw_prices empty", "empty",
-            price_min, price_max, inst_min, inst_max
-        )
-    if price_span < required_days:
-        return HistoryStatus(
-            True, f"raw_prices span {price_span}d < {required_days}d", "insufficient",
+            True, "raw_prices empty - run 'make backfill-10y' first", "empty",
             price_min, price_max, inst_min, inst_max
         )
     if inst_span is None:
         return HistoryStatus(
-            True, "raw_institutional empty", "empty",
+            True, "raw_institutional empty - run 'make backfill-10y' first", "empty",
+            price_min, price_max, inst_min, inst_max
+        )
+    
+    # 資料不足 - 可執行增量回補
+    if price_span < required_days:
+        return HistoryStatus(
+            True, f"raw_prices span {price_span}d < {required_days}d", "insufficient",
             price_min, price_max, inst_min, inst_max
         )
     if inst_span < required_days:
@@ -92,6 +104,7 @@ def _should_backfill(
             True, f"raw_institutional span {inst_span}d < {required_days}d", "insufficient",
             price_min, price_max, inst_min, inst_max
         )
+    
     return HistoryStatus(False, "ok", "ok", price_min, price_max, inst_min, inst_max)
 
 
@@ -220,9 +233,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return logs
 
+        # DB 完全為空 - 需要先執行 make backfill-10y
+        if status.reason_category == "empty":
+            error_msg = (
+                "資料庫為空，無法進行增量回補。\n"
+                "請先執行 'make backfill-10y' 進行完整歷史資料回補。\n"
+                f"原因：{status.reason}"
+            )
+            logs["mode"] = "error"
+            logs["error"] = error_msg
+            finish_job(db_session, job_id, "failed", error_text=error_msg, logs=logs)
+            raise RuntimeError(error_msg)
+
         start_date, end_date = _backfill_range(config)
         logs.update({
-            "mode": "backfill",
+            "mode": "backfill_incremental",
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
         })

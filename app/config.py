@@ -45,6 +45,17 @@ class AppConfig:
     # API Rate Limiting
     finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
     chunk_days: int = 180  # 資料抓取每個 chunk 的天數
+    # Backfill 設定
+    backfill_years: int = 10  # 完整 backfill 年數
+    # Data Quality 門檻（比例 + 最小值雙門檻）
+    dq_min_stocks_prices: int = 1200  # raw_prices 每日最小股票數
+    dq_min_stocks_institutional: int = 800  # raw_institutional 每日最小股票數
+    dq_min_stocks_margin: int = 800  # raw_margin_short 每日最小股票數
+    dq_coverage_ratio_prices: float = 0.7  # raw_prices 覆蓋率門檻
+    dq_coverage_ratio_institutional: float = 0.5  # raw_institutional 覆蓋率門檻
+    dq_coverage_ratio_margin: float = 0.5  # raw_margin_short 覆蓋率門檻
+    dq_max_lag_trading_days: int = 1  # 允許最大落後交易日數
+    dq_max_stale_calendar_days: int = 5  # 允許最大落後日曆天數
 
     @property
     def db_url(self) -> str:
@@ -114,4 +125,13 @@ def load_config() -> AppConfig:
         fallback_days=int(pick("FALLBACK_DAYS", 10)),
         finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),
         chunk_days=int(pick("CHUNK_DAYS", 180)),
+        backfill_years=int(pick("BACKFILL_YEARS", 10)),
+        dq_min_stocks_prices=int(pick("DQ_MIN_STOCKS_PRICES", 1200)),
+        dq_min_stocks_institutional=int(pick("DQ_MIN_STOCKS_INSTITUTIONAL", 800)),
+        dq_min_stocks_margin=int(pick("DQ_MIN_STOCKS_MARGIN", 800)),
+        dq_coverage_ratio_prices=float(pick("DQ_COVERAGE_RATIO_PRICES", 0.7)),
+        dq_coverage_ratio_institutional=float(pick("DQ_COVERAGE_RATIO_INSTITUTIONAL", 0.5)),
+        dq_coverage_ratio_margin=float(pick("DQ_COVERAGE_RATIO_MARGIN", 0.5)),
+        dq_max_lag_trading_days=int(pick("DQ_MAX_LAG_TRADING_DAYS", 1)),
+        dq_max_stale_calendar_days=int(pick("DQ_MAX_STALE_CALENDAR_DAYS", 5)),
     )

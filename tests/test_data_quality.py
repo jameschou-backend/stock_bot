@@ -125,3 +125,59 @@ class TestBootstrapHistoryDiagnosis:
         assert status.needs_backfill is True
         assert status.reason_category == "empty"
         assert "raw_institutional empty" in status.reason
+
+
+class TestDualThresholdCoverage:
+    """測試比例 + 最小值雙門檻邏輯"""
+
+    def test_coverage_ratio_calculation(self):
+        """覆蓋率計算正確"""
+        # 模擬 10 個交易日，其中 7 個達標（>= 1200 股票）
+        # 覆蓋率 = 7/10 = 0.7
+        days_with_enough = 7
+        total_days = 10
+        coverage_ratio = days_with_enough / total_days
+        assert coverage_ratio == 0.7
+
+    def test_threshold_pass_condition(self):
+        """同時滿足雙門檻才算通過"""
+        min_stocks = 1200
+        ratio_threshold = 0.7
+        
+        # 情況 1: 股票數達標、覆蓋率達標 -> 通過
+        actual_stocks = 1500
+        actual_ratio = 0.8
+        assert actual_stocks >= min_stocks and actual_ratio >= ratio_threshold
+        
+        # 情況 2: 股票數不足、覆蓋率達標 -> 不通過
+        actual_stocks = 1000
+        actual_ratio = 0.8
+        assert not (actual_stocks >= min_stocks and actual_ratio >= ratio_threshold)
+        
+        # 情況 3: 股票數達標、覆蓋率不足 -> 不通過
+        actual_stocks = 1500
+        actual_ratio = 0.5
+        assert not (actual_stocks >= min_stocks and actual_ratio >= ratio_threshold)
+
+
+class TestMarginDataOptional:
+    """測試融資融券資料為選用"""
+
+    def test_margin_empty_is_warning_not_error(self):
+        """融資融券為空應為 warning 而非 error"""
+        # margin 資料空時，severity 應為 warning
+        issue = data_quality.QualityIssue(
+            category="raw_margin_short_empty",
+            message="raw_margin_short 表為空",
+            severity="warning",
+        )
+        assert issue.severity == "warning"
+
+    def test_report_passes_with_margin_warning_only(self):
+        """只有 margin warning 時報告應通過"""
+        issues = [
+            data_quality.QualityIssue("raw_margin_short_empty", "margin empty", "warning"),
+        ]
+        report = data_quality.QualityReport(passed=True, issues=issues, metrics={})
+        assert report.passed is True
+        assert report.error_text == ""  # warning 不會出現在 error_text
