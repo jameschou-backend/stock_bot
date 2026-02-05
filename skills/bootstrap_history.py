@@ -24,7 +24,13 @@ from sqlalchemy import func
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
-from app.finmind import FinMindError, date_chunks, fetch_dataset
+from app.finmind import (
+    FinMindError,
+    date_chunks,
+    fetch_dataset,
+    fetch_dataset_by_stocks,
+    fetch_stock_list,
+)
 from app.job_utils import finish_job, start_job
 from app.models import RawInstitutional, RawPrice
 from skills.ingest_institutional import _normalize_institutional
@@ -224,6 +230,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         price_rows = 0
         inst_rows = 0
         chunk_count = 0
+        fetch_mode = "bulk"  # 預設全市場抓取
+        stock_list: List[str] = []
         
         for chunk_start, chunk_end in date_chunks(start_date, end_date, chunk_days=30):
             chunk_count += 1
@@ -231,6 +239,23 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             # 抓取價格資料
             try:
                 price_df = fetch_dataset(PRICE_DATASET, chunk_start, chunk_end, token=config.finmind_token)
+                
+                # 如果全市場抓取回傳空值，改用逐檔抓取
+                if price_df.empty and fetch_mode == "bulk":
+                    fetch_mode = "by_stock"
+                    stock_list = fetch_stock_list(config.finmind_token)
+                    logs["fetch_mode"] = "by_stock"
+                    logs["stock_list_count"] = len(stock_list)
+                    
+                    if stock_list:
+                        price_df = fetch_dataset_by_stocks(
+                            PRICE_DATASET, chunk_start, chunk_end, stock_list, token=config.finmind_token
+                        )
+                elif price_df.empty and fetch_mode == "by_stock" and stock_list:
+                    price_df = fetch_dataset_by_stocks(
+                        PRICE_DATASET, chunk_start, chunk_end, stock_list, token=config.finmind_token
+                    )
+                
                 if not price_df.empty:
                     price_df = _normalize_prices(price_df)
                     records: List[Dict] = price_df.to_dict("records")
@@ -246,6 +271,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             # 抓取法人資料
             try:
                 inst_df = fetch_dataset(INST_DATASET, chunk_start, chunk_end, token=config.finmind_token)
+                
+                # 如果全市場抓取回傳空值，改用逐檔抓取
+                if inst_df.empty and fetch_mode == "by_stock":
+                    if not stock_list:
+                        stock_list = fetch_stock_list(config.finmind_token)
+                    if stock_list:
+                        inst_df = fetch_dataset_by_stocks(
+                            INST_DATASET, chunk_start, chunk_end, stock_list, token=config.finmind_token
+                        )
+                
                 if not inst_df.empty:
                     inst_df = _normalize_institutional(inst_df)
                     records = inst_df.to_dict("records")

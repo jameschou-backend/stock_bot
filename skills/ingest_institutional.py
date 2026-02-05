@@ -1,7 +1,18 @@
+"""Ingest Institutional 模組
+
+從 FinMind 抓取三大法人買賣超資料寫入 raw_institutional 表。
+
+支援兩種模式：
+1. 全市場抓取（需較高權限）
+2. 逐檔抓取（適用免費/低階會員）
+
+會自動偵測權限並切換模式。
+"""
+
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from typing import Dict, List
+from typing import Dict, List, Optional
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -9,12 +20,21 @@ from sqlalchemy import func
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
-from app.finmind import FinMindError, date_chunks, fetch_dataset
+from app.finmind import (
+    FinMindError,
+    date_chunks,
+    fetch_dataset,
+    fetch_dataset_by_stocks,
+    fetch_stock_list,
+)
 from app.job_utils import finish_job, start_job
 from app.models import RawInstitutional
 
 
 DATASET = "TaiwanStockInstitutionalInvestorsBuySell"
+
+# 股票清單快取（與 ingest_prices 共用）
+_stock_list_cache: Optional[List[str]] = None
 
 CATEGORY_MAP = {
     "foreign_investor": "foreign",
@@ -114,6 +134,49 @@ def _resolve_start_date(session: Session, default_start: date) -> date:
     return max_date + timedelta(days=1)
 
 
+def _get_stock_list(token: str | None) -> List[str]:
+    """取得股票清單（有快取）"""
+    global _stock_list_cache
+    if _stock_list_cache is None:
+        _stock_list_cache = fetch_stock_list(token)
+    return _stock_list_cache
+
+
+def _fetch_institutional_smart(
+    start_date: date,
+    end_date: date,
+    token: str | None,
+    logs: Dict[str, object],
+) -> pd.DataFrame:
+    """智慧抓取：先嘗試全市場，失敗則改逐檔
+    
+    Returns:
+        合併後的 DataFrame
+    """
+    # 先嘗試全市場抓取
+    df = fetch_dataset(DATASET, start_date, end_date, token=token)
+    if not df.empty:
+        logs["fetch_mode"] = "bulk"
+        return df
+    
+    # 全市場抓取回傳空值，改用逐檔抓取
+    logs["fetch_mode"] = "by_stock"
+    stock_ids = _get_stock_list(token)
+    logs["stock_list_count"] = len(stock_ids)
+    
+    if not stock_ids:
+        logs["warning"] = "無法取得股票清單，跳過抓取"
+        return pd.DataFrame()
+    
+    return fetch_dataset_by_stocks(
+        DATASET,
+        start_date,
+        end_date,
+        stock_ids,
+        token=token,
+    )
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "ingest_institutional")
     logs: Dict[str, object] = {}
@@ -126,6 +189,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         if start_date > end_date:
             logs["rows"] = 0
+            logs["skip_reason"] = "start_date > end_date"
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0, "start_date": start_date, "end_date": end_date}
 
@@ -133,7 +197,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         chunk_count = 0
         for chunk_start, chunk_end in date_chunks(start_date, end_date, chunk_days=30):
             chunk_count += 1
-            df = fetch_dataset(DATASET, chunk_start, chunk_end, token=config.finmind_token)
+            chunk_logs: Dict[str, object] = {}
+            
+            df = _fetch_institutional_smart(chunk_start, chunk_end, config.finmind_token, chunk_logs)
+            logs.update({f"chunk_{chunk_count}": chunk_logs})
+            
             if df.empty:
                 continue
             df = _normalize_institutional(df)
