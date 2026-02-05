@@ -167,6 +167,8 @@ def _choose_pick_date(
 
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "daily_pick")
+    coverage_stats: Dict[str, object] = {}
+    
     try:
         candidate_dates = (
             db_session.query(Feature.trading_date)
@@ -176,9 +178,18 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             .all()
         )
         candidate_dates = [row[0] for row in candidate_dates]
+        coverage_stats["candidate_dates_count"] = len(candidate_dates)
+        
         if not candidate_dates:
-            finish_job(db_session, job_id, "success", logs={"rows": 0, "reason": "no feature dates"})
+            finish_job(db_session, job_id, "success", logs={
+                "rows": 0, 
+                "reason": "no feature dates",
+                **coverage_stats,
+            })
             return {"rows": 0}
+        
+        coverage_stats["latest_feature_date"] = candidate_dates[0].isoformat()
+        coverage_stats["oldest_candidate_date"] = candidate_dates[-1].isoformat()
 
         model_version = _load_latest_model(db_session)
         if model_version is None:
@@ -194,11 +205,24 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             .order_by(Feature.stock_id, Feature.trading_date)
         )
         df = pd.read_sql(stmt, db_session.get_bind())
+        
+        coverage_stats["total_feature_rows"] = len(df)
+        coverage_stats["unique_stocks_with_features"] = df["stock_id"].nunique() if not df.empty else 0
+        
         if df.empty:
-            finish_job(db_session, job_id, "success", logs={"rows": 0})
+            finish_job(db_session, job_id, "success", logs={
+                "rows": 0,
+                "reason": "no features for candidate dates",
+                **coverage_stats,
+            })
             return {"rows": 0}
 
         feature_df = _parse_features(df["features_json"])
+        
+        # 記錄缺失欄位
+        missing_cols = [col for col in feature_names if col not in feature_df.columns]
+        coverage_stats["missing_feature_columns"] = missing_cols
+        
         for col in feature_names:
             if col not in feature_df.columns:
                 feature_df[col] = np.nan
@@ -210,6 +234,9 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             df["stock_id"].astype(str).unique().tolist(),
             config.min_avg_volume,
         )
+        
+        coverage_stats["price_universe_rows"] = len(price_df)
+        coverage_stats["price_universe_stocks"] = price_df["stock_id"].nunique() if not price_df.empty else 0
 
         chosen_date, chosen_df, fallback_logs = _choose_pick_date(
             candidate_dates,
@@ -221,7 +248,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         )
         if chosen_date is None:
             reason = "no valid candidates after fallback"
-            finish_job(db_session, job_id, "failed", error_text=reason, logs={"error": reason, **fallback_logs})
+            finish_job(db_session, job_id, "failed", error_text=reason, logs={
+                "error": reason, 
+                **fallback_logs,
+                **coverage_stats,
+            })
             raise ValueError(reason)
 
         selected_idx = chosen_df.index
@@ -275,10 +306,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             "model_id": model_version.model_id,
             **fallback_logs,
             **impute_stats,
+            **coverage_stats,
             "min_avg_volume": config.min_avg_volume,
         }
         finish_job(db_session, job_id, "success", logs=logs)
         return logs
+    except ValueError:
+        raise
     except Exception as exc:  # pragma: no cover - exercised by pipeline
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs={"error": str(exc)})
+        finish_job(db_session, job_id, "failed", error_text=str(exc), logs={
+            "error": str(exc),
+            **coverage_stats,
+        })
         raise

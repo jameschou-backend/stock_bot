@@ -62,6 +62,10 @@ def run_daily_pipeline() -> None:
     from skills import ingest_institutional
     run_skill("ingest_institutional", ingest_institutional.run)
 
+    # Data Quality Check: 確保資料完整性，若不達標則 fail-fast
+    from skills import data_quality
+    run_skill("data_quality_check", data_quality.run)
+
     from skills import build_features
     run_skill("build_features", build_features.run)
 

@@ -1,3 +1,18 @@
+"""Bootstrap History 模組
+
+負責檢查 DB 是否需要 backfill，並自動回補近 N 日曆天的歷史資料。
+
+Backfill 觸發條件：
+1. raw_prices 或 raw_institutional 表為空
+2. 資料跨度不足 required_days
+
+若 backfill 後資料仍不足，會產生詳細錯誤訊息：
+- 價格缺資料 (prices_insufficient)
+- 法人 dataset 錯頻率 (inst_wrong_frequency)
+- Universe 太小 (universe_too_small)
+- Token/Limit 問題 (api_issue)
+"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -9,7 +24,7 @@ from sqlalchemy import func
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
-from app.finmind import date_chunks, fetch_dataset
+from app.finmind import FinMindError, date_chunks, fetch_dataset
 from app.job_utils import finish_job, start_job
 from app.models import RawInstitutional, RawPrice
 from skills.ingest_institutional import _normalize_institutional
@@ -19,15 +34,21 @@ from skills.ingest_prices import _normalize_prices
 PRICE_DATASET = "TaiwanStockPrice"
 INST_DATASET = "TaiwanStockInstitutionalInvestorsBuySell"
 
+# 最低資料品質門檻
+MIN_STOCKS_THRESHOLD = 500  # 每日至少要有這麼多股票
+BENCHMARK_STOCK_ID = "0050"  # 用於驗證日頻資料
+
 
 @dataclass(frozen=True)
 class HistoryStatus:
     needs_backfill: bool
     reason: str
+    reason_category: str  # 'ok', 'empty', 'insufficient', 'wrong_frequency', 'api_issue'
     price_min: date | None
     price_max: date | None
     inst_min: date | None
     inst_max: date | None
+    details: Dict[str, object] | None = None
 
 
 def _span_days(min_date: date | None, max_date: date | None) -> int | None:
@@ -46,14 +67,26 @@ def _should_backfill(
     price_span = _span_days(price_min, price_max)
     inst_span = _span_days(inst_min, inst_max)
     if price_span is None:
-        return HistoryStatus(True, "raw_prices empty", price_min, price_max, inst_min, inst_max)
+        return HistoryStatus(
+            True, "raw_prices empty", "empty",
+            price_min, price_max, inst_min, inst_max
+        )
     if price_span < required_days:
-        return HistoryStatus(True, f"raw_prices span {price_span}d < {required_days}d", price_min, price_max, inst_min, inst_max)
+        return HistoryStatus(
+            True, f"raw_prices span {price_span}d < {required_days}d", "insufficient",
+            price_min, price_max, inst_min, inst_max
+        )
     if inst_span is None:
-        return HistoryStatus(True, "raw_institutional empty", price_min, price_max, inst_min, inst_max)
+        return HistoryStatus(
+            True, "raw_institutional empty", "empty",
+            price_min, price_max, inst_min, inst_max
+        )
     if inst_span < required_days:
-        return HistoryStatus(True, f"raw_institutional span {inst_span}d < {required_days}d", price_min, price_max, inst_min, inst_max)
-    return HistoryStatus(False, "ok", price_min, price_max, inst_min, inst_max)
+        return HistoryStatus(
+            True, f"raw_institutional span {inst_span}d < {required_days}d", "insufficient",
+            price_min, price_max, inst_min, inst_max
+        )
+    return HistoryStatus(False, "ok", "ok", price_min, price_max, inst_min, inst_max)
 
 
 def _backfill_range(config) -> Tuple[date, date]:
@@ -62,14 +95,105 @@ def _backfill_range(config) -> Tuple[date, date]:
     return start_date, today
 
 
+def _diagnose_failure(
+    session: Session,
+    price_rows: int,
+    inst_rows: int,
+    start_date: date,
+    end_date: date,
+    config,
+) -> Tuple[str, str]:
+    """診斷 backfill 失敗原因並產生明確錯誤訊息
+    
+    Returns:
+        (error_category, error_message)
+    """
+    # 計算預期交易日數（約略）
+    expected_trading_days = ((end_date - start_date).days * 5) // 7
+    
+    # 檢查是否完全沒有資料（可能是 token/API 問題）
+    if price_rows == 0 and inst_rows == 0:
+        return (
+            "api_issue",
+            f"FinMind API 回傳 0 筆資料，可能原因：(1) FINMIND_TOKEN 無效或過期 "
+            f"(2) API 限流 (3) 網路問題。請確認 token 並重試。"
+        )
+    
+    if price_rows == 0:
+        return (
+            "prices_insufficient",
+            f"raw_prices 抓取 0 筆，但 raw_institutional 有 {inst_rows} 筆。"
+            f"可能 FINMIND_TOKEN 無權存取 TaiwanStockPrice dataset。"
+        )
+    
+    if inst_rows == 0:
+        return (
+            "inst_insufficient",
+            f"raw_institutional 抓取 0 筆，但 raw_prices 有 {price_rows} 筆。"
+            f"可能 FINMIND_TOKEN 無權存取 TaiwanStockInstitutionalInvestorsBuySell dataset。"
+        )
+    
+    # 檢查法人資料是否日頻（用 0050 驗證）
+    benchmark_count = (
+        session.query(func.count())
+        .select_from(RawInstitutional)
+        .where(RawInstitutional.stock_id == BENCHMARK_STOCK_ID)
+        .scalar()
+    ) or 0
+    
+    # 預期 0050 應有約 expected_trading_days 筆
+    if benchmark_count < expected_trading_days * 0.5:
+        return (
+            "wrong_frequency",
+            f"法人資料可能非日頻：{BENCHMARK_STOCK_ID} 僅 {benchmark_count} 筆，"
+            f"預期約 {expected_trading_days} 筆。請確認 FinMind dataset 為 "
+            f"TaiwanStockInstitutionalInvestorsBuySell（日頻），而非月/週頻。"
+        )
+    
+    # 檢查每日股票數量（universe 大小）
+    daily_counts = (
+        session.query(
+            RawPrice.trading_date,
+            func.count(func.distinct(RawPrice.stock_id))
+        )
+        .group_by(RawPrice.trading_date)
+        .order_by(RawPrice.trading_date.desc())
+        .limit(10)
+        .all()
+    )
+    
+    if daily_counts:
+        avg_daily = sum(c for _, c in daily_counts) / len(daily_counts)
+        if avg_daily < MIN_STOCKS_THRESHOLD:
+            return (
+                "universe_too_small",
+                f"股票 universe 太小：最近 {len(daily_counts)} 交易日平均每日僅 {avg_daily:.0f} 檔，"
+                f"低於門檻 {MIN_STOCKS_THRESHOLD}。可能是 token 權限或 API 問題。"
+            )
+    
+    # 一般性資料不足
+    return (
+        "insufficient",
+        f"資料跨度不足：prices={price_rows} rows, institutional={inst_rows} rows，"
+        f"期間 {start_date.isoformat()} ~ {end_date.isoformat()}。"
+        f"請確認 FINMIND_TOKEN 權限與 API 狀態。"
+    )
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "bootstrap_history")
     logs: Dict[str, object] = {}
+    api_errors: List[str] = []
+    
     try:
         price_min = db_session.query(func.min(RawPrice.trading_date)).scalar()
         price_max = db_session.query(func.max(RawPrice.trading_date)).scalar()
         inst_min = db_session.query(func.min(RawInstitutional.trading_date)).scalar()
         inst_max = db_session.query(func.max(RawInstitutional.trading_date)).scalar()
+        
+        # 記錄 backfill 前狀態
+        rows_before_prices = db_session.query(func.count()).select_from(RawPrice).scalar() or 0
+        rows_before_inst = db_session.query(func.count()).select_from(RawInstitutional).scalar() or 0
 
         status = _should_backfill(price_min, price_max, inst_min, inst_max, config.bootstrap_days)
         logs.update(
@@ -78,7 +202,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 "price_max": price_max.isoformat() if price_max else None,
                 "inst_min": inst_min.isoformat() if inst_min else None,
                 "inst_max": inst_max.isoformat() if inst_max else None,
+                "rows_before_prices": rows_before_prices,
+                "rows_before_inst": rows_before_inst,
                 "reason": status.reason,
+                "reason_category": status.reason_category,
             }
         )
 
@@ -88,50 +215,69 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return logs
 
         start_date, end_date = _backfill_range(config)
-        logs.update({"mode": "backfill", "start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
+        logs.update({
+            "mode": "backfill",
+            "start_date": start_date.isoformat(),
+            "end_date": end_date.isoformat(),
+        })
 
         price_rows = 0
         inst_rows = 0
+        chunk_count = 0
+        
         for chunk_start, chunk_end in date_chunks(start_date, end_date, chunk_days=30):
-            price_df = fetch_dataset(PRICE_DATASET, chunk_start, chunk_end, token=config.finmind_token)
-            if not price_df.empty:
-                price_df = _normalize_prices(price_df)
-                records: List[Dict] = price_df.to_dict("records")
-                if records:
-                    stmt = insert(RawPrice).values(records)
-                    update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
-                    stmt = stmt.on_duplicate_key_update(**update_cols)
-                    db_session.execute(stmt)
-                    price_rows += len(records)
+            chunk_count += 1
+            
+            # 抓取價格資料
+            try:
+                price_df = fetch_dataset(PRICE_DATASET, chunk_start, chunk_end, token=config.finmind_token)
+                if not price_df.empty:
+                    price_df = _normalize_prices(price_df)
+                    records: List[Dict] = price_df.to_dict("records")
+                    if records:
+                        stmt = insert(RawPrice).values(records)
+                        update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
+                        stmt = stmt.on_duplicate_key_update(**update_cols)
+                        db_session.execute(stmt)
+                        price_rows += len(records)
+            except FinMindError as e:
+                api_errors.append(f"prices chunk {chunk_start}~{chunk_end}: {e}")
 
-            inst_df = fetch_dataset(INST_DATASET, chunk_start, chunk_end, token=config.finmind_token)
-            if not inst_df.empty:
-                inst_df = _normalize_institutional(inst_df)
-                records = inst_df.to_dict("records")
-                if records:
-                    stmt = insert(RawInstitutional).values(records)
-                    update_cols = {
-                        col: stmt.inserted[col]
-                        for col in [
-                            "foreign_buy",
-                            "foreign_sell",
-                            "foreign_net",
-                            "trust_buy",
-                            "trust_sell",
-                            "trust_net",
-                            "dealer_buy",
-                            "dealer_sell",
-                            "dealer_net",
-                        ]
-                    }
-                    stmt = stmt.on_duplicate_key_update(**update_cols)
-                    db_session.execute(stmt)
-                    inst_rows += len(records)
+            # 抓取法人資料
+            try:
+                inst_df = fetch_dataset(INST_DATASET, chunk_start, chunk_end, token=config.finmind_token)
+                if not inst_df.empty:
+                    inst_df = _normalize_institutional(inst_df)
+                    records = inst_df.to_dict("records")
+                    if records:
+                        stmt = insert(RawInstitutional).values(records)
+                        update_cols = {
+                            col: stmt.inserted[col]
+                            for col in [
+                                "foreign_buy",
+                                "foreign_sell",
+                                "foreign_net",
+                                "trust_buy",
+                                "trust_sell",
+                                "trust_net",
+                                "dealer_buy",
+                                "dealer_sell",
+                                "dealer_net",
+                            ]
+                        }
+                        stmt = stmt.on_duplicate_key_update(**update_cols)
+                        db_session.execute(stmt)
+                        inst_rows += len(records)
+            except FinMindError as e:
+                api_errors.append(f"institutional chunk {chunk_start}~{chunk_end}: {e}")
 
+        # 記錄 backfill 後狀態
         price_min_after = db_session.query(func.min(RawPrice.trading_date)).scalar()
         price_max_after = db_session.query(func.max(RawPrice.trading_date)).scalar()
         inst_min_after = db_session.query(func.min(RawInstitutional.trading_date)).scalar()
         inst_max_after = db_session.query(func.max(RawInstitutional.trading_date)).scalar()
+        rows_after_prices = db_session.query(func.count()).select_from(RawPrice).scalar() or 0
+        rows_after_inst = db_session.query(func.count()).select_from(RawInstitutional).scalar() or 0
 
         status_after = _should_backfill(
             price_min_after, price_max_after, inst_min_after, inst_max_after, config.bootstrap_days
@@ -139,22 +285,37 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         logs.update(
             {
+                "chunks_processed": chunk_count,
                 "rows_prices": price_rows,
                 "rows_institutional": inst_rows,
+                "rows_after_prices": rows_after_prices,
+                "rows_after_inst": rows_after_inst,
                 "price_min_after": price_min_after.isoformat() if price_min_after else None,
                 "price_max_after": price_max_after.isoformat() if price_max_after else None,
                 "inst_min_after": inst_min_after.isoformat() if inst_min_after else None,
                 "inst_max_after": inst_max_after.isoformat() if inst_max_after else None,
             }
         )
+        
+        if api_errors:
+            logs["api_errors"] = api_errors[:10]  # 限制錯誤數量
 
         if status_after.needs_backfill:
+            # 診斷失敗原因
+            error_category, error_message = _diagnose_failure(
+                db_session, price_rows, inst_rows, start_date, end_date, config
+            )
             logs["reason_after"] = status_after.reason
-            finish_job(db_session, job_id, "failed", error_text=status_after.reason, logs=logs)
-            raise ValueError(status_after.reason)
+            logs["error_category"] = error_category
+            logs["error_diagnosis"] = error_message
+            
+            finish_job(db_session, job_id, "failed", error_text=error_message, logs=logs)
+            raise ValueError(error_message)
 
         finish_job(db_session, job_id, "success", logs=logs)
         return logs
+    except ValueError:
+        raise
     except Exception as exc:  # pragma: no cover - exercised by pipeline
         finish_job(db_session, job_id, "failed", error_text=str(exc), logs={"error": str(exc), **logs})
         raise
