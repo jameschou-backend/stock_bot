@@ -45,6 +45,33 @@ def fetch_latest_pick_date(engine) -> date | None:
     return _to_date(df.loc[0, "pick_date"]) if not df.empty else None
 
 
+def fetch_latest_job(engine) -> dict | None:
+    query = text(
+        """
+        SELECT job_name, status, started_at, ended_at, error_text
+        FROM jobs
+        ORDER BY ended_at DESC
+        LIMIT 1
+        """
+    )
+    df = pd.read_sql(query, engine)
+    if df.empty:
+        return None
+    return df.iloc[0].to_dict()
+
+
+def fetch_raw_price_freshness(engine) -> dict:
+    max_q = text("SELECT MAX(trading_date) AS trading_date FROM raw_prices")
+    max_df = pd.read_sql(max_q, engine)
+    latest_date = _to_date(max_df.loc[0, "trading_date"]) if not max_df.empty else None
+    if latest_date is None:
+        return {"latest_date": None, "rows": 0}
+    count_q = text("SELECT COUNT(*) AS rows FROM raw_prices WHERE trading_date = :date")
+    count_df = pd.read_sql(count_q, engine, params={"date": latest_date})
+    rows = int(count_df.loc[0, "rows"]) if not count_df.empty else 0
+    return {"latest_date": latest_date, "rows": rows}
+
+
 def fetch_picks(engine, pick_date: date) -> pd.DataFrame:
     query = text(
         """
@@ -154,9 +181,36 @@ st.title("台股 ML 選股 Dashboard")
 config = load_config()
 engine = get_engine()
 
+latest_job = fetch_latest_job(engine)
+freshness = fetch_raw_price_freshness(engine)
+
+st.subheader("Pipeline 狀態")
+if latest_job:
+    st.write(
+        {
+            "job_name": latest_job.get("job_name"),
+            "status": latest_job.get("status"),
+            "ended_at": latest_job.get("ended_at"),
+            "error_text": (latest_job.get("error_text") or "")[:200],
+        }
+    )
+else:
+    st.write("尚無 job records")
+
+st.subheader("資料新鮮度")
+st.write(
+    {
+        "raw_prices_latest_date": freshness.get("latest_date"),
+        "raw_prices_rows": freshness.get("rows"),
+    }
+)
+
 latest_pick_date = fetch_latest_pick_date(engine)
 if latest_pick_date is None:
-    st.warning("尚未有 picks 資料，請先執行 pipeline。")
+    hint = "尚未有 picks 資料，可能是資料不足或 bootstrap 尚未完成。"
+    if latest_job and latest_job.get("status") == "failed":
+        hint = f"{hint} 最近失敗：{latest_job.get('error_text')}"
+    st.warning(hint)
     st.stop()
 
 pick_date = st.date_input("選擇日期", value=latest_pick_date)
