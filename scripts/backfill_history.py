@@ -344,6 +344,9 @@ def run_backfill(
                         print(f" [股票數: {len(stock_list)}]", end="", flush=True)
                     
                     if price_df.empty and fetch_mode == "by_stock" and stock_list:
+                        def price_progress(current, total):
+                            print(f"\r[{chunk_num}/{total_chunks}] prices: {current}/{total} 股票", end="", flush=True)
+                        
                         price_df = fetch_dataset_by_stocks(
                             PRICE_DATASET,
                             chunk_start,
@@ -351,7 +354,9 @@ def run_backfill(
                             stock_list,
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
+                            progress_callback=price_progress,
                         )
+                        print()  # 換行
                         progress.api_calls += (len(stock_list) + 99) // 100
                     
                 except FinMindError as e:
@@ -387,6 +392,9 @@ def run_backfill(
                     progress.api_calls += 1
                     
                     if inst_df.empty and fetch_mode == "by_stock" and stock_list:
+                        def inst_progress(current, total):
+                            print(f"\r[{chunk_num}/{total_chunks}] institutional: {current}/{total} 股票", end="", flush=True)
+                        
                         inst_df = fetch_dataset_by_stocks(
                             INST_DATASET,
                             chunk_start,
@@ -394,7 +402,9 @@ def run_backfill(
                             stock_list,
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
+                            progress_callback=inst_progress,
                         )
+                        print()  # 換行
                         progress.api_calls += (len(stock_list) + 99) // 100
                         
                 except FinMindError as e:
@@ -437,6 +447,9 @@ def run_backfill(
                     progress.api_calls += 1
                     
                     if margin_df.empty and fetch_mode == "by_stock" and stock_list:
+                        def margin_progress(current, total):
+                            print(f"\r[{chunk_num}/{total_chunks}] margin: {current}/{total} 股票", end="", flush=True)
+                        
                         margin_df = fetch_dataset_by_stocks(
                             MARGIN_DATASET,
                             chunk_start,
@@ -444,7 +457,9 @@ def run_backfill(
                             stock_list,
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
+                            progress_callback=margin_progress,
                         )
+                        print()  # 換行
                         progress.api_calls += (len(stock_list) + 99) // 100
                         
                 except FinMindError as e:
