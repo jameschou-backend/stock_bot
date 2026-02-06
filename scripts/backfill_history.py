@@ -78,6 +78,20 @@ MARGIN_DATASET = "TaiwanStockMarginPurchaseShortSale"
 SUPPORTED_DATASETS = {"prices", "institutional", "margin"}
 
 
+def get_listed_stocks_from_db() -> List[str]:
+    """從 stocks 表取得目前上市櫃股票清單（排除下市、ETF、權證）"""
+    from app.models import Stock
+    
+    with get_session() as session:
+        stocks = (
+            session.query(Stock.stock_id)
+            .filter(Stock.is_listed == True)
+            .filter(Stock.security_type == "stock")
+            .all()
+        )
+        return sorted([s[0] for s in stocks])
+
+
 @dataclass
 class BackfillProgress:
     """回補進度追蹤"""
@@ -233,6 +247,7 @@ def run_backfill(
     config,
     datasets: List[str],
     resume: bool = True,
+    listed_stock_list: Optional[List[str]] = None,
 ) -> Dict:
     """執行歷史資料回補
     
@@ -242,6 +257,7 @@ def run_backfill(
         config: AppConfig
         datasets: 要回補的 datasets 列表
         resume: 是否從上次進度繼續
+        listed_stock_list: 指定股票清單（若提供則不從 API 取得）
     
     Returns:
         結果摘要 dict
@@ -338,10 +354,14 @@ def run_backfill(
                         fetch_mode = "by_stock"
                         progress.fetch_mode = "by_stock"
                         
-                        # 取得股票清單
-                        stock_list = fetch_stock_list(config.finmind_token, config.finmind_requests_per_hour)
-                        progress.api_calls += 1
-                        print(f" [股票數: {len(stock_list)}]", end="", flush=True)
+                        # 取得股票清單（優先使用指定清單）
+                        if listed_stock_list:
+                            stock_list = listed_stock_list
+                            print(f" [使用上市櫃清單: {len(stock_list)} 檔]", end="", flush=True)
+                        else:
+                            stock_list = fetch_stock_list(config.finmind_token, config.finmind_requests_per_hour)
+                            progress.api_calls += 1
+                            print(f" [股票數: {len(stock_list)}]", end="", flush=True)
                     
                     if price_df.empty and fetch_mode == "by_stock" and stock_list:
                         def price_progress(current, total):
@@ -528,6 +548,8 @@ def main():
     parser.add_argument("--end", type=str, help="結束日期 (YYYY-MM-DD)")
     parser.add_argument("--datasets", type=str, default="prices,institutional,margin",
                        help="要回補的 datasets，逗號分隔 (預設: prices,institutional,margin)")
+    parser.add_argument("--listed-only", action="store_true", 
+                       help="只抓目前上市櫃股票（排除下市、ETF、權證）")
     parser.add_argument("--status", action="store_true", help="顯示目前進度")
     parser.add_argument("--reset", action="store_true", help="重置進度")
     parser.add_argument("--estimate", action="store_true", help="只顯示 API 用量估算")
@@ -573,6 +595,10 @@ def main():
         print(f"   chunk_days: {config.chunk_days}")
         print(f"   datasets: {datasets}")
         
+        if args.listed_only:
+            listed_count = len(get_listed_stocks_from_db())
+            print(f"   --listed-only: {listed_count} 檔上市櫃股票")
+        
         est_bulk, min_bulk = estimate_api_calls(start_date, end_date, config.chunk_days, "bulk", datasets)
         est_stock, min_stock = estimate_api_calls(start_date, end_date, config.chunk_days, "by_stock", datasets)
         
@@ -593,8 +619,17 @@ def main():
         print("請在 .env 檔案中設定 FINMIND_TOKEN")
         sys.exit(1)
     
+    # 取得上市櫃股票清單（如果指定 --listed-only）
+    listed_stock_list = None
+    if args.listed_only:
+        listed_stock_list = get_listed_stocks_from_db()
+        if not listed_stock_list:
+            print("錯誤: stocks 表為空，請先執行 make pipeline 或 ingest_stock_master")
+            sys.exit(1)
+        print(f"使用上市櫃股票清單: {len(listed_stock_list)} 檔（排除下市、ETF、權證）")
+    
     # 執行回補
-    result = run_backfill(start_date, end_date, config, datasets, resume=not args.reset)
+    result = run_backfill(start_date, end_date, config, datasets, resume=not args.reset, listed_stock_list=listed_stock_list)
     print(f"\n結果: {result}")
 
 

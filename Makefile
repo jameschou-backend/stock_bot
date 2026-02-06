@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-status
+.PHONY: migrate pipeline api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed
 
 migrate:
 	python scripts/migrate.py
@@ -35,6 +35,14 @@ backfill-10y:
 backfill:
 	python scripts/backfill_history.py --years 5 --datasets prices,institutional
 
+# 只抓上市櫃股票（排除下市、ETF、權證）- 推薦使用
+backfill-listed:
+	python scripts/backfill_history.py --years 5 --datasets prices,institutional,margin --listed-only
+
+# 10 年上市櫃股票
+backfill-10y-listed:
+	python scripts/backfill_history.py --years 10 --datasets prices,institutional,margin --listed-only
+
 # 只回補融資融券
 backfill-margin:
 	python scripts/backfill_history.py --years 10 --datasets margin
@@ -46,3 +54,7 @@ backfill-status:
 # 估算 API 用量
 backfill-estimate:
 	python scripts/backfill_history.py --estimate --years 10 --datasets prices,institutional,margin
+
+# 估算 API 用量（僅上市櫃）
+backfill-estimate-listed:
+	python scripts/backfill_history.py --estimate --years 5 --datasets prices,institutional,margin --listed-only
