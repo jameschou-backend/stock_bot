@@ -337,6 +337,26 @@ def run_backfill(
             
             # === 抓取價格資料 ===
             if "prices" in datasets:
+                price_rows_written = 0
+                
+                # 批次寫入回調函數（每批 100 檔立即寫入）
+                def write_prices_batch(df: pd.DataFrame) -> int:
+                    nonlocal price_rows_written
+                    try:
+                        df = _normalize_prices(df)
+                        records = df.to_dict("records")
+                        if records:
+                            stmt = insert(RawPrice).values(records)
+                            update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
+                            stmt = stmt.on_duplicate_key_update(**update_cols)
+                            db_session.execute(stmt)
+                            db_session.commit()
+                            price_rows_written += len(records)
+                            return len(records)
+                    except Exception:
+                        pass
+                    return 0
+                
                 price_df = pd.DataFrame()
                 try:
                     price_df = fetch_dataset(
@@ -365,9 +385,10 @@ def run_backfill(
                     
                     if price_df.empty and fetch_mode == "by_stock" and stock_list:
                         def price_progress(current, total):
-                            print(f"\r[{chunk_num}/{total_chunks}] prices: {current}/{total} 股票", end="", flush=True)
+                            print(f"\r[{chunk_num}/{total_chunks}] prices: {current}/{total} 股票 (已寫入 {price_rows_written:,} 筆)", end="", flush=True)
                         
-                        price_df = fetch_dataset_by_stocks(
+                        # 使用 batch_write_callback 每批立即寫入
+                        fetch_dataset_by_stocks(
                             PRICE_DATASET,
                             chunk_start,
                             chunk_end,
@@ -375,6 +396,7 @@ def run_backfill(
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
                             progress_callback=price_progress,
+                            batch_write_callback=write_prices_batch,
                         )
                         print()  # 換行
                         progress.api_calls += (len(stock_list) + 99) // 100
@@ -382,7 +404,7 @@ def run_backfill(
                 except FinMindError as e:
                     print(f" [prices err: {e}]", end="", flush=True)
                 
-                # 寫入價格資料
+                # 寫入價格資料（全市場模式時才需要，逐檔模式已在 callback 寫入）
                 if not price_df.empty:
                     try:
                         price_df = _normalize_prices(price_df)
@@ -393,13 +415,43 @@ def run_backfill(
                             stmt = stmt.on_duplicate_key_update(**update_cols)
                             db_session.execute(stmt)
                             db_session.commit()
-                            progress.prices_rows += len(records)
-                            chunk_results.append(f"P+{len(records)}")
+                            price_rows_written = len(records)
                     except Exception as e:
                         print(f" [prices write err]", end="", flush=True)
+                
+                if price_rows_written > 0:
+                    progress.prices_rows += price_rows_written
+                    chunk_results.append(f"P+{price_rows_written:,}")
             
             # === 抓取法人資料 ===
             if "institutional" in datasets:
+                inst_rows_written = 0
+                
+                # 批次寫入回調函數
+                def write_inst_batch(df: pd.DataFrame) -> int:
+                    nonlocal inst_rows_written
+                    try:
+                        df = _normalize_institutional(df)
+                        records = df.to_dict("records")
+                        if records:
+                            stmt = insert(RawInstitutional).values(records)
+                            update_cols = {
+                                col: stmt.inserted[col]
+                                for col in [
+                                    "foreign_buy", "foreign_sell", "foreign_net",
+                                    "trust_buy", "trust_sell", "trust_net",
+                                    "dealer_buy", "dealer_sell", "dealer_net",
+                                ]
+                            }
+                            stmt = stmt.on_duplicate_key_update(**update_cols)
+                            db_session.execute(stmt)
+                            db_session.commit()
+                            inst_rows_written += len(records)
+                            return len(records)
+                    except Exception:
+                        pass
+                    return 0
+                
                 inst_df = pd.DataFrame()
                 try:
                     inst_df = fetch_dataset(
@@ -413,9 +465,9 @@ def run_backfill(
                     
                     if inst_df.empty and fetch_mode == "by_stock" and stock_list:
                         def inst_progress(current, total):
-                            print(f"\r[{chunk_num}/{total_chunks}] institutional: {current}/{total} 股票", end="", flush=True)
+                            print(f"\r[{chunk_num}/{total_chunks}] institutional: {current}/{total} 股票 (已寫入 {inst_rows_written:,} 筆)", end="", flush=True)
                         
-                        inst_df = fetch_dataset_by_stocks(
+                        fetch_dataset_by_stocks(
                             INST_DATASET,
                             chunk_start,
                             chunk_end,
@@ -423,6 +475,7 @@ def run_backfill(
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
                             progress_callback=inst_progress,
+                            batch_write_callback=write_inst_batch,
                         )
                         print()  # 換行
                         progress.api_calls += (len(stock_list) + 99) // 100
@@ -430,7 +483,7 @@ def run_backfill(
                 except FinMindError as e:
                     print(f" [inst err: {e}]", end="", flush=True)
                 
-                # 寫入法人資料
+                # 寫入法人資料（全市場模式時才需要）
                 if not inst_df.empty:
                     try:
                         inst_df = _normalize_institutional(inst_df)
@@ -448,13 +501,48 @@ def run_backfill(
                             stmt = stmt.on_duplicate_key_update(**update_cols)
                             db_session.execute(stmt)
                             db_session.commit()
-                            progress.inst_rows += len(records)
-                            chunk_results.append(f"I+{len(records)}")
+                            inst_rows_written = len(records)
                     except Exception as e:
                         print(f" [inst write err]", end="", flush=True)
+                
+                if inst_rows_written > 0:
+                    progress.inst_rows += inst_rows_written
+                    chunk_results.append(f"I+{inst_rows_written:,}")
             
             # === 抓取融資融券資料 ===
             if "margin" in datasets:
+                margin_rows_written = 0
+                margin_cols = [
+                    "margin_purchase_buy", "margin_purchase_sell",
+                    "margin_purchase_cash_repay", "margin_purchase_limit",
+                    "margin_purchase_balance",
+                    "short_sale_buy", "short_sale_sell",
+                    "short_sale_cash_repay", "short_sale_limit",
+                    "short_sale_balance", "offset_loan_and_short", "note",
+                ]
+                
+                # 批次寫入回調函數
+                def write_margin_batch(df: pd.DataFrame) -> int:
+                    nonlocal margin_rows_written
+                    try:
+                        df = _normalize_margin_short(df)
+                        records = df.to_dict("records")
+                        if records:
+                            stmt = insert(RawMarginShort).values(records)
+                            update_cols = {
+                                col: stmt.inserted[col]
+                                for col in margin_cols
+                                if col in df.columns
+                            }
+                            stmt = stmt.on_duplicate_key_update(**update_cols)
+                            db_session.execute(stmt)
+                            db_session.commit()
+                            margin_rows_written += len(records)
+                            return len(records)
+                    except Exception:
+                        pass
+                    return 0
+                
                 margin_df = pd.DataFrame()
                 try:
                     margin_df = fetch_dataset(
@@ -468,9 +556,9 @@ def run_backfill(
                     
                     if margin_df.empty and fetch_mode == "by_stock" and stock_list:
                         def margin_progress(current, total):
-                            print(f"\r[{chunk_num}/{total_chunks}] margin: {current}/{total} 股票", end="", flush=True)
+                            print(f"\r[{chunk_num}/{total_chunks}] margin: {current}/{total} 股票 (已寫入 {margin_rows_written:,} 筆)", end="", flush=True)
                         
-                        margin_df = fetch_dataset_by_stocks(
+                        fetch_dataset_by_stocks(
                             MARGIN_DATASET,
                             chunk_start,
                             chunk_end,
@@ -478,6 +566,7 @@ def run_backfill(
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
                             progress_callback=margin_progress,
+                            batch_write_callback=write_margin_batch,
                         )
                         print()  # 換行
                         progress.api_calls += (len(stock_list) + 99) // 100
@@ -485,7 +574,7 @@ def run_backfill(
                 except FinMindError as e:
                     print(f" [margin err: {e}]", end="", flush=True)
                 
-                # 寫入融資融券資料
+                # 寫入融資融券資料（全市場模式時才需要）
                 if not margin_df.empty:
                     try:
                         margin_df = _normalize_margin_short(margin_df)
@@ -494,23 +583,19 @@ def run_backfill(
                             stmt = insert(RawMarginShort).values(records)
                             update_cols = {
                                 col: stmt.inserted[col]
-                                for col in [
-                                    "margin_purchase_buy", "margin_purchase_sell",
-                                    "margin_purchase_cash_repay", "margin_purchase_limit",
-                                    "margin_purchase_balance",
-                                    "short_sale_buy", "short_sale_sell",
-                                    "short_sale_cash_repay", "short_sale_limit",
-                                    "short_sale_balance", "offset_loan_and_short", "note",
-                                ]
+                                for col in margin_cols
                                 if col in margin_df.columns
                             }
                             stmt = stmt.on_duplicate_key_update(**update_cols)
                             db_session.execute(stmt)
                             db_session.commit()
-                            progress.margin_rows += len(records)
-                            chunk_results.append(f"M+{len(records)}")
+                            margin_rows_written = len(records)
                     except Exception as e:
                         print(f" [margin write err]", end="", flush=True)
+                
+                if margin_rows_written > 0:
+                    progress.margin_rows += margin_rows_written
+                    chunk_results.append(f"M+{margin_rows_written:,}")
             
             # 更新進度
             progress.completed_chunks = chunk_num

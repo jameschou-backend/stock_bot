@@ -129,6 +129,7 @@ def fetch_dataset_by_stocks(
     progress_callback: Optional[Callable[[int, int], None]] = None,
     requests_per_hour: int = 6000,
     use_batch_query: bool = True,
+    batch_write_callback: Optional[Callable[[pd.DataFrame], int]] = None,
 ) -> pd.DataFrame:
     """批次抓取資料（當全市場抓取不可用時）
     
@@ -148,9 +149,11 @@ def fetch_dataset_by_stocks(
         progress_callback: 進度回報函數 callback(current, total)
         requests_per_hour: 每小時最大請求數
         use_batch_query: 是否使用批次查詢（一次傳多個 data_id）
+        batch_write_callback: 每批寫入回調函數 callback(df) -> rows_written
+                              如果提供，每批抓完後立即寫入 DB，中斷也不會丟失已寫資料
     
     Returns:
-        合併後的 DataFrame
+        合併後的 DataFrame（如果有 batch_write_callback 則回傳空 DataFrame）
     """
     if not stock_ids:
         return pd.DataFrame()
@@ -158,9 +161,11 @@ def fetch_dataset_by_stocks(
     all_dfs = []
     total = len(stock_ids)
     api_calls = 0
+    total_written = 0
     
     for i in range(0, total, batch_size):
         batch = stock_ids[i:i + batch_size]
+        batch_dfs = []
         
         if use_batch_query:
             # 優化：一次 API call 抓取整批股票
@@ -177,7 +182,7 @@ def fetch_dataset_by_stocks(
                 )
                 api_calls += 1
                 if not df.empty:
-                    all_dfs.append(df)
+                    batch_dfs.append(df)
             except FinMindError:
                 # 批次失敗時，降級為逐檔抓取
                 for stock_id in batch:
@@ -192,7 +197,7 @@ def fetch_dataset_by_stocks(
                         )
                         api_calls += 1
                         if not df.empty:
-                            all_dfs.append(df)
+                            batch_dfs.append(df)
                     except FinMindError:
                         # 單檔失敗不中斷整體流程
                         pass
@@ -210,10 +215,21 @@ def fetch_dataset_by_stocks(
                     )
                     api_calls += 1
                     if not df.empty:
-                        all_dfs.append(df)
+                        batch_dfs.append(df)
                 except FinMindError:
                     # 單檔失敗不中斷整體流程
                     pass
+        
+        # 處理這批資料
+        if batch_dfs:
+            batch_df = pd.concat(batch_dfs, ignore_index=True)
+            if batch_write_callback:
+                # 立即寫入這批資料
+                rows = batch_write_callback(batch_df)
+                total_written += rows
+            else:
+                # 累積到最後合併
+                all_dfs.append(batch_df)
         
         if progress_callback:
             progress_callback(min(i + batch_size, total), total)
@@ -221,6 +237,10 @@ def fetch_dataset_by_stocks(
         # 批次間延遲
         if i + batch_size < total:
             time.sleep(batch_delay)
+    
+    # 如果有 batch_write_callback，資料已經寫入，回傳空 DataFrame
+    if batch_write_callback:
+        return pd.DataFrame()
     
     if not all_dfs:
         return pd.DataFrame()
