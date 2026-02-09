@@ -27,7 +27,7 @@ from app.finmind import (
     fetch_dataset_by_stocks,
     fetch_stock_list,
 )
-from app.job_utils import finish_job, start_job
+from app.job_utils import finish_job, start_job, update_job
 from app.models import RawInstitutional
 
 
@@ -134,11 +134,16 @@ def _resolve_start_date(session: Session, default_start: date) -> date:
     return max_date + timedelta(days=1)
 
 
-def _get_stock_list(token: str | None) -> List[str]:
+def _get_stock_list(token: str | None, requests_per_hour: int, max_retries: int, backoff_seconds: float) -> List[str]:
     """取得股票清單（有快取）"""
     global _stock_list_cache
     if _stock_list_cache is None:
-        _stock_list_cache = fetch_stock_list(token)
+        _stock_list_cache = fetch_stock_list(
+            token,
+            requests_per_hour=requests_per_hour,
+            max_retries=max_retries,
+            backoff_seconds=backoff_seconds,
+        )
     return _stock_list_cache
 
 
@@ -146,6 +151,9 @@ def _fetch_institutional_smart(
     start_date: date,
     end_date: date,
     token: str | None,
+    requests_per_hour: int,
+    max_retries: int,
+    backoff_seconds: float,
     logs: Dict[str, object],
 ) -> pd.DataFrame:
     """智慧抓取：先嘗試全市場，失敗則改逐檔
@@ -154,14 +162,22 @@ def _fetch_institutional_smart(
         合併後的 DataFrame
     """
     # 先嘗試全市場抓取
-    df = fetch_dataset(DATASET, start_date, end_date, token=token)
+    df = fetch_dataset(
+        DATASET,
+        start_date,
+        end_date,
+        token=token,
+        requests_per_hour=requests_per_hour,
+        max_retries=max_retries,
+        backoff_seconds=backoff_seconds,
+    )
     if not df.empty:
         logs["fetch_mode"] = "bulk"
         return df
     
     # 全市場抓取回傳空值，改用逐檔抓取
     logs["fetch_mode"] = "by_stock"
-    stock_ids = _get_stock_list(token)
+    stock_ids = _get_stock_list(token, requests_per_hour, max_retries, backoff_seconds)
     logs["stock_list_count"] = len(stock_ids)
     
     if not stock_ids:
@@ -174,11 +190,14 @@ def _fetch_institutional_smart(
         end_date,
         stock_ids,
         token=token,
+        requests_per_hour=requests_per_hour,
+        max_retries=max_retries,
+        backoff_seconds=backoff_seconds,
     )
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
-    job_id = start_job(db_session, "ingest_institutional")
+    job_id = start_job(db_session, "ingest_institutional", commit=True)
     logs: Dict[str, object] = {}
     try:
         today = datetime.now(ZoneInfo(config.tz)).date()
@@ -194,12 +213,30 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0, "start_date": start_date, "end_date": end_date}
 
         total_rows = 0
-        chunk_count = 0
-        for chunk_start, chunk_end in date_chunks(start_date, end_date, chunk_days=30):
-            chunk_count += 1
+        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=config.chunk_days))
+        total_chunks = len(chunk_ranges)
+        logs["chunks_total"] = total_chunks
+
+        for chunk_count, (chunk_start, chunk_end) in enumerate(chunk_ranges, start=1):
             chunk_logs: Dict[str, object] = {}
-            
-            df = _fetch_institutional_smart(chunk_start, chunk_end, config.finmind_token, chunk_logs)
+            logs["progress"] = {
+                "current_chunk": chunk_count,
+                "total_chunks": total_chunks,
+                "chunk_start": chunk_start.isoformat(),
+                "chunk_end": chunk_end.isoformat(),
+                "rows": total_rows,
+            }
+            update_job(db_session, job_id, logs=logs, commit=True)
+
+            df = _fetch_institutional_smart(
+                chunk_start,
+                chunk_end,
+                config.finmind_token,
+                config.finmind_requests_per_hour,
+                config.finmind_retry_max,
+                config.finmind_retry_backoff,
+                chunk_logs,
+            )
             logs.update({f"chunk_{chunk_count}": chunk_logs})
             
             if df.empty:
@@ -228,7 +265,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             db_session.execute(stmt)
             total_rows += len(records)
 
-        logs.update({"rows": total_rows, "chunks": chunk_count})
+        logs.update({"rows": total_rows, "chunks": total_chunks})
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:  # pragma: no cover - exercised by pipeline

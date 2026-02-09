@@ -18,3 +18,5 @@ FALLBACK_DAYS: 10
 # API Rate Limiting
 FINMIND_REQUESTS_PER_HOUR: 6000  # FinMind API 每小時請求限制（付費會員 6000，免費 600）
 CHUNK_DAYS: 180  # 資料抓取每個 chunk 的天數（建議 180 天減少 API 次數）
+FINMIND_RETRY_MAX: 3  # FinMind API 最大重試次數
+FINMIND_RETRY_BACKOFF: 1.0  # FinMind API 重試退避秒數（指數退避）

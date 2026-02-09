@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import random
 import re
 import time
 from datetime import date, timedelta
@@ -40,6 +41,20 @@ def _build_headers(token: str | None) -> Dict[str, str]:
     return {}
 
 
+def _is_retryable_payload(status: object, msg: str) -> bool:
+    if status in (429, "429", 402, "402"):
+        return True
+    msg_lower = (msg or "").lower()
+    return any(term in msg_lower for term in ["rate", "limit", "頻率", "超過", "exceed"])
+
+
+def _sleep_backoff(attempt: int, base_seconds: float, retry_after: float | None = None) -> None:
+    backoff = base_seconds * (2 ** attempt)
+    jitter = random.uniform(0, base_seconds)
+    wait_time = max(retry_after or 0.0, backoff + jitter)
+    time.sleep(wait_time)
+
+
 def fetch_dataset(
     dataset: str,
     start_date: date,
@@ -48,6 +63,8 @@ def fetch_dataset(
     data_id: str | None = None,
     rate_limit: bool = True,
     requests_per_hour: int = 6000,
+    max_retries: int = 3,
+    backoff_seconds: float = 1.0,
 ) -> pd.DataFrame:
     """抓取單一 dataset 資料
     
@@ -63,11 +80,6 @@ def fetch_dataset(
     Returns:
         DataFrame 包含抓取的資料
     """
-    # Rate limiting
-    if rate_limit:
-        limiter = get_rate_limiter(requests_per_hour)
-        limiter.acquire()
-    
     params: Dict[str, Any] = {
         "dataset": dataset,
         "start_date": start_date.isoformat(),
@@ -76,24 +88,57 @@ def fetch_dataset(
     if data_id:
         params["data_id"] = data_id
 
-    resp = requests.get(FINMIND_DATA_URL, params=params, headers=_build_headers(token), timeout=60)
-    if resp.status_code != 200:
-        raise FinMindError(f"FinMind HTTP {resp.status_code}: {resp.text[:200]}")
+    retryable_http = {429, 500, 502, 503, 504}
 
-    payload = resp.json()
-    status = payload.get("status")
-    if status not in (200, "200", None):
-        raise FinMindError(f"FinMind status={status}, msg={payload.get('msg')}")
+    for attempt in range(max_retries + 1):
+        # Rate limiting
+        if rate_limit:
+            limiter = get_rate_limiter(requests_per_hour)
+            limiter.acquire()
 
-    data = payload.get("data")
-    if data is None:
-        raise FinMindError(f"FinMind missing data field: {payload}")
-    return pd.DataFrame(data)
+        try:
+            resp = requests.get(
+                FINMIND_DATA_URL,
+                params=params,
+                headers=_build_headers(token),
+                timeout=60,
+            )
+        except requests.RequestException as exc:
+            if attempt < max_retries:
+                _sleep_backoff(attempt, backoff_seconds)
+                continue
+            raise FinMindError(f"FinMind request failed: {exc}") from exc
+
+        if resp.status_code != 200:
+            if resp.status_code in retryable_http and attempt < max_retries:
+                retry_after = resp.headers.get("Retry-After")
+                retry_after_sec = float(retry_after) if retry_after and retry_after.isdigit() else None
+                _sleep_backoff(attempt, backoff_seconds, retry_after_sec)
+                continue
+            raise FinMindError(f"FinMind HTTP {resp.status_code}: {resp.text[:200]}")
+
+        payload = resp.json()
+        status = payload.get("status")
+        if status not in (200, "200", None):
+            msg = payload.get("msg") or ""
+            if _is_retryable_payload(status, msg) and attempt < max_retries:
+                _sleep_backoff(attempt, backoff_seconds)
+                continue
+            raise FinMindError(f"FinMind status={status}, msg={msg}")
+
+        data = payload.get("data")
+        if data is None:
+            raise FinMindError(f"FinMind missing data field: {payload}")
+        return pd.DataFrame(data)
+
+    raise FinMindError("FinMind request failed after retries")
 
 
 def fetch_stock_list(
     token: str | None = None,
     requests_per_hour: int = 6000,
+    max_retries: int = 3,
+    backoff_seconds: float = 1.0,
 ) -> List[str]:
     """取得台股股票代碼清單（僅四碼數字）
     
@@ -108,6 +153,8 @@ def fetch_stock_list(
         date(2030, 12, 31),
         token=token,
         requests_per_hour=requests_per_hour,
+        max_retries=max_retries,
+        backoff_seconds=backoff_seconds,
     )
     if df.empty:
         return []
@@ -130,6 +177,8 @@ def fetch_dataset_by_stocks(
     requests_per_hour: int = 6000,
     use_batch_query: bool = True,
     batch_write_callback: Optional[Callable[[pd.DataFrame], int]] = None,
+    max_retries: int = 3,
+    backoff_seconds: float = 1.0,
 ) -> pd.DataFrame:
     """批次抓取資料（當全市場抓取不可用時）
     
@@ -179,6 +228,8 @@ def fetch_dataset_by_stocks(
                     token=token,
                     data_id=batch_data_id,
                     requests_per_hour=requests_per_hour,
+                    max_retries=max_retries,
+                    backoff_seconds=backoff_seconds,
                 )
                 api_calls += 1
                 if not df.empty:
@@ -194,6 +245,8 @@ def fetch_dataset_by_stocks(
                             token=token,
                             data_id=stock_id,
                             requests_per_hour=requests_per_hour,
+                            max_retries=max_retries,
+                            backoff_seconds=backoff_seconds,
                         )
                         api_calls += 1
                         if not df.empty:
@@ -205,14 +258,16 @@ def fetch_dataset_by_stocks(
             # 傳統模式：逐檔抓取
             for stock_id in batch:
                 try:
-                    df = fetch_dataset(
-                        dataset,
-                        start_date,
-                        end_date,
-                        token=token,
-                        data_id=stock_id,
-                        requests_per_hour=requests_per_hour,
-                    )
+            df = fetch_dataset(
+                dataset,
+                start_date,
+                end_date,
+                token=token,
+                data_id=stock_id,
+                requests_per_hour=requests_per_hour,
+                max_retries=max_retries,
+                backoff_seconds=backoff_seconds,
+            )
                     api_calls += 1
                     if not df.empty:
                         batch_dfs.append(df)

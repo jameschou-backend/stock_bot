@@ -365,6 +365,8 @@ def run_backfill(
                         chunk_end,
                         token=config.finmind_token,
                         requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
                     )
                     progress.api_calls += 1
                     
@@ -379,7 +381,12 @@ def run_backfill(
                             stock_list = listed_stock_list
                             print(f" [使用上市櫃清單: {len(stock_list)} 檔]", end="", flush=True)
                         else:
-                            stock_list = fetch_stock_list(config.finmind_token, config.finmind_requests_per_hour)
+                            stock_list = fetch_stock_list(
+                                config.finmind_token,
+                                requests_per_hour=config.finmind_requests_per_hour,
+                                max_retries=config.finmind_retry_max,
+                                backoff_seconds=config.finmind_retry_backoff,
+                            )
                             progress.api_calls += 1
                             print(f" [股票數: {len(stock_list)}]", end="", flush=True)
                     
@@ -395,6 +402,8 @@ def run_backfill(
                             stock_list,
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
                             progress_callback=price_progress,
                             batch_write_callback=write_prices_batch,
                         )
@@ -460,6 +469,8 @@ def run_backfill(
                         chunk_end,
                         token=config.finmind_token,
                         requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
                     )
                     progress.api_calls += 1
                     
@@ -474,6 +485,8 @@ def run_backfill(
                             stock_list,
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
                             progress_callback=inst_progress,
                             batch_write_callback=write_inst_batch,
                         )
@@ -551,6 +564,8 @@ def run_backfill(
                         chunk_end,
                         token=config.finmind_token,
                         requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
                     )
                     progress.api_calls += 1
                     
@@ -565,6 +580,8 @@ def run_backfill(
                             stock_list,
                             token=config.finmind_token,
                             requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
                             progress_callback=margin_progress,
                             batch_write_callback=write_margin_batch,
                         )

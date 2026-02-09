@@ -101,18 +101,31 @@ def _normalize_market(type_value: str) -> str:
     return mapping.get(type_lower, type_value.upper())
 
 
-def _fetch_stock_info(token: str | None) -> pd.DataFrame:
+def _fetch_stock_info(
+    token: str | None,
+    requests_per_hour: int,
+    max_retries: int,
+    backoff_seconds: float,
+) -> pd.DataFrame:
     """從 TaiwanStockInfo 抓取股票基本資料"""
     df = fetch_dataset(
         STOCK_INFO_DATASET,
         date(2020, 1, 1),
         date(2030, 12, 31),
         token=token,
+        requests_per_hour=requests_per_hour,
+        max_retries=max_retries,
+        backoff_seconds=backoff_seconds,
     )
     return df
 
 
-def _fetch_delisting_info(token: str | None) -> pd.DataFrame:
+def _fetch_delisting_info(
+    token: str | None,
+    requests_per_hour: int,
+    max_retries: int,
+    backoff_seconds: float,
+) -> pd.DataFrame:
     """從 TaiwanStockDelisting 抓取下市櫃資料"""
     try:
         df = fetch_dataset(
@@ -120,6 +133,9 @@ def _fetch_delisting_info(token: str | None) -> pd.DataFrame:
             date(1990, 1, 1),
             date(2030, 12, 31),
             token=token,
+            requests_per_hour=requests_per_hour,
+            max_retries=max_retries,
+            backoff_seconds=backoff_seconds,
         )
         return df
     except FinMindError:
@@ -146,7 +162,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         today = datetime.now(ZoneInfo(config.tz)).date()
         
         # 抓取股票基本資料
-        info_df = _fetch_stock_info(config.finmind_token)
+        info_df = _fetch_stock_info(
+            config.finmind_token,
+            config.finmind_requests_per_hour,
+            config.finmind_retry_max,
+            config.finmind_retry_backoff,
+        )
         logs["stock_info_rows"] = len(info_df)
         
         if info_df.empty:
@@ -155,7 +176,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return logs
         
         # 抓取下市櫃資料
-        delisting_df = _fetch_delisting_info(config.finmind_token)
+        delisting_df = _fetch_delisting_info(
+            config.finmind_token,
+            config.finmind_requests_per_hour,
+            config.finmind_retry_max,
+            config.finmind_retry_backoff,
+        )
         logs["delisting_rows"] = len(delisting_df)
         
         # 建立下市股票集合

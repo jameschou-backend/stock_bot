@@ -46,11 +46,6 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        max_label_date = max_price_date - timedelta(days=horizon)
-        if target_start > max_label_date:
-            finish_job(db_session, job_id, "success", logs={"rows": 0})
-            return {"rows": 0}
-
         stmt = (
             select(RawPrice.stock_id, RawPrice.trading_date, RawPrice.close)
             .where(RawPrice.trading_date.between(target_start, max_price_date))
@@ -62,7 +57,6 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         df = _compute_labels(df, horizon)
-        df = df[df["trading_date"] <= max_label_date]
         df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["future_ret_h"])
         if df.empty:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
@@ -73,10 +67,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         insert_stmt = insert_stmt.on_duplicate_key_update(future_ret_h=insert_stmt.inserted.future_ret_h)
         db_session.execute(insert_stmt)
 
+        end_date = df["trading_date"].max()
         logs = {
             "rows": len(records),
             "start_date": target_start.isoformat(),
-            "end_date": max_label_date.isoformat(),
+            "end_date": end_date.isoformat() if end_date is not None else None,
         }
         finish_job(db_session, job_id, "success", logs=logs)
         return logs

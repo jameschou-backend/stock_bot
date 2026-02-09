@@ -45,6 +45,8 @@ class AppConfig:
     # API Rate Limiting
     finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
     chunk_days: int = 180  # 資料抓取每個 chunk 的天數
+    finmind_retry_max: int = 3  # FinMind API 最大重試次數
+    finmind_retry_backoff: float = 1.0  # FinMind API 重試退避秒數
     # Backfill 設定
     backfill_years: int = 10  # 完整 backfill 年數
     # Data Quality 門檻（比例 + 最小值雙門檻）
@@ -125,6 +127,8 @@ def load_config() -> AppConfig:
         fallback_days=int(pick("FALLBACK_DAYS", 10)),
         finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),
         chunk_days=int(pick("CHUNK_DAYS", 180)),
+        finmind_retry_max=int(pick("FINMIND_RETRY_MAX", 3)),
+        finmind_retry_backoff=float(pick("FINMIND_RETRY_BACKOFF", 1.0)),
         backfill_years=int(pick("BACKFILL_YEARS", 10)),
         dq_min_stocks_prices=int(pick("DQ_MIN_STOCKS_PRICES", 1200)),
         dq_min_stocks_institutional=int(pick("DQ_MIN_STOCKS_INSTITUTIONAL", 800)),

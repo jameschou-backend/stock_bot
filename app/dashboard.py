@@ -60,6 +60,23 @@ def fetch_latest_job(engine) -> dict | None:
     return df.iloc[0].to_dict()
 
 
+def fetch_running_jobs(engine, limit: int = 5) -> list[dict]:
+    query = text(
+        """
+        SELECT job_id, job_name, status, started_at, logs_json
+        FROM jobs
+        WHERE status = 'running'
+        ORDER BY started_at DESC
+        LIMIT :limit
+        """
+    )
+    df = pd.read_sql(query, engine, params={"limit": limit})
+    if df.empty:
+        return []
+    df["logs_json"] = df["logs_json"].apply(_parse_json)
+    return df.to_dict(orient="records")
+
+
 def fetch_raw_price_freshness(engine) -> dict:
     max_q = text("SELECT MAX(trading_date) AS trading_date FROM raw_prices")
     max_df = pd.read_sql(max_q, engine)
@@ -308,7 +325,27 @@ st.divider()
 # ========== Pipeline 狀態 ==========
 st.subheader("最近 Job 狀態")
 latest_job = fetch_latest_job(engine)
+running_jobs = fetch_running_jobs(engine)
 freshness = fetch_raw_price_freshness(engine)
+
+if running_jobs:
+    st.markdown("**正在執行中**")
+    for job in running_jobs:
+        logs = job.get("logs_json") or {}
+        progress = logs.get("progress") if isinstance(logs, dict) else None
+        st.write(f"{job.get('job_name')} (started: {job.get('started_at')})")
+        if isinstance(progress, dict) and progress.get("total_chunks"):
+            total = int(progress.get("total_chunks") or 0)
+            current = int(progress.get("current_chunk") or 0)
+            ratio = current / total if total else 0.0
+            st.progress(min(max(ratio, 0.0), 1.0))
+            st.caption(
+                f"chunk {current}/{total} | {progress.get('chunk_start')} ~ {progress.get('chunk_end')} | rows={progress.get('rows')}"
+            )
+        else:
+            st.caption("無進度資訊")
+else:
+    st.caption("目前沒有執行中的 job")
 
 if latest_job:
     job_status = latest_job.get("status", "unknown")

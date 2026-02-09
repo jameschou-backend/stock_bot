@@ -31,7 +31,7 @@ from app.finmind import (
     fetch_dataset_by_stocks,
     fetch_stock_list,
 )
-from app.job_utils import finish_job, start_job
+from app.job_utils import finish_job, start_job, update_job
 from app.models import RawInstitutional, RawPrice
 from skills.ingest_institutional import _normalize_institutional
 from skills.ingest_prices import _normalize_prices
@@ -200,7 +200,7 @@ def _diagnose_failure(
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
-    job_id = start_job(db_session, "bootstrap_history")
+    job_id = start_job(db_session, "bootstrap_history", commit=True)
     logs: Dict[str, object] = {}
     api_errors: List[str] = []
     
@@ -258,27 +258,66 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         fetch_mode = "bulk"  # 預設全市場抓取
         stock_list: List[str] = []
         
-        for chunk_start, chunk_end in date_chunks(start_date, end_date, chunk_days=30):
-            chunk_count += 1
+        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=config.chunk_days))
+        total_chunks = len(chunk_ranges)
+        logs["chunks_total"] = total_chunks
+
+        for chunk_count, (chunk_start, chunk_end) in enumerate(chunk_ranges, start=1):
+            logs["progress"] = {
+                "current_chunk": chunk_count,
+                "total_chunks": total_chunks,
+                "chunk_start": chunk_start.isoformat(),
+                "chunk_end": chunk_end.isoformat(),
+                "prices_rows": price_rows,
+                "institutional_rows": inst_rows,
+            }
+            update_job(db_session, job_id, logs=logs, commit=True)
             
             # 抓取價格資料
             try:
-                price_df = fetch_dataset(PRICE_DATASET, chunk_start, chunk_end, token=config.finmind_token)
+                price_df = fetch_dataset(
+                    PRICE_DATASET,
+                    chunk_start,
+                    chunk_end,
+                    token=config.finmind_token,
+                    requests_per_hour=config.finmind_requests_per_hour,
+                    max_retries=config.finmind_retry_max,
+                    backoff_seconds=config.finmind_retry_backoff,
+                )
                 
                 # 如果全市場抓取回傳空值，改用逐檔抓取
                 if price_df.empty and fetch_mode == "bulk":
                     fetch_mode = "by_stock"
-                    stock_list = fetch_stock_list(config.finmind_token)
+                    stock_list = fetch_stock_list(
+                        config.finmind_token,
+                        requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
+                    )
                     logs["fetch_mode"] = "by_stock"
                     logs["stock_list_count"] = len(stock_list)
                     
                     if stock_list:
                         price_df = fetch_dataset_by_stocks(
-                            PRICE_DATASET, chunk_start, chunk_end, stock_list, token=config.finmind_token
+                            PRICE_DATASET,
+                            chunk_start,
+                            chunk_end,
+                            stock_list,
+                            token=config.finmind_token,
+                            requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
                         )
                 elif price_df.empty and fetch_mode == "by_stock" and stock_list:
                     price_df = fetch_dataset_by_stocks(
-                        PRICE_DATASET, chunk_start, chunk_end, stock_list, token=config.finmind_token
+                        PRICE_DATASET,
+                        chunk_start,
+                        chunk_end,
+                        stock_list,
+                        token=config.finmind_token,
+                        requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
                     )
                 
                 if not price_df.empty:
@@ -295,15 +334,35 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
             # 抓取法人資料
             try:
-                inst_df = fetch_dataset(INST_DATASET, chunk_start, chunk_end, token=config.finmind_token)
+                inst_df = fetch_dataset(
+                    INST_DATASET,
+                    chunk_start,
+                    chunk_end,
+                    token=config.finmind_token,
+                    requests_per_hour=config.finmind_requests_per_hour,
+                    max_retries=config.finmind_retry_max,
+                    backoff_seconds=config.finmind_retry_backoff,
+                )
                 
                 # 如果全市場抓取回傳空值，改用逐檔抓取
                 if inst_df.empty and fetch_mode == "by_stock":
                     if not stock_list:
-                        stock_list = fetch_stock_list(config.finmind_token)
+                        stock_list = fetch_stock_list(
+                            config.finmind_token,
+                            requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
+                        )
                     if stock_list:
                         inst_df = fetch_dataset_by_stocks(
-                            INST_DATASET, chunk_start, chunk_end, stock_list, token=config.finmind_token
+                            INST_DATASET,
+                            chunk_start,
+                            chunk_end,
+                            stock_list,
+                            token=config.finmind_token,
+                            requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
                         )
                 
                 if not inst_df.empty:
