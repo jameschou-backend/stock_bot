@@ -1,10 +1,14 @@
-.PHONY: migrate pipeline api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed
+.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest rebuild-features
 
 migrate:
 	python scripts/migrate.py
 
 pipeline:
 	python scripts/run_daily.py
+
+# 跳過抓資料，只跑 data_quality + features/labels/train/pick
+pipeline-build:
+	python scripts/run_daily.py --skip-ingest
 
 api:
 	python scripts/run_api.py
@@ -23,6 +27,25 @@ cron-daily:
 
 ai-prompt:
 	AI_ASSIST_ENABLED=0 python scripts/ai_prompt_demo.py
+
+# === 回測 ===
+
+# Walk-forward 回測（預設 24 個月）
+backtest:
+	python scripts/run_backtest.py
+
+# 回測 36 個月 + 自訂參數
+backtest-long:
+	python scripts/run_backtest.py --months 36 --topn 20
+
+# 重建 features（特徵欄位變更後需要執行）
+# 會清空 features/labels/model_versions/picks 並重新建置
+rebuild-features:
+	@echo "⚠️  即將清空 features, labels, model_versions, picks 表並重建..."
+	@echo "按 Ctrl+C 取消，或 Enter 繼續"
+	@read _confirm
+	python -c "from app.db import get_session; from app.models import Feature, Label, ModelVersion, Pick; s = get_session().__enter__(); [s.execute(t.__table__.delete()) for t in [Pick, ModelVersion, Label, Feature]]; s.commit(); print('已清空 4 張表')"
+	python scripts/run_daily.py --skip-ingest
 
 # === 歷史資料回補 ===
 

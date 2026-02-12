@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 import sys
 
@@ -10,8 +11,13 @@ from pipelines.daily_pipeline import run_daily_pipeline
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="執行每日 pipeline")
+    parser.add_argument("--skip-ingest", action="store_true",
+                        help="跳過資料抓取（ingest），只跑 data_quality + features/labels/train/pick")
+    args = parser.parse_args()
+
     try:
-        run_daily_pipeline()
+        run_daily_pipeline(skip_ingest=args.skip_ingest)
     except Exception as exc:
         from skills import ai_assist
         import platform
