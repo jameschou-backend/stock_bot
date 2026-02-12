@@ -40,11 +40,20 @@ class AppConfig:
     ai_assist_max_code_lines: int = 200
     ai_assist_max_log_lines: int = 200
     bootstrap_days: int = 365
-    min_avg_volume: int = 0
+    min_avg_turnover: float = 0.5  # 20日平均成交值門檻（億元）
     fallback_days: int = 10
+    # 大盤過濾器
+    market_filter_enabled: bool = True
+    market_filter_ma_days: int = 60
+    market_filter_bear_topn: int = 10
+    # 回測設定
+    stoploss_pct: float = -0.07
+    transaction_cost_pct: float = 0.00585
     # API Rate Limiting
     finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
     chunk_days: int = 180  # 資料抓取每個 chunk 的天數
+    institutional_bulk_chunk_days: int = 90  # 法人全市場抓取建議 chunk 天數
+    margin_bulk_chunk_days: int = 90  # 融資融券全市場抓取建議 chunk 天數
     finmind_retry_max: int = 3  # FinMind API 最大重試次數
     finmind_retry_backoff: float = 1.0  # FinMind API 重試退避秒數
     # Backfill 設定
@@ -123,10 +132,17 @@ def load_config() -> AppConfig:
         ai_assist_max_code_lines=int(pick("AI_ASSIST_MAX_CODE_LINES", 200)),
         ai_assist_max_log_lines=int(pick("AI_ASSIST_MAX_LOG_LINES", 200)),
         bootstrap_days=int(pick("BOOTSTRAP_DAYS", 365)),
-        min_avg_volume=int(pick("MIN_AVG_VOLUME", 0)),
+        min_avg_turnover=float(pick("MIN_AVG_TURNOVER", 0.5)),
         fallback_days=int(pick("FALLBACK_DAYS", 10)),
+        market_filter_enabled=str(pick("MARKET_FILTER_ENABLED", "true")).lower() in {"1", "true"},
+        market_filter_ma_days=int(pick("MARKET_FILTER_MA_DAYS", 60)),
+        market_filter_bear_topn=int(pick("MARKET_FILTER_BEAR_TOPN", 10)),
+        stoploss_pct=float(pick("STOPLOSS_PCT", -0.07)),
+        transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.00585)),
         finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),
         chunk_days=int(pick("CHUNK_DAYS", 180)),
+        institutional_bulk_chunk_days=int(pick("INSTITUTIONAL_BULK_CHUNK_DAYS", 90)),
+        margin_bulk_chunk_days=int(pick("MARGIN_BULK_CHUNK_DAYS", 90)),
         finmind_retry_max=int(pick("FINMIND_RETRY_MAX", 3)),
         finmind_retry_backoff=float(pick("FINMIND_RETRY_BACKOFF", 1.0)),
         backfill_years=int(pick("BACKFILL_YEARS", 10)),

@@ -11,6 +11,7 @@ artifacts/models/*.joblib
 artifacts/ai_prompts/
 artifacts/ai_answers/
 artifacts/reports/
+artifacts/backtest/
 logs/
 .cache/
 .pytest_cache/

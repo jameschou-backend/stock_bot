@@ -13,10 +13,19 @@ TZ: "Asia/Taipei"
 API_HOST: "0.0.0.0"
 API_PORT: 8000
 BOOTSTRAP_DAYS: 365
-MIN_AVG_VOLUME: 0
+MIN_AVG_TURNOVER: 0.5  # 20日平均成交值門檻（億元），0.5 = 5000萬，排除冷門股
 FALLBACK_DAYS: 10
+# 大盤過濾器（市場下行時減碼）
+MARKET_FILTER_ENABLED: true
+MARKET_FILTER_MA_DAYS: 60        # 用 60 日均線判斷市場多空
+MARKET_FILTER_BEAR_TOPN: 10      # 空頭市場時只選 10 檔（減半）
+# 回測設定
+STOPLOSS_PCT: -0.07              # 停損比例 (-7%)
+TRANSACTION_COST_PCT: 0.00585    # 來回交易成本 (手續費0.1425%*2 + 證交稅0.3%)
 # API Rate Limiting
 FINMIND_REQUESTS_PER_HOUR: 6000  # FinMind API 每小時請求限制（付費會員 6000，免費 600）
 CHUNK_DAYS: 180  # 資料抓取每個 chunk 的天數（建議 180 天減少 API 次數）
+INSTITUTIONAL_BULK_CHUNK_DAYS: 90  # 法人全市場抓取建議 chunk 天數（約 3 個月）
+MARGIN_BULK_CHUNK_DAYS: 90  # 融資融券全市場抓取建議 chunk 天數（約 3 個月）
 FINMIND_RETRY_MAX: 3  # FinMind API 最大重試次數
 FINMIND_RETRY_BACKOFF: 1.0  # FinMind API 重試退避秒數（指數退避）
