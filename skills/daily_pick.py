@@ -18,7 +18,30 @@ from app.models import Feature, ModelVersion, Pick, RawPrice, Stock
 from skills.build_features import FEATURE_COLUMNS
 
 
+# 選取前 8 個特徵作為 reason 說明
 REASON_FEATURES = FEATURE_COLUMNS[:8]
+
+
+def _is_bear_market(db_session: Session, target_date, ma_days: int) -> bool:
+    """判斷大盤是否處於空頭（用全市場股票均價的移動平均）。
+
+    計算方式：全市場股票等權 close 的 MA(ma_days) vs 最新 close。
+    若最新均價 < MA → 視為空頭市場。
+    """
+    from datetime import timedelta as td
+    start = target_date - td(days=ma_days * 2)  # 多拉資料確保夠算
+    stmt = (
+        select(RawPrice.trading_date, func.avg(RawPrice.close).label("avg_close"))
+        .where(RawPrice.trading_date.between(start, target_date))
+        .group_by(RawPrice.trading_date)
+        .order_by(RawPrice.trading_date)
+    )
+    mkt_df = pd.read_sql(stmt, db_session.get_bind())
+    if len(mkt_df) < ma_days:
+        return False  # 資料不足，不觸發過濾
+    mkt_df["ma"] = mkt_df["avg_close"].astype(float).rolling(ma_days).mean()
+    latest = mkt_df.iloc[-1]
+    return float(latest["avg_close"]) < float(latest["ma"])
 
 
 def _get_valid_stock_universe(session: Session) -> set:
@@ -84,7 +107,6 @@ def _load_price_universe(
     db_session: Session,
     target_date,
     stock_ids: List[str],
-    min_avg_volume: int,
 ) -> pd.DataFrame:
     if not stock_ids:
         return pd.DataFrame()
@@ -111,9 +133,16 @@ def _choose_pick_date(
     feature_df: pd.DataFrame,
     price_df: pd.DataFrame,
     topn: int,
-    min_avg_volume: int,
+    min_avg_turnover: float,
     fallback_days: int,
 ) -> Tuple[date | None, pd.DataFrame, Dict[str, object]]:
+    """選擇最佳選股日期。
+
+    min_avg_turnover: 20 日平均成交值門檻（億元）。0 表示不過濾。
+    """
+    # 預先計算每檔每日成交值（元）
+    turnover_threshold = min_avg_turnover * 1e8  # 億元 → 元
+
     best_date = None
     best_df = pd.DataFrame()
     best_valid = 0
@@ -138,18 +167,21 @@ def _choose_pick_date(
         if latest_price.empty:
             continue
 
-        avg_volume = (
+        # 計算 20 日平均成交值（close × volume）
+        recent = (
             price_df[price_df["trading_date"] <= target]
             .sort_values(["stock_id", "trading_date"])
             .groupby("stock_id")
             .tail(20)
-            .groupby("stock_id")["volume"]
-            .mean()
+            .copy()
         )
-        if min_avg_volume > 0:
-            avg_volume = avg_volume[avg_volume >= min_avg_volume]
+        recent["turnover"] = recent["close"] * recent["volume"]
+        avg_turnover = recent.groupby("stock_id")["turnover"].mean()
 
-        eligible = latest_price.merge(avg_volume.rename("avg_volume"), on="stock_id", how="inner")
+        if turnover_threshold > 0:
+            avg_turnover = avg_turnover[avg_turnover >= turnover_threshold]
+
+        eligible = latest_price.merge(avg_turnover.rename("avg_turnover"), on="stock_id", how="inner")
         eligible = eligible.drop_duplicates(subset=["stock_id"])
         if eligible.empty:
             continue
@@ -266,18 +298,33 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             db_session,
             max(candidate_dates),
             df["stock_id"].astype(str).unique().tolist(),
-            config.min_avg_volume,
         )
         
         coverage_stats["price_universe_rows"] = len(price_df)
         coverage_stats["price_universe_stocks"] = price_df["stock_id"].nunique() if not price_df.empty else 0
 
+        # ── 大盤過濾器：空頭市場減碼 ──
+        effective_topn = config.topn
+        bear_market = False
+        if getattr(config, "market_filter_enabled", False):
+            ma_days = getattr(config, "market_filter_ma_days", 60)
+            bear_topn = getattr(config, "market_filter_bear_topn", config.topn // 2)
+            bear_market = _is_bear_market(db_session, max(candidate_dates), ma_days)
+            if bear_market:
+                effective_topn = bear_topn
+                coverage_stats["market_filter"] = "BEAR"
+                coverage_stats["effective_topn"] = effective_topn
+            else:
+                coverage_stats["market_filter"] = "BULL"
+        else:
+            coverage_stats["market_filter"] = "disabled"
+
         chosen_date, chosen_df, fallback_logs = _choose_pick_date(
             candidate_dates,
             df,
             price_df,
-            config.topn,
-            config.min_avg_volume,
+            effective_topn,
+            config.min_avg_turnover,
             config.fallback_days,
         )
         if chosen_date is None:
@@ -304,7 +351,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             vals = pd.to_numeric(feature_df[feat], errors="coerce")
             percentile_map[feat] = vals.rank(pct=True)
 
-        df = df.sort_values("score", ascending=False).head(config.topn)
+        df = df.sort_values("score", ascending=False).head(effective_topn)
         records: List[Dict] = []
         for _, row in df.iterrows():
             reasons = {}
@@ -326,6 +373,9 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             )
 
         if records:
+            # 先清除同一天的舊 picks，避免殘留不同 stock_id 的過期資料
+            db_session.query(Pick).filter(Pick.pick_date == chosen_date).delete()
+
             stmt = insert(Pick).values(records)
             stmt = stmt.on_duplicate_key_update(
                 score=stmt.inserted.score,
@@ -341,7 +391,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             **fallback_logs,
             **impute_stats,
             **coverage_stats,
-            "min_avg_volume": config.min_avg_volume,
+            "min_avg_turnover": config.min_avg_turnover,
         }
         finish_job(db_session, job_id, "success", logs=logs)
         return logs

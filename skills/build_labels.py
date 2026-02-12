@@ -63,9 +63,14 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         records: List[Dict] = df[["stock_id", "trading_date", "future_ret_h"]].to_dict("records")
-        insert_stmt = insert(Label).values(records)
-        insert_stmt = insert_stmt.on_duplicate_key_update(future_ret_h=insert_stmt.inserted.future_ret_h)
-        db_session.execute(insert_stmt)
+        # 分批寫入，避免單次 INSERT 語句過大
+        BATCH_SIZE = 5000
+        for i in range(0, len(records), BATCH_SIZE):
+            batch = records[i:i + BATCH_SIZE]
+            insert_stmt = insert(Label).values(batch)
+            insert_stmt = insert_stmt.on_duplicate_key_update(future_ret_h=insert_stmt.inserted.future_ret_h)
+            db_session.execute(insert_stmt)
+            db_session.commit()
 
         end_date = df["trading_date"].max()
         logs = {
@@ -76,5 +81,6 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         finish_job(db_session, job_id, "success", logs=logs)
         return logs
     except Exception as exc:  # pragma: no cover - exercised by pipeline
+        db_session.rollback()
         finish_job(db_session, job_id, "failed", error_text=str(exc), logs={"error": str(exc)})
         raise

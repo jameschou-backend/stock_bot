@@ -35,7 +35,7 @@ from app.models import RawInstitutional, RawMarginShort, RawPrice
 
 # ---------- 常數設定（預設值，可被 config 覆蓋）----------
 CHECK_DAYS = 10  # 檢查最近 N 個交易日
-BENCHMARK_STOCK_ID = "0050"
+BENCHMARK_STOCK_ID = "2330"  # 台積電（普通股，確保在 --listed-only 資料集中）
 BENCHMARK_CHECK_DAYS = 30
 BENCHMARK_MIN_ROWS = 20
 

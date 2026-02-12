@@ -37,7 +37,7 @@ def test_choose_pick_date_fallback():
         }
     )
     pick_date, chosen, logs = daily_pick._choose_pick_date(
-        [d1, d2], feature_df, price_df, topn=1, min_avg_volume=0, fallback_days=2
+        [d1, d2], feature_df, price_df, topn=1, min_avg_turnover=0, fallback_days=2
     )
     assert pick_date == d2
     assert len(chosen) == 1
