@@ -26,8 +26,8 @@ from app.rate_limiter import get_rate_limiter
 FINMIND_DATA_URL = "https://api.finmindtrade.com/api/v4/data"
 
 # 批次抓取設定（優化後）
-BATCH_SIZE = 100  # 每批抓取股票數（FinMind 支援多個 data_id）
-BATCH_DELAY = 0.5  # 批次間最小延遲（秒）
+BATCH_SIZE = 500  # 每批抓取股票數（FinMind 支援多個 data_id）
+BATCH_DELAY = 0.1  # 批次間最小延遲（秒）
 DEFAULT_CHUNK_DAYS = 180  # 預設 chunk 天數（從 30 改為 180）
 
 
@@ -65,6 +65,7 @@ def fetch_dataset(
     requests_per_hour: int = 6000,
     max_retries: int = 3,
     backoff_seconds: float = 1.0,
+    timeout: int = 60,
 ) -> pd.DataFrame:
     """抓取單一 dataset 資料
     
@@ -76,6 +77,7 @@ def fetch_dataset(
         data_id: 股票代碼（若為 None 則全市場抓取）
         rate_limit: 是否啟用速率限制
         requests_per_hour: 每小時最大請求數
+        timeout: HTTP 請求超時秒數（預設 60，長區間建議 120）
     
     Returns:
         DataFrame 包含抓取的資料
@@ -101,7 +103,7 @@ def fetch_dataset(
                 FINMIND_DATA_URL,
                 params=params,
                 headers=_build_headers(token),
-                timeout=60,
+                timeout=timeout,
             )
         except requests.RequestException as exc:
             if attempt < max_retries:
@@ -132,6 +134,45 @@ def fetch_dataset(
         return pd.DataFrame(data)
 
     raise FinMindError("FinMind request failed after retries")
+
+
+def fetch_dataset_bulk_subchunks(
+    dataset: str,
+    start_date: date,
+    end_date: date,
+    chunk_days: int,
+    token: str | None = None,
+    requests_per_hour: int = 6000,
+    max_retries: int = 3,
+    backoff_seconds: float = 1.0,
+) -> tuple[pd.DataFrame, int]:
+    """用較小 chunk 嘗試全市場抓取，避免一次回傳過大而空回。
+
+    Returns:
+        (DataFrame, api_calls)
+    """
+    if chunk_days <= 0:
+        return pd.DataFrame(), 0
+
+    dfs: list[pd.DataFrame] = []
+    api_calls = 0
+    for sub_start, sub_end in date_chunks(start_date, end_date, chunk_days=chunk_days):
+        df = fetch_dataset(
+            dataset,
+            sub_start,
+            sub_end,
+            token=token,
+            requests_per_hour=requests_per_hour,
+            max_retries=max_retries,
+            backoff_seconds=backoff_seconds,
+        )
+        api_calls += 1
+        if not df.empty:
+            dfs.append(df)
+
+    if not dfs:
+        return pd.DataFrame(), api_calls
+    return pd.concat(dfs, ignore_index=True), api_calls
 
 
 def fetch_stock_list(
@@ -179,6 +220,8 @@ def fetch_dataset_by_stocks(
     batch_write_callback: Optional[Callable[[pd.DataFrame], int]] = None,
     max_retries: int = 3,
     backoff_seconds: float = 1.0,
+    debug: bool = False,
+    timeout: int = 60,
 ) -> pd.DataFrame:
     """批次抓取資料（當全市場抓取不可用時）
     
@@ -211,6 +254,10 @@ def fetch_dataset_by_stocks(
     total = len(stock_ids)
     api_calls = 0
     total_written = 0
+    error_count = 0
+    empty_count = 0
+    first_error: Optional[str] = None
+    _first_data_logged = False
     
     for i in range(0, total, batch_size):
         batch = stock_ids[i:i + batch_size]
@@ -230,11 +277,15 @@ def fetch_dataset_by_stocks(
                     requests_per_hour=requests_per_hour,
                     max_retries=max_retries,
                     backoff_seconds=backoff_seconds,
+                    timeout=timeout,
                 )
                 api_calls += 1
                 if not df.empty:
                     batch_dfs.append(df)
             except FinMindError:
+                error_count += 1
+                if debug and first_error is None:
+                    first_error = f"batch data_id={batch_data_id}"
                 # 批次失敗時，降級為逐檔抓取
                 for stock_id in batch:
                     try:
@@ -247,33 +298,50 @@ def fetch_dataset_by_stocks(
                             requests_per_hour=requests_per_hour,
                             max_retries=max_retries,
                             backoff_seconds=backoff_seconds,
+                            timeout=timeout,
                         )
                         api_calls += 1
                         if not df.empty:
                             batch_dfs.append(df)
                     except FinMindError:
                         # 單檔失敗不中斷整體流程
+                        error_count += 1
+                        if debug and first_error is None:
+                            first_error = f"stock_id={stock_id}"
                         pass
         else:
             # 傳統模式：逐檔抓取
-            for stock_id in batch:
+            for j, stock_id in enumerate(batch):
                 try:
-            df = fetch_dataset(
-                dataset,
-                start_date,
-                end_date,
-                token=token,
-                data_id=stock_id,
-                requests_per_hour=requests_per_hour,
-                max_retries=max_retries,
-                backoff_seconds=backoff_seconds,
-            )
+                    df = fetch_dataset(
+                        dataset,
+                        start_date,
+                        end_date,
+                        token=token,
+                        data_id=stock_id,
+                        requests_per_hour=requests_per_hour,
+                        max_retries=max_retries,
+                        backoff_seconds=backoff_seconds,
+                        timeout=timeout,
+                    )
                     api_calls += 1
                     if not df.empty:
                         batch_dfs.append(df)
-                except FinMindError:
+                        if debug and not _first_data_logged:
+                            _first_data_logged = True
+                            print(f"\n  [debug] 首筆回傳: stock_id={stock_id}, rows={len(df)}, cols={list(df.columns[:6])}", flush=True)
+                    else:
+                        empty_count += 1
+                except FinMindError as exc:
                     # 單檔失敗不中斷整體流程
+                    error_count += 1
+                    if debug and first_error is None:
+                        first_error = f"stock_id={stock_id}: {exc}"
                     pass
+
+                # 每檔都更新進度（逐檔模式下即時顯示）
+                if progress_callback:
+                    progress_callback(i + j + 1, total)
         
         # 處理這批資料
         if batch_dfs:
@@ -286,7 +354,8 @@ def fetch_dataset_by_stocks(
                 # 累積到最後合併
                 all_dfs.append(batch_df)
         
-        if progress_callback:
+        # batch_query 模式在 batch 結束時更新進度
+        if use_batch_query and progress_callback:
             progress_callback(min(i + batch_size, total), total)
         
         # 批次間延遲
@@ -295,11 +364,15 @@ def fetch_dataset_by_stocks(
     
     # 如果有 batch_write_callback，資料已經寫入，回傳空 DataFrame
     if batch_write_callback:
+        if debug and (error_count or empty_count):
+            print(f"\n[finmind] {dataset} api_calls={api_calls} empty={empty_count} errors={error_count} first_error={first_error}", flush=True)
         return pd.DataFrame()
     
     if not all_dfs:
         return pd.DataFrame()
     
+    if debug and error_count:
+        print(f"[finmind] {dataset} errors={error_count} first_error={first_error}")
     return pd.concat(all_dfs, ignore_index=True)
 
 
