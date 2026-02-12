@@ -57,6 +57,7 @@ from app.finmind import (
     date_chunks,
     fetch_dataset,
     fetch_dataset_by_stocks,
+    fetch_dataset_bulk_subchunks,
     fetch_stock_list,
 )
 from app.models import RawInstitutional, RawMarginShort, RawPrice
@@ -68,6 +69,10 @@ from skills.ingest_prices import _normalize_prices
 
 # 進度檔案位置
 PROGRESS_FILE = Path(__file__).resolve().parent.parent / "storage" / "backfill_progress.json"
+# 融資融券逐檔進度檔（記錄已完成的 stock_id，支援中斷續傳）
+MARGIN_DONE_FILE = Path(__file__).resolve().parent.parent / "storage" / "backfill_margin_done.json"
+PRICES_DONE_FILE = Path(__file__).resolve().parent.parent / "storage" / "backfill_prices_done.json"
+INST_DONE_FILE = Path(__file__).resolve().parent.parent / "storage" / "backfill_inst_done.json"
 
 # Dataset 名稱
 PRICE_DATASET = "TaiwanStockPrice"
@@ -90,6 +95,23 @@ def get_listed_stocks_from_db() -> List[str]:
             .all()
         )
         return sorted([s[0] for s in stocks])
+
+
+def _bulk_insufficient(df: pd.DataFrame, start_date: date, end_date: date) -> bool:
+    """判斷全市場回補是否只回單日資料（對多日區間來說不足）"""
+    if df.empty:
+        return True
+    if start_date == end_date:
+        return False
+    date_col = None
+    for col in ("date", "trading_date"):
+        if col in df.columns:
+            date_col = col
+            break
+    if date_col is None:
+        return False
+    unique_dates = pd.to_datetime(df[date_col], errors="coerce").dt.date.nunique()
+    return unique_dates <= 1
 
 
 @dataclass
@@ -170,6 +192,78 @@ def delete_progress() -> None:
         PROGRESS_FILE.unlink()
 
 
+def load_margin_done() -> Set[str]:
+    """載入已完成的融資融券股票清單"""
+    if not MARGIN_DONE_FILE.exists():
+        return set()
+    try:
+        with open(MARGIN_DONE_FILE, "r") as f:
+            return set(json.load(f))
+    except Exception:
+        return set()
+
+
+def save_margin_done(done: Set[str]) -> None:
+    """儲存已完成的融資融券股票清單"""
+    MARGIN_DONE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(MARGIN_DONE_FILE, "w") as f:
+        json.dump(sorted(done), f)
+
+
+def delete_margin_done() -> None:
+    """刪除融資融券逐檔進度檔"""
+    if MARGIN_DONE_FILE.exists():
+        MARGIN_DONE_FILE.unlink()
+
+
+def load_prices_done() -> Set[str]:
+    """載入已完成的價格回補股票清單"""
+    if not PRICES_DONE_FILE.exists():
+        return set()
+    try:
+        with open(PRICES_DONE_FILE, "r") as f:
+            return set(json.load(f))
+    except Exception:
+        return set()
+
+
+def save_prices_done(done: Set[str]) -> None:
+    """儲存已完成的價格回補股票清單"""
+    PRICES_DONE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(PRICES_DONE_FILE, "w") as f:
+        json.dump(sorted(done), f)
+
+
+def delete_prices_done() -> None:
+    """刪除價格逐檔進度檔"""
+    if PRICES_DONE_FILE.exists():
+        PRICES_DONE_FILE.unlink()
+
+
+def load_inst_done() -> Set[str]:
+    """載入已完成的法人回補股票清單"""
+    if not INST_DONE_FILE.exists():
+        return set()
+    try:
+        with open(INST_DONE_FILE, "r") as f:
+            return set(json.load(f))
+    except Exception:
+        return set()
+
+
+def save_inst_done(done: Set[str]) -> None:
+    """儲存已完成的法人回補股票清單"""
+    INST_DONE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(INST_DONE_FILE, "w") as f:
+        json.dump(sorted(done), f)
+
+
+def delete_inst_done() -> None:
+    """刪除法人逐檔進度檔"""
+    if INST_DONE_FILE.exists():
+        INST_DONE_FILE.unlink()
+
+
 def estimate_api_calls(
     start_date: date,
     end_date: date,
@@ -241,6 +335,162 @@ def print_status(progress: Optional[BackfillProgress], config) -> None:
     print("=" * 60)
 
 
+INST_UPDATE_COLS = [
+    "foreign_buy", "foreign_sell", "foreign_net",
+    "trust_buy", "trust_sell", "trust_net",
+    "dealer_buy", "dealer_sell", "dealer_net",
+]
+
+
+def _backfill_institutional(
+    start_date: date,
+    end_date: date,
+    config,
+    stock_list: List[str],
+    db_session,
+    progress: BackfillProgress,
+    allowed_stock_ids: Optional[Set[str]] = None,
+) -> None:
+    """逐檔抓取法人資料，每檔一次 API call 抓完整區間，每檔立即 upsert"""
+    inst_done = load_inst_done()
+    remaining = [s for s in stock_list if s not in inst_done]
+    total = len(stock_list)
+    done_count = total - len(remaining)
+
+    print(f"\n{'='*50}")
+    print(f"抓取法人資料 (逐檔模式)")
+    print(f"期間: {start_date} ~ {end_date}")
+    print(f"股票: {total} 檔, 已完成: {done_count}, 待抓取: {len(remaining)}")
+    print(f"{'='*50}")
+
+    if not remaining:
+        print("所有股票已完成，跳過")
+        return
+
+    for idx, stock_id in enumerate(remaining, start=1):
+        current = done_count + idx
+        try:
+            df = fetch_dataset(
+                INST_DATASET,
+                start_date,
+                end_date,
+                token=config.finmind_token,
+                data_id=stock_id,
+                requests_per_hour=config.finmind_requests_per_hour,
+                max_retries=config.finmind_retry_max,
+                backoff_seconds=config.finmind_retry_backoff,
+                timeout=120,
+            )
+            progress.api_calls += 1
+
+            if not df.empty:
+                df = _normalize_institutional(df, allowed_stock_ids=allowed_stock_ids)
+                records = df.to_dict("records")
+                if records:
+                    for k in range(0, len(records), 5000):
+                        batch = records[k:k + 5000]
+                        stmt = insert(RawInstitutional).values(batch)
+                        update_cols = {
+                            col: stmt.inserted[col]
+                            for col in INST_UPDATE_COLS
+                        }
+                        stmt = stmt.on_duplicate_key_update(**update_cols)
+                        db_session.execute(stmt)
+                        db_session.commit()
+                    rows = len(records)
+                    progress.inst_rows += rows
+                    print(f"  [{current}/{total}] {stock_id} +{rows:,} 筆", flush=True)
+                else:
+                    print(f"  [{current}/{total}] {stock_id} 空 (normalize 後)", flush=True)
+            else:
+                print(f"  [{current}/{total}] {stock_id} 無資料", flush=True)
+
+            inst_done.add(stock_id)
+            save_inst_done(inst_done)
+
+        except FinMindError as e:
+            print(f"  [{current}/{total}] {stock_id} ERR: {e}", flush=True)
+        except Exception as e:
+            db_session.rollback()
+            print(f"  [{current}/{total}] {stock_id} DB ERR: {e}", flush=True)
+
+    print(f"\n法人資料完成: 共 {progress.inst_rows:,} 筆")
+
+
+def _backfill_prices(
+    start_date: date,
+    end_date: date,
+    config,
+    stock_list: List[str],
+    db_session,
+    progress: BackfillProgress,
+) -> None:
+    """逐檔抓取價格資料，每檔一次 API call 抓完整區間，每檔立即 upsert"""
+    prices_done = load_prices_done()
+    remaining = [s for s in stock_list if s not in prices_done]
+    total = len(stock_list)
+    done_count = total - len(remaining)
+
+    print(f"\n{'='*50}")
+    print(f"抓取價格資料 (逐檔模式)")
+    print(f"期間: {start_date} ~ {end_date}")
+    print(f"股票: {total} 檔, 已完成: {done_count}, 待抓取: {len(remaining)}")
+    print(f"{'='*50}")
+
+    if not remaining:
+        print("所有股票已完成，跳過")
+        return
+
+    for idx, stock_id in enumerate(remaining, start=1):
+        current = done_count + idx
+        try:
+            df = fetch_dataset(
+                PRICE_DATASET,
+                start_date,
+                end_date,
+                token=config.finmind_token,
+                data_id=stock_id,
+                requests_per_hour=config.finmind_requests_per_hour,
+                max_retries=config.finmind_retry_max,
+                backoff_seconds=config.finmind_retry_backoff,
+                timeout=120,
+            )
+            progress.api_calls += 1
+
+            if not df.empty:
+                df = _normalize_prices(df)
+                records = df.to_dict("records")
+                if records:
+                    for k in range(0, len(records), 5000):
+                        batch = records[k:k + 5000]
+                        stmt = insert(RawPrice).values(batch)
+                        update_cols = {
+                            col: stmt.inserted[col]
+                            for col in ["open", "high", "low", "close", "volume"]
+                        }
+                        stmt = stmt.on_duplicate_key_update(**update_cols)
+                        db_session.execute(stmt)
+                        db_session.commit()
+                    rows = len(records)
+                    progress.prices_rows += rows
+                    print(f"  [{current}/{total}] {stock_id} +{rows:,} 筆", flush=True)
+                else:
+                    print(f"  [{current}/{total}] {stock_id} 空 (normalize 後)", flush=True)
+            else:
+                print(f"  [{current}/{total}] {stock_id} 無資料", flush=True)
+
+            prices_done.add(stock_id)
+            save_prices_done(prices_done)
+
+        except FinMindError as e:
+            print(f"  [{current}/{total}] {stock_id} ERR: {e}", flush=True)
+        except Exception as e:
+            db_session.rollback()
+            print(f"  [{current}/{total}] {stock_id} DB ERR: {e}", flush=True)
+
+    print(f"\n價格資料完成: 共 {progress.prices_rows:,} 筆")
+
+
 def run_backfill(
     start_date: date,
     end_date: date,
@@ -248,6 +498,7 @@ def run_backfill(
     datasets: List[str],
     resume: bool = True,
     listed_stock_list: Optional[List[str]] = None,
+    chunk_days: Optional[int] = None,
 ) -> Dict:
     """執行歷史資料回補
     
@@ -274,7 +525,14 @@ def run_backfill(
             progress = None
     
     # 計算 chunks
-    chunk_days = config.chunk_days
+    if chunk_days is None:
+        chunk_days = config.chunk_days
+    margin_only = set(datasets) == {"margin"}
+    if margin_only:
+        # 融資融券逐檔抓取：每檔 1 次 API call 就能拉完整區間，
+        # 用單一 chunk 最小化 API 次數（2339 檔 = 2339 calls）。
+        # 中斷續傳由 stock-level 進度檔（backfill_margin_done.json）負責。
+        chunk_days = (end_date - start_date).days + 1
     all_chunks = list(date_chunks(start_date, end_date, chunk_days))
     total_chunks = len(all_chunks)
     
@@ -308,7 +566,7 @@ def run_backfill(
     limiter = get_rate_limiter(config.finmind_requests_per_hour)
     
     # 先嘗試全市場抓取，失敗則獲取股票清單
-    fetch_mode = "bulk"
+    fetch_mode = "by_stock" if margin_only else "bulk"
     stock_list: List[str] = []
     
     print(f"\n開始回補歷史資料")
@@ -325,6 +583,40 @@ def run_backfill(
     print()
     
     with get_session() as db_session:
+        # === Phase 1: 逐檔抓取價格資料（完整區間）===
+        if "prices" in datasets:
+            if not stock_list:
+                if listed_stock_list:
+                    stock_list = listed_stock_list
+                else:
+                    stock_list = fetch_stock_list(
+                        config.finmind_token,
+                        requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
+                    )
+                    progress.api_calls += 1
+            _backfill_prices(start_date, end_date, config, stock_list, db_session, progress)
+            save_progress(progress)
+
+        # === Phase 1b: 逐檔抓取法人資料（完整區間）===
+        if "institutional" in datasets:
+            if not stock_list:
+                if listed_stock_list:
+                    stock_list = listed_stock_list
+                else:
+                    stock_list = fetch_stock_list(
+                        config.finmind_token,
+                        requests_per_hour=config.finmind_requests_per_hour,
+                        max_retries=config.finmind_retry_max,
+                        backoff_seconds=config.finmind_retry_backoff,
+                    )
+                    progress.api_calls += 1
+            allowed_stock_ids = set(listed_stock_list) if listed_stock_list else None
+            _backfill_institutional(start_date, end_date, config, stock_list, db_session, progress, allowed_stock_ids)
+            save_progress(progress)
+
+        # === Phase 2: 融資融券（按時間 chunk）===
         for chunk_idx, (chunk_start, chunk_end) in enumerate(all_chunks[start_chunk_idx:], start=start_chunk_idx):
             chunk_num = chunk_idx + 1
             
@@ -335,194 +627,7 @@ def run_backfill(
             
             chunk_results = []
             
-            # === 抓取價格資料 ===
-            if "prices" in datasets:
-                price_rows_written = 0
-                
-                # 批次寫入回調函數（每批 100 檔立即寫入）
-                def write_prices_batch(df: pd.DataFrame) -> int:
-                    nonlocal price_rows_written
-                    try:
-                        df = _normalize_prices(df)
-                        records = df.to_dict("records")
-                        if records:
-                            stmt = insert(RawPrice).values(records)
-                            update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
-                            stmt = stmt.on_duplicate_key_update(**update_cols)
-                            db_session.execute(stmt)
-                            db_session.commit()
-                            price_rows_written += len(records)
-                            return len(records)
-                    except Exception:
-                        pass
-                    return 0
-                
-                price_df = pd.DataFrame()
-                try:
-                    price_df = fetch_dataset(
-                        PRICE_DATASET,
-                        chunk_start,
-                        chunk_end,
-                        token=config.finmind_token,
-                        requests_per_hour=config.finmind_requests_per_hour,
-                        max_retries=config.finmind_retry_max,
-                        backoff_seconds=config.finmind_retry_backoff,
-                    )
-                    progress.api_calls += 1
-                    
-                    # 如果全市場抓取回傳空值，切換到逐檔模式
-                    if price_df.empty and fetch_mode == "bulk":
-                        print(" [切換到逐檔模式]", end="", flush=True)
-                        fetch_mode = "by_stock"
-                        progress.fetch_mode = "by_stock"
-                        
-                        # 取得股票清單（優先使用指定清單）
-                        if listed_stock_list:
-                            stock_list = listed_stock_list
-                            print(f" [使用上市櫃清單: {len(stock_list)} 檔]", end="", flush=True)
-                        else:
-                            stock_list = fetch_stock_list(
-                                config.finmind_token,
-                                requests_per_hour=config.finmind_requests_per_hour,
-                                max_retries=config.finmind_retry_max,
-                                backoff_seconds=config.finmind_retry_backoff,
-                            )
-                            progress.api_calls += 1
-                            print(f" [股票數: {len(stock_list)}]", end="", flush=True)
-                    
-                    if price_df.empty and fetch_mode == "by_stock" and stock_list:
-                        def price_progress(current, total):
-                            print(f"\r[{chunk_num}/{total_chunks}] prices: {current}/{total} 股票 (已寫入 {price_rows_written:,} 筆)", end="", flush=True)
-                        
-                        # 使用 batch_write_callback 每批立即寫入
-                        fetch_dataset_by_stocks(
-                            PRICE_DATASET,
-                            chunk_start,
-                            chunk_end,
-                            stock_list,
-                            token=config.finmind_token,
-                            requests_per_hour=config.finmind_requests_per_hour,
-                            max_retries=config.finmind_retry_max,
-                            backoff_seconds=config.finmind_retry_backoff,
-                            progress_callback=price_progress,
-                            batch_write_callback=write_prices_batch,
-                        )
-                        print()  # 換行
-                        progress.api_calls += (len(stock_list) + 99) // 100
-                    
-                except FinMindError as e:
-                    print(f" [prices err: {e}]", end="", flush=True)
-                
-                # 寫入價格資料（全市場模式時才需要，逐檔模式已在 callback 寫入）
-                if not price_df.empty:
-                    try:
-                        price_df = _normalize_prices(price_df)
-                        records = price_df.to_dict("records")
-                        if records:
-                            stmt = insert(RawPrice).values(records)
-                            update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
-                            stmt = stmt.on_duplicate_key_update(**update_cols)
-                            db_session.execute(stmt)
-                            db_session.commit()
-                            price_rows_written = len(records)
-                    except Exception as e:
-                        print(f" [prices write err]", end="", flush=True)
-                
-                if price_rows_written > 0:
-                    progress.prices_rows += price_rows_written
-                    chunk_results.append(f"P+{price_rows_written:,}")
-            
-            # === 抓取法人資料 ===
-            if "institutional" in datasets:
-                inst_rows_written = 0
-                
-                # 批次寫入回調函數
-                def write_inst_batch(df: pd.DataFrame) -> int:
-                    nonlocal inst_rows_written
-                    try:
-                        df = _normalize_institutional(df)
-                        records = df.to_dict("records")
-                        if records:
-                            stmt = insert(RawInstitutional).values(records)
-                            update_cols = {
-                                col: stmt.inserted[col]
-                                for col in [
-                                    "foreign_buy", "foreign_sell", "foreign_net",
-                                    "trust_buy", "trust_sell", "trust_net",
-                                    "dealer_buy", "dealer_sell", "dealer_net",
-                                ]
-                            }
-                            stmt = stmt.on_duplicate_key_update(**update_cols)
-                            db_session.execute(stmt)
-                            db_session.commit()
-                            inst_rows_written += len(records)
-                            return len(records)
-                    except Exception:
-                        pass
-                    return 0
-                
-                inst_df = pd.DataFrame()
-                try:
-                    inst_df = fetch_dataset(
-                        INST_DATASET,
-                        chunk_start,
-                        chunk_end,
-                        token=config.finmind_token,
-                        requests_per_hour=config.finmind_requests_per_hour,
-                        max_retries=config.finmind_retry_max,
-                        backoff_seconds=config.finmind_retry_backoff,
-                    )
-                    progress.api_calls += 1
-                    
-                    if inst_df.empty and fetch_mode == "by_stock" and stock_list:
-                        def inst_progress(current, total):
-                            print(f"\r[{chunk_num}/{total_chunks}] institutional: {current}/{total} 股票 (已寫入 {inst_rows_written:,} 筆)", end="", flush=True)
-                        
-                        fetch_dataset_by_stocks(
-                            INST_DATASET,
-                            chunk_start,
-                            chunk_end,
-                            stock_list,
-                            token=config.finmind_token,
-                            requests_per_hour=config.finmind_requests_per_hour,
-                            max_retries=config.finmind_retry_max,
-                            backoff_seconds=config.finmind_retry_backoff,
-                            progress_callback=inst_progress,
-                            batch_write_callback=write_inst_batch,
-                        )
-                        print()  # 換行
-                        progress.api_calls += (len(stock_list) + 99) // 100
-                        
-                except FinMindError as e:
-                    print(f" [inst err: {e}]", end="", flush=True)
-                
-                # 寫入法人資料（全市場模式時才需要）
-                if not inst_df.empty:
-                    try:
-                        inst_df = _normalize_institutional(inst_df)
-                        records = inst_df.to_dict("records")
-                        if records:
-                            stmt = insert(RawInstitutional).values(records)
-                            update_cols = {
-                                col: stmt.inserted[col]
-                                for col in [
-                                    "foreign_buy", "foreign_sell", "foreign_net",
-                                    "trust_buy", "trust_sell", "trust_net",
-                                    "dealer_buy", "dealer_sell", "dealer_net",
-                                ]
-                            }
-                            stmt = stmt.on_duplicate_key_update(**update_cols)
-                            db_session.execute(stmt)
-                            db_session.commit()
-                            inst_rows_written = len(records)
-                    except Exception as e:
-                        print(f" [inst write err]", end="", flush=True)
-                
-                if inst_rows_written > 0:
-                    progress.inst_rows += inst_rows_written
-                    chunk_results.append(f"I+{inst_rows_written:,}")
-            
-            # === 抓取融資融券資料 ===
+            # === 抓取融資融券資料（逐檔模式 + stock-level 續傳）===
             if "margin" in datasets:
                 margin_rows_written = 0
                 margin_cols = [
@@ -533,83 +638,94 @@ def run_backfill(
                     "short_sale_cash_repay", "short_sale_limit",
                     "short_sale_balance", "offset_loan_and_short", "note",
                 ]
-                
-                # 批次寫入回調函數
-                def write_margin_batch(df: pd.DataFrame) -> int:
-                    nonlocal margin_rows_written
+
+                # 載入已完成股票，過濾 stock_list
+                margin_done: Set[str] = load_margin_done()
+
+                # 取得股票清單
+                if not stock_list:
+                    if listed_stock_list:
+                        stock_list = listed_stock_list
+                    else:
+                        stock_list = fetch_stock_list(
+                            config.finmind_token,
+                            requests_per_hour=config.finmind_requests_per_hour,
+                            max_retries=config.finmind_retry_max,
+                            backoff_seconds=config.finmind_retry_backoff,
+                        )
+                        progress.api_calls += 1
+
+                remaining_stocks = [s for s in stock_list if s not in margin_done]
+                total_stocks = len(stock_list)
+                done_count = total_stocks - len(remaining_stocks)
+                print(f" [待抓取: {len(remaining_stocks)} 檔, 已完成: {done_count} 檔]", flush=True)
+
+                if remaining_stocks:
+                    # 批次寫入回調函數（每批寫入 DB 並記錄已完成 stock_id）
+                    _current_batch_stocks: List[str] = []
+
+                    DB_INSERT_BATCH = 5000  # 每次 INSERT 最多筆數，避免 SQLAlchemy 編譯過慢
+
+                    def write_margin_batch(df: pd.DataFrame) -> int:
+                        nonlocal margin_rows_written
+                        if df.empty:
+                            return 0
+                        try:
+                            df = _normalize_margin_short(df)
+                            records = df.to_dict("records")
+                            if not records:
+                                return 0
+                            # 分批 INSERT（避免單次 INSERT 十萬筆導致 SQLAlchemy 編譯卡住）
+                            total_written = 0
+                            for k in range(0, len(records), DB_INSERT_BATCH):
+                                batch_records = records[k:k + DB_INSERT_BATCH]
+                                stmt = insert(RawMarginShort).values(batch_records)
+                                update_cols = {
+                                    col: stmt.inserted[col]
+                                    for col in margin_cols
+                                    if col in df.columns
+                                }
+                                stmt = stmt.on_duplicate_key_update(**update_cols)
+                                db_session.execute(stmt)
+                                db_session.commit()
+                                total_written += len(batch_records)
+                            margin_rows_written += total_written
+                            # 記錄已完成的 stock_id 到進度檔
+                            written_ids = set(df["stock_id"].unique())
+                            margin_done.update(written_ids)
+                            save_margin_done(margin_done)
+                            return total_written
+                        except Exception as exc:
+                            db_session.rollback()
+                            print(f"\n  [margin write err] {type(exc).__name__}: {exc}", flush=True)
+                        return 0
+
+                    def margin_progress(current, total):
+                        done_now = done_count + current
+                        print(f"\r[{chunk_num}/{total_chunks}] margin: {done_now}/{total_stocks} 股票 (已寫入 {margin_rows_written:,} 筆)", end="", flush=True)
+
                     try:
-                        df = _normalize_margin_short(df)
-                        records = df.to_dict("records")
-                        if records:
-                            stmt = insert(RawMarginShort).values(records)
-                            update_cols = {
-                                col: stmt.inserted[col]
-                                for col in margin_cols
-                                if col in df.columns
-                            }
-                            stmt = stmt.on_duplicate_key_update(**update_cols)
-                            db_session.execute(stmt)
-                            db_session.commit()
-                            margin_rows_written += len(records)
-                            return len(records)
-                    except Exception:
-                        pass
-                    return 0
-                
-                margin_df = pd.DataFrame()
-                try:
-                    margin_df = fetch_dataset(
-                        MARGIN_DATASET,
-                        chunk_start,
-                        chunk_end,
-                        token=config.finmind_token,
-                        requests_per_hour=config.finmind_requests_per_hour,
-                        max_retries=config.finmind_retry_max,
-                        backoff_seconds=config.finmind_retry_backoff,
-                    )
-                    progress.api_calls += 1
-                    
-                    if margin_df.empty and fetch_mode == "by_stock" and stock_list:
-                        def margin_progress(current, total):
-                            print(f"\r[{chunk_num}/{total_chunks}] margin: {current}/{total} 股票 (已寫入 {margin_rows_written:,} 筆)", end="", flush=True)
-                        
                         fetch_dataset_by_stocks(
                             MARGIN_DATASET,
                             chunk_start,
                             chunk_end,
-                            stock_list,
+                            remaining_stocks,
                             token=config.finmind_token,
+                            batch_size=10,  # 每 10 檔寫入一次 DB（~24K 筆），避免 INSERT 過大
+                            use_batch_query=False,
                             requests_per_hour=config.finmind_requests_per_hour,
                             max_retries=config.finmind_retry_max,
                             backoff_seconds=config.finmind_retry_backoff,
                             progress_callback=margin_progress,
                             batch_write_callback=write_margin_batch,
+                            debug=True,
+                            timeout=120,
                         )
                         print()  # 換行
-                        progress.api_calls += (len(stock_list) + 99) // 100
-                        
-                except FinMindError as e:
-                    print(f" [margin err: {e}]", end="", flush=True)
-                
-                # 寫入融資融券資料（全市場模式時才需要）
-                if not margin_df.empty:
-                    try:
-                        margin_df = _normalize_margin_short(margin_df)
-                        records = margin_df.to_dict("records")
-                        if records:
-                            stmt = insert(RawMarginShort).values(records)
-                            update_cols = {
-                                col: stmt.inserted[col]
-                                for col in margin_cols
-                                if col in margin_df.columns
-                            }
-                            stmt = stmt.on_duplicate_key_update(**update_cols)
-                            db_session.execute(stmt)
-                            db_session.commit()
-                            margin_rows_written = len(records)
-                    except Exception as e:
-                        print(f" [margin write err]", end="", flush=True)
-                
+                        progress.api_calls += len(remaining_stocks)
+                    except FinMindError as e:
+                        print(f" [margin err: {e}]", end="", flush=True)
+
                 if margin_rows_written > 0:
                     progress.margin_rows += margin_rows_written
                     chunk_results.append(f"M+{margin_rows_written:,}")
@@ -629,6 +745,9 @@ def run_backfill(
     
     # 刪除進度檔案（完成後）
     delete_progress()
+    delete_margin_done()
+    delete_prices_done()
+    delete_inst_done()
     
     return {
         "prices_rows": progress.prices_rows,
@@ -677,6 +796,9 @@ def main():
     # 重置進度
     if args.reset:
         delete_progress()
+        delete_margin_done()
+        delete_prices_done()
+        delete_inst_done()
         print("進度已重置")
         if not args.years and not args.start:
             return
@@ -731,7 +853,15 @@ def main():
         print(f"使用上市櫃股票清單: {len(listed_stock_list)} 檔（排除下市、ETF、權證）")
     
     # 執行回補
-    result = run_backfill(start_date, end_date, config, datasets, resume=not args.reset, listed_stock_list=listed_stock_list)
+    result = run_backfill(
+        start_date,
+        end_date,
+        config,
+        datasets,
+        resume=not args.reset,
+        listed_stock_list=listed_stock_list,
+        chunk_days=config.chunk_days,
+    )
     print(f"\n結果: {result}")
 
 

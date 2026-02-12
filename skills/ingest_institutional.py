@@ -2,17 +2,14 @@
 
 從 FinMind 抓取三大法人買賣超資料寫入 raw_institutional 表。
 
-支援兩種模式：
-1. 全市場抓取（需較高權限）
-2. 逐檔抓取（適用免費/低階會員）
-
-會自動偵測權限並切換模式。
+策略：使用批次查詢模式（逗號分隔 data_id），每批最多 500 檔。
+不嘗試全市場 bulk API（權限不足會回傳空值）。
 """
 
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -23,18 +20,14 @@ from sqlalchemy.orm import Session
 from app.finmind import (
     FinMindError,
     date_chunks,
-    fetch_dataset,
     fetch_dataset_by_stocks,
     fetch_stock_list,
 )
 from app.job_utils import finish_job, start_job, update_job
-from app.models import RawInstitutional
+from app.models import RawInstitutional, Stock
 
 
 DATASET = "TaiwanStockInstitutionalInvestorsBuySell"
-
-# 股票清單快取（與 ingest_prices 共用）
-_stock_list_cache: Optional[List[str]] = None
 
 CATEGORY_MAP = {
     "foreign_investor": "foreign",
@@ -45,7 +38,10 @@ CATEGORY_MAP = {
 }
 
 
-def _normalize_institutional(df: pd.DataFrame) -> pd.DataFrame:
+def _normalize_institutional(
+    df: pd.DataFrame,
+    allowed_stock_ids: Optional[Set[str]] = None,
+) -> pd.DataFrame:
     rename_map = {"date": "trading_date"}
     df = df.rename(columns=rename_map)
 
@@ -65,6 +61,12 @@ def _normalize_institutional(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df["category"].notna()].copy()
     if df.empty:
         return pd.DataFrame(columns=["stock_id", "trading_date"])
+
+    df["stock_id"] = df["stock_id"].astype(str)
+    if allowed_stock_ids:
+        df = df[df["stock_id"].isin(allowed_stock_ids)]
+        if df.empty:
+            return pd.DataFrame(columns=["stock_id", "trading_date"])
 
     df[buy_col] = pd.to_numeric(df[buy_col], errors="coerce").fillna(0)
     df[sell_col] = pd.to_numeric(df[sell_col], errors="coerce").fillna(0)
@@ -134,66 +136,21 @@ def _resolve_start_date(session: Session, default_start: date) -> date:
     return max_date + timedelta(days=1)
 
 
-def _get_stock_list(token: str | None, requests_per_hour: int, max_retries: int, backoff_seconds: float) -> List[str]:
-    """取得股票清單（有快取）"""
-    global _stock_list_cache
-    if _stock_list_cache is None:
-        _stock_list_cache = fetch_stock_list(
-            token,
-            requests_per_hour=requests_per_hour,
-            max_retries=max_retries,
-            backoff_seconds=backoff_seconds,
-        )
-    return _stock_list_cache
+def _load_allowed_stock_ids(session: Session) -> Set[str]:
+    rows = (
+        session.query(Stock.stock_id)
+        .filter(Stock.is_listed == True)
+        .filter(Stock.security_type == "stock")
+        .all()
+    )
+    return {row[0] for row in rows}
 
 
-def _fetch_institutional_smart(
-    start_date: date,
-    end_date: date,
-    token: str | None,
-    requests_per_hour: int,
-    max_retries: int,
-    backoff_seconds: float,
-    logs: Dict[str, object],
-) -> pd.DataFrame:
-    """智慧抓取：先嘗試全市場，失敗則改逐檔
-    
-    Returns:
-        合併後的 DataFrame
-    """
-    # 先嘗試全市場抓取
-    df = fetch_dataset(
-        DATASET,
-        start_date,
-        end_date,
-        token=token,
-        requests_per_hour=requests_per_hour,
-        max_retries=max_retries,
-        backoff_seconds=backoff_seconds,
-    )
-    if not df.empty:
-        logs["fetch_mode"] = "bulk"
-        return df
-    
-    # 全市場抓取回傳空值，改用逐檔抓取
-    logs["fetch_mode"] = "by_stock"
-    stock_ids = _get_stock_list(token, requests_per_hour, max_retries, backoff_seconds)
-    logs["stock_list_count"] = len(stock_ids)
-    
-    if not stock_ids:
-        logs["warning"] = "無法取得股票清單，跳過抓取"
-        return pd.DataFrame()
-    
-    return fetch_dataset_by_stocks(
-        DATASET,
-        start_date,
-        end_date,
-        stock_ids,
-        token=token,
-        requests_per_hour=requests_per_hour,
-        max_retries=max_retries,
-        backoff_seconds=backoff_seconds,
-    )
+INST_UPDATE_COLS = [
+    "foreign_buy", "foreign_sell", "foreign_net",
+    "trust_buy", "trust_sell", "trust_net",
+    "dealer_buy", "dealer_sell", "dealer_net",
+]
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
@@ -213,12 +170,30 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0, "start_date": start_date, "end_date": end_date}
 
         total_rows = 0
+        allowed_stock_ids = _load_allowed_stock_ids(db_session)
+        logs["allowed_stock_ids"] = len(allowed_stock_ids)
+
+        # 取得股票清單
+        stock_ids = fetch_stock_list(
+            config.finmind_token,
+            requests_per_hour=config.finmind_requests_per_hour,
+            max_retries=config.finmind_retry_max,
+            backoff_seconds=config.finmind_retry_backoff,
+        )
+        logs["stock_count"] = len(stock_ids)
+        logs["fetch_mode"] = "by_stock_batch"
+
+        if not stock_ids:
+            logs["warning"] = "無法取得股票清單，跳過抓取"
+            logs["rows"] = 0
+            finish_job(db_session, job_id, "success", logs=logs)
+            return {"rows": 0, "start_date": start_date, "end_date": end_date}
+
         chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=config.chunk_days))
         total_chunks = len(chunk_ranges)
         logs["chunks_total"] = total_chunks
 
         for chunk_count, (chunk_start, chunk_end) in enumerate(chunk_ranges, start=1):
-            chunk_logs: Dict[str, object] = {}
             logs["progress"] = {
                 "current_chunk": chunk_count,
                 "total_chunks": total_chunks,
@@ -228,39 +203,29 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             }
             update_job(db_session, job_id, logs=logs, commit=True)
 
-            df = _fetch_institutional_smart(
+            # 使用批次查詢（每 500 檔一次 API call，逗號分隔 data_id）
+            df = fetch_dataset_by_stocks(
+                DATASET,
                 chunk_start,
                 chunk_end,
-                config.finmind_token,
-                config.finmind_requests_per_hour,
-                config.finmind_retry_max,
-                config.finmind_retry_backoff,
-                chunk_logs,
+                stock_ids,
+                token=config.finmind_token,
+                batch_size=500,
+                use_batch_query=True,
+                requests_per_hour=config.finmind_requests_per_hour,
+                max_retries=config.finmind_retry_max,
+                backoff_seconds=config.finmind_retry_backoff,
             )
-            logs.update({f"chunk_{chunk_count}": chunk_logs})
-            
+
             if df.empty:
                 continue
-            df = _normalize_institutional(df)
+            df = _normalize_institutional(df, allowed_stock_ids=allowed_stock_ids or None)
             records: List[Dict] = df.to_dict("records")
             if not records:
                 continue
 
             stmt = insert(RawInstitutional).values(records)
-            update_cols = {
-                col: stmt.inserted[col]
-                for col in [
-                    "foreign_buy",
-                    "foreign_sell",
-                    "foreign_net",
-                    "trust_buy",
-                    "trust_sell",
-                    "trust_net",
-                    "dealer_buy",
-                    "dealer_sell",
-                    "dealer_net",
-                ]
-            }
+            update_cols = {col: stmt.inserted[col] for col in INST_UPDATE_COLS}
             stmt = stmt.on_duplicate_key_update(**update_cols)
             db_session.execute(stmt)
             total_rows += len(records)

@@ -25,7 +25,6 @@ from sqlalchemy.orm import Session
 from app.finmind import (
     FinMindError,
     date_chunks,
-    fetch_dataset,
     fetch_dataset_by_stocks,
     fetch_stock_list,
 )
@@ -150,28 +149,14 @@ def _fetch_margin_smart(
     requests_per_hour: int,
     max_retries: int,
     backoff_seconds: float,
+    bulk_chunk_days: int,
     logs: Dict[str, object],
 ) -> pd.DataFrame:
-    """智慧抓取：先嘗試全市場，失敗則改逐檔
+    """逐檔抓取（融資融券建議直接逐檔）
     
     Returns:
         合併後的 DataFrame
     """
-    # 先嘗試全市場抓取
-    df = fetch_dataset(
-        DATASET,
-        start_date,
-        end_date,
-        token=token,
-        requests_per_hour=requests_per_hour,
-        max_retries=max_retries,
-        backoff_seconds=backoff_seconds,
-    )
-    if not df.empty:
-        logs["fetch_mode"] = "bulk"
-        return df
-    
-    # 全市場抓取回傳空值，改用逐檔抓取
     logs["fetch_mode"] = "by_stock"
     stock_ids = _get_stock_list(token, requests_per_hour, max_retries, backoff_seconds)
     logs["stock_list_count"] = len(stock_ids)
@@ -186,9 +171,11 @@ def _fetch_margin_smart(
         end_date,
         stock_ids,
         token=token,
+        use_batch_query=False,
         requests_per_hour=requests_per_hour,
         max_retries=max_retries,
         backoff_seconds=backoff_seconds,
+        debug=True,
     )
 
 
@@ -215,7 +202,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0, "start_date": start_date, "end_date": end_date}
         
         total_rows = 0
-        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=config.chunk_days))
+        chunk_days = config.chunk_days
+        if getattr(config, "margin_bulk_chunk_days", 0):
+            chunk_days = min(chunk_days, config.margin_bulk_chunk_days)
+        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=chunk_days))
         total_chunks = len(chunk_ranges)
         logs["chunks_total"] = total_chunks
         
@@ -237,6 +227,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 config.finmind_requests_per_hour,
                 config.finmind_retry_max,
                 config.finmind_retry_backoff,
+                config.margin_bulk_chunk_days,
                 chunk_logs,
             )
             logs.update({f"chunk_{chunk_count}": chunk_logs})
