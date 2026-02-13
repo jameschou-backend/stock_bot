@@ -118,7 +118,7 @@ def _check_table_freshness(
     session: Session,
     model,
     table_name: str,
-    today: date,
+    reference_date: date,
     max_stale_days: int,
     max_lag_trading_days: int,
 ) -> Tuple[Optional[date], List[QualityIssue]]:
@@ -134,7 +134,7 @@ def _check_table_freshness(
         return None, issues
     
     # 日曆天落後檢查
-    stale_days = (today - max_date).days
+    stale_days = max((reference_date - max_date).days, 0)
     if stale_days > max_stale_days:
         issues.append(QualityIssue(
             category=f"{table_name}_stale",
@@ -142,7 +142,7 @@ def _check_table_freshness(
         ))
     
     # 交易日落後檢查
-    lag_trading = _calculate_lag_trading_days(session, max_date, today)
+    lag_trading = _calculate_lag_trading_days(session, max_date, reference_date)
     if lag_trading > max_lag_trading_days:
         issues.append(QualityIssue(
             category=f"{table_name}_lag",
@@ -236,11 +236,13 @@ def check_data_quality(session: Session, config) -> QualityReport:
         QualityReport 包含是否通過、問題列表、指標數據
     """
     today = datetime.now(ZoneInfo(config.tz)).date()
-    trading_days = _get_taiwan_trading_days(today, CHECK_DAYS)
+    reference_date = get_latest_trading_day(session) or today
+    trading_days = _get_taiwan_trading_days(reference_date, CHECK_DAYS)
     
     issues: List[QualityIssue] = []
     metrics: Dict[str, object] = {
         "check_date": today.isoformat(),
+        "reference_trading_date": reference_date.isoformat(),
         "trading_days_checked": len(trading_days),
     }
     
@@ -250,7 +252,7 @@ def check_data_quality(session: Session, config) -> QualityReport:
     
     # === 1. raw_prices 檢查 ===
     prices_max_date, price_issues = _check_table_freshness(
-        session, RawPrice, "raw_prices", today, max_stale_days, max_lag_trading
+        session, RawPrice, "raw_prices", reference_date, max_stale_days, max_lag_trading
     )
     metrics["prices_max_date"] = prices_max_date.isoformat() if prices_max_date else None
     issues.extend(price_issues)
@@ -265,7 +267,7 @@ def check_data_quality(session: Session, config) -> QualityReport:
     
     # === 2. raw_institutional 檢查 ===
     inst_max_date, inst_issues = _check_table_freshness(
-        session, RawInstitutional, "raw_institutional", today, max_stale_days, max_lag_trading
+        session, RawInstitutional, "raw_institutional", reference_date, max_stale_days, max_lag_trading
     )
     metrics["inst_max_date"] = inst_max_date.isoformat() if inst_max_date else None
     issues.extend(inst_issues)
@@ -295,7 +297,7 @@ def check_data_quality(session: Session, config) -> QualityReport:
     
     # === 3. raw_margin_short 檢查 ===
     margin_max_date, margin_issues = _check_table_freshness(
-        session, RawMarginShort, "raw_margin_short", today, max_stale_days, max_lag_trading
+        session, RawMarginShort, "raw_margin_short", reference_date, max_stale_days, max_lag_trading
     )
     metrics["margin_max_date"] = margin_max_date.isoformat() if margin_max_date else None
     

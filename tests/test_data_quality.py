@@ -181,3 +181,40 @@ class TestMarginDataOptional:
         report = data_quality.QualityReport(passed=True, issues=issues, metrics={})
         assert report.passed is True
         assert report.error_text == ""  # warning 不會出現在 error_text
+
+
+def test_check_data_quality_uses_latest_trading_day_as_reference(monkeypatch):
+    """休市日執行時，應以最新交易日作為 freshness/lag 基準。"""
+
+    class _Cfg:
+        tz = "Asia/Taipei"
+        dq_max_stale_calendar_days = 1
+        dq_max_lag_trading_days = 1
+        dq_min_stocks_prices = 1
+        dq_min_stocks_institutional = 1
+        dq_min_stocks_margin = 1
+        dq_coverage_ratio_prices = 0.0
+        dq_coverage_ratio_institutional = 0.0
+        dq_coverage_ratio_margin = 0.0
+
+    reference_date = date(2026, 2, 11)
+    captured_references = []
+
+    def _fake_freshness(session, model, table_name, ref_date, max_stale, max_lag):
+        captured_references.append(ref_date)
+        return reference_date, []
+
+    monkeypatch.setattr(data_quality, "get_latest_trading_day", lambda _session: reference_date)
+    monkeypatch.setattr(data_quality, "_check_table_freshness", _fake_freshness)
+    monkeypatch.setattr(data_quality, "_check_table_coverage", lambda *_args, **_kwargs: ({}, []))
+    monkeypatch.setattr(
+        data_quality,
+        "_check_institutional_benchmark",
+        lambda *_args, **_kwargs: (data_quality.BENCHMARK_MIN_ROWS, None),
+    )
+
+    report = data_quality.check_data_quality(object(), _Cfg())
+
+    assert len(captured_references) == 3
+    assert all(ref == reference_date for ref in captured_references)
+    assert report.metrics["reference_trading_date"] == reference_date.isoformat()

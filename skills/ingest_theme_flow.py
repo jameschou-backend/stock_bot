@@ -6,7 +6,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from typing import Dict, List
+from typing import Dict, Iterator, List
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -80,6 +80,23 @@ def _build_theme_flow(df: pd.DataFrame) -> pd.DataFrame:
     ].drop_duplicates(subset=["theme_id", "trading_date"])
 
 
+def _to_mysql_safe_records(df: pd.DataFrame) -> List[Dict]:
+    """將 DataFrame 轉為 MySQL 可接受 records（NaN/NaT/inf -> None）。"""
+    if df.empty:
+        return []
+    safe_df = df.astype(object).copy()
+    safe_df = safe_df.mask(safe_df.isin([float("inf"), float("-inf")]), pd.NA)
+    safe_df = safe_df.where(pd.notna(safe_df), None)
+    return safe_df.to_dict("records")
+
+
+def _chunk_records(records: List[Dict], chunk_size: int) -> Iterator[List[Dict]]:
+    if chunk_size <= 0:
+        raise ValueError("chunk_size must be > 0")
+    for i in range(0, len(records), chunk_size):
+        yield records[i : i + chunk_size]
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "ingest_theme_flow", commit=True)
     logs: Dict[str, object] = {}
@@ -126,25 +143,42 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         theme_df = theme_df[theme_df["trading_date"] >= start_date]
-        records: List[Dict] = theme_df.to_dict("records")
+        records: List[Dict] = _to_mysql_safe_records(theme_df)
         if not records:
             logs["rows"] = 0
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        stmt = insert(RawThemeFlow).values(records)
-        stmt = stmt.on_duplicate_key_update(
-            turnover_amount=stmt.inserted.turnover_amount,
-            turnover_ratio=stmt.inserted.turnover_ratio,
-            theme_return_5=stmt.inserted.theme_return_5,
-            theme_return_20=stmt.inserted.theme_return_20,
-            hot_score=stmt.inserted.hot_score,
-        )
-        db_session.execute(stmt)
+        batch_size = int(kwargs.get("batch_size", 2000))
+        batch_count = 0
+        for batch in _chunk_records(records, batch_size):
+            stmt = insert(RawThemeFlow).values(batch)
+            stmt = stmt.on_duplicate_key_update(
+                turnover_amount=stmt.inserted.turnover_amount,
+                turnover_ratio=stmt.inserted.turnover_ratio,
+                theme_return_5=stmt.inserted.theme_return_5,
+                theme_return_20=stmt.inserted.theme_return_20,
+                hot_score=stmt.inserted.hot_score,
+            )
+            db_session.execute(stmt)
+            db_session.commit()
+            batch_count += 1
+
         logs.update({"rows": len(records), "themes": int(theme_df["theme_id"].nunique())})
+        logs["batches"] = batch_count
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": len(records)}
     except Exception as exc:  # pragma: no cover
+        # 若前面 SQL 失敗，先 rollback，避免後續寫 jobs 時觸發 invalid transaction。
+        try:
+            db_session.rollback()
+        except Exception:
+            pass
+
         logs["error"] = str(exc)
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception:
+            # 不覆蓋原始例外，保留最初失敗原因給上層處理。
+            pass
         raise
