@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from dataclasses import dataclass
+import json
 from pathlib import Path
 from typing import Any, Dict, Tuple
 
@@ -50,6 +51,8 @@ class AppConfig:
     # 回測設定
     stoploss_pct: float = -0.07
     transaction_cost_pct: float = 0.00585
+    strategy_weights_bull: dict = None
+    strategy_weights_bear: dict = None
     # API Rate Limiting
     finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
     chunk_days: int = 180  # 資料抓取每個 chunk 的天數
@@ -128,6 +131,14 @@ def load_config() -> AppConfig:
             return env_val
         return base.get(key, default)
 
+    def pick_json(key: str, default: dict) -> dict:
+        value = pick(key, default)
+        if isinstance(value, dict):
+            return value
+        if value is None or value == "":
+            return default
+        return json.loads(value)
+
     return AppConfig(
         finmind_token=str(pick("FINMIND_TOKEN", "")),
         db_dialect=str(pick("DB_DIALECT", "mysql")),
@@ -158,6 +169,8 @@ def load_config() -> AppConfig:
         regime_detector=str(pick("REGIME_DETECTOR", "ma")),
         stoploss_pct=float(pick("STOPLOSS_PCT", -0.07)),
         transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.00585)),
+        strategy_weights_bull=pick_json("STRATEGY_WEIGHTS_BULL", {}),
+        strategy_weights_bear=pick_json("STRATEGY_WEIGHTS_BEAR", {}),
         finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),
         chunk_days=int(pick("CHUNK_DAYS", 180)),
         institutional_bulk_chunk_days=int(pick("INSTITUTIONAL_BULK_CHUNK_DAYS", 90)),

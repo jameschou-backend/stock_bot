@@ -23,6 +23,8 @@ REGIME_DETECTOR: "ma"            # 市場狀態偵測器（目前支援 ma）
 # 回測設定
 STOPLOSS_PCT: -0.07              # 停損比例 (-7%)
 TRANSACTION_COST_PCT: 0.00585    # 來回交易成本 (手續費0.1425%*2 + 證交稅0.3%)
+STRATEGY_WEIGHTS_BULL: {"MomentumTrend": 0.6, "MeanReversion": 0.2, "DefensiveLowVol": 0.2}
+STRATEGY_WEIGHTS_BEAR: {"MomentumTrend": 0.2, "MeanReversion": 0.3, "DefensiveLowVol": 0.5}
 EVAL_TOPK_LIST: [10, 20]         # ranker 驗證指標使用的 K 值
 # API Rate Limiting
 FINMIND_REQUESTS_PER_HOUR: 6000  # FinMind API 每小時請求限制（付費會員 6000，免費 600）
