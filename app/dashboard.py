@@ -145,6 +145,55 @@ def fetch_stock_universe_summary(engine) -> dict:
         return {"total": 0, "stocks": 0, "etfs": 0, "listed": 0, "delisted": 0, "error": "table not found"}
 
 
+def fetch_data_quality_reports(engine, days: int = 30) -> pd.DataFrame:
+    try:
+        query = text(
+            """
+            SELECT
+                report_date,
+                table_name,
+                missing_ratio,
+                max_trading_date,
+                notes
+            FROM data_quality_reports
+            WHERE report_date >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+            ORDER BY report_date DESC, table_name ASC
+            """
+        )
+        df = pd.read_sql(query, engine, params={"days": days})
+        return df
+    except Exception:
+        # SQLite 測試環境不支援 DATE_SUB，改走可攜語法
+        try:
+            query = text(
+                """
+                SELECT
+                    report_date,
+                    table_name,
+                    missing_ratio,
+                    max_trading_date,
+                    notes
+                FROM data_quality_reports
+                WHERE report_date >= date('now', '-' || :days || ' day')
+                ORDER BY report_date DESC, table_name ASC
+                """
+            )
+            return pd.read_sql(query, engine, params={"days": days})
+        except Exception:
+            return pd.DataFrame()
+
+
+def _data_quality_light(missing_ratio: float | None) -> str:
+    if missing_ratio is None or pd.isna(missing_ratio):
+        return "GRAY"
+    value = float(missing_ratio)
+    if value < 0.05:
+        return "GREEN"
+    if value <= 0.20:
+        return "YELLOW"
+    return "RED"
+
+
 def fetch_picks(engine, pick_date: date) -> pd.DataFrame:
     query = text(
         """
@@ -390,6 +439,29 @@ if not prices_coverage.empty or not inst_coverage.empty:
         st.line_chart(combined)
 else:
     st.info("無覆蓋率資料")
+
+st.subheader("Data Quality")
+st.caption("最近 30 天資料品質報表（缺漏率紅黃綠燈）")
+quality_df = fetch_data_quality_reports(engine, days=30)
+if quality_df.empty:
+    st.info("尚無 data_quality_reports 資料")
+else:
+    quality_df = quality_df.copy()
+    quality_df["missing_ratio"] = pd.to_numeric(quality_df["missing_ratio"], errors="coerce")
+    quality_df["light"] = quality_df["missing_ratio"].apply(_data_quality_light)
+    st.dataframe(
+        quality_df[
+            [
+                "report_date",
+                "table_name",
+                "light",
+                "missing_ratio",
+                "max_trading_date",
+                "notes",
+            ]
+        ],
+        use_container_width=True,
+    )
 
 st.divider()
 

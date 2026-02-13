@@ -26,11 +26,12 @@ from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Tuple
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import RawInstitutional, RawMarginShort, RawPrice
+from app.market_calendar import get_latest_trading_day
+from app.models import Pick, RawInstitutional, RawMarginShort, RawPrice
 
 
 # ---------- 常數設定（預設值，可被 config 覆蓋）----------
@@ -38,6 +39,15 @@ CHECK_DAYS = 10  # 檢查最近 N 個交易日
 BENCHMARK_STOCK_ID = "2330"  # 台積電（普通股，確保在 --listed-only 資料集中）
 BENCHMARK_CHECK_DAYS = 30
 BENCHMARK_MIN_ROWS = 20
+DQ_TABLES = [
+    "raw_prices",
+    "raw_institutional",
+    "raw_margin_short",
+    "raw_fundamentals",
+    "raw_theme_flow",
+    "features",
+    "labels",
+]
 
 
 @dataclass
@@ -318,6 +328,204 @@ def check_data_quality(session: Session, config) -> QualityReport:
     return QualityReport(passed=not has_error, issues=issues, metrics=metrics)
 
 
+def _resolve_report_date(session: Session, tz: str) -> date:
+    """取得報表日期，優先使用最新交易日，避免非交易日誤判。"""
+    latest_trading_day = get_latest_trading_day(session)
+    if latest_trading_day is not None:
+        return latest_trading_day
+
+    latest_pick_date = session.query(func.max(Pick.pick_date)).scalar()
+    if latest_pick_date is not None:
+        return latest_pick_date
+
+    return datetime.now(ZoneInfo(tz)).date()
+
+
+def _estimate_expected_rows(session: Session, report_date: date) -> int:
+    """預估 expected_rows，優先 stocks listed stock，取不到則回退 raw_prices baseline。"""
+    listed_stock_count = session.execute(
+        text(
+            """
+            SELECT COUNT(*) AS cnt
+            FROM stocks
+            WHERE is_listed = 1 AND security_type = 'stock'
+            """
+        )
+    ).scalar()
+    if listed_stock_count and int(listed_stock_count) > 0:
+        return int(listed_stock_count)
+
+    baseline_count = session.execute(
+        text(
+            """
+            SELECT COUNT(DISTINCT stock_id) AS cnt
+            FROM raw_prices
+            WHERE trading_date = :report_date
+            """
+        ),
+        {"report_date": report_date},
+    ).scalar()
+    return int(baseline_count or 0)
+
+
+def _get_actual_rows(session: Session, table_name: str, report_date: date) -> int:
+    if table_name in {"raw_prices", "raw_institutional", "raw_margin_short", "raw_fundamentals"}:
+        query = text(
+            f"""
+            SELECT COUNT(DISTINCT stock_id) AS cnt
+            FROM {table_name}
+            WHERE trading_date = :report_date
+            """
+        )
+    else:
+        query = text(
+            f"""
+            SELECT COUNT(*) AS cnt
+            FROM {table_name}
+            WHERE trading_date = :report_date
+            """
+        )
+    value = session.execute(query, {"report_date": report_date}).scalar()
+    return int(value or 0)
+
+
+def _get_max_trading_date(session: Session, table_name: str) -> Optional[date]:
+    value = session.execute(
+        text(f"SELECT MAX(trading_date) AS max_date FROM {table_name}")
+    ).scalar()
+    if value is None:
+        return None
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        return date.fromisoformat(value)
+    return value
+
+
+def _get_total_rows(session: Session, table_name: str) -> int:
+    value = session.execute(text(f"SELECT COUNT(*) AS cnt FROM {table_name}")).scalar()
+    return int(value or 0)
+
+
+def _build_notes(
+    table_name: str,
+    report_date: date,
+    actual_rows: int,
+    max_trading_date: Optional[date],
+    total_rows: int,
+) -> Optional[str]:
+    notes: List[str] = []
+    if actual_rows == 0:
+        notes.append("empty")
+    if max_trading_date is None or max_trading_date < report_date:
+        notes.append("stale_or_empty")
+    if table_name in {"raw_fundamentals", "raw_theme_flow"} and total_rows == 0:
+        notes.append("historically_zero")
+    if not notes:
+        return None
+    return ",".join(notes)
+
+
+def _upsert_data_quality_report(
+    session: Session,
+    report_date: date,
+    table_name: str,
+    expected_rows: int,
+    actual_rows: int,
+    missing_ratio: Optional[float],
+    max_trading_date: Optional[date],
+    notes: Optional[str],
+) -> None:
+    payload = {
+        "report_date": report_date,
+        "table_name": table_name,
+        "expected_rows": expected_rows,
+        "actual_rows": actual_rows,
+        "missing_ratio": missing_ratio,
+        "max_trading_date": max_trading_date,
+        "notes": notes,
+    }
+    dialect = session.bind.dialect.name if session.bind is not None else ""
+    if dialect == "sqlite":
+        session.execute(
+            text(
+                """
+                INSERT INTO data_quality_reports (
+                    report_date, table_name, expected_rows, actual_rows,
+                    missing_ratio, max_trading_date, notes, created_at
+                ) VALUES (
+                    :report_date, :table_name, :expected_rows, :actual_rows,
+                    :missing_ratio, :max_trading_date, :notes, CURRENT_TIMESTAMP
+                )
+                ON CONFLICT(report_date, table_name) DO UPDATE SET
+                    expected_rows = excluded.expected_rows,
+                    actual_rows = excluded.actual_rows,
+                    missing_ratio = excluded.missing_ratio,
+                    max_trading_date = excluded.max_trading_date,
+                    notes = excluded.notes,
+                    created_at = CURRENT_TIMESTAMP
+                """
+            ),
+            payload,
+        )
+        return
+
+    session.execute(
+        text(
+            """
+            INSERT INTO data_quality_reports (
+                report_date, table_name, expected_rows, actual_rows,
+                missing_ratio, max_trading_date, notes, created_at
+            ) VALUES (
+                :report_date, :table_name, :expected_rows, :actual_rows,
+                :missing_ratio, :max_trading_date, :notes, NOW()
+            )
+            ON DUPLICATE KEY UPDATE
+                expected_rows = VALUES(expected_rows),
+                actual_rows = VALUES(actual_rows),
+                missing_ratio = VALUES(missing_ratio),
+                max_trading_date = VALUES(max_trading_date),
+                notes = VALUES(notes),
+                created_at = NOW()
+            """
+        ),
+        payload,
+    )
+
+
+def _persist_data_quality_reports(session: Session, config) -> Dict[str, object]:
+    report_date = _resolve_report_date(session, config.tz)
+    expected_rows = _estimate_expected_rows(session, report_date)
+
+    inserted_rows = 0
+    for table_name in DQ_TABLES:
+        actual_rows = _get_actual_rows(session, table_name, report_date)
+        max_trading_date = _get_max_trading_date(session, table_name)
+        total_rows = _get_total_rows(session, table_name)
+        missing_ratio = None
+        if expected_rows > 0:
+            missing_ratio = 1.0 - (actual_rows / expected_rows)
+        notes = _build_notes(table_name, report_date, actual_rows, max_trading_date, total_rows)
+
+        _upsert_data_quality_report(
+            session=session,
+            report_date=report_date,
+            table_name=table_name,
+            expected_rows=expected_rows,
+            actual_rows=actual_rows,
+            missing_ratio=missing_ratio,
+            max_trading_date=max_trading_date,
+            notes=notes,
+        )
+        inserted_rows += 1
+
+    return {
+        "data_quality_report_date": report_date.isoformat(),
+        "data_quality_expected_rows": expected_rows,
+        "data_quality_report_rows": inserted_rows,
+    }
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     """Pipeline skill entry point
     
@@ -331,6 +539,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         logs.update(report.metrics)
         logs["issues"] = [{"category": i.category, "message": i.message, "severity": i.severity} for i in report.issues]
         logs["passed"] = report.passed
+        logs.update(_persist_data_quality_reports(db_session, config))
         
         if not report.passed:
             error_text = report.error_text
