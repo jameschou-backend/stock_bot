@@ -3,17 +3,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import date
 from pathlib import Path
 from typing import Dict
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from app.config import load_config
 from skills.strategy_factory.engine import BacktestConfig, BacktestEngine, StrategyAllocation
 from skills.strategy_factory.registry import get, register_defaults
 from skills.strategy_factory.data import compute_indicators, detect_regime, load_price_df, resolve_weights
-
-
-ROOT = Path(__file__).resolve().parent.parent
 
 
 def main() -> None:
