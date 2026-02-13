@@ -30,6 +30,11 @@ def _make_sample_df(periods=80):
             "dealer_net": [2] * periods,
             "margin_purchase_balance": [50000 + i * 100 for i in range(periods)],
             "short_sale_balance": [5000 + i * 10 for i in range(periods)],
+            "fund_revenue_mom": [0.01] * periods,
+            "fund_revenue_yoy": [0.08] * periods,
+            "theme_turnover_ratio": [0.12] * periods,
+            "theme_return_20": [0.03] * periods,
+            "theme_hot_score": [1.2] * periods,
         }
     )
 
@@ -73,6 +78,8 @@ def test_compute_features_extended():
     # 融資融券特徵應有值
     assert np.isfinite(last["margin_balance_chg_5"]), "margin_balance_chg_5 not finite"
     assert np.isfinite(last["margin_short_ratio"]), "margin_short_ratio not finite"
+    assert np.isfinite(last["fund_revenue_yoy"]), "fund_revenue_yoy not finite"
+    assert np.isfinite(last["theme_hot_score"]), "theme_hot_score not finite"
 
     # market_rel_ret_20：單一股票時，相對大盤報酬應為 0
     assert np.isclose(last["market_rel_ret_20"], 0, atol=1e-10), (

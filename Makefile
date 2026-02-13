@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest rebuild-features
+.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-all
 
 migrate:
 	python scripts/migrate.py
@@ -37,6 +37,20 @@ backtest:
 # 回測 36 個月 + 自訂參數
 backtest-long:
 	python scripts/run_backtest.py --months 36 --topn 20
+
+# 因子研究（10 年）
+research-factors:
+	python scripts/research_factors.py
+
+# 參數網格回測（10 年）
+research-grid:
+	python scripts/run_grid_backtest.py --months 120
+
+# Train5Y-Test1Y walk-forward
+research-walkforward:
+	python scripts/run_walkforward.py --train-years 5 --test-years 1
+
+research-all: research-factors research-grid research-walkforward
 
 # 重建 features（特徵欄位變更後需要執行）
 # 會清空 features/labels/model_versions/picks 並重新建置

@@ -218,6 +218,10 @@ def run_backtest(
     stoploss_pct: float = -0.07,
     transaction_cost_pct: float = 0.00585,
     min_train_days: int = 500,
+    min_avg_turnover: float = 0.0,
+    eval_start: Optional[date] = None,
+    eval_end: Optional[date] = None,
+    train_lookback_days: Optional[int] = None,
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -247,15 +251,20 @@ def run_backtest(
         raise ValueError("features 或 labels 表為空，請先跑 pipeline-build")
 
     data_end = min(max_feat_date, max_label_date)
-    backtest_start = data_end - timedelta(days=30 * backtest_months)
+    if eval_end is not None:
+        data_end = min(data_end, eval_end)
+    backtest_start = eval_start if eval_start is not None else data_end - timedelta(days=30 * backtest_months)
     data_start = min_feat_date
 
     print(f"  資料範圍: {data_start} ~ {data_end}")
     print(f"  回測期間: {backtest_start} ~ {data_end}")
     print(f"  模型重訓: 每 {retrain_freq_months} 個月")
     print(f"  選股數量: {topn}")
+    print(f"  成交值門檻: {min_avg_turnover} 億元")
     print(f"  停損比例: {stoploss_pct:.1%}")
     print(f"  交易成本: {transaction_cost_pct:.3%}")
+    if train_lookback_days:
+        print(f"  訓練窗長: {train_lookback_days} 日")
     print()
 
     # ── 2. 載入全部資料 ──
@@ -309,6 +318,10 @@ def run_backtest(
             # 用 rb_date 之前的資料訓練
             train_feat = feat_df[feat_df["trading_date"] < rb_date]
             train_label = label_df[label_df["trading_date"] < rb_date]
+            if train_lookback_days:
+                train_start = rb_date - timedelta(days=train_lookback_days)
+                train_feat = train_feat[train_feat["trading_date"] >= train_start]
+                train_label = train_label[train_label["trading_date"] >= train_start]
 
             if train_feat.empty or train_label.empty:
                 print(f"  [{rb_date}] 訓練資料不足，跳過")
@@ -376,6 +389,24 @@ def run_backtest(
         scores = current_model.predict(fmat.values)
         day_feat = day_feat.reset_index(drop=True)
         day_feat["score"] = scores
+
+        # 流動性過濾：20 日平均成交值（億元）
+        if min_avg_turnover > 0:
+            threshold = min_avg_turnover * 1e8
+            recent_prices = (
+                price_df[price_df["trading_date"] <= rb_date]
+                .sort_values(["stock_id", "trading_date"])
+                .groupby("stock_id")
+                .tail(20)
+                .copy()
+            )
+            recent_prices["turnover"] = recent_prices["close"] * recent_prices["volume"]
+            avg_turnover = recent_prices.groupby("stock_id")["turnover"].mean()
+            keep_ids = set(avg_turnover[avg_turnover >= threshold].index.astype(str))
+            day_feat = day_feat[day_feat["stock_id"].astype(str).isin(keep_ids)]
+            if day_feat.empty:
+                continue
+
         picks = day_feat.sort_values("score", ascending=False).head(topn)
 
         # ── 模擬持有 ──

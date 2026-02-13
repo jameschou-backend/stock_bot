@@ -15,6 +15,7 @@ from sqlalchemy import text
 
 from app.config import load_config
 from app.db import get_engine
+from app.strategy_doc import get_selection_logic
 
 
 st.set_page_config(page_title="台股 ML 選股 Dashboard", layout="wide")
@@ -248,10 +249,80 @@ def fetch_jobs(engine, limit: int = 30) -> pd.DataFrame:
     return pd.read_sql(query, engine, params={"limit": limit})
 
 
+def fetch_market_regime(engine, ma_days: int = 60) -> dict:
+    try:
+        query = text(
+            """
+            SELECT trading_date, AVG(close) AS avg_close
+            FROM raw_prices
+            GROUP BY trading_date
+            ORDER BY trading_date DESC
+            LIMIT :n
+            """
+        )
+        df = pd.read_sql(query, engine, params={"n": ma_days * 2}).sort_values("trading_date")
+        if len(df) < ma_days:
+            return {"regime": "unknown", "latest": None, "ma": None}
+        df["ma"] = pd.to_numeric(df["avg_close"], errors="coerce").rolling(ma_days).mean()
+        latest = df.iloc[-1]
+        latest_close = float(latest["avg_close"])
+        latest_ma = float(latest["ma"])
+        regime = "BEAR" if latest_close < latest_ma else "BULL"
+        return {
+            "regime": regime,
+            "latest": latest_close,
+            "ma": latest_ma,
+            "trading_date": _to_date(latest["trading_date"]),
+        }
+    except Exception:
+        return {"regime": "unknown", "latest": None, "ma": None}
+
+
+def fetch_hot_themes(engine, limit: int = 5) -> pd.DataFrame:
+    try:
+        latest_q = text("SELECT MAX(trading_date) AS trading_date FROM raw_theme_flow")
+        latest_df = pd.read_sql(latest_q, engine)
+        if latest_df.empty or latest_df.loc[0, "trading_date"] is None:
+            return pd.DataFrame()
+        latest_date = _to_date(latest_df.loc[0, "trading_date"])
+        q = text(
+            """
+            SELECT theme_id, turnover_ratio, theme_return_20, hot_score
+            FROM raw_theme_flow
+            WHERE trading_date = :trading_date
+            ORDER BY hot_score DESC
+            LIMIT :limit
+            """
+        )
+        return pd.read_sql(q, engine, params={"trading_date": latest_date, "limit": limit})
+    except Exception:
+        return pd.DataFrame()
+
+
+def load_latest_backtest_summary() -> dict | None:
+    backtest_dir = PROJECT_ROOT / "artifacts" / "backtest"
+    if not backtest_dir.exists():
+        return None
+    files = sorted(backtest_dir.glob("backtest_*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    if not files:
+        return None
+    try:
+        payload = json.loads(files[0].read_text(encoding="utf-8"))
+        summary = payload.get("summary") or {}
+        summary["source_file"] = str(files[0].name)
+        return summary
+    except Exception:
+        return None
+
+
 st.title("台股 ML 選股 Dashboard")
 
 config = load_config()
 engine = get_engine()
+
+# ========== 選股邏輯 ==========
+with st.expander("📋 選股邏輯說明", expanded=False):
+    st.markdown(get_selection_logic(config))
 
 # ========== 資料層狀態總覽 ==========
 st.subheader("資料層狀態")
@@ -359,6 +430,61 @@ if latest_job:
     )
 else:
     st.write("尚無 job records")
+
+st.divider()
+
+# ========== 策略版本與風險監控 ==========
+st.subheader("策略版本與風險監控")
+
+regime = fetch_market_regime(engine, ma_days=config.market_filter_ma_days)
+latest_backtest = load_latest_backtest_summary()
+hot_themes = fetch_hot_themes(engine, limit=5)
+
+v1, v2, v3, v4 = st.columns(4)
+with v1:
+    st.metric("策略版本", "vNext-research")
+    st.caption(f"TopN={config.topn}, 停損={config.stoploss_pct:.1%}")
+with v2:
+    regime_label = regime.get("regime", "unknown")
+    st.metric("市場 Regime", regime_label)
+    if regime.get("latest") and regime.get("ma"):
+        st.caption(f"mkt={regime['latest']:.2f}, MA{config.market_filter_ma_days}={regime['ma']:.2f}")
+with v3:
+    if latest_backtest:
+        mdd = float(latest_backtest.get("max_drawdown", 0.0))
+        st.metric("最新回測 MDD", f"{mdd:.2%}")
+    else:
+        st.metric("最新回測 MDD", "N/A")
+with v4:
+    if latest_backtest:
+        sharpe = float(latest_backtest.get("sharpe_ratio", 0.0))
+        st.metric("最新回測 Sharpe", f"{sharpe:.2f}")
+    else:
+        st.metric("最新回測 Sharpe", "N/A")
+
+if latest_backtest:
+    dd = float(latest_backtest.get("max_drawdown", 0.0))
+    sharpe = float(latest_backtest.get("sharpe_ratio", 0.0))
+    stoploss_count = int(latest_backtest.get("stoploss_triggered", 0))
+    total_trades = max(int(latest_backtest.get("total_trades", 1)), 1)
+    stoploss_rate = stoploss_count / total_trades
+    lights = {
+        "drawdown_light": "RED" if dd <= -0.35 else ("YELLOW" if dd <= -0.25 else "GREEN"),
+        "sharpe_light": "RED" if sharpe < 0.2 else ("YELLOW" if sharpe < 0.6 else "GREEN"),
+        "stoploss_light": "RED" if stoploss_rate > 0.45 else ("YELLOW" if stoploss_rate > 0.30 else "GREEN"),
+    }
+    st.write(
+        {
+            "backtest_file": latest_backtest.get("source_file"),
+            "annualized_return": latest_backtest.get("annualized_return"),
+            "excess_return": latest_backtest.get("excess_return"),
+            "risk_lights": lights,
+        }
+    )
+
+if not hot_themes.empty:
+    st.caption("目前資金較熱題材（產業代理）")
+    st.dataframe(hot_themes, use_container_width=True)
 
 st.divider()
 

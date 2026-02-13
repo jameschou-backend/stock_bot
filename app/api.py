@@ -6,8 +6,10 @@ from typing import List, Optional
 from fastapi import FastAPI, HTTPException, Query
 from sqlalchemy import func
 
+from app.config import load_config
 from app.db import get_session
 from app.models import Feature, Job, ModelVersion, Pick, RawInstitutional, RawPrice
+from app.strategy_doc import get_selection_logic
 from app.schemas import (
     FeatureOut,
     InstitutionalOut,
@@ -76,6 +78,13 @@ def _pick_out(row: Pick) -> PickOut:
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/strategy")
+def get_strategy():
+    """回傳選股邏輯說明（Markdown）"""
+    config = load_config()
+    return {"markdown": get_selection_logic(config)}
 
 
 @app.get("/picks", response_model=List[PickOut])

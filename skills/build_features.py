@@ -10,7 +10,15 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import Feature, RawInstitutional, RawMarginShort, RawPrice
+from app.models import (
+    Feature,
+    RawFundamental,
+    RawInstitutional,
+    RawMarginShort,
+    RawPrice,
+    RawThemeFlow,
+    Stock,
+)
 
 
 # ── 核心特徵（必須存在才保留該筆資料）──────────────────────────────
@@ -39,6 +47,20 @@ EXTENDED_FEATURE_COLUMNS = [
     "margin_short_ratio",
     # 大盤相對強弱
     "market_rel_ret_20",
+    # 技術面（擴充）
+    "breakout_20",
+    "drawdown_60",
+    # 籌碼面（擴充）
+    "foreign_buy_streak_5",
+    "chip_flow_intensity_20",
+    # 基本面（月營收）
+    "fund_revenue_mom",
+    "fund_revenue_yoy",
+    "fund_revenue_trend_3m",
+    # 題材/金流（產業聚合）
+    "theme_turnover_ratio",
+    "theme_return_20",
+    "theme_hot_score",
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -115,6 +137,96 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             margin_df[col] = pd.to_numeric(margin_df[col], errors="coerce")
         price_df = price_df.merge(margin_df, on=["stock_id", "trading_date"], how="left")
 
+    # ── 股票主檔（產業） ──
+    stock_stmt = (
+        select(
+            Stock.stock_id,
+            Stock.industry_category,
+            Stock.is_listed,
+            Stock.security_type,
+        )
+        .where(Stock.security_type == "stock")
+        .where(Stock.is_listed == True)
+    )
+    stock_df = pd.read_sql(stock_stmt, session.get_bind())
+    if not stock_df.empty:
+        stock_df["stock_id"] = stock_df["stock_id"].astype(str)
+        price_df = price_df.merge(stock_df[["stock_id", "industry_category"]], on="stock_id", how="left")
+    else:
+        price_df["industry_category"] = None
+
+    # ── 基本面（月營收）──
+    fund_stmt = (
+        select(
+            RawFundamental.stock_id,
+            RawFundamental.trading_date,
+            RawFundamental.revenue_mom,
+            RawFundamental.revenue_yoy,
+        )
+        .where(RawFundamental.trading_date.between(start_date - timedelta(days=370), end_date))
+        .order_by(RawFundamental.stock_id, RawFundamental.trading_date)
+    )
+    fund_df = pd.read_sql(fund_stmt, session.get_bind())
+    if fund_df.empty:
+        price_df["fund_revenue_mom"] = np.nan
+        price_df["fund_revenue_yoy"] = np.nan
+    else:
+        for col in ["revenue_mom", "revenue_yoy"]:
+            fund_df[col] = pd.to_numeric(fund_df[col], errors="coerce")
+        fund_df = fund_df.rename(columns={"revenue_mom": "fund_revenue_mom", "revenue_yoy": "fund_revenue_yoy"})
+        fund_df = fund_df.sort_values(["stock_id", "trading_date"])
+        price_df = price_df.sort_values(["stock_id", "trading_date"])
+        merged = []
+        for sid, sub in price_df.groupby("stock_id", sort=False):
+            sub_f = fund_df[fund_df["stock_id"] == sid]
+            if sub_f.empty:
+                sub = sub.copy()
+                sub["fund_revenue_mom"] = np.nan
+                sub["fund_revenue_yoy"] = np.nan
+                merged.append(sub)
+                continue
+            aligned = pd.merge_asof(
+                sub.sort_values("trading_date"),
+                sub_f.sort_values("trading_date")[["trading_date", "fund_revenue_mom", "fund_revenue_yoy"]],
+                on="trading_date",
+                direction="backward",
+            )
+            merged.append(aligned)
+        price_df = pd.concat(merged, ignore_index=True)
+
+    # ── 題材/金流（產業聚合）──
+    theme_stmt = (
+        select(
+            RawThemeFlow.theme_id,
+            RawThemeFlow.trading_date,
+            RawThemeFlow.turnover_ratio,
+            RawThemeFlow.theme_return_20,
+            RawThemeFlow.hot_score,
+        )
+        .where(RawThemeFlow.trading_date.between(start_date, end_date))
+        .order_by(RawThemeFlow.trading_date, RawThemeFlow.theme_id)
+    )
+    theme_df = pd.read_sql(theme_stmt, session.get_bind())
+    if theme_df.empty:
+        price_df["theme_turnover_ratio"] = np.nan
+        price_df["theme_return_20"] = np.nan
+        price_df["theme_hot_score"] = np.nan
+    else:
+        theme_df = theme_df.rename(
+            columns={
+                "theme_id": "industry_category",
+                "turnover_ratio": "theme_turnover_ratio",
+                "hot_score": "theme_hot_score",
+            }
+        )
+        for col in ["theme_turnover_ratio", "theme_return_20", "theme_hot_score"]:
+            theme_df[col] = pd.to_numeric(theme_df[col], errors="coerce")
+        price_df = price_df.merge(
+            theme_df[["industry_category", "trading_date", "theme_turnover_ratio", "theme_return_20", "theme_hot_score"]],
+            on=["industry_category", "trading_date"],
+            how="left",
+        )
+
     return price_df
 
 
@@ -148,6 +260,10 @@ def _compute_features(df: pd.DataFrame) -> pd.DataFrame:
         daily_ret = close.pct_change(1)
         group["vol_20"] = daily_ret.rolling(20).std()
         group["vol_ratio_20"] = volume / volume.rolling(20).mean()
+        rolling_max20 = close.rolling(20).max()
+        rolling_max60 = close.rolling(60).max()
+        group["breakout_20"] = close / rolling_max20 - 1
+        group["drawdown_60"] = close / rolling_max60 - 1
 
         # ── 法人 ──
         group["foreign_net_5"] = group["foreign_net"].rolling(5).sum()
@@ -156,6 +272,13 @@ def _compute_features(df: pd.DataFrame) -> pd.DataFrame:
         group["trust_net_20"] = group["trust_net"].rolling(20).sum()
         group["dealer_net_5"] = group["dealer_net"].rolling(5).sum()
         group["dealer_net_20"] = group["dealer_net"].rolling(20).sum()
+        group["foreign_buy_streak_5"] = (
+            (group["foreign_net"] > 0).astype(int).rolling(5).sum()
+        )
+        group["chip_flow_intensity_20"] = (
+            (group["foreign_net"] + group["trust_net"] + group["dealer_net"]).rolling(20).sum()
+            / volume.rolling(20).sum().replace(0, np.nan)
+        )
 
         # ── RSI 14 ──
         delta = close.diff()
@@ -197,6 +320,26 @@ def _compute_features(df: pd.DataFrame) -> pd.DataFrame:
                 "margin_short_ratio",
             ]:
                 group[col] = np.nan
+
+        # ── 基本面（月營收）──
+        if "fund_revenue_mom" in group.columns:
+            group["fund_revenue_mom"] = pd.to_numeric(group["fund_revenue_mom"], errors="coerce")
+            group["fund_revenue_yoy"] = pd.to_numeric(group["fund_revenue_yoy"], errors="coerce")
+            group["fund_revenue_trend_3m"] = group["fund_revenue_yoy"].rolling(60, min_periods=20).mean()
+        else:
+            group["fund_revenue_mom"] = np.nan
+            group["fund_revenue_yoy"] = np.nan
+            group["fund_revenue_trend_3m"] = np.nan
+
+        # ── 題材/金流（產業）──
+        if "theme_turnover_ratio" in group.columns:
+            group["theme_turnover_ratio"] = pd.to_numeric(group["theme_turnover_ratio"], errors="coerce")
+            group["theme_return_20"] = pd.to_numeric(group["theme_return_20"], errors="coerce")
+            group["theme_hot_score"] = pd.to_numeric(group["theme_hot_score"], errors="coerce")
+        else:
+            group["theme_turnover_ratio"] = np.nan
+            group["theme_return_20"] = np.nan
+            group["theme_hot_score"] = np.nan
 
         return group
 

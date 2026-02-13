@@ -100,6 +100,36 @@ class RawInstitutional(Base):
     __table_args__ = (Index("idx_raw_inst_trading_date", "trading_date"),)
 
 
+class RawFundamental(Base):
+    """基本面原始資料表（月營收）"""
+    __tablename__ = "raw_fundamentals"
+
+    stock_id = Column(String(16), primary_key=True)
+    trading_date = Column(Date, primary_key=True)  # 使用月份對應日期（通常為月初）
+    revenue_current_month = Column(BigInteger)
+    revenue_last_month = Column(BigInteger)
+    revenue_last_year = Column(BigInteger)
+    revenue_mom = Column(DECIMAL(18, 8))
+    revenue_yoy = Column(DECIMAL(18, 8))
+
+    __table_args__ = (Index("idx_raw_fundamentals_trading_date", "trading_date"),)
+
+
+class RawThemeFlow(Base):
+    """題材/金流聚合表（以產業為主題）"""
+    __tablename__ = "raw_theme_flow"
+
+    theme_id = Column(String(64), primary_key=True)  # 例如 industry_category
+    trading_date = Column(Date, primary_key=True)
+    turnover_amount = Column(DECIMAL(20, 2))  # 主題總成交值（元）
+    turnover_ratio = Column(DECIMAL(18, 8))  # 主題成交值占全市場比例
+    theme_return_5 = Column(DECIMAL(18, 8))
+    theme_return_20 = Column(DECIMAL(18, 8))
+    hot_score = Column(DECIMAL(18, 8))  # 綜合熱度分數
+
+    __table_args__ = (Index("idx_raw_theme_flow_trading_date", "trading_date"),)
+
+
 class Feature(Base):
     __tablename__ = "features"
 

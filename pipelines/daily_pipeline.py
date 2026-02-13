@@ -77,10 +77,24 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
             run_skill("ingest_margin_short", ingest_margin_short.run)
         except Exception as exc:
             print(f"[WARN] ingest_margin_short failed: {exc}")
+
+        # 6. 基本面（月營收，研究用；失敗不中斷）
+        try:
+            from skills import ingest_fundamental
+            run_skill("ingest_fundamental", ingest_fundamental.run)
+        except Exception as exc:
+            print(f"[WARN] ingest_fundamental failed: {exc}")
+
+        # 7. 題材/金流（由產業聚合，研究用；失敗不中斷）
+        try:
+            from skills import ingest_theme_flow
+            run_skill("ingest_theme_flow", ingest_theme_flow.run)
+        except Exception as exc:
+            print(f"[WARN] ingest_theme_flow failed: {exc}")
     else:
         print("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
 
-    # 6. Data Quality Check: 確保資料完整性，若不達標則 fail-fast
+    # 8. Data Quality Check: 確保資料完整性，若不達標則 fail-fast
     from skills import data_quality
     run_skill("data_quality_check", data_quality.run)
 
