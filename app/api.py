@@ -8,6 +8,7 @@ from sqlalchemy import func
 
 from app.config import load_config
 from app.db import get_session
+from app.job_utils import cleanup_stale_running_jobs
 from app.models import Feature, Job, ModelVersion, Pick, RawInstitutional, RawPrice
 from app.strategy_doc import get_selection_logic
 from app.schemas import (
@@ -163,5 +164,6 @@ def get_models():
 @app.get("/jobs", response_model=List[JobOut])
 def get_jobs(limit: int = Query(default=50, ge=1, le=200)):
     with get_session() as session:
+        cleanup_stale_running_jobs(session, stale_minutes=120, commit=False)
         rows = session.query(Job).order_by(Job.started_at.desc()).limit(limit).all()
         return [JobOut.model_validate(row) for row in rows]

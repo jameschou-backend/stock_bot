@@ -396,3 +396,41 @@ def date_chunks(
         chunk_end = min(end_date, cursor + timedelta(days=chunk_days - 1))
         yield cursor, chunk_end
         cursor = chunk_end + timedelta(days=1)
+
+
+def probe_dataset_has_data(
+    dataset: str,
+    start_date: date,
+    end_date: date,
+    token: str | None = None,
+    probe_stock_ids: Optional[List[str]] = None,
+    requests_per_hour: int = 6000,
+    max_retries: int = 3,
+    backoff_seconds: float = 1.0,
+    timeout: int = 30,
+) -> Dict[str, Any]:
+    """用少量探針股票先確認區間是否有資料，避免空窗期逐檔呼叫 API。
+
+    回傳:
+      {
+        "has_data": bool,
+        "probe_stock_id": str | None,
+        "rows": int
+      }
+    """
+    probe_ids = probe_stock_ids or ["2330", "2317"]
+    for sid in probe_ids:
+        df = fetch_dataset(
+            dataset=dataset,
+            start_date=start_date,
+            end_date=end_date,
+            token=token,
+            data_id=sid,
+            requests_per_hour=requests_per_hour,
+            max_retries=max_retries,
+            backoff_seconds=backoff_seconds,
+            timeout=timeout,
+        )
+        if not df.empty:
+            return {"has_data": True, "probe_stock_id": sid, "rows": int(len(df))}
+    return {"has_data": False, "probe_stock_id": None, "rows": 0}

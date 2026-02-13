@@ -27,6 +27,7 @@ from app.finmind import (
     date_chunks,
     fetch_dataset_by_stocks,
     fetch_stock_list,
+    probe_dataset_has_data,
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawMarginShort
@@ -198,6 +199,23 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         if start_date > end_date:
             logs["rows"] = 0
             logs["skip_reason"] = "start_date > end_date"
+            finish_job(db_session, job_id, "success", logs=logs)
+            return {"rows": 0, "start_date": start_date, "end_date": end_date}
+
+        # 先做探針檢查，若區間無資料就不進入逐檔抓取。
+        probe = probe_dataset_has_data(
+            dataset=DATASET,
+            start_date=start_date,
+            end_date=end_date,
+            token=config.finmind_token,
+            requests_per_hour=config.finmind_requests_per_hour,
+            max_retries=config.finmind_retry_max,
+            backoff_seconds=config.finmind_retry_backoff,
+        )
+        logs["probe"] = probe
+        if not probe.get("has_data", False):
+            logs["rows"] = 0
+            logs["skip_reason"] = "no_data_in_range"
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0, "start_date": start_date, "end_date": end_date}
         

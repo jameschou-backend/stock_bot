@@ -14,7 +14,8 @@ import streamlit as st
 from sqlalchemy import text
 
 from app.config import load_config
-from app.db import get_engine
+from app.db import get_engine, get_session
+from app.job_utils import cleanup_stale_running_jobs
 from app.strategy_doc import get_selection_logic
 from skills import regime as regime_module
 
@@ -63,6 +64,10 @@ def fetch_latest_job(engine) -> dict | None:
 
 
 def fetch_running_jobs(engine, limit: int = 5) -> list[dict]:
+    # 每次載入 dashboard 時自動收斂 stale running jobs，避免畫面長期假卡住。
+    with get_session() as session:
+        cleanup_stale_running_jobs(session, stale_minutes=120, commit=False)
+
     query = text(
         """
         SELECT job_id, job_name, status, started_at, logs_json
