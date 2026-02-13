@@ -84,3 +84,57 @@ class StockDetailOut(BaseModel):
     institutional: Optional[InstitutionalOut] = None
     features: Optional[FeatureOut] = None
     pick: Optional[PickOut] = None
+
+
+class StrategyConfigIn(BaseModel):
+    name: str
+    config_json: Dict[str, Any]
+
+
+class StrategyConfigOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    config_id: str
+    name: str
+    config_json: Dict[str, Any]
+    created_at: Optional[datetime] = None
+
+
+class StrategyRunIn(BaseModel):
+    config_id: str
+    start_date: date
+    end_date: date
+    initial_capital: Optional[float] = None
+    transaction_cost_pct: Optional[float] = None
+    slippage_pct: Optional[float] = None
+    risk_per_trade: Optional[float] = None
+    max_positions: Optional[int] = None
+    rebalance_freq: Optional[str] = None
+
+
+class StrategyRunOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    run_id: str
+    config_id: str
+    start_date: date
+    end_date: date
+    initial_capital: float
+    transaction_cost_pct: float
+    slippage_pct: float
+    metrics_json: Optional[Dict[str, Any]] = None
+    created_at: Optional[datetime] = None
+
+
+class StrategyTradeOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    run_id: str
+    trade_id: str
+    trading_date: date
+    stock_id: str
+    action: str
+    qty: float
+    price: float
+    fee: float
+    reason_json: Optional[Dict[str, Any]] = None

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import date
 import json
+import uuid
 from pathlib import Path
 import sys
 
@@ -331,6 +332,42 @@ def fetch_jobs(engine, limit: int = 30) -> pd.DataFrame:
         """
     )
     return pd.read_sql(query, engine, params={"limit": limit})
+
+
+def fetch_strategy_configs(engine) -> pd.DataFrame:
+    try:
+        return pd.read_sql("SELECT * FROM strategy_configs ORDER BY created_at DESC", engine)
+    except Exception:
+        return pd.DataFrame()
+
+
+def fetch_strategy_runs(engine) -> pd.DataFrame:
+    try:
+        return pd.read_sql("SELECT * FROM strategy_runs ORDER BY created_at DESC", engine)
+    except Exception:
+        return pd.DataFrame()
+
+
+def fetch_strategy_trades(engine, run_id: str) -> pd.DataFrame:
+    try:
+        return pd.read_sql(
+            "SELECT * FROM strategy_trades WHERE run_id = :run_id ORDER BY trading_date ASC",
+            engine,
+            params={"run_id": run_id},
+        )
+    except Exception:
+        return pd.DataFrame()
+
+
+def fetch_strategy_positions(engine, run_id: str) -> pd.DataFrame:
+    try:
+        return pd.read_sql(
+            "SELECT * FROM strategy_positions WHERE run_id = :run_id ORDER BY trading_date ASC",
+            engine,
+            params={"run_id": run_id},
+        )
+    except Exception:
+        return pd.DataFrame()
 
 
 def fetch_market_regime(engine, config) -> dict:
@@ -685,3 +722,69 @@ if jobs_df.empty:
     st.write("尚無 job logs")
 else:
     st.dataframe(jobs_df, use_container_width=True)
+
+st.divider()
+
+st.subheader("Strategy Factory")
+tab1, tab2, tab3 = st.tabs(["Strategy Builder", "Backtest Result", "Holdings & Exposure"])
+
+with tab1:
+    st.caption("建立策略設定（規則/權重）")
+    configs_df = fetch_strategy_configs(engine)
+    if not configs_df.empty:
+        st.dataframe(configs_df, use_container_width=True)
+    name = st.text_input("設定名稱", value="default_strategy")
+    default_json = {
+        "strategies": ["MomentumTrend", "MeanReversion", "DefensiveLowVol"],
+        "weights_bull": {"MomentumTrend": 0.6, "MeanReversion": 0.2, "DefensiveLowVol": 0.2},
+        "weights_bear": {"MomentumTrend": 0.2, "MeanReversion": 0.3, "DefensiveLowVol": 0.5},
+    }
+    config_text = st.text_area("設定 JSON", value=json.dumps(default_json, ensure_ascii=False, indent=2))
+    if st.button("建立設定"):
+        try:
+            payload = json.loads(config_text)
+            with get_session() as session:
+                session.execute(
+                    text(
+                        "INSERT INTO strategy_configs (config_id, name, config_json) VALUES (:id, :name, :json)"
+                    ),
+                    {
+                        "id": uuid.uuid4().hex,
+                        "name": name,
+                        "json": json.dumps(payload, ensure_ascii=False),
+                    },
+                )
+                session.commit()
+            st.success("已建立策略設定")
+        except Exception as exc:
+            st.error(f"建立失敗: {exc}")
+
+with tab2:
+    runs_df = fetch_strategy_runs(engine)
+    if runs_df.empty:
+        st.info("尚無策略回測紀錄")
+    else:
+        run_id = st.selectbox("選擇 run_id", runs_df["run_id"].tolist())
+        row = runs_df[runs_df["run_id"] == run_id].iloc[0]
+        metrics = _parse_json(row.get("metrics_json"))
+        st.json(metrics)
+        equity_curve = metrics.get("equity_curve", [])
+        if equity_curve:
+            curve_df = pd.DataFrame(equity_curve)
+            curve_df["trading_date"] = pd.to_datetime(curve_df["trading_date"])
+            st.line_chart(curve_df.set_index("trading_date")["equity"])
+        trades_df = fetch_strategy_trades(engine, run_id)
+        if not trades_df.empty:
+            st.dataframe(trades_df, use_container_width=True)
+
+with tab3:
+    runs_df = fetch_strategy_runs(engine)
+    if runs_df.empty:
+        st.info("尚無持倉資料")
+    else:
+        run_id = st.selectbox("選擇 run_id (持倉)", runs_df["run_id"].tolist(), key="run_positions")
+        pos_df = fetch_strategy_positions(engine, run_id)
+        if pos_df.empty:
+            st.info("此 run 無持倉快照")
+        else:
+            st.dataframe(pos_df, use_container_width=True)

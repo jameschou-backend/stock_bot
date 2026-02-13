@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+import uuid
 from typing import List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
@@ -9,7 +10,18 @@ from sqlalchemy import func
 from app.config import load_config
 from app.db import get_session
 from app.job_utils import cleanup_stale_running_jobs
-from app.models import Feature, Job, ModelVersion, Pick, RawInstitutional, RawPrice
+from app.models import (
+    Feature,
+    Job,
+    ModelVersion,
+    Pick,
+    RawInstitutional,
+    RawPrice,
+    StrategyConfig,
+    StrategyPosition,
+    StrategyRun,
+    StrategyTrade,
+)
 from app.strategy_doc import get_selection_logic
 from app.schemas import (
     FeatureOut,
@@ -19,7 +31,15 @@ from app.schemas import (
     PickOut,
     PriceOut,
     StockDetailOut,
+    StrategyConfigIn,
+    StrategyConfigOut,
+    StrategyRunIn,
+    StrategyRunOut,
+    StrategyTradeOut,
 )
+from skills.strategy_factory.data import compute_indicators, detect_regime, load_price_df, resolve_weights
+from skills.strategy_factory.engine import BacktestConfig, BacktestEngine, StrategyAllocation
+from skills.strategy_factory.registry import get as get_strategy, register_defaults
 
 app = FastAPI(title="Stock Bot ML API", version="0.1.0")
 
@@ -167,3 +187,141 @@ def get_jobs(limit: int = Query(default=50, ge=1, le=200)):
         cleanup_stale_running_jobs(session, stale_minutes=120, commit=False)
         rows = session.query(Job).order_by(Job.started_at.desc()).limit(limit).all()
         return [JobOut.model_validate(row) for row in rows]
+
+
+@app.get("/strategy_configs", response_model=List[StrategyConfigOut])
+def list_strategy_configs():
+    with get_session() as session:
+        rows = session.query(StrategyConfig).order_by(StrategyConfig.created_at.desc()).all()
+        return [StrategyConfigOut.model_validate(r) for r in rows]
+
+
+@app.post("/strategy_configs", response_model=StrategyConfigOut)
+def create_strategy_config(payload: StrategyConfigIn):
+    with get_session() as session:
+        config_id = uuid.uuid4().hex
+        row = StrategyConfig(
+            config_id=config_id,
+            name=payload.name,
+            config_json=payload.config_json,
+        )
+        session.add(row)
+        session.commit()
+        return StrategyConfigOut.model_validate(row)
+
+
+@app.post("/strategy_runs", response_model=StrategyRunOut)
+def run_strategy_backtest(payload: StrategyRunIn):
+    register_defaults()
+    with get_session() as session:
+        config_row = (
+            session.query(StrategyConfig)
+            .filter(StrategyConfig.config_id == payload.config_id)
+            .one_or_none()
+        )
+        if config_row is None:
+            raise HTTPException(status_code=404, detail="strategy config not found")
+
+        config = load_config()
+        start_date = payload.start_date
+        end_date = payload.end_date
+        raw = load_price_df(start_date, end_date)
+        df = compute_indicators(raw)
+        regime = detect_regime(df, config)
+        weights = resolve_weights(regime, config, config_row.config_json or {})
+        strategies = config_row.config_json.get("strategies") if config_row.config_json else None
+
+        allocations = []
+        for name, weight in weights.items():
+            if strategies and name not in strategies:
+                continue
+            allocations.append(StrategyAllocation(strategy=get_strategy(name), weight=weight))
+        if not allocations:
+            raise HTTPException(status_code=400, detail="no strategies to run")
+
+        bt_cfg = BacktestConfig(
+            start_date=start_date,
+            end_date=end_date,
+            initial_capital=payload.initial_capital or 1_000_000.0,
+            transaction_cost_pct=payload.transaction_cost_pct or 0.00585,
+            slippage_pct=payload.slippage_pct or 0.001,
+            risk_per_trade=payload.risk_per_trade or 0.01,
+            max_positions=payload.max_positions or 6,
+            rebalance_freq=(payload.rebalance_freq or "D").upper(),
+        )
+        engine = BacktestEngine(bt_cfg)
+        result = engine.run(df, allocations)
+
+        equity_curve = result["equity_curve"]
+        final_equity = equity_curve[-1]["equity"] if equity_curve else bt_cfg.initial_capital
+        total_return = final_equity / bt_cfg.initial_capital - 1
+        metrics = {
+            "regime": regime,
+            "final_equity": final_equity,
+            "total_return": total_return,
+            "equity_curve": equity_curve,
+            "trade_count": len(result["trades"]),
+        }
+
+        run_id = uuid.uuid4().hex
+        run_row = StrategyRun(
+            run_id=run_id,
+            config_id=config_row.config_id,
+            start_date=start_date,
+            end_date=end_date,
+            initial_capital=bt_cfg.initial_capital,
+            transaction_cost_pct=bt_cfg.transaction_cost_pct,
+            slippage_pct=bt_cfg.slippage_pct,
+            metrics_json=metrics,
+        )
+        session.add(run_row)
+
+        for t in result["trades"]:
+            trade_row = StrategyTrade(
+                run_id=run_id,
+                trade_id=uuid.uuid4().hex,
+                trading_date=t["trading_date"],
+                stock_id=t["stock_id"],
+                action=t["action"],
+                qty=t["qty"],
+                price=t["price"],
+                fee=t["fee"],
+                reason_json={"reason": t.get("reason")},
+            )
+            session.add(trade_row)
+
+        for p in result["positions"]:
+            pos_row = StrategyPosition(
+                run_id=run_id,
+                trading_date=p["trading_date"],
+                stock_id=p["stock_id"],
+                qty=p["qty"],
+                avg_cost=p["avg_cost"],
+                market_value=p["market_value"],
+                unrealized_pnl=p["unrealized_pnl"],
+            )
+            session.add(pos_row)
+
+        session.commit()
+        return StrategyRunOut.model_validate(run_row)
+
+
+@app.get("/strategy_runs/{run_id}", response_model=StrategyRunOut)
+def get_strategy_run(run_id: str):
+    with get_session() as session:
+        row = session.query(StrategyRun).filter(StrategyRun.run_id == run_id).one_or_none()
+        if row is None:
+            raise HTTPException(status_code=404, detail="strategy run not found")
+        return StrategyRunOut.model_validate(row)
+
+
+@app.get("/strategy_runs/{run_id}/trades", response_model=List[StrategyTradeOut])
+def get_strategy_trades(run_id: str):
+    with get_session() as session:
+        rows = (
+            session.query(StrategyTrade)
+            .filter(StrategyTrade.run_id == run_id)
+            .order_by(StrategyTrade.trading_date.asc())
+            .all()
+        )
+        return [StrategyTradeOut.model_validate(r) for r in rows]
