@@ -46,6 +46,7 @@ class AppConfig:
     market_filter_enabled: bool = True
     market_filter_ma_days: int = 60
     market_filter_bear_topn: int = 10
+    regime_detector: str = "ma"
     # 回測設定
     stoploss_pct: float = -0.07
     transaction_cost_pct: float = 0.00585
@@ -137,6 +138,7 @@ def load_config() -> AppConfig:
         market_filter_enabled=str(pick("MARKET_FILTER_ENABLED", "true")).lower() in {"1", "true"},
         market_filter_ma_days=int(pick("MARKET_FILTER_MA_DAYS", 60)),
         market_filter_bear_topn=int(pick("MARKET_FILTER_BEAR_TOPN", 10)),
+        regime_detector=str(pick("REGIME_DETECTOR", "ma")),
         stoploss_pct=float(pick("STOPLOSS_PCT", -0.07)),
         transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.00585)),
         finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),

@@ -16,6 +16,7 @@ from sqlalchemy import text
 from app.config import load_config
 from app.db import get_engine
 from app.strategy_doc import get_selection_logic
+from skills import regime as regime_module
 
 
 st.set_page_config(page_title="台股 ML 選股 Dashboard", layout="wide")
@@ -298,8 +299,9 @@ def fetch_jobs(engine, limit: int = 30) -> pd.DataFrame:
     return pd.read_sql(query, engine, params={"limit": limit})
 
 
-def fetch_market_regime(engine, ma_days: int = 60) -> dict:
+def fetch_market_regime(engine, config) -> dict:
     try:
+        ma_days = int(getattr(config, "market_filter_ma_days", 60))
         query = text(
             """
             SELECT trading_date, AVG(close) AS avg_close
@@ -310,21 +312,13 @@ def fetch_market_regime(engine, ma_days: int = 60) -> dict:
             """
         )
         df = pd.read_sql(query, engine, params={"n": ma_days * 2}).sort_values("trading_date")
-        if len(df) < ma_days:
-            return {"regime": "unknown", "latest": None, "ma": None}
-        df["ma"] = pd.to_numeric(df["avg_close"], errors="coerce").rolling(ma_days).mean()
-        latest = df.iloc[-1]
-        latest_close = float(latest["avg_close"])
-        latest_ma = float(latest["ma"])
-        regime = "BEAR" if latest_close < latest_ma else "BULL"
-        return {
-            "regime": regime,
-            "latest": latest_close,
-            "ma": latest_ma,
-            "trading_date": _to_date(latest["trading_date"]),
-        }
+        detector = regime_module.get_regime_detector(config)
+        detected = detector.detect(df, config)
+        latest_date = _to_date(df.iloc[-1]["trading_date"]) if not df.empty else None
+        detected["trading_date"] = latest_date
+        return detected
     except Exception:
-        return {"regime": "unknown", "latest": None, "ma": None}
+        return {"regime": "unknown", "score": 0.0, "meta": {}}
 
 
 def fetch_hot_themes(engine, limit: int = 5) -> pd.DataFrame:
@@ -508,7 +502,7 @@ st.divider()
 # ========== 策略版本與風險監控 ==========
 st.subheader("策略版本與風險監控")
 
-regime = fetch_market_regime(engine, ma_days=config.market_filter_ma_days)
+regime = fetch_market_regime(engine, config)
 latest_backtest = load_latest_backtest_summary()
 hot_themes = fetch_hot_themes(engine, limit=5)
 
@@ -519,8 +513,16 @@ with v1:
 with v2:
     regime_label = regime.get("regime", "unknown")
     st.metric("市場 Regime", regime_label)
-    if regime.get("latest") and regime.get("ma"):
-        st.caption(f"mkt={regime['latest']:.2f}, MA{config.market_filter_ma_days}={regime['ma']:.2f}")
+    meta = regime.get("meta") or {}
+    current_price = meta.get("current_price")
+    ma_value = meta.get("ma_value")
+    diff_pct = meta.get("diff_pct")
+    ma_days = meta.get("ma_days", config.market_filter_ma_days)
+    if current_price is not None and ma_value is not None:
+        caption = f"mkt={float(current_price):.2f}, MA{ma_days}={float(ma_value):.2f}"
+        if diff_pct is not None:
+            caption += f", diff={float(diff_pct):.2%}"
+        st.caption(caption)
 with v3:
     if latest_backtest:
         mdd = float(latest_backtest.get("max_drawdown", 0.0))

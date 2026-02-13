@@ -19,6 +19,7 @@ FALLBACK_DAYS: 10
 MARKET_FILTER_ENABLED: true
 MARKET_FILTER_MA_DAYS: 60        # 用 60 日均線判斷市場多空
 MARKET_FILTER_BEAR_TOPN: 10      # 空頭市場時只選 10 檔（減半）
+REGIME_DETECTOR: "ma"            # 市場狀態偵測器（目前支援 ma）
 # 回測設定
 STOPLOSS_PCT: -0.07              # 停損比例 (-7%)
 TRANSACTION_COST_PCT: 0.00585    # 來回交易成本 (手續費0.1425%*2 + 證交稅0.3%)

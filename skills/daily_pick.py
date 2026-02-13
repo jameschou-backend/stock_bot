@@ -9,40 +9,29 @@ except ModuleNotFoundError as exc:
     raise RuntimeError("Missing dependency 'joblib'. Install with `pip install -r requirements.txt`.") from exc
 import numpy as np
 import pandas as pd
-from sqlalchemy import func, select
+from sqlalchemy import select, func
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
 from app.models import Feature, ModelVersion, Pick, RawPrice
 from skills.build_features import FEATURE_COLUMNS
-from skills import risk
+from skills import regime, risk
 
 
 # 選取前 8 個特徵作為 reason 說明
 REASON_FEATURES = FEATURE_COLUMNS[:8]
 
 
-def _is_bear_market(db_session: Session, target_date, ma_days: int) -> bool:
-    """判斷大盤是否處於空頭（用全市場股票均價的移動平均）。
-
-    計算方式：全市場股票等權 close 的 MA(ma_days) vs 最新 close。
-    若最新均價 < MA → 視為空頭市場。
-    """
-    from datetime import timedelta as td
-    start = target_date - td(days=ma_days * 2)  # 多拉資料確保夠算
+def _load_market_price_df(db_session: Session, target_date: date, ma_days: int) -> pd.DataFrame:
+    start = target_date - timedelta(days=ma_days * 2)
     stmt = (
         select(RawPrice.trading_date, func.avg(RawPrice.close).label("avg_close"))
         .where(RawPrice.trading_date.between(start, target_date))
         .group_by(RawPrice.trading_date)
         .order_by(RawPrice.trading_date)
     )
-    mkt_df = pd.read_sql(stmt, db_session.get_bind())
-    if len(mkt_df) < ma_days:
-        return False  # 資料不足，不觸發過濾
-    mkt_df["ma"] = mkt_df["avg_close"].astype(float).rolling(ma_days).mean()
-    latest = mkt_df.iloc[-1]
-    return float(latest["avg_close"]) < float(latest["ma"])
+    return pd.read_sql(stmt, db_session.get_bind())
 
 
 def _load_latest_model(session: Session) -> ModelVersion | None:
@@ -280,7 +269,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         if getattr(config, "market_filter_enabled", False):
             ma_days = getattr(config, "market_filter_ma_days", 60)
             bear_topn = getattr(config, "market_filter_bear_topn", config.topn // 2)
-            bear_market = _is_bear_market(db_session, max(candidate_dates), ma_days)
+            detector = regime.get_regime_detector(config)
+            market_df = _load_market_price_df(db_session, max(candidate_dates), ma_days)
+            regime_result = detector.detect(market_df, config)
+            bear_market = regime_result.get("regime") == "BEAR"
+            coverage_stats["regime_detector"] = getattr(config, "regime_detector", "ma")
+            coverage_stats["regime_meta"] = regime_result.get("meta", {})
             if bear_market:
                 effective_topn = bear_topn
                 coverage_stats["market_filter"] = "BEAR"
