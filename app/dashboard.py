@@ -510,9 +510,20 @@ if running_jobs:
             current = int(progress.get("current_chunk") or 0)
             ratio = current / total if total else 0.0
             st.progress(min(max(ratio, 0.0), 1.0))
-            st.caption(
-                f"chunk {current}/{total} | {progress.get('chunk_start')} ~ {progress.get('chunk_end')} | rows={progress.get('rows')}"
-            )
+            current_stock = progress.get("current_stock")
+            total_stocks = progress.get("total_stocks")
+            stock_id = progress.get("stock_id")
+            if current_stock is not None and total_stocks is not None:
+                stock_part = f"stock {current_stock}/{total_stocks}"
+                if stock_id:
+                    stock_part += f" ({stock_id})"
+                st.caption(
+                    f"{stock_part} | {progress.get('chunk_start')} ~ {progress.get('chunk_end')} | rows={progress.get('rows')}"
+                )
+            else:
+                st.caption(
+                    f"chunk {current}/{total} | {progress.get('chunk_start')} ~ {progress.get('chunk_end')} | rows={progress.get('rows')}"
+                )
         else:
             st.caption("無進度資訊")
 else:

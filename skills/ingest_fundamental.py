@@ -16,8 +16,7 @@ from sqlalchemy.orm import Session
 
 from app.finmind import (
     FinMindError,
-    date_chunks,
-    fetch_dataset_by_stocks,
+    fetch_dataset,
     fetch_stock_list,
 )
 from app.job_utils import finish_job, start_job, update_job
@@ -129,33 +128,39 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         total_rows = 0
-        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=365))
-        total_chunks = len(chunk_ranges)
-        logs["chunks_total"] = total_chunks
+        total_stocks = len(stock_ids)
+        error_stocks = 0
+        logs["stocks_total"] = total_stocks
 
-        for chunk_count, (chunk_start, chunk_end) in enumerate(chunk_ranges, start=1):
+        for stock_idx, stock_id in enumerate(stock_ids, start=1):
             logs["progress"] = {
-                "current_chunk": chunk_count,
-                "total_chunks": total_chunks,
-                "chunk_start": chunk_start.isoformat(),
-                "chunk_end": chunk_end.isoformat(),
+                "current_stock": stock_idx,
+                "total_stocks": total_stocks,
+                "current_chunk": stock_idx,
+                "total_chunks": total_stocks,
+                "chunk_start": start_date.isoformat(),
+                "chunk_end": end_date.isoformat(),
                 "rows": total_rows,
+                "stock_id": stock_id,
             }
             update_job(db_session, job_id, logs=logs, commit=True)
 
-            df = fetch_dataset_by_stocks(
-                DATASET,
-                chunk_start,
-                chunk_end,
-                stock_ids,
-                token=config.finmind_token,
-                batch_size=500,
-                use_batch_query=True,
-                requests_per_hour=config.finmind_requests_per_hour,
-                max_retries=config.finmind_retry_max,
-                backoff_seconds=config.finmind_retry_backoff,
-                timeout=120,
-            )
+            try:
+                df = fetch_dataset(
+                    DATASET,
+                    start_date,
+                    end_date,
+                    token=config.finmind_token,
+                    data_id=stock_id,
+                    requests_per_hour=config.finmind_requests_per_hour,
+                    max_retries=config.finmind_retry_max,
+                    backoff_seconds=config.finmind_retry_backoff,
+                    timeout=120,
+                )
+            except FinMindError:
+                error_stocks += 1
+                continue
+
             if df.empty:
                 continue
 
@@ -173,9 +178,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 revenue_yoy=stmt.inserted.revenue_yoy,
             )
             db_session.execute(stmt)
+            db_session.commit()
             total_rows += len(records)
 
-        logs.update({"rows": total_rows, "chunks": total_chunks})
+        logs.update({"rows": total_rows, "stocks_with_error": error_stocks})
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:  # pragma: no cover - pipeline runtime
