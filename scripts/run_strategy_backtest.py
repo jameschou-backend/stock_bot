@@ -44,7 +44,7 @@ def main() -> None:
     result = engine.run(df, allocations)
 
     out = ROOT / "artifacts" / "strategy_backtest.json"
-    out.write_text(json.dumps(result, ensure_ascii=False, indent=2))
+    out.write_text(json.dumps(result, ensure_ascii=False, indent=2, default=str))
     print(f"regime={regime} output={out}")
 
 
