@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 import yaml
 
@@ -68,6 +68,7 @@ class AppConfig:
     dq_coverage_ratio_margin: float = 0.5  # raw_margin_short 覆蓋率門檻
     dq_max_lag_trading_days: int = 1  # 允許最大落後交易日數
     dq_max_stale_calendar_days: int = 5  # 允許最大落後日曆天數
+    eval_topk_list: Tuple[int, ...] = (10, 20)
 
     @property
     def db_url(self) -> str:
@@ -97,6 +98,22 @@ def _get_env(key: str) -> str | None:
     if value.strip() == "":
         return None
     return value
+
+
+def _parse_eval_topk_list(raw_value: Any) -> Tuple[int, ...]:
+    if raw_value is None:
+        return (10, 20)
+    if isinstance(raw_value, (list, tuple)):
+        values = [int(v) for v in raw_value if int(v) > 0]
+        return tuple(values) if values else (10, 20)
+
+    text = str(raw_value).strip()
+    if not text:
+        return (10, 20)
+    parts = [p.strip() for p in text.split(",")]
+    values = [int(p) for p in parts if p]
+    values = [v for v in values if v > 0]
+    return tuple(values) if values else (10, 20)
 
 
 def load_config() -> AppConfig:
@@ -156,4 +173,5 @@ def load_config() -> AppConfig:
         dq_coverage_ratio_margin=float(pick("DQ_COVERAGE_RATIO_MARGIN", 0.5)),
         dq_max_lag_trading_days=int(pick("DQ_MAX_LAG_TRADING_DAYS", 1)),
         dq_max_stale_calendar_days=int(pick("DQ_MAX_STALE_CALENDAR_DAYS", 5)),
+        eval_topk_list=_parse_eval_topk_list(pick("EVAL_TOPK_LIST", "10,20")),
     )

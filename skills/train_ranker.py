@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import timedelta
 import hashlib
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Iterable
 
 try:
     import joblib
@@ -78,6 +78,69 @@ def _build_model(train_X, train_y, val_X, val_y):
         model.fit(train_X, train_y)
         engine = "sklearn_gbr"
     return model, engine
+
+
+def _safe_float(value):
+    if value is None:
+        return None
+    if pd.isna(value):
+        return None
+    return float(value)
+
+
+def _compute_validation_metrics(
+    val_dates: Iterable,
+    val_y: np.ndarray,
+    preds: np.ndarray,
+    topk_list: Iterable[int],
+) -> Dict[str, object]:
+    ic = None
+    if len(preds):
+        ic_value = spearmanr(preds, val_y).correlation
+        ic = _safe_float(ic_value)
+
+    topk_metrics: Dict[str, float | None] = {}
+    hitrate_metrics: Dict[str, float | None] = {}
+
+    if len(preds):
+        val_frame = pd.DataFrame(
+            {
+                "trading_date": list(val_dates),
+                "pred": preds,
+                "y": val_y,
+            }
+        )
+        for k in topk_list:
+            key = f"k{int(k)}"
+            topk_rows = (
+                val_frame.sort_values(["trading_date", "pred"], ascending=[True, False])
+                .groupby("trading_date")
+                .head(k)
+            )
+            per_day_topk = topk_rows.groupby("trading_date")["y"].mean()
+            per_day_hitrate = topk_rows.groupby("trading_date")["y"].apply(lambda s: float((s > 0).mean()))
+            topk_metrics[key] = _safe_float(per_day_topk.mean()) if not per_day_topk.empty else None
+            hitrate_metrics[key] = _safe_float(per_day_hitrate.mean()) if not per_day_hitrate.empty else None
+    else:
+        for k in topk_list:
+            key = f"k{int(k)}"
+            topk_metrics[key] = None
+            hitrate_metrics[key] = None
+
+    pred_stats = {
+        "mean": _safe_float(np.mean(preds)) if len(preds) else None,
+        "std": _safe_float(np.std(preds)) if len(preds) else None,
+        "min": _safe_float(np.min(preds)) if len(preds) else None,
+        "max": _safe_float(np.max(preds)) if len(preds) else None,
+    }
+
+    return {
+        "v": 1,
+        "ic_spearman": ic,
+        "topk": topk_metrics,
+        "hitrate": hitrate_metrics,
+        "pred_stats": pred_stats,
+    }
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
@@ -156,18 +219,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         # ── 驗證集評估 ──
         preds = model.predict(val_X) if len(val_X) else np.array([])
-        ic = spearmanr(preds, val_y).correlation if len(preds) else None
-
-        topn = config.topn
-        topn_mean = None
-        if len(preds):
-            val_frame = pd.DataFrame({"trading_date": df.loc[~train_mask, "trading_date"].values, "pred": preds, "y": val_y})
-
-            def topn_mean_for_day(group: pd.DataFrame) -> float:
-                return group.sort_values("pred", ascending=False).head(topn)["y"].mean()
-
-            per_day = val_frame.groupby("trading_date").apply(topn_mean_for_day)
-            topn_mean = float(per_day.mean()) if not per_day.empty else None
+        eval_topk_list = getattr(config, "eval_topk_list", (10, 20))
+        metrics_core = _compute_validation_metrics(
+            val_dates=df.loc[~train_mask, "trading_date"].values,
+            val_y=val_y,
+            preds=preds,
+            topk_list=eval_topk_list,
+        )
 
         # ── 特徵重要度（LightGBM 原生支援）──
         importance = {}
@@ -177,8 +235,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 importance[name] = int(imp[i])
 
         metrics = {
-            "ic_spearman": None if ic is None else float(ic),
-            "topn_mean_future_ret": topn_mean,
+            **metrics_core,
             "train_rows": int(train_X.shape[0]),
             "val_rows": int(val_X.shape[0]),
             "engine": engine,

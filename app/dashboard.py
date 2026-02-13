@@ -195,6 +195,35 @@ def _data_quality_light(missing_ratio: float | None) -> str:
     return "RED"
 
 
+def _format_model_metrics(metrics: dict) -> dict:
+    if not isinstance(metrics, dict):
+        return {}
+    if metrics.get("v") == 1:
+        return {
+            "v": metrics.get("v"),
+            "ic_spearman": metrics.get("ic_spearman"),
+            "topk": metrics.get("topk", {}),
+            "hitrate": metrics.get("hitrate", {}),
+            "pred_stats": metrics.get("pred_stats", {}),
+            "train_rows": metrics.get("train_rows"),
+            "val_rows": metrics.get("val_rows"),
+            "engine": metrics.get("engine"),
+            "feature_count": metrics.get("feature_count"),
+        }
+
+    # 舊版 metrics_json 相容顯示
+    return {
+        "v": 0,
+        "ic_spearman": metrics.get("ic_spearman"),
+        "topn_mean_future_ret": metrics.get("topn_mean_future_ret"),
+        "train_rows": metrics.get("train_rows"),
+        "val_rows": metrics.get("val_rows"),
+        "engine": metrics.get("engine"),
+        "feature_count": metrics.get("feature_count"),
+        "raw_metrics": metrics,
+    }
+
+
 def fetch_picks(engine, pick_date: date) -> pd.DataFrame:
     query = text(
         """
@@ -604,7 +633,8 @@ with col2:
             "train_end": model_row["train_end"],
             "feature_set_hash": model_row["feature_set_hash"],
         })
-        st.write("metrics", model_row["metrics_json"])
+        st.write("metrics")
+        st.json(_format_model_metrics(model_row["metrics_json"]))
 
 st.divider()
 
