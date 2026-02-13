@@ -36,8 +36,11 @@ def test_choose_pick_date_fallback():
             "volume": [1000, 1000],
         }
     )
+    class _Cfg:
+        min_avg_turnover = 0
+
     pick_date, chosen, logs = daily_pick._choose_pick_date(
-        [d1, d2], feature_df, price_df, topn=1, min_avg_turnover=0, fallback_days=2
+        [d1, d2], feature_df, price_df, topn=1, config=_Cfg(), fallback_days=2
     )
     assert pick_date == d2
     assert len(chosen) == 1

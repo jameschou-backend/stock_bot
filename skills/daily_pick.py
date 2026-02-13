@@ -14,8 +14,9 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import Feature, ModelVersion, Pick, RawPrice, Stock
+from app.models import Feature, ModelVersion, Pick, RawPrice
 from skills.build_features import FEATURE_COLUMNS
+from skills import risk
 
 
 # 選取前 8 個特徵作為 reason 說明
@@ -42,24 +43,6 @@ def _is_bear_market(db_session: Session, target_date, ma_days: int) -> bool:
     mkt_df["ma"] = mkt_df["avg_close"].astype(float).rolling(ma_days).mean()
     latest = mkt_df.iloc[-1]
     return float(latest["avg_close"]) < float(latest["ma"])
-
-
-def _get_valid_stock_universe(session: Session) -> set:
-    """取得有效股票 universe（排除 ETF、權證等）
-    
-    過濾條件：
-    - security_type = 'stock' 
-    - is_listed = True
-    
-    若 stocks 表為空，回傳空集合（不會阻擋流程，但會記錄 warning）
-    """
-    stmt = (
-        select(Stock.stock_id)
-        .where(Stock.security_type == "stock")
-        .where(Stock.is_listed == True)
-    )
-    rows = session.execute(stmt).fetchall()
-    return {row[0] for row in rows}
 
 
 def _load_latest_model(session: Session) -> ModelVersion | None:
@@ -133,16 +116,13 @@ def _choose_pick_date(
     feature_df: pd.DataFrame,
     price_df: pd.DataFrame,
     topn: int,
-    min_avg_turnover: float,
+    config,
     fallback_days: int,
 ) -> Tuple[date | None, pd.DataFrame, Dict[str, object]]:
     """選擇最佳選股日期。
 
-    min_avg_turnover: 20 日平均成交值門檻（億元）。0 表示不過濾。
+    20 日平均成交值門檻由 risk.apply_liquidity_filter 控制。
     """
-    # 預先計算每檔每日成交值（元）
-    turnover_threshold = min_avg_turnover * 1e8  # 億元 → 元
-
     best_date = None
     best_df = pd.DataFrame()
     best_valid = 0
@@ -167,21 +147,11 @@ def _choose_pick_date(
         if latest_price.empty:
             continue
 
-        # 計算 20 日平均成交值（close × volume）
-        recent = (
-            price_df[price_df["trading_date"] <= target]
-            .sort_values(["stock_id", "trading_date"])
-            .groupby("stock_id")
-            .tail(20)
-            .copy()
+        eligible_turnover = risk.apply_liquidity_filter(
+            price_df[price_df["trading_date"] <= target],
+            config,
         )
-        recent["turnover"] = recent["close"] * recent["volume"]
-        avg_turnover = recent.groupby("stock_id")["turnover"].mean()
-
-        if turnover_threshold > 0:
-            avg_turnover = avg_turnover[avg_turnover >= turnover_threshold]
-
-        eligible = latest_price.merge(avg_turnover.rename("avg_turnover"), on="stock_id", how="inner")
+        eligible = latest_price.merge(eligible_turnover[["stock_id"]], on="stock_id", how="inner")
         eligible = eligible.drop_duplicates(subset=["stock_id"])
         if eligible.empty:
             continue
@@ -250,7 +220,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         feature_names = artifact["feature_names"]
         
         # 取得有效股票 universe（排除 ETF、權證等）
-        valid_stocks = _get_valid_stock_universe(db_session)
+        valid_universe_df = risk.get_universe(db_session, max(candidate_dates), config)
+        valid_stocks = set(valid_universe_df["stock_id"].astype(str).tolist())
         coverage_stats["valid_stock_universe_count"] = len(valid_stocks)
         
         if not valid_stocks:
@@ -324,7 +295,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             df,
             price_df,
             effective_topn,
-            config.min_avg_turnover,
+            config,
             config.fallback_days,
         )
         if chosen_date is None:
@@ -351,7 +322,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             vals = pd.to_numeric(feature_df[feat], errors="coerce")
             percentile_map[feat] = vals.rank(pct=True)
 
-        df = df.sort_values("score", ascending=False).head(effective_topn)
+        df = risk.pick_topn(df, effective_topn)
         records: List[Dict] = []
         for _, row in df.iterrows():
             reasons = {}

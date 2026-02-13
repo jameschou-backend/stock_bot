@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 from typing import Dict, List, Optional, Tuple
+from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
@@ -29,6 +30,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import Feature, Label, RawPrice
+from skills import risk
 
 # ── 模型訓練（複用 train_ranker 邏輯）──
 try:
@@ -160,36 +162,22 @@ def _simulate_period(
     if entry_prices.empty:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
-    # 逐日檢查停損
+    positions = entry_prices.copy()
+    positions["entry_date"] = entry_date
+    positions["planned_exit_date"] = exit_date
+    positions = positions[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
+    stoploss_result = risk.apply_stoploss(positions, period_prices, stoploss_pct)
+
     stoploss_count = 0
     stock_returns = {}
-    trading_dates = sorted(period_prices["trading_date"].unique())
-
-    for sid in stock_ids:
-        ep = entry_prices[entry_prices["stock_id"] == sid]
-        if ep.empty:
-            continue
-        entry_px = float(ep["entry_price"].iloc[0])
-        if entry_px <= 0:
-            continue
-
-        stock_prices = period_prices[period_prices["stock_id"] == sid].sort_values("trading_date")
-        exit_px = entry_px  # default
-        stopped = False
-
-        for _, row in stock_prices.iterrows():
-            if row["trading_date"] == entry_date:
-                continue  # 進場日不檢查停損
-            current_ret = float(row["close"]) / entry_px - 1
-            if stoploss_pct < 0 and current_ret <= stoploss_pct:
-                exit_px = float(row["close"])
-                stoploss_count += 1
-                stopped = True
-                break
-            exit_px = float(row["close"])
-
-        ret = exit_px / entry_px - 1 - transaction_cost_pct
-        stock_returns[sid] = ret
+    if not stoploss_result.empty:
+        stoploss_count = int(stoploss_result["stoploss_triggered"].sum())
+        for _, row in stoploss_result.iterrows():
+            sid = str(row["stock_id"])
+            entry_px = float(row["entry_price"])
+            exit_px = float(row["exit_price"])
+            ret = exit_px / entry_px - 1 - transaction_cost_pct
+            stock_returns[sid] = ret
 
     if not stock_returns:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
@@ -391,23 +379,17 @@ def run_backtest(
         day_feat["score"] = scores
 
         # 流動性過濾：20 日平均成交值（億元）
+        eligible_turnover = risk.apply_liquidity_filter(
+            price_df[price_df["trading_date"] <= rb_date],
+            SimpleNamespace(min_avg_turnover=min_avg_turnover),
+        )
         if min_avg_turnover > 0:
-            threshold = min_avg_turnover * 1e8
-            recent_prices = (
-                price_df[price_df["trading_date"] <= rb_date]
-                .sort_values(["stock_id", "trading_date"])
-                .groupby("stock_id")
-                .tail(20)
-                .copy()
-            )
-            recent_prices["turnover"] = recent_prices["close"] * recent_prices["volume"]
-            avg_turnover = recent_prices.groupby("stock_id")["turnover"].mean()
-            keep_ids = set(avg_turnover[avg_turnover >= threshold].index.astype(str))
+            keep_ids = set(eligible_turnover["stock_id"].astype(str).tolist())
             day_feat = day_feat[day_feat["stock_id"].astype(str).isin(keep_ids)]
             if day_feat.empty:
                 continue
 
-        picks = day_feat.sort_values("score", ascending=False).head(topn)
+        picks = risk.pick_topn(day_feat, topn)
 
         # ── 模擬持有 ──
         result = _simulate_period(picks, price_df, rb_date, exit_date, stoploss_pct, transaction_cost_pct)
