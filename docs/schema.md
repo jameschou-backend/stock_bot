@@ -38,3 +38,26 @@
 - 目的：技能與 pipeline 執行紀錄。
 - 主鍵：`job_id`
 - 欄位：名稱、狀態、起訖時間、錯誤訊息、logs JSON。
+
+## strategy_configs
+- 目的：組合式策略設定（規則、參數、權重）。
+- 主鍵：`config_id`
+- 欄位：名稱、設定 JSON、建立時間。
+
+## strategy_runs
+- 目的：策略回測/模擬執行記錄。
+- 主鍵：`run_id`
+- 索引：`config_id`、`(start_date, end_date)`
+- 欄位：日期區間、初始資金、交易成本/滑價、績效 JSON、建立時間。
+
+## strategy_trades
+- 目的：交易明細。
+- 主鍵：`(run_id, trade_id)`
+- 索引：`trading_date`、`stock_id`
+- 欄位：買賣動作、數量、成交價、手續費、原因 JSON。
+
+## strategy_positions
+- 目的：每日持倉快照（選用）。
+- 主鍵：`(run_id, trading_date, stock_id)`
+- 索引：`trading_date`
+- 欄位：持倉數量、均價、市值、未實現損益。

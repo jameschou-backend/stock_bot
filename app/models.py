@@ -186,3 +186,64 @@ class Job(Base):
     ended_at = Column(DateTime)
     error_text = Column(Text)
     logs_json = Column(JSON)
+
+
+class StrategyConfig(Base):
+    __tablename__ = "strategy_configs"
+
+    config_id = Column(String(64), primary_key=True)
+    name = Column(String(128), nullable=False)
+    config_json = Column(JSON, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+
+
+class StrategyRun(Base):
+    __tablename__ = "strategy_runs"
+
+    run_id = Column(String(64), primary_key=True)
+    config_id = Column(String(64), nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+    initial_capital = Column(DECIMAL(18, 6), nullable=False)
+    transaction_cost_pct = Column(DECIMAL(10, 6), nullable=False)
+    slippage_pct = Column(DECIMAL(10, 6), nullable=False)
+    metrics_json = Column(JSON)
+    created_at = Column(DateTime, server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_strategy_runs_config", "config_id"),
+        Index("idx_strategy_runs_dates", "start_date", "end_date"),
+    )
+
+
+class StrategyTrade(Base):
+    __tablename__ = "strategy_trades"
+
+    run_id = Column(String(64), primary_key=True)
+    trade_id = Column(String(64), primary_key=True)
+    trading_date = Column(Date, nullable=False)
+    stock_id = Column(String(16), nullable=False)
+    action = Column(String(8), nullable=False)
+    qty = Column(DECIMAL(18, 6), nullable=False)
+    price = Column(DECIMAL(18, 6), nullable=False)
+    fee = Column(DECIMAL(18, 6), nullable=False)
+    reason_json = Column(JSON)
+
+    __table_args__ = (
+        Index("idx_strategy_trades_date", "trading_date"),
+        Index("idx_strategy_trades_stock", "stock_id"),
+    )
+
+
+class StrategyPosition(Base):
+    __tablename__ = "strategy_positions"
+
+    run_id = Column(String(64), primary_key=True)
+    trading_date = Column(Date, primary_key=True)
+    stock_id = Column(String(16), primary_key=True)
+    qty = Column(DECIMAL(18, 6), nullable=False)
+    avg_cost = Column(DECIMAL(18, 6), nullable=False)
+    market_value = Column(DECIMAL(18, 6), nullable=False)
+    unrealized_pnl = Column(DECIMAL(18, 6), nullable=False)
+
+    __table_args__ = (Index("idx_strategy_positions_date", "trading_date"),)
