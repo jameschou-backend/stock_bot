@@ -32,6 +32,9 @@ class Strategy(Protocol):
     entry_rules: List[Rule]
     filter_rules: List[Rule]
     exit_rules: List[Rule]
+    rank_col: str
+    rank_ascending: bool
+    stoploss_fixed_pct: float
 
     def select_candidates(self, ctx: RuleContext) -> pd.DataFrame:
         """回傳符合 entry+filter 的候選股票（含 stock_id）"""

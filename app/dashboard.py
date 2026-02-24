@@ -429,14 +429,16 @@ def load_latest_backtest_summary() -> dict | None:
         return None
 
 
-st.title("台股 ML 選股 Dashboard")
-
 config = load_config()
 engine = get_engine()
+show_ml = getattr(config, "dashboard_show_ml", False)
+
+st.title("台股 ML 選股 Dashboard" if show_ml else "台股 Dashboard")
 
 # ========== 選股邏輯 ==========
-with st.expander("📋 選股邏輯說明", expanded=False):
-    st.markdown(get_selection_logic(config))
+if show_ml:
+    with st.expander("📋 選股邏輯說明", expanded=False):
+        st.markdown(get_selection_logic(config))
 
 # ========== 資料層狀態總覽 ==========
 st.subheader("資料層狀態")
@@ -582,139 +584,140 @@ else:
 st.divider()
 
 # ========== 策略版本與風險監控 ==========
-st.subheader("策略版本與風險監控")
+if show_ml:
+    st.subheader("策略版本與風險監控")
 
-regime = fetch_market_regime(engine, config)
-latest_backtest = load_latest_backtest_summary()
-hot_themes = fetch_hot_themes(engine, limit=5)
+    regime = fetch_market_regime(engine, config)
+    latest_backtest = load_latest_backtest_summary()
+    hot_themes = fetch_hot_themes(engine, limit=5)
 
-v1, v2, v3, v4 = st.columns(4)
-with v1:
-    st.metric("策略版本", "vNext-research")
-    st.caption(f"TopN={config.topn}, 停損={config.stoploss_pct:.1%}")
-with v2:
-    regime_label = regime.get("regime", "unknown")
-    st.metric("市場 Regime", regime_label)
-    meta = regime.get("meta") or {}
-    current_price = meta.get("current_price")
-    ma_value = meta.get("ma_value")
-    diff_pct = meta.get("diff_pct")
-    ma_days = meta.get("ma_days", config.market_filter_ma_days)
-    if current_price is not None and ma_value is not None:
-        caption = f"mkt={float(current_price):.2f}, MA{ma_days}={float(ma_value):.2f}"
-        if diff_pct is not None:
-            caption += f", diff={float(diff_pct):.2%}"
-        st.caption(caption)
-with v3:
+    v1, v2, v3, v4 = st.columns(4)
+    with v1:
+        st.metric("策略版本", "vNext-research")
+        st.caption(f"TopN={config.topn}, 停損={config.stoploss_pct:.1%}")
+    with v2:
+        regime_label = regime.get("regime", "unknown")
+        st.metric("市場 Regime", regime_label)
+        meta = regime.get("meta") or {}
+        current_price = meta.get("current_price")
+        ma_value = meta.get("ma_value")
+        diff_pct = meta.get("diff_pct")
+        ma_days = meta.get("ma_days", config.market_filter_ma_days)
+        if current_price is not None and ma_value is not None:
+            caption = f"mkt={float(current_price):.2f}, MA{ma_days}={float(ma_value):.2f}"
+            if diff_pct is not None:
+                caption += f", diff={float(diff_pct):.2%}"
+            st.caption(caption)
+    with v3:
+        if latest_backtest:
+            mdd = float(latest_backtest.get("max_drawdown", 0.0))
+            st.metric("最新回測 MDD", f"{mdd:.2%}")
+        else:
+            st.metric("最新回測 MDD", "N/A")
+    with v4:
+        if latest_backtest:
+            sharpe = float(latest_backtest.get("sharpe_ratio", 0.0))
+            st.metric("最新回測 Sharpe", f"{sharpe:.2f}")
+        else:
+            st.metric("最新回測 Sharpe", "N/A")
+
     if latest_backtest:
-        mdd = float(latest_backtest.get("max_drawdown", 0.0))
-        st.metric("最新回測 MDD", f"{mdd:.2%}")
-    else:
-        st.metric("最新回測 MDD", "N/A")
-with v4:
-    if latest_backtest:
+        dd = float(latest_backtest.get("max_drawdown", 0.0))
         sharpe = float(latest_backtest.get("sharpe_ratio", 0.0))
-        st.metric("最新回測 Sharpe", f"{sharpe:.2f}")
-    else:
-        st.metric("最新回測 Sharpe", "N/A")
-
-if latest_backtest:
-    dd = float(latest_backtest.get("max_drawdown", 0.0))
-    sharpe = float(latest_backtest.get("sharpe_ratio", 0.0))
-    stoploss_count = int(latest_backtest.get("stoploss_triggered", 0))
-    total_trades = max(int(latest_backtest.get("total_trades", 1)), 1)
-    stoploss_rate = stoploss_count / total_trades
-    lights = {
-        "drawdown_light": "RED" if dd <= -0.35 else ("YELLOW" if dd <= -0.25 else "GREEN"),
-        "sharpe_light": "RED" if sharpe < 0.2 else ("YELLOW" if sharpe < 0.6 else "GREEN"),
-        "stoploss_light": "RED" if stoploss_rate > 0.45 else ("YELLOW" if stoploss_rate > 0.30 else "GREEN"),
-    }
-    st.write(
-        {
-            "backtest_file": latest_backtest.get("source_file"),
-            "annualized_return": latest_backtest.get("annualized_return"),
-            "excess_return": latest_backtest.get("excess_return"),
-            "risk_lights": lights,
+        stoploss_count = int(latest_backtest.get("stoploss_triggered", 0))
+        total_trades = max(int(latest_backtest.get("total_trades", 1)), 1)
+        stoploss_rate = stoploss_count / total_trades
+        lights = {
+            "drawdown_light": "RED" if dd <= -0.35 else ("YELLOW" if dd <= -0.25 else "GREEN"),
+            "sharpe_light": "RED" if sharpe < 0.2 else ("YELLOW" if sharpe < 0.6 else "GREEN"),
+            "stoploss_light": "RED" if stoploss_rate > 0.45 else ("YELLOW" if stoploss_rate > 0.30 else "GREEN"),
         }
-    )
+        st.write(
+            {
+                "backtest_file": latest_backtest.get("source_file"),
+                "annualized_return": latest_backtest.get("annualized_return"),
+                "excess_return": latest_backtest.get("excess_return"),
+                "risk_lights": lights,
+            }
+        )
 
-if not hot_themes.empty:
-    st.caption("目前資金較熱題材（產業代理）")
-    st.dataframe(hot_themes, use_container_width=True)
+    if not hot_themes.empty:
+        st.caption("目前資金較熱題材（產業代理）")
+        st.dataframe(hot_themes, use_container_width=True)
 
-st.divider()
+    st.divider()
 
-latest_pick_date = fetch_latest_pick_date(engine)
-if latest_pick_date is None:
-    hint = "尚未有 picks 資料，可能是資料不足或 bootstrap 尚未完成。"
-    if latest_job and latest_job.get("status") == "failed":
-        hint = f"{hint} 最近失敗：{latest_job.get('error_text')}"
-    st.warning(hint)
-    st.stop()
+    latest_pick_date = fetch_latest_pick_date(engine)
+    if latest_pick_date is None:
+        hint = "尚未有 picks 資料，可能是資料不足或 bootstrap 尚未完成。"
+        if latest_job and latest_job.get("status") == "failed":
+            hint = f"{hint} 最近失敗：{latest_job.get('error_text')}"
+        st.warning(hint)
+        st.stop()
 
-pick_date = st.date_input("選擇日期", value=latest_pick_date)
+    pick_date = st.date_input("選擇日期", value=latest_pick_date)
 
-picks_df = fetch_picks(engine, pick_date)
-if picks_df.empty:
-    st.warning("當日無 picks 資料。")
-    st.stop()
+    picks_df = fetch_picks(engine, pick_date)
+    if picks_df.empty:
+        st.warning("當日無 picks 資料。")
+        st.stop()
 
-col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([2, 1])
 
-with col1:
-    st.subheader("TopN 選股清單")
-    st.dataframe(
-        picks_df[["stock_id", "score", "model_id"]].reset_index(drop=True),
-        use_container_width=True,
-    )
+    with col1:
+        st.subheader("TopN 選股清單")
+        st.dataframe(
+            picks_df[["stock_id", "score", "model_id"]].reset_index(drop=True),
+            use_container_width=True,
+        )
 
-    st.subheader("分數 Bar Chart")
-    chart_df = picks_df[["stock_id", "score"]].set_index("stock_id")
-    st.bar_chart(chart_df)
+        st.subheader("分數 Bar Chart")
+        chart_df = picks_df[["stock_id", "score"]].set_index("stock_id")
+        st.bar_chart(chart_df)
 
-with col2:
-    st.subheader("模型資訊")
-    model_id = picks_df["model_id"].iloc[0]
-    model_df = fetch_model(engine, model_id)
-    if model_df.empty:
-        st.write("找不到模型版本資料")
-    else:
-        model_row = model_df.iloc[0]
-        st.write({
-            "model_id": model_row["model_id"],
-            "train_start": model_row["train_start"],
-            "train_end": model_row["train_end"],
-            "feature_set_hash": model_row["feature_set_hash"],
-        })
-        st.write("metrics")
-        st.json(_format_model_metrics(model_row["metrics_json"]))
+    with col2:
+        st.subheader("模型資訊")
+        model_id = picks_df["model_id"].iloc[0]
+        model_df = fetch_model(engine, model_id)
+        if model_df.empty:
+            st.write("找不到模型版本資料")
+        else:
+            model_row = model_df.iloc[0]
+            st.write({
+                "model_id": model_row["model_id"],
+                "train_start": model_row["train_start"],
+                "train_end": model_row["train_end"],
+                "feature_set_hash": model_row["feature_set_hash"],
+            })
+            st.write("metrics")
+            st.json(_format_model_metrics(model_row["metrics_json"]))
 
-st.divider()
+    st.divider()
 
-st.subheader("個股詳情")
-stock_id = st.selectbox("選擇股票", picks_df["stock_id"].tolist())
+    st.subheader("個股詳情")
+    stock_id = st.selectbox("選擇股票", picks_df["stock_id"].tolist())
 
-stock_detail = fetch_stock_detail(engine, stock_id, pick_date)
-price_hist = fetch_price_history(engine, stock_id, pick_date)
+    stock_detail = fetch_stock_detail(engine, stock_id, pick_date)
+    price_hist = fetch_price_history(engine, stock_id, pick_date)
 
-if stock_detail["price"]:
-    price_col, inst_col = st.columns(2)
-    with price_col:
-        st.write("價格")
-        st.json(stock_detail["price"])
-    with inst_col:
-        st.write("法人")
-        st.json(stock_detail["institutional"] or {})
+    if stock_detail["price"]:
+        price_col, inst_col = st.columns(2)
+        with price_col:
+            st.write("價格")
+            st.json(stock_detail["price"])
+        with inst_col:
+            st.write("法人")
+            st.json(stock_detail["institutional"] or {})
 
-    if not price_hist.empty:
-        st.write("近 120 日收盤價")
-        st.line_chart(price_hist.set_index("trading_date")["close"])
+        if not price_hist.empty:
+            st.write("近 120 日收盤價")
+            st.line_chart(price_hist.set_index("trading_date")["close"])
 
-if stock_detail["features"]:
-    st.write("特徵")
-    st.json(stock_detail["features"]["features_json"])
+    if stock_detail["features"]:
+        st.write("特徵")
+        st.json(stock_detail["features"]["features_json"])
 
-st.divider()
+    st.divider()
 
 st.subheader("Job Logs")
 jobs_df = fetch_jobs(engine, limit=20)
@@ -724,67 +727,3 @@ else:
     st.dataframe(jobs_df, use_container_width=True)
 
 st.divider()
-
-st.subheader("Strategy Factory")
-tab1, tab2, tab3 = st.tabs(["Strategy Builder", "Backtest Result", "Holdings & Exposure"])
-
-with tab1:
-    st.caption("建立策略設定（規則/權重）")
-    configs_df = fetch_strategy_configs(engine)
-    if not configs_df.empty:
-        st.dataframe(configs_df, use_container_width=True)
-    name = st.text_input("設定名稱", value="default_strategy")
-    default_json = {
-        "strategies": ["MomentumTrend", "MeanReversion", "DefensiveLowVol"],
-        "weights_bull": {"MomentumTrend": 0.6, "MeanReversion": 0.2, "DefensiveLowVol": 0.2},
-        "weights_bear": {"MomentumTrend": 0.2, "MeanReversion": 0.3, "DefensiveLowVol": 0.5},
-    }
-    config_text = st.text_area("設定 JSON", value=json.dumps(default_json, ensure_ascii=False, indent=2))
-    if st.button("建立設定"):
-        try:
-            payload = json.loads(config_text)
-            with get_session() as session:
-                session.execute(
-                    text(
-                        "INSERT INTO strategy_configs (config_id, name, config_json) VALUES (:id, :name, :json)"
-                    ),
-                    {
-                        "id": uuid.uuid4().hex,
-                        "name": name,
-                        "json": json.dumps(payload, ensure_ascii=False),
-                    },
-                )
-                session.commit()
-            st.success("已建立策略設定")
-        except Exception as exc:
-            st.error(f"建立失敗: {exc}")
-
-with tab2:
-    runs_df = fetch_strategy_runs(engine)
-    if runs_df.empty:
-        st.info("尚無策略回測紀錄")
-    else:
-        run_id = st.selectbox("選擇 run_id", runs_df["run_id"].tolist())
-        row = runs_df[runs_df["run_id"] == run_id].iloc[0]
-        metrics = _parse_json(row.get("metrics_json"))
-        st.json(metrics)
-        equity_curve = metrics.get("equity_curve", [])
-        if equity_curve:
-            curve_df = pd.DataFrame(equity_curve)
-            curve_df["trading_date"] = pd.to_datetime(curve_df["trading_date"])
-            st.line_chart(curve_df.set_index("trading_date")["equity"])
-        trades_df = fetch_strategy_trades(engine, run_id)
-        if not trades_df.empty:
-            st.dataframe(trades_df, use_container_width=True)
-
-with tab3:
-    runs_df = fetch_strategy_runs(engine)
-    if runs_df.empty:
-        st.info("尚無持倉資料")
-    else:
-        run_id = st.selectbox("選擇 run_id (持倉)", runs_df["run_id"].tolist(), key="run_positions")
-        pos_df = fetch_strategy_positions(engine, run_id)
-        if pos_df.empty:
-            st.info("此 run 無持倉快照")
-        else:
-            st.dataframe(pos_df, use_container_width=True)

@@ -54,10 +54,10 @@
 - 目的：交易明細。
 - 主鍵：`(run_id, trade_id)`
 - 索引：`trading_date`、`stock_id`
-- 欄位：買賣動作、數量、成交價、手續費、原因 JSON。
+- 欄位：策略名稱、買賣動作、數量、成交價、手續費、原因 JSON。
 
 ## strategy_positions
 - 目的：每日持倉快照（選用）。
 - 主鍵：`(run_id, trading_date, stock_id)`
 - 索引：`trading_date`
-- 欄位：持倉數量、均價、市值、未實現損益。
+- 欄位：策略名稱、持倉數量、均價、市值、未實現損益。

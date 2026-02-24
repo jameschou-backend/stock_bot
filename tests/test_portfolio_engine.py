@@ -8,15 +8,15 @@ def test_risk_position_size():
 
 def test_execute_order_buy_sell():
     pf = Portfolio(initial_capital=100000, cash=100000)
-    execute_order(pf, "2330", "BUY", 10, 100, 1)
+    execute_order(pf, "MomentumTrend", "2330", "BUY", 10, 100, 1)
     assert pf.cash == 100000 - 1000 - 1
-    assert "2330" in pf.positions
-    execute_order(pf, "2330", "SELL", 10, 110, 1)
-    assert "2330" not in pf.positions
+    assert any(pos.stock_id == "2330" for pos in pf.positions.values())
+    execute_order(pf, "MomentumTrend", "2330", "SELL", 10, 110, 1)
+    assert all(pos.stock_id != "2330" for pos in pf.positions.values())
     assert pf.cash > 100000
 
 
 def test_apply_pyramiding():
-    pos = Position(stock_id="2330", qty=10, avg_cost=100, last_price=105)
+    pos = Position(stock_id="2330", strategy_name="MomentumTrend", qty=10, avg_cost=100, last_price=105, base_qty=10)
     add_ratio = apply_pyramiding(pos, last_high=104, current_price=105)
     assert add_ratio == 0.30
