@@ -3,7 +3,14 @@ from __future__ import annotations
 from typing import Dict, List
 
 from .base import Strategy
-from .strategies import DefensiveLowVol, MeanReversion, MomentumTrend
+from .strategies import (
+    CourseBreakout,
+    CoursePullback,
+    CourseVolumeMomentum,
+    DefensiveLowVol,
+    MeanReversion,
+    MomentumTrend,
+)
 
 
 _REGISTRY: Dict[str, Strategy] = {}
@@ -22,5 +29,12 @@ def list_strategies() -> List[str]:
 
 
 def register_defaults() -> None:
-    for s in [MomentumTrend(), MeanReversion(), DefensiveLowVol()]:
+    for s in [
+        MomentumTrend(),
+        MeanReversion(),
+        DefensiveLowVol(),
+        CourseVolumeMomentum(),
+        CourseBreakout(),
+        CoursePullback(),
+    ]:
         register(s)

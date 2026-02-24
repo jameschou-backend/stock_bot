@@ -87,6 +87,9 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     if price_df.empty:
         return price_df
 
+    price_df["stock_id"] = price_df["stock_id"].astype(str)
+    price_df["trading_date"] = pd.to_datetime(price_df["trading_date"], errors="coerce")
+
     for col in ["open", "high", "low", "close"]:
         price_df[col] = pd.to_numeric(price_df[col], errors="coerce")
     price_df["volume"] = pd.to_numeric(price_df["volume"], errors="coerce")
@@ -110,6 +113,8 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         price_df["trust_net"] = 0
         price_df["dealer_net"] = 0
     else:
+        inst_df["stock_id"] = inst_df["stock_id"].astype(str)
+        inst_df["trading_date"] = pd.to_datetime(inst_df["trading_date"], errors="coerce")
         for col in ["foreign_net", "trust_net", "dealer_net"]:
             inst_df[col] = pd.to_numeric(inst_df[col], errors="coerce").fillna(0)
         price_df = price_df.merge(inst_df, on=["stock_id", "trading_date"], how="left")
@@ -133,6 +138,8 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         price_df["margin_purchase_balance"] = np.nan
         price_df["short_sale_balance"] = np.nan
     else:
+        margin_df["stock_id"] = margin_df["stock_id"].astype(str)
+        margin_df["trading_date"] = pd.to_datetime(margin_df["trading_date"], errors="coerce")
         for col in ["margin_purchase_balance", "short_sale_balance"]:
             margin_df[col] = pd.to_numeric(margin_df[col], errors="coerce")
         price_df = price_df.merge(margin_df, on=["stock_id", "trading_date"], how="left")
@@ -171,6 +178,8 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         price_df["fund_revenue_mom"] = np.nan
         price_df["fund_revenue_yoy"] = np.nan
     else:
+        fund_df["stock_id"] = fund_df["stock_id"].astype(str)
+        fund_df["trading_date"] = pd.to_datetime(fund_df["trading_date"], errors="coerce")
         for col in ["revenue_mom", "revenue_yoy"]:
             fund_df[col] = pd.to_numeric(fund_df[col], errors="coerce")
         fund_df = fund_df.rename(columns={"revenue_mom": "fund_revenue_mom", "revenue_yoy": "fund_revenue_yoy"})
@@ -212,6 +221,7 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         price_df["theme_return_20"] = np.nan
         price_df["theme_hot_score"] = np.nan
     else:
+        theme_df["trading_date"] = pd.to_datetime(theme_df["trading_date"], errors="coerce")
         theme_df = theme_df.rename(
             columns={
                 "theme_id": "industry_category",
@@ -382,7 +392,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         featured = _compute_features(merged)
-        featured = featured[featured["trading_date"] >= target_start]
+        target_start_ts = pd.Timestamp(target_start)
+        featured = featured[featured["trading_date"] >= target_start_ts]
 
         # 核心特徵必須存在；擴充特徵允許 NaN，用 0 填補
         featured = featured.dropna(subset=CORE_FEATURE_COLUMNS)
@@ -402,7 +413,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             records.append(
                 {
                     "stock_id": row["stock_id"],
-                    "trading_date": row["trading_date"],
+                    "trading_date": pd.Timestamp(row["trading_date"]).date(),
                     "features_json": features,
                 }
             )

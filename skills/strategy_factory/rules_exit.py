@@ -20,7 +20,10 @@ def _position_return(ctx: RuleContext) -> pd.Series:
         if not pos:
             returns.append(0.0)
         else:
-            returns.append(float(row["close"]) / pos.avg_cost - 1)
+            if pos.avg_cost and pos.avg_cost > 0:
+                returns.append(float(row["close"]) / pos.avg_cost - 1)
+            else:
+                returns.append(0.0)
     return pd.Series(returns, index=ctx.df.index)
 
 
@@ -56,13 +59,17 @@ def exit_trailing_stop(trailing_pct: float = 0.1):
 def exit_time_stop(days: int = 10):
     def _fn(ctx: RuleContext) -> pd.Series:
         positions = ctx.extra.get("positions", {})
+        current_index = ctx.extra.get("current_day_index")
         flags = []
         for _, row in ctx.df.iterrows():
             pos = positions.get(row["stock_id"])
             if not pos or pos.entry_date is None:
                 flags.append(False)
                 continue
-            held_days = (ctx.now.date() - pos.entry_date.date()).days
+            if current_index is not None and pos.entry_index is not None:
+                held_days = current_index - pos.entry_index
+            else:
+                held_days = (ctx.now.date() - pos.entry_date.date()).days
             flags.append(held_days >= days)
         return pd.Series(flags, index=ctx.df.index)
 

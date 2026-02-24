@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import date
+import json
 import uuid
 from typing import List, Optional
 
@@ -243,11 +244,13 @@ def run_strategy_backtest(payload: StrategyRunIn):
             start_date=start_date,
             end_date=end_date,
             initial_capital=payload.initial_capital or 1_000_000.0,
-            transaction_cost_pct=payload.transaction_cost_pct or 0.00585,
+            transaction_cost_pct=payload.transaction_cost_pct or 0.001425,
             slippage_pct=payload.slippage_pct or 0.001,
             risk_per_trade=payload.risk_per_trade or 0.01,
             max_positions=payload.max_positions or 6,
             rebalance_freq=(payload.rebalance_freq or "D").upper(),
+            min_notional_per_trade=payload.min_notional_per_trade or 1_000.0,
+            max_pyramiding_level=payload.max_pyramiding_level or 1,
         )
         engine = BacktestEngine(bt_cfg)
         result = engine.run(df, allocations)
@@ -262,6 +265,7 @@ def run_strategy_backtest(payload: StrategyRunIn):
             "equity_curve": equity_curve,
             "trade_count": len(result["trades"]),
         }
+        metrics = json.loads(json.dumps(metrics, default=str))
 
         run_id = uuid.uuid4().hex
         run_row = StrategyRun(
@@ -282,11 +286,16 @@ def run_strategy_backtest(payload: StrategyRunIn):
                 trade_id=uuid.uuid4().hex,
                 trading_date=t["trading_date"],
                 stock_id=t["stock_id"],
+                strategy_name=t.get("strategy_name"),
                 action=t["action"],
                 qty=t["qty"],
                 price=t["price"],
                 fee=t["fee"],
-                reason_json={"reason": t.get("reason")},
+                reason_json={
+                    "reason": t.get("reason"),
+                    "realized_pnl": t.get("realized_pnl"),
+                    "avg_cost": t.get("avg_cost"),
+                },
             )
             session.add(trade_row)
 
@@ -295,6 +304,7 @@ def run_strategy_backtest(payload: StrategyRunIn):
                 run_id=run_id,
                 trading_date=p["trading_date"],
                 stock_id=p["stock_id"],
+                strategy_name=p.get("strategy_name"),
                 qty=p["qty"],
                 avg_cost=p["avg_cost"],
                 market_value=p["market_value"],

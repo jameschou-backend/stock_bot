@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 import pandas as pd
 
 from .base import RuleContext, Strategy, apply_rules_all, apply_rules_any
-from .portfolio import Portfolio, execute_order, risk_position_size
+from .portfolio import Portfolio, apply_pyramiding, execute_order, risk_position_size
 
 
 @dataclass
@@ -21,12 +21,15 @@ class BacktestConfig:
     start_date: date
     end_date: date
     initial_capital: float = 1_000_000.0
-    transaction_cost_pct: float = 0.00585
+    transaction_cost_pct: float = 0.001425
+    min_fee: float = 20.0
     slippage_pct: float = 0.001
     risk_per_trade: float = 0.01
     max_positions: int = 6
     rebalance_freq: str = "D"  # D/W/M
     stoploss_fixed_pct: float = 0.07
+    min_notional_per_trade: float = 1_000.0
+    max_pyramiding_level: int = 1
 
 
 class BacktestEngine:
@@ -51,51 +54,196 @@ class BacktestEngine:
                 last_month = ym
         return rebal
 
+    def _calc_fee(self, qty: float, price: float) -> float:
+        notional = qty * price
+        if notional <= 0:
+            return 0.0
+        return max(notional * self.config.transaction_cost_pct, self.config.min_fee)
+
     def run(self, price_df: pd.DataFrame, allocations: List[StrategyAllocation]) -> Dict:
         df = price_df.copy()
         df["trading_date"] = pd.to_datetime(df["trading_date"])
         df = df.sort_values(["trading_date", "stock_id"])
 
         trading_dates = sorted(df["trading_date"].unique())
+        day_index_map = {d: idx for idx, d in enumerate(trading_dates)}
+        next_day_map = {
+            trading_dates[i]: trading_dates[i + 1] for i in range(len(trading_dates) - 1)
+        }
         rebalance_dates = set(self._rebalance_dates(trading_dates))
 
         portfolio = Portfolio(self.config.initial_capital, self.config.initial_capital)
         equity_curve = []
+        pending_buys: Dict[pd.Timestamp, List[Dict]] = {}
 
         for current_date in trading_dates:
             day_df = df[df["trading_date"] == current_date]
+            # 先執行「前一日訊號 -> 本日開盤」的買進單
+            for order in pending_buys.pop(current_date, []):
+                sid = order["stock_id"]
+                if portfolio.has_stock(sid):
+                    continue
+                match = day_df[day_df["stock_id"] == sid]
+                if match.empty:
+                    continue
+                open_px = float(match.iloc[0].get("open", match.iloc[0]["close"]))
+                entry_price = open_px * (1 + self.config.slippage_pct)
+                if entry_price <= 0:
+                    continue
+                qty = int(order["qty"])
+                if qty <= 0:
+                    continue
+                if qty * entry_price < self.config.min_notional_per_trade:
+                    continue
+                fee = self._calc_fee(qty, entry_price)
+                if portfolio.cash < qty * entry_price + fee:
+                    continue
+                execute_order(
+                    portfolio,
+                    order["strategy_name"],
+                    sid,
+                    "BUY",
+                    qty,
+                    entry_price,
+                    fee,
+                    trade_date=current_date,
+                    entry_index=day_index_map[current_date],
+                )
+                self.trades.append(
+                    {
+                        "trading_date": current_date.date(),
+                        "stock_id": sid,
+                        "strategy_name": order["strategy_name"],
+                        "action": "BUY",
+                        "qty": qty,
+                        "price": entry_price,
+                        "fee": fee,
+                        "reason": order["reason"],
+                    }
+                )
+
             price_map = dict(zip(day_df["stock_id"], day_df["close"]))
+            prev_max = {key: pos.max_price for key, pos in portfolio.positions.items()}
             portfolio.update_prices(price_map)
 
             # 先出場
             if portfolio.positions:
-                held_df = day_df[day_df["stock_id"].isin(portfolio.positions.keys())].copy()
-                ctx = RuleContext(df=held_df, now=current_date, extra={"positions": portfolio.positions})
-                exit_mask = None
                 for alloc in allocations:
+                    positions = portfolio.positions_for_strategy(alloc.strategy.name)
+                    if not positions:
+                        continue
+                    held_df = day_df[day_df["stock_id"].isin(positions.keys())].copy()
+                    if held_df.empty:
+                        continue
+                    ctx = RuleContext(
+                        df=held_df,
+                        now=current_date,
+                        extra={
+                            "positions": positions,
+                            "current_day_index": day_index_map[current_date],
+                        },
+                    )
                     if not alloc.strategy.exit_rules:
                         continue
-                    m = apply_rules_any(alloc.strategy.exit_rules, ctx)
-                    exit_mask = m if exit_mask is None else (exit_mask | m)
-                if exit_mask is not None and not held_df.empty:
-                    for _, row in held_df[exit_mask].iterrows():
-                        sid = row["stock_id"]
-                        price = float(row["close"]) * (1 - self.config.slippage_pct)
-                        pos = portfolio.positions.get(sid)
-                        if not pos:
+                    exit_reason_map: Dict[str, List[str]] = {}
+                    exit_mask = pd.Series([False] * len(held_df), index=held_df.index)
+                    for rule in alloc.strategy.exit_rules:
+                        rule_mask = rule.apply(ctx).astype(bool)
+                        exit_mask = exit_mask | rule_mask
+                        for idx, flag in rule_mask.items():
+                            if not flag:
+                                continue
+                            sid = held_df.loc[idx, "stock_id"]
+                            exit_reason_map.setdefault(sid, []).append(rule.name)
+                    if exit_mask is not None and not held_df.empty:
+                        for _, row in held_df[exit_mask].iterrows():
+                            sid = row["stock_id"]
+                            price = float(row["close"]) * (1 - self.config.slippage_pct)
+                            if price <= 0:
+                                continue
+                            pos = positions.get(sid)
+                            if not pos:
+                                continue
+                            qty = pos.qty
+                            fee = self._calc_fee(qty, price)
+                            avg_cost_before_sell = pos.avg_cost
+                            realized_pnl = (price - avg_cost_before_sell) * qty - fee
+                            execute_order(
+                                portfolio,
+                                alloc.strategy.name,
+                                sid,
+                                "SELL",
+                                qty,
+                                price,
+                                fee,
+                                trade_date=current_date,
+                            )
+                            self.trades.append(
+                                {
+                                    "trading_date": current_date.date(),
+                                    "stock_id": sid,
+                                    "strategy_name": alloc.strategy.name,
+                                    "action": "SELL",
+                                    "qty": qty,
+                                    "price": price,
+                                    "fee": fee,
+                                    "realized_pnl": realized_pnl,
+                                    "avg_cost": avg_cost_before_sell,
+                                    "reason": {
+                                        "code": "exit_rule",
+                                        "detail": exit_reason_map.get(sid, ["exit_rule"]),
+                                    },
+                                }
+                            )
+
+            # 加碼（pyramiding）
+            if portfolio.positions:
+                for alloc in allocations:
+                    positions = portfolio.positions_for_strategy(alloc.strategy.name)
+                    if not positions:
+                        continue
+                    for sid, pos in positions.items():
+                        if pos.pyramiding_level >= self.config.max_pyramiding_level:
                             continue
-                        qty = pos.qty
-                        fee = qty * price * self.config.transaction_cost_pct
-                        execute_order(portfolio, sid, "SELL", qty, price, fee, trade_date=current_date)
+                        last_high = prev_max.get((alloc.strategy.name, sid)) or pos.max_price or pos.last_price
+                        add_ratio = apply_pyramiding(pos, last_high, pos.last_price)
+                        if add_ratio <= 0:
+                            continue
+                        add_qty = pos.base_qty * add_ratio
+                        add_qty = int(add_qty)
+                        if add_qty <= 0:
+                            continue
+                        add_price = float(pos.last_price) * (1 + self.config.slippage_pct)
+                        if add_price <= 0:
+                            continue
+                        if add_qty * add_price < self.config.min_notional_per_trade:
+                            continue
+                        fee = self._calc_fee(add_qty, add_price)
+                        if portfolio.cash < add_qty * add_price + fee:
+                            continue
+                        execute_order(
+                            portfolio,
+                            alloc.strategy.name,
+                            sid,
+                            "ADD",
+                            add_qty,
+                            add_price,
+                            fee,
+                            trade_date=current_date,
+                        )
                         self.trades.append(
                             {
                                 "trading_date": current_date.date(),
                                 "stock_id": sid,
-                                "action": "SELL",
-                                "qty": qty,
-                                "price": price,
+                                "strategy_name": alloc.strategy.name,
+                                "action": "ADD",
+                                "qty": add_qty,
+                                "price": add_price,
                                 "fee": fee,
-                                "reason": "exit_rule",
+                                "reason": {
+                                    "code": "pyramiding",
+                                    "detail": [f"level_{pos.pyramiding_level}"],
+                                },
                             }
                         )
 
@@ -107,38 +255,62 @@ class BacktestEngine:
                     ctx = RuleContext(df=day_df, now=current_date, extra={"positions": portfolio.positions})
                     entry_mask = apply_rules_all(alloc.strategy.entry_rules, ctx)
                     filter_mask = apply_rules_all(alloc.strategy.filter_rules, ctx)
-                    candidates = day_df[entry_mask & filter_mask]
+                    candidates = day_df[entry_mask & filter_mask].copy()
                     if candidates.empty:
                         continue
 
                     # 可用資金分配給策略
                     target_value = portfolio.total_value() * alloc.weight
-                    cash_budget = min(portfolio.cash, target_value)
+                    current_value = portfolio.value_for_strategy(alloc.strategy.name)
+                    cash_budget = min(portfolio.cash, max(target_value - current_value, 0.0))
                     if cash_budget <= 0:
                         continue
+
+                    rank_col = getattr(alloc.strategy, "rank_col", None)
+                    rank_ascending = getattr(alloc.strategy, "rank_ascending", False)
+                    if rank_col and rank_col in candidates.columns:
+                        candidates = candidates.sort_values(rank_col, ascending=rank_ascending)
 
                     for _, row in candidates.iterrows():
                         if portfolio.can_open_more(self.config.max_positions) is False:
                             break
                         sid = row["stock_id"]
-                        if sid in portfolio.positions:
+                        if portfolio.has_stock(sid):
                             continue
-                        entry_price = float(row["close"]) * (1 + self.config.slippage_pct)
-                        stop_price = entry_price * (1 - self.config.stoploss_fixed_pct)
-                        qty = risk_position_size(cash_budget, self.config.risk_per_trade, entry_price, stop_price)
+                        estimate_entry_price = float(row["close"]) * (1 + self.config.slippage_pct)
+                        if estimate_entry_price <= 0:
+                            continue
+                        stoploss_pct = getattr(alloc.strategy, "stoploss_fixed_pct", self.config.stoploss_fixed_pct)
+                        stop_price = estimate_entry_price * (1 - stoploss_pct)
+                        qty = risk_position_size(
+                            cash_budget,
+                            self.config.risk_per_trade,
+                            estimate_entry_price,
+                            stop_price,
+                        )
+                        qty *= 0.5
+                        max_affordable = cash_budget / estimate_entry_price
+                        qty = min(qty, max_affordable)
+                        qty = int(qty)
                         if qty <= 0:
                             continue
-                        fee = qty * entry_price * self.config.transaction_cost_pct
-                        execute_order(portfolio, sid, "BUY", qty, entry_price, fee, trade_date=current_date)
-                        self.trades.append(
+                        if qty * estimate_entry_price < self.config.min_notional_per_trade:
+                            continue
+                        estimate_fee = self._calc_fee(qty, estimate_entry_price)
+                        cash_budget -= qty * estimate_entry_price + estimate_fee
+
+                        next_date = next_day_map.get(current_date)
+                        if next_date is None:
+                            continue
+                        pending_buys.setdefault(next_date, []).append(
                             {
-                                "trading_date": current_date.date(),
+                                "strategy_name": alloc.strategy.name,
                                 "stock_id": sid,
-                                "action": "BUY",
                                 "qty": qty,
-                                "price": entry_price,
-                                "fee": fee,
-                                "reason": "entry_rule",
+                                "reason": {
+                                    "code": "entry_rule",
+                                    "detail": [r.name for r in alloc.strategy.entry_rules],
+                                },
                             }
                         )
 
@@ -157,6 +329,7 @@ class BacktestEngine:
                     {
                         "trading_date": current_date.date(),
                         "stock_id": pos.stock_id,
+                        "strategy_name": pos.strategy_name,
                         "qty": pos.qty,
                         "avg_cost": pos.avg_cost,
                         "market_value": pos.market_value(),

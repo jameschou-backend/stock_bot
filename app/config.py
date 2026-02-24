@@ -50,7 +50,7 @@ class AppConfig:
     regime_detector: str = "ma"
     # 回測設定
     stoploss_pct: float = -0.07
-    transaction_cost_pct: float = 0.00585
+    transaction_cost_pct: float = 0.001425
     strategy_weights_bull: dict = None
     strategy_weights_bear: dict = None
     # API Rate Limiting
@@ -72,6 +72,7 @@ class AppConfig:
     dq_max_lag_trading_days: int = 1  # 允許最大落後交易日數
     dq_max_stale_calendar_days: int = 5  # 允許最大落後日曆天數
     eval_topk_list: Tuple[int, ...] = (10, 20)
+    dashboard_show_ml: bool = False
 
     @property
     def db_url(self) -> str:
@@ -168,7 +169,7 @@ def load_config() -> AppConfig:
         market_filter_bear_topn=int(pick("MARKET_FILTER_BEAR_TOPN", 10)),
         regime_detector=str(pick("REGIME_DETECTOR", "ma")),
         stoploss_pct=float(pick("STOPLOSS_PCT", -0.07)),
-        transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.00585)),
+        transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.001425)),
         strategy_weights_bull=pick_json("STRATEGY_WEIGHTS_BULL", {}),
         strategy_weights_bear=pick_json("STRATEGY_WEIGHTS_BEAR", {}),
         finmind_requests_per_hour=int(pick("FINMIND_REQUESTS_PER_HOUR", 6000)),
@@ -187,4 +188,5 @@ def load_config() -> AppConfig:
         dq_max_lag_trading_days=int(pick("DQ_MAX_LAG_TRADING_DAYS", 1)),
         dq_max_stale_calendar_days=int(pick("DQ_MAX_STALE_CALENDAR_DAYS", 5)),
         eval_topk_list=_parse_eval_topk_list(pick("EVAL_TOPK_LIST", "10,20")),
+        dashboard_show_ml=str(pick("DASHBOARD_SHOW_ML", "0")).lower() in {"1", "true"},
     )

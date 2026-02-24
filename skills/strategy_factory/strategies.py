@@ -12,6 +12,9 @@ from . import rules_exit as rx
 @dataclass
 class MomentumTrend(Strategy):
     name: str = "MomentumTrend"
+    rank_col: str = "ret_20"
+    rank_ascending: bool = False
+    stoploss_fixed_pct: float = 0.07
     entry_rules: List = None
     filter_rules: List = None
     exit_rules: List = None
@@ -35,6 +38,9 @@ class MomentumTrend(Strategy):
 @dataclass
 class MeanReversion(Strategy):
     name: str = "MeanReversion"
+    rank_col: str = "rsi_14"
+    rank_ascending: bool = True
+    stoploss_fixed_pct: float = 0.05
     entry_rules: List = None
     filter_rules: List = None
     exit_rules: List = None
@@ -57,6 +63,9 @@ class MeanReversion(Strategy):
 @dataclass
 class DefensiveLowVol(Strategy):
     name: str = "DefensiveLowVol"
+    rank_col: str = "vol_pct_60"
+    rank_ascending: bool = True
+    stoploss_fixed_pct: float = 0.06
     entry_rules: List = None
     filter_rules: List = None
     exit_rules: List = None
@@ -72,4 +81,94 @@ class DefensiveLowVol(Strategy):
         self.exit_rules = [
             rx.exit_below_ma("ma_20"),
             rx.exit_stop_loss_fixed(-0.06),
+        ]
+
+
+@dataclass
+class CourseVolumeMomentum(Strategy):
+    """課程版：量大動能（多方）"""
+
+    name: str = "CourseVolumeMomentum"
+    rank_col: str = "ret_20"
+    rank_ascending: bool = False
+    stoploss_fixed_pct: float = 0.07
+    entry_rules: List = None
+    filter_rules: List = None
+    exit_rules: List = None
+
+    def __post_init__(self):
+        self.entry_rules = [
+            re.entry_close_above_ma("ma_20"),
+            re.entry_ret_above("ret_20", 0.10),
+            re.entry_volume_above("volume_20", "volume_60_mean"),
+            re.entry_col_gte("foreign_net_3", 1000),
+        ]
+        self.filter_rules = [
+            rf.filter_min_turnover("avg_turnover_20", 1.0),
+        ]
+        self.exit_rules = [
+            rx.exit_stop_loss_fixed(-0.07),
+            rx.exit_trailing_stop(0.12),
+            rx.exit_below_ma("ma_20"),
+            rx.exit_time_stop(20),
+        ]
+
+
+@dataclass
+class CourseBreakout(Strategy):
+    """課程版：價量創新高 / 突破壓力"""
+
+    name: str = "CourseBreakout"
+    rank_col: str = "ret_5"
+    rank_ascending: bool = False
+    stoploss_fixed_pct: float = 0.06
+    entry_rules: List = None
+    filter_rules: List = None
+    exit_rules: List = None
+
+    def __post_init__(self):
+        self.entry_rules = [
+            re.entry_close_at_high("high_60", tolerance=0.002),
+            re.entry_ret_above("ret_20", 0.08),
+            re.entry_volume_above("volume_20", "volume_60_mean"),
+            re.entry_col_gte("trust_net_3", 1000),
+            re.entry_col_gte("foreign_trust_same_side", 1),
+        ]
+        self.filter_rules = [
+            rf.filter_min_turnover("avg_turnover_20", 1.5),
+        ]
+        self.exit_rules = [
+            rx.exit_stop_loss_fixed(-0.06),
+            rx.exit_trailing_stop(0.10),
+            rx.exit_below_ma("ma_20"),
+            rx.exit_time_stop(12),
+        ]
+
+
+@dataclass
+class CoursePullback(Strategy):
+    """課程版：回檔低成本進場（多方）"""
+
+    name: str = "CoursePullback"
+    rank_col: str = "rsi_14"
+    rank_ascending: bool = True
+    stoploss_fixed_pct: float = 0.05
+    entry_rules: List = None
+    filter_rules: List = None
+    exit_rules: List = None
+
+    def __post_init__(self):
+        self.entry_rules = [
+            re.entry_close_above_ma("ma_60"),
+            re.entry_rsi_below("rsi_14", 45),
+            re.entry_col_gte("foreign_trust_same_side", 1),
+        ]
+        self.filter_rules = [
+            rf.filter_min_turnover("avg_turnover_20", 0.8),
+        ]
+        self.exit_rules = [
+            rx.exit_take_profit_fixed(0.12),
+            rx.exit_stop_loss_fixed(-0.05),
+            rx.exit_below_ma("ma_20"),
+            rx.exit_time_stop(20),
         ]

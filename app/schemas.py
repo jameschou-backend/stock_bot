@@ -110,6 +110,8 @@ class StrategyRunIn(BaseModel):
     risk_per_trade: Optional[float] = None
     max_positions: Optional[int] = None
     rebalance_freq: Optional[str] = None
+    min_notional_per_trade: Optional[float] = None
+    max_pyramiding_level: Optional[int] = None
 
 
 class StrategyRunOut(BaseModel):
@@ -133,6 +135,7 @@ class StrategyTradeOut(BaseModel):
     trade_id: str
     trading_date: date
     stock_id: str
+    strategy_name: Optional[str] = None
     action: str
     qty: float
     price: float

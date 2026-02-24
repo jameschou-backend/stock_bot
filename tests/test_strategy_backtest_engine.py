@@ -24,3 +24,17 @@ def test_backtest_engine_runs():
     result = engine.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
     assert len(result["equity_curve"]) == 2
     assert len(result["trades"]) >= 1
+
+
+def test_backtest_engine_skip_zero_price_without_crash():
+    df = pd.DataFrame(
+        {
+            "stock_id": ["2330", "2330"],
+            "trading_date": ["2026-02-10", "2026-02-11"],
+            "close": [0, 101],
+        }
+    )
+    cfg = BacktestConfig(start_date=pd.Timestamp("2026-02-10").date(), end_date=pd.Timestamp("2026-02-11").date())
+    engine = BacktestEngine(cfg)
+    result = engine.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
+    assert len(result["equity_curve"]) == 2

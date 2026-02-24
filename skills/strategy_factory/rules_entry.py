@@ -38,3 +38,38 @@ def entry_volume_above(col_vol: str = "volume_20", col_base: str = "volume_60_me
         return ctx.df[col_vol] > ctx.df[col_base]
 
     return FunctionalRule(f"{col_vol}_gt_{col_base}", _fn)
+
+
+def entry_ret_below(col_ret: str = "ret_20", threshold: float = -0.08):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        return ctx.df[col_ret] < threshold
+
+    return FunctionalRule(f"{col_ret}_lt_{threshold}", _fn)
+
+
+def entry_close_at_high(col_high: str = "high_60", tolerance: float = 0.0):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        return ctx.df["close"] >= (ctx.df[col_high] * (1.0 - tolerance))
+
+    return FunctionalRule(f"close_near_{col_high}", _fn)
+
+
+def entry_close_at_low(col_low: str = "low_20", tolerance: float = 0.0):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        return ctx.df["close"] <= (ctx.df[col_low] * (1.0 + tolerance))
+
+    return FunctionalRule(f"close_near_{col_low}", _fn)
+
+
+def entry_col_gte(col_name: str, threshold: float):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        return ctx.df[col_name] >= threshold
+
+    return FunctionalRule(f"{col_name}_gte_{threshold}", _fn)
+
+
+def entry_col_lte(col_name: str, threshold: float):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        return ctx.df[col_name] <= threshold
+
+    return FunctionalRule(f"{col_name}_lte_{threshold}", _fn)

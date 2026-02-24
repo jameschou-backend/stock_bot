@@ -89,6 +89,27 @@ def _get_taiwan_trading_days(
     return days
 
 
+def _get_recent_db_trading_days(
+    session: Session,
+    reference_date: date,
+    lookback_days: int = CHECK_DAYS,
+) -> List[date]:
+    """優先使用 DB 實際交易日，避免連假與未來日期誤判。"""
+    if not hasattr(session, "execute"):
+        return _get_taiwan_trading_days(reference_date, lookback_days)
+    stmt = (
+        select(func.distinct(RawPrice.trading_date))
+        .where(RawPrice.trading_date <= reference_date)
+        .order_by(RawPrice.trading_date.desc())
+        .limit(lookback_days)
+    )
+    rows = session.execute(stmt).scalars().all()
+    days = [d for d in rows if isinstance(d, date)]
+    if days:
+        return sorted(days, reverse=True)
+    return _get_taiwan_trading_days(reference_date, lookback_days)
+
+
 def _calculate_lag_trading_days(
     session: Session,
     db_max_date: date,
@@ -133,20 +154,23 @@ def _check_table_freshness(
         ))
         return None, issues
     
-    # 日曆天落後檢查
-    stale_days = max((reference_date - max_date).days, 0)
-    if stale_days > max_stale_days:
-        issues.append(QualityIssue(
-            category=f"{table_name}_stale",
-            message=f"{table_name} 最新資料為 {max_date.isoformat()}，已落後 {stale_days} 日曆天 (上限 {max_stale_days})",
-        ))
-    
-    # 交易日落後檢查
+    # 先做交易日落後檢查（可過濾連假造成的日曆天落後）
     lag_trading = _calculate_lag_trading_days(session, max_date, reference_date)
     if lag_trading > max_lag_trading_days:
         issues.append(QualityIssue(
             category=f"{table_name}_lag",
             message=f"{table_name} 最新資料為 {max_date.isoformat()}，落後 {lag_trading} 個交易日 (上限 {max_lag_trading_days})",
+        ))
+
+    # 日曆天落後檢查：僅在交易日也落後時視為 error，避免長假誤判
+    stale_days = max((reference_date - max_date).days, 0)
+    if stale_days > max_stale_days:
+        severity = "error" if lag_trading > max_lag_trading_days else "warning"
+        extra = "（可能為連假/休市）" if severity == "warning" else ""
+        issues.append(QualityIssue(
+            category=f"{table_name}_stale",
+            message=f"{table_name} 最新資料為 {max_date.isoformat()}，已落後 {stale_days} 日曆天 (上限 {max_stale_days}){extra}",
+            severity=severity,
         ))
     
     return max_date, issues
@@ -208,7 +232,11 @@ def _check_institutional_benchmark(
     min_rows: int = BENCHMARK_MIN_ROWS,
 ) -> Tuple[int, Optional[QualityIssue]]:
     """檢查指標股票的資料完整度（驗證是否日頻）"""
-    all_days = _get_taiwan_trading_days(trading_days[0] if trading_days else date.today(), check_days)
+    if trading_days:
+        ref_date = trading_days[0]
+    else:
+        ref_date = date.today()
+    all_days = _get_recent_db_trading_days(session, ref_date, check_days)
     
     stmt = (
         select(func.count())
@@ -236,8 +264,10 @@ def check_data_quality(session: Session, config) -> QualityReport:
         QualityReport 包含是否通過、問題列表、指標數據
     """
     today = datetime.now(ZoneInfo(config.tz)).date()
-    reference_date = get_latest_trading_day(session) or today
-    trading_days = _get_taiwan_trading_days(reference_date, CHECK_DAYS)
+    latest_trading_day = get_latest_trading_day(session) or today
+    # 防止連假/時區導致 reference_date 落到未來
+    reference_date = min(latest_trading_day, today)
+    trading_days = _get_recent_db_trading_days(session, reference_date, CHECK_DAYS)
     
     issues: List[QualityIssue] = []
     metrics: Dict[str, object] = {

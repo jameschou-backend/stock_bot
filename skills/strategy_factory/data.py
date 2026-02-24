@@ -6,13 +6,13 @@ from typing import Dict
 import pandas as pd
 
 from app.db import get_session
-from app.models import RawPrice
+from app.models import RawInstitutional, RawPrice
 from skills.regime import get_regime_detector
 
 
 def load_price_df(start_date: date, end_date: date) -> pd.DataFrame:
     with get_session() as session:
-        df = pd.read_sql(
+        q = (
             session.query(
                 RawPrice.stock_id,
                 RawPrice.trading_date,
@@ -21,13 +21,22 @@ def load_price_df(start_date: date, end_date: date) -> pd.DataFrame:
                 RawPrice.low,
                 RawPrice.close,
                 RawPrice.volume,
+                RawInstitutional.foreign_net,
+                RawInstitutional.trust_net,
+                RawInstitutional.dealer_net,
+            )
+            .outerjoin(
+                RawInstitutional,
+                (RawPrice.stock_id == RawInstitutional.stock_id)
+                & (RawPrice.trading_date == RawInstitutional.trading_date),
             )
             .filter(RawPrice.trading_date.between(start_date, end_date))
-            .statement,
-            session.get_bind(),
         )
+        df = pd.read_sql(q.statement, session.get_bind())
     for col in ["open", "high", "low", "close", "volume"]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
+    for col in ["foreign_net", "trust_net", "dealer_net"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
     return df
 
 
@@ -39,10 +48,14 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
         close = g["close"]
         volume = g["volume"]
         g["ret_20"] = close.pct_change(20)
+        g["ret_5"] = close.pct_change(5)
         g["ma_20"] = close.rolling(20).mean()
         g["ma_60"] = close.rolling(60).mean()
         g["volume_20"] = volume.rolling(20).mean()
         g["volume_60_mean"] = volume.rolling(60).mean()
+        g["high_60"] = close.rolling(60).max()
+        g["low_20"] = close.rolling(20).min()
+        g["volume_max_10"] = volume.rolling(10).max()
 
         delta = close.diff()
         gain = delta.where(delta > 0, 0).rolling(14).mean()
@@ -56,6 +69,14 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
 
         g["vol_60"] = close.pct_change(1).rolling(60).std()
         g["avg_turnover_20"] = (close * volume).rolling(20).mean() / 1e8
+
+        # 法人籌碼特徵（課程策略）
+        g["foreign_net_3"] = g["foreign_net"].rolling(3).sum()
+        g["trust_net_3"] = g["trust_net"].rolling(3).sum()
+        g["foreign_trust_same_side"] = (
+            ((g["foreign_net"] > 0) & (g["trust_net"] > 0))
+            | ((g["foreign_net"] < 0) & (g["trust_net"] < 0))
+        ).astype(int)
         outputs.append(g)
     merged = pd.concat(outputs, ignore_index=True)
 
@@ -64,6 +85,8 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
         .rank(pct=True)
         .fillna(0.5)
     )
+    merged = merged.replace([float("inf"), float("-inf")], pd.NA)
+    merged = merged[merged["close"] > 0].copy()
     return merged
 
 

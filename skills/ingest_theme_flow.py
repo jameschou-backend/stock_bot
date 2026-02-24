@@ -56,15 +56,21 @@ def _build_theme_flow(df: pd.DataFrame) -> pd.DataFrame:
     )
 
     total_turnover = grouped.groupby("trading_date")["turnover_amount"].transform("sum")
-    grouped["turnover_ratio"] = grouped["turnover_amount"] / total_turnover.replace(0, pd.NA)
+    grouped["turnover_ratio"] = grouped["turnover_amount"] / total_turnover.where(total_turnover != 0, float("nan"))
+
+    def _safe_zscore(series: pd.Series) -> pd.Series:
+        values = pd.to_numeric(series, errors="coerce")
+        values = values.mask(values.isin([float("inf"), float("-inf")]))
+        mean = values.mean(skipna=True)
+        std = values.std(ddof=0, skipna=True)
+        if pd.isna(std) or std == 0:
+            return pd.Series(0.0, index=series.index)
+        z = (values - mean) / std
+        return z.fillna(0.0)
 
     # 熱度分數：成交占比 z-score + 20日報酬 z-score
-    grouped["turnover_z"] = grouped.groupby("trading_date")["turnover_ratio"].transform(
-        lambda s: (s - s.mean()) / (s.std(ddof=0) if s.std(ddof=0) else 1.0)
-    )
-    grouped["ret20_z"] = grouped.groupby("trading_date")["theme_return_20"].transform(
-        lambda s: (s - s.mean()) / (s.std(ddof=0) if s.std(ddof=0) else 1.0)
-    )
+    grouped["turnover_z"] = grouped.groupby("trading_date")["turnover_ratio"].transform(_safe_zscore)
+    grouped["ret20_z"] = grouped.groupby("trading_date")["theme_return_20"].transform(_safe_zscore)
     grouped["hot_score"] = 0.6 * grouped["turnover_z"] + 0.4 * grouped["ret20_z"]
 
     return grouped[
