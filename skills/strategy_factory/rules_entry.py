@@ -54,6 +54,22 @@ def entry_close_at_high(col_high: str = "high_60", tolerance: float = 0.0):
     return FunctionalRule(f"close_near_{col_high}", _fn)
 
 
+def entry_close_near_ma(col_ma: str = "ma_10", tolerance: float = 0.02):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        lower = ctx.df[col_ma] * (1.0 - tolerance)
+        upper = ctx.df[col_ma] * (1.0 + tolerance)
+        return (ctx.df["close"] >= lower) & (ctx.df["close"] <= upper)
+
+    return FunctionalRule(f"close_near_{col_ma}_{tolerance}", _fn)
+
+
+def entry_volume_new_high(col_volume: str = "volume", col_high: str = "volume_max_10"):
+    def _fn(ctx: RuleContext) -> pd.Series:
+        return ctx.df[col_volume] >= ctx.df[col_high]
+
+    return FunctionalRule(f"{col_volume}_gte_{col_high}", _fn)
+
+
 def entry_close_at_low(col_low: str = "low_20", tolerance: float = 0.0):
     def _fn(ctx: RuleContext) -> pd.Series:
         return ctx.df["close"] <= (ctx.df[col_low] * (1.0 + tolerance))

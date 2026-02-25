@@ -49,11 +49,14 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
         volume = g["volume"]
         g["ret_20"] = close.pct_change(20)
         g["ret_5"] = close.pct_change(5)
+        g["ma_5"] = close.rolling(5).mean()
+        g["ma_10"] = close.rolling(10).mean()
         g["ma_20"] = close.rolling(20).mean()
         g["ma_60"] = close.rolling(60).mean()
         g["volume_20"] = volume.rolling(20).mean()
         g["volume_60_mean"] = volume.rolling(60).mean()
         g["high_60"] = close.rolling(60).max()
+        g["high_400"] = close.rolling(400).max()
         g["low_20"] = close.rolling(20).min()
         g["volume_max_10"] = volume.rolling(10).max()
 
@@ -91,6 +94,31 @@ def compute_indicators(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def detect_regime(price_df: pd.DataFrame, config) -> str:
+    # 課程版方向判讀：
+    # 上漲家數 / 下跌家數 > 1.35 => 多方
+    # 上漲家數 / 下跌家數 < 0.6  => 空方
+    # 中間區間則回退既有 MA 規則。
+    breadth_df = price_df.sort_values(["stock_id", "trading_date"]).copy()
+    breadth_df["prev_close"] = breadth_df.groupby("stock_id")["close"].shift(1)
+    latest_date = breadth_df["trading_date"].max() if not breadth_df.empty else None
+    if latest_date is not None:
+        latest = breadth_df[
+            (breadth_df["trading_date"] == latest_date)
+            & (breadth_df["prev_close"].notna())
+            & (breadth_df["prev_close"] > 0)
+        ]
+        if not latest.empty:
+            up_cnt = int((latest["close"] > latest["prev_close"]).sum())
+            down_cnt = int((latest["close"] < latest["prev_close"]).sum())
+            if down_cnt == 0:
+                up_down_ratio = float("inf") if up_cnt > 0 else 1.0
+            else:
+                up_down_ratio = up_cnt / down_cnt
+            if up_down_ratio > 1.35:
+                return "BULL"
+            if up_down_ratio < 0.6:
+                return "BEAR"
+
     market = (
         price_df.groupby("trading_date")["close"]
         .mean()

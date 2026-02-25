@@ -104,11 +104,13 @@ class CourseVolumeMomentum(Strategy):
             re.entry_col_gte("foreign_net_3", 1000),
         ]
         self.filter_rules = [
-            rf.filter_min_turnover("avg_turnover_20", 1.0),
+            rf.filter_min_turnover("avg_turnover_20", 5.0),
         ]
         self.exit_rules = [
             rx.exit_stop_loss_fixed(-0.07),
             rx.exit_trailing_stop(0.12),
+            rx.exit_below_ma("ma_5"),
+            rx.exit_below_ma("ma_10"),
             rx.exit_below_ma("ma_20"),
             rx.exit_time_stop(20),
         ]
@@ -128,18 +130,17 @@ class CourseBreakout(Strategy):
 
     def __post_init__(self):
         self.entry_rules = [
-            re.entry_close_at_high("high_60", tolerance=0.002),
-            re.entry_ret_above("ret_20", 0.08),
-            re.entry_volume_above("volume_20", "volume_60_mean"),
-            re.entry_col_gte("trust_net_3", 1000),
-            re.entry_col_gte("foreign_trust_same_side", 1),
+            re.entry_close_at_high("high_400", tolerance=0.002),
+            re.entry_volume_new_high("volume", "volume_max_10"),
         ]
         self.filter_rules = [
-            rf.filter_min_turnover("avg_turnover_20", 1.5),
+            rf.filter_min_turnover("avg_turnover_20", 5.0),
         ]
         self.exit_rules = [
             rx.exit_stop_loss_fixed(-0.06),
             rx.exit_trailing_stop(0.10),
+            rx.exit_below_ma("ma_5"),
+            rx.exit_below_ma("ma_10"),
             rx.exit_below_ma("ma_20"),
             rx.exit_time_stop(12),
         ]
@@ -160,6 +161,7 @@ class CoursePullback(Strategy):
     def __post_init__(self):
         self.entry_rules = [
             re.entry_close_above_ma("ma_60"),
+            re.entry_close_near_ma("ma_10", tolerance=0.03),
             re.entry_rsi_below("rsi_14", 45),
             re.entry_col_gte("foreign_trust_same_side", 1),
         ]
@@ -169,6 +171,7 @@ class CoursePullback(Strategy):
         self.exit_rules = [
             rx.exit_take_profit_fixed(0.12),
             rx.exit_stop_loss_fixed(-0.05),
+            rx.exit_below_ma("ma_10"),
             rx.exit_below_ma("ma_20"),
             rx.exit_time_stop(20),
         ]
