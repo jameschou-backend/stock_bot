@@ -83,6 +83,8 @@ class BacktestEngine:
                 sid = order["stock_id"]
                 if portfolio.has_stock(sid):
                     continue
+                if portfolio.can_open_more(self.config.max_positions) is False:
+                    break
                 match = day_df[day_df["stock_id"] == sid]
                 if match.empty:
                     continue
@@ -249,70 +251,76 @@ class BacktestEngine:
 
             # 進場（僅在再平衡日）
             if current_date in rebalance_dates:
-                for alloc in allocations:
-                    if portfolio.can_open_more(self.config.max_positions) is False:
-                        break
-                    ctx = RuleContext(df=day_df, now=current_date, extra={"positions": portfolio.positions})
-                    entry_mask = apply_rules_all(alloc.strategy.entry_rules, ctx)
-                    filter_mask = apply_rules_all(alloc.strategy.filter_rules, ctx)
-                    candidates = day_df[entry_mask & filter_mask].copy()
-                    if candidates.empty:
-                        continue
-
-                    # 可用資金分配給策略
-                    target_value = portfolio.total_value() * alloc.weight
-                    current_value = portfolio.value_for_strategy(alloc.strategy.name)
-                    cash_budget = min(portfolio.cash, max(target_value - current_value, 0.0))
-                    if cash_budget <= 0:
-                        continue
-
-                    rank_col = getattr(alloc.strategy, "rank_col", None)
-                    rank_ascending = getattr(alloc.strategy, "rank_ascending", False)
-                    if rank_col and rank_col in candidates.columns:
-                        candidates = candidates.sort_values(rank_col, ascending=rank_ascending)
-
-                    for _, row in candidates.iterrows():
-                        if portfolio.can_open_more(self.config.max_positions) is False:
+                next_date = next_day_map.get(current_date)
+                if next_date is not None:
+                    for alloc in allocations:
+                        reserved_orders = pending_buys.get(next_date, [])
+                        reserved_sids = {order["stock_id"] for order in reserved_orders}
+                        slots_left = self.config.max_positions - len(portfolio.positions) - len(reserved_sids)
+                        if slots_left <= 0:
                             break
-                        sid = row["stock_id"]
-                        if portfolio.has_stock(sid):
+                        ctx = RuleContext(df=day_df, now=current_date, extra={"positions": portfolio.positions})
+                        entry_mask = apply_rules_all(alloc.strategy.entry_rules, ctx)
+                        filter_mask = apply_rules_all(alloc.strategy.filter_rules, ctx)
+                        candidates = day_df[entry_mask & filter_mask].copy()
+                        if candidates.empty:
                             continue
-                        estimate_entry_price = float(row["close"]) * (1 + self.config.slippage_pct)
-                        if estimate_entry_price <= 0:
-                            continue
-                        stoploss_pct = getattr(alloc.strategy, "stoploss_fixed_pct", self.config.stoploss_fixed_pct)
-                        stop_price = estimate_entry_price * (1 - stoploss_pct)
-                        qty = risk_position_size(
-                            cash_budget,
-                            self.config.risk_per_trade,
-                            estimate_entry_price,
-                            stop_price,
-                        )
-                        qty *= 0.5
-                        max_affordable = cash_budget / estimate_entry_price
-                        qty = min(qty, max_affordable)
-                        qty = int(qty)
-                        if qty <= 0:
-                            continue
-                        if qty * estimate_entry_price < self.config.min_notional_per_trade:
-                            continue
-                        estimate_fee = self._calc_fee(qty, estimate_entry_price)
-                        cash_budget -= qty * estimate_entry_price + estimate_fee
 
-                        next_date = next_day_map.get(current_date)
-                        if next_date is None:
+                        # 可用資金分配給策略
+                        target_value = portfolio.total_value() * alloc.weight
+                        current_value = portfolio.value_for_strategy(alloc.strategy.name)
+                        cash_budget = min(portfolio.cash, max(target_value - current_value, 0.0))
+                        if cash_budget <= 0:
                             continue
-                        pending_buys.setdefault(next_date, []).append(
-                            {
-                                "strategy_name": alloc.strategy.name,
-                                "stock_id": sid,
-                                "qty": qty,
-                                "reason": {
-                                    "code": "entry_rule",
-                                    "detail": [r.name for r in alloc.strategy.entry_rules],
-                                },
-                            }
-                        )
+
+                        rank_col = getattr(alloc.strategy, "rank_col", None)
+                        rank_ascending = getattr(alloc.strategy, "rank_ascending", False)
+                        if rank_col and rank_col in candidates.columns:
+                            candidates = candidates.sort_values(rank_col, ascending=rank_ascending)
+
+                        for _, row in candidates.iterrows():
+                            if slots_left <= 0:
+                                break
+                            sid = row["stock_id"]
+                            if portfolio.has_stock(sid):
+                                continue
+                            if sid in reserved_sids:
+                                continue
+                            estimate_entry_price = float(row["close"]) * (1 + self.config.slippage_pct)
+                            if estimate_entry_price <= 0:
+                                continue
+                            stoploss_pct = getattr(alloc.strategy, "stoploss_fixed_pct", self.config.stoploss_fixed_pct)
+                            stop_price = estimate_entry_price * (1 - stoploss_pct)
+                            qty = risk_position_size(
+                                cash_budget,
+                                self.config.risk_per_trade,
+                                estimate_entry_price,
+                                stop_price,
+                            )
+                            qty *= 0.5
+                            max_affordable = cash_budget / estimate_entry_price
+                            qty = min(qty, max_affordable)
+                            qty = int(qty)
+                            if qty <= 0:
+                                continue
+                            if qty * estimate_entry_price < self.config.min_notional_per_trade:
+                                continue
+                            estimate_fee = self._calc_fee(qty, estimate_entry_price)
+                            cash_budget -= qty * estimate_entry_price + estimate_fee
+
+                            pending_buys.setdefault(next_date, []).append(
+                                {
+                                    "strategy_name": alloc.strategy.name,
+                                    "stock_id": sid,
+                                    "qty": qty,
+                                    "reason": {
+                                        "code": "entry_rule",
+                                        "detail": [r.name for r in alloc.strategy.entry_rules],
+                                    },
+                                }
+                            )
+                            reserved_sids.add(sid)
+                            slots_left -= 1
 
             equity_curve.append(
                 {
