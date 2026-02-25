@@ -27,6 +27,7 @@ class BacktestConfig:
     risk_per_trade: float = 0.01
     max_positions: int = 6
     rebalance_freq: str = "D"  # D/W/M
+    min_hold_days: int = 1
     stoploss_fixed_pct: float = 0.07
     min_notional_per_trade: float = 1_000.0
     max_pyramiding_level: int = 1
@@ -77,6 +78,7 @@ class BacktestEngine:
         pending_buys: Dict[pd.Timestamp, List[Dict]] = {}
 
         for current_date in trading_dates:
+            current_day_index = day_index_map[current_date]
             day_df = df[df["trading_date"] == current_date]
             # 先執行「前一日訊號 -> 本日開盤」的買進單
             for order in pending_buys.pop(current_date, []):
@@ -109,7 +111,7 @@ class BacktestEngine:
                     entry_price,
                     fee,
                     trade_date=current_date,
-                    entry_index=day_index_map[current_date],
+                    entry_index=current_day_index,
                 )
                 self.trades.append(
                     {
@@ -134,7 +136,19 @@ class BacktestEngine:
                     positions = portfolio.positions_for_strategy(alloc.strategy.name)
                     if not positions:
                         continue
-                    held_df = day_df[day_df["stock_id"].isin(positions.keys())].copy()
+                    eligible_stock_ids = []
+                    for sid, pos in positions.items():
+                        if pos.entry_index is not None:
+                            held_days = current_day_index - pos.entry_index
+                        elif pos.entry_date is not None:
+                            held_days = (current_date.date() - pos.entry_date.date()).days
+                        else:
+                            held_days = self.config.min_hold_days
+                        if held_days >= self.config.min_hold_days:
+                            eligible_stock_ids.append(sid)
+                    if not eligible_stock_ids:
+                        continue
+                    held_df = day_df[day_df["stock_id"].isin(eligible_stock_ids)].copy()
                     if held_df.empty:
                         continue
                     ctx = RuleContext(
@@ -142,7 +156,7 @@ class BacktestEngine:
                         now=current_date,
                         extra={
                             "positions": positions,
-                            "current_day_index": day_index_map[current_date],
+                            "current_day_index": current_day_index,
                         },
                     )
                     if not alloc.strategy.exit_rules:

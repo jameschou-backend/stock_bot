@@ -18,6 +18,13 @@ class DummyManyCandidatesStrategy:
     exit_rules = []
 
 
+class DummyAlwaysExitStrategy:
+    name = "DummyExit"
+    entry_rules = [FunctionalRule("always", lambda ctx: pd.Series([True] * len(ctx.df), index=ctx.df.index))]
+    filter_rules = []
+    exit_rules = [FunctionalRule("always_exit", lambda ctx: pd.Series([True] * len(ctx.df), index=ctx.df.index))]
+
+
 def test_backtest_engine_runs():
     df = pd.DataFrame(
         {
@@ -54,6 +61,27 @@ def test_backtest_engine_respects_max_positions_for_pending_buys():
     buy_rows = [t for t in result["trades"] if t["action"] == "BUY"]
     assert len(buy_rows) <= 3
     assert max(point["positions"] for point in result["equity_curve"]) <= 3
+
+
+def test_backtest_engine_enforces_min_hold_days_for_exit_rules():
+    df = pd.DataFrame(
+        {
+            "stock_id": ["2330", "2330"],
+            "trading_date": ["2026-02-10", "2026-02-11"],
+            "close": [100.0, 99.0],
+        }
+    )
+    cfg = BacktestConfig(
+        start_date=pd.Timestamp("2026-02-10").date(),
+        end_date=pd.Timestamp("2026-02-11").date(),
+        min_hold_days=1,
+    )
+    engine = BacktestEngine(cfg)
+    result = engine.run(df, [StrategyAllocation(strategy=DummyAlwaysExitStrategy(), weight=1.0)])
+    buy_rows = [t for t in result["trades"] if t["action"] == "BUY"]
+    sell_rows = [t for t in result["trades"] if t["action"] == "SELL"]
+    assert len(buy_rows) == 1
+    assert len(sell_rows) == 0
 
 
 def test_backtest_engine_skip_zero_price_without_crash():
