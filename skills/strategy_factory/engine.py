@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+import math
 from typing import Dict, List, Optional
 
 import pandas as pd
@@ -59,7 +60,38 @@ class BacktestEngine:
         notional = qty * price
         if notional <= 0:
             return 0.0
-        return max(notional * self.config.transaction_cost_pct, self.config.min_fee)
+        fee = math.ceil(notional * self.config.transaction_cost_pct)
+        min_fee = math.ceil(self.config.min_fee)
+        return float(max(fee, min_fee))
+
+    def _price_tick(self, price: float) -> float:
+        if price < 100:
+            return 0.01
+        if price < 1000:
+            return 0.1
+        return 5.0
+
+    def _round_to_valid_price(self, price: float, action: str) -> float:
+        if price <= 0:
+            return 0.0
+        tick = self._price_tick(price)
+        ratio = price / tick
+        if action in {"BUY", "ADD"}:
+            stepped = math.ceil(ratio - 1e-12) * tick
+        else:
+            stepped = math.floor(ratio + 1e-12) * tick
+        if tick == 0.01:
+            return round(stepped, 2)
+        if tick == 0.1:
+            return round(stepped, 1)
+        return round(stepped, 0)
+
+    def _slipped_price(self, raw_price: float, action: str) -> float:
+        if action in {"BUY", "ADD"}:
+            slipped = raw_price * (1 + self.config.slippage_pct)
+        else:
+            slipped = raw_price * (1 - self.config.slippage_pct)
+        return self._round_to_valid_price(slipped, action)
 
     def run(self, price_df: pd.DataFrame, allocations: List[StrategyAllocation]) -> Dict:
         df = price_df.copy()
@@ -91,7 +123,7 @@ class BacktestEngine:
                 if match.empty:
                     continue
                 open_px = float(match.iloc[0].get("open", match.iloc[0]["close"]))
-                entry_price = open_px * (1 + self.config.slippage_pct)
+                entry_price = self._slipped_price(open_px, "BUY")
                 if entry_price <= 0:
                     continue
                 qty = int(order["qty"])
@@ -174,7 +206,7 @@ class BacktestEngine:
                     if exit_mask is not None and not held_df.empty:
                         for _, row in held_df[exit_mask].iterrows():
                             sid = row["stock_id"]
-                            price = float(row["close"]) * (1 - self.config.slippage_pct)
+                            price = self._slipped_price(float(row["close"]), "SELL")
                             if price <= 0:
                                 continue
                             pos = positions.get(sid)
@@ -229,7 +261,7 @@ class BacktestEngine:
                         add_qty = int(add_qty)
                         if add_qty <= 0:
                             continue
-                        add_price = float(pos.last_price) * (1 + self.config.slippage_pct)
+                        add_price = self._slipped_price(float(pos.last_price), "ADD")
                         if add_price <= 0:
                             continue
                         if add_qty * add_price < self.config.min_notional_per_trade:
@@ -300,7 +332,7 @@ class BacktestEngine:
                                 continue
                             if sid in reserved_sids:
                                 continue
-                            estimate_entry_price = float(row["close"]) * (1 + self.config.slippage_pct)
+                            estimate_entry_price = self._slipped_price(float(row["close"]), "BUY")
                             if estimate_entry_price <= 0:
                                 continue
                             stoploss_pct = getattr(alloc.strategy, "stoploss_fixed_pct", self.config.stoploss_fixed_pct)

@@ -96,3 +96,26 @@ def test_backtest_engine_skip_zero_price_without_crash():
     engine = BacktestEngine(cfg)
     result = engine.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
     assert len(result["equity_curve"]) == 2
+
+
+def test_backtest_engine_price_tick_rounding_and_slippage():
+    cfg = BacktestConfig(start_date=pd.Timestamp("2026-02-10").date(), end_date=pd.Timestamp("2026-02-11").date())
+    engine = BacktestEngine(cfg)
+    # <100: 第二位小數
+    assert engine._round_to_valid_price(16.3363, "BUY") == 16.34
+    assert engine._round_to_valid_price(16.3363, "SELL") == 16.33
+    # 100~999: 第一位小數（對應 442.442 -> 442.5）
+    assert engine._round_to_valid_price(442.442, "BUY") == 442.5
+    assert engine._round_to_valid_price(442.442, "SELL") == 442.4
+    # >=1000: 每 5 元一檔
+    assert engine._round_to_valid_price(1001.0, "BUY") == 1005.0
+    assert engine._round_to_valid_price(1001.0, "SELL") == 1000.0
+
+
+def test_backtest_engine_fee_ceil_and_min_fee():
+    cfg = BacktestConfig(start_date=pd.Timestamp("2026-02-10").date(), end_date=pd.Timestamp("2026-02-11").date())
+    engine = BacktestEngine(cfg)
+    # 未達 20 元，應收 20
+    assert engine._calc_fee(1, 100.0) == 20.0
+    # 62 * 436.563 * 0.001425 = 38.5703... -> 無條件進位 39
+    assert engine._calc_fee(62, 436.563) == 39.0
