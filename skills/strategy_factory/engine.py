@@ -28,6 +28,8 @@ class BacktestConfig:
     risk_per_trade: float = 0.01
     max_positions: int = 6
     rebalance_freq: str = "D"  # D/W/M
+    board_lot_shares: int = 1000
+    min_trade_shares: int = 100
     min_hold_days: int = 1
     stoploss_fixed_pct: float = 0.07
     min_notional_per_trade: float = 1_000.0
@@ -93,6 +95,21 @@ class BacktestEngine:
             slipped = raw_price * (1 - self.config.slippage_pct)
         return self._round_to_valid_price(slipped, action)
 
+    def _normalize_qty(self, qty: float) -> int:
+        q = int(qty)
+        if q <= 0:
+            return 0
+        lot = max(int(self.config.board_lot_shares), 1)
+        min_shares = max(int(self.config.min_trade_shares), 1)
+        min_shares = min(min_shares, lot)
+
+        if q < min_shares:
+            return 0
+        # 優先整張；不足一張時退而求其次使用 100 股單位。
+        if q >= lot:
+            return (q // lot) * lot
+        return (q // min_shares) * min_shares
+
     def run(self, price_df: pd.DataFrame, allocations: List[StrategyAllocation]) -> Dict:
         df = price_df.copy()
         df["trading_date"] = pd.to_datetime(df["trading_date"])
@@ -127,6 +144,7 @@ class BacktestEngine:
                 if entry_price <= 0:
                     continue
                 qty = int(order["qty"])
+                qty = self._normalize_qty(qty)
                 if qty <= 0:
                     continue
                 if qty * entry_price < self.config.min_notional_per_trade:
@@ -258,7 +276,7 @@ class BacktestEngine:
                         if add_ratio <= 0:
                             continue
                         add_qty = pos.base_qty * add_ratio
-                        add_qty = int(add_qty)
+                        add_qty = self._normalize_qty(add_qty)
                         if add_qty <= 0:
                             continue
                         add_price = self._slipped_price(float(pos.last_price), "ADD")
@@ -346,7 +364,7 @@ class BacktestEngine:
                             qty *= 0.5
                             max_affordable = cash_budget / estimate_entry_price
                             qty = min(qty, max_affordable)
-                            qty = int(qty)
+                            qty = self._normalize_qty(qty)
                             if qty <= 0:
                                 continue
                             if qty * estimate_entry_price < self.config.min_notional_per_trade:

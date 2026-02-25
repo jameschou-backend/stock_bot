@@ -119,3 +119,34 @@ def test_backtest_engine_fee_ceil_and_min_fee():
     assert engine._calc_fee(1, 100.0) == 20.0
     # 62 * 436.563 * 0.001425 = 38.5703... -> 無條件進位 39
     assert engine._calc_fee(62, 436.563) == 39.0
+
+
+def test_backtest_engine_qty_normalization_prefers_board_lot():
+    cfg = BacktestConfig(start_date=pd.Timestamp("2026-02-10").date(), end_date=pd.Timestamp("2026-02-11").date())
+    engine = BacktestEngine(cfg)
+    assert engine._normalize_qty(99) == 0
+    assert engine._normalize_qty(100) == 100
+    assert engine._normalize_qty(950) == 900
+    assert engine._normalize_qty(1000) == 1000
+    assert engine._normalize_qty(1999) == 1000
+
+
+def test_backtest_engine_buy_qty_uses_lot_or_100_shares():
+    df = pd.DataFrame(
+        {
+            "stock_id": ["2330", "2330"],
+            "trading_date": ["2026-02-10", "2026-02-11"],
+            "close": [100.0, 100.0],
+        }
+    )
+    cfg = BacktestConfig(
+        start_date=pd.Timestamp("2026-02-10").date(),
+        end_date=pd.Timestamp("2026-02-11").date(),
+        max_positions=1,
+    )
+    engine = BacktestEngine(cfg)
+    result = engine.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
+    buys = [t for t in result["trades"] if t["action"] == "BUY"]
+    assert len(buys) == 1
+    qty = int(buys[0]["qty"])
+    assert qty % 100 == 0
