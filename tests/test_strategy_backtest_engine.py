@@ -150,3 +150,78 @@ def test_backtest_engine_buy_qty_uses_lot_or_100_shares():
     assert len(buys) == 1
     qty = int(buys[0]["qty"])
     assert qty % 100 == 0
+
+
+def test_backtest_engine_position_size_multiplier_changes_buy_qty():
+    df = pd.DataFrame(
+        {
+            "stock_id": ["2330", "2330"],
+            "trading_date": ["2026-02-10", "2026-02-11"],
+            "close": [100.0, 100.0],
+        }
+    )
+    cfg_full = BacktestConfig(
+        start_date=pd.Timestamp("2026-02-10").date(),
+        end_date=pd.Timestamp("2026-02-11").date(),
+        max_positions=1,
+        risk_per_trade=0.02,
+        position_size_multiplier=1.0,
+        board_lot_shares=100,
+        min_trade_shares=100,
+    )
+    engine_full = BacktestEngine(cfg_full)
+    result_full = engine_full.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
+    full_qty = int([t for t in result_full["trades"] if t["action"] == "BUY"][0]["qty"])
+
+    cfg_half = BacktestConfig(
+        start_date=pd.Timestamp("2026-02-10").date(),
+        end_date=pd.Timestamp("2026-02-11").date(),
+        max_positions=1,
+        risk_per_trade=0.02,
+        position_size_multiplier=0.5,
+        board_lot_shares=100,
+        min_trade_shares=100,
+    )
+    engine_half = BacktestEngine(cfg_half)
+    result_half = engine_half.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
+    half_qty = int([t for t in result_half["trades"] if t["action"] == "BUY"][0]["qty"])
+
+    assert half_qty < full_qty
+    assert half_qty == full_qty // 2
+
+
+def test_backtest_engine_target_exposure_pct_caps_buy_qty():
+    df = pd.DataFrame(
+        {
+            "stock_id": ["2330", "2330"],
+            "trading_date": ["2026-02-10", "2026-02-11"],
+            "close": [100.0, 100.0],
+        }
+    )
+    cfg_full = BacktestConfig(
+        start_date=pd.Timestamp("2026-02-10").date(),
+        end_date=pd.Timestamp("2026-02-11").date(),
+        max_positions=1,
+        risk_per_trade=0.2,
+        target_exposure_pct=1.0,
+        board_lot_shares=100,
+        min_trade_shares=100,
+    )
+    engine_full = BacktestEngine(cfg_full)
+    result_full = engine_full.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
+    full_qty = int([t for t in result_full["trades"] if t["action"] == "BUY"][0]["qty"])
+
+    cfg_low = BacktestConfig(
+        start_date=pd.Timestamp("2026-02-10").date(),
+        end_date=pd.Timestamp("2026-02-11").date(),
+        max_positions=1,
+        risk_per_trade=0.2,
+        target_exposure_pct=0.3,
+        board_lot_shares=100,
+        min_trade_shares=100,
+    )
+    engine_low = BacktestEngine(cfg_low)
+    result_low = engine_low.run(df, [StrategyAllocation(strategy=DummyStrategy(), weight=1.0)])
+    low_qty = int([t for t in result_low["trades"] if t["action"] == "BUY"][0]["qty"])
+
+    assert low_qty < full_qty

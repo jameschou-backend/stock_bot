@@ -64,25 +64,46 @@ def _format_reason(value) -> str:
         if text in fixed:
             return fixed[text]
 
-        m = re.match(r"^([a-z0-9_]+)_gt_(-?\\d+(?:\\.\\d+)?)$", text)
+        col_name_map = {
+            "ret_20": "近 20 日報酬",
+            "ret_5": "近 5 日報酬",
+            "volume_20": "20 日均量",
+            "volume_60_mean": "60 日均量",
+            "trust_net_3": "投信近 3 日淨買超",
+            "foreign_net_3": "外資近 3 日淨買超",
+            "foreign_trust_same_side": "外資投信同向",
+            "rsi_14": "RSI(14)",
+        }
+
+        m = re.match(r"^([a-z0-9_]+)_gt_(-?\d+(?:\.\d+)?)$", text)
         if m:
-            return f"{m.group(1)} > {m.group(2)}"
-        m = re.match(r"^([a-z0-9_]+)_lt_(-?\\d+(?:\\.\\d+)?)$", text)
+            col = col_name_map.get(m.group(1), m.group(1))
+            val = m.group(2)
+            if m.group(1).startswith("ret_"):
+                return f"{col} > {float(val):.1%}"
+            return f"{col} > {val}"
+        m = re.match(r"^([a-z0-9_]+)_lt_(-?\d+(?:\.\d+)?)$", text)
         if m:
-            return f"{m.group(1)} < {m.group(2)}"
-        m = re.match(r"^([a-z0-9_]+)_gte_(-?\\d+(?:\\.\\d+)?)$", text)
+            col = col_name_map.get(m.group(1), m.group(1))
+            val = m.group(2)
+            if m.group(1).startswith("ret_"):
+                return f"{col} < {float(val):.1%}"
+            return f"{col} < {val}"
+        m = re.match(r"^([a-z0-9_]+)_gte_(-?\d+(?:\.\d+)?)$", text)
         if m:
-            return f"{m.group(1)} >= {m.group(2)}"
-        m = re.match(r"^([a-z0-9_]+)_lte_(-?\\d+(?:\\.\\d+)?)$", text)
+            col = col_name_map.get(m.group(1), m.group(1))
+            return f"{col} >= {m.group(2)}"
+        m = re.match(r"^([a-z0-9_]+)_lte_(-?\d+(?:\.\d+)?)$", text)
         if m:
-            return f"{m.group(1)} <= {m.group(2)}"
-        m = re.match(r"^stoploss_fixed_(-?\\d+(?:\\.\\d+)?)$", text)
+            col = col_name_map.get(m.group(1), m.group(1))
+            return f"{col} <= {m.group(2)}"
+        m = re.match(r"^stoploss_fixed_(-?\d+(?:\.\d+)?)$", text)
         if m:
             return f"固定停損 {float(m.group(1)):.1%}"
-        m = re.match(r"^takeprofit_fixed_(-?\\d+(?:\\.\\d+)?)$", text)
+        m = re.match(r"^takeprofit_fixed_(-?\d+(?:\.\d+)?)$", text)
         if m:
             return f"固定停利 {float(m.group(1)):.1%}"
-        m = re.match(r"^trailing_stop_(-?\\d+(?:\\.\\d+)?)$", text)
+        m = re.match(r"^trailing_stop_(-?\d+(?:\.\d+)?)$", text)
         if m:
             return f"移動停損 {float(m.group(1)):.1%}"
         return text
@@ -213,6 +234,8 @@ HELP_TEXT = {
     "transaction_cost": "單邊手續費率（預設 0.1425%，每筆最低 20 元）。",
     "slippage": "成交滑價比例（買提高、賣降低）。",
     "risk_per_trade": "單筆最大風險占資金比例。",
+    "position_size_multiplier": "部位倍率（套用在風險定倉結果；1.0 為原始倉位）。",
+    "target_exposure_pct": "目標總倉位比例（0~1，1 代表最多可用到 100% 資金）。",
     "max_positions": "同時持倉的最大股票數。",
     "rebalance_freq": "再平衡頻率：D=每日、W=每週、M=每月。",
     "min_notional_per_trade": "單筆最低成交金額，小於門檻則跳過，避免碎單成本過高。",
@@ -228,6 +251,8 @@ def run_strategy_backtest(
     transaction_cost_pct: float,
     slippage_pct: float,
     risk_per_trade: float,
+    position_size_multiplier: float,
+    target_exposure_pct: float,
     max_positions: int,
     rebalance_freq: str,
     min_notional_per_trade: float,
@@ -256,6 +281,8 @@ def run_strategy_backtest(
         transaction_cost_pct=transaction_cost_pct,
         slippage_pct=slippage_pct,
         risk_per_trade=risk_per_trade,
+        position_size_multiplier=position_size_multiplier,
+        target_exposure_pct=target_exposure_pct,
         max_positions=max_positions,
         rebalance_freq=rebalance_freq.upper(),
         min_notional_per_trade=min_notional_per_trade,
@@ -478,14 +505,16 @@ with tab_builder:
         "交易成本比例",
         min_value=0.0,
         value=0.001425,
-        step=0.0001,
+        step=0.00001,
+        format="%.6f",
         help=HELP_TEXT["transaction_cost"],
     )
     slippage_pct = st.number_input(
         "滑價比例",
         min_value=0.0,
         value=0.001,
-        step=0.0001,
+        step=0.00001,
+        format="%.6f",
         help=HELP_TEXT["slippage"],
     )
     if "sf_risk_per_trade" not in st.session_state:
@@ -499,6 +528,24 @@ with tab_builder:
         format="%.4f",
         key="sf_risk_per_trade",
         help=HELP_TEXT["risk_per_trade"],
+    )
+    position_size_multiplier = st.number_input(
+        "部位倍率",
+        min_value=0.1,
+        max_value=3.0,
+        value=1.0,
+        step=0.1,
+        format="%.2f",
+        help=HELP_TEXT["position_size_multiplier"],
+    )
+    target_exposure_pct = st.number_input(
+        "目標總倉位比例",
+        min_value=0.1,
+        max_value=1.0,
+        value=1.0,
+        step=0.05,
+        format="%.2f",
+        help=HELP_TEXT["target_exposure_pct"],
     )
     max_positions = st.number_input(
         "同時持倉上限",
@@ -545,6 +592,8 @@ with tab_builder:
                     transaction_cost_pct=transaction_cost_pct,
                     slippage_pct=slippage_pct,
                     risk_per_trade=risk_per_trade,
+                    position_size_multiplier=position_size_multiplier,
+                    target_exposure_pct=target_exposure_pct,
                     max_positions=max_positions,
                     rebalance_freq=rebalance_freq,
                     min_notional_per_trade=min_notional_per_trade,

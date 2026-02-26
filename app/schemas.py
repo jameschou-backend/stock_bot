@@ -108,6 +108,8 @@ class StrategyRunIn(BaseModel):
     transaction_cost_pct: Optional[float] = None
     slippage_pct: Optional[float] = None
     risk_per_trade: Optional[float] = None
+    position_size_multiplier: Optional[float] = None
+    target_exposure_pct: Optional[float] = None
     max_positions: Optional[int] = None
     rebalance_freq: Optional[str] = None
     min_notional_per_trade: Optional[float] = None

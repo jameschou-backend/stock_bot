@@ -26,6 +26,8 @@ class BacktestConfig:
     min_fee: float = 20.0
     slippage_pct: float = 0.001
     risk_per_trade: float = 0.01
+    position_size_multiplier: float = 1.0
+    target_exposure_pct: float = 1.0
     max_positions: int = 6
     rebalance_freq: str = "D"  # D/W/M
     board_lot_shares: int = 1000
@@ -317,6 +319,12 @@ class BacktestEngine:
             if current_date in rebalance_dates:
                 next_date = next_day_map.get(current_date)
                 if next_date is not None:
+                    total_value = portfolio.total_value()
+                    current_exposure = max(total_value - portfolio.cash, 0.0)
+                    target_exposure_value = total_value * max(min(self.config.target_exposure_pct, 1.0), 0.0)
+                    remaining_total_budget = max(target_exposure_value - current_exposure, 0.0)
+                    if remaining_total_budget <= 0:
+                        continue
                     for alloc in allocations:
                         reserved_orders = pending_buys.get(next_date, [])
                         reserved_sids = {order["stock_id"] for order in reserved_orders}
@@ -331,9 +339,13 @@ class BacktestEngine:
                             continue
 
                         # 可用資金分配給策略
-                        target_value = portfolio.total_value() * alloc.weight
+                        target_value = target_exposure_value * alloc.weight
                         current_value = portfolio.value_for_strategy(alloc.strategy.name)
-                        cash_budget = min(portfolio.cash, max(target_value - current_value, 0.0))
+                        cash_budget = min(
+                            portfolio.cash,
+                            remaining_total_budget,
+                            max(target_value - current_value, 0.0),
+                        )
                         if cash_budget <= 0:
                             continue
 
@@ -361,7 +373,7 @@ class BacktestEngine:
                                 estimate_entry_price,
                                 stop_price,
                             )
-                            qty *= 0.5
+                            qty *= max(self.config.position_size_multiplier, 0.0)
                             max_affordable = cash_budget / estimate_entry_price
                             qty = min(qty, max_affordable)
                             qty = self._normalize_qty(qty)

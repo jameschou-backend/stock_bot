@@ -243,14 +243,20 @@ def run_strategy_backtest(payload: StrategyRunIn):
         bt_cfg = BacktestConfig(
             start_date=start_date,
             end_date=end_date,
-            initial_capital=payload.initial_capital or 1_000_000.0,
-            transaction_cost_pct=payload.transaction_cost_pct or 0.001425,
-            slippage_pct=payload.slippage_pct or 0.001,
-            risk_per_trade=payload.risk_per_trade or 0.01,
-            max_positions=payload.max_positions or 6,
+            initial_capital=payload.initial_capital if payload.initial_capital is not None else 1_000_000.0,
+            transaction_cost_pct=payload.transaction_cost_pct if payload.transaction_cost_pct is not None else 0.001425,
+            slippage_pct=payload.slippage_pct if payload.slippage_pct is not None else 0.001,
+            risk_per_trade=payload.risk_per_trade if payload.risk_per_trade is not None else 0.01,
+            position_size_multiplier=(
+                payload.position_size_multiplier if payload.position_size_multiplier is not None else 1.0
+            ),
+            target_exposure_pct=payload.target_exposure_pct if payload.target_exposure_pct is not None else 1.0,
+            max_positions=payload.max_positions if payload.max_positions is not None else 6,
             rebalance_freq=(payload.rebalance_freq or "D").upper(),
-            min_notional_per_trade=payload.min_notional_per_trade or 1_000.0,
-            max_pyramiding_level=payload.max_pyramiding_level or 1,
+            min_notional_per_trade=(
+                payload.min_notional_per_trade if payload.min_notional_per_trade is not None else 1_000.0
+            ),
+            max_pyramiding_level=payload.max_pyramiding_level if payload.max_pyramiding_level is not None else 1,
         )
         engine = BacktestEngine(bt_cfg)
         result = engine.run(df, allocations)
