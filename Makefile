@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-all
+.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs
 
 migrate:
 	python scripts/migrate.py
@@ -95,3 +95,27 @@ backfill-estimate:
 # 估算 API 用量（僅上市櫃）
 backfill-estimate-listed:
 	python scripts/backfill_history.py --estimate --years 5 --datasets prices,institutional,margin --listed-only
+
+backfill-prices:
+	python scripts/backfill_prices.py --days $${DAYS:-180}
+
+backfill-institutional:
+	python scripts/backfill_institutional.py --days $${DAYS:-180}
+
+dq-report:
+	python scripts/data_quality_report.py --days $${DAYS:-180}
+
+experiment-matrix:
+	python scripts/run_experiment_matrix.py --matrix experiments/multi_agent_matrix.yaml --resume
+
+evaluate-experiment:
+	python scripts/evaluate_experiment.py --experiment-id "$${EXPERIMENT_ID}" --start-date "$${START_DATE}" --end-date "$${END_DATE}" --selection-mode "$${SELECTION_MODE}" --dq-mode "$${DQ_MODE}" --topn "$${TOPN:-20}" $${WEIGHTS_JSON:+--weights-json "$${WEIGHTS_JSON}"}
+
+agent-attribution:
+	python scripts/agent_attribution_report.py --experiment-id "$${EXPERIMENT_ID}"
+
+experiment-summary:
+	python scripts/render_experiment_summary.py
+
+compare-runs:
+	python scripts/compare_runs.py --a "$${A}" --b "$${B}"

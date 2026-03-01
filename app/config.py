@@ -42,6 +42,9 @@ class AppConfig:
     ai_assist_max_log_lines: int = 200
     bootstrap_days: int = 365
     min_avg_turnover: float = 0.5  # 20日平均成交值門檻（億元）
+    min_amt_20: float = 5e7  # 20日平均成交值門檻（元）
+    use_adjusted_price: bool = True
+    enable_tradability_filter: bool = True
     fallback_days: int = 10
     # 大盤過濾器
     market_filter_enabled: bool = True
@@ -73,6 +76,10 @@ class AppConfig:
     dq_max_stale_calendar_days: int = 5  # 允許最大落後日曆天數
     eval_topk_list: Tuple[int, ...] = (10, 20)
     dashboard_show_ml: bool = False
+    data_quality_mode: str = "strict"
+    selection_mode: str = "model"
+    multi_agent_topn: int = 20
+    multi_agent_weights: dict = None
 
     @property
     def db_url(self) -> str:
@@ -163,6 +170,9 @@ def load_config() -> AppConfig:
         ai_assist_max_log_lines=int(pick("AI_ASSIST_MAX_LOG_LINES", 200)),
         bootstrap_days=int(pick("BOOTSTRAP_DAYS", 365)),
         min_avg_turnover=float(pick("MIN_AVG_TURNOVER", 0.5)),
+        min_amt_20=float(pick("MIN_AMT_20", 5e7)),
+        use_adjusted_price=str(pick("USE_ADJUSTED_PRICE", "true")).lower() in {"1", "true"},
+        enable_tradability_filter=str(pick("ENABLE_TRADABILITY_FILTER", "true")).lower() in {"1", "true"},
         fallback_days=int(pick("FALLBACK_DAYS", 10)),
         market_filter_enabled=str(pick("MARKET_FILTER_ENABLED", "true")).lower() in {"1", "true"},
         market_filter_ma_days=int(pick("MARKET_FILTER_MA_DAYS", 60)),
@@ -189,4 +199,11 @@ def load_config() -> AppConfig:
         dq_max_stale_calendar_days=int(pick("DQ_MAX_STALE_CALENDAR_DAYS", 5)),
         eval_topk_list=_parse_eval_topk_list(pick("EVAL_TOPK_LIST", "10,20")),
         dashboard_show_ml=str(pick("DASHBOARD_SHOW_ML", "0")).lower() in {"1", "true"},
+        data_quality_mode=str(pick("DATA_QUALITY_MODE", "strict")).lower(),
+        selection_mode=str(pick("SELECTION_MODE", "model")).lower(),
+        multi_agent_topn=int(pick("MULTI_AGENT_TOPN", 20)),
+        multi_agent_weights=pick_json(
+            "MULTI_AGENT_WEIGHTS",
+            {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10},
+        ),
     )

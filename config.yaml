@@ -15,12 +15,19 @@ API_PORT: 8000
 DASHBOARD_SHOW_ML: false
 BOOTSTRAP_DAYS: 365
 MIN_AVG_TURNOVER: 0.5  # 20日平均成交值門檻（億元），0.5 = 5000萬，排除冷門股
+MIN_AMT_20: 50000000  # 20日平均成交值門檻（元），與 MIN_AVG_TURNOVER 並存，優先使用此欄位
+USE_ADJUSTED_PRICE: true  # true: ret/ma/breakout 使用還原價；false: 使用原始 close
+ENABLE_TRADABILITY_FILTER: true  # true: 啟用狀態硬過濾（halt/suspend/disposition...）
 FALLBACK_DAYS: 10
 # 大盤過濾器（市場下行時減碼）
 MARKET_FILTER_ENABLED: true
 MARKET_FILTER_MA_DAYS: 60        # 用 60 日均線判斷市場多空
 MARKET_FILTER_BEAR_TOPN: 10      # 空頭市場時只選 10 檔（減半）
 REGIME_DETECTOR: "ma"            # 市場狀態偵測器（目前支援 ma）
+DATA_QUALITY_MODE: "research"    # strict|research|dev
+SELECTION_MODE: "model"          # model|multi_agent
+MULTI_AGENT_TOPN: 20
+MULTI_AGENT_WEIGHTS: {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10}
 # 回測設定
 STOPLOSS_PCT: -0.07              # 停損比例 (-7%)
 TRANSACTION_COST_PCT: 0.001425   # 單邊手續費 0.1425%（每筆最低 20 元由回測引擎處理）
