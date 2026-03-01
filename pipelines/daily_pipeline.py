@@ -63,29 +63,37 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         from skills import ingest_stock_master
         run_skill("ingest_stock_master", ingest_stock_master.run)
 
-        # 3. 每日價格資料
+        # 3. 交易日曆（目前先以工作日 seed，後續可替換為官方日曆來源）
+        from skills import ingest_trading_calendar
+        run_skill("ingest_trading_calendar", ingest_trading_calendar.run)
+
+        # 4. 每日價格資料
         from skills import ingest_prices
         run_skill("ingest_prices", ingest_prices.run)
 
-        # 4. 三大法人買賣超
+        # 5. 三大法人買賣超
         from skills import ingest_institutional
         run_skill("ingest_institutional", ingest_institutional.run)
+
+        # 6. 公司行為/還原因子（來源未接妥時會寫入 adj_factor=1 的保底資料）
+        from skills import ingest_corporate_actions
+        run_skill("ingest_corporate_actions", ingest_corporate_actions.run)
         
-        # 5. 融資融券資料（選用，不影響核心流程）
+        # 7. 融資融券資料（選用，不影響核心流程）
         try:
             from skills import ingest_margin_short
             run_skill("ingest_margin_short", ingest_margin_short.run)
         except Exception as exc:
             print(f"[WARN] ingest_margin_short failed: {exc}")
 
-        # 6. 基本面（月營收，研究用；失敗不中斷）
+        # 8. 基本面（月營收，研究用；失敗不中斷）
         try:
             from skills import ingest_fundamental
             run_skill("ingest_fundamental", ingest_fundamental.run)
         except Exception as exc:
             print(f"[WARN] ingest_fundamental failed: {exc}")
 
-        # 7. 題材/金流（由產業聚合，研究用；失敗不中斷）
+        # 9. 題材/金流（由產業聚合，研究用；失敗不中斷）
         try:
             from skills import ingest_theme_flow
             run_skill("ingest_theme_flow", ingest_theme_flow.run)

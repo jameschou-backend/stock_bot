@@ -164,6 +164,7 @@ def fetch_data_quality_reports(engine, days: int = 30) -> pd.DataFrame:
                 notes
             FROM data_quality_reports
             WHERE report_date >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+              AND report_date <= CURDATE()
             ORDER BY report_date DESC, table_name ASC
             """
         )
@@ -182,6 +183,7 @@ def fetch_data_quality_reports(engine, days: int = 30) -> pd.DataFrame:
                     notes
                 FROM data_quality_reports
                 WHERE report_date >= date('now', '-' || :days || ' day')
+                  AND report_date <= date('now')
                 ORDER BY report_date DESC, table_name ASC
                 """
             )
@@ -243,6 +245,36 @@ def fetch_picks(engine, pick_date: date) -> pd.DataFrame:
     if not df.empty:
         df["reason_json"] = df["reason_json"].apply(_parse_json)
     return df
+
+
+def fetch_table_count_max(engine, table_name: str, date_col: str = "trading_date") -> dict:
+    try:
+        q = text(f"SELECT COUNT(*) AS cnt, MAX({date_col}) AS max_date FROM {table_name}")
+        df = pd.read_sql(q, engine)
+        if df.empty:
+            return {"count": 0, "max_date": None}
+        return {
+            "count": int(df.loc[0, "cnt"] or 0),
+            "max_date": _to_date(df.loc[0, "max_date"]) if df.loc[0, "max_date"] is not None else None,
+        }
+    except Exception:
+        return {"count": 0, "max_date": None}
+
+
+def fetch_latest_job_by_name(engine, job_name: str) -> dict | None:
+    q = text(
+        """
+        SELECT job_id, job_name, status, started_at, ended_at, error_text
+        FROM jobs
+        WHERE job_name = :job_name
+        ORDER BY started_at DESC
+        LIMIT 1
+        """
+    )
+    df = pd.read_sql(q, engine, params={"job_name": job_name})
+    if df.empty:
+        return None
+    return df.iloc[0].to_dict()
 
 
 def fetch_model(engine, model_id: str) -> pd.DataFrame:
@@ -647,20 +679,56 @@ if show_ml:
 
     st.divider()
 
-    latest_pick_date = fetch_latest_pick_date(engine)
-    if latest_pick_date is None:
-        hint = "尚未有 picks 資料，可能是資料不足或 bootstrap 尚未完成。"
-        if latest_job and latest_job.get("status") == "failed":
-            hint = f"{hint} 最近失敗：{latest_job.get('error_text')}"
-        st.warning(hint)
-        st.stop()
-
-    pick_date = st.date_input("選擇日期", value=latest_pick_date)
-
+# ========== Picks 區塊（永遠顯示，不受 show_ml 影響） ==========
+st.subheader("選股結果（Picks）")
+latest_pick_date = fetch_latest_pick_date(engine)
+today = date.today()
+if latest_pick_date is None:
+    picks_stat = fetch_table_count_max(engine, "picks", "pick_date")
+    feat_stat = fetch_table_count_max(engine, "features", "trading_date")
+    latest_daily_pick = fetch_latest_job_by_name(engine, "daily_pick")
+    latest_build_features = fetch_latest_job_by_name(engine, "build_features")
+    st.error("picks table is empty")
+    st.write(
+        {
+            "possible_reasons": [
+                "features not built yet",
+                "daily_pick job has not run successfully",
+                "pipeline has not completed",
+            ],
+            "picks_count": picks_stat.get("count", 0),
+            "features_count": feat_stat.get("count", 0),
+            "features_max_trading_date": feat_stat.get("max_date"),
+            "latest_daily_pick_job": latest_daily_pick,
+            "latest_build_features_job": latest_build_features,
+        }
+    )
+else:
+    pick_date = st.date_input("選擇日期", value=latest_pick_date, key="dashboard_pick_date")
+    display_date = pick_date
     picks_df = fetch_picks(engine, pick_date)
     if picks_df.empty:
-        st.warning("當日無 picks 資料。")
-        st.stop()
+        fallback_df = fetch_picks(engine, latest_pick_date)
+        if not fallback_df.empty:
+            picks_df = fallback_df
+            display_date = latest_pick_date
+            st.warning(
+                f"所選日期 {pick_date} 無 picks，已回退至最新可用選股日期：{latest_pick_date}"
+            )
+        else:
+            st.error("picks table has rows but selected/latest date has no valid picks")
+            st.stop()
+
+    if display_date != today:
+        st.info(f"目前顯示最新可用選股日期：{display_date}（非今日）")
+    else:
+        st.caption(f"目前顯示日期：{display_date}")
+
+    if not quality_df.empty:
+        red_rows = quality_df[quality_df["light"] == "RED"]
+        if not red_rows.empty:
+            red_tables = sorted(red_rows["table_name"].astype(str).unique().tolist())
+            st.warning(f"Data Quality 存在 RED 項目（{', '.join(red_tables)}），但 picks 仍可供檢視。")
 
     col1, col2 = st.columns([2, 1])
 
@@ -697,8 +765,8 @@ if show_ml:
     st.subheader("個股詳情")
     stock_id = st.selectbox("選擇股票", picks_df["stock_id"].tolist())
 
-    stock_detail = fetch_stock_detail(engine, stock_id, pick_date)
-    price_hist = fetch_price_history(engine, stock_id, pick_date)
+    stock_detail = fetch_stock_detail(engine, stock_id, display_date)
+    price_hist = fetch_price_history(engine, stock_id, display_date)
 
     if stock_detail["price"]:
         price_col, inst_col = st.columns(2)
