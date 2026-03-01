@@ -43,6 +43,53 @@ class StockStatusHistory(Base):
     __table_args__ = (Index("idx_ssh_stock_date", "stock_id", "effective_date"),)
 
 
+class CorporateAction(Base):
+    """公司行為事件（除權息/分割/合併/增資等）"""
+    __tablename__ = "corporate_actions"
+
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    stock_id = Column(String(16), nullable=False)
+    action_date = Column(Date, nullable=False)
+    action_type = Column(String(32), nullable=False)
+    adj_factor = Column(DECIMAL(18, 8))
+    payload_json = Column(JSON)
+    created_at = Column(DateTime, server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_ca_stock_date", "stock_id", "action_date"),
+        Index("idx_ca_action_date", "action_date"),
+        Index("idx_ca_action_type", "action_type"),
+    )
+
+
+class PriceAdjustFactor(Base):
+    """每日累積還原因子（adj_close = close * adj_factor）"""
+    __tablename__ = "price_adjust_factors"
+
+    stock_id = Column(String(16), primary_key=True)
+    trading_date = Column(Date, primary_key=True)
+    adj_factor = Column(DECIMAL(18, 8), nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+
+    __table_args__ = (Index("idx_paf_trading_date", "trading_date"),)
+
+
+class TradingCalendar(Base):
+    """交易日曆（FULL/HALF/CLOSED）"""
+    __tablename__ = "trading_calendar"
+
+    trading_date = Column(Date, primary_key=True)
+    is_open = Column(Boolean, nullable=False, default=False)
+    session_type = Column(String(16), nullable=False, default="CLOSED")
+    note = Column(String(255))
+    created_at = Column(DateTime, server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_trading_calendar_is_open", "is_open"),
+        Index("idx_trading_calendar_session_type", "session_type"),
+    )
+
+
 class RawMarginShort(Base):
     """融資融券表"""
     __tablename__ = "raw_margin_short"
