@@ -30,7 +30,7 @@ from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.market_calendar import get_latest_trading_day
+from app.market_calendar import calculate_lag_trading_days, get_latest_trading_day, get_recent_trading_days
 from app.models import Pick, RawInstitutional, RawMarginShort, RawPrice
 
 
@@ -76,6 +76,20 @@ class QualityReport:
         return "; ".join(f"[{i.category}] {i.message}" for i in errors)
 
 
+def _issue_dataset(category: str) -> str:
+    if category.startswith("raw_prices"):
+        return "raw_prices"
+    if category.startswith("raw_institutional") or category.startswith("inst_"):
+        return "raw_institutional"
+    if category.startswith("raw_margin_short"):
+        return "raw_margin_short"
+    if category.startswith("raw_fundamentals"):
+        return "raw_fundamentals"
+    if category.startswith("raw_theme_flow"):
+        return "raw_theme_flow"
+    return "other"
+
+
 def _get_taiwan_trading_days(
     reference_date: date, lookback_days: int = CHECK_DAYS
 ) -> List[date]:
@@ -94,7 +108,7 @@ def _get_recent_db_trading_days(
     reference_date: date,
     lookback_days: int = CHECK_DAYS,
 ) -> List[date]:
-    """優先使用 DB 實際交易日，避免連假與未來日期誤判。"""
+    """優先使用 raw_prices 實際交易日，避免連假與未來日期誤判。"""
     if not hasattr(session, "execute"):
         return _get_taiwan_trading_days(reference_date, lookback_days)
     stmt = (
@@ -105,6 +119,9 @@ def _get_recent_db_trading_days(
     )
     rows = session.execute(stmt).scalars().all()
     days = [d for d in rows if isinstance(d, date)]
+    if not days:
+        days = get_recent_trading_days(session, reference_date, lookback_days)
+    days = [d for d in days if isinstance(d, date)]
     if days:
         return sorted(days, reverse=True)
     return _get_taiwan_trading_days(reference_date, lookback_days)
@@ -118,21 +135,7 @@ def _calculate_lag_trading_days(
     """計算落後的交易日數"""
     if db_max_date >= reference_date:
         return 0
-    
-    # 嘗試從 raw_prices 取得交易日
-    stmt = (
-        select(func.count(func.distinct(RawPrice.trading_date)))
-        .where(RawPrice.trading_date > db_max_date)
-        .where(RawPrice.trading_date <= reference_date)
-    )
-    count = session.execute(stmt).scalar() or 0
-    
-    if count > 0:
-        return count
-    
-    # 若 raw_prices 沒有資料，用估算
-    est_days = _get_taiwan_trading_days(reference_date, 30)
-    return len([d for d in est_days if d > db_max_date])
+    return int(calculate_lag_trading_days(session, db_max_date, reference_date))
 
 
 def _check_table_freshness(
@@ -215,10 +218,17 @@ def _check_table_coverage(
     # 雙門檻檢查
     if actual_ratio < coverage_ratio:
         details = ", ".join(f"{d.isoformat()}({c})" for d, c in low_coverage_days[:5])
+        if low_coverage_days:
+            low_dates = [d for d, _ in low_coverage_days]
+            missing_range = f"{min(low_dates).isoformat()} ~ {max(low_dates).isoformat()}"
+        else:
+            missing_range = "n/a"
+        expected_days = int(len(trading_days) * coverage_ratio + 0.999999)
         issues.append(QualityIssue(
             category=f"{table_name}_coverage",
             message=f"{table_name} 覆蓋率 {actual_ratio:.1%} < {coverage_ratio:.0%}，"
-                   f"最近 {len(trading_days)} 交易日中 {len(low_coverage_days)} 天低於 {min_stocks}：{details}",
+                   f"最近 {len(trading_days)} 交易日中 {len(low_coverage_days)} 天低於 {min_stocks}（預期達標天數 >= {expected_days}），"
+                   f"缺失區間 {missing_range}；樣本：{details}",
         ))
     
     return coverage, issues
@@ -361,16 +371,21 @@ def check_data_quality(session: Session, config) -> QualityReport:
 
 
 def _resolve_report_date(session: Session, tz: str) -> date:
-    """取得報表日期，優先使用最新交易日，避免非交易日誤判。"""
+    """取得報表日期，優先使用「有資料」的最新交易日，避免未來/空白日誤判。"""
+    today = datetime.now(ZoneInfo(tz)).date()
+    latest_price_date = session.query(func.max(RawPrice.trading_date)).scalar()
+    if latest_price_date is not None:
+        return min(latest_price_date, today)
+
     latest_trading_day = get_latest_trading_day(session)
     if latest_trading_day is not None:
-        return latest_trading_day
+        return min(latest_trading_day, today)
 
     latest_pick_date = session.query(func.max(Pick.pick_date)).scalar()
     if latest_pick_date is not None:
-        return latest_pick_date
+        return min(latest_pick_date, today)
 
-    return datetime.now(ZoneInfo(tz)).date()
+    return today
 
 
 def _estimate_expected_rows(session: Session, report_date: date) -> int:
@@ -567,12 +582,47 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     logs: Dict[str, object] = {}
     
     try:
+        dq_mode = str(getattr(config, "data_quality_mode", "strict")).lower()
+        if dq_mode not in {"strict", "research", "dev"}:
+            dq_mode = "strict"
+
         report = check_data_quality(db_session, config)
         logs.update(report.metrics)
         logs["issues"] = [{"category": i.category, "message": i.message, "severity": i.severity} for i in report.issues]
         logs["passed"] = report.passed
+        logs["data_quality_mode"] = dq_mode
         logs.update(_persist_data_quality_reports(db_session, config))
-        
+
+        degraded_datasets: List[str] = []
+        if dq_mode == "research":
+            for issue in report.issues:
+                if issue.severity != "error":
+                    continue
+                dataset = _issue_dataset(issue.category)
+                if dataset in {"raw_institutional", "raw_margin_short", "raw_fundamentals", "raw_theme_flow"}:
+                    issue.severity = "warning"
+                    degraded_datasets.append(dataset)
+            logs["degraded_mode"] = len(degraded_datasets) > 0
+            logs["degraded_datasets"] = sorted(set(degraded_datasets))
+            logs["issues"] = [{"category": i.category, "message": i.message, "severity": i.severity} for i in report.issues]
+            report.passed = not any(i.severity == "error" for i in report.issues)
+        elif dq_mode == "dev":
+            for issue in report.issues:
+                if issue.severity == "error":
+                    issue.severity = "warning"
+            logs["degraded_mode"] = True
+            logs["degraded_datasets"] = sorted(
+                set(_issue_dataset(i.category) for i in report.issues if _issue_dataset(i.category) != "other")
+            )
+            logs["issues"] = [{"category": i.category, "message": i.message, "severity": i.severity} for i in report.issues]
+            report.passed = True
+        else:
+            logs["degraded_mode"] = False
+            logs["degraded_datasets"] = []
+
+        logs["error_count_effective"] = len([i for i in report.issues if i.severity == "error"])
+        logs["warning_count_effective"] = len([i for i in report.issues if i.severity == "warning"])
+
         if not report.passed:
             error_text = report.error_text
             finish_job(db_session, job_id, "failed", error_text=error_text, logs=logs)

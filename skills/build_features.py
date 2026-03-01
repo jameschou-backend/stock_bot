@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from app.job_utils import finish_job, start_job
 from app.models import (
     Feature,
+    PriceAdjustFactor,
     RawFundamental,
     RawInstitutional,
     RawMarginShort,
@@ -29,6 +30,8 @@ CORE_FEATURE_COLUMNS = [
     "ma_5", "ma_20", "ma_60",
     # 技術指標（基礎）
     "bias_20", "vol_20", "vol_ratio_20",
+    # 流動性
+    "amt_20",
     # 法人
     "foreign_net_5", "foreign_net_20",
     "trust_net_5", "trust_net_20",
@@ -50,6 +53,8 @@ EXTENDED_FEATURE_COLUMNS = [
     # 技術面（擴充）
     "breakout_20",
     "drawdown_60",
+    "amt",
+    "amt_ratio_20",
     # 籌碼面（擴充）
     "foreign_buy_streak_5",
     "chip_flow_intensity_20",
@@ -144,6 +149,34 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             margin_df[col] = pd.to_numeric(margin_df[col], errors="coerce")
         price_df = price_df.merge(margin_df, on=["stock_id", "trading_date"], how="left")
 
+    # ── 還原因子（公司行為）──
+    try:
+        factor_stmt = (
+            select(
+                PriceAdjustFactor.stock_id,
+                PriceAdjustFactor.trading_date,
+                PriceAdjustFactor.adj_factor,
+            )
+            .where(PriceAdjustFactor.trading_date.between(start_date, end_date))
+            .order_by(PriceAdjustFactor.stock_id, PriceAdjustFactor.trading_date)
+        )
+        factor_df = pd.read_sql(factor_stmt, session.get_bind())
+    except Exception:
+        factor_df = pd.DataFrame()
+
+    if factor_df.empty:
+        price_df["adj_factor"] = 1.0
+        price_df["factor_missing"] = 1
+    else:
+        factor_df["stock_id"] = factor_df["stock_id"].astype(str)
+        factor_df["trading_date"] = pd.to_datetime(factor_df["trading_date"], errors="coerce")
+        factor_df["adj_factor"] = pd.to_numeric(factor_df["adj_factor"], errors="coerce")
+        price_df = price_df.merge(factor_df, on=["stock_id", "trading_date"], how="left")
+        price_df["factor_missing"] = price_df["adj_factor"].isna().astype(int)
+        price_df["adj_factor"] = price_df["adj_factor"].fillna(1.0)
+
+    price_df["adj_close"] = pd.to_numeric(price_df["close"], errors="coerce") * price_df["adj_factor"]
+
     # ── 股票主檔（產業） ──
     stock_stmt = (
         select(
@@ -167,6 +200,9 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         select(
             RawFundamental.stock_id,
             RawFundamental.trading_date,
+            RawFundamental.revenue_current_month,
+            RawFundamental.revenue_last_month,
+            RawFundamental.revenue_last_year,
             RawFundamental.revenue_mom,
             RawFundamental.revenue_yoy,
         )
@@ -180,8 +216,18 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     else:
         fund_df["stock_id"] = fund_df["stock_id"].astype(str)
         fund_df["trading_date"] = pd.to_datetime(fund_df["trading_date"], errors="coerce")
-        for col in ["revenue_mom", "revenue_yoy"]:
+        for col in ["revenue_current_month", "revenue_last_month", "revenue_last_year", "revenue_mom", "revenue_yoy"]:
             fund_df[col] = pd.to_numeric(fund_df[col], errors="coerce")
+        fund_df = fund_df.sort_values(["stock_id", "trading_date"])
+        fund_df["rev_prev_1m"] = fund_df.groupby("stock_id")["revenue_current_month"].shift(1)
+        fund_df["rev_prev_12m"] = fund_df.groupby("stock_id")["revenue_current_month"].shift(12)
+        # 若原始欄位已有缺漏，使用營收欄位回補，避免 fund feature 全缺失
+        prev_month = fund_df["revenue_last_month"].where(fund_df["revenue_last_month"].notna(), fund_df["rev_prev_1m"])
+        prev_year = fund_df["revenue_last_year"].where(fund_df["revenue_last_year"].notna(), fund_df["rev_prev_12m"])
+        mom_fallback = fund_df["revenue_current_month"] / prev_month.replace(0, np.nan) - 1.0
+        yoy_fallback = fund_df["revenue_current_month"] / prev_year.replace(0, np.nan) - 1.0
+        fund_df["revenue_mom"] = fund_df["revenue_mom"].fillna(mom_fallback)
+        fund_df["revenue_yoy"] = fund_df["revenue_yoy"].fillna(yoy_fallback)
         fund_df = fund_df.rename(columns={"revenue_mom": "fund_revenue_mom", "revenue_yoy": "fund_revenue_yoy"})
         fund_df = fund_df.sort_values(["stock_id", "trading_date"])
         price_df = price_df.sort_values(["stock_id", "trading_date"])
@@ -240,7 +286,7 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     return price_df
 
 
-def _compute_features(df: pd.DataFrame) -> pd.DataFrame:
+def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.DataFrame:
     """計算所有特徵（逐股分組）"""
     if df.empty:
         return df
@@ -249,7 +295,8 @@ def _compute_features(df: pd.DataFrame) -> pd.DataFrame:
 
     def apply_group(group: pd.DataFrame) -> pd.DataFrame:
         group = group.sort_values("trading_date").copy()
-        close = group["close"]
+        close = group["adj_close"] if use_adjusted_price and "adj_close" in group.columns else group["close"]
+        raw_close = group["close"]
         volume = group["volume"]
         high = group["high"]
         low = group["low"]
@@ -274,6 +321,9 @@ def _compute_features(df: pd.DataFrame) -> pd.DataFrame:
         rolling_max60 = close.rolling(60).max()
         group["breakout_20"] = close / rolling_max20 - 1
         group["drawdown_60"] = close / rolling_max60 - 1
+        group["amt"] = raw_close * volume
+        group["amt_20"] = group["amt"].rolling(20).mean()
+        group["amt_ratio_20"] = group["amt"] / group["amt_20"].replace(0, np.nan)
 
         # ── 法人 ──
         group["foreign_net_5"] = group["foreign_net"].rolling(5).sum()
@@ -391,7 +441,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        featured = _compute_features(merged)
+        use_adjusted_price = bool(getattr(config, "use_adjusted_price", True))
+        featured = _compute_features(merged, use_adjusted_price=use_adjusted_price)
         target_start_ts = pd.Timestamp(target_start)
         featured = featured[featured["trading_date"] >= target_start_ts]
 
@@ -432,7 +483,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             "feature_count": len(FEATURE_COLUMNS),
             "start_date": target_start.isoformat(),
             "end_date": max_price_date.isoformat(),
+            "use_adjusted_price": use_adjusted_price,
+            "factor_missing_ratio": float(merged["factor_missing"].mean()) if "factor_missing" in merged.columns else 1.0,
+            "price_adjustment_mode": "adjusted" if use_adjusted_price else "unadjusted",
         }
+        if not use_adjusted_price:
+            logs["warning"] = "Feature price series is unadjusted (USE_ADJUSTED_PRICE=false)."
         finish_job(db_session, job_id, "success", logs=logs)
         return logs
     except Exception as exc:  # pragma: no cover - exercised by pipeline

@@ -80,17 +80,33 @@ def get_trading_days_from_db(
     Returns:
         交易日列表（從新到舊排序）
     """
-    from app.models import RawPrice
-    
+    from app.models import RawPrice, TradingCalendar
+
+    try:
+        cal_stmt = (
+            select(TradingCalendar.trading_date)
+            .where(TradingCalendar.is_open == True)
+            .order_by(TradingCalendar.trading_date.desc())
+        )
+        if start_date:
+            cal_stmt = cal_stmt.where(TradingCalendar.trading_date >= start_date)
+        if end_date:
+            cal_stmt = cal_stmt.where(TradingCalendar.trading_date <= end_date)
+        if limit:
+            cal_stmt = cal_stmt.limit(limit)
+        cal_days = [row[0] for row in session.execute(cal_stmt).fetchall()]
+        if cal_days:
+            return cal_days
+    except Exception:
+        pass
+
     stmt = select(RawPrice.trading_date).distinct().order_by(RawPrice.trading_date.desc())
-    
     if start_date:
         stmt = stmt.where(RawPrice.trading_date >= start_date)
     if end_date:
         stmt = stmt.where(RawPrice.trading_date <= end_date)
     if limit:
         stmt = stmt.limit(limit)
-    
     rows = session.execute(stmt).fetchall()
     return [row[0] for row in rows]
 
@@ -104,8 +120,21 @@ def get_latest_trading_day(session: Session) -> Optional[date]:
     Returns:
         最新交易日，若 DB 空則回傳 None
     """
-    from app.models import RawPrice
-    
+    from app.models import RawPrice, TradingCalendar
+
+    today = date.today()
+    try:
+        latest = (
+            session.query(func.max(TradingCalendar.trading_date))
+            .filter(TradingCalendar.is_open == True)
+            .filter(TradingCalendar.trading_date <= today)
+            .scalar()
+        )
+        if latest is not None:
+            return latest
+    except Exception:
+        pass
+
     return session.query(func.max(RawPrice.trading_date)).scalar()
 
 

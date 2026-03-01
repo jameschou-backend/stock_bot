@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 from datetime import date, timedelta
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 try:
@@ -14,13 +16,16 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import Feature, ModelVersion, Pick, RawPrice
+from app.models import Feature, Job, ModelVersion, Pick, RawPrice
 from skills.build_features import FEATURE_COLUMNS
 from skills import regime, risk
+from skills import tradability_filter
+from skills import multi_agent_selector
 
 
 # 選取前 8 個特徵作為 reason 說明
 REASON_FEATURES = FEATURE_COLUMNS[:8]
+ARTIFACTS_DIR = Path(__file__).resolve().parent.parent / "artifacts"
 
 
 def _load_market_price_df(db_session: Session, target_date: date, ma_days: int) -> pd.DataFrame:
@@ -116,6 +121,7 @@ def _choose_pick_date(
     best_df = pd.DataFrame()
     best_valid = 0
     fallback_used = 0
+    best_meta: Dict[str, object] = {}
 
     for idx, target_date in enumerate(candidate_dates[: fallback_days + 1]):
         target = target_date
@@ -127,6 +133,7 @@ def _choose_pick_date(
         if date_features.empty:
             continue
         date_features = date_features.drop_duplicates(subset=["stock_id", "trading_date"])
+        pre_liquidity_count = len(date_features)
 
         date_prices = price_df[price_df["trading_date"] == target].copy()
         if date_prices.empty:
@@ -147,17 +154,29 @@ def _choose_pick_date(
 
         date_features = date_features.merge(eligible[["stock_id"]], on="stock_id", how="inner")
         valid_count = len(date_features)
+        meta = {
+            "candidate_count_before_liquidity": pre_liquidity_count,
+            "candidate_count_after_liquidity": valid_count,
+            "liquidity_excluded_count": max(pre_liquidity_count - valid_count, 0),
+            "liquidity_excluded_ratio": (
+                max(pre_liquidity_count - valid_count, 0) / pre_liquidity_count
+                if pre_liquidity_count
+                else 0.0
+            ),
+        }
         if valid_count > 0 and best_date is None:
             best_date = target_date
             best_df = date_features
             best_valid = valid_count
             fallback_used = idx
+            best_meta = meta
 
         if valid_count >= topn:
             return target_date, date_features, {
                 "fallback_days": idx,
                 "valid_candidates": valid_count,
                 "topn_returned": min(valid_count, topn),
+                **meta,
             }
 
     if best_date is None:
@@ -171,7 +190,102 @@ def _choose_pick_date(
         "fallback_days": fallback_used,
         "valid_candidates": best_valid,
         "topn_returned": min(best_valid, topn),
+        **best_meta,
     }
+
+
+def _load_data_quality_degraded_context(session: Session) -> Dict[str, object]:
+    latest = (
+        session.query(Job)
+        .filter(Job.job_name == "data_quality_check")
+        .order_by(Job.started_at.desc())
+        .limit(1)
+        .one_or_none()
+    )
+    if latest is None or not latest.logs_json:
+        return {"degraded_mode": False, "degraded_datasets": []}
+    logs = latest.logs_json if isinstance(latest.logs_json, dict) else {}
+    return {
+        "degraded_mode": bool(logs.get("degraded_mode", False)),
+        "degraded_datasets": list(logs.get("degraded_datasets", [])),
+        "dq_mode": logs.get("data_quality_mode"),
+    }
+
+
+def _research_score_candidates(feature_df: pd.DataFrame) -> pd.Series:
+    # research 降級模式：只使用技術+流動性特徵做啟發式排序，避免依賴缺失的 institutional 資料
+    keys = ["ret_20", "breakout_20", "amt_ratio_20"]
+    data = feature_df.copy()
+    z = pd.DataFrame(index=data.index)
+    for col in keys:
+        vals = pd.to_numeric(data.get(col), errors="coerce").fillna(0.0)
+        std = float(vals.std())
+        if std == 0:
+            z[col] = 0.0
+        else:
+            z[col] = (vals - vals.mean()) / std
+    return 0.5 * z["ret_20"] + 0.3 * z["breakout_20"] + 0.2 * z["amt_ratio_20"]
+
+
+def _should_use_research_fallback(config, dq_ctx: Dict[str, object]) -> bool:
+    degraded_datasets = set(str(x) for x in dq_ctx.get("degraded_datasets", []))
+    return (
+        str(getattr(config, "data_quality_mode", "strict")).lower() == "research"
+        and bool(dq_ctx.get("degraded_mode", False))
+        and "raw_institutional" in degraded_datasets
+    )
+
+
+def _build_agent_dump_summary(agent_dump: Dict[str, object]) -> Dict[str, object]:
+    if not agent_dump:
+        return {}
+    return dict(agent_dump.get("summary", {}))
+
+
+def _write_run_manifest(
+    job_id: str,
+    chosen_date: date,
+    rows_df: pd.DataFrame,
+    logs: Dict[str, object],
+    selection_mode: str,
+    score_mode: str,
+    config,
+    selection_meta: Dict[str, object],
+    dq_ctx: Dict[str, object],
+    weights_used: Dict[str, float] | None = None,
+    agent_dump: Dict[str, object] | None = None,
+) -> None:
+    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
+    picks_payload = []
+    sorted_df = rows_df.sort_values("score", ascending=False).reset_index(drop=True)
+    for i, row in sorted_df.iterrows():
+        picks_payload.append({"stock_id": str(row["stock_id"]), "rank": int(i + 1), "score": float(row["score"])})
+
+    universe = {
+        "valid_stock_universe_count": logs.get("valid_stock_universe_count"),
+        "liquidity_excluded_ratio": logs.get("liquidity_excluded_ratio"),
+        "tradability": selection_meta.get("tradability", {}),
+        "missing_feature_columns": logs.get("missing_feature_columns", []),
+    }
+    manifest = {
+        "job_id": job_id,
+        "pick_date": chosen_date.isoformat(),
+        "selection_mode": selection_mode,
+        "score_mode": score_mode,
+        "data_quality_mode": str(getattr(config, "data_quality_mode", "strict")),
+        "degraded_mode": bool(dq_ctx.get("degraded_mode", False)),
+        "degraded_datasets": list(dq_ctx.get("degraded_datasets", [])),
+        "effective_topn": int(logs.get("effective_topn", getattr(config, "topn", len(picks_payload)))),
+        "universe": universe,
+        "weights_requested": getattr(config, "multi_agent_weights", None) if selection_mode == "multi_agent" else None,
+        "weights_used": weights_used if selection_mode == "multi_agent" else None,
+        "picks": picks_payload,
+    }
+    if selection_mode == "multi_agent":
+        manifest["agent_dump_summary"] = _build_agent_dump_summary(agent_dump or {})
+
+    manifest_path = ARTIFACTS_DIR / f"run_manifest_daily_pick_{job_id}.json"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
@@ -200,18 +314,40 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         coverage_stats["latest_feature_date"] = candidate_dates[0].isoformat()
         coverage_stats["oldest_candidate_date"] = candidate_dates[-1].isoformat()
 
-        model_version = _load_latest_model(db_session)
-        if model_version is None:
-            raise ValueError("No trained model found")
+        selection_mode = str(getattr(config, "selection_mode", "model")).lower()
+        if selection_mode not in {"model", "multi_agent"}:
+            selection_mode = "model"
 
-        artifact = joblib.load(model_version.artifact_path)
-        model = artifact["model"]
-        feature_names = artifact["feature_names"]
+        model_version = _load_latest_model(db_session)
+        model = None
+        feature_names = list(FEATURE_COLUMNS)
+        if selection_mode == "model":
+            if model_version is None:
+                raise ValueError("No trained model found")
+            artifact = joblib.load(model_version.artifact_path)
+            model = artifact["model"]
+            feature_names = artifact["feature_names"]
         
         # 取得有效股票 universe（排除 ETF、權證等）
         valid_universe_df = risk.get_universe(db_session, max(candidate_dates), config)
+        tradability_logs: Dict[str, object] = {}
+        if getattr(config, "enable_tradability_filter", True):
+            valid_universe_df, tradability_logs = tradability_filter.filter_universe(
+                db_session,
+                valid_universe_df,
+                max(candidate_dates),
+                return_stats=True,
+            )
+            if tradability_logs.get("missing_status_count", 0) > 0:
+                tradability_logs["warning"] = (
+                    f"tradability status missing for {tradability_logs['missing_status_count']} stocks; "
+                    "kept as tradable by policy"
+                )
+        else:
+            tradability_logs = {"tradability_filter": "disabled"}
         valid_stocks = set(valid_universe_df["stock_id"].astype(str).tolist())
         coverage_stats["valid_stock_universe_count"] = len(valid_stocks)
+        coverage_stats["tradability"] = tradability_logs
         
         if not valid_stocks:
             # stocks 表為空時，不過濾（向後相容）
@@ -283,6 +419,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 coverage_stats["market_filter"] = "BULL"
         else:
             coverage_stats["market_filter"] = "disabled"
+            coverage_stats["effective_topn"] = effective_topn
 
         chosen_date, chosen_df, fallback_logs = _choose_pick_date(
             candidate_dates,
@@ -306,36 +443,90 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         feature_df = feature_df.loc[selected_idx].reset_index(drop=True)
         feature_df, impute_stats = _impute_features(feature_df)
 
-        scores = model.predict(feature_df.values)
-        df["score"] = scores
+        dq_ctx = _load_data_quality_degraded_context(db_session)
+        degraded_datasets = set(str(x) for x in dq_ctx.get("degraded_datasets", []))
+        use_research_fallback = _should_use_research_fallback(config, dq_ctx)
+        coverage_stats["degraded_mode"] = bool(dq_ctx.get("degraded_mode", False))
+        coverage_stats["degraded_datasets"] = sorted(degraded_datasets)
 
-        percentile_map = {}
-        for feat in REASON_FEATURES:
-            if feat not in feature_df.columns:
-                continue
-            vals = pd.to_numeric(feature_df[feat], errors="coerce")
-            percentile_map[feat] = vals.rank(pct=True)
-
-        df = risk.pick_topn(df, effective_topn)
         records: List[Dict] = []
-        for _, row in df.iterrows():
-            reasons = {}
+        selection_meta = {
+            "tradability": tradability_logs,
+            "liquidity": {
+                "excluded_ratio": fallback_logs.get("liquidity_excluded_ratio", 0.0),
+                "excluded_count": fallback_logs.get("liquidity_excluded_count", 0),
+                "before_count": fallback_logs.get("candidate_count_before_liquidity", 0),
+                "after_count": fallback_logs.get("candidate_count_after_liquidity", 0),
+            },
+        }
+        weights_used_manifest: Dict[str, float] | None = None
+        agent_dump: Dict[str, object] | None = None
+        if selection_mode == "multi_agent":
+            ma_topn = int(getattr(config, "multi_agent_topn", effective_topn) or effective_topn)
+            picks_df, agent_dump = multi_agent_selector.run_multi_agent_selection(
+                feature_df=feature_df,
+                stock_ids=df["stock_id"],
+                pick_date=chosen_date,
+                topn=min(ma_topn, effective_topn),
+                config=config,
+                dq_ctx=dq_ctx,
+                selection_meta=selection_meta,
+            )
+            coverage_stats["score_mode"] = (
+                "multi_agent_degraded" if bool(dq_ctx.get("degraded_mode", False)) else "multi_agent"
+            )
+            df = picks_df.copy()
+            if not df.empty:
+                first_meta = df.iloc[0]["reason_json"].get("_selection_meta", {})
+                weights_used_manifest = dict(first_meta.get("weights_used", {}))
+        else:
+            if use_research_fallback:
+                scores = _research_score_candidates(feature_df).values
+                coverage_stats["score_mode"] = "research_tech_liquidity_fallback"
+            else:
+                scores = model.predict(feature_df.values)
+                coverage_stats["score_mode"] = "model"
+            df["score"] = scores
+
+            percentile_map = {}
             for feat in REASON_FEATURES:
                 if feat not in feature_df.columns:
                     continue
-                value = float(feature_df.loc[row.name, feat])
-                pct = float(percentile_map[feat].loc[row.name]) if feat in percentile_map else None
-                reasons[feat] = {"value": value, "percentile": pct}
+                vals = pd.to_numeric(feature_df[feat], errors="coerce")
+                percentile_map[feat] = vals.rank(pct=True)
 
-            records.append(
-                {
-                    "pick_date": chosen_date,
-                    "stock_id": row["stock_id"],
-                    "score": float(row["score"]),
-                    "model_id": model_version.model_id,
-                    "reason_json": reasons,
-                }
-            )
+            df = risk.pick_topn(df, effective_topn)
+            for _, row in df.iterrows():
+                reasons = {}
+                for feat in REASON_FEATURES:
+                    if feat not in feature_df.columns:
+                        continue
+                    value = float(feature_df.loc[row.name, feat])
+                    pct = float(percentile_map[feat].loc[row.name]) if feat in percentile_map else None
+                    reasons[feat] = {"value": value, "percentile": pct}
+                reasons["_selection_meta"] = dict(selection_meta, dq_ctx=dq_ctx, selection_mode="model")
+
+                records.append(
+                    {
+                        "pick_date": chosen_date,
+                        "stock_id": row["stock_id"],
+                        "score": float(row["score"]),
+                        "model_id": model_version.model_id if model_version else "n/a",
+                        "reason_json": reasons,
+                    }
+                )
+
+        if selection_mode == "multi_agent":
+            for _, row in df.iterrows():
+                records.append(
+                    {
+                        "pick_date": chosen_date,
+                        "stock_id": row["stock_id"],
+                        "score": float(row["score"]),
+                        "model_id": model_version.model_id if model_version else "multi_agent",
+                        "reason_json": row["reason_json"],
+                    }
+                )
 
         if records:
             # 先清除同一天的舊 picks，避免殘留不同 stock_id 的過期資料
@@ -352,12 +543,27 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         logs = {
             "rows": len(records),
             "pick_date": chosen_date.isoformat(),
-            "model_id": model_version.model_id,
+            "model_id": model_version.model_id if model_version else "multi_agent",
             **fallback_logs,
             **impute_stats,
             **coverage_stats,
             "min_avg_turnover": config.min_avg_turnover,
+            "min_amt_20": getattr(config, "min_amt_20", None),
+            "selection_mode": selection_mode,
         }
+        _write_run_manifest(
+            job_id=job_id,
+            chosen_date=chosen_date,
+            rows_df=df,
+            logs=logs,
+            selection_mode=selection_mode,
+            score_mode=str(coverage_stats.get("score_mode", "model")),
+            config=config,
+            selection_meta=selection_meta,
+            dq_ctx=dq_ctx,
+            weights_used=weights_used_manifest,
+            agent_dump=agent_dump,
+        )
         finish_job(db_session, job_id, "success", logs=logs)
         return logs
     except ValueError:

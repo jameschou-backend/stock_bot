@@ -54,7 +54,12 @@ def apply_liquidity_filter(price_df: pd.DataFrame, config) -> pd.DataFrame:
         .rename("avg_turnover")
         .reset_index()
     )
-    threshold = float(getattr(config, "min_avg_turnover", 0.0)) * 1e8
+    min_amt_20 = float(getattr(config, "min_amt_20", 0.0) or 0.0)
+    if min_amt_20 > 0:
+        threshold = min_amt_20
+    else:
+        # 向後相容：舊版使用「億元」門檻
+        threshold = float(getattr(config, "min_avg_turnover", 0.0)) * 1e8
     if threshold > 0:
         avg_turnover = avg_turnover[avg_turnover["avg_turnover"] >= threshold]
     return avg_turnover.reset_index(drop=True)
