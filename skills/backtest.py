@@ -91,7 +91,10 @@ def _load_all_data(
         .order_by(Label.trading_date, Label.stock_id)
     )
     price_stmt = (
-        select(RawPrice.stock_id, RawPrice.trading_date, RawPrice.close, RawPrice.volume)
+        select(
+            RawPrice.stock_id, RawPrice.trading_date,
+            RawPrice.open, RawPrice.high, RawPrice.low, RawPrice.close, RawPrice.volume,
+        )
         .where(RawPrice.trading_date.between(start_date, end_date))
         .order_by(RawPrice.trading_date, RawPrice.stock_id)
     )
@@ -99,7 +102,7 @@ def _load_all_data(
     label_df = pd.read_sql(label_stmt, db_session.get_bind())
     price_df = pd.read_sql(price_stmt, db_session.get_bind())
 
-    for col in ["close", "volume"]:
+    for col in ["open", "high", "low", "close", "volume"]:
         if col in price_df.columns:
             price_df[col] = pd.to_numeric(price_df[col], errors="coerce")
 
@@ -126,16 +129,26 @@ def _simulate_period(
     exit_date: date,
     stoploss_pct: float,
     transaction_cost_pct: float,
+    entry_delay_days: int = 1,
+    position_weights: Optional[pd.DataFrame] = None,
+    trailing_stop_pct: Optional[float] = None,
+    atr_df: Optional[pd.DataFrame] = None,
+    atr_stoploss_multiplier: Optional[float] = None,
 ) -> Dict:
     """模擬一個持有期間的績效。
 
     Args:
         picks: DataFrame with 'stock_id' and 'score'
-        price_df: full price data
-        entry_date: 進場日（以收盤價買入）
-        exit_date: 預計出場日（以收盤價賣出）
-        stoploss_pct: 停損比例（如 -0.07）
+        price_df: full price data（含 high/low/close）
+        entry_date: 選股決策日（收盤後決策）
+        exit_date: 預計出場日
+        stoploss_pct: 全局固定停損比例（如 -0.07）
         transaction_cost_pct: 來回交易成本
+        entry_delay_days: 進場延遲（1 = 次一交易日收盤，更符合實際執行）
+        position_weights: 各股倉位比例 DataFrame（stock_id, weight），None 時等權
+        trailing_stop_pct: 移動停利比例（如 -0.12），None 時不啟用
+        atr_df: 預先計算的 ATR DataFrame（stock_id, trading_date, atr）
+        atr_stoploss_multiplier: ATR 倍數停損（如 2.5），覆蓋全局 stoploss_pct
 
     Returns:
         Dict with period results
@@ -144,7 +157,6 @@ def _simulate_period(
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
     stock_ids = picks["stock_id"].tolist()
-    n = len(stock_ids)
 
     period_prices = price_df[
         (price_df["stock_id"].isin(stock_ids)) &
@@ -155,35 +167,85 @@ def _simulate_period(
     if period_prices.empty:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
-    # 取得進場價（entry_date 的收盤價）
-    entry_prices = period_prices[period_prices["trading_date"] == entry_date][["stock_id", "close"]]
-    entry_prices = entry_prices.rename(columns={"close": "entry_price"})
+    # ── 1. 確定實際進場日（支援延遲 N 個交易日）──
+    all_trading_dates = sorted(period_prices["trading_date"].unique())
+    if entry_delay_days > 0:
+        future_dates = [d for d in all_trading_dates if d > entry_date]
+        if len(future_dates) < entry_delay_days:
+            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+        actual_entry_date = future_dates[entry_delay_days - 1]
+    else:
+        actual_entry_date = entry_date
+
+    # ── 2. 取進場價（以實際進場日收盤價估算）──
+    entry_prices = period_prices[
+        period_prices["trading_date"] == actual_entry_date
+    ][["stock_id", "close"]].rename(columns={"close": "entry_price"})
 
     if entry_prices.empty:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
-    positions = entry_prices.copy()
-    positions["entry_date"] = entry_date
-    positions["planned_exit_date"] = exit_date
-    positions = positions[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
-    stoploss_result = risk.apply_stoploss(positions, period_prices, stoploss_pct)
+    positions_input = entry_prices.assign(
+        entry_date=actual_entry_date,
+        planned_exit_date=exit_date,
+    )[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
+
+    # ── 3. ATR-based 個股動態停損 ──
+    per_stock_stop: Optional[Dict[str, float]] = None
+    if atr_stoploss_multiplier is not None and atr_df is not None and not atr_df.empty:
+        atr_at_entry = (
+            atr_df[atr_df["trading_date"] <= actual_entry_date]
+            .groupby("stock_id")["atr"]
+            .last()
+        )
+        per_stock_stop = {}
+        for _, row in entry_prices.iterrows():
+            sid = str(row["stock_id"])
+            ep = float(row["entry_price"])
+            if sid in atr_at_entry.index and ep > 0:
+                atr_val = float(atr_at_entry[sid])
+                dynamic = -(atr_stoploss_multiplier * atr_val / ep)
+                per_stock_stop[sid] = max(dynamic, -0.30)  # 最大停損 30%
+            else:
+                per_stock_stop[sid] = stoploss_pct
+
+    # ── 4. 執行出場邏輯 ──
+    if trailing_stop_pct is not None:
+        stoploss_result = risk.apply_trailing_stop(
+            positions_input, period_prices, trailing_stop_pct, stoploss_pct, per_stock_stop
+        )
+    else:
+        stoploss_result = risk.apply_stoploss(
+            positions_input, period_prices, stoploss_pct, per_stock_stop
+        )
 
     stoploss_count = 0
-    stock_returns = {}
+    stock_returns: Dict[str, float] = {}
     if not stoploss_result.empty:
         stoploss_count = int(stoploss_result["stoploss_triggered"].sum())
         for _, row in stoploss_result.iterrows():
             sid = str(row["stock_id"])
             entry_px = float(row["entry_price"])
             exit_px = float(row["exit_price"])
-            ret = exit_px / entry_px - 1 - transaction_cost_pct
-            stock_returns[sid] = ret
+            if entry_px > 0:
+                stock_returns[sid] = exit_px / entry_px - 1 - transaction_cost_pct
 
     if not stock_returns:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
-    # 等權重
-    portfolio_return = sum(stock_returns.values()) / len(stock_returns)
+    # ── 5. 計算組合報酬（支援分級倉位）──
+    if position_weights is not None and not position_weights.empty:
+        pw = position_weights.set_index("stock_id")["weight"]
+        n_total = len(stock_returns)
+        weighted_ret, total_w = 0.0, 0.0
+        for sid, ret in stock_returns.items():
+            w = float(pw.get(sid, 1.0 / n_total))
+            weighted_ret += w * ret
+            total_w += w
+        portfolio_return = weighted_ret / total_w if total_w > 0 else 0.0
+    else:
+        portfolio_return = sum(stock_returns.values()) / len(stock_returns)
+
     wins = sum(1 for r in stock_returns.values() if r > 0)
     losses = sum(1 for r in stock_returns.values() if r <= 0)
 
@@ -194,6 +256,7 @@ def _simulate_period(
         "losses": losses,
         "stoploss_triggered": stoploss_count,
         "stock_returns": stock_returns,
+        "actual_entry_date": actual_entry_date.isoformat() if hasattr(actual_entry_date, "isoformat") else str(actual_entry_date),
     }
 
 
@@ -210,6 +273,14 @@ def run_backtest(
     eval_start: Optional[date] = None,
     eval_end: Optional[date] = None,
     train_lookback_days: Optional[int] = None,
+    # ── 新增參數 ──
+    entry_delay_days: int = 1,
+    risk_free_rate: float = 0.015,
+    benchmark_with_cost: bool = True,
+    position_sizing: str = "equal",
+    trailing_stop_pct: Optional[float] = None,
+    atr_stoploss_multiplier: Optional[float] = None,
+    atr_period: int = 14,
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -219,9 +290,16 @@ def run_backtest(
         backtest_months: 回測幾個月
         retrain_freq_months: 每幾個月重訓模型
         topn: 每期選幾檔
-        stoploss_pct: 停損比例
+        stoploss_pct: 全局固定停損比例（如 -0.07）
         transaction_cost_pct: 來回交易成本
         min_train_days: 最低訓練天數
+        entry_delay_days: 進場延遲交易日（1=決策日次一交易日執行，更符合實際）
+        risk_free_rate: 無風險利率（年化，Sharpe 計算用）
+        benchmark_with_cost: Benchmark 是否套用相同交易成本（公平比較）
+        position_sizing: 倉位分配方式 equal|score_tiered|vol_inverse
+        trailing_stop_pct: 移動停利比例（如 -0.12），None 停用
+        atr_stoploss_multiplier: ATR 倍數動態停損（如 2.5），None 使用固定停損
+        atr_period: ATR 計算週期（日）
 
     Returns:
         Dict 包含完整回測結果
@@ -244,13 +322,16 @@ def run_backtest(
     backtest_start = eval_start if eval_start is not None else data_end - timedelta(days=30 * backtest_months)
     data_start = min_feat_date
 
+    exit_strategy = "trailing" if trailing_stop_pct is not None else (
+        f"ATR×{atr_stoploss_multiplier}" if atr_stoploss_multiplier is not None else f"fixed {stoploss_pct:.0%}"
+    )
     print(f"  資料範圍: {data_start} ~ {data_end}")
     print(f"  回測期間: {backtest_start} ~ {data_end}")
     print(f"  模型重訓: 每 {retrain_freq_months} 個月")
-    print(f"  選股數量: {topn}")
-    print(f"  成交值門檻: {min_avg_turnover} 億元")
-    print(f"  停損比例: {stoploss_pct:.1%}")
-    print(f"  交易成本: {transaction_cost_pct:.3%}")
+    print(f"  選股數量: {topn}  倉位: {position_sizing}")
+    print(f"  停損策略: {exit_strategy}" + (f"  移動停利: {trailing_stop_pct:.0%}" if trailing_stop_pct else ""))
+    print(f"  交易成本: {transaction_cost_pct:.3%}（來回）  進場延遲: {entry_delay_days} 交易日")
+    print(f"  無風險利率: {risk_free_rate:.1%}  Benchmark含成本: {benchmark_with_cost}")
     if train_lookback_days:
         print(f"  訓練窗長: {train_lookback_days} 日")
     print()
@@ -264,12 +345,18 @@ def run_backtest(
     label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
     price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
 
-    # ── 3. 找出回測期間的再平衡日 ──
+    # ── 3. 預計算 ATR（若需要）──
+    atr_df: Optional[pd.DataFrame] = None
+    if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse":
+        print("  預計算 ATR ...", flush=True)
+        atr_df = risk.compute_atr(price_df, period=atr_period)
+
+    # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
     rebalance_dates = _get_rebalance_dates(bt_trading_dates)
     print(f"  再平衡次數: {len(rebalance_dates)}")
 
-    # ── 4. Walk-forward 執行 ──
+    # ── 5. Walk-forward 執行 ──
     current_model = None
     current_feature_names = None
     last_train_date = None
@@ -277,15 +364,13 @@ def run_backtest(
     equity = 10000.0
     equity_curve = [{"date": rebalance_dates[0].isoformat() if rebalance_dates else data_start.isoformat(), "equity": equity}]
 
-    # 大盤基準：等權平均
     benchmark_equity = 10000.0
     benchmark_curve = [{"date": equity_curve[0]["date"], "equity": benchmark_equity}]
+    benchmark_tc = transaction_cost_pct if benchmark_with_cost else 0.0
 
     for i, rb_date in enumerate(rebalance_dates):
-        # 決定退出日（下一個再平衡日前一天，或最後一天）
+        # 決定退出日（下一個再平衡日的最後一個交易日，或資料末尾）
         if i + 1 < len(rebalance_dates):
-            exit_date = rebalance_dates[i + 1] - timedelta(days=1)
-            # 確保 exit_date 是交易日
             exit_candidates = [d for d in bt_trading_dates if d > rb_date and d <= rebalance_dates[i + 1]]
             exit_date = exit_candidates[-1] if exit_candidates else rb_date
         else:
@@ -303,7 +388,6 @@ def run_backtest(
         )
 
         if need_retrain:
-            # 用 rb_date 之前的資料訓練
             train_feat = feat_df[feat_df["trading_date"] < rb_date]
             train_label = label_df[label_df["trading_date"] < rb_date]
             if train_lookback_days:
@@ -346,11 +430,9 @@ def run_backtest(
 
         # ── 對當日股票評分 ──
         day_feat = feat_df[feat_df["trading_date"] == rb_date].copy()
-        # 只選四碼股票
         day_feat = day_feat[day_feat["stock_id"].str.fullmatch(r"\d{4}")]
 
         if day_feat.empty:
-            # 回退找前幾天
             for fallback in range(1, 6):
                 fb_date = rb_date - timedelta(days=fallback)
                 day_feat = feat_df[feat_df["trading_date"] == fb_date].copy()
@@ -362,7 +444,6 @@ def run_backtest(
             continue
 
         fmat = _parse_features(day_feat["features_json"])
-        # 補齊缺失欄位
         for col in current_feature_names:
             if col not in fmat.columns:
                 fmat[col] = 0
@@ -378,7 +459,7 @@ def run_backtest(
         day_feat = day_feat.reset_index(drop=True)
         day_feat["score"] = scores
 
-        # 流動性過濾：20 日平均成交值（億元）
+        # 流動性過濾
         eligible_turnover = risk.apply_liquidity_filter(
             price_df[price_df["trading_date"] <= rb_date],
             SimpleNamespace(min_avg_turnover=min_avg_turnover),
@@ -391,14 +472,33 @@ def run_backtest(
 
         picks = risk.pick_topn(day_feat, topn)
 
-        # ── 模擬持有 ──
-        result = _simulate_period(picks, price_df, rb_date, exit_date, stoploss_pct, transaction_cost_pct)
+        # ── 計算倉位權重 ──
+        period_price_slice = price_df[price_df["trading_date"] <= rb_date]
+        pos_weights = risk.compute_position_weights(
+            picks, method=position_sizing,
+            price_df=period_price_slice if position_sizing == "vol_inverse" else None,
+            atr_period=atr_period,
+        )
 
-        # 大盤基準（等權所有股票）
+        # ── 模擬持有 ──
+        result = _simulate_period(
+            picks, price_df, rb_date, exit_date,
+            stoploss_pct, transaction_cost_pct,
+            entry_delay_days=entry_delay_days,
+            position_weights=pos_weights,
+            trailing_stop_pct=trailing_stop_pct,
+            atr_df=atr_df,
+            atr_stoploss_multiplier=atr_stoploss_multiplier,
+        )
+
+        # ── 大盤基準（等權所有股票，套用相同交易成本）──
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
         benchmark_result = _simulate_period(
             pd.DataFrame({"stock_id": all_stocks_on_date, "score": 0}),
-            price_df, rb_date, exit_date, 0, 0,  # 基準不設停損和成本
+            price_df, rb_date, exit_date,
+            stoploss_pct=0,  # 基準不設停損
+            transaction_cost_pct=benchmark_tc,
+            entry_delay_days=0,  # 被動指數無選股延遲
         )
 
         period_ret = result["return"]
@@ -409,6 +509,7 @@ def run_backtest(
         period_results.append({
             "rebalance_date": rb_date.isoformat(),
             "exit_date": exit_date.isoformat(),
+            "actual_entry_date": result.get("actual_entry_date", rb_date.isoformat()),
             "return": period_ret,
             "benchmark_return": benchmark_ret,
             "excess_return": period_ret - benchmark_ret,
@@ -432,26 +533,25 @@ def run_backtest(
             flush=True,
         )
 
-    # ── 5. 計算總結指標 ──
+    # ── 6. 計算總結指標 ──
     if not period_results:
         print("\n[WARN] 無有效回測期間")
         return {"error": "no valid backtest periods"}
 
     returns = [p["return"] for p in period_results]
     benchmark_returns = [p["benchmark_return"] for p in period_results]
-    excess_returns = [p["excess_return"] for p in period_results]
 
     total_return = equity / 10000 - 1
     benchmark_total = benchmark_equity / 10000 - 1
     n_periods = len(returns)
-    years = n_periods / 12  # 近似（月度再平衡）
+    years = n_periods / 12
 
     annualized_return = (1 + total_return) ** (1 / max(years, 0.01)) - 1 if total_return > -1 else -1
     benchmark_annualized = (1 + benchmark_total) ** (1 / max(years, 0.01)) - 1 if benchmark_total > -1 else -1
 
     # Max Drawdown
-    peak = 10000
-    max_dd = 0
+    peak = 10000.0
+    max_dd = 0.0
     for ec in equity_curve:
         v = ec["equity"]
         if v > peak:
@@ -460,12 +560,17 @@ def run_backtest(
         if dd < max_dd:
             max_dd = dd
 
-    # Sharpe (月化報酬 → 年化)
+    # Sharpe（扣除無風險利率，月化後年化）
+    rf_monthly = (1 + risk_free_rate) ** (1 / 12) - 1
     monthly_returns = np.array(returns)
-    if len(monthly_returns) > 1 and monthly_returns.std() > 0:
-        sharpe = (monthly_returns.mean() / monthly_returns.std()) * np.sqrt(12)
+    excess_monthly = monthly_returns - rf_monthly
+    if len(excess_monthly) > 1 and monthly_returns.std() > 0:
+        sharpe = (excess_monthly.mean() / monthly_returns.std()) * np.sqrt(12)
     else:
         sharpe = 0.0
+
+    # Calmar Ratio（年化報酬 / |最大回撤|）
+    calmar = annualized_return / abs(max_dd) if max_dd < 0 else float("inf")
 
     # 勝率 & 盈虧比
     total_wins = sum(p["wins"] for p in period_results)
@@ -490,6 +595,7 @@ def run_backtest(
         "excess_return": round(total_return - benchmark_total, 4),
         "max_drawdown": round(max_dd, 4),
         "sharpe_ratio": round(sharpe, 4),
+        "calmar_ratio": round(calmar, 4) if calmar != float("inf") else None,
         "win_rate": round(win_rate, 4),
         "profit_factor": round(profit_factor, 4),
         "total_trades": total_trades,
@@ -497,34 +603,42 @@ def run_backtest(
         "stoploss_triggered": sum(p["stoploss_triggered"] for p in period_results),
         "backtest_start": period_results[0]["rebalance_date"],
         "backtest_end": period_results[-1]["exit_date"],
+        # 回測設定紀錄
+        "config": {
+            "entry_delay_days": entry_delay_days,
+            "risk_free_rate": risk_free_rate,
+            "benchmark_with_cost": benchmark_with_cost,
+            "position_sizing": position_sizing,
+            "stoploss_pct": stoploss_pct,
+            "trailing_stop_pct": trailing_stop_pct,
+            "atr_stoploss_multiplier": atr_stoploss_multiplier,
+        },
     }
 
-    # ── 6. 輸出報告 ──
+    # ── 7. 輸出報告 ──
     print("\n" + "=" * 60)
     print("回測結果摘要")
     print("=" * 60)
     print(f"  回測期間: {summary['backtest_start']} ~ {summary['backtest_end']}")
-    print(f"  再平衡次數: {n_periods}")
-    print(f"  總交易次數: {total_trades}")
+    print(f"  再平衡次數: {n_periods}  總交易次數: {total_trades}")
     print()
-    print(f"  {'指標':<20} {'組合':>12} {'大盤':>12}")
-    print(f"  {'-'*44}")
-    print(f"  {'累積報酬':<18} {total_return:>11.2%} {benchmark_total:>11.2%}")
-    print(f"  {'年化報酬':<18} {annualized_return:>11.2%} {benchmark_annualized:>11.2%}")
-    print(f"  {'超額報酬':<18} {total_return - benchmark_total:>11.2%}")
-    print(f"  {'最大回撤':<18} {max_dd:>11.2%}")
-    print(f"  {'Sharpe Ratio':<20} {sharpe:>11.2f}")
-    print(f"  {'勝率':<18} {win_rate:>11.2%}")
-    print(f"  {'盈虧比':<18} {profit_factor:>11.2f}")
-    print(f"  {'停損觸發次數':<18} {summary['stoploss_triggered']:>11}")
+    print(f"  {'指標':<22} {'組合':>12} {'大盤':>12}")
+    print(f"  {'-'*46}")
+    print(f"  {'累積報酬':<20} {total_return:>11.2%} {benchmark_total:>11.2%}")
+    print(f"  {'年化報酬':<20} {annualized_return:>11.2%} {benchmark_annualized:>11.2%}")
+    print(f"  {'超額報酬':<20} {total_return - benchmark_total:>11.2%}")
+    print(f"  {'最大回撤':<20} {max_dd:>11.2%}")
+    print(f"  {'Sharpe Ratio (rf={risk_free_rate:.1%})':<20} {sharpe:>11.2f}")
+    print(f"  {'Calmar Ratio':<20} {calmar:>11.2f}" if calmar != float("inf") else f"  {'Calmar Ratio':<20} {'∞':>11}")
+    print(f"  {'勝率':<20} {win_rate:>11.2%}")
+    print(f"  {'盈虧比':<20} {profit_factor:>11.2f}")
+    print(f"  {'停損觸發次數':<20} {summary['stoploss_triggered']:>11}")
     print()
 
-    # 月度報酬表
     print("  月度報酬:")
     for p in period_results:
         ret = p["return"]
         bm = p["benchmark_return"]
-        excess = p["excess_return"]
         bar = "█" * max(1, int(abs(ret) * 200))
         sign = "+" if ret >= 0 else ""
         color_bar = f"{'↑' if ret >= 0 else '↓'} {bar}"

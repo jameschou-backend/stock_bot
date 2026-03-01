@@ -236,6 +236,43 @@ def _should_use_research_fallback(config, dq_ctx: Dict[str, object]) -> bool:
     )
 
 
+def _filter_overheated(
+    df: pd.DataFrame,
+    feature_df: pd.DataFrame,
+    config,
+) -> pd.DataFrame:
+    """過濾短線過熱股票，避免在 RSI 過高或趨勢已過度延伸時追高買入。
+
+    過濾條件（任一成立即排除）：
+    1. RSI_14 > overheat_rsi_threshold（預設 75）
+    2. market_rel_ret_20 > 0.20 且 macd_hist <= 0（相對強勢已減弱）
+    """
+    if not getattr(config, "enable_overheat_filter", False):
+        return df
+
+    rsi_threshold = float(getattr(config, "overheat_rsi_threshold", 75))
+    mask_overheat = pd.Series(False, index=feature_df.index)
+
+    if "rsi_14" in feature_df.columns:
+        rsi = pd.to_numeric(feature_df["rsi_14"], errors="coerce").fillna(0)
+        mask_overheat |= rsi > rsi_threshold
+
+    if "market_rel_ret_20" in feature_df.columns and "macd_hist" in feature_df.columns:
+        rel_ret = pd.to_numeric(feature_df["market_rel_ret_20"], errors="coerce").fillna(0)
+        macd = pd.to_numeric(feature_df["macd_hist"], errors="coerce").fillna(0)
+        mask_overheat |= (rel_ret > 0.20) & (macd <= 0)
+
+    keep = ~mask_overheat.values
+    filtered = df[keep].copy()
+
+    n_removed = len(df) - len(filtered)
+    if n_removed > 0:
+        import logging
+        logging.getLogger(__name__).debug("overheat_filter: removed %d stocks", n_removed)
+
+    return filtered
+
+
 def _build_agent_dump_summary(agent_dump: Dict[str, object]) -> Dict[str, object]:
     if not agent_dump:
         return {}
@@ -495,6 +532,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 vals = pd.to_numeric(feature_df[feat], errors="coerce")
                 percentile_map[feat] = vals.rank(pct=True)
 
+            df = _filter_overheated(df, feature_df, config)
             df = risk.pick_topn(df, effective_topn)
             for _, row in df.iterrows():
                 reasons = {}

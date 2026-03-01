@@ -28,9 +28,20 @@ DATA_QUALITY_MODE: "research"    # strict|research|dev
 SELECTION_MODE: "model"          # model|multi_agent
 MULTI_AGENT_TOPN: 20
 MULTI_AGENT_WEIGHTS: {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10}
-# 回測設定
+# 回測基礎設定
 STOPLOSS_PCT: -0.07              # 停損比例 (-7%)
 TRANSACTION_COST_PCT: 0.001425   # 單邊手續費 0.1425%（每筆最低 20 元由回測引擎處理）
+# 回測進階設定
+BACKTEST_ENTRY_DELAY_DAYS: 1     # 進場延遲交易日（1=決策日次一交易日執行，更符合實際）
+BACKTEST_RISK_FREE_RATE: 0.015   # Sharpe 計算用無風險利率（年化，台灣定存約 1.5%）
+BACKTEST_BENCHMARK_WITH_COST: true  # Benchmark 是否套用相同交易成本（公平比較）
+BACKTEST_POSITION_SIZING: "equal"   # equal | score_tiered | vol_inverse
+BACKTEST_TRAILING_STOP_PCT: null    # 移動停利比例（如 -0.12），null 停用
+BACKTEST_ATR_STOPLOSS_MULTIPLIER: null  # ATR 倍數動態停損（如 2.5），null 使用固定停損
+BACKTEST_ATR_PERIOD: 14          # ATR 計算週期（日）
+# 過熱過濾器（選股階段排除短線過熱標的）
+ENABLE_OVERHEAT_FILTER: false    # 是否啟用過熱過濾（建議先在回測中評估效果再開啟）
+OVERHEAT_RSI_THRESHOLD: 75       # RSI 過熱門檻（RSI > 此值視為短線過熱）
 STRATEGY_WEIGHTS_BULL: {"MomentumTrend": 0.6, "MeanReversion": 0.2, "DefensiveLowVol": 0.2}
 STRATEGY_WEIGHTS_BEAR: {"MomentumTrend": 0.2, "MeanReversion": 0.3, "DefensiveLowVol": 0.5}
 EVAL_TOPK_LIST: [10, 20]         # ranker 驗證指標使用的 K 值

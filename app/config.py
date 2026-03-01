@@ -51,11 +51,22 @@ class AppConfig:
     market_filter_ma_days: int = 60
     market_filter_bear_topn: int = 10
     regime_detector: str = "ma"
-    # 回測設定
+    # 回測基礎設定
     stoploss_pct: float = -0.07
     transaction_cost_pct: float = 0.001425
     strategy_weights_bull: dict = None
     strategy_weights_bear: dict = None
+    # 回測進階設定
+    backtest_entry_delay_days: int = 1
+    backtest_risk_free_rate: float = 0.015
+    backtest_benchmark_with_cost: bool = True
+    backtest_position_sizing: str = "equal"
+    backtest_trailing_stop_pct: float = None
+    backtest_atr_stoploss_multiplier: float = None
+    backtest_atr_period: int = 14
+    # 過熱過濾器
+    enable_overheat_filter: bool = False
+    overheat_rsi_threshold: float = 75.0
     # API Rate Limiting
     finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
     chunk_days: int = 180  # 資料抓取每個 chunk 的天數
@@ -206,4 +217,13 @@ def load_config() -> AppConfig:
             "MULTI_AGENT_WEIGHTS",
             {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10},
         ),
+        backtest_entry_delay_days=int(pick("BACKTEST_ENTRY_DELAY_DAYS", 1)),
+        backtest_risk_free_rate=float(pick("BACKTEST_RISK_FREE_RATE", 0.015)),
+        backtest_benchmark_with_cost=str(pick("BACKTEST_BENCHMARK_WITH_COST", "true")).lower() in {"1", "true"},
+        backtest_position_sizing=str(pick("BACKTEST_POSITION_SIZING", "equal")).lower(),
+        backtest_trailing_stop_pct=float(pick("BACKTEST_TRAILING_STOP_PCT", "nan")) if pick("BACKTEST_TRAILING_STOP_PCT", None) not in {None, "null", "None", ""} else None,
+        backtest_atr_stoploss_multiplier=float(pick("BACKTEST_ATR_STOPLOSS_MULTIPLIER", "nan")) if pick("BACKTEST_ATR_STOPLOSS_MULTIPLIER", None) not in {None, "null", "None", ""} else None,
+        backtest_atr_period=int(pick("BACKTEST_ATR_PERIOD", 14)),
+        enable_overheat_filter=str(pick("ENABLE_OVERHEAT_FILTER", "false")).lower() in {"1", "true"},
+        overheat_rsi_threshold=float(pick("OVERHEAT_RSI_THRESHOLD", 75.0)),
     )
