@@ -1,0 +1,150 @@
+{
+  "generated_at": "2026-02-28T17:17:47.758175Z",
+  "asof": "2026-03-01",
+  "days": 7,
+  "data_quality_mode": "research",
+  "daily_universe_count": 2340,
+  "trading_days_count": 5,
+  "closed_dates_last_90d": [
+    "2025-12-06",
+    "2025-12-07",
+    "2025-12-13",
+    "2025-12-14",
+    "2025-12-20",
+    "2025-12-21",
+    "2025-12-27",
+    "2025-12-28",
+    "2026-01-03",
+    "2026-01-04",
+    "2026-01-10",
+    "2026-01-11",
+    "2026-01-17",
+    "2026-01-18",
+    "2026-01-24",
+    "2026-01-25",
+    "2026-01-31",
+    "2026-02-01",
+    "2026-02-07",
+    "2026-02-08",
+    "2026-02-14",
+    "2026-02-15",
+    "2026-02-21",
+    "2026-02-22",
+    "2026-02-28",
+    "2026-03-01"
+  ],
+  "datasets": [
+    {
+      "dataset": "raw_prices",
+      "min_date": "2016-02-15",
+      "max_date": "2026-02-26",
+      "symbol_coverage_ratio_last_30d": 0.6864957264957265,
+      "missing_dates_last_90d": [
+        "2026-02-27"
+      ],
+      "null_rate": {
+        "open": 0.0,
+        "high": 0.0,
+        "low": 0.0,
+        "close": 0.0,
+        "volume": 0.0
+      },
+      "outlier_rate": {
+        "open": 0.0,
+        "high": 0.0,
+        "low": 0.0,
+        "close": 0.0,
+        "volume": 0.0
+      },
+      "fail_reasons": [
+        "coverage_ratio 68.65% < threshold 70%"
+      ]
+    },
+    {
+      "dataset": "raw_institutional",
+      "min_date": "2016-02-15",
+      "max_date": "2026-02-26",
+      "symbol_coverage_ratio_last_30d": 0.6297435897435897,
+      "missing_dates_last_90d": [
+        "2026-02-27"
+      ],
+      "null_rate": {
+        "foreign_buy": 0.0,
+        "foreign_sell": 0.0,
+        "foreign_net": 0.0,
+        "trust_net": 0.0,
+        "dealer_net": 0.0
+      },
+      "outlier_rate": {
+        "foreign_buy": 0.0,
+        "foreign_sell": 0.0,
+        "foreign_net": 0.49675421802082087,
+        "trust_net": 0.08623546862758821,
+        "dealer_net": 0.31139497788544684
+      },
+      "fail_reasons": []
+    },
+    {
+      "dataset": "raw_margin_short",
+      "min_date": "2016-02-15",
+      "max_date": "2026-02-26",
+      "symbol_coverage_ratio_last_30d": 0.6231623931623932,
+      "missing_dates_last_90d": [
+        "2026-02-27"
+      ],
+      "null_rate": {
+        "margin_purchase_balance": 0.0,
+        "short_sale_balance": 0.0
+      },
+      "outlier_rate": {
+        "margin_purchase_balance": 0.0,
+        "short_sale_balance": 0.0
+      },
+      "fail_reasons": []
+    },
+    {
+      "dataset": "raw_fundamentals",
+      "min_date": "2016-03-01",
+      "max_date": "2026-02-01",
+      "symbol_coverage_ratio_last_30d": 0.0,
+      "missing_dates_last_90d": [
+        "2026-02-23",
+        "2026-02-24",
+        "2026-02-25",
+        "2026-02-26",
+        "2026-02-27"
+      ],
+      "null_rate": {
+        "revenue_mom": 1.0,
+        "revenue_yoy": 1.0
+      },
+      "outlier_rate": {
+        "revenue_mom": 0.0,
+        "revenue_yoy": 0.0
+      },
+      "fail_reasons": []
+    },
+    {
+      "dataset": "raw_theme_flow",
+      "min_date": "2016-02-16",
+      "max_date": "2026-02-26",
+      "symbol_coverage_ratio_last_30d": 0.014615384615384617,
+      "missing_dates_last_90d": [
+        "2026-02-27"
+      ],
+      "null_rate": {
+        "turnover_amount": 0.0,
+        "turnover_ratio": 0.0,
+        "theme_return_20": 0.3635264372870177,
+        "hot_score": 0.9988549338609798
+      },
+      "outlier_rate": {
+        "turnover_amount": 0.0,
+        "turnover_ratio": 0.0,
+        "theme_return_20": 0.3398464695320802,
+        "hot_score": 0.0007511633871972445
+      },
+      "fail_reasons": []
+    }
+  ]
+}

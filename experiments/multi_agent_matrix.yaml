@@ -1,0 +1,32 @@
+start_date: "2025-03-01"
+end_date: "2026-02-28"
+rebalance: "M"
+topn: 20
+resume: true
+experiments:
+  - name: "model_strict"
+    selection_mode: "model"
+    data_quality_mode: "strict"
+  - name: "model_research"
+    selection_mode: "model"
+    data_quality_mode: "research"
+  - name: "ma_strict_baseline"
+    selection_mode: "multi_agent"
+    data_quality_mode: "strict"
+    multi_agent_weights: {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10}
+  - name: "ma_research_baseline"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10}
+  - name: "ma_research_tech_heavy"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.50, "flow": 0.20, "margin": 0.10, "fund": 0.10, "theme": 0.10}
+  - name: "ma_research_flow_heavy"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.25, "flow": 0.45, "margin": 0.10, "fund": 0.10, "theme": 0.10}
+  - name: "ma_research_defensive"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.20, "flow": 0.20, "margin": 0.10, "fund": 0.30, "theme": 0.20}

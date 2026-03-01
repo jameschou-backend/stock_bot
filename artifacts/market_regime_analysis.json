@@ -1,0 +1,335 @@
+{
+  "period": {
+    "start_date": "2025-03-01",
+    "end_date": "2026-02-28"
+  },
+  "multi_agent_weights": {
+    "tech": 0.29,
+    "flow": 0.46,
+    "margin": 0.12,
+    "fund": 0.13,
+    "theme": 0.0
+  },
+  "per_period": [
+    {
+      "entry_date": "2025-03-03",
+      "exit_date": "2025-04-01",
+      "trend_regime": "震盪盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "低波動",
+      "model_return": -0.09662975170917766,
+      "multi_agent_return": -0.06972023952155212,
+      "multi_agent_minus_model": 0.026909512187625537
+    },
+    {
+      "entry_date": "2025-04-01",
+      "exit_date": "2025-05-02",
+      "trend_regime": "趨勢盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "高波動",
+      "model_return": -0.041870475298869655,
+      "multi_agent_return": 0.026824084486650523,
+      "multi_agent_minus_model": 0.06869455978552018
+    },
+    {
+      "entry_date": "2025-05-02",
+      "exit_date": "2025-06-02",
+      "trend_regime": "趨勢盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "高波動",
+      "model_return": -0.006916287668378728,
+      "multi_agent_return": -0.07024702970687978,
+      "multi_agent_minus_model": -0.06333074203850104
+    },
+    {
+      "entry_date": "2025-06-02",
+      "exit_date": "2025-07-01",
+      "trend_regime": "趨勢盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "高波動",
+      "model_return": 0.11753672108064583,
+      "multi_agent_return": 0.05767186562930452,
+      "multi_agent_minus_model": -0.05986485545134131
+    },
+    {
+      "entry_date": "2025-07-01",
+      "exit_date": "2025-08-01",
+      "trend_regime": "震盪盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "高波動",
+      "model_return": 0.2209567728273473,
+      "multi_agent_return": 0.04102406799792111,
+      "multi_agent_minus_model": -0.1799327048294262
+    },
+    {
+      "entry_date": "2025-08-01",
+      "exit_date": "2025-09-01",
+      "trend_regime": "震盪盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "高波動",
+      "model_return": 0.11330613006813141,
+      "multi_agent_return": 0.17983946895204564,
+      "multi_agent_minus_model": 0.06653333888391423
+    },
+    {
+      "entry_date": "2025-09-01",
+      "exit_date": "2025-10-01",
+      "trend_regime": "震盪盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "低波動",
+      "model_return": 0.09243364088230423,
+      "multi_agent_return": 0.022698211261433076,
+      "multi_agent_minus_model": -0.06973542962087115
+    },
+    {
+      "entry_date": "2025-10-01",
+      "exit_date": "2025-11-03",
+      "trend_regime": "震盪盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "低波動",
+      "model_return": 0.006051309548425749,
+      "multi_agent_return": 0.14872960602124352,
+      "multi_agent_minus_model": 0.14267829647281777
+    },
+    {
+      "entry_date": "2025-11-03",
+      "exit_date": "2025-12-01",
+      "trend_regime": "趨勢盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "低波動",
+      "model_return": -0.009132057233514504,
+      "multi_agent_return": -0.007768254161952438,
+      "multi_agent_minus_model": 0.0013638030715620655
+    },
+    {
+      "entry_date": "2025-12-01",
+      "exit_date": "2026-01-02",
+      "trend_regime": "趨勢盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "高波動",
+      "model_return": -0.00928477189661515,
+      "multi_agent_return": 0.10615186997378516,
+      "multi_agent_minus_model": 0.11543664187040031
+    },
+    {
+      "entry_date": "2026-01-02",
+      "exit_date": "2026-02-02",
+      "trend_regime": "震盪盤",
+      "strength_regime": "弱勢盤",
+      "vol_regime": "低波動",
+      "model_return": 0.2920968448342121,
+      "multi_agent_return": 0.14525870586743253,
+      "multi_agent_minus_model": -0.14683813896677958
+    }
+  ],
+  "performance_by_regime": {
+    "trend_regime": [
+      {
+        "regime": "趨勢盤",
+        "periods": 5,
+        "model_avg_return": 0.010066625796653562,
+        "multi_agent_avg_return": 0.0225265072441816,
+        "multi_agent_minus_model": 0.012459881447528038,
+        "model_win_rate": 0.2,
+        "multi_agent_win_rate": 0.6
+      },
+      {
+        "regime": "震盪盤",
+        "periods": 6,
+        "model_avg_return": 0.1047024910752072,
+        "multi_agent_avg_return": 0.07797163676308728,
+        "multi_agent_minus_model": -0.02673085431211991,
+        "model_win_rate": 0.8333333333333334,
+        "multi_agent_win_rate": 0.8333333333333334
+      }
+    ],
+    "strength_regime": [
+      {
+        "regime": "弱勢盤",
+        "periods": 11,
+        "model_avg_return": 0.06168618867586464,
+        "multi_agent_avg_return": 0.0527693051635847,
+        "multi_agent_minus_model": -0.008916883512279941,
+        "model_win_rate": 0.5454545454545454,
+        "multi_agent_win_rate": 0.7272727272727273
+      }
+    ],
+    "vol_regime": [
+      {
+        "regime": "低波動",
+        "periods": 5,
+        "model_avg_return": 0.056963997264449985,
+        "multi_agent_avg_return": 0.04783960589332091,
+        "multi_agent_minus_model": -0.009124391371129074,
+        "model_win_rate": 0.6,
+        "multi_agent_win_rate": 0.6
+      },
+      {
+        "regime": "高波動",
+        "periods": 6,
+        "model_avg_return": 0.06562134818537683,
+        "multi_agent_avg_return": 0.05687738788880453,
+        "multi_agent_minus_model": -0.008743960296572303,
+        "model_win_rate": 0.5,
+        "multi_agent_win_rate": 0.8333333333333334
+      }
+    ]
+  },
+  "regimes_multi_agent_relatively_strong": [
+    {
+      "regime": "趨勢盤",
+      "periods": 5,
+      "model_avg_return": 0.010066625796653562,
+      "multi_agent_avg_return": 0.0225265072441816,
+      "multi_agent_minus_model": 0.012459881447528038,
+      "model_win_rate": 0.2,
+      "multi_agent_win_rate": 0.6
+    },
+    {
+      "regime": "高波動",
+      "periods": 6,
+      "model_avg_return": 0.06562134818537683,
+      "multi_agent_avg_return": 0.05687738788880453,
+      "multi_agent_minus_model": -0.008743960296572303,
+      "model_win_rate": 0.5,
+      "multi_agent_win_rate": 0.8333333333333334
+    },
+    {
+      "regime": "弱勢盤",
+      "periods": 11,
+      "model_avg_return": 0.06168618867586464,
+      "multi_agent_avg_return": 0.0527693051635847,
+      "multi_agent_minus_model": -0.008916883512279941,
+      "model_win_rate": 0.5454545454545454,
+      "multi_agent_win_rate": 0.7272727272727273
+    }
+  ],
+  "agent_impact_by_regime": {
+    "trend_regime": [
+      {
+        "regime": "趨勢盤",
+        "agent": "fund",
+        "avg_abs_contrib": 0.22639963494148183,
+        "avg_signed_contrib": 0.22558419486525855
+      },
+      {
+        "regime": "趨勢盤",
+        "agent": "tech",
+        "avg_abs_contrib": 0.19082374855777845,
+        "avg_signed_contrib": 0.18775839594213284
+      },
+      {
+        "regime": "趨勢盤",
+        "agent": "flow",
+        "avg_abs_contrib": 0.18740283291998797,
+        "avg_signed_contrib": 0.18288295349933517
+      },
+      {
+        "regime": "趨勢盤",
+        "agent": "margin",
+        "avg_abs_contrib": 0.09174460110442446,
+        "avg_signed_contrib": 0.08271278921169936
+      },
+      {
+        "regime": "震盪盤",
+        "agent": "fund",
+        "avg_abs_contrib": 0.2290509732242631,
+        "avg_signed_contrib": 0.2271560511526289
+      },
+      {
+        "regime": "震盪盤",
+        "agent": "tech",
+        "avg_abs_contrib": 0.20397659877486543,
+        "avg_signed_contrib": 0.20310165353851042
+      },
+      {
+        "regime": "震盪盤",
+        "agent": "flow",
+        "avg_abs_contrib": 0.18617668063173193,
+        "avg_signed_contrib": 0.18458627824751
+      },
+      {
+        "regime": "震盪盤",
+        "agent": "margin",
+        "avg_abs_contrib": 0.10008267237970499,
+        "avg_signed_contrib": 0.08599751601509587
+      }
+    ],
+    "strength_regime": [
+      {
+        "regime": "弱勢盤",
+        "agent": "fund",
+        "avg_abs_contrib": 0.22772530408287248,
+        "avg_signed_contrib": 0.2263701230089437
+      },
+      {
+        "regime": "弱勢盤",
+        "agent": "tech",
+        "avg_abs_contrib": 0.19740017366632193,
+        "avg_signed_contrib": 0.19543002474032167
+      },
+      {
+        "regime": "弱勢盤",
+        "agent": "flow",
+        "avg_abs_contrib": 0.18678975677585993,
+        "avg_signed_contrib": 0.18373461587342263
+      },
+      {
+        "regime": "弱勢盤",
+        "agent": "margin",
+        "avg_abs_contrib": 0.09591363674206473,
+        "avg_signed_contrib": 0.08435515261339761
+      }
+    ],
+    "vol_regime": [
+      {
+        "regime": "低波動",
+        "agent": "fund",
+        "avg_abs_contrib": 0.22699310981238827,
+        "avg_signed_contrib": 0.2256340060759034
+      },
+      {
+        "regime": "低波動",
+        "agent": "flow",
+        "avg_abs_contrib": 0.22015781112105692,
+        "avg_signed_contrib": 0.21807105798615833
+      },
+      {
+        "regime": "低波動",
+        "agent": "tech",
+        "avg_abs_contrib": 0.19209377203585085,
+        "avg_signed_contrib": 0.19163739530609672
+      },
+      {
+        "regime": "低波動",
+        "agent": "margin",
+        "avg_abs_contrib": 0.10685096647884737,
+        "avg_signed_contrib": 0.0910529434283849
+      },
+      {
+        "regime": "高波動",
+        "agent": "fund",
+        "avg_abs_contrib": 0.22845749835335666,
+        "avg_signed_contrib": 0.22710623994198403
+      },
+      {
+        "regime": "高波動",
+        "agent": "tech",
+        "avg_abs_contrib": 0.202706575296793,
+        "avg_signed_contrib": 0.19922265417454657
+      },
+      {
+        "regime": "高波動",
+        "agent": "flow",
+        "avg_abs_contrib": 0.15342170243066294,
+        "avg_signed_contrib": 0.14939817376068684
+      },
+      {
+        "regime": "高波動",
+        "agent": "margin",
+        "avg_abs_contrib": 0.08497630700528207,
+        "avg_signed_contrib": 0.07765736179841029
+      }
+    ]
+  }
+}

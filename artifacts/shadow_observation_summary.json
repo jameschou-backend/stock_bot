@@ -1,0 +1,165 @@
+{
+  "period": {
+    "start_date": "2025-08-01",
+    "end_date": "2026-02-02",
+    "rebalance_dates": [
+      "2025-08-01",
+      "2025-09-01",
+      "2025-10-01",
+      "2025-11-03",
+      "2025-12-01",
+      "2026-01-02",
+      "2026-02-02"
+    ]
+  },
+  "model_experiment_id": "shadow_model_2025-08-01_2026-02-02",
+  "multi_agent_experiment_id": "shadow_ma_2025-08-01_2026-02-02",
+  "multi_agent_weights": {
+    "tech": 0.29,
+    "flow": 0.46,
+    "margin": 0.12,
+    "fund": 0.13,
+    "theme": 0.0
+  },
+  "model_metrics": {
+    "total_return": 0.5519920030898582,
+    "cagr": 1.3816489179933162,
+    "max_drawdown": -0.018332040061769583,
+    "volatility": 0.3677735157336231,
+    "sharpe": 2.6400546827551796,
+    "turnover": 0.7666666666666667,
+    "win_rate": 0.6666666666666666,
+    "average_holding_return": 0.0809118493671573,
+    "picks_stability": 0.2333333333333333,
+    "degraded_period_ratio": 0.0
+  },
+  "multi_agent_metrics": {
+    "total_return": 0.7422870498677079,
+    "cagr": 1.9925988572001332,
+    "max_drawdown": -0.007768254161952481,
+    "volatility": 0.23841290121075687,
+    "sharpe": 4.990582345945177,
+    "turnover": 0.8166666666666665,
+    "win_rate": 0.8333333333333334,
+    "average_holding_return": 0.09915160131899792,
+    "picks_stability": 0.18333333333333335,
+    "degraded_period_ratio": 0.0
+  },
+  "avg_picks_overlap_jaccard": 0.0,
+  "per_period_comparison": [
+    {
+      "entry_date": "2025-08-01",
+      "exit_date": "2025-09-01",
+      "model_period_return": 0.11330613006813141,
+      "multi_agent_period_return": 0.17983946895204564,
+      "picks_overlap_jaccard": 0.0
+    },
+    {
+      "entry_date": "2025-09-01",
+      "exit_date": "2025-10-01",
+      "model_period_return": 0.09243364088230423,
+      "multi_agent_period_return": 0.022698211261433076,
+      "picks_overlap_jaccard": 0.0
+    },
+    {
+      "entry_date": "2025-10-01",
+      "exit_date": "2025-11-03",
+      "model_period_return": 0.006051309548425749,
+      "multi_agent_period_return": 0.14872960602124352,
+      "picks_overlap_jaccard": 0.0
+    },
+    {
+      "entry_date": "2025-11-03",
+      "exit_date": "2025-12-01",
+      "model_period_return": -0.009132057233514504,
+      "multi_agent_period_return": -0.007768254161952438,
+      "picks_overlap_jaccard": 0.0
+    },
+    {
+      "entry_date": "2025-12-01",
+      "exit_date": "2026-01-02",
+      "model_period_return": -0.00928477189661515,
+      "multi_agent_period_return": 0.10615186997378516,
+      "picks_overlap_jaccard": 0.0
+    },
+    {
+      "entry_date": "2026-01-02",
+      "exit_date": "2026-02-02",
+      "model_period_return": 0.2920968448342121,
+      "multi_agent_period_return": 0.14525870586743253,
+      "picks_overlap_jaccard": 0.0
+    }
+  ],
+  "attribution_trend": {
+    "2025-08-01": {
+      "tech_signal": 0.85,
+      "tech_contrib": 0.7385558238378539,
+      "flow_signal": 0.7,
+      "flow_contrib": 0.40816105840115674,
+      "margin_signal": 0.95,
+      "margin_contrib": 0.8786696343128397,
+      "fund_signal": 1.7,
+      "fund_contrib": 1.6447762156210104
+    },
+    "2025-09-01": {
+      "tech_signal": 0.95,
+      "tech_contrib": 0.6979149867173661,
+      "flow_signal": 0.5,
+      "flow_contrib": 0.30342600921547846,
+      "margin_signal": 0.75,
+      "margin_contrib": 0.7172791720847715,
+      "fund_signal": 1.8,
+      "fund_contrib": 1.7837460744657576
+    },
+    "2025-10-01": {
+      "tech_signal": 0.95,
+      "tech_contrib": 0.7021923630597209,
+      "flow_signal": 0.8,
+      "flow_contrib": 0.6082480036243196,
+      "margin_signal": 0.95,
+      "margin_contrib": 0.6907348211890815,
+      "fund_signal": 1.75,
+      "fund_contrib": 1.5580150901705283
+    },
+    "2025-11-03": {
+      "tech_signal": 0.85,
+      "tech_contrib": 0.6575280761595126,
+      "flow_signal": 0.9,
+      "flow_contrib": 0.603703138154076,
+      "margin_signal": 0.55,
+      "margin_contrib": 0.5715697589252376,
+      "fund_signal": 1.75,
+      "fund_contrib": 1.6348943953303796
+    },
+    "2025-12-01": {
+      "tech_signal": 0.8,
+      "tech_contrib": 0.58952481228034,
+      "flow_signal": 0.7,
+      "flow_contrib": 0.4757164785990586,
+      "margin_signal": 1.05,
+      "margin_contrib": 0.7659361699910802,
+      "fund_signal": 1.75,
+      "fund_contrib": 1.6723743319416904
+    },
+    "2026-01-02": {
+      "tech_signal": 0.85,
+      "tech_contrib": 0.7464772894581266,
+      "flow_signal": 0.8,
+      "flow_contrib": 0.42545527471798217,
+      "margin_signal": 1.0,
+      "margin_contrib": 0.8333150412848941,
+      "fund_signal": 1.9,
+      "fund_contrib": 1.8763836909295066
+    },
+    "2026-02-02": {
+      "tech_signal": 0.75,
+      "tech_contrib": 0.566401261656444,
+      "flow_signal": 0.9,
+      "flow_contrib": 0.468189012051823,
+      "margin_signal": 1.25,
+      "margin_contrib": 1.127128148347054,
+      "fund_signal": 1.9,
+      "fund_contrib": 1.828268294216297
+    }
+  }
+}

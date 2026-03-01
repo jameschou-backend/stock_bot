@@ -1,0 +1,56 @@
+{
+  "baseline_experiment_id": "full_baseline_20260228",
+  "distribution": {
+    "theme_hot_score_feat": {
+      "count": 0,
+      "mean": null,
+      "std": null,
+      "p10": null,
+      "p50": null,
+      "p90": null
+    },
+    "theme_return_20_feat": {
+      "count": 0,
+      "mean": null,
+      "std": null,
+      "p10": null,
+      "p50": null,
+      "p90": null
+    },
+    "theme_turnover_ratio_feat": {
+      "count": 0,
+      "mean": null,
+      "std": null,
+      "p10": null,
+      "p50": null,
+      "p90": null
+    }
+  },
+  "correlation": {
+    "theme_hot_score_feat": {
+      "corr_with_final_score": null,
+      "corr_with_next_period_return": null
+    },
+    "theme_return_20_feat": {
+      "corr_with_final_score": null,
+      "corr_with_next_period_return": null
+    },
+    "theme_turnover_ratio_feat": {
+      "corr_with_final_score": null,
+      "corr_with_next_period_return": null
+    }
+  },
+  "support_vs_nonsupport": {
+    "support": {
+      "count": 0,
+      "avg_next_period_return": null,
+      "win_rate_next_period": null
+    },
+    "non_support": {
+      "count": 240,
+      "avg_next_period_return": 0.03514167996827072,
+      "win_rate_next_period": 0.3958333333333333
+    }
+  },
+  "recommendation": "暫時停用"
+}

@@ -1,0 +1,404 @@
+{
+  "generated_at": "2026-02-28T15:42:06.453980Z",
+  "multi_agent_weights": {
+    "tech": 0.29,
+    "flow": 0.46,
+    "margin": 0.12,
+    "fund": 0.13,
+    "theme": 0.0
+  },
+  "windows": {
+    "1m": {
+      "window_months": 1,
+      "available": true,
+      "period": {
+        "start_date": "2026-01-02",
+        "end_date": "2026-02-02",
+        "rebalance_dates": [
+          "2026-01-02",
+          "2026-02-02"
+        ]
+      },
+      "model_experiment_id": "shadow_monitor_model_1m_2026-01-02_2026-02-02",
+      "multi_agent_experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+      "model_metrics": {
+        "total_return": 0.29209684483421205,
+        "cagr": 19.47892656635427,
+        "max_drawdown": 0.0,
+        "volatility": "N/A: <2 periods",
+        "sharpe": "N/A: zero std or <2 periods",
+        "turnover": 0.65,
+        "win_rate": 1.0,
+        "average_holding_return": 0.2920968448342121,
+        "picks_stability": 0.35,
+        "degraded_period_ratio": 0.0
+      },
+      "multi_agent_metrics": {
+        "total_return": 0.1452587058674326,
+        "cagr": 3.943305346945455,
+        "max_drawdown": 0.0,
+        "volatility": "N/A: <2 periods",
+        "sharpe": "N/A: zero std or <2 periods",
+        "turnover": 0.85,
+        "win_rate": 1.0,
+        "average_holding_return": 0.14525870586743253,
+        "picks_stability": 0.15,
+        "degraded_period_ratio": 0.0
+      },
+      "model_invalid_result": false,
+      "multi_agent_invalid_result": false,
+      "avg_picks_overlap_jaccard": 0.0,
+      "per_period": [
+        {
+          "entry_date": "2026-01-02",
+          "exit_date": "2026-02-02",
+          "model_return": 0.2920968448342121,
+          "multi_agent_return": 0.14525870586743253,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        }
+      ],
+      "attribution_trend": {
+        "2026-01-02": {
+          "tech_contrib": 0.2164784139428567,
+          "tech_signal": 0.85,
+          "flow_contrib": 0.19570942637027175,
+          "flow_signal": 0.8,
+          "margin_contrib": 0.09999780495418728,
+          "margin_signal": 1.0,
+          "fund_contrib": 0.24392987982083586,
+          "fund_signal": 1.9
+        },
+        "2026-02-02": {
+          "tech_contrib": 0.16425636588036877,
+          "tech_signal": 0.75,
+          "flow_contrib": 0.21536694554383864,
+          "flow_signal": 0.9,
+          "margin_contrib": 0.13525537780164648,
+          "margin_signal": 1.25,
+          "fund_contrib": 0.23767487824811862,
+          "fund_signal": 1.9
+        }
+      }
+    },
+    "3m": {
+      "window_months": 3,
+      "available": true,
+      "period": {
+        "start_date": "2025-11-03",
+        "end_date": "2026-02-02",
+        "rebalance_dates": [
+          "2025-11-03",
+          "2025-12-01",
+          "2026-01-02",
+          "2026-02-02"
+        ]
+      },
+      "model_experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+      "multi_agent_experiment_id": "shadow_monitor_ma_3m_2025-11-03_2026-02-02",
+      "model_metrics": {
+        "total_return": 0.2684100737110251,
+        "cagr": 1.5969113970780873,
+        "max_drawdown": -0.00928477189661514,
+        "volatility": 0.4920294756292331,
+        "sharpe": 2.2249074842850503,
+        "turnover": 0.7000000000000001,
+        "win_rate": 0.3333333333333333,
+        "average_holding_return": 0.09122667190136081,
+        "picks_stability": 0.3,
+        "degraded_period_ratio": 0.0
+      },
+      "multi_agent_metrics": {
+        "total_return": 0.2569890012199354,
+        "cagr": 1.5043230666808887,
+        "max_drawdown": 0.0,
+        "volatility": 0.2248685239350601,
+        "sharpe": 4.333951544941467,
+        "turnover": 0.8333333333333334,
+        "win_rate": 0.6666666666666666,
+        "average_holding_return": 0.08121410722642175,
+        "picks_stability": 0.16666666666666666,
+        "degraded_period_ratio": 0.0
+      },
+      "model_invalid_result": false,
+      "multi_agent_invalid_result": false,
+      "avg_picks_overlap_jaccard": 0.0,
+      "per_period": [
+        {
+          "entry_date": "2025-11-03",
+          "exit_date": "2025-12-01",
+          "model_return": -0.009132057233514504,
+          "multi_agent_return": -0.007768254161952438,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        },
+        {
+          "entry_date": "2025-12-01",
+          "exit_date": "2026-01-02",
+          "model_return": -0.00928477189661515,
+          "multi_agent_return": 0.10615186997378516,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "趨勢盤",
+            "strength": "弱勢盤",
+            "vol": "高波動"
+          }
+        },
+        {
+          "entry_date": "2026-01-02",
+          "exit_date": "2026-02-02",
+          "model_return": 0.2920968448342121,
+          "multi_agent_return": 0.14525870586743253,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        }
+      ],
+      "attribution_trend": {
+        "2025-11-03": {
+          "tech_contrib": 0.19068314208625864,
+          "tech_signal": 0.85,
+          "flow_contrib": 0.277703443550875,
+          "flow_signal": 0.9,
+          "margin_contrib": 0.06858837107102851,
+          "margin_signal": 0.55,
+          "fund_contrib": 0.21253627139294934,
+          "fund_signal": 1.75
+        },
+        "2025-12-01": {
+          "tech_contrib": 0.17096219556129863,
+          "tech_signal": 0.8,
+          "flow_contrib": 0.21882958015556692,
+          "flow_signal": 0.7,
+          "margin_contrib": 0.09191234039892962,
+          "margin_signal": 1.05,
+          "fund_contrib": 0.21740866315241975,
+          "fund_signal": 1.75
+        },
+        "2026-01-02": {
+          "tech_contrib": 0.2164784139428567,
+          "tech_signal": 0.85,
+          "flow_contrib": 0.19570942637027175,
+          "flow_signal": 0.8,
+          "margin_contrib": 0.09999780495418728,
+          "margin_signal": 1.0,
+          "fund_contrib": 0.24392987982083586,
+          "fund_signal": 1.9
+        },
+        "2026-02-02": {
+          "tech_contrib": 0.16425636588036877,
+          "tech_signal": 0.75,
+          "flow_contrib": 0.21536694554383864,
+          "flow_signal": 0.9,
+          "margin_contrib": 0.13525537780164648,
+          "margin_signal": 1.25,
+          "fund_contrib": 0.23767487824811862,
+          "fund_signal": 1.9
+        }
+      }
+    },
+    "6m": {
+      "window_months": 6,
+      "available": true,
+      "period": {
+        "start_date": "2025-08-01",
+        "end_date": "2026-02-02",
+        "rebalance_dates": [
+          "2025-08-01",
+          "2025-09-01",
+          "2025-10-01",
+          "2025-11-03",
+          "2025-12-01",
+          "2026-01-02",
+          "2026-02-02"
+        ]
+      },
+      "model_experiment_id": "shadow_monitor_model_6m_2025-08-01_2026-02-02",
+      "multi_agent_experiment_id": "shadow_monitor_ma_6m_2025-08-01_2026-02-02",
+      "model_metrics": {
+        "total_return": 0.5519920030898582,
+        "cagr": 1.3816489179933162,
+        "max_drawdown": -0.018332040061769583,
+        "volatility": 0.3677735157336231,
+        "sharpe": 2.6400546827551796,
+        "turnover": 0.7666666666666667,
+        "win_rate": 0.6666666666666666,
+        "average_holding_return": 0.0809118493671573,
+        "picks_stability": 0.2333333333333333,
+        "degraded_period_ratio": 0.0
+      },
+      "multi_agent_metrics": {
+        "total_return": 0.7422870498677079,
+        "cagr": 1.9925988572001332,
+        "max_drawdown": -0.007768254161952481,
+        "volatility": 0.23841290121075687,
+        "sharpe": 4.990582345945177,
+        "turnover": 0.8166666666666665,
+        "win_rate": 0.8333333333333334,
+        "average_holding_return": 0.09915160131899792,
+        "picks_stability": 0.18333333333333335,
+        "degraded_period_ratio": 0.0
+      },
+      "model_invalid_result": false,
+      "multi_agent_invalid_result": false,
+      "avg_picks_overlap_jaccard": 0.0,
+      "per_period": [
+        {
+          "entry_date": "2025-08-01",
+          "exit_date": "2025-09-01",
+          "model_return": 0.11330613006813141,
+          "multi_agent_return": 0.17983946895204564,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        },
+        {
+          "entry_date": "2025-09-01",
+          "exit_date": "2025-10-01",
+          "model_return": 0.09243364088230423,
+          "multi_agent_return": 0.022698211261433076,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        },
+        {
+          "entry_date": "2025-10-01",
+          "exit_date": "2025-11-03",
+          "model_return": 0.006051309548425749,
+          "multi_agent_return": 0.14872960602124352,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "高波動"
+          }
+        },
+        {
+          "entry_date": "2025-11-03",
+          "exit_date": "2025-12-01",
+          "model_return": -0.009132057233514504,
+          "multi_agent_return": -0.007768254161952438,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "趨勢盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        },
+        {
+          "entry_date": "2025-12-01",
+          "exit_date": "2026-01-02",
+          "model_return": -0.00928477189661515,
+          "multi_agent_return": 0.10615186997378516,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "趨勢盤",
+            "strength": "弱勢盤",
+            "vol": "高波動"
+          }
+        },
+        {
+          "entry_date": "2026-01-02",
+          "exit_date": "2026-02-02",
+          "model_return": 0.2920968448342121,
+          "multi_agent_return": 0.14525870586743253,
+          "picks_overlap_jaccard": 0.0,
+          "regime_tags": {
+            "trend": "震盪盤",
+            "strength": "弱勢盤",
+            "vol": "低波動"
+          }
+        }
+      ],
+      "attribution_trend": {
+        "2025-08-01": {
+          "tech_contrib": 0.2141811889129776,
+          "tech_signal": 0.85,
+          "flow_contrib": 0.18775408686453207,
+          "flow_signal": 0.7,
+          "margin_contrib": 0.1054403561175408,
+          "margin_signal": 0.95,
+          "fund_contrib": 0.2138209080307313,
+          "fund_signal": 1.7
+        },
+        "2025-09-01": {
+          "tech_contrib": 0.20239534614803611,
+          "tech_signal": 0.95,
+          "flow_contrib": 0.13957596423912008,
+          "flow_signal": 0.5,
+          "margin_contrib": 0.08607350065017258,
+          "margin_signal": 0.75,
+          "fund_contrib": 0.2318869896805485,
+          "fund_signal": 1.8
+        },
+        "2025-10-01": {
+          "tech_contrib": 0.20363578528731904,
+          "tech_signal": 0.95,
+          "flow_contrib": 0.279794081667187,
+          "flow_signal": 0.8,
+          "margin_contrib": 0.08288817854268979,
+          "margin_signal": 0.95,
+          "fund_contrib": 0.20254196172216865,
+          "fund_signal": 1.75
+        },
+        "2025-11-03": {
+          "tech_contrib": 0.19068314208625864,
+          "tech_signal": 0.85,
+          "flow_contrib": 0.277703443550875,
+          "flow_signal": 0.9,
+          "margin_contrib": 0.06858837107102851,
+          "margin_signal": 0.55,
+          "fund_contrib": 0.21253627139294934,
+          "fund_signal": 1.75
+        },
+        "2025-12-01": {
+          "tech_contrib": 0.17096219556129863,
+          "tech_signal": 0.8,
+          "flow_contrib": 0.21882958015556692,
+          "flow_signal": 0.7,
+          "margin_contrib": 0.09191234039892962,
+          "margin_signal": 1.05,
+          "fund_contrib": 0.21740866315241975,
+          "fund_signal": 1.75
+        },
+        "2026-01-02": {
+          "tech_contrib": 0.2164784139428567,
+          "tech_signal": 0.85,
+          "flow_contrib": 0.19570942637027175,
+          "flow_signal": 0.8,
+          "margin_contrib": 0.09999780495418728,
+          "margin_signal": 1.0,
+          "fund_contrib": 0.24392987982083586,
+          "fund_signal": 1.9
+        },
+        "2026-02-02": {
+          "tech_contrib": 0.16425636588036877,
+          "tech_signal": 0.75,
+          "flow_contrib": 0.21536694554383864,
+          "flow_signal": 0.9,
+          "margin_contrib": 0.13525537780164648,
+          "margin_signal": 1.25,
+          "fund_contrib": 0.23767487824811862,
+          "fund_signal": 1.9
+        }
+      }
+    }
+  }
+}

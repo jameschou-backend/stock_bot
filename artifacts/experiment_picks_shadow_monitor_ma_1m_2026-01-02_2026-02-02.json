@@ -1,0 +1,4842 @@
+[
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2344",
+    "rank": 1,
+    "score": 0.4746359173437422,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2344",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.6272",
+            "breakout_20=0.0000",
+            "macd_hist=1.1737"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2344",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.836405397795856,
+          "reasons": [
+            "foreign_net_20=86776891.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2344",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.2547",
+            "short_balance_chg_20=0.9079",
+            "margin_short_ratio=0.2223"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2344",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.5333",
+            "fund_revenue_trend_3m=0.4230"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2344",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.474636"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6770",
+    "rank": 2,
+    "score": 0.4598588126269975,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "6770",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.7685146156353861,
+          "reasons": [
+            "ret_20=0.3115",
+            "breakout_20=0.0000",
+            "macd_hist=0.3848"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "6770",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=168081445.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "6770",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.1610",
+            "short_balance_chg_20=0.2757",
+            "margin_short_ratio=0.1827"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "6770",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 0.8424585921929884,
+          "reasons": [
+            "fund_revenue_yoy=0.2192",
+            "fund_revenue_trend_3m=0.1255"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "6770",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.459859"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2337",
+    "rank": 3,
+    "score": 0.4406410962934511,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2337",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.7873088796202714,
+          "reasons": [
+            "ret_20=0.3216",
+            "breakout_20=0.0000",
+            "macd_hist=0.2850"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2337",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.8062670893865009,
+          "reasons": [
+            "foreign_net_20=83651470.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2337",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.3615",
+            "short_balance_chg_20=0.9987",
+            "margin_short_ratio=0.1187"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2337",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.4494",
+            "fund_revenue_trend_3m=0.3126"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2337",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.440641"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3006",
+    "rank": 4,
+    "score": 0.3729657274144092,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "3006",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.6775",
+            "breakout_20=0.0000",
+            "macd_hist=4.7624"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "3006",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.3452450599729912,
+          "reasons": [
+            "foreign_net_20=35842286.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "3006",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.0301",
+            "short_balance_chg_20=2.7360",
+            "margin_short_ratio=0.2741"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "3006",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.0786",
+            "fund_revenue_trend_3m=0.5364"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "3006",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.372966"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4989",
+    "rank": 5,
+    "score": 0.3402244749754731,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "4989",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.8665639374900849,
+          "reasons": [
+            "ret_20=0.3643",
+            "breakout_20=0.0000",
+            "macd_hist=1.3198"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "4989",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.010327928178825978,
+          "reasons": [
+            "foreign_net_20=1110508.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "4989",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.0221",
+            "short_balance_chg_20=-0.8171",
+            "margin_short_ratio=0.1061"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "4989",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.8354",
+            "fund_revenue_trend_3m=0.4493"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "4989",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.340224"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2885",
+    "rank": 6,
+    "score": 0.3400635296759607,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2885",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.09747434078773534,
+          "reasons": [
+            "ret_20=0.0848",
+            "breakout_20=0.0000",
+            "macd_hist=-0.0873"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2885",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=204627892.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2885",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.2974727717770501,
+          "reasons": [
+            "margin_balance_chg_20=0.2114",
+            "short_balance_chg_20=2.0000",
+            "margin_short_ratio=0.0302"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2885",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.3623",
+            "fund_revenue_trend_3m=0.2653"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2885",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.340064"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2891",
+    "rank": 7,
+    "score": 0.33416614121191707,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2891",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.491694568673694,
+          "reasons": [
+            "ret_20=0.1625",
+            "breakout_20=0.0000",
+            "macd_hist=0.1223"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2891",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=279340770.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2891",
+          "agent": "margin",
+          "signal": -1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=-0.2728",
+            "short_balance_chg_20=1.1818",
+            "margin_short_ratio=0.1434"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2891",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.4410",
+            "fund_revenue_trend_3m=0.4741"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2891",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.334166"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3163",
+    "rank": 8,
+    "score": 0.3337705434237517,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "3163",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.8119755519689644,
+          "reasons": [
+            "ret_20=0.3349",
+            "breakout_20=0.0000",
+            "macd_hist=0.1665"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "3163",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.013563931844453161,
+          "reasons": [
+            "foreign_net_20=1446090.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "3163",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.0914",
+            "short_balance_chg_20=-0.1415",
+            "margin_short_ratio=0.1862"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "3163",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.3446",
+            "fund_revenue_trend_3m=0.3074"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "3163",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.333771"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2408",
+    "rank": 9,
+    "score": 0.32486567548466777,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2408",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.8787085391817335,
+          "reasons": [
+            "ret_20=0.3709",
+            "breakout_20=0.0000",
+            "macd_hist=2.5408"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2408",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.1893440150794759,
+          "reasons": [
+            "foreign_net_20=19674942.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2408",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.0057",
+            "short_balance_chg_20=0.0433",
+            "margin_short_ratio=0.1160"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2408",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=4.4486",
+            "fund_revenue_trend_3m=3.5738"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2408",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.324866"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2867",
+    "rank": 10,
+    "score": 0.324,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2867",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.1233820131532968,
+          "reasons": [
+            "ret_20=0.0988",
+            "breakout_20=0.0000",
+            "macd_hist=-0.0186"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2867",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=177382009.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2867",
+          "agent": "margin",
+          "signal": 0,
+          "confidence": 0.0045406510417418285,
+          "reasons": [
+            "margin_balance_chg_20=0.0000",
+            "short_balance_chg_20=0.0000",
+            "margin_short_ratio=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2867",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.2813",
+            "fund_revenue_trend_3m=0.2132"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2867",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.324000"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "5521",
+    "rank": 11,
+    "score": 0.31473174597511333,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "5521",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.6179",
+            "breakout_20=0.0000",
+            "macd_hist=0.1297"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "5521",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.15032447338565302,
+          "reasons": [
+            "foreign_net_20=15628514.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "5521",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.6687885182274648,
+          "reasons": [
+            "margin_balance_chg_20=0.9268",
+            "short_balance_chg_20=0.0257",
+            "margin_short_ratio=0.0673"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "5521",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.2564",
+            "fund_revenue_trend_3m=0.0674"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "5521",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.314732"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4967",
+    "rank": 12,
+    "score": 0.31232523757520075,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "4967",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5000",
+            "breakout_20=0.0000",
+            "macd_hist=5.1221"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "4967",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.052295833696621864,
+          "reasons": [
+            "foreign_net_20=5462689.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "4967",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=1.1106",
+            "short_balance_chg_20=1.3385",
+            "margin_short_ratio=0.1485"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "4967",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=2.1128",
+            "fund_revenue_trend_3m=0.9403"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "4967",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.312325"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "8131",
+    "rank": 13,
+    "score": 0.31170061163169666,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "8131",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.4375",
+            "breakout_20=0.0000",
+            "macd_hist=1.3791"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "8131",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.051658906572645186,
+          "reasons": [
+            "foreign_net_20=5396638.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "8131",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.9908744068733161,
+          "reasons": [
+            "margin_balance_chg_20=0.0409",
+            "short_balance_chg_20=0.7116",
+            "margin_short_ratio=0.0995"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "8131",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.3938",
+            "fund_revenue_trend_3m=0.3717"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "8131",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.311701"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3260",
+    "rank": 14,
+    "score": 0.3107929410557937,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "3260",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.6074",
+            "breakout_20=0.0000",
+            "macd_hist=9.9515"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "3260",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.04489343505214339,
+          "reasons": [
+            "foreign_net_20=4695041.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "3260",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.1212",
+            "short_balance_chg_20=1.4798",
+            "margin_short_ratio=0.1935"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "3260",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.0121",
+            "fund_revenue_trend_3m=0.6410"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "3260",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.310793"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4768",
+    "rank": 15,
+    "score": 0.30535629931803,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "4768",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.6832",
+            "breakout_20=0.0000",
+            "macd_hist=10.5894"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "4768",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.018629465304492585,
+          "reasons": [
+            "foreign_net_20=1971399.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "4768",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.5709",
+            "short_balance_chg_20=15.7143",
+            "margin_short_ratio=0.2010"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "4768",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=2.2460",
+            "fund_revenue_trend_3m=1.4944"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "4768",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.305356"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2892",
+    "rank": 16,
+    "score": 0.3039624845751815,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2892",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.32477969659239814,
+          "reasons": [
+            "ret_20=0.0726",
+            "breakout_20=0.0000",
+            "macd_hist=0.0485"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2892",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=444223639.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2892",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.048865472860465616,
+          "reasons": [
+            "margin_balance_chg_20=0.6603",
+            "short_balance_chg_20=-0.8534",
+            "margin_short_ratio=0.0053"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2892",
+          "agent": "fund",
+          "signal": 1,
+          "confidence": 0.8427566342041584,
+          "reasons": [
+            "fund_revenue_yoy=0.1495",
+            "fund_revenue_trend_3m=0.1759"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2892",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.303962"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2881",
+    "rank": 17,
+    "score": 0.30123526352199265,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2881",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.010171602281823943,
+          "reasons": [
+            "ret_20=0.0269",
+            "breakout_20=0.0000",
+            "macd_hist=-0.2977"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2881",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=126778344.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2881",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.6617641392961601,
+          "reasons": [
+            "margin_balance_chg_20=0.0063",
+            "short_balance_chg_20=0.5154",
+            "margin_short_ratio=0.0666"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2881",
+          "agent": "fund",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.0810",
+            "fund_revenue_trend_3m=0.4154"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2881",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.301235"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "8438",
+    "rank": 18,
+    "score": 0.30112777867521534,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "8438",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5717",
+            "breakout_20=0.0000",
+            "macd_hist=1.6925"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "8438",
+          "agent": "flow",
+          "signal": -1,
+          "confidence": 0.0017981706511336372,
+          "reasons": [
+            "foreign_net_20=-147000.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "8438",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=2.9527",
+            "short_balance_chg_20=0.0000",
+            "margin_short_ratio=0.1397"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "8438",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.2336",
+            "fund_revenue_trend_3m=0.2043"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "8438",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.301128"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "8068",
+    "rank": 19,
+    "score": 0.2998023731652859,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "8068",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5328",
+            "breakout_20=0.0000",
+            "macd_hist=0.9463"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "8068",
+          "agent": "flow",
+          "signal": -1,
+          "confidence": 0.00820109581987466,
+          "reasons": [
+            "foreign_net_20=-811000.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "8068",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.4515",
+            "short_balance_chg_20=212.0000",
+            "margin_short_ratio=0.1185"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "8068",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.3969",
+            "fund_revenue_trend_3m=0.3448"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "8068",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.299802"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4542",
+    "rank": 20,
+    "score": 0.2988130718494849,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-01-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "4542",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.7670",
+            "breakout_20=0.0000",
+            "macd_hist=0.8859"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "4542",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.0001492245609909948,
+          "reasons": [
+            "foreign_net_20=24000.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "4542",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.9496700438029587,
+          "reasons": [
+            "margin_balance_chg_20=0.1515",
+            "short_balance_chg_20=73.5000",
+            "margin_short_ratio=0.0954"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "4542",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.1166",
+            "fund_revenue_trend_3m=1.0660"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "4542",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.298813"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2337",
+    "rank": 1,
+    "score": 0.49248584549207514,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2337",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.7796",
+            "breakout_20=0.0000",
+            "macd_hist=1.2983"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2337",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.8528252187193132,
+          "reasons": [
+            "foreign_net_20=81013847.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2337",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.6338057890479373,
+          "reasons": [
+            "margin_balance_chg_20=0.3717",
+            "short_balance_chg_20=-0.1584",
+            "margin_short_ratio=0.0732"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2337",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.5141",
+            "fund_revenue_trend_3m=0.4032"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2337",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.492486"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6005",
+    "rank": 2,
+    "score": 0.44983826618054285,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "6005",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.5491401450308866,
+          "reasons": [
+            "ret_20=0.2012",
+            "breakout_20=0.0000",
+            "macd_hist=0.1081"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "6005",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.7578645722107858,
+          "reasons": [
+            "foreign_net_20=72072352.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "6005",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.965717692651662,
+          "reasons": [
+            "margin_balance_chg_20=2.0663",
+            "short_balance_chg_20=-0.6783",
+            "margin_short_ratio=0.0069"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "6005",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.2999",
+            "fund_revenue_trend_3m=0.6014"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "6005",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.449838"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2883",
+    "rank": 3,
+    "score": 0.430059375,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2883",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.018097116184575896,
+          "reasons": [
+            "ret_20=0.0315",
+            "breakout_20=0.0000",
+            "macd_hist=-0.0229"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2883",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=227035378.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2883",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.98203125,
+          "reasons": [
+            "margin_balance_chg_20=0.0174",
+            "short_balance_chg_20=-0.4889",
+            "margin_short_ratio=0.0036"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2883",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.2825",
+            "fund_revenue_trend_3m=0.1272"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2883",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.430059"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6770",
+    "rank": 4,
+    "score": 0.4121055120738265,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "6770",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.9457051275926605,
+          "reasons": [
+            "ret_20=0.4407",
+            "breakout_20=0.0000",
+            "macd_hist=0.1074"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "6770",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.3093483283548193,
+          "reasons": [
+            "foreign_net_20=29840060.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "6770",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.9968137866068213,
+          "reasons": [
+            "margin_balance_chg_20=0.0857",
+            "short_balance_chg_20=-0.9961",
+            "margin_short_ratio=0.0006"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "6770",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.2627",
+            "fund_revenue_trend_3m=0.1944"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "6770",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.412106"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5347",
+    "rank": 5,
+    "score": 0.3619886907732091,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "5347",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.7352070171240561,
+          "reasons": [
+            "ret_20=0.4646",
+            "breakout_20=0.0000",
+            "macd_hist=-0.5736"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "5347",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=124814785.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "5347",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.8710874554421603,
+          "reasons": [
+            "margin_balance_chg_20=3.4802",
+            "short_balance_chg_20=5.0690",
+            "margin_short_ratio=0.0258"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "5347",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 0.9226493006780547,
+          "reasons": [
+            "fund_revenue_yoy=0.1837",
+            "fund_revenue_trend_3m=0.1385"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "5347",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.361989"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2855",
+    "rank": 6,
+    "score": 0.3397920218210882,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2855",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.5009319523807128,
+          "reasons": [
+            "ret_20=0.1721",
+            "breakout_20=0.0000",
+            "macd_hist=0.0404"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2855",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.26335274906609546,
+          "reasons": [
+            "foreign_net_20=25509116.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2855",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.9528368794326242,
+          "reasons": [
+            "margin_balance_chg_20=3.8288",
+            "short_balance_chg_20=-0.0075",
+            "margin_short_ratio=0.0094"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2855",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=3.7349",
+            "fund_revenue_trend_3m=1.4520"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2855",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.339792"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "3044",
+    "rank": 7,
+    "score": 0.33019404204402797,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "3044",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.6325255962175548,
+          "reasons": [
+            "ret_20=0.2516",
+            "breakout_20=0.0000",
+            "macd_hist=6.2634"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "3044",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.13060462601567566,
+          "reasons": [
+            "foreign_net_20=13009552.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "3044",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.95939161252215,
+          "reasons": [
+            "margin_balance_chg_20=0.0494",
+            "short_balance_chg_20=-0.2466",
+            "margin_short_ratio=0.0081"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "3044",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.3098",
+            "fund_revenue_trend_3m=0.1787"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "3044",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.330194"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "8299",
+    "rank": 8,
+    "score": 0.33007372956012726,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "8299",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.9762511236480061,
+          "reasons": [
+            "ret_20=0.4592",
+            "breakout_20=0.0000",
+            "macd_hist=14.1100"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "8299",
+          "agent": "flow",
+          "signal": -1,
+          "confidence": 0.08033276602287465,
+          "reasons": [
+            "foreign_net_20=-6852314.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "8299",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.947239263803681,
+          "reasons": [
+            "margin_balance_chg_20=0.3204",
+            "short_balance_chg_20=-0.5521",
+            "margin_short_ratio=0.0106"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "8299",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.8925",
+            "fund_revenue_trend_3m=1.1465"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "8299",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.330074"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2002",
+    "rank": 9,
+    "score": 0.3268904686148844,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2002",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.4384686490006482,
+          "reasons": [
+            "ret_20=0.1344",
+            "breakout_20=0.0000",
+            "macd_hist=0.1704"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2002",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=124827723.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2002",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.9260882708585247,
+          "reasons": [
+            "margin_balance_chg_20=0.2139",
+            "short_balance_chg_20=1.3510",
+            "margin_short_ratio=0.0148"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2002",
+          "agent": "fund",
+          "signal": 1,
+          "confidence": 0.21643663750323827,
+          "reasons": [
+            "fund_revenue_yoy=0.0119",
+            "fund_revenue_trend_3m=-0.0840"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2002",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.326890"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2891",
+    "rank": 10,
+    "score": 0.31948784986674367,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2891",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.0009097615032671309,
+          "reasons": [
+            "ret_20=0.0200",
+            "breakout_20=0.0000",
+            "macd_hist=-0.1150"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2891",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.7501572553309112,
+          "reasons": [
+            "foreign_net_20=71346631.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2891",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.43708609271523186,
+          "reasons": [
+            "margin_balance_chg_20=0.0447",
+            "short_balance_chg_20=-0.1053",
+            "margin_short_ratio=0.1126"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2891",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.1896",
+            "fund_revenue_trend_3m=0.3629"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2891",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.319488"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6282",
+    "rank": 11,
+    "score": 0.3176378222648937,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "6282",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.2075091848473949,
+          "reasons": [
+            "ret_20=0.1459",
+            "breakout_20=0.0000",
+            "macd_hist=-1.3131"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "6282",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.7441708708054338,
+          "reasons": [
+            "foreign_net_20=70782953.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "6282",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.8628602223734967,
+          "reasons": [
+            "margin_balance_chg_20=0.1291",
+            "short_balance_chg_20=1.1068",
+            "margin_short_ratio=0.0274"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "6282",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.2877",
+            "fund_revenue_trend_3m=0.1858"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "6282",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.317638"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2887",
+    "rank": 12,
+    "score": 0.31505825559574646,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2887",
+          "agent": "tech",
+          "signal": 0,
+          "confidence": 0.07235487212661923,
+          "reasons": [
+            "ret_20=0.0643",
+            "breakout_20=0.0000",
+            "macd_hist=-0.0198"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2887",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=219330581.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2887",
+          "agent": "margin",
+          "signal": -1,
+          "confidence": 0.1655878593380293,
+          "reasons": [
+            "margin_balance_chg_20=-0.0922",
+            "short_balance_chg_20=2.6343",
+            "margin_short_ratio=0.2331"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2887",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.1767",
+            "fund_revenue_trend_3m=1.7812"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2887",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.315058"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5864",
+    "rank": 13,
+    "score": 0.3110924121856696,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "5864",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.9657306340082006,
+          "reasons": [
+            "ret_20=0.4528",
+            "breakout_20=0.0000",
+            "macd_hist=0.3224"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "5864",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.07509854388663212,
+          "reasons": [
+            "foreign_net_20=7783099.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "5864",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.9725771456123433,
+          "reasons": [
+            "margin_balance_chg_20=1.3585",
+            "short_balance_chg_20=1.9355",
+            "margin_short_ratio=0.0055"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "5864",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=85.4866",
+            "fund_revenue_trend_3m=49.3608"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "5864",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.311092"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "8046",
+    "rank": 14,
+    "score": 0.3046769938791571,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "8046",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5238",
+            "breakout_20=0.0000",
+            "macd_hist=5.4825"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "8046",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.2762173617350583,
+          "reasons": [
+            "foreign_net_20=26720448.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "8046",
+          "agent": "margin",
+          "signal": 0,
+          "confidence": 0.15528677331252447,
+          "reasons": [
+            "margin_balance_chg_20=-0.3658",
+            "short_balance_chg_20=-0.0306",
+            "margin_short_ratio=0.1689"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "8046",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.4498",
+            "fund_revenue_trend_3m=0.4290"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "8046",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.304677"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6683",
+    "rank": 15,
+    "score": 0.29705882132338024,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "6683",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5290",
+            "breakout_20=0.0000",
+            "macd_hist=20.7406"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "6683",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.012901149490983983,
+          "reasons": [
+            "foreign_net_20=1926592.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "6683",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.8683015440508629,
+          "reasons": [
+            "margin_balance_chg_20=2.1959",
+            "short_balance_chg_20=57.0000",
+            "margin_short_ratio=0.0263"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "6683",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.4669",
+            "fund_revenue_trend_3m=0.2244"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "6683",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.297059"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5340",
+    "rank": 16,
+    "score": 0.29345087917712465,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "5340",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5086",
+            "breakout_20=0.0000",
+            "macd_hist=0.2556"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "5340",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.039355799595171964,
+          "reasons": [
+            "foreign_net_20=4417562.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "5340",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.7000783085356305,
+          "reasons": [
+            "margin_balance_chg_20=0.2180",
+            "short_balance_chg_20=0.0789",
+            "margin_short_ratio=0.0600"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "5340",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.4035",
+            "fund_revenue_trend_3m=0.2206"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "5340",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.293451"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2485",
+    "rank": 17,
+    "score": 0.2919315462124578,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2485",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "ret_20=0.5576",
+            "breakout_20=0.0000",
+            "macd_hist=0.3155"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2485",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.0815385817414754,
+          "reasons": [
+            "foreign_net_20=8389493.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2485",
+          "agent": "margin",
+          "signal": 1,
+          "confidence": 0.5102418479994895,
+          "reasons": [
+            "margin_balance_chg_20=0.2846",
+            "short_balance_chg_20=0.3548",
+            "margin_short_ratio=0.0980"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2485",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.6271",
+            "fund_revenue_trend_3m=1.1486"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2485",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.291932"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "1326",
+    "rank": 18,
+    "score": 0.28605041822893107,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "1326",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.6781339398631214,
+          "reasons": [
+            "ret_20=0.2791",
+            "breakout_20=0.0000",
+            "macd_hist=0.7334"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "1326",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 1.0,
+          "reasons": [
+            "foreign_net_20=106762180.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "1326",
+          "agent": "margin",
+          "signal": -1,
+          "confidence": 0.7205269200555925,
+          "reasons": [
+            "margin_balance_chg_20=-0.2279",
+            "short_balance_chg_20=0.1783",
+            "margin_short_ratio=0.0559"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "1326",
+          "agent": "fund",
+          "signal": 1,
+          "confidence": 0.5036306454665929,
+          "reasons": [
+            "fund_revenue_yoy=0.0425",
+            "fund_revenue_trend_3m=-0.1289"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "1326",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.286050"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2374",
+    "rank": 19,
+    "score": 0.28232400990607426,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "2374",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.25199593006932586,
+          "reasons": [
+            "ret_20=0.0218",
+            "breakout_20=0.0000",
+            "macd_hist=0.1636"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "2374",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.11806058469578368,
+          "reasons": [
+            "foreign_net_20=11828405.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "2374",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "margin_balance_chg_20=0.2047",
+            "short_balance_chg_20=-1.0000",
+            "margin_short_ratio=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "2374",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=1.0950",
+            "fund_revenue_trend_3m=0.9791"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "2374",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.282324"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  },
+  {
+    "experiment_id": "shadow_monitor_ma_1m_2026-01-02_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "1603",
+    "rank": 20,
+    "score": 0.28078514706579316,
+    "reason_json": {
+      "_selection_meta": {
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {},
+        "pick_date": "2026-02-02",
+        "selection_mode": "multi_agent",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "weights_used": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        },
+        "weights_requested": {
+          "tech": 0.29,
+          "flow": 0.46,
+          "margin": 0.12,
+          "fund": 0.13,
+          "theme": 0.0
+        }
+      },
+      "agents": {
+        "tech": {
+          "ticker": "1603",
+          "agent": "tech",
+          "signal": 1,
+          "confidence": 0.38914213531776426,
+          "reasons": [
+            "ret_20=0.1046",
+            "breakout_20=0.0000",
+            "macd_hist=0.0202"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "flow": {
+          "ticker": "1603",
+          "agent": "flow",
+          "signal": 1,
+          "confidence": 0.03261736541119691,
+          "reasons": [
+            "foreign_net_20=3783071.00",
+            "chip_flow_intensity_20=0.000000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "margin": {
+          "ticker": "1603",
+          "agent": "margin",
+          "signal": 2,
+          "confidence": 0.9837991089509923,
+          "reasons": [
+            "margin_balance_chg_20=0.0944",
+            "short_balance_chg_20=-0.6000",
+            "margin_short_ratio=0.0032"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "fund": {
+          "ticker": "1603",
+          "agent": "fund",
+          "signal": 2,
+          "confidence": 1.0,
+          "reasons": [
+            "fund_revenue_yoy=0.1652",
+            "fund_revenue_trend_3m=0.2650"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        },
+        "theme": {
+          "ticker": "1603",
+          "agent": "theme",
+          "signal": 0,
+          "confidence": 0.0,
+          "reasons": [
+            "theme_hot_score=0.0000",
+            "theme_return_20=0.0000"
+          ],
+          "risk_flags": [
+            "liquidity_risk"
+          ],
+          "unavailable": false
+        }
+      },
+      "explain": "deterministic multi-agent score=0.280785"
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "multi_agent",
+    "score_mode": "multi_agent"
+  }
+]

@@ -1,0 +1,237 @@
+{
+  "round2_matrix_file": "/Users/james.chou/JamesProject/stock_bot/experiments/multi_agent_matrix_round2.yaml",
+  "split": {
+    "split_rule": "rebalance_dates_count_70_30",
+    "rebalance_dates_total": 12,
+    "development_start": "2025-03-01",
+    "development_end": "2025-11-02",
+    "validation_start": "2025-11-03",
+    "validation_end": "2026-02-28",
+    "development_rebalance_dates": [
+      "2025-03-03",
+      "2025-04-01",
+      "2025-05-02",
+      "2025-06-02",
+      "2025-07-01",
+      "2025-08-01",
+      "2025-09-01",
+      "2025-10-01"
+    ],
+    "validation_rebalance_dates": [
+      "2025-11-03",
+      "2025-12-01",
+      "2026-01-02",
+      "2026-02-02"
+    ],
+    "development_last_rebalance": "2025-10-01"
+  },
+  "development": {
+    "results": [
+      {
+        "name": "baseline_round2",
+        "experiment_id": "baseline_round2_dev_20260228",
+        "selection_mode": "multi_agent",
+        "data_quality_mode": "research",
+        "weights_requested": {
+          "tech": 0.35,
+          "flow": 0.3,
+          "margin": 0.1,
+          "fund": 0.15,
+          "theme": 0.1
+        },
+        "metrics": {
+          "total_return": -0.045968852917201986,
+          "cagr": -0.06748596488679082,
+          "max_drawdown": -0.10250794856520995,
+          "volatility": 0.35092123039901335,
+          "sharpe": -0.06273581979275912,
+          "turnover": 0.9500000000000001,
+          "win_rate": 0.42857142857142855,
+          "average_holding_return": -0.0018346109226471505,
+          "picks_stability": 0.05,
+          "degraded_period_ratio": 0.375
+        }
+      },
+      {
+        "name": "slightly_tech_up",
+        "experiment_id": "slightly_tech_up_dev_20260228",
+        "selection_mode": "multi_agent",
+        "data_quality_mode": "research",
+        "weights_requested": {
+          "tech": 0.42,
+          "flow": 0.26,
+          "margin": 0.1,
+          "fund": 0.12,
+          "theme": 0.1
+        },
+        "metrics": {
+          "total_return": -0.02380920479960369,
+          "cagr": -0.03514601641480697,
+          "max_drawdown": -0.12118672647107509,
+          "volatility": 0.3399333856080343,
+          "sharpe": 0.04092981799364026,
+          "turnover": 0.9357142857142858,
+          "win_rate": 0.42857142857142855,
+          "average_holding_return": 0.0011594509669082315,
+          "picks_stability": 0.0642857142857143,
+          "degraded_period_ratio": 0.375
+        }
+      },
+      {
+        "name": "slightly_flow_up",
+        "experiment_id": "slightly_flow_up_dev_20260228",
+        "selection_mode": "multi_agent",
+        "data_quality_mode": "research",
+        "weights_requested": {
+          "tech": 0.3,
+          "flow": 0.37,
+          "margin": 0.1,
+          "fund": 0.13,
+          "theme": 0.1
+        },
+        "metrics": {
+          "total_return": 0.08713419130442968,
+          "cagr": 0.13206570881974478,
+          "max_drawdown": -0.08216795516637443,
+          "volatility": 0.30732024643380423,
+          "sharpe": 0.6168739306454133,
+          "turnover": 0.9071428571428573,
+          "win_rate": 0.5714285714285714,
+          "average_holding_return": 0.015798154032044827,
+          "picks_stability": 0.09285714285714286,
+          "degraded_period_ratio": 0.375
+        }
+      },
+      {
+        "name": "slightly_defensive",
+        "experiment_id": "slightly_defensive_dev_20260228",
+        "selection_mode": "multi_agent",
+        "data_quality_mode": "research",
+        "weights_requested": {
+          "tech": 0.3,
+          "flow": 0.27,
+          "margin": 0.12,
+          "fund": 0.2,
+          "theme": 0.11
+        },
+        "metrics": {
+          "total_return": 0.050828491323258396,
+          "cagr": 0.07638969128709672,
+          "max_drawdown": -0.10088864824139465,
+          "volatility": 0.3373757348620996,
+          "sharpe": 0.4126730833352126,
+          "turnover": 0.942857142857143,
+          "win_rate": 0.42857142857142855,
+          "average_holding_return": 0.011602157062335484,
+          "picks_stability": 0.05714285714285715,
+          "degraded_period_ratio": 0.375
+        }
+      }
+    ],
+    "best_by_return": {
+      "name": "slightly_flow_up",
+      "experiment_id": "slightly_flow_up_dev_20260228",
+      "selection_mode": "multi_agent",
+      "data_quality_mode": "research",
+      "weights_requested": {
+        "tech": 0.3,
+        "flow": 0.37,
+        "margin": 0.1,
+        "fund": 0.13,
+        "theme": 0.1
+      },
+      "metrics": {
+        "total_return": 0.08713419130442968,
+        "cagr": 0.13206570881974478,
+        "max_drawdown": -0.08216795516637443,
+        "volatility": 0.30732024643380423,
+        "sharpe": 0.6168739306454133,
+        "turnover": 0.9071428571428573,
+        "win_rate": 0.5714285714285714,
+        "average_holding_return": 0.015798154032044827,
+        "picks_stability": 0.09285714285714286,
+        "degraded_period_ratio": 0.375
+      }
+    },
+    "best_by_risk_adjusted": {
+      "name": "slightly_flow_up",
+      "experiment_id": "slightly_flow_up_dev_20260228",
+      "selection_mode": "multi_agent",
+      "data_quality_mode": "research",
+      "weights_requested": {
+        "tech": 0.3,
+        "flow": 0.37,
+        "margin": 0.1,
+        "fund": 0.13,
+        "theme": 0.1
+      },
+      "metrics": {
+        "total_return": 0.08713419130442968,
+        "cagr": 0.13206570881974478,
+        "max_drawdown": -0.08216795516637443,
+        "volatility": 0.30732024643380423,
+        "sharpe": 0.6168739306454133,
+        "turnover": 0.9071428571428573,
+        "win_rate": 0.5714285714285714,
+        "average_holding_return": 0.015798154032044827,
+        "picks_stability": 0.09285714285714286,
+        "degraded_period_ratio": 0.375
+      }
+    },
+    "chosen_for_validation": {
+      "rule": "prefer_best_by_risk_adjusted_sharpe",
+      "name": "slightly_flow_up",
+      "weights_requested": {
+        "tech": 0.3,
+        "flow": 0.37,
+        "margin": 0.1,
+        "fund": 0.13,
+        "theme": 0.1
+      }
+    }
+  },
+  "validation": {
+    "model": {
+      "experiment_id": "model_research_val_20260228",
+      "metrics": {
+        "total_return": 0.2684100737110251,
+        "cagr": 1.100658943415426,
+        "max_drawdown": -0.00928477189661514,
+        "volatility": 0.4920294756292331,
+        "sharpe": 2.2249074842850503,
+        "turnover": 0.7000000000000001,
+        "win_rate": 0.3333333333333333,
+        "average_holding_return": 0.09122667190136081,
+        "picks_stability": 0.3,
+        "degraded_period_ratio": 0.75
+      }
+    },
+    "chosen_multi_agent": {
+      "name": "slightly_flow_up",
+      "experiment_id": "slightly_flow_up_val_20260228",
+      "weights_requested": {
+        "tech": 0.3,
+        "flow": 0.37,
+        "margin": 0.1,
+        "fund": 0.13,
+        "theme": 0.1
+      },
+      "metrics": {
+        "total_return": 0.16098139343252038,
+        "cagr": 0.5935700642364494,
+        "max_drawdown": 0.0,
+        "volatility": 0.29747189890006215,
+        "sharpe": 2.200795879775914,
+        "turnover": 0.85,
+        "win_rate": 0.6666666666666666,
+        "average_holding_return": 0.05455624412069785,
+        "picks_stability": 0.15,
+        "degraded_period_ratio": 0.75
+      }
+    }
+  },
+  "overfit_assessment": {
+    "suspected": true,
+    "rule": "suspected_when_chosen_multi_agent_underperforms_model_on_return_and_sharpe"
+  }
+}

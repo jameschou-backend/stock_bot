@@ -1,0 +1,4342 @@
+[
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "2867",
+    "rank": 1,
+    "score": 0.2287887431391699,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "2380",
+    "rank": 2,
+    "score": 0.1917750373915925,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "4529",
+    "rank": 3,
+    "score": 0.12150093255711422,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "7781",
+    "rank": 4,
+    "score": 0.10083297989013057,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "4804",
+    "rank": 5,
+    "score": 0.08174500245522959,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "6881",
+    "rank": 6,
+    "score": 0.07409543226896857,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "6919",
+    "rank": 7,
+    "score": 0.06318717609961773,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "1436",
+    "rank": 8,
+    "score": 0.06215111569166827,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "4738",
+    "rank": 9,
+    "score": 0.05994939229375059,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "6189",
+    "rank": 10,
+    "score": 0.058681606498060535,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "5508",
+    "rank": 11,
+    "score": 0.04742128623756007,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "3593",
+    "rank": 12,
+    "score": 0.04401485982168079,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "3310",
+    "rank": 13,
+    "score": 0.04294558550766372,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "6652",
+    "rank": 14,
+    "score": 0.036169158689363795,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "5488",
+    "rank": 15,
+    "score": 0.03542318590459774,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "6403",
+    "rank": 16,
+    "score": 0.033466195548947614,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "6673",
+    "rank": 17,
+    "score": 0.03235150178509941,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "3321",
+    "rank": 18,
+    "score": 0.03157042998729737,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "1343",
+    "rank": 19,
+    "score": 0.03036985558778973,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-08-01",
+    "stock_id": "5355",
+    "rank": 20,
+    "score": 0.030120572499438624,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2867",
+    "rank": 1,
+    "score": 0.2417480259410146,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2364",
+    "rank": 2,
+    "score": 0.10432197827080336,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2726",
+    "rank": 3,
+    "score": 0.10253113990508224,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "7731",
+    "rank": 4,
+    "score": 0.10163448511357359,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "3056",
+    "rank": 5,
+    "score": 0.0936913503213559,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2235",
+    "rank": 6,
+    "score": 0.09177213194066984,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "6434",
+    "rank": 7,
+    "score": 0.09113653942232734,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "3117",
+    "rank": 8,
+    "score": 0.08010969162705232,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "4735",
+    "rank": 9,
+    "score": 0.0744036268061774,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "6847",
+    "rank": 10,
+    "score": 0.07409543226896857,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "3054",
+    "rank": 11,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "8923",
+    "rank": 12,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "6518",
+    "rank": 13,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "4529",
+    "rank": 14,
+    "score": 0.07090972610807801,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "5701",
+    "rank": 15,
+    "score": 0.06949476623752188,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2539",
+    "rank": 16,
+    "score": 0.06760455089334258,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "4303",
+    "rank": 17,
+    "score": 0.06140758200499387,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2327",
+    "rank": 18,
+    "score": 0.060151398695852044,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "4166",
+    "rank": 19,
+    "score": 0.05471979167055172,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-09-01",
+    "stock_id": "2911",
+    "rank": 20,
+    "score": 0.052138983557206975,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "3603",
+    "rank": 1,
+    "score": 0.26708575513828414,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "6932",
+    "rank": 2,
+    "score": 0.16544706562734018,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "1570",
+    "rank": 3,
+    "score": 0.15316688656364563,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "2540",
+    "rank": 4,
+    "score": 0.14125003500339406,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "2743",
+    "rank": 5,
+    "score": 0.08176649630370193,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "4585",
+    "rank": 6,
+    "score": 0.07739855383259753,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "2035",
+    "rank": 7,
+    "score": 0.07363535417620459,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "5481",
+    "rank": 8,
+    "score": 0.07112242316521623,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "3260",
+    "rank": 9,
+    "score": 0.06809975482149128,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "4529",
+    "rank": 10,
+    "score": 0.06608078084591261,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "7731",
+    "rank": 11,
+    "score": 0.06542772465152229,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "7607",
+    "rank": 12,
+    "score": 0.06181522528045328,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "6434",
+    "rank": 13,
+    "score": 0.05061197035649275,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "2867",
+    "rank": 14,
+    "score": 0.049983627424110194,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "6793",
+    "rank": 15,
+    "score": 0.04923862559828758,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "4991",
+    "rank": 16,
+    "score": 0.04695414496940954,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "3049",
+    "rank": 17,
+    "score": 0.04533799271077622,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "2924",
+    "rank": 18,
+    "score": 0.04530278518225044,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "2245",
+    "rank": 19,
+    "score": 0.042673066583608525,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-10-01",
+    "stock_id": "4976",
+    "rank": 20,
+    "score": 0.042194581489039054,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6434",
+    "rank": 1,
+    "score": 0.12287004037841029,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "9960",
+    "rank": 2,
+    "score": 0.09141430906748757,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "2429",
+    "rank": 3,
+    "score": 0.08415261197033434,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6221",
+    "rank": 4,
+    "score": 0.08092742321241296,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "9103",
+    "rank": 5,
+    "score": 0.07995532935219778,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6259",
+    "rank": 6,
+    "score": 0.07667473009086066,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "5701",
+    "rank": 7,
+    "score": 0.07639776758091586,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6622",
+    "rank": 8,
+    "score": 0.07444175891495562,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "4529",
+    "rank": 9,
+    "score": 0.07202251297043047,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6535",
+    "rank": 10,
+    "score": 0.07034365558473593,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "2607",
+    "rank": 11,
+    "score": 0.06529367500100125,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "1340",
+    "rank": 12,
+    "score": 0.06040868537476436,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "3049",
+    "rank": 13,
+    "score": 0.05485375500234874,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6682",
+    "rank": 14,
+    "score": 0.052727039197099625,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "4738",
+    "rank": 15,
+    "score": 0.05260974188732106,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6946",
+    "rank": 16,
+    "score": 0.049194806275778415,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "7781",
+    "rank": 17,
+    "score": 0.046614978656496886,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "7731",
+    "rank": 18,
+    "score": 0.04590124864299121,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "1463",
+    "rank": 19,
+    "score": 0.04483140754522986,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6839",
+    "rank": 20,
+    "score": 0.04471324604778244,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6434",
+    "rank": 1,
+    "score": 0.18286060461492862,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "4529",
+    "rank": 2,
+    "score": 0.16859739079765657,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7731",
+    "rank": 3,
+    "score": 0.10810652702450649,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3632",
+    "rank": 4,
+    "score": 0.07707068507282115,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3018",
+    "rank": 5,
+    "score": 0.07444175891495562,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6887",
+    "rank": 6,
+    "score": 0.07409543226896857,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "2938",
+    "rank": 7,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "5310",
+    "rank": 8,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7575",
+    "rank": 9,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "9103",
+    "rank": 10,
+    "score": 0.07041253767803539,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3710",
+    "rank": 11,
+    "score": 0.06410621683856708,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7711",
+    "rank": 12,
+    "score": 0.06225646087802052,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "8277",
+    "rank": 13,
+    "score": 0.06061662430247843,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "2380",
+    "rank": 14,
+    "score": 0.059910035250109454,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6610",
+    "rank": 15,
+    "score": 0.05782434189602921,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "1337",
+    "rank": 16,
+    "score": 0.057213970959931595,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7781",
+    "rank": 17,
+    "score": 0.05716221845899454,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3494",
+    "rank": 18,
+    "score": 0.05695366887004165,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6614",
+    "rank": 19,
+    "score": 0.056888101054086385,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7786",
+    "rank": 20,
+    "score": 0.05514700448469291,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4529",
+    "rank": 1,
+    "score": 0.15376648539472776,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "7731",
+    "rank": 2,
+    "score": 0.15292674096467954,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6403",
+    "rank": 3,
+    "score": 0.09672047072296211,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2380",
+    "rank": 4,
+    "score": 0.09438946367537408,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6434",
+    "rank": 5,
+    "score": 0.0707952280562189,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "7781",
+    "rank": 6,
+    "score": 0.07056154993641528,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "1337",
+    "rank": 7,
+    "score": 0.06417530226260056,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "5701",
+    "rank": 8,
+    "score": 0.05788022353567115,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6884",
+    "rank": 9,
+    "score": 0.05701416816301892,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3049",
+    "rank": 10,
+    "score": 0.052153948126044056,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4194",
+    "rank": 11,
+    "score": 0.050606881954424206,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2911",
+    "rank": 12,
+    "score": 0.050503894342716946,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3117",
+    "rank": 13,
+    "score": 0.041097934083659964,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4738",
+    "rank": 14,
+    "score": 0.04073549298670478,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "9957",
+    "rank": 15,
+    "score": 0.03766397025253739,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6682",
+    "rank": 16,
+    "score": 0.03617672654019968,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "1460",
+    "rank": 17,
+    "score": 0.03466390130091031,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "8933",
+    "rank": 18,
+    "score": 0.032886740588600735,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2022",
+    "rank": 19,
+    "score": 0.03153906750854369,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "1417",
+    "rank": 20,
+    "score": 0.031425147582089405,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "9110",
+    "rank": 1,
+    "score": 0.15836047878988724,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2380",
+    "rank": 2,
+    "score": 0.13771794270596244,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5701",
+    "rank": 3,
+    "score": 0.133024175648402,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6434",
+    "rank": 4,
+    "score": 0.1112352284660813,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "3230",
+    "rank": 5,
+    "score": 0.10078288072545419,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "7731",
+    "rank": 6,
+    "score": 0.08292796404639076,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "9103",
+    "rank": 7,
+    "score": 0.08138497752706854,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2911",
+    "rank": 8,
+    "score": 0.08095997424306148,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "7810",
+    "rank": 9,
+    "score": 0.07483708445132546,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5240",
+    "rank": 10,
+    "score": 0.07444175891495562,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6721",
+    "rank": 11,
+    "score": 0.07409543226896857,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "4568",
+    "rank": 12,
+    "score": 0.07223392708541691,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "4529",
+    "rank": 13,
+    "score": 0.06558840418129663,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2337",
+    "rank": 14,
+    "score": 0.06293604048273022,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "7780",
+    "rank": 15,
+    "score": 0.0583618343760416,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2429",
+    "rank": 16,
+    "score": 0.051128477024917615,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "1337",
+    "rank": 17,
+    "score": 0.04902958556843791,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6706",
+    "rank": 18,
+    "score": 0.04867443949372496,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "8422",
+    "rank": 19,
+    "score": 0.04797355641409833,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_model_2025-08-01_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "1340",
+    "rank": 20,
+    "score": 0.04666303834281145,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  }
+]

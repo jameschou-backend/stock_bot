@@ -1,0 +1,174 @@
+{
+  "start_date": "2025-03-01",
+  "end_date": "2026-02-28",
+  "rows": [
+    {
+      "rebalance_date": "2025-03-03",
+      "stocks": 2015,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8704714640198511,
+        "fund_revenue_yoy": 0.8416873449131513,
+        "fund_revenue_trend_3m": 0.8411910669975186
+      }
+    },
+    {
+      "rebalance_date": "2025-04-01",
+      "stocks": 2007,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8719481813652217,
+        "fund_revenue_yoy": 0.8460388639760837,
+        "fund_revenue_trend_3m": 0.8440458395615347
+      }
+    },
+    {
+      "rebalance_date": "2025-05-02",
+      "stocks": 2013,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8678589170392449,
+        "fund_revenue_yoy": 0.8400397416790859,
+        "fund_revenue_trend_3m": 0.8360655737704918
+      }
+    },
+    {
+      "rebalance_date": "2025-06-02",
+      "stocks": 2000,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.872,
+        "fund_revenue_yoy": 0.847,
+        "fund_revenue_trend_3m": 0.8455
+      }
+    },
+    {
+      "rebalance_date": "2025-07-01",
+      "stocks": 1985,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.873551637279597,
+        "fund_revenue_yoy": 0.8448362720403023,
+        "fund_revenue_trend_3m": 0.8433249370277078
+      }
+    },
+    {
+      "rebalance_date": "2025-08-01",
+      "stocks": 1973,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8692346680182463,
+        "fund_revenue_yoy": 0.8403446528129752,
+        "fund_revenue_trend_3m": 0.8388241256969082
+      }
+    },
+    {
+      "rebalance_date": "2025-09-01",
+      "stocks": 2023,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8699950568462679,
+        "fund_revenue_yoy": 0.8413247652001977,
+        "fund_revenue_trend_3m": 0.8388531883341572
+      }
+    },
+    {
+      "rebalance_date": "2025-10-01",
+      "stocks": 2020,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8717821782178218,
+        "fund_revenue_yoy": 0.8435643564356435,
+        "fund_revenue_trend_3m": 0.8381188118811881
+      }
+    },
+    {
+      "rebalance_date": "2025-11-03",
+      "stocks": 2031,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8739537173806007,
+        "fund_revenue_yoy": 0.843426883308715,
+        "fund_revenue_trend_3m": 0.8419497784342689
+      }
+    },
+    {
+      "rebalance_date": "2025-12-01",
+      "stocks": 2008,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8789840637450199,
+        "fund_revenue_yoy": 0.8491035856573705,
+        "fund_revenue_trend_3m": 0.8466135458167331
+      }
+    },
+    {
+      "rebalance_date": "2026-01-02",
+      "stocks": 2020,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8772277227722772,
+        "fund_revenue_yoy": 0.8455445544554455,
+        "fund_revenue_trend_3m": 0.844059405940594
+      }
+    },
+    {
+      "rebalance_date": "2026-02-02",
+      "stocks": 2105,
+      "before_non_null": {
+        "fund_revenue_mom": 0.0,
+        "fund_revenue_yoy": 0.0,
+        "fund_revenue_trend_3m": 0.0
+      },
+      "after_non_null": {
+        "fund_revenue_mom": 0.8741092636579573,
+        "fund_revenue_yoy": 0.8418052256532067,
+        "fund_revenue_trend_3m": 0.8399049881235154
+      }
+    }
+  ]
+}

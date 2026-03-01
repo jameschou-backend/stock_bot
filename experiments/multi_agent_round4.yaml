@@ -1,0 +1,21 @@
+start_date: "2025-03-01"
+end_date: "2026-02-28"
+rebalance: "M"
+topn: 20
+resume: false
+experiments:
+  - name: "model_baseline"
+    selection_mode: "model"
+    data_quality_mode: "research"
+  - name: "ma_3agent_tfm"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.3896, "flow": 0.4805, "margin": 0.1299, "fund": 0.0, "theme": 0.0}
+  - name: "ma_4agent_tfmf"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.3333, "flow": 0.4111, "margin": 0.1111, "fund": 0.1445, "theme": 0.0}
+  - name: "ma_4agent_flow_up"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.29, "flow": 0.46, "margin": 0.12, "fund": 0.13, "theme": 0.0}

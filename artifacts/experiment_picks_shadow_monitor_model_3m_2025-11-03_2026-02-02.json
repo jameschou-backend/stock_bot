@@ -1,0 +1,2482 @@
+[
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6434",
+    "rank": 1,
+    "score": 0.12287004037841029,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "9960",
+    "rank": 2,
+    "score": 0.09141430906748757,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "2429",
+    "rank": 3,
+    "score": 0.08415261197033434,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6221",
+    "rank": 4,
+    "score": 0.08092742321241296,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "9103",
+    "rank": 5,
+    "score": 0.07995532935219778,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6259",
+    "rank": 6,
+    "score": 0.07667473009086066,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "5701",
+    "rank": 7,
+    "score": 0.07639776758091586,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6622",
+    "rank": 8,
+    "score": 0.07444175891495562,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "4529",
+    "rank": 9,
+    "score": 0.07202251297043047,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6535",
+    "rank": 10,
+    "score": 0.07034365558473593,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "2607",
+    "rank": 11,
+    "score": 0.06529367500100125,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "1340",
+    "rank": 12,
+    "score": 0.06040868537476436,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "3049",
+    "rank": 13,
+    "score": 0.05485375500234874,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6682",
+    "rank": 14,
+    "score": 0.052727039197099625,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "4738",
+    "rank": 15,
+    "score": 0.05260974188732106,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6946",
+    "rank": 16,
+    "score": 0.049194806275778415,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "7781",
+    "rank": 17,
+    "score": 0.046614978656496886,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "7731",
+    "rank": 18,
+    "score": 0.04590124864299121,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "1463",
+    "rank": 19,
+    "score": 0.04483140754522986,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-11-03",
+    "stock_id": "6839",
+    "rank": 20,
+    "score": 0.04471324604778244,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6434",
+    "rank": 1,
+    "score": 0.18286060461492862,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "4529",
+    "rank": 2,
+    "score": 0.16859739079765657,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7731",
+    "rank": 3,
+    "score": 0.10810652702450649,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3632",
+    "rank": 4,
+    "score": 0.07707068507282115,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3018",
+    "rank": 5,
+    "score": 0.07444175891495562,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6887",
+    "rank": 6,
+    "score": 0.07409543226896857,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "2938",
+    "rank": 7,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "5310",
+    "rank": 8,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7575",
+    "rank": 9,
+    "score": 0.07290300490323848,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "9103",
+    "rank": 10,
+    "score": 0.07041253767803539,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3710",
+    "rank": 11,
+    "score": 0.06410621683856708,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7711",
+    "rank": 12,
+    "score": 0.06225646087802052,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "8277",
+    "rank": 13,
+    "score": 0.06061662430247843,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "2380",
+    "rank": 14,
+    "score": 0.059910035250109454,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6610",
+    "rank": 15,
+    "score": 0.05782434189602921,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "1337",
+    "rank": 16,
+    "score": 0.057213970959931595,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7781",
+    "rank": 17,
+    "score": 0.05716221845899454,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "3494",
+    "rank": 18,
+    "score": 0.05695366887004165,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "6614",
+    "rank": 19,
+    "score": 0.056888101054086385,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2025-12-01",
+    "stock_id": "7786",
+    "rank": 20,
+    "score": 0.05514700448469291,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4529",
+    "rank": 1,
+    "score": 0.15376648539472776,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "7731",
+    "rank": 2,
+    "score": 0.15292674096467954,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6403",
+    "rank": 3,
+    "score": 0.09672047072296211,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2380",
+    "rank": 4,
+    "score": 0.09438946367537408,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6434",
+    "rank": 5,
+    "score": 0.0707952280562189,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "7781",
+    "rank": 6,
+    "score": 0.07056154993641528,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "1337",
+    "rank": 7,
+    "score": 0.06417530226260056,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "5701",
+    "rank": 8,
+    "score": 0.05788022353567115,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6884",
+    "rank": 9,
+    "score": 0.05701416816301892,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3049",
+    "rank": 10,
+    "score": 0.052153948126044056,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4194",
+    "rank": 11,
+    "score": 0.050606881954424206,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2911",
+    "rank": 12,
+    "score": 0.050503894342716946,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "3117",
+    "rank": 13,
+    "score": 0.041097934083659964,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "4738",
+    "rank": 14,
+    "score": 0.04073549298670478,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "9957",
+    "rank": 15,
+    "score": 0.03766397025253739,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "6682",
+    "rank": 16,
+    "score": 0.03617672654019968,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "1460",
+    "rank": 17,
+    "score": 0.03466390130091031,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "8933",
+    "rank": 18,
+    "score": 0.032886740588600735,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "2022",
+    "rank": 19,
+    "score": 0.03153906750854369,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-01-02",
+    "stock_id": "1417",
+    "rank": 20,
+    "score": 0.031425147582089405,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "9110",
+    "rank": 1,
+    "score": 0.15836047878988724,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2380",
+    "rank": 2,
+    "score": 0.13771794270596244,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5701",
+    "rank": 3,
+    "score": 0.133024175648402,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6434",
+    "rank": 4,
+    "score": 0.1112352284660813,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "3230",
+    "rank": 5,
+    "score": 0.10078288072545419,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "7731",
+    "rank": 6,
+    "score": 0.08292796404639076,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "9103",
+    "rank": 7,
+    "score": 0.08138497752706854,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2911",
+    "rank": 8,
+    "score": 0.08095997424306148,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "7810",
+    "rank": 9,
+    "score": 0.07483708445132546,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "5240",
+    "rank": 10,
+    "score": 0.07444175891495562,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6721",
+    "rank": 11,
+    "score": 0.07409543226896857,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "4568",
+    "rank": 12,
+    "score": 0.07223392708541691,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "4529",
+    "rank": 13,
+    "score": 0.06558840418129663,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2337",
+    "rank": 14,
+    "score": 0.06293604048273022,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "7780",
+    "rank": 15,
+    "score": 0.0583618343760416,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "2429",
+    "rank": 16,
+    "score": 0.051128477024917615,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "1337",
+    "rank": 17,
+    "score": 0.04902958556843791,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "6706",
+    "rank": 18,
+    "score": 0.04867443949372496,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "8422",
+    "rank": 19,
+    "score": 0.04797355641409833,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  },
+  {
+    "experiment_id": "shadow_monitor_model_3m_2025-11-03_2026-02-02",
+    "date": "2026-02-02",
+    "stock_id": "1340",
+    "rank": 20,
+    "score": 0.04666303834281145,
+    "reason_json": {
+      "_selection_meta": {
+        "selection_mode": "model",
+        "dq_ctx": {
+          "degraded_mode": false,
+          "degraded_datasets": [],
+          "dq_mode": "research"
+        },
+        "tradability": {
+          "input_count": 2340,
+          "filtered_count": 2340,
+          "excluded_count": 0,
+          "excluded_ratio": 0.0,
+          "missing_status_count": 2340,
+          "missing_status_ratio": 1.0,
+          "excluded_reason_counts": {}
+        },
+        "liquidity": {}
+      }
+    },
+    "degraded_mode": false,
+    "degraded_datasets": [],
+    "selection_mode": "model",
+    "score_mode": "model"
+  }
+]

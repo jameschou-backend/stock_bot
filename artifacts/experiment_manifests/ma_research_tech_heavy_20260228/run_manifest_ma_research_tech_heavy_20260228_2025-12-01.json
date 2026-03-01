@@ -1,0 +1,171 @@
+{
+  "job_id": "ma_research_tech_heavy_20260228_2025-12-01",
+  "pick_date": "2025-12-01",
+  "selection_mode": "multi_agent",
+  "score_mode": "multi_agent",
+  "data_quality_mode": "research",
+  "degraded_mode": false,
+  "degraded_datasets": [],
+  "effective_topn": 20,
+  "weights_requested": {
+    "tech": 0.5,
+    "flow": 0.2,
+    "margin": 0.1,
+    "fund": 0.1,
+    "theme": 0.1
+  },
+  "weights_used": {
+    "tech": 0.5000000000000001,
+    "flow": 0.20000000000000004,
+    "margin": 0.10000000000000002,
+    "fund": 0.10000000000000002,
+    "theme": 0.10000000000000002
+  },
+  "agent_dump_summary": {
+    "tech": {
+      "unavailable_count": 0,
+      "avg_confidence": 0.3248978856424431,
+      "signal_distribution": {
+        "1": 584,
+        "-1": 1262,
+        "0": 162
+      }
+    },
+    "flow": {
+      "unavailable_count": 0,
+      "avg_confidence": 0.04598136611514709,
+      "signal_distribution": {
+        "-1": 864,
+        "1": 877,
+        "0": 267
+      }
+    },
+    "margin": {
+      "unavailable_count": 0,
+      "avg_confidence": 0.12493950876201194,
+      "signal_distribution": {
+        "1": 392,
+        "2": 176,
+        "-1": 203,
+        "0": 1233,
+        "-2": 4
+      }
+    },
+    "fund": {
+      "unavailable_count": 0,
+      "avg_confidence": 0.0,
+      "signal_distribution": {
+        "0": 2008
+      }
+    },
+    "theme": {
+      "unavailable_count": 0,
+      "avg_confidence": 0.0,
+      "signal_distribution": {
+        "0": 2008
+      }
+    }
+  },
+  "picks": [
+    {
+      "stock_id": "1303",
+      "rank": 1,
+      "score": 0.3600000000000001
+    },
+    {
+      "stock_id": "4577",
+      "rank": 2,
+      "score": 0.27405653913989064
+    },
+    {
+      "stock_id": "4939",
+      "rank": 3,
+      "score": 0.2729927907156305
+    },
+    {
+      "stock_id": "2413",
+      "rank": 4,
+      "score": 0.27086664616577655
+    },
+    {
+      "stock_id": "2485",
+      "rank": 5,
+      "score": 0.2629670071600487
+    },
+    {
+      "stock_id": "8042",
+      "rank": 6,
+      "score": 0.2598680550757875
+    },
+    {
+      "stock_id": "4903",
+      "rank": 7,
+      "score": 0.2591313094502536
+    },
+    {
+      "stock_id": "6155",
+      "rank": 8,
+      "score": 0.25690512709303365
+    },
+    {
+      "stock_id": "2486",
+      "rank": 9,
+      "score": 0.25484324267505815
+    },
+    {
+      "stock_id": "3581",
+      "rank": 10,
+      "score": 0.2521078047039055
+    },
+    {
+      "stock_id": "1802",
+      "rank": 11,
+      "score": 0.2505991084144663
+    },
+    {
+      "stock_id": "1326",
+      "rank": 12,
+      "score": 0.25006283942815244
+    },
+    {
+      "stock_id": "3443",
+      "rank": 13,
+      "score": 0.2468987332863979
+    },
+    {
+      "stock_id": "4971",
+      "rank": 14,
+      "score": 0.2451843607603859
+    },
+    {
+      "stock_id": "6706",
+      "rank": 15,
+      "score": 0.24446453362427498
+    },
+    {
+      "stock_id": "6163",
+      "rank": 16,
+      "score": 0.24410052073296237
+    },
+    {
+      "stock_id": "8048",
+      "rank": 17,
+      "score": 0.23894134920035734
+    },
+    {
+      "stock_id": "2236",
+      "rank": 18,
+      "score": 0.2320280171217951
+    },
+    {
+      "stock_id": "4745",
+      "rank": 19,
+      "score": 0.2304592703036873
+    },
+    {
+      "stock_id": "3702",
+      "rank": 20,
+      "score": 0.22964474194565743
+    }
+  ]
+}

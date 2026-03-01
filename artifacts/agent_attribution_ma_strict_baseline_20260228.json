@@ -1,0 +1,58 @@
+{
+  "experiment_id": "ma_strict_baseline_20260228",
+  "agent_stats": {
+    "tech": {
+      "average_signal": 0.975,
+      "average_confidence": 0.8547399644907598,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0460991072649285,
+      "support_selected_ratio": 0.9833333333333333,
+      "oppose_but_selected_ratio": 0.008333333333333333
+    },
+    "flow": {
+      "average_signal": 0.5666666666666667,
+      "average_confidence": 0.3224142207366795,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.24986041101052217,
+      "support_selected_ratio": 0.7666666666666667,
+      "oppose_but_selected_ratio": 0.2
+    },
+    "margin": {
+      "average_signal": 0.9083333333333333,
+      "average_confidence": 0.7254420044658824,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.1428487621459255,
+      "support_selected_ratio": 0.8666666666666667,
+      "oppose_but_selected_ratio": 0.03333333333333333
+    },
+    "fund": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    },
+    "theme": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    }
+  },
+  "top_contributor_distribution": {
+    "flow": 21,
+    "tech": 99
+  },
+  "degraded_unavailable_counts": {},
+  "degraded_vs_normal_signal_delta": {
+    "tech": 0.0,
+    "flow": 0.0,
+    "margin": 0.0,
+    "fund": 0.0,
+    "theme": 0.0
+  },
+  "rows": 120
+}

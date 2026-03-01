@@ -1,0 +1,55 @@
+{
+  "experiment_id": "model_strict_20260228",
+  "agent_stats": {
+    "tech": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    },
+    "flow": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    },
+    "margin": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    },
+    "fund": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    },
+    "theme": {
+      "average_signal": 0.0,
+      "average_confidence": 0.0,
+      "unavailable_ratio": 0.0,
+      "signal_final_score_correlation": 0.0,
+      "support_selected_ratio": 0.0,
+      "oppose_but_selected_ratio": 0.0
+    }
+  },
+  "top_contributor_distribution": {},
+  "degraded_unavailable_counts": {},
+  "degraded_vs_normal_signal_delta": {
+    "tech": 0.0,
+    "flow": 0.0,
+    "margin": 0.0,
+    "fund": 0.0,
+    "theme": 0.0
+  },
+  "rows": 120
+}

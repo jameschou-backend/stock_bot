@@ -1,0 +1,100 @@
+{
+  "generated_at": "2026-02-28T16:48:05.004009Z",
+  "baseline": {
+    "model_total_return_6m": 0.5519920030898582,
+    "model_turnover_6m": 0.7666666666666667,
+    "multi_agent_turnover_6m": 0.8166666666666665,
+    "avg_overlap_6m": 0.0,
+    "avg_replace_ratio_6m": 1.0
+  },
+  "schemes": [
+    {
+      "scheme": "A_hard_switch",
+      "multi_agent_weights_over_time": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "total_return": 0.7422870498677079,
+      "sharpe": 4.555757543268707,
+      "max_drawdown": -0.007768254161952481,
+      "turnover_impact": 0.8166666666666665,
+      "overlap_proxy": 0.0,
+      "replacement_rate": 1.0,
+      "switching_risk_proxy": 2.0,
+      "delta_vs_model_total_return": 0.1902950467778497
+    },
+    {
+      "scheme": "B_blended_70_30",
+      "multi_agent_weights_over_time": [
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3
+      ],
+      "total_return": 0.6156255583018622,
+      "sharpe": 3.236881415949673,
+      "max_drawdown": -0.008722916312045803,
+      "turnover_impact": 0.7816666666666664,
+      "overlap_proxy": 0.7,
+      "replacement_rate": 0.3,
+      "switching_risk_proxy": 0.6,
+      "delta_vs_model_total_return": 0.06363355521200398
+    },
+    {
+      "scheme": "B_blended_50_50",
+      "multi_agent_weights_over_time": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "total_return": 0.6551088486748575,
+      "sharpe": 3.8749694586626866,
+      "max_drawdown": -0.008450155697733441,
+      "turnover_impact": 0.7916666666666666,
+      "overlap_proxy": 0.5,
+      "replacement_rate": 0.5,
+      "switching_risk_proxy": 1.0,
+      "delta_vs_model_total_return": 0.10311684558499934
+    },
+    {
+      "scheme": "C_gradual_adoption",
+      "multi_agent_weights_over_time": [
+        0.3,
+        0.3,
+        0.3,
+        0.5,
+        0.7,
+        0.6
+      ],
+      "total_return": 0.6292368531315655,
+      "sharpe": 4.100642751632745,
+      "max_drawdown": -0.00845015569773333,
+      "turnover_impact": 0.7891666666666666,
+      "overlap_proxy": 0.55,
+      "replacement_rate": 0.44999999999999996,
+      "switching_risk_proxy": 0.8499999999999999,
+      "delta_vs_model_total_return": 0.07724485004170734
+    }
+  ],
+  "pass_assessment": {
+    "A_hard_switch": false,
+    "B_blended_70_30": true,
+    "B_blended_50_50": true,
+    "C_gradual_adoption": true
+  },
+  "policy_recommendation": {
+    "recommended_now": "B_blended_70_30",
+    "reason": "在滿足基本績效門檻下，切換風險代理值最低",
+    "default_policy_when_all_pass": "C_gradual_adoption",
+    "all_primary_pass": false
+  }
+}

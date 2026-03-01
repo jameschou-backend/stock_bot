@@ -1,0 +1,389 @@
+{
+  "generated_at": "2026-02-28T16:47:56.543543Z",
+  "windows": {
+    "1m": {
+      "window": "1m",
+      "available": true,
+      "period": {
+        "start_date": "2026-01-02",
+        "end_date": "2026-02-02",
+        "rebalance_dates": [
+          "2026-01-02",
+          "2026-02-02"
+        ]
+      },
+      "summary": {
+        "model_turnover": 0.65,
+        "multi_agent_turnover": 0.85,
+        "avg_overlap_jaccard": 0.0,
+        "avg_replace_count": 20.0,
+        "avg_replace_ratio": 1.0,
+        "avg_amt_20": 3860241436.297625,
+        "avg_low_liquidity_ratio": 0.1
+      },
+      "turnover_rows": [
+        {
+          "date": "2026-01-02",
+          "model_turnover_window": 0.65,
+          "multi_agent_turnover_window": 0.85
+        }
+      ],
+      "overlap_rows": [
+        {
+          "date": "2026-01-02",
+          "overlap_jaccard": 0.0
+        }
+      ],
+      "low_overlap_dates": [
+        "2026-01-02"
+      ],
+      "liquidity_rows": [
+        {
+          "date": "2026-01-02",
+          "avg_amt_20": 3860241436.297625,
+          "p20_amt_20": 272217901.4685,
+          "low_liquidity_ratio": 0.1,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        }
+      ],
+      "switching_rows": [
+        {
+          "date": "2026-01-02",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        }
+      ]
+    },
+    "3m": {
+      "window": "3m",
+      "available": true,
+      "period": {
+        "start_date": "2025-11-03",
+        "end_date": "2026-02-02",
+        "rebalance_dates": [
+          "2025-11-03",
+          "2025-12-01",
+          "2026-01-02",
+          "2026-02-02"
+        ]
+      },
+      "summary": {
+        "model_turnover": 0.7000000000000001,
+        "multi_agent_turnover": 0.8333333333333334,
+        "avg_overlap_jaccard": 0.0,
+        "avg_replace_count": 20.0,
+        "avg_replace_ratio": 1.0,
+        "avg_amt_20": 4081746505.3914666,
+        "avg_low_liquidity_ratio": 0.03333333333333333
+      },
+      "turnover_rows": [
+        {
+          "date": "2025-11-03",
+          "model_turnover_window": 0.7000000000000001,
+          "multi_agent_turnover_window": 0.8333333333333334
+        },
+        {
+          "date": "2025-12-01",
+          "model_turnover_window": 0.7000000000000001,
+          "multi_agent_turnover_window": 0.8333333333333334
+        },
+        {
+          "date": "2026-01-02",
+          "model_turnover_window": 0.7000000000000001,
+          "multi_agent_turnover_window": 0.8333333333333334
+        }
+      ],
+      "overlap_rows": [
+        {
+          "date": "2025-11-03",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2025-12-01",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2026-01-02",
+          "overlap_jaccard": 0.0
+        }
+      ],
+      "low_overlap_dates": [
+        "2025-11-03",
+        "2025-12-01",
+        "2026-01-02"
+      ],
+      "liquidity_rows": [
+        {
+          "date": "2025-11-03",
+          "avg_amt_20": 5324744480.701776,
+          "p20_amt_20": 768111557.9775001,
+          "low_liquidity_ratio": 0.0,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2025-12-01",
+          "avg_amt_20": 3060253599.1749997,
+          "p20_amt_20": 641858258.6295002,
+          "low_liquidity_ratio": 0.0,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2026-01-02",
+          "avg_amt_20": 3860241436.297625,
+          "p20_amt_20": 272217901.4685,
+          "low_liquidity_ratio": 0.1,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        }
+      ],
+      "switching_rows": [
+        {
+          "date": "2025-11-03",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2025-12-01",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2026-01-02",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        }
+      ]
+    },
+    "6m": {
+      "window": "6m",
+      "available": true,
+      "period": {
+        "start_date": "2025-08-01",
+        "end_date": "2026-02-02",
+        "rebalance_dates": [
+          "2025-08-01",
+          "2025-09-01",
+          "2025-10-01",
+          "2025-11-03",
+          "2025-12-01",
+          "2026-01-02",
+          "2026-02-02"
+        ]
+      },
+      "summary": {
+        "model_turnover": 0.7666666666666667,
+        "multi_agent_turnover": 0.8166666666666665,
+        "avg_overlap_jaccard": 0.0,
+        "avg_replace_count": 20.0,
+        "avg_replace_ratio": 1.0,
+        "avg_amt_20": 4340384108.581004,
+        "avg_low_liquidity_ratio": 0.025000000000000005
+      },
+      "turnover_rows": [
+        {
+          "date": "2025-08-01",
+          "model_turnover_window": 0.7666666666666667,
+          "multi_agent_turnover_window": 0.8166666666666665
+        },
+        {
+          "date": "2025-09-01",
+          "model_turnover_window": 0.7666666666666667,
+          "multi_agent_turnover_window": 0.8166666666666665
+        },
+        {
+          "date": "2025-10-01",
+          "model_turnover_window": 0.7666666666666667,
+          "multi_agent_turnover_window": 0.8166666666666665
+        },
+        {
+          "date": "2025-11-03",
+          "model_turnover_window": 0.7666666666666667,
+          "multi_agent_turnover_window": 0.8166666666666665
+        },
+        {
+          "date": "2025-12-01",
+          "model_turnover_window": 0.7666666666666667,
+          "multi_agent_turnover_window": 0.8166666666666665
+        },
+        {
+          "date": "2026-01-02",
+          "model_turnover_window": 0.7666666666666667,
+          "multi_agent_turnover_window": 0.8166666666666665
+        }
+      ],
+      "overlap_rows": [
+        {
+          "date": "2025-08-01",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2025-09-01",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2025-10-01",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2025-11-03",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2025-12-01",
+          "overlap_jaccard": 0.0
+        },
+        {
+          "date": "2026-01-02",
+          "overlap_jaccard": 0.0
+        }
+      ],
+      "low_overlap_dates": [
+        "2025-08-01",
+        "2025-09-01",
+        "2025-10-01",
+        "2025-11-03",
+        "2025-12-01",
+        "2026-01-02"
+      ],
+      "liquidity_rows": [
+        {
+          "date": "2025-08-01",
+          "avg_amt_20": 4712885225.112875,
+          "p20_amt_20": 1475081962.4775,
+          "low_liquidity_ratio": 0.05,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2025-09-01",
+          "avg_amt_20": 2641139237.852375,
+          "p20_amt_20": 404118423.89000005,
+          "low_liquidity_ratio": 0.0,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2025-10-01",
+          "avg_amt_20": 6443040672.346376,
+          "p20_amt_20": 1082849441.2595,
+          "low_liquidity_ratio": 0.0,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2025-11-03",
+          "avg_amt_20": 5324744480.701776,
+          "p20_amt_20": 768111557.9775001,
+          "low_liquidity_ratio": 0.0,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2025-12-01",
+          "avg_amt_20": 3060253599.1749997,
+          "p20_amt_20": 641858258.6295002,
+          "low_liquidity_ratio": 0.0,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        },
+        {
+          "date": "2026-01-02",
+          "avg_amt_20": 3860241436.297625,
+          "p20_amt_20": 272217901.4685,
+          "low_liquidity_ratio": 0.1,
+          "liquidity_source_count": {
+            "feature": 0,
+            "raw_fallback": 20,
+            "missing": 0
+          }
+        }
+      ],
+      "switching_rows": [
+        {
+          "date": "2025-08-01",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2025-09-01",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2025-10-01",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2025-11-03",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2025-12-01",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        },
+        {
+          "date": "2026-01-02",
+          "replace_count": 20,
+          "replace_ratio": 1.0
+        }
+      ]
+    }
+  },
+  "root_cause_ranking": [
+    {
+      "reason": "overlap過低（策略分歧）",
+      "score": 1.0
+    },
+    {
+      "reason": "switching風險偏高（持股替換率）",
+      "score": 1.0
+    },
+    {
+      "reason": "turnover偏高",
+      "score": 0.04999999999999982
+    }
+  ],
+  "classification": {
+    "governance": [
+      "overlap過低（策略分歧）",
+      "switching風險偏高（持股替換率）"
+    ],
+    "strategy": [
+      "turnover偏高",
+      "流動性偏弱"
+    ]
+  }
+}

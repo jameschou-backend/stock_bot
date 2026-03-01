@@ -1,0 +1,58 @@
+{
+  "generated_at": "2026-02-28T16:47:55.706896Z",
+  "liquidity_fields": [
+    "amt",
+    "amt_20",
+    "amt_ratio_20"
+  ],
+  "overall_availability": {
+    "amt": 1.0,
+    "amt_20": 1.0,
+    "amt_ratio_20": 1.0
+  },
+  "feature_layer_coverage": {
+    "amt": 0.0,
+    "amt_20": 0.0,
+    "amt_ratio_20": 0.0
+  },
+  "window_availability": {
+    "1m": {
+      "available": true,
+      "points": 40,
+      "availability_rate": {
+        "amt": 1.0,
+        "amt_20": 1.0,
+        "amt_ratio_20": 1.0
+      }
+    },
+    "3m": {
+      "available": true,
+      "points": 80,
+      "availability_rate": {
+        "amt": 1.0,
+        "amt_20": 1.0,
+        "amt_ratio_20": 1.0
+      }
+    },
+    "6m": {
+      "available": true,
+      "points": 140,
+      "availability_rate": {
+        "amt": 1.0,
+        "amt_20": 1.0,
+        "amt_ratio_20": 1.0
+      }
+    }
+  },
+  "missing_reason_counts": {
+    "source": 0,
+    "pipeline": 0,
+    "alignment": 0
+  },
+  "blind_spot_reason_counts": {
+    "pipeline": 780
+  },
+  "missing_reason_classification": [],
+  "sufficient_for_d3_liquidity": true,
+  "conclusion": "D3_liquidity 可有效評估"
+}

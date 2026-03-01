@@ -1,0 +1,448 @@
+{
+  "baseline_experiment_id": "full_baseline_20260228",
+  "unavailable_reason_counts": {
+    "raw_fundamentals degraded": 120
+  },
+  "raw_fund_coverage_exact_by_date": [
+    {
+      "date": "2025-03-03",
+      "raw_fund_stocks_exact": 0,
+      "feature_universe_stocks": 2015,
+      "coverage_exact": 0.0
+    },
+    {
+      "date": "2025-04-01",
+      "raw_fund_stocks_exact": 1898,
+      "feature_universe_stocks": 2007,
+      "coverage_exact": 0.9456900847035377
+    },
+    {
+      "date": "2025-05-02",
+      "raw_fund_stocks_exact": 0,
+      "feature_universe_stocks": 2013,
+      "coverage_exact": 0.0
+    },
+    {
+      "date": "2025-06-02",
+      "raw_fund_stocks_exact": 0,
+      "feature_universe_stocks": 2000,
+      "coverage_exact": 0.0
+    },
+    {
+      "date": "2025-07-01",
+      "raw_fund_stocks_exact": 1910,
+      "feature_universe_stocks": 1985,
+      "coverage_exact": 0.9622166246851386
+    },
+    {
+      "date": "2025-08-01",
+      "raw_fund_stocks_exact": 1912,
+      "feature_universe_stocks": 1973,
+      "coverage_exact": 0.9690826153066396
+    },
+    {
+      "date": "2025-09-01",
+      "raw_fund_stocks_exact": 1919,
+      "feature_universe_stocks": 2023,
+      "coverage_exact": 0.9485912011863569
+    },
+    {
+      "date": "2025-10-01",
+      "raw_fund_stocks_exact": 1929,
+      "feature_universe_stocks": 2020,
+      "coverage_exact": 0.9549504950495049
+    },
+    {
+      "date": "2025-11-03",
+      "raw_fund_stocks_exact": 0,
+      "feature_universe_stocks": 2031,
+      "coverage_exact": 0.0
+    },
+    {
+      "date": "2025-12-01",
+      "raw_fund_stocks_exact": 1948,
+      "feature_universe_stocks": 2008,
+      "coverage_exact": 0.9701195219123506
+    },
+    {
+      "date": "2026-01-02",
+      "raw_fund_stocks_exact": 0,
+      "feature_universe_stocks": 2020,
+      "coverage_exact": 0.0
+    },
+    {
+      "date": "2026-02-02",
+      "raw_fund_stocks_exact": 0,
+      "feature_universe_stocks": 2105,
+      "coverage_exact": 0.0
+    }
+  ],
+  "raw_fund_coverage_same_month_by_date": [
+    {
+      "date": "2025-03-03",
+      "raw_fund_stocks_same_month": 0,
+      "feature_universe_stocks": 2015,
+      "coverage_same_month": 0.0
+    },
+    {
+      "date": "2025-04-01",
+      "raw_fund_stocks_same_month": 1898,
+      "feature_universe_stocks": 2007,
+      "coverage_same_month": 0.9456900847035377
+    },
+    {
+      "date": "2025-05-02",
+      "raw_fund_stocks_same_month": 1900,
+      "feature_universe_stocks": 2013,
+      "coverage_same_month": 0.9438648782911078
+    },
+    {
+      "date": "2025-06-02",
+      "raw_fund_stocks_same_month": 1904,
+      "feature_universe_stocks": 2000,
+      "coverage_same_month": 0.952
+    },
+    {
+      "date": "2025-07-01",
+      "raw_fund_stocks_same_month": 1910,
+      "feature_universe_stocks": 1985,
+      "coverage_same_month": 0.9622166246851386
+    },
+    {
+      "date": "2025-08-01",
+      "raw_fund_stocks_same_month": 1912,
+      "feature_universe_stocks": 1973,
+      "coverage_same_month": 0.9690826153066396
+    },
+    {
+      "date": "2025-09-01",
+      "raw_fund_stocks_same_month": 1919,
+      "feature_universe_stocks": 2023,
+      "coverage_same_month": 0.9485912011863569
+    },
+    {
+      "date": "2025-10-01",
+      "raw_fund_stocks_same_month": 1929,
+      "feature_universe_stocks": 2020,
+      "coverage_same_month": 0.9549504950495049
+    },
+    {
+      "date": "2025-11-03",
+      "raw_fund_stocks_same_month": 1939,
+      "feature_universe_stocks": 2031,
+      "coverage_same_month": 0.9547021171836534
+    },
+    {
+      "date": "2025-12-01",
+      "raw_fund_stocks_same_month": 1948,
+      "feature_universe_stocks": 2008,
+      "coverage_same_month": 0.9701195219123506
+    },
+    {
+      "date": "2026-01-02",
+      "raw_fund_stocks_same_month": 1948,
+      "feature_universe_stocks": 2020,
+      "coverage_same_month": 0.9643564356435643
+    },
+    {
+      "date": "2026-02-02",
+      "raw_fund_stocks_same_month": 1948,
+      "feature_universe_stocks": 2105,
+      "coverage_same_month": 0.9254156769596199
+    }
+  ],
+  "fund_feature_missing_ratio_by_date": [
+    {
+      "date": "2025-03-03",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-03-03",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-03-03",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-04-01",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-04-01",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-04-01",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-05-02",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-05-02",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-05-02",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-06-02",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-06-02",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-06-02",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-07-01",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-07-01",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-07-01",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-08-01",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-08-01",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-08-01",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-09-01",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-09-01",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-09-01",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-10-01",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-10-01",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-10-01",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-11-03",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-11-03",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-11-03",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-12-01",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-12-01",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2025-12-01",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2026-01-02",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2026-01-02",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2026-01-02",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2026-02-02",
+      "feature": "fund_revenue_yoy",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2026-02-02",
+      "feature": "fund_revenue_mom",
+      "missing_ratio": 1.0
+    },
+    {
+      "date": "2026-02-02",
+      "feature": "fund_revenue_trend_3m",
+      "missing_ratio": 1.0
+    }
+  ],
+  "top_unavailable_dates": [
+    [
+      "2025-03-03",
+      20
+    ],
+    [
+      "2025-05-02",
+      20
+    ],
+    [
+      "2025-06-02",
+      20
+    ],
+    [
+      "2025-11-03",
+      20
+    ],
+    [
+      "2026-01-02",
+      20
+    ],
+    [
+      "2026-02-02",
+      20
+    ]
+  ],
+  "top_unavailable_stocks": [
+    [
+      "2883",
+      4
+    ],
+    [
+      "2408",
+      3
+    ],
+    [
+      "2337",
+      3
+    ],
+    [
+      "2002",
+      2
+    ],
+    [
+      "2882",
+      2
+    ],
+    [
+      "2891",
+      2
+    ],
+    [
+      "2892",
+      2
+    ],
+    [
+      "1815",
+      2
+    ],
+    [
+      "2344",
+      2
+    ],
+    [
+      "2881",
+      2
+    ],
+    [
+      "2303",
+      2
+    ],
+    [
+      "6770",
+      2
+    ],
+    [
+      "2027",
+      1
+    ],
+    [
+      "1536",
+      1
+    ],
+    [
+      "2606",
+      1
+    ],
+    [
+      "4510",
+      1
+    ],
+    [
+      "8234",
+      1
+    ],
+    [
+      "2014",
+      1
+    ],
+    [
+      "4916",
+      1
+    ],
+    [
+      "2609",
+      1
+    ]
+  ],
+  "classification_counts": {
+    "source missing": 21,
+    "feature engineering missing": 99
+  }
+}

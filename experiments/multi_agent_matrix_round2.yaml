@@ -1,0 +1,22 @@
+start_date: "2025-03-01"
+end_date: "2026-02-28"
+rebalance: "M"
+topn: 20
+resume: false
+experiments:
+  - name: "baseline_round2"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10}
+  - name: "slightly_tech_up"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.42, "flow": 0.26, "margin": 0.10, "fund": 0.12, "theme": 0.10}
+  - name: "slightly_flow_up"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.30, "flow": 0.37, "margin": 0.10, "fund": 0.13, "theme": 0.10}
+  - name: "slightly_defensive"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.30, "flow": 0.27, "margin": 0.12, "fund": 0.20, "theme": 0.11}

@@ -1,0 +1,30 @@
+start_date: "2025-03-01"
+end_date: "2026-02-28"
+rebalance: "M"
+topn: 20
+resume: false
+experiments:
+  - name: "full_baseline"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.30, "flow": 0.37, "margin": 0.10, "fund": 0.13, "theme": 0.10}
+  - name: "no_fund"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.3448, "flow": 0.4253, "margin": 0.1149, "fund": 0.0, "theme": 0.1150}
+  - name: "no_theme"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.3333, "flow": 0.4111, "margin": 0.1111, "fund": 0.1445, "theme": 0.0}
+  - name: "no_margin"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.3333, "flow": 0.4111, "margin": 0.0, "fund": 0.1445, "theme": 0.1111}
+  - name: "tech_flow_only"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.4478, "flow": 0.5522, "margin": 0.0, "fund": 0.0, "theme": 0.0}
+  - name: "tech_flow_margin_only"
+    selection_mode: "multi_agent"
+    data_quality_mode: "research"
+    multi_agent_weights: {"tech": 0.3896, "flow": 0.4805, "margin": 0.1299, "fund": 0.0, "theme": 0.0}

@@ -1,0 +1,115 @@
+{
+  "job_id": "model_research_20260228_2025-09-01",
+  "pick_date": "2025-09-01",
+  "selection_mode": "model",
+  "score_mode": "model",
+  "data_quality_mode": "research",
+  "degraded_mode": false,
+  "degraded_datasets": [],
+  "effective_topn": 20,
+  "weights_requested": null,
+  "weights_used": null,
+  "agent_dump_summary": null,
+  "picks": [
+    {
+      "stock_id": "2867",
+      "rank": 1,
+      "score": 0.2417480259410146
+    },
+    {
+      "stock_id": "2364",
+      "rank": 2,
+      "score": 0.10432197827080336
+    },
+    {
+      "stock_id": "2726",
+      "rank": 3,
+      "score": 0.10253113990508224
+    },
+    {
+      "stock_id": "7731",
+      "rank": 4,
+      "score": 0.10163448511357359
+    },
+    {
+      "stock_id": "3056",
+      "rank": 5,
+      "score": 0.0936913503213559
+    },
+    {
+      "stock_id": "2235",
+      "rank": 6,
+      "score": 0.09177213194066984
+    },
+    {
+      "stock_id": "6434",
+      "rank": 7,
+      "score": 0.09113653942232734
+    },
+    {
+      "stock_id": "3117",
+      "rank": 8,
+      "score": 0.08010969162705232
+    },
+    {
+      "stock_id": "4735",
+      "rank": 9,
+      "score": 0.0744036268061774
+    },
+    {
+      "stock_id": "6847",
+      "rank": 10,
+      "score": 0.07409543226896857
+    },
+    {
+      "stock_id": "3054",
+      "rank": 11,
+      "score": 0.07290300490323848
+    },
+    {
+      "stock_id": "8923",
+      "rank": 12,
+      "score": 0.07290300490323848
+    },
+    {
+      "stock_id": "6518",
+      "rank": 13,
+      "score": 0.07290300490323848
+    },
+    {
+      "stock_id": "4529",
+      "rank": 14,
+      "score": 0.07090972610807801
+    },
+    {
+      "stock_id": "5701",
+      "rank": 15,
+      "score": 0.06949476623752188
+    },
+    {
+      "stock_id": "2539",
+      "rank": 16,
+      "score": 0.06760455089334258
+    },
+    {
+      "stock_id": "4303",
+      "rank": 17,
+      "score": 0.06140758200499387
+    },
+    {
+      "stock_id": "2327",
+      "rank": 18,
+      "score": 0.060151398695852044
+    },
+    {
+      "stock_id": "4166",
+      "rank": 19,
+      "score": 0.05471979167055172
+    },
+    {
+      "stock_id": "2911",
+      "rank": 20,
+      "score": 0.052138983557206975
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "generated_at": "2026-02-28T17:00:51.229687Z",
+  "month_window": {
+    "start_date": "2026-01-02",
+    "end_date": "2026-02-02",
+    "rebalance_dates": [
+      "2026-01-02",
+      "2026-02-02"
+    ]
+  },
+  "monthly_kpi_comparison": {
+    "model": {
+      "total_return": 0.29209684483421205,
+      "sharpe": "N/A: zero std or <2 periods",
+      "max_drawdown": 0.0,
+      "turnover": 0.65,
+      "picks_stability": 0.35
+    },
+    "multi_agent": {
+      "total_return": 0.1452587058674326,
+      "sharpe": "N/A: zero std or <2 periods",
+      "max_drawdown": 0.0,
+      "turnover": 0.85,
+      "picks_stability": 0.15
+    },
+    "avg_picks_overlap_jaccard": 0.0
+  },
+  "promotion_criteria_change_summary": {
+    "passed_checks": 1,
+    "total_checks": 4,
+    "changes": [
+      {
+        "criteria": "D1_turnover",
+        "current_status": "pass",
+        "previous_status": "fail",
+        "change": "improved",
+        "blocker": ""
+      },
+      {
+        "criteria": "D2_overlap",
+        "current_status": "fail",
+        "previous_status": "fail",
+        "change": "no_change",
+        "blocker": "model 與 multi-agent picks 重疊不足"
+      },
+      {
+        "criteria": "D3_liquidity",
+        "current_status": "pass",
+        "previous_status": "pass",
+        "change": "no_change",
+        "blocker": ""
+      },
+      {
+        "criteria": "D4_switching_risk",
+        "current_status": "fail",
+        "previous_status": "fail",
+        "change": "no_change",
+        "blocker": "平均持股替換比例過高"
+      }
+    ]
+  },
+  "month_over_month_delta": {
+    "previous_generated_at": "2026-02-28T16:56:49.503897Z",
+    "rows": [
+      {
+        "metric": "return",
+        "previous_month": "0.145259",
+        "current_month": "0.145259",
+        "delta": "0.000000",
+        "interpretation": "flat"
+      },
+      {
+        "metric": "sharpe",
+        "previous_month": "N/A",
+        "current_month": "N/A",
+        "delta": "N/A",
+        "interpretation": "N/A"
+      },
+      {
+        "metric": "mdd",
+        "previous_month": "0.000000",
+        "current_month": "0.000000",
+        "delta": "0.000000",
+        "interpretation": "flat"
+      },
+      {
+        "metric": "turnover",
+        "previous_month": "0.850000",
+        "current_month": "0.850000",
+        "delta": "0.000000",
+        "interpretation": "flat"
+      },
+      {
+        "metric": "picks_stability",
+        "previous_month": "0.150000",
+        "current_month": "0.150000",
+        "delta": "0.000000",
+        "interpretation": "flat"
+      },
+      {
+        "metric": "overlap",
+        "previous_month": "0.000000",
+        "current_month": "0.000000",
+        "delta": "0.000000",
+        "interpretation": "flat"
+      },
+      {
+        "metric": "promotion_pass_ratio",
+        "previous_month": "0.250000",
+        "current_month": "0.250000",
+        "delta": "0.000000",
+        "interpretation": "flat"
+      }
+    ]
+  },
+  "regime_summary": {
+    "strongest_relative_regime": {
+      "regime": "趨勢盤",
+      "periods": 5,
+      "model_avg_return": 0.010066625796653562,
+      "multi_agent_avg_return": 0.0225265072441816,
+      "multi_agent_minus_model": 0.012459881447528038,
+      "model_win_rate": 0.2,
+      "multi_agent_win_rate": 0.6
+    },
+    "non_negative_regime_count": 1.0
+  },
+  "tradability_transition_summary": {
+    "D2_overlap": false,
+    "D3_liquidity_status": "pass",
+    "D4_switching_risk": false,
+    "avg_overlap_6m": 0.0,
+    "avg_replace_ratio_6m": 1.0,
+    "default_policy_if_promoted": "C_gradual_adoption",
+    "recommended_now": "B_blended_70_30"
+  },
+  "recommended_action": {
+    "action": "continue shadow",
+    "reason": "tradability 關鍵缺口仍在 overlap / switching risk",
+    "action_candidates": [
+      "continue shadow",
+      "prepare blended pilot",
+      "trigger promotion review",
+      "hold"
+    ]
+  }
+}

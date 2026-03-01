@@ -1,0 +1,121 @@
+{
+  "experiment_id": "model_strict_20260228",
+  "start_date": "2025-03-01",
+  "end_date": "2026-02-28",
+  "selection_mode": "model",
+  "data_quality_mode": "strict",
+  "weights_requested": null,
+  "rebalance_dates": [
+    "2025-03-03",
+    "2025-04-01",
+    "2025-05-02",
+    "2025-06-02",
+    "2025-07-01",
+    "2025-08-01",
+    "2025-09-01",
+    "2025-10-01",
+    "2025-11-03",
+    "2025-12-01",
+    "2026-01-02",
+    "2026-02-02"
+  ],
+  "number_of_rebalance_dates": 12,
+  "degraded_ratio": 0.5,
+  "skipped_periods": [
+    {
+      "date": "2025-03-03",
+      "reason": "strict mode degraded: ['raw_fundamentals']"
+    },
+    {
+      "date": "2025-05-02",
+      "reason": "strict mode degraded: ['raw_fundamentals']"
+    },
+    {
+      "date": "2025-06-02",
+      "reason": "strict mode degraded: ['raw_fundamentals']"
+    },
+    {
+      "date": "2025-11-03",
+      "reason": "strict mode degraded: ['raw_fundamentals']"
+    },
+    {
+      "date": "2026-01-02",
+      "reason": "strict mode degraded: ['raw_fundamentals']"
+    },
+    {
+      "date": "2026-02-02",
+      "reason": "strict mode degraded: ['raw_fundamentals']"
+    }
+  ],
+  "metrics": {
+    "total_return": 0.41808788427864796,
+    "cagr": 0.4197899744298663,
+    "max_drawdown": -0.009284771896615251,
+    "volatility": 0.30922902536886065,
+    "sharpe": 2.46802579851969,
+    "turnover": 0.8299999999999998,
+    "win_rate": 0.6666666666666666,
+    "average_holding_return": 0.06359876768845397,
+    "picks_stability": 0.16999999999999998,
+    "degraded_period_ratio": 0.5
+  },
+  "invalid_result": false,
+  "manifest_dir": "/Users/james.chou/JamesProject/stock_bot/artifacts/experiment_manifests/model_strict_20260228",
+  "model_id": "ranker_lgbm_20210115_20260114_5515735035fc4ca8",
+  "feature_columns_observed": [
+    "bias_20",
+    "dealer_net_20",
+    "dealer_net_5",
+    "foreign_net_20",
+    "foreign_net_5",
+    "kd_d",
+    "kd_k",
+    "ma_20",
+    "ma_5",
+    "ma_60",
+    "macd_hist",
+    "margin_balance_chg_20",
+    "margin_balance_chg_5",
+    "margin_short_ratio",
+    "market_rel_ret_20",
+    "ret_10",
+    "ret_20",
+    "ret_5",
+    "ret_60",
+    "rsi_14",
+    "short_balance_chg_20",
+    "short_balance_chg_5",
+    "trust_net_20",
+    "trust_net_5",
+    "vol_20",
+    "vol_ratio_20"
+  ],
+  "feature_columns_input_selector": [
+    "bias_20",
+    "dealer_net_20",
+    "dealer_net_5",
+    "foreign_net_20",
+    "foreign_net_5",
+    "kd_d",
+    "kd_k",
+    "ma_20",
+    "ma_5",
+    "ma_60",
+    "macd_hist",
+    "margin_balance_chg_20",
+    "margin_balance_chg_5",
+    "margin_short_ratio",
+    "market_rel_ret_20",
+    "ret_10",
+    "ret_20",
+    "ret_5",
+    "ret_60",
+    "rsi_14",
+    "short_balance_chg_20",
+    "short_balance_chg_5",
+    "trust_net_20",
+    "trust_net_5",
+    "vol_20",
+    "vol_ratio_20"
+  ]
+}
