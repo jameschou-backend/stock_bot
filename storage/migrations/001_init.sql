@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS labels (
   stock_id VARCHAR(16) NOT NULL,
   trading_date DATE NOT NULL,
   future_ret_h DECIMAL(18,8) NULL,
-  PRIMARY KEY (stock_id, trading_date)
+  PRIMARY KEY (stock_id, trading_date),
+  INDEX idx_labels_trading_date (trading_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS model_versions (
@@ -72,5 +73,7 @@ CREATE TABLE IF NOT EXISTS jobs (
   ended_at DATETIME,
   error_text TEXT NULL,
   logs_json JSON NULL,
-  PRIMARY KEY (job_id)
+  PRIMARY KEY (job_id),
+  INDEX idx_jobs_started_at (started_at),
+  INDEX idx_jobs_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

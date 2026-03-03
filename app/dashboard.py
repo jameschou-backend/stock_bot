@@ -21,7 +21,7 @@ from app.strategy_doc import get_selection_logic
 from skills import regime as regime_module
 
 
-st.set_page_config(page_title="台股 ML 選股 Dashboard", layout="wide")
+st.set_page_config(page_title="台股 ML 選股 Dashboard", page_icon="🏠", layout="wide")
 
 
 def _parse_json(value):

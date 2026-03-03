@@ -55,8 +55,7 @@ def _normalize_prices(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.dropna(subset=["stock_id", "trading_date"])
     df["stock_id"] = df["stock_id"].astype(str)
-    # FinMind 可能包含指數/產業字串，僅保留台股四碼代碼。
-    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]
+    df = df[df["stock_id"].str.fullmatch(r"\d{4,6}")]
     return df[["stock_id", "trading_date", "open", "high", "low", "close", "volume"]].drop_duplicates(
         subset=["stock_id", "trading_date"]
     )
@@ -154,16 +153,27 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             if not records:
                 continue
 
-            stmt = insert(RawPrice).values(records)
-            update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
-            stmt = stmt.on_duplicate_key_update(**update_cols)
-            db_session.execute(stmt)
+            BATCH_SIZE = 5000
+            for i in range(0, len(records), BATCH_SIZE):
+                batch = records[i : i + BATCH_SIZE]
+                stmt = insert(RawPrice).values(batch)
+                update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
+                stmt = stmt.on_duplicate_key_update(**update_cols)
+                db_session.execute(stmt)
+                db_session.commit()
             total_rows += len(records)
 
         logs.update({"rows": total_rows, "chunks": total_chunks})
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
-    except Exception as exc:  # pragma: no cover - exercised by pipeline
-        logs["error"] = str(exc)
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+    except Exception as exc:
+        try:
+            db_session.rollback()
+        except Exception:
+            pass
+        try:
+            logs["error"] = str(exc)
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception:
+            pass
         raise

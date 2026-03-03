@@ -139,27 +139,31 @@ def get_stock(stock_id: str, date: Optional[date] = Query(default=None)):
         if target_date is None:
             raise HTTPException(status_code=404, detail="stock not found")
 
-        price = (
-            session.query(RawPrice)
+        row = (
+            session.query(RawPrice, RawInstitutional, Feature, Pick)
+            .outerjoin(
+                RawInstitutional,
+                (RawPrice.stock_id == RawInstitutional.stock_id)
+                & (RawPrice.trading_date == RawInstitutional.trading_date),
+            )
+            .outerjoin(
+                Feature,
+                (RawPrice.stock_id == Feature.stock_id)
+                & (RawPrice.trading_date == Feature.trading_date),
+            )
+            .outerjoin(
+                Pick,
+                (RawPrice.stock_id == Pick.stock_id)
+                & (RawPrice.trading_date == Pick.pick_date),
+            )
             .filter(RawPrice.stock_id == stock_id, RawPrice.trading_date == target_date)
             .one_or_none()
         )
-        inst = (
-            session.query(RawInstitutional)
-            .filter(RawInstitutional.stock_id == stock_id, RawInstitutional.trading_date == target_date)
-            .one_or_none()
-        )
-        feat = (
-            session.query(Feature)
-            .filter(Feature.stock_id == stock_id, Feature.trading_date == target_date)
-            .one_or_none()
-        )
-        pick = (
-            session.query(Pick)
-            .filter(Pick.stock_id == stock_id, Pick.pick_date == target_date)
-            .one_or_none()
-        )
 
+        if row is None:
+            return StockDetailOut(stock_id=stock_id, trading_date=target_date)
+
+        price, inst, feat, pick = row
         return StockDetailOut(
             stock_id=stock_id,
             trading_date=target_date,

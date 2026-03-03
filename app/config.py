@@ -35,6 +35,11 @@ class AppConfig:
     api_host: str
     api_port: int
     force_train: bool = False
+    min_avg_volume: int = 500
+    round_trip_cost: float = 0.00585
+    hold_buffer: int = 10
+    backtest_folds: int = 6
+    backtest_val_months: int = 3
     openai_api_key: str = ""
     openai_model: str = "gpt-4.1-mini"
     ai_assist_enabled: bool = False
@@ -174,6 +179,11 @@ def load_config() -> AppConfig:
         api_host=str(pick("API_HOST", "0.0.0.0")),
         api_port=int(pick("API_PORT", 8000)),
         force_train=str(pick("FORCE_TRAIN", "0")) in {"1", "true", "True"},
+        min_avg_volume=int(pick("MIN_AVG_VOLUME", 500)),
+        round_trip_cost=float(pick("ROUND_TRIP_COST", 0.00585)),
+        hold_buffer=int(pick("HOLD_BUFFER", 10)),
+        backtest_folds=int(pick("BACKTEST_FOLDS", 6)),
+        backtest_val_months=int(pick("BACKTEST_VAL_MONTHS", 3)),
         openai_api_key=str(pick("OPENAI_API_KEY", "")),
         openai_model=str(pick("OPENAI_MODEL", "gpt-4.1-mini")),
         ai_assist_enabled=str(pick("AI_ASSIST_ENABLED", "0")) in {"1", "true", "True"},
