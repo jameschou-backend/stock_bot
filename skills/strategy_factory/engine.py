@@ -127,6 +127,9 @@ class BacktestEngine:
         portfolio = Portfolio(self.config.initial_capital, self.config.initial_capital)
         equity_curve = []
         pending_buys: Dict[pd.Timestamp, List[Dict]] = {}
+        
+        # 紀錄買進後最高價的變化，用來判斷「都沒動」
+        days_since_new_high = {}
 
         for current_date in trading_dates:
             current_day_index = day_index_map[current_date]
@@ -261,6 +264,41 @@ class BacktestEngine:
                                         "code": "exit_rule",
                                         "detail": exit_reason_map.get(sid, ["exit_rule"]),
                                     },
+                                }
+                            )
+
+            # 檢查「買進後都沒動」的汰弱留強機制 (若 10 個交易日都沒創高，且漲幅低於 3%，則換股)
+            for sid, pos in list(portfolio.positions.items()):
+                if pos.entry_index is not None:
+                    held_days = current_day_index - pos.entry_index
+                    if held_days >= 10:
+                        # 檢查近幾日有沒有進展
+                        current_px = price_map.get(sid, pos.last_price)
+                        ret_since_entry = current_px / pos.avg_cost - 1
+                        
+                        # 維護創新高計數
+                        if current_px > pos.max_price:
+                            days_since_new_high[sid] = 0
+                        else:
+                            days_since_new_high[sid] = days_since_new_high.get(sid, 0) + 1
+                            
+                        # 如果超過 N 天沒創新高，且總報酬極低(<3%)，判定為「沒動的死魚股」，進行輪動換股淘汰
+                        stagnant_days_limit = getattr(self.config, "stagnant_days", 10)
+                        stagnant_threshold = getattr(self.config, "stagnant_threshold", 0.03)
+
+                        if days_since_new_high.get(sid, 0) >= stagnant_days_limit and ret_since_entry < stagnant_threshold:
+                            # 進行賣出
+                            qty = pos.qty
+                            fee = self._calc_fee(qty, current_px)
+                            realized_pnl = (current_px - pos.avg_cost) * qty - fee
+                            execute_order(
+                                portfolio, pos.strategy_name, sid, "SELL", qty, current_px, fee, trade_date=current_date
+                            )
+                            self.trades.append(
+                                {
+                                    "trading_date": current_date.date(), "stock_id": sid, "strategy_name": pos.strategy_name,
+                                    "action": "SELL", "qty": qty, "price": current_px, "fee": fee,
+                                    "realized_pnl": realized_pnl, "avg_cost": pos.avg_cost, "reason": {"code": "time_stop_rotation", "detail": ["stagnant_stock"]},
                                 }
                             )
 

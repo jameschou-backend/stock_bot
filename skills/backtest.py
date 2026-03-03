@@ -22,7 +22,6 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 from typing import Dict, List, Optional, Tuple
-from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
@@ -109,17 +108,79 @@ def _load_all_data(
     return feat_df, label_df, price_df
 
 
-def _get_rebalance_dates(trading_dates: List[date]) -> List[date]:
-    """找出每月第一個交易日作為再平衡日"""
+def _get_rebalance_dates(trading_dates: List[date], freq: str = "W") -> List[date]:
+    """依據頻率找出再平衡日（W:每週第一個交易日, M:每月第一個交易日）"""
     dates = sorted(trading_dates)
     rebalance = []
-    prev_month = None
-    for d in dates:
-        ym = (d.year, d.month)
-        if ym != prev_month:
-            rebalance.append(d)
-            prev_month = ym
+    if freq == "W":
+        prev_week = None
+        for d in dates:
+            yw = d.isocalendar()[:2]
+            if yw != prev_week:
+                rebalance.append(d)
+                prev_week = yw
+    else:
+        prev_month = None
+        for d in dates:
+            ym = (d.year, d.month)
+            if ym != prev_month:
+                rebalance.append(d)
+                prev_month = ym
     return rebalance
+
+
+def _precompute_liquidity_eligible_map(
+    price_df: pd.DataFrame,
+    min_avg_turnover: float,
+) -> Dict[date, set[str]]:
+    """預先計算每個交易日符合 20 日平均成交值門檻的股票集合。"""
+    if min_avg_turnover <= 0 or price_df.empty:
+        return {}
+
+    threshold = float(min_avg_turnover) * 1e8  # 向後相容：舊參數單位為「億元」
+    if threshold <= 0:
+        return {}
+
+    df = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df["volume"] = pd.to_numeric(df["volume"], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", "close", "volume"])
+    if df.empty:
+        return {}
+
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df.sort_values(["stock_id", "trading_date"])
+    df["turnover"] = df["close"] * df["volume"]
+    df["avg_turnover_20"] = df.groupby("stock_id")["turnover"].transform(
+        lambda s: s.rolling(20, min_periods=1).mean()
+    )
+
+    eligible = df[df["avg_turnover_20"] >= threshold][["trading_date", "stock_id"]]
+    if eligible.empty:
+        return {}
+
+    result: Dict[date, set[str]] = {}
+    for td, sub in eligible.groupby("trading_date"):
+        result[td] = set(sub["stock_id"].tolist())
+    return result
+
+
+def _precompute_market_median_ret20(price_df: pd.DataFrame) -> Dict[date, float]:
+    """預先計算每個交易日全市場 20 日報酬中位數（供大盤環境濾網）。"""
+    if price_df.empty:
+        return {}
+
+    df = price_df[["stock_id", "trading_date", "close"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", "close"])
+    if df.empty:
+        return {}
+
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df.sort_values(["stock_id", "trading_date"])
+    df["ret_20"] = df.groupby("stock_id")["close"].pct_change(20)
+    med = df.groupby("trading_date")["ret_20"].median().dropna()
+    return {d: float(v) for d, v in med.items()}
 
 
 def _simulate_period(
@@ -192,6 +253,7 @@ def _simulate_period(
 
     # ── 3. ATR-based 個股動態停損 ──
     per_stock_stop: Optional[Dict[str, float]] = None
+    atr_at_entry: Optional[pd.Series] = None
     if atr_stoploss_multiplier is not None and atr_df is not None and not atr_df.empty:
         atr_at_entry = (
             atr_df[atr_df["trading_date"] <= actual_entry_date]
@@ -210,9 +272,14 @@ def _simulate_period(
                 per_stock_stop[sid] = stoploss_pct
 
     # ── 4. 執行出場邏輯 ──
-    if trailing_stop_pct is not None:
+    if trailing_stop_pct is not None or atr_stoploss_multiplier is not None:
         stoploss_result = risk.apply_trailing_stop(
-            positions_input, period_prices, trailing_stop_pct, stoploss_pct, per_stock_stop
+            positions_input, price_df=period_prices, 
+            trailing_stop_pct=trailing_stop_pct if trailing_stop_pct else -0.15, 
+            stoploss_pct=stoploss_pct, 
+            per_stock_stoploss=per_stock_stop,
+            atr_stoploss_multiplier=atr_stoploss_multiplier,
+            atr_at_entry=atr_at_entry
         )
     else:
         stoploss_result = risk.apply_stoploss(
@@ -221,17 +288,38 @@ def _simulate_period(
 
     stoploss_count = 0
     stock_returns: Dict[str, float] = {}
+    trades_log = []
     if not stoploss_result.empty:
         stoploss_count = int(stoploss_result["stoploss_triggered"].sum())
         for _, row in stoploss_result.iterrows():
             sid = str(row["stock_id"])
             entry_px = float(row["entry_price"])
             exit_px = float(row["exit_price"])
+            exit_date_val = str(row["exit_date"])
+            sl_triggered = bool(row["stoploss_triggered"])
             if entry_px > 0:
-                stock_returns[sid] = exit_px / entry_px - 1 - transaction_cost_pct
+                ret = exit_px / entry_px - 1 - transaction_cost_pct
+                stock_returns[sid] = ret
+                
+                # 收錄完整交易紀錄
+                reason = "Stop Loss / Trailing Stop" if sl_triggered else "Normal Rebalance Exit"
+                pick_row = picks[picks["stock_id"].astype(str) == sid]
+                score_val = float(pick_row["score"].iloc[0]) if not pick_row.empty else 0.0
+                trade_record = {
+                    "stock_id": sid,
+                    "entry_date": str(actual_entry_date),
+                    "exit_date": exit_date_val,
+                    "entry_price": entry_px,
+                    "exit_price": exit_px,
+                    "realized_pnl_pct": ret,
+                    "stoploss_triggered": sl_triggered,
+                    "exit_reason": reason,
+                    "score": score_val,
+                }
+                trades_log.append(trade_record)
 
     if not stock_returns:
-        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "trades_log": []}
 
     # ── 5. 計算組合報酬（支援分級倉位）──
     if position_weights is not None and not position_weights.empty:
@@ -257,6 +345,7 @@ def _simulate_period(
         "stoploss_triggered": stoploss_count,
         "stock_returns": stock_returns,
         "actual_entry_date": actual_entry_date.isoformat() if hasattr(actual_entry_date, "isoformat") else str(actual_entry_date),
+        "trades_log": trades_log,
     }
 
 
@@ -277,10 +366,11 @@ def run_backtest(
     entry_delay_days: int = 1,
     risk_free_rate: float = 0.015,
     benchmark_with_cost: bool = True,
-    position_sizing: str = "equal",
-    trailing_stop_pct: Optional[float] = None,
-    atr_stoploss_multiplier: Optional[float] = None,
+    position_sizing: str = "vol_inverse",
+    trailing_stop_pct: Optional[float] = -0.15,
+    atr_stoploss_multiplier: Optional[float] = 2.5,
     atr_period: int = 14,
+    rebalance_freq: str = "W",
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -321,6 +411,11 @@ def run_backtest(
         data_end = min(data_end, eval_end)
     backtest_start = eval_start if eval_start is not None else data_end - timedelta(days=30 * backtest_months)
     data_start = min_feat_date
+    if eval_start is not None and train_lookback_days:
+        # Walk-forward 測試可縮小資料抓取範圍，降低 DB I/O 與記憶體壓力
+        warmup_days = max(60, atr_period * 3)
+        bounded_start = eval_start - timedelta(days=train_lookback_days + warmup_days)
+        data_start = max(min_feat_date, bounded_start)
 
     exit_strategy = "trailing" if trailing_stop_pct is not None else (
         f"ATR×{atr_stoploss_multiplier}" if atr_stoploss_multiplier is not None else f"fixed {stoploss_pct:.0%}"
@@ -350,17 +445,20 @@ def run_backtest(
     if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse":
         print("  預計算 ATR ...", flush=True)
         atr_df = risk.compute_atr(price_df, period=atr_period)
+    liquidity_eligible_map = _precompute_liquidity_eligible_map(price_df, min_avg_turnover)
+    market_median_ret20_map = _precompute_market_median_ret20(price_df)
 
     # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
-    rebalance_dates = _get_rebalance_dates(bt_trading_dates)
-    print(f"  再平衡次數: {len(rebalance_dates)}")
+    rebalance_dates = _get_rebalance_dates(bt_trading_dates, freq=rebalance_freq)
+    print(f"  再平衡次數: {len(rebalance_dates)} (頻率: {rebalance_freq})")
 
     # ── 5. Walk-forward 執行 ──
     current_model = None
     current_feature_names = None
     last_train_date = None
     period_results: List[Dict] = []
+    all_trades_log: List[Dict] = []
     equity = 10000.0
     equity_curve = [{"date": rebalance_dates[0].isoformat() if rebalance_dates else data_start.isoformat(), "equity": equity}]
 
@@ -460,17 +558,20 @@ def run_backtest(
         day_feat["score"] = scores
 
         # 流動性過濾
-        eligible_turnover = risk.apply_liquidity_filter(
-            price_df[price_df["trading_date"] <= rb_date],
-            SimpleNamespace(min_avg_turnover=min_avg_turnover),
-        )
         if min_avg_turnover > 0:
-            keep_ids = set(eligible_turnover["stock_id"].astype(str).tolist())
+            keep_ids = liquidity_eligible_map.get(rb_date, set())
             day_feat = day_feat[day_feat["stock_id"].astype(str).isin(keep_ids)]
             if day_feat.empty:
                 continue
 
         picks = risk.pick_topn(day_feat, topn)
+
+        # ── 大盤環境濾網 (Market Regime Filter) ──
+        median_ret = market_median_ret20_map.get(rb_date)
+        # 過去一個月 (20日) 股市中位數跌幅超過 4%，減少部位數量 (以對抗大跌市)
+        if median_ret is not None and median_ret < -0.04:
+            print(f"  [{rb_date}] 大盤環境不佳 (20日中位數報酬 {median_ret:.2%})，減少倉位")
+            picks = risk.pick_topn(day_feat, max(2, topn // 3))
 
         # ── 計算倉位權重 ──
         period_price_slice = price_df[price_df["trading_date"] <= rb_date]
@@ -516,12 +617,14 @@ def run_backtest(
             "trades": result["trades"],
             "wins": result.get("wins", 0),
             "losses": result.get("losses", 0),
+            "stock_returns": result.get("stock_returns", {}),
             "stoploss_triggered": result["stoploss_triggered"],
             "equity": equity,
             "benchmark_equity": benchmark_equity,
         })
         equity_curve.append({"date": exit_date.isoformat(), "equity": equity})
         benchmark_curve.append({"date": exit_date.isoformat(), "equity": benchmark_equity})
+        all_trades_log.extend(result.get("trades_log", []))
 
         sign = "+" if period_ret >= 0 else ""
         bm_sign = "+" if benchmark_ret >= 0 else ""
@@ -612,6 +715,7 @@ def run_backtest(
             "stoploss_pct": stoploss_pct,
             "trailing_stop_pct": trailing_stop_pct,
             "atr_stoploss_multiplier": atr_stoploss_multiplier,
+            "rebalance_freq": rebalance_freq,
         },
     }
 
@@ -651,4 +755,5 @@ def run_backtest(
         "periods": period_results,
         "equity_curve": equity_curve,
         "benchmark_curve": benchmark_curve,
+        "trades_log": all_trades_log,
     }

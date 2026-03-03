@@ -251,15 +251,23 @@ def apply_trailing_stop(
     trailing_stop_pct: float,
     stoploss_pct: float = -0.07,
     per_stock_stoploss: Optional[Dict[str, float]] = None,
+    atr_stoploss_multiplier: Optional[float] = None,
+    atr_at_entry: Optional[pd.Series] = None,
+    stagnant_days: int = 10,
+    stagnant_threshold: float = 0.03,
 ) -> pd.DataFrame:
     """移動停利 + 固定停損：從持有期最高收盤回落觸發出場，或跌破固定停損，以先觸發者為準。
 
     Args:
         trades_or_positions_df: 需含 stock_id / entry_date / planned_exit_date / entry_price
         price_df: 持有期間內的價格資料
-        trailing_stop_pct: 從最高點回落觸發比例（如 -0.12 = -12%）
+        trailing_stop_pct: 從最高點回落觸發比例（如 -0.12 = -12%），若有 ATR 設定，此為保底的最小容忍度
         stoploss_pct: 以進場價為基準的固定停損（如 -0.07 = -7%）
         per_stock_stoploss: 個股動態固定停損 dict，優先於全局 stoploss_pct
+        atr_stoploss_multiplier: ATR 倍數（如 2.5），若設定則作為動態移動停利基準
+        atr_at_entry: 每檔股票進場時的 ATR 值（Series, index: stock_id）
+        stagnant_days: 超過幾天不創新高啟動淘汰 (預設 10 天)
+        stagnant_threshold: 在 stagnant_days 期間即使沒破底但漲幅低於此比例就視為死魚股淘汰 (預設 0.03)
     """
     if trades_or_positions_df.empty:
         return pd.DataFrame(columns=["stock_id", "entry_price", "exit_price", "exit_date", "stoploss_triggered"])
@@ -279,6 +287,26 @@ def apply_trailing_stop(
             else stoploss_pct
         )
 
+        # ── 計算動態移動停利 (Adaptive Trailing Stop) ──
+        effective_trailing_stop = trailing_stop_pct
+        if atr_stoploss_multiplier is not None and atr_at_entry is not None and stock_id in atr_at_entry.index:
+            atr_val = float(atr_at_entry[stock_id])
+            dynamic_trailing = -(atr_stoploss_multiplier * atr_val / entry_price)
+            # 若有指定全域 trailing_stop_pct，把它當作最嚴格的門檻（比如不讓停利無限制寬鬆）
+            # 或者當作較寬的門檻，讓 ATR 主導。這裡採「取較小值（即容忍度較寬的）」
+            # 例如: dynamic = -0.05, trailing_stop_pct = -0.15 -> -0.15 (保護牛皮股不會太快被洗)
+            # 例如: dynamic = -0.15, trailing_stop_pct = -0.08 -> -0.15 (保護飆股不被預設的 -8% 洗掉)
+            if trailing_stop_pct is not None and trailing_stop_pct < 0:
+                effective_trailing_stop = min(trailing_stop_pct, dynamic_trailing)
+            else:
+                effective_trailing_stop = dynamic_trailing
+            
+            # 最大容忍度 30%
+            effective_trailing_stop = max(effective_trailing_stop, -0.30)
+        elif trailing_stop_pct is None:
+             effective_trailing_stop = -0.10 # default fallback if nothing is meant to be trailing
+
+
         stock_prices = price_df[
             (price_df["stock_id"].astype(str) == stock_id)
             & (price_df["trading_date"] >= entry_date)
@@ -291,6 +319,10 @@ def apply_trailing_stop(
         exit_date = entry_date
         stoploss_triggered = False
         peak_close = entry_price
+        
+        # 紀錄創新高天數，用於汰弱留強
+        days_held = 0
+        days_since_new_high = 0
 
         for _, px_row in stock_prices.iterrows():
             trading_date = px_row["trading_date"]
@@ -302,8 +334,13 @@ def apply_trailing_stop(
                 peak_close = max(peak_close, close)
                 continue
 
+            days_held += 1
+
             if close > peak_close:
                 peak_close = close
+                days_since_new_high = 0
+            else:
+                days_since_new_high += 1
 
             # 固定停損（以進場價為基準）
             hard_ret = close / entry_price - 1
@@ -313,9 +350,37 @@ def apply_trailing_stop(
                 stoploss_triggered = True
                 break
 
+            # 階段性停利保護 (Stage-based Take Profit)
+            # 若最高點獲利超過特定門檻，緊縮 trailing_stop
+            current_drawdown_stop = effective_trailing_stop
+            peak_ret = peak_close / entry_price - 1
+            if peak_ret >= 0.20:
+                # 獲利超過 20% 時，拉緊停利為 5% 或是至少保本 +10%
+                current_drawdown_stop = max(current_drawdown_stop, -0.05)
+                # 另外一種保底條件：不能跌破進場的1.1倍
+                if close < entry_price * 1.10:
+                    exit_price = close
+                    exit_date = trading_date
+                    stoploss_triggered = True
+                    break
+            elif peak_ret >= 0.10:
+                # 獲利超過 10% 時，停利至少改為保本 (或小賺 2%)
+                if close < entry_price * 1.02:
+                    exit_price = close
+                    exit_date = trading_date
+                    stoploss_triggered = True
+                    break
+
             # 移動停利（從最高點回落）
             drawdown_from_peak = close / peak_close - 1
-            if trailing_stop_pct < 0 and drawdown_from_peak <= trailing_stop_pct:
+            if current_drawdown_stop < 0 and drawdown_from_peak <= current_drawdown_stop:
+                exit_price = close
+                exit_date = trading_date
+                stoploss_triggered = True
+                break
+
+            # 汰弱留強機制 (Time-Stop Rotation)
+            if days_since_new_high >= stagnant_days and hard_ret < stagnant_threshold:
                 exit_price = close
                 exit_date = trading_date
                 stoploss_triggered = True

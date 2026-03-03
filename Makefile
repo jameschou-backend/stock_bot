@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs
+.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs
 
 migrate:
 	python scripts/migrate.py
@@ -50,7 +50,11 @@ research-grid:
 research-walkforward:
 	python scripts/run_walkforward.py --train-years 5 --test-years 1
 
-research-all: research-factors research-grid research-walkforward
+# Walk-forward 掃描 TopN（預設 3,5,8,12,20）
+research-topn-sweep:
+	python scripts/run_walkforward_topn_sweep.py --train-years 5 --test-years 1
+
+research-all: research-factors research-grid research-walkforward research-topn-sweep
 
 # 重建 features（特徵欄位變更後需要執行）
 # 會清空 features/labels/model_versions/picks 並重新建置

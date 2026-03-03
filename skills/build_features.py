@@ -58,6 +58,11 @@ EXTENDED_FEATURE_COLUMNS = [
     # 籌碼面（擴充）
     "foreign_buy_streak_5",
     "chip_flow_intensity_20",
+    "foreign_buy_ratio_5",
+    "foreign_buy_ratio_20",
+    # 趨勢與型態
+    "ma_alignment", # 均線多頭排列
+    "trend_persistence", # 趨勢延續性
     # 基本面（月營收）
     "fund_revenue_mom",
     "fund_revenue_yoy",
@@ -339,6 +344,15 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
             (group["foreign_net"] + group["trust_net"] + group["dealer_net"]).rolling(20).sum()
             / volume.rolling(20).sum().replace(0, np.nan)
         )
+        group["foreign_buy_ratio_5"] = (group["foreign_net"].rolling(5).sum() / volume.rolling(5).sum().replace(0, np.nan)).clip(-1, 1)
+        group["foreign_buy_ratio_20"] = (group["foreign_net"].rolling(20).sum() / volume.rolling(20).sum().replace(0, np.nan)).clip(-1, 1)
+
+        # ── 趨勢與型態 ──
+        # 均線多頭排列：短天期 > 中天期 > 長天期
+        group["ma_alignment"] = ((close > group["ma_5"]) & (group["ma_5"] > group["ma_20"]) & (group["ma_20"] > group["ma_60"])).astype(int)
+        
+        # 趨勢延續性：過去20天內，收盤價大於開盤價的天數比例 (紅K比例)
+        group["trend_persistence"] = (close > group["open"]).astype(int).rolling(20).mean()
 
         # ── RSI 14 ──
         delta = close.diff()

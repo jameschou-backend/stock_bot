@@ -64,6 +64,36 @@ def fetch_latest_job(engine) -> dict | None:
     return df.iloc[0].to_dict()
 
 
+st.divider()
+
+st.subheader("Walkforward 回測交易明細")
+trades_csv_path = PROJECT_ROOT / "artifacts" / "ai_answers" / "walkforward_trades.csv"
+if trades_csv_path.exists():
+    try:
+        wf_trades_df = pd.read_csv(trades_csv_path)
+        # Format the display
+        wf_trades_df["entry_date"] = pd.to_datetime(wf_trades_df["entry_date"]).dt.date
+        wf_trades_df["exit_date"] = pd.to_datetime(wf_trades_df["exit_date"]).dt.date
+        wf_trades_df["realized_pnl_pct"] = wf_trades_df["realized_pnl_pct"].map("{:.2%}".format)
+        wf_trades_df["score (Logic)"] = wf_trades_df["score"].map("{:.4f}".format)
+        st.dataframe(
+            wf_trades_df[["stock_id", "entry_date", "exit_date", "entry_price", "exit_price", "realized_pnl_pct", "stoploss_triggered", "exit_reason", "score (Logic)"]],
+            use_container_width=True
+        )
+    except Exception as e:
+        st.error(f"無法讀取回測交易明細: {e}")
+else:
+    st.info("尚未產生 Walkforward 回測交易明細。請執行 python scripts/run_walkforward.py 產生。")
+
+st.divider()
+
+st.subheader("Job Logs")
+query = text("SELECT job_name, status, started_at, ended_at, error_text FROM jobs ORDER BY started_at DESC LIMIT 50")
+with get_session() as session:
+    df_logs = pd.read_sql(query, session.bind)
+    st.dataframe(df_logs, use_container_width=True)
+
+
 def fetch_running_jobs(engine, limit: int = 5) -> list[dict]:
     # 每次載入 dashboard 時自動收斂 stale running jobs，避免畫面長期假卡住。
     with get_session() as session:

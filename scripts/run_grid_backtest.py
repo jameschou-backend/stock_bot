@@ -17,6 +17,11 @@ from app.db import get_session
 from skills.backtest import run_backtest
 
 
+def _resolve_round_trip_cost(raw_cost: float) -> float:
+    # 向後相容：若 config 給的是單邊手續費，轉成來回成本
+    return raw_cost * 4.1 if raw_cost < 0.005 else raw_cost
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="參數網格回測")
     parser.add_argument("--months", type=int, default=120, help="回測月數（預設 120 = 10 年）")
@@ -25,6 +30,7 @@ def main() -> None:
     config = load_config()
     output_dir = PROJECT_ROOT / "artifacts" / "ai_answers"
     output_dir.mkdir(parents=True, exist_ok=True)
+    round_trip_cost = _resolve_round_trip_cost(float(config.transaction_cost_pct))
 
     grid = {
         "topn": [5, 10, 15, 20],
@@ -46,7 +52,7 @@ def main() -> None:
                 backtest_months=args.months,
                 topn=topn,
                 stoploss_pct=stoploss,
-                transaction_cost_pct=config.transaction_cost_pct,
+                transaction_cost_pct=round_trip_cost,
                 retrain_freq_months=3,
                 min_train_days=500,
                 min_avg_turnover=min_turnover,
