@@ -260,6 +260,7 @@ def run_multi_agent_selection(
     config,
     dq_ctx: dict,
     selection_meta: dict,
+    model_score_map: Dict[str, float] | None = None,
 ) -> Tuple[pd.DataFrame, dict]:
     if feature_df.empty or stock_ids.empty:
         return pd.DataFrame(columns=["stock_id", "score", "reason_json"]), {"outputs": {}, "summary": {}}
@@ -275,6 +276,16 @@ def run_multi_agent_selection(
     requested_weights = dict(getattr(config, "multi_agent_weights", {}) or {})
     for a in AGENT_NAMES:
         requested_weights.setdefault(a, 0.0)
+
+    # model alignment：將 model 預測分數 z-score 正規化，用於提升與 model 選股的重疊度
+    model_alignment_weight = float(getattr(config, "ma_model_alignment_weight", 0.0))
+    model_z_map: Dict[str, float] = {}
+    if model_alignment_weight > 0.0 and model_score_map:
+        raw_scores = pd.Series(model_score_map)
+        std = float(raw_scores.std(skipna=True) or 0.0)
+        if std > 0:
+            mean = float(raw_scores.mean(skipna=True))
+            model_z_map = {k: float((v - mean) / std) for k, v in model_score_map.items()}
 
     outputs: Dict[str, Dict[str, Dict[str, object]]] = {}
     rows: List[Dict[str, object]] = []
@@ -305,6 +316,10 @@ def run_multi_agent_selection(
         if "liquidity_risk" in risk_flags:
             final_score *= 0.9
 
+        # 加入 model alignment 分數（0 時不影響）
+        if model_alignment_weight > 0.0 and ticker in model_z_map:
+            final_score += model_alignment_weight * model_z_map[ticker]
+
         meta = dict(selection_meta or {})
         meta.update(
             {
@@ -313,6 +328,7 @@ def run_multi_agent_selection(
                 "dq_ctx": dict(dq_ctx or {}),
                 "weights_used": weights_used,
                 "weights_requested": requested_weights,
+                "model_alignment_weight": model_alignment_weight,
             }
         )
         rows.append(

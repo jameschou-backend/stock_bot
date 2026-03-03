@@ -500,6 +500,27 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         agent_dump: Dict[str, object] | None = None
         if selection_mode == "multi_agent":
             ma_topn = int(getattr(config, "multi_agent_topn", effective_topn) or effective_topn)
+            # 若啟用 model alignment，預先計算 model 預測分數傳給 MA
+            ma_model_score_map: Dict[str, float] | None = None
+            ma_alignment_weight = float(getattr(config, "ma_model_alignment_weight", 0.0))
+            if ma_alignment_weight > 0.0 and model_version is not None:
+                try:
+                    artifact = joblib.load(model_version.artifact_path)
+                    ma_model = artifact["model"]
+                    ma_feat_names = artifact["feature_names"]
+                    ma_feat_df = feature_df.copy()
+                    for col in ma_feat_names:
+                        if col not in ma_feat_df.columns:
+                            ma_feat_df[col] = np.nan
+                    ma_feat_df = ma_feat_df[ma_feat_names]
+                    ma_feat_df = ma_feat_df.replace([np.inf, -np.inf], np.nan).fillna(ma_feat_df.median(skipna=True).fillna(0))
+                    ma_raw_scores = ma_model.predict(ma_feat_df.values)
+                    ma_model_score_map = {
+                        str(sid): float(s)
+                        for sid, s in zip(df["stock_id"].tolist(), ma_raw_scores)
+                    }
+                except Exception:
+                    ma_model_score_map = None
             picks_df, agent_dump = multi_agent_selector.run_multi_agent_selection(
                 feature_df=feature_df,
                 stock_ids=df["stock_id"],
@@ -508,6 +529,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 config=config,
                 dq_ctx=dq_ctx,
                 selection_meta=selection_meta,
+                model_score_map=ma_model_score_map,
             )
             coverage_stats["score_mode"] = (
                 "multi_agent_degraded" if bool(dq_ctx.get("degraded_mode", False)) else "multi_agent"
