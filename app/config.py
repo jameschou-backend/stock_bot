@@ -65,8 +65,8 @@ class AppConfig:
     backtest_entry_delay_days: int = 1
     backtest_risk_free_rate: float = 0.015
     backtest_benchmark_with_cost: bool = True
-    backtest_position_sizing: str = "equal"
-    backtest_trailing_stop_pct: float = None
+    backtest_position_sizing: str = "vol_inverse"
+    backtest_trailing_stop_pct: float = -0.12
     backtest_atr_stoploss_multiplier: float = None
     backtest_atr_period: int = 14
     # 過熱過濾器
