@@ -256,7 +256,7 @@ def _simulate_period(
     atr_at_entry: Optional[pd.Series] = None
     if atr_stoploss_multiplier is not None and atr_df is not None and not atr_df.empty:
         atr_at_entry = (
-            atr_df[atr_df["trading_date"] <= actual_entry_date]
+            atr_df[atr_df["trading_date"] < actual_entry_date]
             .groupby("stock_id")["atr"]
             .last()
         )
@@ -371,6 +371,7 @@ def run_backtest(
     atr_stoploss_multiplier: Optional[float] = 2.5,
     atr_period: int = 14,
     rebalance_freq: str = "W",
+    label_horizon_buffer: int = 7,
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -390,6 +391,7 @@ def run_backtest(
         trailing_stop_pct: 移動停利比例（如 -0.12），None 停用
         atr_stoploss_multiplier: ATR 倍數動態停損（如 2.5），None 使用固定停損
         atr_period: ATR 計算週期（日）
+        label_horizon_buffer: 訓練標籤截止日往前預留天數，避免近 rb_date 的標籤使用到未來價格（預設 7）
 
     Returns:
         Dict 包含完整回測結果
@@ -486,8 +488,9 @@ def run_backtest(
         )
 
         if need_retrain:
+            label_cutoff = rb_date - timedelta(days=label_horizon_buffer)
             train_feat = feat_df[feat_df["trading_date"] < rb_date]
-            train_label = label_df[label_df["trading_date"] < rb_date]
+            train_label = label_df[label_df["trading_date"] < label_cutoff]
             if train_lookback_days:
                 train_start = rb_date - timedelta(days=train_lookback_days)
                 train_feat = train_feat[train_feat["trading_date"] >= train_start]
@@ -592,8 +595,11 @@ def run_backtest(
             atr_stoploss_multiplier=atr_stoploss_multiplier,
         )
 
-        # ── 大盤基準（等權所有股票，套用相同交易成本）──
+        # ── 大盤基準（等權，套用相同流動性門檻與交易成本）──
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
+        if min_avg_turnover > 0 and liquidity_eligible_map:
+            eligible_set = liquidity_eligible_map.get(rb_date, set())
+            all_stocks_on_date = [s for s in all_stocks_on_date if str(s) in eligible_set]
         benchmark_result = _simulate_period(
             pd.DataFrame({"stock_id": all_stocks_on_date, "score": 0}),
             price_df, rb_date, exit_date,
