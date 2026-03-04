@@ -50,7 +50,7 @@ def _is_retryable_payload(status: object, msg: str) -> bool:
 
 def _sleep_backoff(attempt: int, base_seconds: float, retry_after: float | None = None) -> None:
     backoff = base_seconds * (2 ** attempt)
-    jitter = random.uniform(0, base_seconds)
+    jitter = random.uniform(0, backoff)
     wait_time = max(retry_after or 0.0, backoff + jitter)
     time.sleep(wait_time)
 
