@@ -29,37 +29,38 @@ from app.models import (
 
 # ── 核心特徵（必須存在才保留該筆資料）──────────────────────────────
 CORE_FEATURE_COLUMNS = [
-    # 動能
-    "ret_5", "ret_10", "ret_20", "ret_60",
-    # 均線
-    "ma_5", "ma_20", "ma_60",
-    # 技術指標（基礎）
-    "bias_20",
-    "vol_20",       # LOW_IC? 波動率本身非 alpha 訊號，建議實證確認方向性
-    "vol_ratio_20",
     # 流動性
     "amt_20",
+    # 波動率
+    "vol_20",
+    "vol_ratio_20",
+    # 反向特徵（IC 為負但穩定，取負號讓模型方向一致）
+    "vol_20_inv",             # -vol_20：高波動預期負報酬（IC=-0.056，ICIR=-0.34）
+    "atr_inv",                # -atr_14_pct：高 ATR% 預期負報酬（IC=-0.058，ICIR=-0.34）
+    "trend_persistence_inv",  # -trend_persistence：整份報告最強信號（ICIR=-1.07）
+    "trust_net_5_inv",        # -trust_net_5：投信反向有效（ICIR=-0.87）
     # 法人
     "foreign_net_5", "foreign_net_20",
     "trust_net_5", "trust_net_20",
-    "dealer_net_5", "dealer_net_20",  # LOW_IC? 自營商操作常帶避險性質，IC 不穩，建議實證確認
 ]
 
 # ── 擴充特徵（允許 NaN，用 0 填補）──────────────────────────────
 EXTENDED_FEATURE_COLUMNS = [
+    # 動能（由 CORE 降級：IC 有效但 ICIR < 0.5）
+    "ret_5", "ret_10", "ret_20", "ret_60",
+    # 均線（由 CORE 降級）
+    "ma_5", "ma_20", "ma_60",
+    # 技術指標基礎（由 CORE 降級）
+    "bias_20",
     # 經典技術指標
     "rsi_14",
     "macd_hist",
     "kd_k", "kd_d",
     # 籌碼面（融資融券）
-    "margin_balance_chg_5", "margin_balance_chg_20",
     "short_balance_chg_5", "short_balance_chg_20",
     "margin_short_ratio",
-    # 大盤相對強弱
-    "market_rel_ret_20",
     # 技術面（擴充）
-    "breakout_20",
-    "drawdown_60",  # LOW_IC? 多為風險衡量指標，建議實證確認 IC
+    "drawdown_60",
     "amt",
     "amt_ratio_20",
     # 布林帶位置百分位（0=下軌, 1=上軌）
@@ -71,22 +72,20 @@ EXTENDED_FEATURE_COLUMNS = [
     "ret_60_kurt",
     # 籌碼面（擴充）
     "foreign_buy_streak_5",
-    "foreign_buy_consecutive_days",  # 外資連續淨買超天數（非 5 日窗格，而是真實連續天數）
+    "foreign_buy_consecutive_days",
     "chip_flow_intensity_20",
     "foreign_buy_ratio_5",
     "foreign_buy_ratio_20",
     # 趨勢與型態
-    "ma_alignment",       # 均線多頭排列
-    "trend_persistence",  # 趨勢延續性（20 日紅 K 比例）
+    "ma_alignment",
+    "trend_persistence",
     # 基本面（月營收）
     "fund_revenue_mom",
     "fund_revenue_yoy",
-    "fund_revenue_yoy_accel",  # 月營收 YoY 加速度（本月 YoY - 上月 YoY），含 45 天公告延遲
-    "fund_revenue_trend_3m",   # LOW_IC? 60 日滾動均值，可能過度平滑化，建議實證確認
+    "fund_revenue_yoy_accel",
     # 題材/金流（產業聚合）
     "theme_turnover_ratio",
     "theme_return_20",
-    "theme_hot_score",  # LOW_IC? 資料品質不穩，建議實證確認 IC（見 CLAUDE.md）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -355,6 +354,16 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
         group["breakout_20"] = close / rolling_max20 - 1
         group["drawdown_60"] = close / rolling_max60 - 1
         group["amt"] = raw_close * volume
+
+        # ── ATR 14（真實波幅 14 日指數平均，用於計算 atr_inv）──
+        prev_close = close.shift(1)
+        tr = pd.concat([
+            high - low,
+            (high - prev_close).abs(),
+            (low - prev_close).abs(),
+        ], axis=1).max(axis=1)
+        atr_14 = tr.ewm(span=14, adjust=False, min_periods=14).mean()
+        group["atr_14_pct"] = atr_14 / close.replace(0, np.nan)
         group["amt_20"] = group["amt"].rolling(20).mean()
         group["amt_ratio_20"] = group["amt"] / group["amt_20"].replace(0, np.nan)
 
@@ -456,7 +465,6 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
         if "fund_revenue_mom" in group.columns:
             group["fund_revenue_mom"] = pd.to_numeric(group["fund_revenue_mom"], errors="coerce")
             group["fund_revenue_yoy"] = pd.to_numeric(group["fund_revenue_yoy"], errors="coerce")
-            group["fund_revenue_trend_3m"] = group["fund_revenue_yoy"].rolling(60, min_periods=20).mean()
             # fund_revenue_yoy_accel 由 _fetch_data() 中計算並透過 merge_asof 合入，此處僅確保欄位存在
             if "fund_revenue_yoy_accel" not in group.columns:
                 group["fund_revenue_yoy_accel"] = np.nan
@@ -466,28 +474,24 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
             group["fund_revenue_mom"] = np.nan
             group["fund_revenue_yoy"] = np.nan
             group["fund_revenue_yoy_accel"] = np.nan
-            group["fund_revenue_trend_3m"] = np.nan
 
         # ── 題材/金流（產業）──
         if "theme_turnover_ratio" in group.columns:
             group["theme_turnover_ratio"] = pd.to_numeric(group["theme_turnover_ratio"], errors="coerce")
             group["theme_return_20"] = pd.to_numeric(group["theme_return_20"], errors="coerce")
-            group["theme_hot_score"] = pd.to_numeric(group["theme_hot_score"], errors="coerce")
         else:
             group["theme_turnover_ratio"] = np.nan
             group["theme_return_20"] = np.nan
-            group["theme_hot_score"] = np.nan
+
+        # ── 反向特徵（負 IC 穩定，取負號讓模型方向一致）──
+        group["vol_20_inv"] = -group["vol_20"]
+        group["atr_inv"] = -group["atr_14_pct"]
+        group["trend_persistence_inv"] = -group["trend_persistence"]
+        group["trust_net_5_inv"] = -group["trust_net_5"]
 
         return group
 
     featured = df.groupby("stock_id", group_keys=False).apply(apply_group)
-
-    # ── 大盤相對強弱（跨股票計算）──
-    if "ret_20" in featured.columns and not featured["ret_20"].isna().all():
-        market_avg = featured.groupby("trading_date")["ret_20"].transform("mean")
-        featured["market_rel_ret_20"] = featured["ret_20"] - market_avg
-    else:
-        featured["market_rel_ret_20"] = np.nan
 
     return featured
 

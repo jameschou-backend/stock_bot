@@ -65,7 +65,7 @@ def test_compute_features_basic():
 
 
 def test_compute_features_extended():
-    """測試擴充特徵（RSI, MACD, KD, 融資融券, 大盤相對強弱）"""
+    """測試擴充特徵（RSI, MACD, KD, 融資融券, 反向特徵）"""
     df = _make_sample_df(periods=80)
     out = _compute_features(df)
     last = out.iloc[-1]
@@ -81,15 +81,14 @@ def test_compute_features_extended():
     assert 0 <= last["kd_d"] <= 100, f"KD_D out of range: {last['kd_d']}"
 
     # 融資融券特徵應有值
-    assert np.isfinite(last["margin_balance_chg_5"]), "margin_balance_chg_5 not finite"
     assert np.isfinite(last["margin_short_ratio"]), "margin_short_ratio not finite"
     assert np.isfinite(last["fund_revenue_yoy"]), "fund_revenue_yoy not finite"
-    assert np.isfinite(last["theme_hot_score"]), "theme_hot_score not finite"
 
-    # market_rel_ret_20：單一股票時，相對大盤報酬應為 0
-    assert np.isclose(last["market_rel_ret_20"], 0, atol=1e-10), (
-        f"Single stock market_rel_ret should be 0, got {last['market_rel_ret_20']}"
-    )
+    # 反向特徵：應為對應原始特徵的負值
+    assert np.isclose(last["vol_20_inv"], -last["vol_20"]), "vol_20_inv should be -vol_20"
+    assert np.isclose(last["atr_inv"], -last["atr_14_pct"]), "atr_inv should be -atr_14_pct"
+    assert np.isclose(last["trend_persistence_inv"], -last["trend_persistence"]), "trend_persistence_inv should be -trend_persistence"
+    assert np.isclose(last["trust_net_5_inv"], -last["trust_net_5"]), "trust_net_5_inv should be -trust_net_5"
 
 
 def test_feature_columns_complete():
