@@ -15,3 +15,5 @@ artifacts/backtest/
 logs/
 .cache/
 .pytest_cache/
+artifacts/run_manifest_*.json
+.claude/
