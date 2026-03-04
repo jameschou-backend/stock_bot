@@ -1,3 +1,8 @@
+"""每日選股模組：讀取最新特徵，套用流動性/可交易性過濾，使用 ML 模型或 multi-agent 選出 TopN 標的，
+寫入 picks 表並輸出 run_manifest JSON。
+
+支援 selection_mode: model（LightGBM）或 multi_agent，以及 research 降級模式。
+"""
 from __future__ import annotations
 
 import json

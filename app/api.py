@@ -1,3 +1,6 @@
+"""FastAPI 應用：提供 REST API 端點，包含選股結果（/picks）、模型版本（/models）、
+工作記錄（/jobs）、股票詳情（/stock/{stock_id}）、策略回測（/strategy_runs）等。
+"""
 from __future__ import annotations
 
 from datetime import date
@@ -103,7 +106,7 @@ def health():
 
 
 @app.get("/strategy")
-def get_strategy():
+def strategy_doc():
     """回傳選股邏輯說明（Markdown）"""
     config = load_config()
     return {"markdown": get_selection_logic(config)}

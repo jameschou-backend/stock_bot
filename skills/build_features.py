@@ -1,3 +1,8 @@
+"""特徵工程模組：從 raw_prices、raw_institutional、raw_margin_short、raw_fundamental、
+raw_theme_flow 等原始資料計算技術/籌碼/基本面特徵，寫入 features 表。
+
+採增量建置模式，每次只補算尚未存在的日期。支援 schema 自動偵測補算與 force_recompute_days 手動補算。
+"""
 from __future__ import annotations
 
 from datetime import date, timedelta
@@ -29,13 +34,15 @@ CORE_FEATURE_COLUMNS = [
     # 均線
     "ma_5", "ma_20", "ma_60",
     # 技術指標（基礎）
-    "bias_20", "vol_20", "vol_ratio_20",
+    "bias_20",
+    "vol_20",       # LOW_IC? 波動率本身非 alpha 訊號，建議實證確認方向性
+    "vol_ratio_20",
     # 流動性
     "amt_20",
     # 法人
     "foreign_net_5", "foreign_net_20",
     "trust_net_5", "trust_net_20",
-    "dealer_net_5", "dealer_net_20",
+    "dealer_net_5", "dealer_net_20",  # LOW_IC? 自營商操作常帶避險性質，IC 不穩，建議實證確認
 ]
 
 # ── 擴充特徵（允許 NaN，用 0 填補）──────────────────────────────
@@ -52,25 +59,34 @@ EXTENDED_FEATURE_COLUMNS = [
     "market_rel_ret_20",
     # 技術面（擴充）
     "breakout_20",
-    "drawdown_60",
+    "drawdown_60",  # LOW_IC? 多為風險衡量指標，建議實證確認 IC
     "amt",
     "amt_ratio_20",
+    # 布林帶位置百分位（0=下軌, 1=上軌）
+    "boll_pct",
+    # 價量背離信號（+1=正背離/量縮價低, -1=負背離/量縮價高, 0=中性）
+    "price_volume_divergence",
+    # 近 60 日報酬分布特徵
+    "ret_60_skew",
+    "ret_60_kurt",
     # 籌碼面（擴充）
     "foreign_buy_streak_5",
+    "foreign_buy_consecutive_days",  # 外資連續淨買超天數（非 5 日窗格，而是真實連續天數）
     "chip_flow_intensity_20",
     "foreign_buy_ratio_5",
     "foreign_buy_ratio_20",
     # 趨勢與型態
-    "ma_alignment", # 均線多頭排列
-    "trend_persistence", # 趨勢延續性
+    "ma_alignment",       # 均線多頭排列
+    "trend_persistence",  # 趨勢延續性（20 日紅 K 比例）
     # 基本面（月營收）
     "fund_revenue_mom",
     "fund_revenue_yoy",
-    "fund_revenue_trend_3m",
+    "fund_revenue_yoy_accel",  # 月營收 YoY 加速度（本月 YoY - 上月 YoY），含 45 天公告延遲
+    "fund_revenue_trend_3m",   # LOW_IC? 60 日滾動均值，可能過度平滑化，建議實證確認
     # 題材/金流（產業聚合）
     "theme_turnover_ratio",
     "theme_return_20",
-    "theme_hot_score",
+    "theme_hot_score",  # LOW_IC? 資料品質不穩，建議實證確認 IC（見 CLAUDE.md）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -218,6 +234,7 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     if fund_df.empty:
         price_df["fund_revenue_mom"] = np.nan
         price_df["fund_revenue_yoy"] = np.nan
+        price_df["fund_revenue_yoy_accel"] = np.nan
     else:
         fund_df["stock_id"] = fund_df["stock_id"].astype(str)
         fund_df["trading_date"] = pd.to_datetime(fund_df["trading_date"], errors="coerce")
@@ -234,6 +251,9 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         fund_df["revenue_mom"] = fund_df["revenue_mom"].fillna(mom_fallback)
         fund_df["revenue_yoy"] = fund_df["revenue_yoy"].fillna(yoy_fallback)
         fund_df = fund_df.rename(columns={"revenue_mom": "fund_revenue_mom", "revenue_yoy": "fund_revenue_yoy"})
+        # 月營收 YoY 加速度：本月 YoY 成長率 - 上月 YoY 成長率（正值代表加速成長）
+        # 注意：使用 diff(1) 在 fund_df 排序後計算，確保對應同一股票的前一筆月份資料
+        fund_df["fund_revenue_yoy_accel"] = fund_df.groupby("stock_id")["fund_revenue_yoy"].diff(1)
         # 月營收公告約在報告月結束後 45 天才公開，加入公告延遲避免前向洩漏
         fund_df["available_date"] = fund_df["trading_date"] + pd.Timedelta(days=45)
         fund_df = fund_df.sort_values(["stock_id", "available_date"])
@@ -246,11 +266,14 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
                 sub = sub.copy()
                 sub["fund_revenue_mom"] = np.nan
                 sub["fund_revenue_yoy"] = np.nan
+                sub["fund_revenue_yoy_accel"] = np.nan
                 merged.append(sub)
                 continue
             aligned = pd.merge_asof(
                 sub.sort_values("trading_date"),
-                sub_f.sort_values("available_date")[["available_date", "fund_revenue_mom", "fund_revenue_yoy"]],
+                sub_f.sort_values("available_date")[
+                    ["available_date", "fund_revenue_mom", "fund_revenue_yoy", "fund_revenue_yoy_accel"]
+                ],
                 left_on="trading_date",
                 right_on="available_date",
                 direction="backward",
@@ -345,6 +368,12 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
         group["foreign_buy_streak_5"] = (
             (group["foreign_net"] > 0).astype(int).rolling(5).sum()
         )
+        # 外資連續淨買超天數（真實連續天數，非 5 日窗格加總）
+        is_buy = (group["foreign_net"] > 0).astype(int)
+        run_id = (is_buy != is_buy.shift()).cumsum()
+        group["foreign_buy_consecutive_days"] = is_buy * (
+            is_buy.groupby(run_id).cumcount() + 1
+        )
         group["chip_flow_intensity_20"] = (
             (group["foreign_net"] + group["trust_net"] + group["dealer_net"]).rolling(20).sum()
             / volume.rolling(20).sum().replace(0, np.nan)
@@ -355,9 +384,32 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
         # ── 趨勢與型態 ──
         # 均線多頭排列：短天期 > 中天期 > 長天期
         group["ma_alignment"] = ((close > group["ma_5"]) & (group["ma_5"] > group["ma_20"]) & (group["ma_20"] > group["ma_60"])).astype(int)
-        
-        # 趨勢延續性：過去20天內，收盤價大於開盤價的天數比例 (紅K比例)
+
+        # 趨勢延續性：過去20天內，收盤價大於開盤價的天數比例（紅 K 比例）
         group["trend_persistence"] = (close > group["open"]).astype(int).rolling(20).mean()
+
+        # ── 布林帶位置百分位（0=下軌，1=上軌） ──
+        boll_mid = close.rolling(20).mean()
+        boll_std = close.rolling(20).std()
+        boll_upper = boll_mid + 2 * boll_std
+        boll_lower = boll_mid - 2 * boll_std
+        boll_range = (boll_upper - boll_lower).replace(0, np.nan)
+        group["boll_pct"] = ((close - boll_lower) / boll_range).clip(0, 1)
+
+        # ── 近 60 日報酬偏態與峰態 ──
+        group["ret_60_skew"] = daily_ret.rolling(60, min_periods=30).skew()
+        group["ret_60_kurt"] = daily_ret.rolling(60, min_periods=30).kurt()
+
+        # ── 價量背離信號 ──
+        # 正背離（+1）：股價接近 10 日低點但量縮（賣壓衰竭，潛在反彈）
+        # 負背離（-1）：股價接近 10 日高點但量縮（上攻乏力，潛在轉折）
+        vol_ma_10 = volume.rolling(10).mean()
+        price_near_high = close >= close.rolling(10).max() * 0.98
+        price_near_low = close <= close.rolling(10).min() * 1.02
+        vol_shrink = volume < vol_ma_10 * 0.8
+        group["price_volume_divergence"] = (
+            price_near_low & vol_shrink
+        ).astype(int) - (price_near_high & vol_shrink).astype(int)
 
         # ── RSI 14 ──
         delta = close.diff()
@@ -405,9 +457,15 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
             group["fund_revenue_mom"] = pd.to_numeric(group["fund_revenue_mom"], errors="coerce")
             group["fund_revenue_yoy"] = pd.to_numeric(group["fund_revenue_yoy"], errors="coerce")
             group["fund_revenue_trend_3m"] = group["fund_revenue_yoy"].rolling(60, min_periods=20).mean()
+            # fund_revenue_yoy_accel 由 _fetch_data() 中計算並透過 merge_asof 合入，此處僅確保欄位存在
+            if "fund_revenue_yoy_accel" not in group.columns:
+                group["fund_revenue_yoy_accel"] = np.nan
+            else:
+                group["fund_revenue_yoy_accel"] = pd.to_numeric(group["fund_revenue_yoy_accel"], errors="coerce")
         else:
             group["fund_revenue_mom"] = np.nan
             group["fund_revenue_yoy"] = np.nan
+            group["fund_revenue_yoy_accel"] = np.nan
             group["fund_revenue_trend_3m"] = np.nan
 
         # ── 題材/金流（產業）──
