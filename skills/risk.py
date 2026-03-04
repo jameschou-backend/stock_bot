@@ -43,12 +43,24 @@ def apply_liquidity_filter(price_df: pd.DataFrame, config) -> pd.DataFrame:
     if df.empty:
         return pd.DataFrame(columns=["stock_id", "avg_turnover"])
 
+    min_amt_20 = float(getattr(config, "min_amt_20", 0.0) or 0.0)
+    if min_amt_20 > 0:
+        threshold = min_amt_20
+    else:
+        # 向後相容：舊版使用「億元」門檻
+        threshold = float(getattr(config, "min_avg_turnover", 0.0)) * 1e8
+
     recent = (
         df.sort_values(["stock_id", "trading_date"])
         .groupby("stock_id", as_index=False, group_keys=False)
         .tail(20)
         .copy()
     )
+    # 只有在啟用流動性門檻時，才排除資料不足（< 10 筆）的股票，
+    # 避免新上市股票因樣本太少導致流動性判定失真。
+    if threshold > 0:
+        record_counts = recent.groupby("stock_id")["trading_date"].transform("count")
+        recent = recent[record_counts >= 10].copy()
     recent["turnover"] = recent["close"] * recent["volume"]
     avg_turnover = (
         recent.groupby("stock_id")["turnover"]
@@ -56,12 +68,6 @@ def apply_liquidity_filter(price_df: pd.DataFrame, config) -> pd.DataFrame:
         .rename("avg_turnover")
         .reset_index()
     )
-    min_amt_20 = float(getattr(config, "min_amt_20", 0.0) or 0.0)
-    if min_amt_20 > 0:
-        threshold = min_amt_20
-    else:
-        # 向後相容：舊版使用「億元」門檻
-        threshold = float(getattr(config, "min_avg_turnover", 0.0)) * 1e8
     if threshold > 0:
         avg_turnover = avg_turnover[avg_turnover["avg_turnover"] >= threshold]
     return avg_turnover.reset_index(drop=True)
@@ -104,8 +110,9 @@ def compute_atr(price_df: pd.DataFrame, period: int = 14) -> pd.DataFrame:
         df["tr"] = (df["close"] - df["prev_close"]).abs()
 
     # Wilder 指數移動平均（EWM span = period）
+    # min_periods=period 確保新上市股票資料不足時 ATR 為 NaN，避免不可靠的早期估計
     df["atr"] = df.groupby("stock_id")["tr"].transform(
-        lambda x: x.ewm(span=period, adjust=False).mean()
+        lambda x: x.ewm(span=period, min_periods=period, adjust=False).mean()
     )
 
     return (

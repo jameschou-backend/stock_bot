@@ -10,12 +10,15 @@ from skills import risk
 
 def test_apply_liquidity_filter_threshold():
     cfg = SimpleNamespace(min_avg_turnover=0.5)  # 0.5 億
+    # 每支股票提供 10 筆資料（符合 min_periods=10 保護），以驗證門檻邏輯
+    n = 10
+    base_dates = [date(2026, 1, 1 + i) for i in range(n)]
     price_df = pd.DataFrame(
         {
-            "stock_id": ["2330", "2330", "2317", "2317"],
-            "trading_date": [date(2026, 2, 10), date(2026, 2, 11), date(2026, 2, 10), date(2026, 2, 11)],
-            "close": [100.0, 100.0, 10.0, 10.0],
-            "volume": [800000, 700000, 100000, 90000],
+            "stock_id": ["2330"] * n + ["2317"] * n,
+            "trading_date": base_dates + base_dates,
+            "close": [100.0] * n + [10.0] * n,
+            "volume": [750000] * n + [90000] * n,
         }
     )
     out = risk.apply_liquidity_filter(price_df, cfg)
