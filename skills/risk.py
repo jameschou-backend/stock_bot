@@ -1,3 +1,7 @@
+"""風控與倉位管理模組：提供流動性過濾、停損（固定/移動/ATR）、倉位權重計算、ATR 計算等工具函式。
+
+供 daily_pick.py 與 backtest.py 共用。
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,6 +16,7 @@ from sqlalchemy.orm import Session
 from app.models import Stock
 
 
+# DEAD CODE? _LiquidityConfig 目前未被任何函式或外部模組使用，可能為重構中間態，請人工確認是否可刪除
 @dataclass(frozen=True)
 class _LiquidityConfig:
     min_avg_turnover: float

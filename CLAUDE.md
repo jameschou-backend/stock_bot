@@ -76,6 +76,10 @@
 - **fund revenue 45 天 publication delay**：月營收資料有約 45 天發布延遲，
   使用 `available_date = trading_date + 45 days` 進行 `merge_asof`，以 per-stock groupby
   方式執行（不可用全域 `merge_asof(by=stock_id)`，因為 `trading_date` 在跨股時非全局單調）。
+- **新增特徵（2026-03-04）**：`foreign_buy_consecutive_days`、`fund_revenue_yoy_accel`（YoY 加速度，含 45 天延遲）、
+  `boll_pct`（布林帶位置 0~1）、`price_volume_divergence`（價量背離 ±1/0）、
+  `ret_60_skew`、`ret_60_kurt`（近 60 日報酬偏態/峰態）。
+  觸發 schema_outdated 自動補算（或設 `force_recompute_days=180`）。
 
 ## 回測機制摘要
 
@@ -85,7 +89,7 @@
 - 每期僅使用 `trading_date < rb_date` 訓練資料，避免直接看未來。
 - 每 `retrain_freq_months` 重訓模型。
 - 進場可設定 `entry_delay_days`（預設 1）。
-- 報酬扣除 `transaction_cost_pct`（主回測未含滑價模型）。
+- 報酬扣除 `transaction_cost_pct` + 滑價成本（`enable_slippage=True`，ATR 的 10%，上限 0.3%，來回各一次）。
 - **`label_horizon_buffer = 7`**：訓練標籤截止日往前預留 7 天，避免近 `rb_date`
   的標籤使用到尚未公開的未來價格。`train_ranker.py` 採相同邏輯。
 - **benchmark 一致性**：大盤基準套用與策略相同的流動性門檻（`min_avg_turnover`），
@@ -100,6 +104,7 @@
 | `backtest_trailing_stop_pct` | `-0.12` | 移動停利，從峰值回落 12% 出場 |
 | `stoploss_pct` | `-0.07` | 固定停損 |
 | `label_horizon_buffer` | `7` | 標籤截止預留天數 |
+| `enable_slippage` | `True` | 滑價模型開關（ATR 的 10%，上限 0.3%，來回合計）|
 
 > 參考回測結果（walk-forward 10 年）：累積 **105%**、年化 **8.72%**、Sharpe **0.46**、MDD **-24.25%**
 

@@ -195,6 +195,7 @@ def _simulate_period(
     trailing_stop_pct: Optional[float] = None,
     atr_df: Optional[pd.DataFrame] = None,
     atr_stoploss_multiplier: Optional[float] = None,
+    enable_slippage: bool = True,
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -210,6 +211,7 @@ def _simulate_period(
         trailing_stop_pct: 移動停利比例（如 -0.12），None 時不啟用
         atr_df: 預先計算的 ATR DataFrame（stock_id, trading_date, atr）
         atr_stoploss_multiplier: ATR 倍數停損（如 2.5），覆蓋全局 stoploss_pct
+        enable_slippage: 是否套用滑價模型（ATR 的 10%，上限 0.3%，適用進出場各一次）
 
     Returns:
         Dict with period results
@@ -286,6 +288,25 @@ def _simulate_period(
             positions_input, period_prices, stoploss_pct, per_stock_stop
         )
 
+    # ── 預先計算個股滑價（ATR 的 10%，上限 0.3%，進出場各一次）──
+    slippage_map: Dict[str, float] = {}
+    if enable_slippage and atr_df is not None and not atr_df.empty:
+        atr_for_slippage = (
+            atr_df[atr_df["trading_date"] < actual_entry_date]
+            .groupby("stock_id")["atr"]
+            .last()
+        )
+        for _, ep_row in entry_prices.iterrows():
+            sid = str(ep_row["stock_id"])
+            ep = float(ep_row["entry_price"])
+            if sid in atr_for_slippage.index and ep > 0:
+                atr_pct = float(atr_for_slippage[sid]) / ep
+                # 單邊滑價 = ATR 10%，上限 0.3%；來回 × 2
+                slippage_one_way = min(atr_pct * 0.1, 0.003)
+                slippage_map[sid] = slippage_one_way * 2  # 進出場各一次
+            else:
+                slippage_map[sid] = 0.0
+
     stoploss_count = 0
     stock_returns: Dict[str, float] = {}
     trades_log = []
@@ -298,7 +319,8 @@ def _simulate_period(
             exit_date_val = str(row["exit_date"])
             sl_triggered = bool(row["stoploss_triggered"])
             if entry_px > 0:
-                ret = exit_px / entry_px - 1 - transaction_cost_pct
+                slippage_pct = slippage_map.get(sid, 0.0)
+                ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
                 stock_returns[sid] = ret
                 
                 # 收錄完整交易紀錄
@@ -315,6 +337,7 @@ def _simulate_period(
                     "stoploss_triggered": sl_triggered,
                     "exit_reason": reason,
                     "score": score_val,
+                    "slippage_pct": slippage_map.get(sid, 0.0),
                 }
                 trades_log.append(trade_record)
 
@@ -372,6 +395,7 @@ def run_backtest(
     atr_period: int = 14,
     rebalance_freq: str = "W",
     label_horizon_buffer: int = 7,
+    enable_slippage: bool = True,  # 滑價模型：ATR 的 10%，上限 0.3%，來回各一次
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -593,9 +617,10 @@ def run_backtest(
             trailing_stop_pct=trailing_stop_pct,
             atr_df=atr_df,
             atr_stoploss_multiplier=atr_stoploss_multiplier,
+            enable_slippage=enable_slippage,
         )
 
-        # ── 大盤基準（等權，套用相同流動性門檻與交易成本）──
+        # ── 大盤基準（等權，套用相同流動性門檻與交易成本，不套用滑價以保持指數特性）──
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
         if min_avg_turnover > 0 and liquidity_eligible_map:
             eligible_set = liquidity_eligible_map.get(rb_date, set())
@@ -606,6 +631,7 @@ def run_backtest(
             stoploss_pct=0,  # 基準不設停損
             transaction_cost_pct=benchmark_tc,
             entry_delay_days=0,  # 被動指數無選股延遲
+            enable_slippage=False,  # 指數基準不套用滑價
         )
 
         period_ret = result["return"]
