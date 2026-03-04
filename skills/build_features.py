@@ -234,25 +234,19 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         fund_df["revenue_mom"] = fund_df["revenue_mom"].fillna(mom_fallback)
         fund_df["revenue_yoy"] = fund_df["revenue_yoy"].fillna(yoy_fallback)
         fund_df = fund_df.rename(columns={"revenue_mom": "fund_revenue_mom", "revenue_yoy": "fund_revenue_yoy"})
-        fund_df = fund_df.sort_values(["stock_id", "trading_date"])
+        # 月營收公告約在報告月結束後 45 天才公開，加入公告延遲避免前向洩漏
+        fund_df["available_date"] = fund_df["trading_date"] + pd.Timedelta(days=45)
+        fund_df = fund_df.sort_values(["stock_id", "available_date"])
         price_df = price_df.sort_values(["stock_id", "trading_date"])
-        merged = []
-        for sid, sub in price_df.groupby("stock_id", sort=False):
-            sub_f = fund_df[fund_df["stock_id"] == sid]
-            if sub_f.empty:
-                sub = sub.copy()
-                sub["fund_revenue_mom"] = np.nan
-                sub["fund_revenue_yoy"] = np.nan
-                merged.append(sub)
-                continue
-            aligned = pd.merge_asof(
-                sub.sort_values("trading_date"),
-                sub_f.sort_values("trading_date")[["trading_date", "fund_revenue_mom", "fund_revenue_yoy"]],
-                on="trading_date",
-                direction="backward",
-            )
-            merged.append(aligned)
-        price_df = pd.concat(merged, ignore_index=True)
+        price_df = pd.merge_asof(
+            price_df,
+            fund_df[["stock_id", "available_date", "fund_revenue_mom", "fund_revenue_yoy"]],
+            left_on="trading_date",
+            right_on="available_date",
+            by="stock_id",
+            direction="backward",
+        )
+        price_df = price_df.drop(columns=["available_date"], errors="ignore")
 
     # ── 題材/金流（產業聚合）──
     theme_stmt = (
@@ -429,6 +423,17 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
     return featured
 
 
+def _detect_schema_outdated(db_session: Session) -> bool:
+    """檢查 DB 中最新一筆 features_json 的欄位數是否低於預期。
+    若 < 80% 視為 schema 過時，需要補算。"""
+    import json as _json
+    row = db_session.query(Feature).order_by(Feature.trading_date.desc()).first()
+    if row is None:
+        return False
+    existing = row.features_json if isinstance(row.features_json, dict) else _json.loads(row.features_json)
+    return len(existing) < len(FEATURE_COLUMNS) * 0.8
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "build_features")
     logs: Dict[str, object] = {}
@@ -439,21 +444,41 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         max_feature_date = db_session.query(func.max(Feature.trading_date)).scalar()
+
+        # force_recompute_days：可由 config 指定，強制補算最近 N 天的特徵
+        force_days = int(getattr(config, "force_recompute_days", 0))
+
+        # schema 自動檢測：若現有特徵欄位數不足，自動補算 180 天
+        schema_outdated = _detect_schema_outdated(db_session)
+        if schema_outdated and force_days == 0:
+            force_days = 180
+            logs["schema_recompute_triggered"] = True
+
+        if force_days > 0 and max_feature_date is not None:
+            # 刪除最近 force_days 天的特徵，讓增量邏輯重新計算
+            recompute_from = max_price_date - timedelta(days=force_days)
+            db_session.query(Feature).filter(Feature.trading_date >= recompute_from).delete()
+            db_session.commit()
+            logs["force_recompute_from"] = recompute_from.isoformat()
+            logs["force_recompute_days"] = force_days
+            # 重新讀取 max_feature_date（已刪除近期資料）
+            max_feature_date = db_session.query(func.max(Feature.trading_date)).scalar()
+
         if max_feature_date is None:
             target_start = db_session.query(func.min(RawPrice.trading_date)).scalar()
         else:
             target_start = max_feature_date + timedelta(days=1)
 
         if target_start is None or target_start > max_price_date:
-            finish_job(db_session, job_id, "success", logs={"rows": 0})
-            return {"rows": 0}
+            finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})
+            return {"rows": 0, **logs}
 
         # 往前多拉 120 天以確保 60 日指標可計算
         calc_start = target_start - timedelta(days=120)
         merged = _fetch_data(db_session, calc_start, max_price_date)
         if merged.empty:
-            finish_job(db_session, job_id, "success", logs={"rows": 0})
-            return {"rows": 0}
+            finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})
+            return {"rows": 0, **logs}
 
         use_adjusted_price = bool(getattr(config, "use_adjusted_price", True))
         featured = _compute_features(merged, use_adjusted_price=use_adjusted_price)
@@ -469,8 +494,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 featured[col] = featured[col].fillna(0)
 
         if featured.empty:
-            finish_job(db_session, job_id, "success", logs={"rows": 0})
-            return {"rows": 0}
+            finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})
+            return {"rows": 0, **logs}
 
         records: List[Dict] = []
         for _, row in featured.iterrows():
@@ -493,6 +518,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             db_session.commit()
 
         logs = {
+            **logs,  # preserve schema_recompute_triggered, force_recompute_from, etc.
             "rows": len(records),
             "feature_count": len(FEATURE_COLUMNS),
             "start_date": target_start.isoformat(),

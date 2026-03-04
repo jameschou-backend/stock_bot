@@ -89,3 +89,84 @@ def test_multi_agent_degraded_unavailable_and_renormalized_weights():
     assert "margin" not in weights_used
     assert abs(sum(weights_used.values()) - 1.0) < 1e-9
 
+
+def test_model_alignment_weight_boosts_overlap():
+    """model_alignment_weight > 0 時，與 model 高分股的 final_score 應提升。"""
+    feature_df = _make_feature_df()
+    stock_ids = pd.Series(["1101", "1216", "1301", "2303", "2317", "2330"])
+    dq_ctx = {"degraded_mode": False, "degraded_datasets": []}
+    selection_meta = {"tradability": {}, "liquidity": {}}
+
+    # 無 alignment 時的 topn=2 結果
+    cfg_no_align = SimpleNamespace(
+        multi_agent_weights={"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10},
+        ma_model_alignment_weight=0.0,
+    )
+    picks_no, _ = run_multi_agent_selection(
+        feature_df=feature_df,
+        stock_ids=stock_ids,
+        pick_date=date(2026, 2, 28),
+        topn=2,
+        config=cfg_no_align,
+        dq_ctx=dq_ctx,
+        selection_meta=selection_meta,
+    )
+
+    # 給予 model_score_map，讓 "2303" 擁有最高 model 分（原本不在前2）
+    model_score_map = {"1101": 0.1, "1216": 0.1, "1301": 0.1, "2303": 10.0, "2317": 0.1, "2330": 0.1}
+    cfg_align = SimpleNamespace(
+        multi_agent_weights={"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10},
+        ma_model_alignment_weight=1.0,
+    )
+    picks_align, _ = run_multi_agent_selection(
+        feature_df=feature_df,
+        stock_ids=stock_ids,
+        pick_date=date(2026, 2, 28),
+        topn=2,
+        config=cfg_align,
+        dq_ctx=dq_ctx,
+        selection_meta=selection_meta,
+        model_score_map=model_score_map,
+    )
+
+    # alignment 模式下 "2303" 應出現在選股結果中
+    assert "2303" in picks_align["stock_id"].tolist()
+    # meta 中應記錄 model_alignment_weight
+    meta = picks_align.iloc[0]["reason_json"]["_selection_meta"]
+    assert meta.get("model_alignment_weight") == 1.0
+
+
+def test_model_alignment_weight_zero_no_effect():
+    """model_alignment_weight=0 時，傳入 model_score_map 不影響結果。"""
+    feature_df = _make_feature_df()
+    stock_ids = pd.Series(["1101", "1216", "1301", "2303", "2317", "2330"])
+    dq_ctx = {"degraded_mode": False, "degraded_datasets": []}
+    selection_meta = {"tradability": {}, "liquidity": {}}
+    cfg = SimpleNamespace(
+        multi_agent_weights={"tech": 0.35, "flow": 0.30, "margin": 0.10, "fund": 0.15, "theme": 0.10},
+        ma_model_alignment_weight=0.0,
+    )
+    model_score_map = {"1101": 999.0, "1216": 0.0, "1301": 0.0, "2303": 0.0, "2317": 0.0, "2330": 0.0}
+
+    picks_no_map, _ = run_multi_agent_selection(
+        feature_df=feature_df,
+        stock_ids=stock_ids,
+        pick_date=date(2026, 2, 28),
+        topn=3,
+        config=cfg,
+        dq_ctx=dq_ctx,
+        selection_meta=selection_meta,
+    )
+    picks_with_map, _ = run_multi_agent_selection(
+        feature_df=feature_df,
+        stock_ids=stock_ids,
+        pick_date=date(2026, 2, 28),
+        topn=3,
+        config=cfg,
+        dq_ctx=dq_ctx,
+        selection_meta=selection_meta,
+        model_score_map=model_score_map,
+    )
+    # weight=0 時結果應完全相同
+    assert picks_no_map["stock_id"].tolist() == picks_with_map["stock_id"].tolist()
+

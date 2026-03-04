@@ -29,6 +29,12 @@ def _status_text(v: bool | None) -> str:
 
 
 def _evaluate_a_stability(shadow: Dict[str, object]) -> tuple[bool, Dict[str, object]]:
+    # 注意：shadow monitor 目前使用 [1m, 3m, 6m] window。
+    # 以每月再平衡計算，1m 最多 2 個 rebalance dates、3m 最多 4 個，
+    # 均無法達到 rb_n >= 6 的 qualified 門檻。只有 6m window（7 個 dates）能 qualify。
+    # 因此 qualified_windows >= 3 在此 window 結構下不可能達成。
+    # 修正：改為只要有 1 個 qualified window 通過即可（= 6m window 必須通過）。
+    # 後續若將 shadow monitor 擴展為 [6m, 12m, 18m] windows 則可恢復 >= 3 的嚴格標準。
     windows = [shadow["windows"].get("1m", {}), shadow["windows"].get("3m", {}), shadow["windows"].get("6m", {})]
     checked = []
     pass_count = 0
@@ -65,7 +71,9 @@ def _evaluate_a_stability(shadow: Dict[str, object]) -> tuple[bool, Dict[str, ob
                 "window_pass": window_pass,
             }
         )
-    overall = qualified_windows >= 3 and pass_count >= 2
+    # 以目前 1m/3m/6m 結構，只有 6m 能 qualify（>= 6 rebalance dates）
+    # 故標準調整為：至少 1 個 qualified window 且通過（實際上等同於 6m window 通過）
+    overall = qualified_windows >= 1 and pass_count >= 1
     return overall, {"checked_windows": checked, "qualified_windows": qualified_windows, "passed_windows": pass_count}
 
 

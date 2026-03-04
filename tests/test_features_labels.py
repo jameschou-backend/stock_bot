@@ -1,3 +1,7 @@
+import json
+from types import SimpleNamespace
+from unittest.mock import MagicMock, patch
+
 import numpy as np
 import pandas as pd
 
@@ -6,6 +10,7 @@ from skills.build_features import (
     EXTENDED_FEATURE_COLUMNS,
     FEATURE_COLUMNS,
     _compute_features,
+    _detect_schema_outdated,
 )
 from skills.build_labels import _compute_labels
 
@@ -132,3 +137,63 @@ def test_compute_labels_basic():
 
     expected = close[2] / close[0] - 1
     assert np.isclose(out.loc[0, "future_ret_h"], expected)
+
+
+# ── _detect_schema_outdated 測試 ─────────────────────────────────────
+
+
+def _make_mock_session(features_json: dict | None) -> MagicMock:
+    """建立模擬 DB session，query(...).order_by(...).first() 回傳帶 features_json 的 row。"""
+    mock_session = MagicMock()
+    if features_json is None:
+        mock_session.query.return_value.order_by.return_value.first.return_value = None
+    else:
+        row = MagicMock()
+        row.features_json = features_json
+        mock_session.query.return_value.order_by.return_value.first.return_value = row
+    return mock_session
+
+
+def test_detect_schema_outdated_no_rows():
+    """DB 無任何資料時應回傳 False（不觸發 recompute）。"""
+    session = _make_mock_session(None)
+    assert _detect_schema_outdated(session) is False
+
+
+def test_detect_schema_outdated_full_schema():
+    """features_json 已包含所有 FEATURE_COLUMNS 時應回傳 False（schema 正常）。"""
+    full = {col: 0.0 for col in FEATURE_COLUMNS}
+    session = _make_mock_session(full)
+    assert _detect_schema_outdated(session) is False
+
+
+def test_detect_schema_outdated_old_schema():
+    """features_json 只有舊版 19 欄時（< 80% of 43）應回傳 True（觸發補算）。"""
+    old_19 = {col: 0.0 for col in FEATURE_COLUMNS[:19]}
+    session = _make_mock_session(old_19)
+    assert _detect_schema_outdated(session) is True
+
+
+def test_detect_schema_outdated_json_string():
+    """features_json 存為 JSON 字串時也應正確解析。"""
+    full = {col: 0.0 for col in FEATURE_COLUMNS}
+    session = _make_mock_session(json.dumps(full))
+    assert _detect_schema_outdated(session) is False
+
+
+def test_detect_schema_outdated_partial_schema():
+    """features_json 欄位數剛好在 80% 門檻附近的邊界測試。
+    實作使用浮點比較：len(existing) < len(FEATURE_COLUMNS) * 0.8
+    43 * 0.8 = 34.4，故 35 欄才算「不小於門檻」。
+    """
+    import math
+    # ceil(43 * 0.8) = 35：剛好過門檻，應回傳 False
+    min_ok = math.ceil(len(FEATURE_COLUMNS) * 0.8)
+    at_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok]}
+    session_ok = _make_mock_session(at_threshold)
+    assert _detect_schema_outdated(session_ok) is False
+
+    # min_ok - 1 = 34：嚴格小於 34.4，應回傳 True
+    below_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok - 1]}
+    session_bad = _make_mock_session(below_threshold)
+    assert _detect_schema_outdated(session_bad) is True
