@@ -13,6 +13,8 @@
   - push 前必跑 `make test`；涉及 pipeline/DB/資料 ingest 變更時，必跑第 3 點完整驗收
   - 若造成回歸，必須使用 `git revert` 回滾（禁止 reset/force push）
 - 不可引入「silent fallback」造成不同環境不同行為；缺依賴必須用明確錯誤訊息指引安裝。
+- **禁止自行建立 feature branch，所有工作直接在 main 進行。**
+- 除非使用者明確要求開分支，否則永遠在 main 作業。
 
 ## 3) 必跑驗收命令（每次改動後）
 - `make test`
@@ -58,3 +60,6 @@
   - 涉及 pipeline/DB/ingest 變更時，需完整跑第 3 點驗收（pipeline + api + curls）
   - 發現回歸優先用 `git revert` 回滾提交
 - 若 push 失敗（權限/認證），需輸出完整錯誤訊息與建議解法（PAT/SSH）。
+- **不得自行開 branch、不得發 PR。**
+- 直接 commit 到 main 並 push。
+- 若發現自己在非 main 分支，立即 `git checkout main` 並 merge 回來。
