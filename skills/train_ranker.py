@@ -151,7 +151,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        train_end = max_label_date
+        # 訓練標籤截止日往前預留 7 天（label_horizon_buffer），
+        # 避免最近標籤的未來報酬期間延伸到尚未公開的未來價格。
+        LABEL_HORIZON_BUFFER_DAYS = 7
+        effective_train_end = train_end - timedelta(days=LABEL_HORIZON_BUFFER_DAYS)
+        train_end = effective_train_end
         train_start = train_end - timedelta(days=365 * config.train_lookback_years)
         val_start = (pd.Timestamp(train_end) - pd.DateOffset(months=6)).date()
 
