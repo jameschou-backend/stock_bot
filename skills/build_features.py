@@ -238,15 +238,26 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         fund_df["available_date"] = fund_df["trading_date"] + pd.Timedelta(days=45)
         fund_df = fund_df.sort_values(["stock_id", "available_date"])
         price_df = price_df.sort_values(["stock_id", "trading_date"])
-        price_df = pd.merge_asof(
-            price_df,
-            fund_df[["stock_id", "available_date", "fund_revenue_mom", "fund_revenue_yoy"]],
-            left_on="trading_date",
-            right_on="available_date",
-            by="stock_id",
-            direction="backward",
-        )
-        price_df = price_df.drop(columns=["available_date"], errors="ignore")
+        # 使用 per-stock groupby loop 避免 merge_asof(by=) 全域排序限制
+        merged = []
+        for sid, sub in price_df.groupby("stock_id", sort=False):
+            sub_f = fund_df[fund_df["stock_id"] == sid]
+            if sub_f.empty:
+                sub = sub.copy()
+                sub["fund_revenue_mom"] = np.nan
+                sub["fund_revenue_yoy"] = np.nan
+                merged.append(sub)
+                continue
+            aligned = pd.merge_asof(
+                sub.sort_values("trading_date"),
+                sub_f.sort_values("available_date")[["available_date", "fund_revenue_mom", "fund_revenue_yoy"]],
+                left_on="trading_date",
+                right_on="available_date",
+                direction="backward",
+            )
+            aligned = aligned.drop(columns=["available_date"], errors="ignore")
+            merged.append(aligned)
+        price_df = pd.concat(merged, ignore_index=True)
 
     # ── 題材/金流（產業聚合）──
     theme_stmt = (
