@@ -79,26 +79,31 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         from skills import ingest_corporate_actions
         run_skill("ingest_corporate_actions", ingest_corporate_actions.run)
         
+        def _run_optional_skill(skill_name: str, runner) -> None:
+            """執行選用 skill，失敗時寫入 job 記錄但不中斷主流程。"""
+            try:
+                run_skill(skill_name, runner)
+            except Exception as exc:
+                print(f"[WARN] {skill_name} failed: {exc}")
+                try:
+                    from app.job_utils import finish_job, start_job
+                    with get_session() as session:
+                        _jid = start_job(session, skill_name)
+                        finish_job(session, _jid, "failed", error_text=str(exc), logs={"error": str(exc), "optional": True})
+                except Exception:
+                    pass  # DB logging 失敗不阻斷主流程
+
         # 7. 融資融券資料（選用，不影響核心流程）
-        try:
-            from skills import ingest_margin_short
-            run_skill("ingest_margin_short", ingest_margin_short.run)
-        except Exception as exc:
-            print(f"[WARN] ingest_margin_short failed: {exc}")
+        from skills import ingest_margin_short
+        _run_optional_skill("ingest_margin_short", ingest_margin_short.run)
 
         # 8. 基本面（月營收，研究用；失敗不中斷）
-        try:
-            from skills import ingest_fundamental
-            run_skill("ingest_fundamental", ingest_fundamental.run)
-        except Exception as exc:
-            print(f"[WARN] ingest_fundamental failed: {exc}")
+        from skills import ingest_fundamental
+        _run_optional_skill("ingest_fundamental", ingest_fundamental.run)
 
         # 9. 題材/金流（由產業聚合，研究用；失敗不中斷）
-        try:
-            from skills import ingest_theme_flow
-            run_skill("ingest_theme_flow", ingest_theme_flow.run)
-        except Exception as exc:
-            print(f"[WARN] ingest_theme_flow failed: {exc}")
+        from skills import ingest_theme_flow
+        _run_optional_skill("ingest_theme_flow", ingest_theme_flow.run)
     else:
         print("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
 
