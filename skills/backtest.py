@@ -46,11 +46,12 @@ def _parse_features(series: pd.Series) -> pd.DataFrame:
     return pd.json_normalize(parsed)
 
 
-def _train_model(train_X: np.ndarray, train_y: np.ndarray):
-    """訓練一個輕量級模型供回測使用"""
+def _train_model(train_X: np.ndarray, train_y: np.ndarray, fast_mode: bool = False):
+    """訓練一個輕量級模型供回測使用。fast_mode=True 時減少樹數以加速。"""
+    n_est = 150 if fast_mode else 500
     if _HAS_LGBM:
         model = lgb.LGBMRegressor(
-            n_estimators=500,
+            n_estimators=n_est,
             learning_rate=0.05,
             max_depth=6,
             num_leaves=31,
@@ -65,8 +66,9 @@ def _train_model(train_X: np.ndarray, train_y: np.ndarray):
         )
         model.fit(train_X, train_y)
     else:
+        n_est_gbr = 100 if fast_mode else 300
         model = GradientBoostingRegressor(
-            n_estimators=300, learning_rate=0.05, max_depth=5,
+            n_estimators=n_est_gbr, learning_rate=0.05, max_depth=5,
             subsample=0.8, random_state=42,
         )
         model.fit(train_X, train_y)
@@ -180,6 +182,22 @@ def _precompute_market_median_ret20(price_df: pd.DataFrame) -> Dict[date, float]
     df = df.sort_values(["stock_id", "trading_date"])
     df["ret_20"] = df.groupby("stock_id")["close"].pct_change(20)
     med = df.groupby("trading_date")["ret_20"].median().dropna()
+    return {d: float(v) for d, v in med.items()}
+
+
+def _precompute_market_weekly_drop(price_df: pd.DataFrame) -> Dict[date, float]:
+    """預先計算每個交易日全市場 5 日報酬中位數（供週跌幅危機偵測）。"""
+    if price_df.empty:
+        return {}
+    df = price_df[["stock_id", "trading_date", "close"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", "close"])
+    if df.empty:
+        return {}
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df.sort_values(["stock_id", "trading_date"])
+    df["ret_5"] = df.groupby("stock_id")["close"].pct_change(5)
+    med = df.groupby("trading_date")["ret_5"].median().dropna()
     return {d: float(v) for d, v in med.items()}
 
 
@@ -396,6 +414,7 @@ def run_backtest(
     rebalance_freq: str = "W",
     label_horizon_buffer: int = 7,
     enable_slippage: bool = True,  # 滑價模型：ATR 的 10%，上限 0.3%，來回各一次
+    fast_mode: bool = False,  # 加速模式：減少樹數（LightGBM 150 棵）
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -466,6 +485,14 @@ def run_backtest(
     label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
     price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
 
+    # ── 2b. 預解析 features_json（一次性展開，避免 training loop 重複 parse）──
+    print("  預解析特徵 JSON ...", flush=True)
+    _parsed_cols = _parse_features(feat_df["features_json"])
+    _parsed_cols = _parsed_cols.replace([np.inf, -np.inf], np.nan)
+    feat_df = feat_df[["stock_id", "trading_date"]].reset_index(drop=True)
+    feat_df = pd.concat([feat_df, _parsed_cols.reset_index(drop=True)], axis=1)
+    del _parsed_cols  # 釋放記憶體
+
     # ── 3. 預計算 ATR（若需要）──
     atr_df: Optional[pd.DataFrame] = None
     if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse":
@@ -473,6 +500,7 @@ def run_backtest(
         atr_df = risk.compute_atr(price_df, period=atr_period)
     liquidity_eligible_map = _precompute_liquidity_eligible_map(price_df, min_avg_turnover)
     market_median_ret20_map = _precompute_market_median_ret20(price_df)
+    market_weekly_drop_map = _precompute_market_weekly_drop(price_df)
 
     # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
@@ -485,6 +513,7 @@ def run_backtest(
     last_train_date = None
     period_results: List[Dict] = []
     all_trades_log: List[Dict] = []
+    cooldown_until: Dict[str, date] = {}  # stock_id -> 冷卻截止日（停損後 N 週不再選入）
     equity = 10000.0
     equity_curve = [{"date": rebalance_dates[0].isoformat() if rebalance_dates else data_start.isoformat(), "equity": equity}]
 
@@ -529,7 +558,9 @@ def run_backtest(
                 print(f"  [{rb_date}] 訓練資料 {len(merged)} 筆 < {min_train_days}，跳過")
                 continue
 
-            fmat = _parse_features(merged["features_json"])
+            # feat_df 已預解析（2b 步驟），直接取特徵欄位（排除 meta 欄與 label）
+            _meta_cols = {"stock_id", "trading_date", "future_ret_h"}
+            fmat = merged.drop(columns=[c for c in _meta_cols if c in merged.columns])
             fmat = fmat.replace([np.inf, -np.inf], np.nan)
             for col in fmat.columns:
                 if fmat[col].isna().all():
@@ -546,7 +577,7 @@ def run_backtest(
 
             current_feature_names = list(fmat.columns)
             y = merged["future_ret_h"].astype(float).values
-            current_model = _train_model(fmat.values, y)
+            current_model = _train_model(fmat.values, y, fast_mode=fast_mode)
             last_train_date = rb_date
             print(f"  [{rb_date}] 模型重訓完成 (訓練筆數: {len(y):,})", flush=True)
 
@@ -568,7 +599,8 @@ def run_backtest(
         if day_feat.empty:
             continue
 
-        fmat = _parse_features(day_feat["features_json"])
+        # feat_df 已預解析，直接從展開後的 DataFrame 取特徵欄位
+        fmat = day_feat.drop(columns=["stock_id", "trading_date"], errors="ignore")
         for col in current_feature_names:
             if col not in fmat.columns:
                 fmat[col] = 0
@@ -591,14 +623,42 @@ def run_backtest(
             if day_feat.empty:
                 continue
 
-        picks = risk.pick_topn(day_feat, topn)
+        # ── 停損冷卻過濾 ──
+        if cooldown_until:
+            excluded = {sid for sid, expiry in cooldown_until.items() if expiry > rb_date}
+            if excluded:
+                before_n = len(day_feat)
+                day_feat = day_feat[~day_feat["stock_id"].astype(str).isin(excluded)]
+                n_excl = before_n - len(day_feat)
+                if n_excl > 0:
+                    print(f"  [{rb_date}] 停損冷卻：排除 {n_excl} 檔")
 
         # ── 大盤環境濾網 (Market Regime Filter) ──
+        effective_topn = topn
         median_ret = market_median_ret20_map.get(rb_date)
-        # 過去一個月 (20日) 股市中位數跌幅超過 4%，減少部位數量 (以對抗大跌市)
-        if median_ret is not None and median_ret < -0.04:
-            print(f"  [{rb_date}] 大盤環境不佳 (20日中位數報酬 {median_ret:.2%})，減少倉位")
-            picks = risk.pick_topn(day_feat, max(2, topn // 3))
+        weekly_drop = market_weekly_drop_map.get(rb_date)
+
+        crisis_threshold = getattr(config, "market_filter_weekly_drop_threshold", -0.03)
+        crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, topn // 4))
+        bear_topn = getattr(config, "market_filter_bear_topn", max(3, topn // 3))
+
+        if weekly_drop is not None and weekly_drop < crisis_threshold:
+            effective_topn = min(effective_topn, crisis_topn)
+            print(f"  [{rb_date}] 危機模式 (週跌 {weekly_drop:.2%})，topN → {effective_topn}")
+        elif median_ret is not None and median_ret < -0.03:
+            effective_topn = min(effective_topn, bear_topn)
+            print(f"  [{rb_date}] 空頭市場 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
+
+        # ── 季節性降倉（弱勢月份）──
+        seasonal_weak = getattr(config, "seasonal_weak_months", (3, 10))
+        seasonal_mult = getattr(config, "seasonal_topn_multiplier", 0.5)
+        if rb_date.month in seasonal_weak:
+            new_topn = max(1, int(effective_topn * seasonal_mult))
+            if new_topn < effective_topn:
+                print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月，topN {effective_topn} → {new_topn}")
+                effective_topn = new_topn
+
+        picks = risk.pick_topn(day_feat, effective_topn)
 
         # ── 計算倉位權重 ──
         period_price_slice = price_df[price_df["trading_date"] <= rb_date]
@@ -620,22 +680,30 @@ def run_backtest(
             enable_slippage=enable_slippage,
         )
 
-        # ── 大盤基準（等權，套用相同流動性門檻與交易成本，不套用滑價以保持指數特性）──
+        # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
         if min_avg_turnover > 0 and liquidity_eligible_map:
             eligible_set = liquidity_eligible_map.get(rb_date, set())
             all_stocks_on_date = [s for s in all_stocks_on_date if str(s) in eligible_set]
-        benchmark_result = _simulate_period(
-            pd.DataFrame({"stock_id": all_stocks_on_date, "score": 0}),
-            price_df, rb_date, exit_date,
-            stoploss_pct=0,  # 基準不設停損
-            transaction_cost_pct=benchmark_tc,
-            entry_delay_days=0,  # 被動指數無選股延遲
-            enable_slippage=False,  # 指數基準不套用滑價
+
+        # 向量化：直接計算 rb_date → exit_date 期間各股等權報酬均值
+        _bm_mask = (
+            price_df["stock_id"].isin(all_stocks_on_date) &
+            price_df["trading_date"].isin([rb_date, exit_date])
         )
+        _bm_prices = price_df[_bm_mask][["stock_id", "trading_date", "close"]].pivot_table(
+            index="stock_id", columns="trading_date", values="close"
+        )
+        if rb_date in _bm_prices.columns and exit_date in _bm_prices.columns:
+            _bm_valid = _bm_prices[[rb_date, exit_date]].dropna()
+            if not _bm_valid.empty:
+                benchmark_ret = float((_bm_valid[exit_date] / _bm_valid[rb_date] - 1 - benchmark_tc).mean())
+            else:
+                benchmark_ret = 0.0
+        else:
+            benchmark_ret = 0.0
 
         period_ret = result["return"]
-        benchmark_ret = benchmark_result["return"]
         equity *= (1 + period_ret)
         benchmark_equity *= (1 + benchmark_ret)
 
@@ -657,6 +725,13 @@ def run_backtest(
         equity_curve.append({"date": exit_date.isoformat(), "equity": equity})
         benchmark_curve.append({"date": exit_date.isoformat(), "equity": benchmark_equity})
         all_trades_log.extend(result.get("trades_log", []))
+
+        # ── 更新停損冷卻表 ──
+        cooldown_weeks = getattr(config, "stoploss_cooldown_weeks", 3)
+        for trade in result.get("trades_log", []):
+            if trade.get("stoploss_triggered"):
+                expiry = rb_date + timedelta(days=cooldown_weeks * 7)
+                cooldown_until[str(trade["stock_id"])] = expiry
 
         sign = "+" if period_ret >= 0 else ""
         bm_sign = "+" if benchmark_ret >= 0 else ""

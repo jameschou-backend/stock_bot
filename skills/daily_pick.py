@@ -447,13 +447,30 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         if getattr(config, "market_filter_enabled", False):
             ma_days = getattr(config, "market_filter_ma_days", 60)
             bear_topn = getattr(config, "market_filter_bear_topn", config.topn // 2)
+            crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, config.topn // 4))
+            crisis_threshold = float(getattr(config, "market_filter_weekly_drop_threshold", -0.03))
             detector = regime.get_regime_detector(config)
             market_df = _load_market_price_df(db_session, max(candidate_dates), ma_days)
             regime_result = detector.detect(market_df, config)
             bear_market = regime_result.get("regime") == "BEAR"
             coverage_stats["regime_detector"] = getattr(config, "regime_detector", "ma")
             coverage_stats["regime_meta"] = regime_result.get("meta", {})
-            if bear_market:
+
+            # 週跌幅危機偵測（最近 5 個交易日平均收盤價變化）
+            weekly_drop = None
+            if "avg_close" in market_df.columns and len(market_df) >= 6:
+                mdf = market_df.sort_values("trading_date")
+                latest_close = float(mdf["avg_close"].iloc[-1])
+                prev_close = float(mdf["avg_close"].iloc[-6])
+                if prev_close > 0:
+                    weekly_drop = (latest_close - prev_close) / prev_close
+            coverage_stats["weekly_drop"] = weekly_drop
+
+            if weekly_drop is not None and weekly_drop < crisis_threshold:
+                effective_topn = crisis_topn
+                coverage_stats["market_filter"] = "CRISIS"
+                coverage_stats["effective_topn"] = effective_topn
+            elif bear_market:
                 effective_topn = bear_topn
                 coverage_stats["market_filter"] = "BEAR"
                 coverage_stats["effective_topn"] = effective_topn
@@ -462,6 +479,17 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         else:
             coverage_stats["market_filter"] = "disabled"
             coverage_stats["effective_topn"] = effective_topn
+
+        # ── 季節性降倉（弱勢月份）──
+        seasonal_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
+        seasonal_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+        today_month = max(candidate_dates).month
+        if today_month in seasonal_weak:
+            new_topn = max(1, int(effective_topn * seasonal_mult))
+            if new_topn < effective_topn:
+                coverage_stats["seasonal_filter"] = f"month_{today_month}"
+                effective_topn = new_topn
+        coverage_stats["effective_topn"] = effective_topn
 
         chosen_date, chosen_df, fallback_logs = _choose_pick_date(
             candidate_dates,

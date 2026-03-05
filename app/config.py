@@ -54,8 +54,15 @@ class AppConfig:
     # 大盤過濾器
     market_filter_enabled: bool = True
     market_filter_ma_days: int = 60
-    market_filter_bear_topn: int = 10
+    market_filter_bear_topn: int = 5
+    market_filter_weekly_drop_threshold: float = -0.03  # 週跌幅觸發危機模式
+    market_filter_crisis_topn: int = 3  # 危機模式 topN
     regime_detector: str = "ma"
+    # 季節性過濾器
+    seasonal_weak_months: Tuple[int, ...] = (3, 10)
+    seasonal_topn_multiplier: float = 0.5
+    # 停損冷卻機制
+    stoploss_cooldown_weeks: int = 3
     # 回測基礎設定
     stoploss_pct: float = -0.07
     transaction_cost_pct: float = 0.001425
@@ -197,8 +204,13 @@ def load_config() -> AppConfig:
         fallback_days=int(pick("FALLBACK_DAYS", 10)),
         market_filter_enabled=str(pick("MARKET_FILTER_ENABLED", "true")).lower() in {"1", "true"},
         market_filter_ma_days=int(pick("MARKET_FILTER_MA_DAYS", 60)),
-        market_filter_bear_topn=int(pick("MARKET_FILTER_BEAR_TOPN", 10)),
+        market_filter_bear_topn=int(pick("MARKET_FILTER_BEAR_TOPN", 5)),
+        market_filter_weekly_drop_threshold=float(pick("MARKET_FILTER_WEEKLY_DROP_THRESHOLD", -0.03)),
+        market_filter_crisis_topn=int(pick("MARKET_FILTER_CRISIS_TOPN", 3)),
         regime_detector=str(pick("REGIME_DETECTOR", "ma")),
+        seasonal_weak_months=_parse_eval_topk_list(pick("SEASONAL_WEAK_MONTHS", "3,10")),
+        seasonal_topn_multiplier=float(pick("SEASONAL_TOPN_MULTIPLIER", 0.5)),
+        stoploss_cooldown_weeks=int(pick("STOPLOSS_COOLDOWN_WEEKS", 3)),
         stoploss_pct=float(pick("STOPLOSS_PCT", -0.07)),
         transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.001425)),
         strategy_weights_bull=pick_json("STRATEGY_WEIGHTS_BULL", {}),
