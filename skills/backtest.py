@@ -726,8 +726,15 @@ def run_backtest(
         )
         if rb_date in _bm_prices.columns and exit_date in _bm_prices.columns:
             _bm_valid = _bm_prices[[rb_date, exit_date]].dropna()
+            # Bug-2 fix：排除 rb_date 或 exit_date 價格為 0 的股票，避免除以零產生 +inf%
+            _bm_valid = _bm_valid[
+                (_bm_valid[rb_date] > 0) & (_bm_valid[exit_date] > 0)
+            ]
             if not _bm_valid.empty:
-                benchmark_ret = float((_bm_valid[exit_date] / _bm_valid[rb_date] - 1 - benchmark_tc).mean())
+                _raw_bm_ret = _bm_valid[exit_date] / _bm_valid[rb_date] - 1 - benchmark_tc
+                # 二次防禦：過濾殘留的 inf/nan（adj_factor 異常等邊緣情況）
+                _raw_bm_ret = _raw_bm_ret.replace([np.inf, -np.inf], np.nan).dropna()
+                benchmark_ret = float(_raw_bm_ret.mean()) if not _raw_bm_ret.empty else 0.0
             else:
                 benchmark_ret = 0.0
         else:
@@ -784,7 +791,15 @@ def run_backtest(
     total_return = equity / 10000 - 1
     benchmark_total = benchmark_equity / 10000 - 1
     n_periods = len(returns)
-    years = n_periods / 12
+
+    # Bug-1 fix：用實際回測期間（日曆天數）計算年化，不再以 n_periods/12 為分母
+    # （舊版：n_periods/12 對週頻回測會把 102週 誤算成 8.5 年）
+    _ec_start = pd.Timestamp(equity_curve[0]["date"]) if equity_curve else None
+    _ec_end = pd.Timestamp(equity_curve[-1]["date"]) if equity_curve else None
+    if _ec_start and _ec_end and _ec_end > _ec_start:
+        years = (_ec_end - _ec_start).days / 365.25
+    else:
+        years = max(n_periods / 12, 0.01)  # fallback（月頻回測仍正確）
 
     annualized_return = (1 + total_return) ** (1 / max(years, 0.01)) - 1 if total_return > -1 else -1
     benchmark_annualized = (1 + benchmark_total) ** (1 / max(years, 0.01)) - 1 if benchmark_total > -1 else -1
