@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs
+.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index
 
 migrate:
 	python scripts/migrate.py
@@ -123,3 +123,30 @@ experiment-summary:
 
 compare-runs:
 	python scripts/compare_runs.py --a "$${A}" --b "$${B}"
+
+# === 效能分析與監控 ===
+
+# 使用 pyinstrument 對 pipeline-build 進行 CPU profiling，輸出 HTML 報表
+profile:
+	DQ_MAX_LAG_TRADING_DAYS=2 python -m pyinstrument -r html -o artifacts/profile_report.html scripts/run_daily.py --skip-ingest
+	@echo "Profile report saved to artifacts/profile_report.html"
+
+# 使用 py-spy 即時監控已執行中的 run_daily.py（需先啟動 make pipeline）
+profile-live:
+	@PID=$$(pgrep -f "run_daily.py" | head -1); \
+	if [ -z "$$PID" ]; then \
+		echo "Error: no run_daily.py process found. Run 'make pipeline' first."; exit 1; \
+	fi; \
+	sudo py-spy top --pid $$PID
+
+# 顯示最近 50 筆 slow query 記錄（由 API 自動記錄至 artifacts/slow_queries.jsonl）
+slow-queries:
+	@if [ -f artifacts/slow_queries.jsonl ]; then \
+		python3 -c "import json; lines=[l.strip() for l in open('artifacts/slow_queries.jsonl') if l.strip()]; [print(json.dumps(json.loads(l), ensure_ascii=False, indent=2)) for l in lines[-50:]]"; \
+	else \
+		echo "No slow queries recorded yet. Start the API and run some requests."; \
+	fi
+
+# 檢查 DB 重要索引是否存在
+check-index:
+	python scripts/check_db_indexes.py

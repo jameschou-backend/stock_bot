@@ -1,15 +1,20 @@
 """FastAPI 應用：提供 REST API 端點，包含選股結果（/picks）、模型版本（/models）、
-工作記錄（/jobs）、股票詳情（/stock/{stock_id}）、策略回測（/strategy_runs）等。
+工作記錄（/jobs）、股票詳情（/stock/{stock_id}）、策略回測（/strategy_runs）、
+WebSocket 即時效能監控（/ws/metrics）等。
 """
 from __future__ import annotations
 
+import asyncio
 from datetime import date
 import json
+import time
 import uuid
+from pathlib import Path
 from typing import List, Optional
 
-from fastapi import FastAPI, HTTPException, Query
-from sqlalchemy import func
+import psutil
+from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
+from sqlalchemy import func, text as sql_text
 
 from app.config import load_config
 from app.db import get_session
@@ -348,3 +353,126 @@ def get_strategy_trades(run_id: str):
             .all()
         )
         return [StrategyTradeOut.model_validate(r) for r in rows]
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 效能監控 Endpoints
+# ══════════════════════════════════════════════════════════════════════════════
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_SLOW_QUERIES_PATH = _PROJECT_ROOT / "artifacts" / "slow_queries.jsonl"
+_FEATURE_PERF_PATH = _PROJECT_ROOT / "artifacts" / "feature_perf.csv"
+
+
+def _system_snapshot() -> dict:
+    """回傳 CPU / RAM 即時快照（psutil）。"""
+    cpu = psutil.cpu_percent(interval=None)  # non-blocking; first call may be 0
+    mem = psutil.virtual_memory()
+    return {
+        "ts": time.time(),
+        "cpu_pct": cpu,
+        "ram_used_gb": round(mem.used / 1e9, 2),
+        "ram_total_gb": round(mem.total / 1e9, 2),
+        "ram_pct": mem.percent,
+    }
+
+
+@app.get("/metrics/system")
+def metrics_system():
+    """回傳目前 CPU / RAM 使用狀況。"""
+    return _system_snapshot()
+
+
+@app.get("/metrics/latest")
+def metrics_latest():
+    """回傳系統資源快照 + 最近一筆 job 狀態。"""
+    sys_info = _system_snapshot()
+    with get_session() as session:
+        latest_job = (
+            session.query(Job)
+            .order_by(Job.started_at.desc())
+            .first()
+        )
+        job_info = None
+        if latest_job:
+            job_info = {
+                "job_name": latest_job.job_name,
+                "status": latest_job.status,
+                "started_at": str(latest_job.started_at),
+                "ended_at": str(latest_job.ended_at) if latest_job.ended_at else None,
+            }
+    return {"system": sys_info, "latest_job": job_info}
+
+
+@app.get("/metrics/history")
+def metrics_history(limit: int = Query(default=100, ge=1, le=1000)):
+    """回傳最近 N 筆已完成 job 的耗時紀錄。"""
+    with get_session() as session:
+        rows = session.execute(
+            sql_text("""
+                SELECT job_name, status, started_at, ended_at,
+                       TIMESTAMPDIFF(SECOND, started_at, ended_at) AS duration_s
+                FROM jobs
+                WHERE ended_at IS NOT NULL
+                ORDER BY started_at DESC
+                LIMIT :limit
+            """),
+            {"limit": limit},
+        ).fetchall()
+    return [
+        {
+            "job_name": r[0],
+            "status": r[1],
+            "started_at": str(r[2]),
+            "ended_at": str(r[3]),
+            "duration_s": r[4],
+        }
+        for r in rows
+    ]
+
+
+@app.get("/metrics/features")
+def metrics_features():
+    """回傳 artifacts/feature_perf.csv 的特徵耗時排名。"""
+    if not _FEATURE_PERF_PATH.exists():
+        return []
+    import pandas as pd  # noqa: PLC0415
+    df = pd.read_csv(_FEATURE_PERF_PATH)
+    return df.to_dict(orient="records")
+
+
+@app.get("/metrics/slow-queries")
+def metrics_slow_queries(limit: int = Query(default=50, ge=1, le=500)):
+    """回傳最近 N 筆 slow query 記錄（來自 artifacts/slow_queries.jsonl）。"""
+    if not _SLOW_QUERIES_PATH.exists():
+        return []
+    records: list[dict] = []
+    try:
+        with open(_SLOW_QUERIES_PATH, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    records.append(json.loads(line))
+    except Exception:
+        return []
+    return records[-limit:]
+
+
+@app.websocket("/ws/metrics")
+async def ws_metrics(websocket: WebSocket):
+    """WebSocket：每 2 秒推送一次系統資源快照（CPU / RAM）。
+
+    連線方式：ws://127.0.0.1:8000/ws/metrics
+    回傳 JSON: {"ts": float, "cpu_pct": float, "ram_used_gb": float,
+                "ram_total_gb": float, "ram_pct": float}
+    """
+    await websocket.accept()
+    # warm-up psutil cpu_percent (first call always returns 0)
+    psutil.cpu_percent(interval=None)
+    try:
+        while True:
+            await asyncio.sleep(2)
+            data = _system_snapshot()
+            await websocket.send_json(data)
+    except WebSocketDisconnect:
+        pass
