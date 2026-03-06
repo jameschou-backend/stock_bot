@@ -20,6 +20,7 @@ from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
 from app.models import Feature, Label, ModelVersion
+from skills.build_features import FEATURE_COLUMNS as _CANONICAL_FEATURES
 
 # ── 嘗試載入 LightGBM（優先），否則回退 sklearn ──
 try:
@@ -185,6 +186,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         feature_matrix = _parse_features(df["features_json"])
         feature_matrix = feature_matrix.replace([np.inf, -np.inf], np.nan)
+
+        # ── 限縮到當前 FEATURE_COLUMNS，確保訓練/預測特徵集一致 ──
+        # 補缺失欄（新特徵在舊歷史資料中不存在，填 NaN → 後續用中位數填補）
+        for col in _CANONICAL_FEATURES:
+            if col not in feature_matrix.columns:
+                feature_matrix[col] = np.nan
+        feature_matrix = feature_matrix[list(_CANONICAL_FEATURES)]
 
         # 允許部分 NaN（用中位數填補），而非全部 dropna
         for col in feature_matrix.columns:

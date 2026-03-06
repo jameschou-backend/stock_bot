@@ -35,6 +35,7 @@ class AppConfig:
     api_host: str
     api_port: int
     force_train: bool = False
+    force_recompute_days: int = 0  # 強制刪除並重算最近 N 天特徵（0=不強制）
     min_avg_volume: int = 500
     round_trip_cost: float = 0.00585
     hold_buffer: int = 10
@@ -186,6 +187,7 @@ def load_config() -> AppConfig:
         api_host=str(pick("API_HOST", "0.0.0.0")),
         api_port=int(pick("API_PORT", 8000)),
         force_train=str(pick("FORCE_TRAIN", "0")) in {"1", "true", "True"},
+        force_recompute_days=int(pick("FORCE_RECOMPUTE_DAYS", 0)),
         min_avg_volume=int(pick("MIN_AVG_VOLUME", 500)),
         round_trip_cost=float(pick("ROUND_TRIP_COST", 0.00585)),
         hold_buffer=int(pick("HOLD_BUFFER", 10)),
