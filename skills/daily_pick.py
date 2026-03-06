@@ -26,6 +26,7 @@ from skills.build_features import FEATURE_COLUMNS
 from skills import regime, risk
 from skills import tradability_filter
 from skills import multi_agent_selector
+from skills import position_sizing as _pos_sizing
 
 
 # 選取前 8 個特徵作為 reason 說明
@@ -589,6 +590,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
             df = _filter_overheated(df, feature_df, config)
             df = risk.pick_topn(df, effective_topn)
+
+            # ── 倉位配置 ──
+            ps_method = str(getattr(config, "position_sizing_method", "vol_inverse"))
+            scores_map = {str(row["stock_id"]): float(row["score"]) for _, row in df.iterrows()}
+            try:
+                weight_map = _pos_sizing.compute_weights(
+                    prices=price_df.pivot_table(index="trading_date", columns="stock_id", values="close")
+                    if not price_df.empty else pd.DataFrame(),
+                    scores=scores_map,
+                    method=ps_method,
+                )
+            except Exception:
+                n = max(len(scores_map), 1)
+                weight_map = {sid: 1.0 / n for sid in scores_map}
+
             for _, row in df.iterrows():
                 reasons = {}
                 for feat in REASON_FEATURES:
@@ -598,6 +614,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     pct = float(percentile_map[feat].loc[row.name]) if feat in percentile_map else None
                     reasons[feat] = {"value": value, "percentile": pct}
                 reasons["_selection_meta"] = dict(selection_meta, dq_ctx=dq_ctx, selection_mode="model")
+                sid = str(row["stock_id"])
+                reasons["weight"] = round(weight_map.get(sid, 0.0), 6)
 
                 records.append(
                     {

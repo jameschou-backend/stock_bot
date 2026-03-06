@@ -408,6 +408,7 @@ def run_backtest(
     risk_free_rate: float = 0.015,
     benchmark_with_cost: bool = True,
     position_sizing: str = "vol_inverse",
+    position_sizing_method: str = "risk_parity",  # vol_inverse | mean_variance | risk_parity
     trailing_stop_pct: Optional[float] = -0.15,
     atr_stoploss_multiplier: Optional[float] = 2.5,
     atr_period: int = 14,
@@ -660,13 +661,42 @@ def run_backtest(
 
         picks = risk.pick_topn(day_feat, effective_topn)
 
-        # ── 計算倉位權重 ──
+        # ── 計算倉位權重（支援 position_sizing_method）──
         period_price_slice = price_df[price_df["trading_date"] <= rb_date]
-        pos_weights = risk.compute_position_weights(
-            picks, method=position_sizing,
-            price_df=period_price_slice if position_sizing == "vol_inverse" else None,
-            atr_period=atr_period,
-        )
+        # position_sizing_method 優先（支援 mean_variance / risk_parity）
+        _ps_method = position_sizing_method if position_sizing_method != "vol_inverse" else position_sizing
+        if _ps_method in ("mean_variance", "risk_parity"):
+            try:
+                from skills import position_sizing as _pos_mod
+                _pick_sids = picks["stock_id"].astype(str).tolist()
+                # 只傳 picks 股票的價格（避免全市場股票含 0/inf 資料干擾協方差估計）
+                _picks_prices = period_price_slice[
+                    period_price_slice["stock_id"].isin(_pick_sids)
+                ]
+                _price_pivot = (
+                    _picks_prices.pivot_table(
+                        index="trading_date", columns="stock_id", values="close"
+                    )
+                    if not _picks_prices.empty else pd.DataFrame()
+                )
+                _scores_map = {str(r["stock_id"]): float(r["score"]) for _, r in picks.iterrows()}
+                _weight_map = _pos_mod.compute_weights(_price_pivot, _scores_map, method=_ps_method)
+                pos_weights = pd.DataFrame(
+                    [{"stock_id": sid, "weight": w} for sid, w in _weight_map.items()]
+                )
+            except Exception as _ps_exc:
+                print(f"  [{rb_date}] position_sizing {_ps_method} 失敗（{_ps_exc}），fallback vol_inverse")
+                pos_weights = risk.compute_position_weights(
+                    picks, method="vol_inverse",
+                    price_df=period_price_slice,
+                    atr_period=atr_period,
+                )
+        else:
+            pos_weights = risk.compute_position_weights(
+                picks, method=position_sizing,
+                price_df=period_price_slice if position_sizing == "vol_inverse" else None,
+                atr_period=atr_period,
+            )
 
         # ── 模擬持有 ──
         result = _simulate_period(
@@ -856,6 +886,42 @@ def run_backtest(
         print(f"    {p['rebalance_date'][:7]}  {sign}{ret:>7.2%}  (大盤 {bm:>+7.2%})  {color_bar}")
 
     print("=" * 60)
+
+    # ── 8. quantstats HTML 報告 ──
+    try:
+        import quantstats as qs
+        import matplotlib
+        matplotlib.use("Agg")
+        from pathlib import Path as _Path
+
+        artifacts_dir = _Path(__file__).resolve().parent.parent / "artifacts"
+        artifacts_dir.mkdir(parents=True, exist_ok=True)
+        report_path = artifacts_dir / "backtest_report.html"
+
+        # 建立每日報酬 Series（以 period 結束日為索引，線性插值到日頻）
+        eq_dates = [ec["date"] for ec in equity_curve]
+        eq_vals = [ec["equity"] for ec in equity_curve]
+        bm_vals = [ec["equity"] for ec in benchmark_curve]
+
+        eq_series = pd.Series(eq_vals, index=pd.to_datetime(eq_dates), name="strategy")
+        bm_series = pd.Series(bm_vals, index=pd.to_datetime(eq_dates), name="benchmark")
+
+        # 轉換為日報酬（pct_change）
+        strat_rets = eq_series.pct_change().dropna()
+        bench_rets = bm_series.pct_change().dropna()
+
+        # quantstats 報告（關閉 display 以避免 GUI 警告）
+        qs.reports.html(
+            strat_rets,
+            benchmark=bench_rets,
+            output=str(report_path),
+            title="Stock Bot Walk-Forward Backtest",
+            download_filename=str(report_path),
+        )
+        print(f"\n[quantstats] 績效報告已輸出: {report_path}")
+        summary["quantstats_report"] = str(report_path)
+    except Exception as _qs_exc:
+        print(f"[quantstats] 報告產出失敗（跳過）: {_qs_exc}")
 
     return {
         "summary": summary,

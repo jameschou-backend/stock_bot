@@ -71,6 +71,10 @@ def main():
                         dest="position_sizing",
                         choices=["equal", "score_tiered", "vol_inverse"],
                         help="倉位分配方式 (預設 equal)")
+    parser.add_argument("--ps-method", type=str, default=None,
+                        dest="position_sizing_method",
+                        choices=["vol_inverse", "mean_variance", "risk_parity"],
+                        help="進階倉位最佳化方法 (預設 risk_parity)")
 
     # ── 回測可信度 ──
     parser.add_argument("--entry-delay", type=int, default=None,
@@ -81,6 +85,10 @@ def main():
                         help="無風險利率年化 (預設 0.015 = 1.5%%)")
     parser.add_argument("--no-benchmark-cost", action="store_true",
                         help="Benchmark 不套用交易成本（舊行為，不建議）")
+
+    # ── 速度 ──
+    parser.add_argument("--fast", action="store_true",
+                        help="快速模式：LightGBM 樹數 500→150，加速 ~3x（精度略降）")
 
     # ── 輸出 ──
     parser.add_argument("--output", type=str, default=None,
@@ -107,6 +115,7 @@ def main():
     risk_free = args.risk_free_rate if args.risk_free_rate is not None else config.backtest_risk_free_rate
     benchmark_with_cost = not args.no_benchmark_cost and config.backtest_benchmark_with_cost
     sizing = args.position_sizing or config.backtest_position_sizing
+    ps_method = args.position_sizing_method or getattr(config, "position_sizing_method", "risk_parity")
     trailing = args.trailing_stop_pct if args.trailing_stop_pct is not None else config.backtest_trailing_stop_pct
     atr_mult = args.atr_stoploss_multiplier if args.atr_stoploss_multiplier is not None else config.backtest_atr_stoploss_multiplier
 
@@ -123,9 +132,11 @@ def main():
             risk_free_rate=risk_free,
             benchmark_with_cost=benchmark_with_cost,
             position_sizing=sizing,
+            position_sizing_method=ps_method,
             trailing_stop_pct=trailing,
             atr_stoploss_multiplier=atr_mult,
             atr_period=args.atr_period,
+            fast_mode=args.fast,
         )
 
     # ── 輸出 JSON ──

@@ -86,6 +86,10 @@ EXTENDED_FEATURE_COLUMNS = [
     # 題材/金流（產業聚合）
     "theme_turnover_ratio",
     "theme_return_20",
+    # 新增技術指標（pandas-ta 對應，手動計算確保無洩漏）
+    "willr_14",             # Williams %R 14 日（-100~0，越低越超賣）
+    "cci_20",               # CCI 20 日（偏離正常范圍信號）
+    "cmf_20",               # Chaikin Money Flow 20 日（資金流入/流出強度）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -488,6 +492,29 @@ def _compute_features(df: pd.DataFrame, use_adjusted_price: bool = True) -> pd.D
         group["atr_inv"] = -group["atr_14_pct"]
         group["trend_persistence_inv"] = -group["trend_persistence"]
         group["trust_net_5_inv"] = -group["trust_net_5"]
+
+        # ── Williams %R 14 日（手動計算，確保無前向洩漏）──
+        # 公式：(最高 - 收盤) / (最高 - 最低) * -100，範圍 -100~0
+        high_14 = high.rolling(14).max()
+        low_14 = low.rolling(14).min()
+        hl_range = (high_14 - low_14).replace(0, np.nan)
+        group["willr_14"] = (high_14 - close) / hl_range * -100
+
+        # ── CCI 20 日（Commodity Channel Index）──
+        # 公式：(典型價 - 20MA) / (0.015 * 平均偏差)
+        tp = (high + low + close) / 3.0
+        tp_ma = tp.rolling(20).mean()
+        tp_mad = tp.rolling(20).apply(lambda x: np.mean(np.abs(x - x.mean())), raw=True)
+        group["cci_20"] = (tp - tp_ma) / (0.015 * tp_mad.replace(0, np.nan))
+
+        # ── CMF 20 日（Chaikin Money Flow）──
+        # 公式：Sum(MFV, 20) / Sum(Volume, 20)
+        # MFV = ((close - low) - (high - close)) / (high - low) * volume
+        hl_diff = (high - low).replace(0, np.nan)
+        mf_multiplier = ((close - low) - (high - close)) / hl_diff
+        mf_volume = mf_multiplier * volume
+        vol_sum_20 = volume.rolling(20).sum().replace(0, np.nan)
+        group["cmf_20"] = mf_volume.rolling(20).sum() / vol_sum_20
 
         return group
 
