@@ -445,20 +445,23 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         # ── 大盤過濾器：空頭市場減碼 ──
         effective_topn = config.topn
         bear_market = False
+        weekly_drop: float | None = None   # 在 if 外初始化，供後續 topN floor 使用
+        market_below_200ma = False
         if getattr(config, "market_filter_enabled", False):
             ma_days = getattr(config, "market_filter_ma_days", 60)
             bear_topn = getattr(config, "market_filter_bear_topn", config.topn // 2)
             crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, config.topn // 4))
             crisis_threshold = float(getattr(config, "market_filter_weekly_drop_threshold", -0.03))
             detector = regime.get_regime_detector(config)
-            market_df = _load_market_price_df(db_session, max(candidate_dates), ma_days)
+            # 載入足夠 200 日資料（用於 200MA 現金保留判斷）
+            _load_days = max(ma_days, 200)
+            market_df = _load_market_price_df(db_session, max(candidate_dates), _load_days)
             regime_result = detector.detect(market_df, config)
             bear_market = regime_result.get("regime") == "BEAR"
             coverage_stats["regime_detector"] = getattr(config, "regime_detector", "ma")
             coverage_stats["regime_meta"] = regime_result.get("meta", {})
 
             # 週跌幅危機偵測（最近 5 個交易日平均收盤價變化）
-            weekly_drop = None
             if "avg_close" in market_df.columns and len(market_df) >= 6:
                 mdf = market_df.sort_values("trading_date")
                 latest_close = float(mdf["avg_close"].iloc[-1])
@@ -466,6 +469,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 if prev_close > 0:
                     weekly_drop = (latest_close - prev_close) / prev_close
             coverage_stats["weekly_drop"] = weekly_drop
+
+            # 200 日均線判斷（供現金保留機制使用）
+            if "avg_close" in market_df.columns and len(market_df) >= 40:
+                _mdf = market_df.sort_values("trading_date")
+                _mdf_close = pd.to_numeric(_mdf["avg_close"], errors="coerce").dropna()
+                if len(_mdf_close) >= 40:
+                    _ma200 = float(_mdf_close.rolling(200, min_periods=40).mean().iloc[-1])
+                    _cur = float(_mdf_close.iloc[-1])
+                    market_below_200ma = not pd.isna(_ma200) and _cur < _ma200
+            coverage_stats["market_below_200ma"] = market_below_200ma
 
             if weekly_drop is not None and weekly_drop < crisis_threshold:
                 effective_topn = crisis_topn
@@ -490,6 +503,14 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             if new_topn < effective_topn:
                 coverage_stats["seasonal_filter"] = f"month_{today_month}"
                 effective_topn = new_topn
+
+        # ── topN 絕對下限保護（防止危機+弱勢月份疊加造成 topN=1~2 的極端集中風險）──
+        # 極端空頭（週跌>10%）最低 3 支；一般情況最低 5 支
+        _dp_extreme_bear = isinstance(weekly_drop, float) and weekly_drop < -0.10
+        _dp_min_topn = 3 if _dp_extreme_bear else 5
+        if effective_topn < _dp_min_topn:
+            coverage_stats["topn_floor_applied"] = f"{effective_topn}→{_dp_min_topn}"
+            effective_topn = _dp_min_topn
         coverage_stats["effective_topn"] = effective_topn
 
         chosen_date, chosen_df, fallback_logs = _choose_pick_date(
@@ -580,6 +601,24 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 scores = model.predict(feature_df.values)
                 coverage_stats["score_mode"] = "model"
             df["score"] = scores
+
+            # ── 空頭防禦②：RSI 過熱過濾（空頭時不追高 RSI>70 強勢股）──
+            if bear_market and "rsi_14" in feature_df.columns:
+                _rsi_ok = feature_df["rsi_14"].fillna(100).values <= 70
+                _rsi_removed = int((~_rsi_ok).sum())
+                if _rsi_removed > 0:
+                    df = df.loc[_rsi_ok].reset_index(drop=True)
+                    feature_df = feature_df.loc[_rsi_ok].reset_index(drop=True)
+                    coverage_stats["bear_rsi_filtered"] = _rsi_removed
+                # df 為空時自然產生 0 picks，由後續流程統一處理
+
+            # ── 空頭防禦③：低波動加權（atr_inv z-score 加分 0.3 倍）──
+            if bear_market and "atr_inv" in feature_df.columns:
+                _atr_inv = pd.to_numeric(feature_df["atr_inv"], errors="coerce").fillna(0)
+                _atr_std = float(_atr_inv.std())
+                if _atr_std > 0:
+                    _atr_z = (_atr_inv - _atr_inv.mean()) / _atr_std
+                    df["score"] = df["score"].values + 0.3 * _atr_z.values
 
             percentile_map = {}
             for feat in REASON_FEATURES:

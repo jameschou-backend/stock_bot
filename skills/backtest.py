@@ -201,6 +201,23 @@ def _precompute_market_weekly_drop(price_df: pd.DataFrame) -> Dict[date, float]:
     return {d: float(v) for d, v in med.items()}
 
 
+def _precompute_market_200ma_bear(price_df: pd.DataFrame) -> Dict[date, bool]:
+    """預先計算每個交易日等權市場均價是否低於 200 日均線（True=空頭）。
+    用於現金保留機制：空頭時保留 30% 現金。min_periods=40 確保資料不足時不誤判。
+    """
+    if price_df.empty:
+        return {}
+    df = price_df[["trading_date", "close"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.dropna(subset=["trading_date", "close"])
+    if df.empty:
+        return {}
+    mkt = df.groupby("trading_date")["close"].mean().sort_index()
+    ma200 = mkt.rolling(200, min_periods=40).mean()
+    bear_series = (mkt < ma200).dropna()
+    return {d: bool(v) for d, v in bear_series.items()}
+
+
 def _simulate_period(
     picks: pd.DataFrame,
     price_df: pd.DataFrame,
@@ -520,6 +537,7 @@ def run_backtest(
     liquidity_eligible_map = _precompute_liquidity_eligible_map(price_df, min_avg_turnover)
     market_median_ret20_map = _precompute_market_median_ret20(price_df)
     market_weekly_drop_map = _precompute_market_weekly_drop(price_df)
+    market_200ma_bear_map = _precompute_market_200ma_bear(price_df)
 
     # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
@@ -677,6 +695,43 @@ def run_backtest(
                 print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月，topN {effective_topn} → {new_topn}")
                 effective_topn = new_topn
 
+        # ── topN 絕對下限保護（避免危機+弱勢月份疊加造成過度集中）──
+        # 極端空頭（週跌>10%）最低 3 支；一般情況最低 5 支
+        _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
+        _min_topn = 3 if _extreme_bear else 5
+        if effective_topn < _min_topn:
+            print(f"  [{rb_date}] [topN-floor] {effective_topn}→{_min_topn} (min_topn={_min_topn})")
+            effective_topn = _min_topn
+
+        # ── 判斷是否為空頭環境（供防禦過濾使用）──
+        _is_bear_env = (
+            (weekly_drop is not None and weekly_drop < crisis_threshold) or
+            (median_ret is not None and median_ret < -0.03)
+        )
+
+        # ── 空頭防禦①：RSI 過熱過濾（空頭時不追高 RSI>70 強勢股）──
+        if _is_bear_env and "rsi_14" in day_feat.columns:
+            _rsi_before = len(day_feat)
+            day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= 70]
+            _rsi_removed = _rsi_before - len(day_feat)
+            if _rsi_removed > 0:
+                print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>70)")
+            if day_feat.empty:
+                continue
+
+        # ── 空頭防禦②：低波動加權（atr_inv z-score 加分 0.3 倍）──
+        if _is_bear_env and "atr_inv" in day_feat.columns:
+            _atr_inv = day_feat["atr_inv"]
+            _atr_std = float(_atr_inv.std())
+            if _atr_std > 0:
+                day_feat = day_feat.copy()
+                day_feat["score"] = (
+                    day_feat["score"] + 0.3 * (_atr_inv - _atr_inv.mean()) / _atr_std
+                )
+
+        # ── 現金保留機制（大盤跌破200日均線保留30%現金）──
+        _cash_ratio = 0.30 if market_200ma_bear_map.get(rb_date, False) else 0.0
+
         picks = risk.pick_topn(day_feat, effective_topn)
 
         # ── 計算倉位權重（支援 position_sizing_method）──
@@ -759,6 +814,9 @@ def run_backtest(
             benchmark_ret = 0.0
 
         period_ret = result["return"]
+        # 現金保留：_cash_ratio 部分以 0% 報酬計（等效縮減風險敞口）
+        if _cash_ratio > 0.0:
+            period_ret = period_ret * (1.0 - _cash_ratio)
         equity *= (1 + period_ret)
         benchmark_equity *= (1 + benchmark_ret)
 
