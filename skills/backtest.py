@@ -494,6 +494,24 @@ def run_backtest(
     feat_df = pd.concat([feat_df, _parsed_cols.reset_index(drop=True)], axis=1)
     del _parsed_cols  # 釋放記憶體
 
+    # ── 2c. Schema 遷移保護：過濾掉 feature 覆蓋率不足的舊版資料 ──
+    # 根因：730d 重算後 DB 存在 2016-2024 的 19-feature 舊 schema（3.14M 行）
+    # 與 2024-2026 的 48-feature 新 schema（978k 行）。混合訓練時舊行 76% 欄位為
+    # NaN，以 median imputation 填補會嚴重污染模型。
+    # 門檻 50%：舊行 19/59≈32% < 50% → 過濾；新行 48/59≈81% > 50% → 保留。
+    _feat_cols_in_df = [c for c in feat_df.columns if c not in ("stock_id", "trading_date")]
+    if _feat_cols_in_df:
+        _schema_threshold = max(1, int(len(_feat_cols_in_df) * 0.50))
+        _valid_schema_mask = feat_df[_feat_cols_in_df].notna().sum(axis=1) >= _schema_threshold
+        _n_schema_dropped = int((~_valid_schema_mask).sum())
+        if _n_schema_dropped > 0:
+            print(
+                f"  [schema filter] 過濾 {_n_schema_dropped:,} 筆舊版特徵資料 "
+                f"(threshold={_schema_threshold}/{len(_feat_cols_in_df)} features)",
+                flush=True,
+            )
+            feat_df = feat_df.loc[_valid_schema_mask].reset_index(drop=True)
+
     # ── 3. 預計算 ATR（若需要）──
     atr_df: Optional[pd.DataFrame] = None
     if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse":

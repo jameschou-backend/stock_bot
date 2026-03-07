@@ -194,6 +194,25 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 feature_matrix[col] = np.nan
         feature_matrix = feature_matrix[list(_CANONICAL_FEATURES)]
 
+        # ── Schema 遷移保護：過濾掉 canonical feature 覆蓋率不足的舊版資料 ──
+        # 根因：730d 重算後 DB 中舊 schema（19 features）資料對 48 canonical features
+        # 只有約 17% 覆蓋率，median imputation 會嚴重污染訓練。
+        # 門檻 50%：舊行 8/48≈17% < 50% → 過濾；新行 48/48=100% > 50% → 保留。
+        _raw_coverage = feature_matrix.notna().mean(axis=1)
+        _schema_valid_mask = _raw_coverage >= 0.50
+        _n_schema_dropped = int((~_schema_valid_mask).sum())
+        if _n_schema_dropped > 0:
+            print(
+                f"[train_ranker] Schema filter: 過濾 {_n_schema_dropped:,} 筆舊版特徵資料 "
+                f"(coverage < 50%, canonical_features={len(_CANONICAL_FEATURES)})",
+                flush=True,
+            )
+            feature_matrix = feature_matrix.loc[_schema_valid_mask]
+            df = df.loc[feature_matrix.index].copy()
+        if feature_matrix.empty:
+            finish_job(db_session, job_id, "success", logs={"rows": 0, "reason": "no valid schema rows"})
+            return {"rows": 0}
+
         # 允許部分 NaN（用中位數填補），而非全部 dropna
         for col in feature_matrix.columns:
             if feature_matrix[col].isna().all():
