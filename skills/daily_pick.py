@@ -480,6 +480,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     market_below_200ma = not pd.isna(_ma200) and _cur < _ma200
             coverage_stats["market_below_200ma"] = market_below_200ma
 
+            # 動態現金水位：200MA 以下+反彈 10%；200MA 以下+未反彈 30%；200MA 以上 0%
+            if market_below_200ma:
+                if isinstance(weekly_drop, float) and weekly_drop > 0.03:
+                    _dp_cash_ratio = 0.10  # 反彈期
+                else:
+                    _dp_cash_ratio = 0.30  # 下跌或橫盤
+            else:
+                _dp_cash_ratio = 0.0
+            coverage_stats["cash_ratio"] = _dp_cash_ratio
+
             if weekly_drop is not None and weekly_drop < crisis_threshold:
                 effective_topn = crisis_topn
                 coverage_stats["market_filter"] = "CRISIS"
@@ -602,14 +612,30 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 coverage_stats["score_mode"] = "model"
             df["score"] = scores
 
-            # ── 空頭防禦②：RSI 過熱過濾（空頭時不追高 RSI>70 強勢股）──
+            # ── 空頭防禦②：RSI 自適應過濾（依空頭深度分級，反彈期取消）──
+            # ‧ 反彈期（5日漲 >+3%）        → 不過濾（跟上反彈領頭羊）
+            # ‧ 空頭深度（20d 中位數 <-15%）→ RSI > 75
+            # ‧ 空頭初期（5~15%）           → RSI > 80
             if bear_market and "rsi_14" in feature_df.columns:
-                _rsi_ok = feature_df["rsi_14"].fillna(100).values <= 70
-                _rsi_removed = int((~_rsi_ok).sum())
-                if _rsi_removed > 0:
-                    df = df.loc[_rsi_ok].reset_index(drop=True)
-                    feature_df = feature_df.loc[_rsi_ok].reset_index(drop=True)
-                    coverage_stats["bear_rsi_filtered"] = _rsi_removed
+                _dp_5d = weekly_drop if isinstance(weekly_drop, float) else 0.0
+                if _dp_5d > 0.03:
+                    _dp_rsi_thr = None   # 反彈期：完全不過濾
+                else:
+                    # 用 feature_df ret_20 欄位估算市場 20d 深度
+                    _dp_ret20 = pd.to_numeric(
+                        feature_df["ret_20"] if "ret_20" in feature_df.columns
+                        else pd.Series(dtype=float), errors="coerce"
+                    ).dropna()
+                    _dp_median20 = float(_dp_ret20.median()) if not _dp_ret20.empty else 0.0
+                    _dp_rsi_thr = 75 if _dp_median20 < -0.15 else 80
+                if _dp_rsi_thr is not None:
+                    _rsi_ok = feature_df["rsi_14"].fillna(100).values <= _dp_rsi_thr
+                    _rsi_removed = int((~_rsi_ok).sum())
+                    if _rsi_removed > 0:
+                        df = df.loc[_rsi_ok].reset_index(drop=True)
+                        feature_df = feature_df.loc[_rsi_ok].reset_index(drop=True)
+                        coverage_stats["bear_rsi_filtered"] = _rsi_removed
+                        coverage_stats["bear_rsi_threshold"] = _dp_rsi_thr
                 # df 為空時自然產生 0 picks，由後續流程統一處理
 
             # ── 空頭防禦③：低波動加權（atr_inv z-score 加分 0.3 倍）──

@@ -709,15 +709,27 @@ def run_backtest(
             (median_ret is not None and median_ret < -0.03)
         )
 
-        # ── 空頭防禦①：RSI 過熱過濾（空頭時不追高 RSI>70 強勢股）──
+        # ── 空頭防禦①：RSI 自適應過濾（依空頭深度分級，反彈期完全取消）──
+        # ‧ 反彈期（5日漲 >+3%）       → 不過濾（跟上反彈領頭羊）
+        # ‧ 空頭深度 > 15%（20d 中位數）→ RSI > 75
+        # ‧ 空頭初期（5~15%）           → RSI > 80
         if _is_bear_env and "rsi_14" in day_feat.columns:
-            _rsi_before = len(day_feat)
-            day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= 70]
-            _rsi_removed = _rsi_before - len(day_feat)
-            if _rsi_removed > 0:
-                print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>70)")
-            if day_feat.empty:
-                continue
+            _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
+            _20d = median_ret if median_ret is not None else 0.0
+            if _5d_bounce > 0.03:
+                _rsi_threshold = None   # 反彈期：完全不過濾
+            elif _20d < -0.15:
+                _rsi_threshold = 75     # 空頭深度 > 15%
+            else:
+                _rsi_threshold = 80     # 空頭初期 5~15%
+            if _rsi_threshold is not None:
+                _rsi_before = len(day_feat)
+                day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= _rsi_threshold]
+                _rsi_removed = _rsi_before - len(day_feat)
+                if _rsi_removed > 0:
+                    print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>{_rsi_threshold})")
+                if day_feat.empty:
+                    continue
 
         # ── 空頭防禦②：低波動加權（atr_inv z-score 加分 0.3 倍）──
         if _is_bear_env and "atr_inv" in day_feat.columns:
@@ -729,8 +741,19 @@ def run_backtest(
                     day_feat["score"] + 0.3 * (_atr_inv - _atr_inv.mean()) / _atr_std
                 )
 
-        # ── 現金保留機制（大盤跌破200日均線保留30%現金）──
-        _cash_ratio = 0.30 if market_200ma_bear_map.get(rb_date, False) else 0.0
+        # ── 動態現金保留機制（依大盤相對 200MA 位置及近 5 日走勢）──
+        # ‧ 200MA 以上          → 0%（不保留現金，全倉）
+        # ‧ 200MA 以下 + 5日反彈 >+3% → 10%（快速重新進場）
+        # ‧ 200MA 以下 + 繼續下跌或橫盤  → 30%（防禦）
+        _200ma_bear = market_200ma_bear_map.get(rb_date, False)
+        if _200ma_bear:
+            _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
+            if _5d_bounce > 0.03:
+                _cash_ratio = 0.10   # 反彈期：降回 10% 以跟上反彈
+            else:
+                _cash_ratio = 0.30   # 繼續下跌 / 橫盤：保留 30%
+        else:
+            _cash_ratio = 0.0
 
         picks = risk.pick_topn(day_feat, effective_topn)
 
