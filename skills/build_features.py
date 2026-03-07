@@ -109,6 +109,12 @@ EXTENDED_FEATURE_COLUMNS = [
     "willr_14",             # Williams %R 14 日（-100~0，越低越超賣）
     "cci_20",               # CCI 20 日（偏離正常范圍信號）
     "cmf_20",               # Chaikin Money Flow 20 日（資金流入/流出強度）
+    # 市場環境特徵（全市場層面，ProcessPoolExecutor 外計算後 merge，2026-03-08 新增）
+    "market_trend_20",      # 市場等權指數近 20 日報酬（衡量市場短期動能）
+    "market_trend_60",      # 市場等權指數近 60 日報酬（衡量市場中期動能）
+    "market_above_200ma",   # 市場等權指數是否在 200 日均線以上（0/1 市場多空環境）
+    "market_volatility_20", # 市場等權日報酬近 20 日波動率（衡量市場恐慌程度）
+    "sector_momentum",      # 個股所屬產業近 20 日報酬 - 市場近 20 日報酬（產業相對動能）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -694,6 +700,108 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     return price_df
 
 
+def _compute_market_context_features(
+    df: pd.DataFrame,
+    use_adjusted_price: bool = True,
+) -> pd.DataFrame:
+    """計算全市場環境特徵（等權市場指數，無洩漏：僅使用歷史滾動計算）。
+
+    Args:
+        df: merged price DataFrame，包含 stock_id, trading_date, adj_close/close
+        use_adjusted_price: 是否使用還原收盤價
+
+    Returns:
+        DataFrame with columns: trading_date, market_trend_20, market_trend_60,
+            market_above_200ma, market_volatility_20
+    """
+    if df.empty:
+        return pd.DataFrame()
+
+    price_col = "adj_close" if (use_adjusted_price and "adj_close" in df.columns) else "close"
+
+    # 只使用四碼台股計算等權市場指數
+    mkt = (
+        df[df["stock_id"].str.fullmatch(r"\d{4}", na=False)]
+        .groupby("trading_date")[price_col]
+        .mean()
+        .sort_index()
+    )
+
+    if len(mkt) < 2:
+        return pd.DataFrame()
+
+    mkt_ret = mkt.pct_change()  # 日報酬（無洩漏）
+
+    result = pd.DataFrame({"trading_date": mkt.index})
+    result["market_trend_20"] = mkt.pct_change(20).values
+    result["market_trend_60"] = mkt.pct_change(60).values
+    result["market_above_200ma"] = (
+        mkt.gt(mkt.rolling(200, min_periods=40).mean())
+    ).astype(float).values
+    result["market_volatility_20"] = mkt_ret.rolling(20, min_periods=5).std().values
+
+    return result
+
+
+def _compute_sector_momentum(
+    df: pd.DataFrame,
+    mkt_ctx_df: pd.DataFrame,
+    use_adjusted_price: bool = True,
+) -> pd.DataFrame:
+    """計算個股相對大盤的產業動能（sector_momentum）。
+
+    sector_momentum = 產業等權近 20 日報酬 - 市場等權近 20 日報酬
+    無資料洩漏：均使用歷史收盤價滾動計算。
+
+    Args:
+        df: merged price DataFrame，包含 stock_id, trading_date, industry_category, adj_close/close
+        mkt_ctx_df: _compute_market_context_features 輸出，含 trading_date, market_trend_20
+        use_adjusted_price: 是否使用還原收盤價
+
+    Returns:
+        DataFrame with columns: stock_id, trading_date, sector_momentum
+    """
+    if df.empty or mkt_ctx_df.empty or "industry_category" not in df.columns:
+        return pd.DataFrame()
+
+    price_col = "adj_close" if (use_adjusted_price and "adj_close" in df.columns) else "close"
+
+    # 只使用四碼台股
+    sub = df[df["stock_id"].str.fullmatch(r"\d{4}", na=False)].copy()
+    sub = sub.dropna(subset=["industry_category", price_col])
+
+    if sub.empty:
+        return pd.DataFrame()
+
+    # 產業等權平均收盤價
+    sector_close = (
+        sub.groupby(["industry_category", "trading_date"])[price_col]
+        .mean()
+        .reset_index()
+        .sort_values(["industry_category", "trading_date"])
+    )
+
+    # 產業近 20 日報酬（無洩漏）
+    sector_close["sector_trend_20"] = sector_close.groupby("industry_category")[price_col].transform(
+        lambda x: x.pct_change(20)
+    )
+
+    # 合併市場 20 日報酬
+    mkt_trend = mkt_ctx_df[["trading_date", "market_trend_20"]].copy()
+    sector_close = sector_close.merge(mkt_trend, on="trading_date", how="left")
+    sector_close["sector_momentum_val"] = sector_close["sector_trend_20"] - sector_close["market_trend_20"]
+
+    # 每檔股票對應其產業 sector_momentum
+    stock_sector = sub[["stock_id", "trading_date", "industry_category"]].drop_duplicates()
+    result = stock_sector.merge(
+        sector_close[["industry_category", "trading_date", "sector_momentum_val"]],
+        on=["industry_category", "trading_date"],
+        how="left",
+    )
+    result = result.rename(columns={"sector_momentum_val": "sector_momentum"})
+    return result[["stock_id", "trading_date", "sector_momentum"]]
+
+
 def _compute_features(
     df: pd.DataFrame,
     use_adjusted_price: bool = True,
@@ -769,6 +877,23 @@ def _compute_features(
 
     featured = pd.concat(result_parts, ignore_index=True) if result_parts else pd.DataFrame()
 
+    # ── 市場環境特徵（全市場層面，ProcessPoolExecutor worker 無法計算，於此合併）──
+    if not featured.empty:
+        _t_mkt = time.perf_counter()
+        mkt_ctx_df = _compute_market_context_features(df, use_adjusted_price=use_adjusted_price)
+        if not mkt_ctx_df.empty:
+            featured = featured.merge(mkt_ctx_df, on="trading_date", how="left")
+            sec_mom_df = _compute_sector_momentum(df, mkt_ctx_df, use_adjusted_price=use_adjusted_price)
+            if not sec_mom_df.empty:
+                featured = featured.merge(sec_mom_df, on=["stock_id", "trading_date"], how="left")
+            else:
+                featured["sector_momentum"] = np.nan
+        else:
+            for _mkt_col in ["market_trend_20", "market_trend_60", "market_above_200ma",
+                             "market_volatility_20", "sector_momentum"]:
+                featured[_mkt_col] = np.nan
+        logger.info(f"[PERF] market_context_features: {time.perf_counter() - _t_mkt:.2f}s")
+
     # ── 彙整 per-feature perf 資訊 ──
     if perf_out is not None:
         for feat in FEATURE_COLUMNS:
@@ -833,8 +958,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})
             return {"rows": 0, **logs}
 
-        # 往前多拉 120 天以確保 60 日指標可計算
-        calc_start = target_start - timedelta(days=120)
+        # 往前多拉 250 天以確保 200 日均線可計算（新增 market_above_200ma 特徵）
+        calc_start = target_start - timedelta(days=250)
 
         t_fetch = time.perf_counter()
         merged = _fetch_data(db_session, calc_start, max_price_date)

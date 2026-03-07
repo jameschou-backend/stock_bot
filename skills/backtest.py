@@ -46,8 +46,15 @@ def _parse_features(series: pd.Series) -> pd.DataFrame:
     return pd.json_normalize(parsed)
 
 
-def _train_model(train_X: np.ndarray, train_y: np.ndarray, fast_mode: bool = False):
-    """訓練一個輕量級模型供回測使用。fast_mode=True 時減少樹數以加速。"""
+def _train_model(
+    train_X: np.ndarray,
+    train_y: np.ndarray,
+    fast_mode: bool = False,
+    sample_weight: Optional[np.ndarray] = None,
+):
+    """訓練一個輕量級模型供回測使用。fast_mode=True 時減少樹數以加速。
+    sample_weight 支援時間加權（近期樣本權重更高）。
+    """
     n_est = 150 if fast_mode else 500
     if _HAS_LGBM:
         model = lgb.LGBMRegressor(
@@ -64,14 +71,14 @@ def _train_model(train_X: np.ndarray, train_y: np.ndarray, fast_mode: bool = Fal
             n_jobs=-1,
             verbose=-1,
         )
-        model.fit(train_X, train_y)
+        model.fit(train_X, train_y, sample_weight=sample_weight)
     else:
         n_est_gbr = 100 if fast_mode else 300
         model = GradientBoostingRegressor(
             n_estimators=n_est_gbr, learning_rate=0.05, max_depth=5,
             subsample=0.8, random_state=42,
         )
-        model.fit(train_X, train_y)
+        model.fit(train_X, train_y, sample_weight=sample_weight)
     return model
 
 
@@ -614,7 +621,13 @@ def run_backtest(
 
             current_feature_names = list(fmat.columns)
             y = merged["future_ret_h"].astype(float).values
-            current_model = _train_model(fmat.values, y, fast_mode=fast_mode)
+
+            # 時間加權：近 1 年 × 2.0，1~2 年 × 1.0，>2 年 × 0.5（近期市場規律更重要）
+            _merged_dates = pd.to_datetime(merged["trading_date"]).dt.date.values
+            _days_ago = np.array([(rb_date - d).days for d in _merged_dates], dtype=float)
+            _sample_weight = np.where(_days_ago <= 365, 2.0, np.where(_days_ago <= 730, 1.0, 0.5))
+
+            current_model = _train_model(fmat.values, y, fast_mode=fast_mode, sample_weight=_sample_weight)
             last_train_date = rb_date
             print(f"  [{rb_date}] 模型重訓完成 (訓練筆數: {len(y):,})", flush=True)
 

@@ -80,6 +80,14 @@
   `boll_pct`（布林帶位置 0~1）、`price_volume_divergence`（價量背離 ±1/0）、
   `ret_60_skew`、`ret_60_kurt`（近 60 日報酬偏態/峰態）。
   觸發 schema_outdated 自動補算（或設 `force_recompute_days=180`）。
+- **新增市場環境特徵（2026-03-08）**：`market_trend_20`、`market_trend_60`（等權市場指數近 20/60 日報酬）、
+  `market_above_200ma`（市場是否在 200 日均線以上，0/1，min_periods=40）、
+  `market_volatility_20`（市場日報酬近 20 日波動率）、`sector_momentum`（產業近 20 日報酬 - 市場近 20 日報酬）。
+  **架構注意**：這 5 個特徵須在 `_compute_features()` 的 `pd.concat(result_parts)` 後，
+  以 `_compute_market_context_features(df)` + `_compute_sector_momentum(df, mkt_ctx_df)` 計算並 merge，
+  **不可在 ProcessPoolExecutor worker 內計算**（無法存取全市場資料）。
+  `calc_start` 從 120 天延長至 250 天以支援 200 日均線計算。
+  觸發 schema_outdated 自動補算（或設 `force_recompute_days=180`）。
 
 ## 回測機制摘要
 
@@ -107,6 +115,26 @@
 | `enable_slippage` | `True` | 滑價模型開關（ATR 的 10%，上限 0.3%，來回合計）|
 
 > 參考回測結果（walk-forward 10 年）：累積 **105%**、年化 **8.72%**、Sharpe **0.46**、MDD **-24.25%**
+
+### 時間加權訓練（2026-03-08 新增）
+
+`backtest.py` 訓練循環在每次 `_train_model` 呼叫前計算時間加權：
+- 近 1 年樣本（≤365 天）：`sample_weight = 2.0`（強調近期市場規律）
+- 1~2 年樣本（365~730 天）：`sample_weight = 1.0`（正常權重）
+- >2 年樣本（>730 天）：`sample_weight = 0.5`（降低陳舊規律影響）
+
+效果（walk-forward 24 月回測）：超額報酬從 **-14.64%** 改善至 **+7.02%**，MDD 從 -55%+ 改善至 **-46.79%**。
+
+### 風控層面優化記錄（2026-03 系列，已達極限）
+
+| 版本 | 主要改動 | 超額報酬 | MDD |
+|------|---------|---------|-----|
+| v1 | 基準線 | -13.04% | - |
+| v2 | topN floor (min 5/3) + 200MA 現金水位 30% + RSI 空頭過濾 | -14.54% | - |
+| v3 | 動態現金水位 (0/10/30%) + 放寬 RSI 過濾 | -14.64% | - |
+| **v4** | **時間加權訓練 + 市場環境特徵架構** | **+7.02%** | **-46.79%** |
+
+結論：風控層（RSI 過濾/現金水位）已優化至極限；真正的改善來自模型訓練品質（時間加權）。
 
 ## 進出場（回測）規則
 
