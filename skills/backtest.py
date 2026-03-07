@@ -884,7 +884,7 @@ def run_backtest(
     print(f"  {'年化報酬':<20} {annualized_return:>11.2%} {benchmark_annualized:>11.2%}")
     print(f"  {'超額報酬':<20} {total_return - benchmark_total:>11.2%}")
     print(f"  {'最大回撤':<20} {max_dd:>11.2%}")
-    print(f"  {'Sharpe Ratio (rf={risk_free_rate:.1%})':<20} {sharpe:>11.2f}")
+    print(f"  {f'Sharpe Ratio (rf={risk_free_rate:.1%})':<20} {sharpe:>11.2f}")
     print(f"  {'Calmar Ratio':<20} {calmar:>11.2f}" if calmar != float("inf") else f"  {'Calmar Ratio':<20} {'∞':>11}")
     print(f"  {'勝率':<20} {win_rate:>11.2%}")
     print(f"  {'盈虧比':<20} {profit_factor:>11.2f}")
@@ -913,7 +913,11 @@ def run_backtest(
         artifacts_dir.mkdir(parents=True, exist_ok=True)
         report_path = artifacts_dir / "backtest_report.html"
 
-        # 建立每日報酬 Series（以 period 結束日為索引，線性插值到日頻）
+        # 依再平衡頻率設定 periods_per_year，避免 quantstats 預設 252 把週頻/月頻誤算成日頻
+        _freq_to_periods = {"W": 52, "M": 12, "D": 252}
+        _periods_per_year = _freq_to_periods.get(rebalance_freq.upper(), 52)
+
+        # 建立淨值 Series（以再平衡結束日為索引）
         eq_dates = [ec["date"] for ec in equity_curve]
         eq_vals = [ec["equity"] for ec in equity_curve]
         bm_vals = [ec["equity"] for ec in benchmark_curve]
@@ -921,19 +925,20 @@ def run_backtest(
         eq_series = pd.Series(eq_vals, index=pd.to_datetime(eq_dates), name="strategy")
         bm_series = pd.Series(bm_vals, index=pd.to_datetime(eq_dates), name="benchmark")
 
-        # 轉換為日報酬（pct_change）
+        # 轉換為週期報酬（保持原始頻率，不插值成日頻以免失真）
         strat_rets = eq_series.pct_change().dropna()
         bench_rets = bm_series.pct_change().dropna()
 
-        # quantstats 報告（關閉 display 以避免 GUI 警告）
+        # quantstats 報告：明確指定每年期數，確保 CAGR / Sharpe 正確
         qs.reports.html(
             strat_rets,
             benchmark=bench_rets,
+            periods_per_year=_periods_per_year,
             output=str(report_path),
-            title="Stock Bot Walk-Forward Backtest",
+            title=f"Stock Bot Walk-Forward Backtest ({rebalance_freq}, {_periods_per_year}p/yr)",
             download_filename=str(report_path),
         )
-        print(f"\n[quantstats] 績效報告已輸出: {report_path}")
+        print(f"\n[quantstats] 績效報告已輸出: {report_path}  (periods_per_year={_periods_per_year})")
         summary["quantstats_report"] = str(report_path)
     except Exception as _qs_exc:
         print(f"[quantstats] 報告產出失敗（跳過）: {_qs_exc}")
