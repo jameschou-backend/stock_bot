@@ -1005,20 +1005,23 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})
             return {"rows": 0, **logs}
 
-        # ── 寫入 DB ──
+        # ── 寫入 DB（向量化建構，避免 iterrows 逐行 Python 迴圈）──
         t_save = time.perf_counter()
-        records: List[Dict] = []
-        for _, row in featured.iterrows():
-            features = {col: float(row[col]) for col in FEATURE_COLUMNS if col in row.index}
-            records.append(
-                {
-                    "stock_id": row["stock_id"],
-                    "trading_date": pd.Timestamp(row["trading_date"]).date(),
-                    "features_json": features,
-                }
-            )
+        feat_cols_in_df = [col for col in FEATURE_COLUMNS if col in featured.columns]
+        # numpy 一次性轉換，比 iterrows 快 10x 以上
+        _feat_arr = featured[feat_cols_in_df].to_numpy(dtype=float, na_value=0.0)
+        _stock_ids = featured["stock_id"].tolist()
+        _trading_dates = [pd.Timestamp(d).date() for d in featured["trading_date"].tolist()]
+        records = [
+            {
+                "stock_id": sid,
+                "trading_date": td,
+                "features_json": dict(zip(feat_cols_in_df, row.tolist())),
+            }
+            for sid, td, row in zip(_stock_ids, _trading_dates, _feat_arr)
+        ]
 
-        BATCH_SIZE = 1000
+        BATCH_SIZE = 5000  # 從 1000 提升至 5000，減少 commit 次數 5x
         for i in range(0, len(records), BATCH_SIZE):
             batch = records[i: i + BATCH_SIZE]
             stmt = insert(Feature).values(batch)

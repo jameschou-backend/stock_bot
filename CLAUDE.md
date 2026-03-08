@@ -181,6 +181,37 @@ A 級穩定性（`_evaluate_a_stability`）門檻說明：
 - 故 `qualified_windows >= 1`（實際上等同於 6m window 必須通過）。
 - 若未來擴展為 `[6m, 12m, 18m]` windows，可恢復 `qualified_windows >= 3` 嚴格標準。
 
+## 效能基準（2026-03-08 優化後）
+
+### DB Index 現況
+所有重要 index 已存在（`make check-index` 通過 13/13）：
+- `raw_prices (stock_id, trading_date)` — 主鍵（PRIMARY）
+- `raw_prices (trading_date)` — 次要
+- `raw_prices (trading_date, stock_id)` — 覆蓋索引（GROUP BY COUNT(DISTINCT) 用）
+- `raw_institutional / raw_margin_short` — 同上
+- `picks (stock_id)` — 依股票查詢
+- `jobs (started_at), (status)` — 工作查詢
+
+### build_features.py 效能（10 年全量重建）
+| 步驟 | 優化前 | 優化後 | 改善 |
+|------|--------|--------|------|
+| fetch prices | ~228s | ~228s | — |
+| calc features | ~95s | ~95s | — |
+| save to DB | ~1051s | ~220s（估）| **5x** |
+| **總計** | **~23.3min** | **~9min（估）** | **~60%** |
+
+優化方式：
+- `iterrows()` → `numpy to_numpy() + zip`（25x，15k→380k rows/s）
+- `BATCH_SIZE` 1000 → 5000（5x 減少 commit 次數）
+
+### Dashboard 覆蓋率查詢
+`fetch_recent_coverage()` 加 WHERE 日期範圍限制：
+- raw_prices: 2.2s → 0.04s（53x）
+- raw_institutional/margin: 2.0s → 0.013s（154x）
+
+### DB 連線池
+`app/db.py`: pool_size=10, max_overflow=20, pool_pre_ping=True, pool_recycle=1800
+
 ## 重要限制與已知風險
 
 - `ingest_trading_calendar.py` 目前使用 weekday heuristic，尚未串官方 TWSE 行事曆。

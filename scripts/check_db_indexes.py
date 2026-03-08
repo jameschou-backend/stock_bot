@@ -25,12 +25,15 @@ from app.db import get_engine
 EXPECTED_INDEXES: list[tuple[str, list[str]]] = [
     ("raw_prices",          ["stock_id", "trading_date"]),
     ("raw_prices",          ["trading_date"]),
+    ("raw_prices",          ["trading_date", "stock_id"]),  # covering: GROUP BY trading_date COUNT(DISTINCT stock_id)
     ("features",            ["stock_id", "trading_date"]),
     ("features",            ["trading_date"]),
     ("picks",               ["pick_date"]),
     ("picks",               ["stock_id"]),
     ("raw_institutional",   ["stock_id", "trading_date"]),
     ("raw_institutional",   ["trading_date"]),
+    ("raw_institutional",   ["trading_date", "stock_id"]),  # covering: GROUP BY queries
+    ("raw_margin_short",    ["trading_date", "stock_id"]),  # covering: GROUP BY queries
     ("jobs",                ["started_at"]),
     ("jobs",                ["status"]),
 ]

@@ -120,16 +120,21 @@ def fetch_data_freshness(engine, table_name: str) -> dict:
 
 
 def fetch_recent_coverage(engine, table_name: str, days: int = 10) -> pd.DataFrame:
-    """查詢最近 N 天的每日股票數覆蓋"""
+    """查詢最近 N 天的每日股票數覆蓋（優化：WHERE 限制日期範圍，避免全表掃描）"""
     try:
+        # 先取最大日期，再限制掃描範圍（避免 GROUP BY 全表掃描）
         query = text(f"""
             SELECT trading_date, COUNT(DISTINCT stock_id) AS stock_count
             FROM {table_name}
+            WHERE trading_date >= (
+                SELECT DATE_SUB(MAX(trading_date), INTERVAL :lookback DAY)
+                FROM {table_name}
+            )
             GROUP BY trading_date
             ORDER BY trading_date DESC
             LIMIT :days
         """)
-        df = pd.read_sql(query, engine, params={"days": days})
+        df = pd.read_sql(query, engine, params={"days": days, "lookback": days * 3})
         return df.sort_values("trading_date")
     except Exception:
         return pd.DataFrame()
