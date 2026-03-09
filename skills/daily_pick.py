@@ -523,6 +523,33 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             effective_topn = _dp_min_topn
         coverage_stats["effective_topn"] = effective_topn
 
+        # ── Regime Switching：依市場三態覆蓋 effective_topn ──
+        _dp_regime = "n/a"
+        if getattr(config, "regime_switching", False):
+            from skills import market_regime as _mkt_regime
+            _regime_mkt_df = _load_market_price_df(db_session, max(candidate_dates), 250)
+            if not _regime_mkt_df.empty and "avg_close" in _regime_mkt_df.columns:
+                _regime_mkt_s = pd.to_numeric(
+                    _regime_mkt_df.sort_values("trading_date")
+                    .set_index("trading_date")["avg_close"],
+                    errors="coerce",
+                )
+                _dp_regime = _mkt_regime.detect_regime_from_mkt_series(_regime_mkt_s)
+            coverage_stats["regime"] = _dp_regime
+            if _dp_regime == "bear":
+                _regime_topn = max(3, effective_topn // 2)
+                coverage_stats["regime_topn_override"] = f"{effective_topn}→{_regime_topn}"
+                effective_topn = _regime_topn
+                coverage_stats["regime_cash_ratio"] = 0.20
+            elif _dp_regime == "sideways":
+                _regime_topn = max(3, int(effective_topn * 0.75))
+                coverage_stats["regime_topn_override"] = f"{effective_topn}→{_regime_topn}"
+                effective_topn = _regime_topn
+                coverage_stats["regime_cash_ratio"] = 0.0
+            else:
+                coverage_stats["regime_cash_ratio"] = 0.0
+            coverage_stats["effective_topn"] = effective_topn
+
         chosen_date, chosen_df, fallback_logs = _choose_pick_date(
             candidate_dates,
             df,
@@ -611,6 +638,22 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 scores = model.predict(feature_df.values)
                 coverage_stats["score_mode"] = "model"
             df["score"] = scores
+
+            # ── Regime Switching：空頭防禦評分（0.6×atr_inv_z + 0.4×fund_revenue_mom_z）──
+            if getattr(config, "regime_switching", False) and _dp_regime == "bear":
+                _bear_h = pd.Series(0.0, index=feature_df.index)
+                if "atr_inv" in feature_df.columns:
+                    _ai = pd.to_numeric(feature_df["atr_inv"], errors="coerce").fillna(0)
+                    _ai_std = float(_ai.std())
+                    if _ai_std > 0:
+                        _bear_h += 0.6 * (_ai - _ai.mean()) / _ai_std
+                if "fund_revenue_mom" in feature_df.columns:
+                    _fr = pd.to_numeric(feature_df["fund_revenue_mom"], errors="coerce").fillna(0)
+                    _fr_std = float(_fr.std())
+                    if _fr_std > 0:
+                        _bear_h += 0.4 * (_fr - _fr.mean()) / _fr_std
+                df["score"] = _bear_h.values
+                coverage_stats["score_mode"] = "regime_bear_heuristic"
 
             # ── 空頭防禦②：RSI 自適應過濾（依空頭深度分級，反彈期取消）──
             # ‧ 反彈期（5日漲 >+3%）        → 不過濾（跟上反彈領頭羊）
