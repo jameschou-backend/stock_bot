@@ -90,11 +90,6 @@ def main():
     parser.add_argument("--fast", action="store_true",
                         help="快速模式：LightGBM 樹數 500→150，加速 ~3x（精度略降）")
 
-    # ── 市場環境切換 ──
-    parser.add_argument("--regime-switching", action="store_true",
-                        dest="regime_switching",
-                        help="啟用 market regime switching（bull/sideways/bear 三態策略切換）")
-
     # ── 輸出 ──
     parser.add_argument("--output", type=str, default=None,
                         help="結果輸出 JSON 路徑")
@@ -142,7 +137,6 @@ def main():
             atr_stoploss_multiplier=atr_mult,
             atr_period=args.atr_period,
             fast_mode=args.fast,
-            regime_switching=args.regime_switching,
         )
 
     # ── 輸出 JSON ──

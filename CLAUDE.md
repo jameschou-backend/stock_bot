@@ -117,7 +117,9 @@
 | `label_horizon_buffer` | `7` | 標籤截止預留天數 |
 | `enable_slippage` | `True` | 滑價模型開關（ATR 的 10%，上限 0.3%，來回合計）|
 
-> 參考回測結果（walk-forward 10 年）：累積 **105%**、年化 **8.72%**、Sharpe **0.46**、MDD **-24.25%**
+> 參考回測結果（walk-forward 10 年，2026-03-09 已修正 label_horizon_buffer + benchmark 流動性過濾後）：
+> 累積 **-84.96%**、大盤 **-85.35%**、超額 **+0.38%**、MDD **-87.74%**、Sharpe **-0.36**
+> 注意：早期 "+105%" 基準為修正前版本（無 label_horizon_buffer、benchmark 未套流動性過濾），已過時。
 
 ### 時間加權訓練（2026-03-08 新增）
 
@@ -138,43 +140,30 @@
 | **v4** | **時間加權訓練 + 市場環境特徵架構（特徵值=0）** | **+7.02%** | **-46.79%** | - |
 | v5 | 全量 10 年重建市場環境特徵（非零值啟用） | -1.71% | -41.88% | -0.68 |
 | **v6** | **Market Regime Switching（bull/sideways/bear）** | **+24.71%** | **-34.79%** | **-0.18** |
+| **v7（現行）** | **移除 Regime Switching，回歸 v4 時間加權訓練** | **+0.38%（10y）** | **-87.74%** | **-0.36** |
 
 結論：
 - 風控層（RSI 過濾/現金水位）已優化至極限；真正的改善來自模型訓練品質（時間加權）。
 - 市場環境特徵在 2024-2026 熊市測試窗口（大盤 -36.39%）中無法提升超額報酬。
   v4 的 +7.02% 實際上是「模型忽略 market_context=0 → 專注個股特徵」的結果。
-- **v6 Regime Switching** 超額 **+24.71%**（最佳），MDD 改善至 -34.79%（最低）。
-  Sharpe 仍為負（-0.18）因 2024-2026 測試窗口大盤本身跌 -36.39%。
+- **v6 Regime Switching** 24m 超額 **+24.71%**（對 2024-2026 極端熊市有效），
+  但 10y walk-forward 驗證顯示 sideways（35%）topN×75% 造成持續損耗（超額 -0.21%/期），整體有害。
+- **v7（現行）**：移除 regime switching，回歸時間加權訓練。10y 超額 +0.38%，
+  等同於跑贏同等條件大盤基準，但 Sharpe 仍負（測試窗口本身大盤極端走弱）。
 
-### Market Regime Switching 架構（2026-03-09 新增）
+### Market Regime Switching 研究紀錄（2026-03-09 實驗，已移除）
 
-`skills/market_regime.py` — 新增外部 regime 判斷模組（不進模型特徵）：
+> **⚠️ 已移除**：`skills/market_regime.py` 標記為 `# NOT IN USE`，`backtest.py` / `daily_pick.py` 不再呼叫。
+> 保留供未來研究參考。
 
-- **三態規則（向量化）**：
-  - bull: 等權指數 > 200MA **AND** 60日報酬 > 0 **AND** 20日報酬 > -5%
-  - bear: 等權指數 < 200MA **AND** 60日報酬 < -10%
-  - sideways: 其餘
-- **5 日 majority vote 緩衝**：`np.bincount` rolling 避免頻繁切換
-- `precompute_regimes(price_df, trading_dates)` — 回測批量預計算
-- `detect_regime_from_mkt_series(mkt_series)` — daily_pick 即時判斷
+**三態規則（向量化）**：
+- bull: 等權指數 > 200MA AND 60日報酬 > 0 AND 20日報酬 > -5%
+- bear: 等權指數 < 200MA AND 60日報酬 < -10%
+- sideways: 其餘
 
-**策略切換（`regime_switching=True`）**：
-| Regime | topN | 現金 | 評分 |
-|--------|------|------|------|
-| bull | config.topn (20) | 0% | model score |
-| sideways | topn × 75% (15) | 0% | model score |
-| bear | topn // 2 (10) | 20% | 0.6×atr_inv_z + 0.4×fund_revenue_mom_z |
+**24m 實驗結果（2024-02 ~ 2026-01，大盤 -36.39%）**：超額 +24.71%，MDD -34.79%，Sharpe -0.18
 
-**24m 回測 Regime 分佈（2024-02 ~ 2026-01，大盤 -36.39%）**：
-| Regime | 期數 | 平均報酬 | 平均大盤 | 平均超額 |
-|--------|------|---------|---------|---------|
-| bull | 61 | +0.11% | -0.52% | +0.63% |
-| sideways | 33 | -0.31% | -0.45% | +0.14% |
-| bear | 8 | -0.31% | +0.54% | -0.85% |
-
-啟用方式：`python scripts/run_backtest.py --regime-switching`
-
-**10年 Walk-Forward 驗證（2026-03-09）**：
+**10y Walk-Forward 驗證（2026-03-09）**：
 
 ```
 回測期間: 2016-03-28 ~ 2026-01-23  再平衡: 508期
@@ -185,19 +174,19 @@ MDD: -93.53%  Sharpe: -0.33
 | Regime | 期數 | 佔比 | 平均超額 |
 |--------|------|------|---------|
 | bull | 288 | 57% | +0.40% |
-| sideways | 180 | 35% | **-0.21%** |
+| sideways | 180 | 35% | **-0.21%** ❌ |
 | bear | 40 | 8% | -0.76% |
 
-**vs 原始 10y 基準（無 regime switching）**：累積 +105%、Sharpe +0.46、MDD -24.25%
+**移除原因**：Sideways（35%）topN×75% 縮減造成長期損耗（超額 -0.21%/期），10y MDD 惡化至 -93.53%。
 
-**分析**：
-- Sideways 佔 35% 且超額 -0.21%/期：topN×75% 縮減導致長期損耗，是最大傷害源。
-- Bear 的 heuristic 評分（atr_inv + fund_revenue_mom）10年長期不如模型。
-- **結論**：regime switching 對 2024-2026 極端熊市有效（24m 超額 +24.71%），
-  但在完整 10年周期中破壞 sideways 表現，整體不適合長期使用。
-- 後續改善選項：(1) sideways 不縮減 topN，維持 model+full topN；
-  (2) bear 也用 model 評分，只縮 topN + 增現金（不換評分函數）；
-  (3) 完全移除 regime switching，回到 v4 時間加權訓練。
+**10y（無 Regime Switching，v7 現行，2026-03-09）**：
+
+```
+回測期間: 2016-03-28 ~ 2026-01-23  再平衡: 508期  交易: 8030次
+累積: -84.96%  大盤: -85.35%  超額: +0.38%
+MDD: -87.74%  Sharpe: -0.36  Calmar: -0.20
+勝率: 39.56%  盈虧比: 1.40  停損觸發: 1082次
+```
 
 ## 進出場（回測）規則
 
