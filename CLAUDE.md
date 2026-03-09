@@ -174,6 +174,31 @@
 
 啟用方式：`python scripts/run_backtest.py --regime-switching`
 
+**10年 Walk-Forward 驗證（2026-03-09）**：
+
+```
+回測期間: 2016-03-28 ~ 2026-01-23  再平衡: 508期
+累積: -82.16%  大盤: -85.35%  超額: +3.18%
+MDD: -93.53%  Sharpe: -0.33
+```
+
+| Regime | 期數 | 佔比 | 平均超額 |
+|--------|------|------|---------|
+| bull | 288 | 57% | +0.40% |
+| sideways | 180 | 35% | **-0.21%** |
+| bear | 40 | 8% | -0.76% |
+
+**vs 原始 10y 基準（無 regime switching）**：累積 +105%、Sharpe +0.46、MDD -24.25%
+
+**分析**：
+- Sideways 佔 35% 且超額 -0.21%/期：topN×75% 縮減導致長期損耗，是最大傷害源。
+- Bear 的 heuristic 評分（atr_inv + fund_revenue_mom）10年長期不如模型。
+- **結論**：regime switching 對 2024-2026 極端熊市有效（24m 超額 +24.71%），
+  但在完整 10年周期中破壞 sideways 表現，整體不適合長期使用。
+- 後續改善選項：(1) sideways 不縮減 topN，維持 model+full topN；
+  (2) bear 也用 model 評分，只縮 topN + 增現金（不換評分函數）；
+  (3) 完全移除 regime switching，回到 v4 時間加權訓練。
+
 ## 進出場（回測）規則
 
 在 `skills/risk.py`：
