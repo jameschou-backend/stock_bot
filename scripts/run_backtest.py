@@ -21,6 +21,12 @@
     python scripts/run_backtest.py --entry-delay 1              # 隔日進場（預設）
     python scripts/run_backtest.py --risk-free 0.015            # 無風險利率 1.5%
     python scripts/run_backtest.py --no-benchmark-cost          # Benchmark 不含成本
+
+10y 逐步優化實驗（每次只改一個變數）:
+    python scripts/run_backtest.py --months 120 --baseline      # 乾淨基準（無時間加權/無複雜過濾）
+    python scripts/run_backtest.py --months 120 --baseline --change-a   # Change A: +IC 特徵
+    python scripts/run_backtest.py --months 120 --baseline --topn-floor 5  # Change B: topN floor=5
+    python scripts/run_backtest.py --months 120 --baseline --slippage  # Change C: 滑價模型
 """
 from __future__ import annotations
 
@@ -37,6 +43,7 @@ if str(ROOT) not in sys.path:
 from app.config import load_config
 from app.db import get_session
 from skills.backtest import run_backtest
+from skills.build_features import BASELINE_FEATURE_COLS, CHANGE_A_FEATURE_COLS
 
 
 def main():
@@ -86,6 +93,19 @@ def main():
     parser.add_argument("--no-benchmark-cost", action="store_true",
                         help="Benchmark 不套用交易成本（舊行為，不建議）")
 
+    # ── 10y 逐步優化實驗參數 ──
+    parser.add_argument("--baseline", action="store_true",
+                        help="乾淨基準：停用時間加權訓練、停用複雜市場過濾，使用 BASELINE_FEATURE_COLS")
+    parser.add_argument("--change-a", action="store_true",
+                        help="Change A：在 baseline 特徵集加入 IC 最優特徵（trust_net_5_inv, theme_turnover_ratio, fund_revenue_mom）")
+    parser.add_argument("--topn-floor", type=int, default=0,
+                        dest="topn_floor",
+                        help="topN 最低下限 (0=不強制；5=Change B)；與 --baseline 配合使用")
+    parser.add_argument("--slippage", action="store_true",
+                        help="Change C：啟用滑價模型（ATR 的 10%%，上限 0.3%%）")
+    parser.add_argument("--no-slippage", action="store_true",
+                        help="停用滑價模型（baseline 預設已停用）")
+
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
                         help="快速模式：LightGBM 樹數 500→150，加速 ~3x（精度略降）")
@@ -114,10 +134,32 @@ def main():
     entry_delay = args.entry_delay_days if args.entry_delay_days is not None else config.backtest_entry_delay_days
     risk_free = args.risk_free_rate if args.risk_free_rate is not None else config.backtest_risk_free_rate
     benchmark_with_cost = not args.no_benchmark_cost and config.backtest_benchmark_with_cost
-    sizing = args.position_sizing or config.backtest_position_sizing
     ps_method = args.position_sizing_method or getattr(config, "position_sizing_method", "risk_parity")
-    trailing = args.trailing_stop_pct if args.trailing_stop_pct is not None else config.backtest_trailing_stop_pct
     atr_mult = args.atr_stoploss_multiplier if args.atr_stoploss_multiplier is not None else config.backtest_atr_stoploss_multiplier
+
+    # ── baseline 模式：覆蓋為原始簡單設定 ──
+    if args.baseline:
+        sizing = args.position_sizing or "equal"
+        trailing = args.trailing_stop_pct if args.trailing_stop_pct is not None else -0.15
+        time_weighting = False
+        enable_complex_filter = False
+        # slippage：baseline 預設關，--slippage 可開啟（Change C）
+        enable_slippage = args.slippage and not args.no_slippage
+        # feature set
+        if args.change_a:
+            feature_columns = CHANGE_A_FEATURE_COLS
+        else:
+            feature_columns = BASELINE_FEATURE_COLS
+    else:
+        sizing = args.position_sizing or config.backtest_position_sizing
+        trailing = args.trailing_stop_pct if args.trailing_stop_pct is not None else config.backtest_trailing_stop_pct
+        time_weighting = True
+        enable_complex_filter = True
+        enable_slippage = not args.no_slippage and (args.slippage or getattr(config, "backtest_enable_slippage", True))
+        feature_columns = None  # 使用 DB 全部特徵
+
+    # --topn-floor 在任何模式下均有效
+    topn_floor = args.topn_floor
 
     with get_session() as session:
         result = run_backtest(
@@ -137,6 +179,11 @@ def main():
             atr_stoploss_multiplier=atr_mult,
             atr_period=args.atr_period,
             fast_mode=args.fast,
+            enable_slippage=enable_slippage,
+            feature_columns=feature_columns,
+            time_weighting=time_weighting,
+            enable_complex_filter=enable_complex_filter,
+            topn_floor=topn_floor,
         )
 
     # ── 輸出 JSON ──

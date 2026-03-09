@@ -188,6 +188,44 @@ MDD: -87.74%  Sharpe: -0.36  Calmar: -0.20
 勝率: 39.56%  盈虧比: 1.40  停損觸發: 1082次
 ```
 
+### 10y 增量優化實驗（2026-03-09，從乾淨 Baseline 逐步驗證）
+
+**目的**：先前 v2-v7 全部在 24m 窗口驗證，導致系統性 overfitting。改以 10y walk-forward 為主要驗證窗口，每次只改一個變數。
+
+**Baseline 設定**（`--baseline` flag）：
+- equal sizing、trailing=-15%、no time_weighting、no complex_filter、no slippage
+- 32 個 `BASELINE_FEATURE_COLS`（動量/均線/技術/法人/月營收）
+- benchmark: 大盤 -85.35%（所有實驗共用）
+
+**實驗結果（期間 2016-03-28 ~ 2026-01-23，508 再平衡期）**：
+
+| 組別 | 累積 | 超額 | MDD | Sharpe | 勝率 | 停損 | 備注 |
+|------|------|------|-----|--------|------|------|------|
+| Baseline | -86.80% | -1.45% | -93.18% | -0.356 | 41.20% | 1534 | 乾淨基準 |
+| **Change A (+IC 特徵)** | **-83.59%** | **+1.76%** | **-88.29%** | **-0.329** | 41.20% | 1538 | ✅ 採用 |
+| Change B (topN floor=5) | -86.80% | -1.45% | -93.18% | -0.356 | 41.20% | 1534 | 🔄 等同 Baseline（no-op） |
+| Change C (+slippage) | -99.26% | -13.92% | -99.32% | -0.820 | 36.70% | 1534 | ❌ 有害 |
+| **v7（現行生產）** | -84.96% | +0.38% | -87.74% | -0.36 | 39.56% | 1082 | 含時間加權/vol_inverse |
+
+**Change A 內容**（`CHANGE_A_FEATURE_COLS` = BASELINE + 3 IC 特徵）：
+- `trust_net_5_inv`（信託淨買力 5 日反轉）
+- `theme_turnover_ratio`（題材輪動比率）
+- `fund_revenue_mom`（月營收環比動能）
+
+**Change B 無效原因**：topN floor=5 從未觸發。Baseline 的熊市過濾 `topN → topN//3 = 20//3 = 6 ≥ 5`，floor 永遠不是下限。
+
+**Change C 有害原因**：ATR 滑價模型（10%，上限 0.3%）在 equal-weight 模式下成本過高。
+9326 筆交易，來回滑價累積造成 ~12pp 累積損耗。建議：滑價模型與 vol_inverse sizing 搭配使用，
+不適合純 equal-weight 模式。
+
+**ATR Bug Fix（本 session，`skills/backtest.py` L555）**：
+```python
+# 修正前：slippage 在 equal-weight + trailing stop 模式下靜默失效（atr_df=None）
+if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse":
+# 修正後：
+if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse" or enable_slippage:
+```
+
 ## 進出場（回測）規則
 
 在 `skills/risk.py`：

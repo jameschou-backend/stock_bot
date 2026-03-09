@@ -440,6 +440,11 @@ def run_backtest(
     label_horizon_buffer: int = 7,
     enable_slippage: bool = True,  # 滑價模型：ATR 的 10%，上限 0.3%，來回各一次
     fast_mode: bool = False,  # 加速模式：減少樹數（LightGBM 150 棵）
+    # ── 實驗參數（10y 逐步優化用）──
+    feature_columns: Optional[List[str]] = None,  # None=用 DB 所有特徵；指定時只用列出的欄位
+    time_weighting: bool = True,  # False=等權樣本（不強調近期），baseline 用
+    enable_complex_filter: bool = True,  # False=停用 seasonal/RSI/200MA/topN-floor，只保留簡單過濾
+    topn_floor: int = 0,  # 0=不強制下限；>0 時 effective_topn 不低於此值（Change B 用）
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -518,6 +523,15 @@ def run_backtest(
     feat_df = pd.concat([feat_df, _parsed_cols.reset_index(drop=True)], axis=1)
     del _parsed_cols  # 釋放記憶體
 
+    # ── 2b-1. 若指定特徵子集，只保留該子集欄位（baseline / change 實驗用）──
+    if feature_columns is not None:
+        _avail = [c for c in feature_columns if c in feat_df.columns]
+        _missing = [c for c in feature_columns if c not in feat_df.columns]
+        if _missing:
+            print(f"  [feature_columns] 警告：DB 中缺少 {_missing}，已忽略")
+        feat_df = feat_df[["stock_id", "trading_date"] + _avail]
+        print(f"  [feature_columns] 使用 {len(_avail)} 個特徵（共 {len(feature_columns)} 指定）")
+
     # ── 2c. Schema 遷移保護：過濾掉 feature 覆蓋率不足的舊版資料 ──
     # 根因：730d 重算後 DB 存在 2016-2024 的 19-feature 舊 schema（3.14M 行）
     # 與 2024-2026 的 48-feature 新 schema（978k 行）。混合訓練時舊行 76% 欄位為
@@ -538,7 +552,7 @@ def run_backtest(
 
     # ── 3. 預計算 ATR（若需要）──
     atr_df: Optional[pd.DataFrame] = None
-    if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse":
+    if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse" or enable_slippage:
         print("  預計算 ATR ...", flush=True)
         atr_df = risk.compute_atr(price_df, period=atr_period)
     liquidity_eligible_map = _precompute_liquidity_eligible_map(price_df, min_avg_turnover)
@@ -623,9 +637,12 @@ def run_backtest(
             y = merged["future_ret_h"].astype(float).values
 
             # 時間加權：近 1 年 × 2.0，1~2 年 × 1.0，>2 年 × 0.5（近期市場規律更重要）
-            _merged_dates = pd.to_datetime(merged["trading_date"]).dt.date.values
-            _days_ago = np.array([(rb_date - d).days for d in _merged_dates], dtype=float)
-            _sample_weight = np.where(_days_ago <= 365, 2.0, np.where(_days_ago <= 730, 1.0, 0.5))
+            if time_weighting:
+                _merged_dates = pd.to_datetime(merged["trading_date"]).dt.date.values
+                _days_ago = np.array([(rb_date - d).days for d in _merged_dates], dtype=float)
+                _sample_weight = np.where(_days_ago <= 365, 2.0, np.where(_days_ago <= 730, 1.0, 0.5))
+            else:
+                _sample_weight = None  # 等權樣本（baseline 模式）
 
             current_model = _train_model(fmat.values, y, fast_mode=fast_mode, sample_weight=_sample_weight)
             last_train_date = rb_date
@@ -689,85 +706,86 @@ def run_backtest(
         median_ret = market_median_ret20_map.get(rb_date)
         weekly_drop = market_weekly_drop_map.get(rb_date)
 
-        crisis_threshold = getattr(config, "market_filter_weekly_drop_threshold", -0.03)
-        crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, topn // 4))
-        bear_topn = getattr(config, "market_filter_bear_topn", max(3, topn // 3))
+        if enable_complex_filter:
+            # ── 複雜過濾（v2-v7 最佳化設定）──
+            crisis_threshold = getattr(config, "market_filter_weekly_drop_threshold", -0.03)
+            crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, topn // 4))
+            bear_topn = getattr(config, "market_filter_bear_topn", max(3, topn // 3))
 
-        if weekly_drop is not None and weekly_drop < crisis_threshold:
-            effective_topn = min(effective_topn, crisis_topn)
-            print(f"  [{rb_date}] 危機模式 (週跌 {weekly_drop:.2%})，topN → {effective_topn}")
-        elif median_ret is not None and median_ret < -0.03:
-            effective_topn = min(effective_topn, bear_topn)
-            print(f"  [{rb_date}] 空頭市場 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
+            if weekly_drop is not None and weekly_drop < crisis_threshold:
+                effective_topn = min(effective_topn, crisis_topn)
+                print(f"  [{rb_date}] 危機模式 (週跌 {weekly_drop:.2%})，topN → {effective_topn}")
+            elif median_ret is not None and median_ret < -0.03:
+                effective_topn = min(effective_topn, bear_topn)
+                print(f"  [{rb_date}] 空頭市場 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
 
-        # ── 季節性降倉（弱勢月份）──
-        seasonal_weak = getattr(config, "seasonal_weak_months", (3, 10))
-        seasonal_mult = getattr(config, "seasonal_topn_multiplier", 0.5)
-        if rb_date.month in seasonal_weak:
-            new_topn = max(1, int(effective_topn * seasonal_mult))
-            if new_topn < effective_topn:
-                print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月，topN {effective_topn} → {new_topn}")
-                effective_topn = new_topn
+            # ── 季節性降倉（弱勢月份）──
+            seasonal_weak = getattr(config, "seasonal_weak_months", (3, 10))
+            seasonal_mult = getattr(config, "seasonal_topn_multiplier", 0.5)
+            if rb_date.month in seasonal_weak:
+                new_topn = max(1, int(effective_topn * seasonal_mult))
+                if new_topn < effective_topn:
+                    print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月，topN {effective_topn} → {new_topn}")
+                    effective_topn = new_topn
 
-        # ── topN 絕對下限保護（避免危機+弱勢月份疊加造成過度集中）──
-        # 極端空頭（週跌>10%）最低 3 支；一般情況最低 5 支
-        _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
-        _min_topn = 3 if _extreme_bear else 5
-        if effective_topn < _min_topn:
-            print(f"  [{rb_date}] [topN-floor] {effective_topn}→{_min_topn} (min_topn={_min_topn})")
-            effective_topn = _min_topn
+            # ── topN 絕對下限保護 ──
+            _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
+            _min_topn = 3 if _extreme_bear else 5
+            if effective_topn < _min_topn:
+                print(f"  [{rb_date}] [topN-floor] {effective_topn}→{_min_topn} (min_topn={_min_topn})")
+                effective_topn = _min_topn
 
-        # ── 判斷是否為空頭環境（供防禦過濾使用）──
-        _is_bear_env = (
-            (weekly_drop is not None and weekly_drop < crisis_threshold) or
-            (median_ret is not None and median_ret < -0.03)
-        )
+            # ── 判斷是否為空頭環境 ──
+            _is_bear_env = (
+                (weekly_drop is not None and weekly_drop < crisis_threshold) or
+                (median_ret is not None and median_ret < -0.03)
+            )
 
-        # ── 空頭防禦①：RSI 自適應過濾（依空頭深度分級，反彈期完全取消）──
-        # ‧ 反彈期（5日漲 >+3%）       → 不過濾（跟上反彈領頭羊）
-        # ‧ 空頭深度 > 15%（20d 中位數）→ RSI > 75
-        # ‧ 空頭初期（5~15%）           → RSI > 80
-        if _is_bear_env and "rsi_14" in day_feat.columns:
-            _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
-            _20d = median_ret if median_ret is not None else 0.0
-            if _5d_bounce > 0.03:
-                _rsi_threshold = None   # 反彈期：完全不過濾
-            elif _20d < -0.15:
-                _rsi_threshold = 75     # 空頭深度 > 15%
-            else:
-                _rsi_threshold = 80     # 空頭初期 5~15%
-            if _rsi_threshold is not None:
-                _rsi_before = len(day_feat)
-                day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= _rsi_threshold]
-                _rsi_removed = _rsi_before - len(day_feat)
-                if _rsi_removed > 0:
-                    print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>{_rsi_threshold})")
-                if day_feat.empty:
-                    continue
+            # ── RSI 自適應過濾 ──
+            if _is_bear_env and "rsi_14" in day_feat.columns:
+                _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
+                _20d = median_ret if median_ret is not None else 0.0
+                if _5d_bounce > 0.03:
+                    _rsi_threshold = None
+                elif _20d < -0.15:
+                    _rsi_threshold = 75
+                else:
+                    _rsi_threshold = 80
+                if _rsi_threshold is not None:
+                    _rsi_before = len(day_feat)
+                    day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= _rsi_threshold]
+                    _rsi_removed = _rsi_before - len(day_feat)
+                    if _rsi_removed > 0:
+                        print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>{_rsi_threshold})")
+                    if day_feat.empty:
+                        continue
 
-        # ── 空頭防禦②：低波動加權（atr_inv z-score 加分 0.3 倍）──
-        if _is_bear_env and "atr_inv" in day_feat.columns:
-            _atr_inv = day_feat["atr_inv"]
-            _atr_std = float(_atr_inv.std())
-            if _atr_std > 0:
-                day_feat = day_feat.copy()
-                day_feat["score"] = (
-                    day_feat["score"] + 0.3 * (_atr_inv - _atr_inv.mean()) / _atr_std
-                )
+            # ── 低波動加權（atr_inv z-score 加分）──
+            if _is_bear_env and "atr_inv" in day_feat.columns:
+                _atr_inv = day_feat["atr_inv"]
+                _atr_std = float(_atr_inv.std())
+                if _atr_std > 0:
+                    day_feat = day_feat.copy()
+                    day_feat["score"] = (
+                        day_feat["score"] + 0.3 * (_atr_inv - _atr_inv.mean()) / _atr_std
+                    )
 
-        # ── 動態現金保留機制（依大盤相對 200MA 位置及近 5 日走勢）──
-        # ‧ 200MA 以上          → 0%（不保留現金，全倉）
-        # ‧ 200MA 以下 + 5日反彈 >+3% → 10%（快速重新進場）
-        # ‧ 200MA 以下 + 繼續下跌或橫盤  → 30%（防禦）
-        _200ma_bear = market_200ma_bear_map.get(rb_date, False)
-        if _200ma_bear:
-            _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
-            if _5d_bounce > 0.03:
-                _cash_ratio = 0.10   # 反彈期：降回 10% 以跟上反彈
-            else:
-                _cash_ratio = 0.30   # 繼續下跌 / 橫盤：保留 30%
+            # ── 動態現金保留機制 ──
+            _200ma_bear = market_200ma_bear_map.get(rb_date, False)
+            if _200ma_bear:
+                _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
+                _cash_ratio = 0.10 if _5d_bounce > 0.03 else 0.30
+
         else:
-            _cash_ratio = 0.0
+            # ── 簡單過濾（baseline 模式）：20d 中位數跌幅 > 4% 才縮減 topN ──
+            if median_ret is not None and median_ret < -0.04:
+                effective_topn = max(2, topn // 3)
+                print(f"  [{rb_date}] 大盤環境不佳 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
+
+        # ── 顯式 topN floor（Change B 實驗用，enable_complex_filter 無關）──
+        if topn_floor > 0 and effective_topn < topn_floor:
+            print(f"  [{rb_date}] [topN-floor] {effective_topn}→{topn_floor}")
+            effective_topn = topn_floor
 
         picks = risk.pick_topn(day_feat, effective_topn)
 

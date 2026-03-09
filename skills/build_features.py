@@ -120,6 +120,43 @@ EXTENDED_FEATURE_COLUMNS = [
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
 FEATURE_COLUMNS = CORE_FEATURE_COLUMNS + EXTENDED_FEATURE_COLUMNS
 
+# ── 10y 逐步優化實驗用特徵子集 ─────────────────────────────────
+# 原始基準（≈ commit aa978b8 可用欄位，不含 IC 優化新增特徵）
+# 包含：動能/均線/技術/籌碼/法人/基本面（fund_revenue_yoy）
+# 排除：trust_net_5_inv（Change A 新增）、theme_turnover_ratio（Change A）、fund_revenue_mom（Change A）
+# 排除：市場環境特徵、IC 衍生特徵（vol_20_inv, atr_inv, trend_persistence_inv）、新特徵
+BASELINE_FEATURE_COLS: List[str] = [
+    # 動能
+    "ret_5", "ret_10", "ret_20", "ret_60",
+    # 均線
+    "ma_5", "ma_20", "ma_60", "bias_20",
+    # 波動/流動性
+    "vol_20", "vol_ratio_20", "amt_20", "amt", "amt_ratio_20",
+    # 法人
+    "foreign_net_5", "foreign_net_20",
+    "trust_net_5", "trust_net_20",
+    # 技術指標
+    "rsi_14", "macd_hist", "kd_k", "kd_d",
+    # 籌碼
+    "short_balance_chg_5", "short_balance_chg_20",
+    "margin_short_ratio",
+    "foreign_buy_streak_5", "chip_flow_intensity_20",
+    "foreign_buy_ratio_5", "foreign_buy_ratio_20",
+    # 技術面
+    "drawdown_60",
+    "ma_alignment", "trend_persistence",
+    # 基本面（YoY，無公告延遲問題）
+    "fund_revenue_yoy",
+]
+
+# Change A：在 BASELINE 上加入 IC 分析中最有效的 3 個特徵
+# theme_turnover_ratio（ICIR 強正）、fund_revenue_mom（MoM 訊號）、trust_net_5_inv（ICIR -0.87 → 取反）
+CHANGE_A_FEATURE_COLS: List[str] = BASELINE_FEATURE_COLS + [
+    "theme_turnover_ratio",
+    "fund_revenue_mom",
+    "trust_net_5_inv",
+]
+
 # ProcessPoolExecutor 每個 task 包含的股票數（降低序列化次數）
 _CHUNK_SIZE = 50
 
