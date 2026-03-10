@@ -135,31 +135,31 @@ def main():
     else:
         stoploss = config.stoploss_pct
 
-    entry_delay = args.entry_delay_days if args.entry_delay_days is not None else config.backtest_entry_delay_days
+    entry_delay = args.entry_delay_days if args.entry_delay_days is not None else 0  # 原始：當日收盤進場
     risk_free = args.risk_free_rate if args.risk_free_rate is not None else config.backtest_risk_free_rate
     benchmark_with_cost = not args.no_benchmark_cost and config.backtest_benchmark_with_cost
     ps_method = args.position_sizing_method or getattr(config, "position_sizing_method", "risk_parity")
-    atr_mult = args.atr_stoploss_multiplier if args.atr_stoploss_multiplier is not None else config.backtest_atr_stoploss_multiplier
+    atr_mult = args.atr_stoploss_multiplier  # 原始：無 ATR 停損（None unless explicitly set）
 
-    # ── baseline 模式：覆蓋為原始簡單設定 ──
+    # ── 預設為還原原始基準設定；--baseline 沿用舊實驗模式（feature_cols 切換用）──
     if args.baseline:
+        # --baseline 保留舊行為供 Change A/B/C 實驗比較
         sizing = args.position_sizing or "equal"
-        trailing = args.trailing_stop_pct if args.trailing_stop_pct is not None else -0.15
+        trailing = args.trailing_stop_pct  # None = 無移動停利
         time_weighting = False
         enable_complex_filter = False
-        # slippage：baseline 預設關，--slippage 可開啟（Change C）
         enable_slippage = args.slippage and not args.no_slippage
-        # feature set
         if args.change_a:
             feature_columns = CHANGE_A_FEATURE_COLS
         else:
             feature_columns = BASELINE_FEATURE_COLS
     else:
-        sizing = args.position_sizing or config.backtest_position_sizing
-        trailing = args.trailing_stop_pct if args.trailing_stop_pct is not None else config.backtest_trailing_stop_pct
-        time_weighting = True
-        enable_complex_filter = True
-        enable_slippage = not args.no_slippage and (args.slippage or getattr(config, "backtest_enable_slippage", True))
+        # 預設：還原原始基準（等權、無 trailing、無 slippage、無複雜過濾）
+        sizing = args.position_sizing or "equal"
+        trailing = args.trailing_stop_pct  # None unless explicitly set
+        time_weighting = False
+        enable_complex_filter = False
+        enable_slippage = args.slippage and not args.no_slippage  # 預設關，需 --slippage 才開
         feature_columns = None  # 使用 DB 全部特徵
 
     # --topn-floor 在任何模式下均有效

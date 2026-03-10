@@ -429,22 +429,22 @@ def run_backtest(
     eval_end: Optional[date] = None,
     train_lookback_days: Optional[int] = None,
     # ── 新增參數 ──
-    entry_delay_days: int = 1,
+    entry_delay_days: int = 0,           # 原始基準：當日收盤進場（0）
     risk_free_rate: float = 0.015,
     benchmark_with_cost: bool = True,
-    position_sizing: str = "vol_inverse",
+    position_sizing: str = "equal",      # 原始基準：等權重
     position_sizing_method: str = "risk_parity",  # vol_inverse | mean_variance | risk_parity
-    trailing_stop_pct: Optional[float] = -0.15,
-    atr_stoploss_multiplier: Optional[float] = 2.5,
+    trailing_stop_pct: Optional[float] = None,    # 原始基準：無移動停利
+    atr_stoploss_multiplier: Optional[float] = None,  # 原始基準：無 ATR 停損
     atr_period: int = 14,
     rebalance_freq: str = "M",
-    label_horizon_buffer: int = 7,
-    enable_slippage: bool = True,  # 滑價模型：ATR 的 10%，上限 0.3%，來回各一次
+    label_horizon_buffer: int = 0,       # 原始基準：無 buffer
+    enable_slippage: bool = False,       # 原始基準：無滑價模型
     fast_mode: bool = False,  # 加速模式：減少樹數（LightGBM 150 棵）
     # ── 實驗參數（10y 逐步優化用）──
     feature_columns: Optional[List[str]] = None,  # None=用 DB 所有特徵；指定時只用列出的欄位
-    time_weighting: bool = True,  # False=等權樣本（不強調近期），baseline 用
-    enable_complex_filter: bool = True,  # False=停用 seasonal/RSI/200MA/topN-floor，只保留簡單過濾
+    time_weighting: bool = False,        # 原始基準：等權樣本，不強調近期
+    enable_complex_filter: bool = False, # 原始基準：無季節/RSI/200MA/空頭縮 topN
     topn_floor: int = 0,  # 0=不強制下限；>0 時 effective_topn 不低於此值（Change B 用）
 ) -> Dict:
     """執行 walk-forward 回測。
