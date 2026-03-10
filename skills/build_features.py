@@ -1066,7 +1066,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         from app.db import get_engine as _get_engine  # noqa: PLC0415
         _get_engine().dispose()
 
-        BATCH_SIZE = 5000  # 從 1000 提升至 5000，減少 commit 次數 5x
+        # BATCH_SIZE 必須讓 INSERT 封包 < max_allowed_packet（預設 4MB）
+        # 每筆 features_json ≈ 1,775 bytes；5000×1775 = 8.5MB > 4MB → MySQL 強制斷線
+        # 1500×1775 = 2.5MB < 4MB，保留 3× commit 減少效益（原始 1000 次）
+        BATCH_SIZE = 1500
         for i in range(0, len(records), BATCH_SIZE):
             batch = records[i: i + BATCH_SIZE]
             stmt = insert(Feature).values(batch)
