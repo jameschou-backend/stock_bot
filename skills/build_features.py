@@ -1059,9 +1059,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             for sid, td, row in zip(_stock_ids, _trading_dates, _feat_arr)
         ]
 
-        # 釋放舊連線回 pool，避免長時間 compute 後 "MySQL server has gone away"
-        # pool_pre_ping 只在從 pool 取出時 ping；session 持有中的連線不受保護
+        # 釋放舊連線並強制 dispose pool，確保取得全新 TCP 連線
+        # pool_pre_ping 無法偵測 half-open socket（Docker 網路層 idle 斷線）；
+        # dispose() 清空 pool，下次 execute() 必定建立全新 TCP 連線到 MySQL
         db_session.close()
+        from app.db import get_engine as _get_engine  # noqa: PLC0415
+        _get_engine().dispose()
 
         BATCH_SIZE = 5000  # 從 1000 提升至 5000，減少 commit 次數 5x
         for i in range(0, len(records), BATCH_SIZE):
