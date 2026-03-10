@@ -1059,13 +1059,6 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             for sid, td, row in zip(_stock_ids, _trading_dates, _feat_arr)
         ]
 
-        # 釋放舊連線並強制 dispose pool，確保取得全新 TCP 連線
-        # pool_pre_ping 無法偵測 half-open socket（Docker 網路層 idle 斷線）；
-        # dispose() 清空 pool，下次 execute() 必定建立全新 TCP 連線到 MySQL
-        db_session.close()
-        from app.db import get_engine as _get_engine  # noqa: PLC0415
-        _get_engine().dispose()
-
         # BATCH_SIZE 必須讓 INSERT 封包 < max_allowed_packet（預設 4MB）
         # 每筆 features_json ≈ 1,775 bytes；5000×1775 = 8.5MB > 4MB → MySQL 強制斷線
         # 1500×1775 = 2.5MB < 4MB，保留 3× commit 減少效益（原始 1000 次）
