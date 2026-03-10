@@ -363,7 +363,7 @@ def _simulate_period(
             if entry_px > 0:
                 slippage_pct = slippage_map.get(sid, 0.0)
                 ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
-                ret = max(ret, -1.0)  # 防止股票跌至 0 後交易成本造成 < -100% 的異常報酬
+                ret = max(ret, -0.50)  # 單筆最大損失 clip -50%，防止退市股拖垮整月組合
                 stock_returns[sid] = ret
                 
                 # 收錄完整交易紀錄
