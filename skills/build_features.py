@@ -865,7 +865,8 @@ def _compute_features(
         batch_ids = stock_ids[i: i + _CHUNK_SIZE]
         chunks.append(df[df["stock_id"].isin(batch_ids)])
 
-    workers = max(1, min(os.cpu_count() or 1, 8) - 1)
+    workers = int(os.environ.get("BUILD_FEATURES_WORKERS",
+                                 max(1, min(os.cpu_count() or 1, 8) - 1)))
     chunk_args = [(chunk, use_adjusted_price) for chunk in chunks]
 
     agg_timing: Dict[str, float] = {}
