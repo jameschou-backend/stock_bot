@@ -105,6 +105,10 @@ def main():
                         help="Change C：啟用滑價模型（ATR 的 10%%，上限 0.3%%）")
     parser.add_argument("--no-slippage", action="store_true",
                         help="停用滑價模型（baseline 預設已停用）")
+    parser.add_argument("--rebalance-freq", type=str, default=None,
+                        dest="rebalance_freq",
+                        choices=["W", "M"],
+                        help="再平衡頻率：W=週頻, M=月頻（預設 M）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -161,6 +165,8 @@ def main():
     # --topn-floor 在任何模式下均有效
     topn_floor = args.topn_floor
 
+    rebalance_freq = args.rebalance_freq or "M"
+
     with get_session() as session:
         result = run_backtest(
             config=config,
@@ -184,6 +190,7 @@ def main():
             time_weighting=time_weighting,
             enable_complex_filter=enable_complex_filter,
             topn_floor=topn_floor,
+            rebalance_freq=rebalance_freq,
         )
 
     # ── 輸出 JSON ──

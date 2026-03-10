@@ -363,6 +363,7 @@ def _simulate_period(
             if entry_px > 0:
                 slippage_pct = slippage_map.get(sid, 0.0)
                 ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
+                ret = max(ret, -1.0)  # 防止股票跌至 0 後交易成本造成 < -100% 的異常報酬
                 stock_returns[sid] = ret
                 
                 # 收錄完整交易紀錄
@@ -436,7 +437,7 @@ def run_backtest(
     trailing_stop_pct: Optional[float] = -0.15,
     atr_stoploss_multiplier: Optional[float] = 2.5,
     atr_period: int = 14,
-    rebalance_freq: str = "W",
+    rebalance_freq: str = "M",
     label_horizon_buffer: int = 7,
     enable_slippage: bool = True,  # 滑價模型：ATR 的 10%，上限 0.3%，來回各一次
     fast_mode: bool = False,  # 加速模式：減少樹數（LightGBM 150 棵）
