@@ -109,6 +109,9 @@ def main():
                         dest="rebalance_freq",
                         choices=["W", "M"],
                         help="再平衡頻率：W=週頻, M=月頻（預設 M）")
+    parser.add_argument("--seasonal-filter", action="store_true",
+                        dest="enable_seasonal_filter",
+                        help="啟用季節性降倉：3/10月 topN×0.5（對應 daily_pick 行為）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -189,6 +192,7 @@ def main():
             feature_columns=feature_columns,
             time_weighting=time_weighting,
             enable_complex_filter=enable_complex_filter,
+            enable_seasonal_filter=args.enable_seasonal_filter,
             topn_floor=topn_floor,
             rebalance_freq=rebalance_freq,
         )

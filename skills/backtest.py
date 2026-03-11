@@ -445,6 +445,7 @@ def run_backtest(
     feature_columns: Optional[List[str]] = None,  # None=用 DB 所有特徵；指定時只用列出的欄位
     time_weighting: bool = False,        # 原始基準：等權樣本，不強調近期
     enable_complex_filter: bool = False, # 原始基準：無季節/RSI/200MA/空頭縮 topN
+    enable_seasonal_filter: bool = False, # 獨立季節性降倉旗標（不啟用其他複雜過濾）
     topn_floor: int = 0,  # 0=不強制下限；>0 時 effective_topn 不低於此值（Change B 用）
 ) -> Dict:
     """執行 walk-forward 回測。
@@ -782,6 +783,20 @@ def run_backtest(
             if median_ret is not None and median_ret < -0.04:
                 effective_topn = max(2, topn // 3)
                 print(f"  [{rb_date}] 大盤環境不佳 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
+
+        # ── 獨立季節性降倉（enable_complex_filter=False 時也可啟用，對應 daily_pick 行為）──
+        if not enable_complex_filter and enable_seasonal_filter:
+            _s_weak = getattr(config, "seasonal_weak_months", (3, 10))
+            _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+            if rb_date.month in _s_weak:
+                _new = max(1, int(effective_topn * _s_mult))
+                if _new < effective_topn:
+                    print(f"  [{rb_date}] seasonal_filter: 月份{rb_date.month} topN {effective_topn}→{_new}")
+                    effective_topn = _new
+            # topN 絕對下限保護（避免弱勢月 topN=1~2）
+            _sf_min = 5
+            if effective_topn < _sf_min:
+                effective_topn = _sf_min
 
         # ── 顯式 topN floor（Change B 實驗用，enable_complex_filter 無關）──
         if topn_floor > 0 and effective_topn < topn_floor:
