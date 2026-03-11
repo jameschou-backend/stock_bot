@@ -181,18 +181,19 @@ def test_detect_schema_outdated_json_string():
 
 
 def test_detect_schema_outdated_partial_schema():
-    """features_json 欄位數剛好在 80% 門檻附近的邊界測試。
-    實作使用浮點比較：len(existing) < len(FEATURE_COLUMNS) * 0.8
-    43 * 0.8 = 34.4，故 35 欄才算「不小於門檻」。
+    """features_json 欄位數剛好在 95% 門檻附近的邊界測試。
+    實作使用浮點比較：len(existing) < len(FEATURE_COLUMNS) * 0.95
+    56 * 0.95 = 53.2，故 ceil(53.2)=54 欄才算「不小於門檻」。
+    門檻從 0.8 → 0.95 以便偵測新增 3 個特徵（53→56）時觸發自動補算。
     """
     import math
-    # ceil(43 * 0.8) = 35：剛好過門檻，應回傳 False
-    min_ok = math.ceil(len(FEATURE_COLUMNS) * 0.8)
+    # ceil(56 * 0.95) = 54：剛好過門檻，應回傳 False
+    min_ok = math.ceil(len(FEATURE_COLUMNS) * 0.95)
     at_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok]}
     session_ok = _make_mock_session(at_threshold)
     assert _detect_schema_outdated(session_ok) is False
 
-    # min_ok - 1 = 34：嚴格小於 34.4，應回傳 True
+    # min_ok - 1 = 53：嚴格小於 53.2，應回傳 True（觸發補算）
     below_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok - 1]}
     session_bad = _make_mock_session(below_threshold)
     assert _detect_schema_outdated(session_bad) is True

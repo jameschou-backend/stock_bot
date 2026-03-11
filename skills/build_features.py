@@ -115,6 +115,10 @@ EXTENDED_FEATURE_COLUMNS = [
     "market_above_200ma",   # 市場等權指數是否在 200 日均線以上（0/1 市場多空環境）
     "market_volatility_20", # 市場等權日報酬近 20 日波動率（衡量市場恐慌程度）
     "sector_momentum",      # 個股所屬產業近 20 日報酬 - 市場近 20 日報酬（產業相對動能）
+    # 強勢訊號過濾特徵（外資異常買超 + 放量，2026-03-11 新增）
+    "foreign_buy_streak",       # 外資連續「高於20日均買量」天數（嚴格版連買天數）
+    "volume_surge_ratio",       # 近5日均量/近20日均量（週成交量放大比例，>2代表異常放量）
+    "foreign_buy_intensity",    # 近5日外資淨買超 / 近20日均量（外資買進力道vs流動性）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -301,6 +305,34 @@ def _apply_group_impl(
     ).clip(-1, 1)
     timing["foreign_buy_ratio_5"] = _t() - t0
     timing["foreign_buy_ratio_20"] = timing["foreign_buy_ratio_5"]
+
+    # ── 強勢訊號特徵（外資異常買超 + 放量，2026-03-11 新增）──
+    # foreign_buy_streak: 外資連續「高於20日均買量」天數（比 foreign_buy_consecutive_days 更嚴格）
+    # foreign_buy_consecutive_days 只要 > 0 即算，這裡要求超過 20 日均值才算「強勢」
+    t0 = _t()
+    _foreign_avg20 = group["foreign_net"].rolling(20, min_periods=5).mean().clip(lower=0)
+    _is_strong_buy = (group["foreign_net"] > _foreign_avg20).astype(int)
+    _run_id_s = (_is_strong_buy != _is_strong_buy.shift()).cumsum()
+    group["foreign_buy_streak"] = _is_strong_buy * (
+        _is_strong_buy.groupby(_run_id_s).cumcount() + 1
+    )
+    timing["foreign_buy_streak"] = _t() - t0
+
+    # volume_surge_ratio: 近5日均量 / 近20日均量（捕捉週成交量異常放大，> 2 代表異常放量）
+    t0 = _t()
+    _vol_5avg = volume.rolling(5, min_periods=1).mean()
+    _vol_20avg = volume.rolling(20, min_periods=5).mean()
+    group["volume_surge_ratio"] = (_vol_5avg / _vol_20avg.replace(0, np.nan)).clip(0, 10)
+    timing["volume_surge_ratio"] = _t() - t0
+
+    # foreign_buy_intensity: 近5日外資買超張數 / 近20日平均成交量（外資買進力道 vs 流動性）
+    # 與 foreign_buy_ratio_5 的區別：分母是 20 日均量（流動性基準），而非 5 日成交量
+    t0 = _t()
+    _foreign_5sum = group["foreign_net"].rolling(5, min_periods=1).sum()
+    group["foreign_buy_intensity"] = (
+        _foreign_5sum / volume.rolling(20, min_periods=5).mean().replace(0, np.nan)
+    ).clip(-1, 1)
+    timing["foreign_buy_intensity"] = _t() - t0
 
     # ── 趨勢與型態 ──
     t0 = _t()
@@ -954,7 +986,8 @@ def _detect_schema_outdated(db_session: Session) -> bool:
     if row is None:
         return False
     existing = row.features_json if isinstance(row.features_json, dict) else _json.loads(row.features_json)
-    return len(existing) < len(FEATURE_COLUMNS) * 0.8
+    # 使用 0.95 閾值（原 0.8）：新增 3 個特徵時 53 < 56×0.95=53.2 → 可觸發自動補算
+    return len(existing) < len(FEATURE_COLUMNS) * 0.95
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
