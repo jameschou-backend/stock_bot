@@ -20,6 +20,8 @@
 
 from __future__ import annotations
 
+import gc
+import time
 from datetime import date, timedelta
 from typing import Dict, List, Optional, Tuple
 
@@ -38,6 +40,34 @@ try:
 except ImportError:
     _HAS_LGBM = False
 from sklearn.ensemble import GradientBoostingRegressor
+
+
+def _get_process_memory_gb() -> float:
+    """取得目前 process 的 RSS 記憶體使用量（GB）。"""
+    try:
+        import os
+        import psutil
+        return psutil.Process(os.getpid()).memory_info().rss / 1024 ** 3
+    except ImportError:
+        try:
+            import platform
+            import resource
+            ru = resource.getrusage(resource.RUSAGE_SELF)
+            # macOS ru_maxrss 單位為 bytes；Linux 為 kilobytes
+            if platform.system() == "Darwin":
+                return ru.ru_maxrss / 1024 ** 3
+            return ru.ru_maxrss / 1024 ** 2 / 1024
+        except Exception:
+            return 0.0
+
+
+def _format_eta(seconds: float) -> str:
+    """將秒數轉為易讀時間格式。"""
+    if seconds < 60:
+        return f"{int(seconds)}秒"
+    elif seconds < 3600:
+        return f"{int(seconds / 60)}分鐘"
+    return f"{seconds / 3600:.1f}小時"
 
 
 def _parse_features(series: pd.Series) -> pd.DataFrame:
@@ -82,12 +112,33 @@ def _train_model(
     return model
 
 
-def _load_all_data(
+def _load_prices(
     db_session: Session,
     start_date: date,
     end_date: date,
-) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """從 DB 載入 features, labels, prices"""
+) -> pd.DataFrame:
+    """從 DB 載入 price 資料（不含 features_json，無 JSON 解析負擔）。"""
+    price_stmt = (
+        select(
+            RawPrice.stock_id, RawPrice.trading_date,
+            RawPrice.open, RawPrice.high, RawPrice.low, RawPrice.close, RawPrice.volume,
+        )
+        .where(RawPrice.trading_date.between(start_date, end_date))
+        .order_by(RawPrice.trading_date, RawPrice.stock_id)
+    )
+    price_df = pd.read_sql(price_stmt, db_session.get_bind())
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in price_df.columns:
+            price_df[col] = pd.to_numeric(price_df[col], errors="coerce")
+    return price_df
+
+
+def _load_features_labels(
+    db_session: Session,
+    start_date: date,
+    end_date: date,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """從 DB 載入 features（raw JSON）和 labels，供滾動視窗按需使用。"""
     feat_stmt = (
         select(Feature.stock_id, Feature.trading_date, Feature.features_json)
         .where(Feature.trading_date.between(start_date, end_date))
@@ -98,23 +149,65 @@ def _load_all_data(
         .where(Label.trading_date.between(start_date, end_date))
         .order_by(Label.trading_date, Label.stock_id)
     )
-    price_stmt = (
-        select(
-            RawPrice.stock_id, RawPrice.trading_date,
-            RawPrice.open, RawPrice.high, RawPrice.low, RawPrice.close, RawPrice.volume,
-        )
-        .where(RawPrice.trading_date.between(start_date, end_date))
-        .order_by(RawPrice.trading_date, RawPrice.stock_id)
-    )
     feat_df = pd.read_sql(feat_stmt, db_session.get_bind())
     label_df = pd.read_sql(label_stmt, db_session.get_bind())
-    price_df = pd.read_sql(price_stmt, db_session.get_bind())
+    return feat_df, label_df
 
-    for col in ["open", "high", "low", "close", "volume"]:
-        if col in price_df.columns:
-            price_df[col] = pd.to_numeric(price_df[col], errors="coerce")
 
+def _load_all_data(
+    db_session: Session,
+    start_date: date,
+    end_date: date,
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """從 DB 載入 features, labels, prices（向後相容封裝）。"""
+    feat_df, label_df = _load_features_labels(db_session, start_date, end_date)
+    price_df = _load_prices(db_session, start_date, end_date)
     return feat_df, label_df, price_df
+
+
+def _parse_and_filter_features(
+    raw_feat_df: pd.DataFrame,
+    feature_columns: Optional[List[str]] = None,
+) -> pd.DataFrame:
+    """解析 features_json、套用欄位過濾與 schema 遷移保護。
+
+    Args:
+        raw_feat_df: 含 stock_id / trading_date / features_json 欄位的原始 DataFrame。
+        feature_columns: 若指定，只保留該子集（None = 保留全部）。
+
+    Returns:
+        展開後的特徵 DataFrame（stock_id, trading_date, feature_cols...）。
+    """
+    parsed = _parse_features(raw_feat_df["features_json"])
+    parsed = parsed.replace([np.inf, -np.inf], np.nan)
+    feat_df = raw_feat_df[["stock_id", "trading_date"]].reset_index(drop=True)
+    feat_df = pd.concat([feat_df, parsed.reset_index(drop=True)], axis=1)
+    del parsed
+
+    # feature_columns 子集過濾
+    if feature_columns is not None:
+        _avail = [c for c in feature_columns if c in feat_df.columns]
+        _missing = [c for c in feature_columns if c not in feat_df.columns]
+        if _missing:
+            print(f"  [feature_columns] 警告：DB 中缺少 {_missing}，已忽略")
+        feat_df = feat_df[["stock_id", "trading_date"] + _avail]
+        print(f"  [feature_columns] 使用 {len(_avail)} 個特徵（共 {len(feature_columns)} 指定）")
+
+    # schema 遷移保護：過濾 feature 覆蓋率不足的舊版資料（門檻 50%）
+    _fc = [c for c in feat_df.columns if c not in ("stock_id", "trading_date")]
+    if _fc:
+        _thr = max(1, int(len(_fc) * 0.50))
+        _mask = feat_df[_fc].notna().sum(axis=1) >= _thr
+        _n_drop = int((~_mask).sum())
+        if _n_drop > 0:
+            print(
+                f"  [schema filter] 過濾 {_n_drop:,} 筆舊版特徵資料"
+                f" (threshold={_thr}/{len(_fc)} features)",
+                flush=True,
+            )
+            feat_df = feat_df.loc[_mask].reset_index(drop=True)
+
+    return feat_df
 
 
 def _get_rebalance_dates(trading_dates: List[date], freq: str = "W") -> List[date]:
@@ -508,49 +601,36 @@ def run_backtest(
         print(f"  訓練窗長: {train_lookback_days} 日")
     print()
 
-    # ── 2. 載入全部資料 ──
-    feat_df, label_df, price_df = _load_all_data(db_session, data_start, data_end)
-    if feat_df.empty or price_df.empty:
-        raise ValueError("資料不足，無法進行回測")
+    # ── 2. 載入資料 ──
+    # 滾動視窗模式（train_lookback_days 已設定）：只預載價格資料，
+    # features/labels 在訓練迴圈中按需載入，每次只保留一個訓練視窗以節省記憶體。
+    # 全量模式（train_lookback_days=None）：沿用原有一次性載入行為（向後相容）。
+    _use_rolling_window = train_lookback_days is not None
 
-    feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
-    label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
+    print("  載入價格資料 ...", flush=True)
+    price_df = _load_prices(db_session, data_start, data_end)
+    if price_df.empty:
+        raise ValueError("資料不足，無法進行回測")
     price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
 
-    # ── 2b. 預解析 features_json（一次性展開，避免 training loop 重複 parse）──
-    print("  預解析特徵 JSON ...", flush=True)
-    _parsed_cols = _parse_features(feat_df["features_json"])
-    _parsed_cols = _parsed_cols.replace([np.inf, -np.inf], np.nan)
-    feat_df = feat_df[["stock_id", "trading_date"]].reset_index(drop=True)
-    feat_df = pd.concat([feat_df, _parsed_cols.reset_index(drop=True)], axis=1)
-    del _parsed_cols  # 釋放記憶體
+    if not _use_rolling_window:
+        # 全量模式：一次性載入並預解析全部特徵/標籤資料
+        print("  載入特徵/標籤資料（全量）...", flush=True)
+        _raw_feat, label_df = _load_features_labels(db_session, data_start, data_end)
+        if _raw_feat.empty:
+            raise ValueError("資料不足，無法進行回測")
+        _raw_feat["trading_date"] = pd.to_datetime(_raw_feat["trading_date"]).dt.date
+        label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
 
-    # ── 2b-1. 若指定特徵子集，只保留該子集欄位（baseline / change 實驗用）──
-    if feature_columns is not None:
-        _avail = [c for c in feature_columns if c in feat_df.columns]
-        _missing = [c for c in feature_columns if c not in feat_df.columns]
-        if _missing:
-            print(f"  [feature_columns] 警告：DB 中缺少 {_missing}，已忽略")
-        feat_df = feat_df[["stock_id", "trading_date"] + _avail]
-        print(f"  [feature_columns] 使用 {len(_avail)} 個特徵（共 {len(feature_columns)} 指定）")
-
-    # ── 2c. Schema 遷移保護：過濾掉 feature 覆蓋率不足的舊版資料 ──
-    # 根因：730d 重算後 DB 存在 2016-2024 的 19-feature 舊 schema（3.14M 行）
-    # 與 2024-2026 的 48-feature 新 schema（978k 行）。混合訓練時舊行 76% 欄位為
-    # NaN，以 median imputation 填補會嚴重污染模型。
-    # 門檻 50%：舊行 19/59≈32% < 50% → 過濾；新行 48/59≈81% > 50% → 保留。
-    _feat_cols_in_df = [c for c in feat_df.columns if c not in ("stock_id", "trading_date")]
-    if _feat_cols_in_df:
-        _schema_threshold = max(1, int(len(_feat_cols_in_df) * 0.50))
-        _valid_schema_mask = feat_df[_feat_cols_in_df].notna().sum(axis=1) >= _schema_threshold
-        _n_schema_dropped = int((~_valid_schema_mask).sum())
-        if _n_schema_dropped > 0:
-            print(
-                f"  [schema filter] 過濾 {_n_schema_dropped:,} 筆舊版特徵資料 "
-                f"(threshold={_schema_threshold}/{len(_feat_cols_in_df)} features)",
-                flush=True,
-            )
-            feat_df = feat_df.loc[_valid_schema_mask].reset_index(drop=True)
+        print("  預解析特徵 JSON ...", flush=True)
+        feat_df = _parse_and_filter_features(_raw_feat, feature_columns)
+        del _raw_feat
+        gc.collect()
+    else:
+        # 滾動視窗模式：feat_df / label_df 由迴圈中的 _rw_* 變數提供
+        print(f"  滾動視窗模式：訓練視窗 {train_lookback_days} 日，特徵按需載入", flush=True)
+        feat_df = pd.DataFrame()   # 佔位符，迴圈開始前替換
+        label_df = pd.DataFrame()
 
     # ── 3. 預計算 ATR（若需要）──
     atr_df: Optional[pd.DataFrame] = None
@@ -581,6 +661,15 @@ def run_backtest(
     benchmark_curve = [{"date": equity_curve[0]["date"], "equity": benchmark_equity}]
     benchmark_tc = transaction_cost_pct if benchmark_with_cost else 0.0
 
+    # ── 滾動視窗狀態 ──
+    _rw_feat_df: Optional[pd.DataFrame] = None   # 目前已載入的 features（已解析）
+    _rw_label_df: Optional[pd.DataFrame] = None  # 目前已載入的 labels
+    _rw_range: Optional[Tuple[date, date]] = None  # (start, end) of current window
+
+    # ── 進度計時 ──
+    _loop_start = time.time()
+    _n_periods = len(rebalance_dates)
+
     for i, rb_date in enumerate(rebalance_dates):
         # 決定退出日（下一個再平衡日的最後一個交易日，或資料末尾）
         if i + 1 < len(rebalance_dates):
@@ -599,6 +688,42 @@ def run_backtest(
             last_train_date is None or
             (rb_date - last_train_date).days >= retrain_freq_months * 30
         )
+
+        # ── 滾動視窗：按需載入 features/labels ──
+        if _use_rolling_window:
+            # 訓練視窗起點
+            _win_start = max(data_start, rb_date - timedelta(days=train_lookback_days))
+            # 視窗終點：涵蓋本次再平衡 + 下一次再平衡前的評分日（約 retrain_freq 個月）
+            _win_end = min(data_end, rb_date + timedelta(days=retrain_freq_months * 30 + 10))
+            # 需要重新載入：(a) 尚未載入、(b) 視窗起點左移、(c) rb_date 超出已載入範圍
+            _need_reload = (
+                _rw_feat_df is None
+                or _rw_range is None
+                or _win_start < _rw_range[0]
+                or rb_date > _rw_range[1]
+            )
+            if _need_reload:
+                if _rw_feat_df is not None:
+                    del _rw_feat_df, _rw_label_df
+                    _rw_feat_df = None
+                    _rw_label_df = None
+                    gc.collect()
+                _mem = _get_process_memory_gb()
+                print(
+                    f"  [{rb_date}] 載入視窗資料 {_win_start}~{_win_end}"
+                    f" (記憶體: {_mem:.1f}GB) ...",
+                    flush=True,
+                )
+                _rf, _rl = _load_features_labels(db_session, _win_start, _win_end)
+                _rf["trading_date"] = pd.to_datetime(_rf["trading_date"]).dt.date
+                _rl["trading_date"] = pd.to_datetime(_rl["trading_date"]).dt.date
+                _rw_feat_df = _parse_and_filter_features(_rf, feature_columns)
+                _rw_label_df = _rl
+                _rw_range = (_win_start, _win_end)
+                del _rf, _rl
+                gc.collect()
+            feat_df = _rw_feat_df
+            label_df = _rw_label_df
 
         if need_retrain:
             label_cutoff = rb_date - timedelta(days=label_horizon_buffer)
@@ -919,11 +1044,16 @@ def run_backtest(
 
         sign = "+" if period_ret >= 0 else ""
         bm_sign = "+" if benchmark_ret >= 0 else ""
+        _done = i + 1
+        _elapsed = time.time() - _loop_start
+        _eta = _elapsed / _done * (_n_periods - _done) if _done < _n_periods else 0.0
+        _mem = _get_process_memory_gb()
         print(
             f"  [{rb_date} ~ {exit_date}] "
             f"組合: {sign}{period_ret:.2%}  大盤: {bm_sign}{benchmark_ret:.2%}  "
             f"持股: {result['trades']}  停損: {result['stoploss_triggered']}  "
-            f"淨值: {equity:,.0f}",
+            f"淨值: {equity:,.0f}  "
+            f"[{_done}/{_n_periods} | 記憶體: {_mem:.1f}GB | 預估剩餘: {_format_eta(_eta)}]",
             flush=True,
         )
 
