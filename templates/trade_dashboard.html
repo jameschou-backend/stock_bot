@@ -700,8 +700,8 @@ async function openCandle(stockId, entryDate) {
   const pct = ((realized_pnl_pct || 0) * 100).toFixed(2);
   const pctColor = pct >= 0 ? 'var(--green)' : 'var(--red)';
   document.getElementById('modalFooter').innerHTML = `
-    <div class="modal-stat"><span class="label">買進價</span><span class="value">$${entry_price.toFixed(2)}</span></div>
-    <div class="modal-stat"><span class="label">賣出價</span><span class="value">$${exit_price.toFixed(2)}</span></div>
+    <div class="modal-stat"><span class="label">買進價</span><span class="value">NT$${entry_price.toFixed(2)}</span></div>
+    <div class="modal-stat"><span class="label">賣出價</span><span class="value">NT$${exit_price.toFixed(2)}</span></div>
     <div class="modal-stat"><span class="label">報酬率</span><span class="value" style="color:${pctColor}">${pct >= 0 ? '+' : ''}${pct}%</span></div>
     <div class="modal-stat"><span class="label">出場日</span><span class="value">${exit_date}</span></div>
   `;
