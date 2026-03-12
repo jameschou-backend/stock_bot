@@ -748,15 +748,15 @@ async function openCandle(stockId, entryDate) {
     return null;
   }
 
-  // Volume pane (bottom 20%)
+  // Volume pane (bottom 22%, with gap above)
   const volumeSeries = addSeries('HistogramSeries', {
     color: '#3b82f6',
     priceFormat: { type: 'volume' },
     priceScaleId: 'volume',
-    scaleMargins: { top: 0.82, bottom: 0 },
+    scaleMargins: { top: 0.78, bottom: 0.02 },
   });
 
-  // Candle pane (top 80%)
+  // Candle pane (top 70%, leave 8% gap above volume)
   const candleSeries = addSeries('CandlestickSeries', {
     upColor: '#22c55e',
     downColor: '#ef4444',
@@ -765,7 +765,7 @@ async function openCandle(stockId, entryDate) {
     wickUpColor: '#22c55e',
     wickDownColor: '#ef4444',
     priceScaleId: 'right',
-    scaleMargins: { top: 0, bottom: 0.2 },
+    scaleMargins: { top: 0.02, bottom: 0.30 },
   });
 
   const candleData = candles.map(c => ({
@@ -823,7 +823,12 @@ async function openCandle(stockId, entryDate) {
 
   if (candleSeries && markers.length) {
     markers.sort((a, b) => a.time.localeCompare(b.time));
-    candleSeries.setMarkers(markers);
+    // lightweight-charts v5 用 createSeriesMarkers()，v4 用 series.setMarkers()
+    if (typeof LightweightCharts.createSeriesMarkers === 'function') {
+      LightweightCharts.createSeriesMarkers(candleSeries, markers);
+    } else if (typeof candleSeries.setMarkers === 'function') {
+      candleSeries.setMarkers(markers);
+    }
   }
 
   // ── Viewport：預設聚焦在當前交易前後 3 個月，可自由縮放 ────────────────
