@@ -748,15 +748,15 @@ async function openCandle(stockId, entryDate) {
     return null;
   }
 
-  // Volume pane (bottom 22%, with gap above)
+  // Volume pane (bottom 18%, gap above)
   const volumeSeries = addSeries('HistogramSeries', {
     color: '#3b82f6',
     priceFormat: { type: 'volume' },
     priceScaleId: 'volume',
-    scaleMargins: { top: 0.78, bottom: 0.02 },
+    scaleMargins: { top: 0.82, bottom: 0.02 },
   });
 
-  // Candle pane (top 70%, leave 8% gap above volume)
+  // Candle pane (top 62%, leave 20% gap above volume)
   const candleSeries = addSeries('CandlestickSeries', {
     upColor: '#22c55e',
     downColor: '#ef4444',
@@ -765,7 +765,7 @@ async function openCandle(stockId, entryDate) {
     wickUpColor: '#22c55e',
     wickDownColor: '#ef4444',
     priceScaleId: 'right',
-    scaleMargins: { top: 0.02, bottom: 0.30 },
+    scaleMargins: { top: 0.02, bottom: 0.38 },
   });
 
   const candleData = candles.map(c => ({
@@ -802,7 +802,7 @@ async function openCandle(stockId, entryDate) {
         position: 'belowBar',
         color: isCurrent ? '#22c55e' : '#4ade80',
         shape: 'arrowUp',
-        text: isCurrent ? `▶ 買進 ${ep.toFixed(2)}` : `B ${ep.toFixed(2)}`,
+        text: isCurrent ? `▶ 買進 ${ep.toFixed(2)}` : `買 ${ep.toFixed(2)} (歷史)`,
         size: isCurrent ? 2 : 1,
       });
     }
@@ -815,7 +815,7 @@ async function openCandle(stockId, entryDate) {
         shape: 'arrowDown',
         text: isCurrent
           ? `▶ 賣出 ${xp.toFixed(2)} (${tpct >= 0 ? '+' : ''}${tpct}%)`
-          : `S ${xp.toFixed(2)}`,
+          : `賣 ${xp.toFixed(2)} (歷史${isStop ? '停損' : ''})`,
         size: isCurrent ? 2 : 1,
       });
     }
