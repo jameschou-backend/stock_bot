@@ -688,13 +688,13 @@ async function openCandle(stockId, entryDate) {
     return;
   }
   const data = await res.json();
-  const { candles, entry_price, exit_price, realized_pnl_pct, exit_date, name } = data;
+  const { candles, entry_price, exit_price, realized_pnl_pct, exit_date, name, all_trades } = data;
 
   // Update header
   document.getElementById('modalTitle').textContent =
-    `${stockId}${name ? ' ' + name : ''} — 日K`;
+    `${stockId}${name ? ' ' + name : ''} — 日K（全歷史）`;
   document.getElementById('modalMeta').textContent =
-    `進場: ${entryDate}  →  出場: ${exit_date}`;
+    `當前交易：進場 ${entryDate}  →  出場 ${exit_date}`;
 
   // Footer
   const pct = ((realized_pnl_pct || 0) * 100).toFixed(2);
@@ -784,39 +784,57 @@ async function openCandle(stockId, entryDate) {
   if (candleSeries) candleSeries.setData(candleData);
   if (volumeSeries) volumeSeries.setData(volData);
 
-  // Markers
+  // ── 全歷史買賣標記 ──────────────────────────────────────────────────────
+  const candleTimeSet = new Set(candles.map(c => c.time));
   const markers = [];
-  // Entry marker
-  const entryCandle = candles.find(c => c.time === entryDate);
-  if (entryCandle) {
-    markers.push({
-      time: entryDate,
-      position: 'belowBar',
-      color: '#22c55e',
-      shape: 'arrowUp',
-      text: `買進 ${entry_price.toFixed(2)}`,
-      size: 1,
-    });
+
+  for (const t of (all_trades || [])) {
+    const isCurrent = (t.entry_date === entryDate);
+    const ep = parseFloat(t.entry_price) || 0;
+    const xp = parseFloat(t.exit_price) || 0;
+    const tpct = ((t.realized_pnl_pct || 0) * 100).toFixed(2);
+    const isStop = t.stoploss_triggered;
+
+    // 買進箭頭（↑）
+    if (t.entry_date && candleTimeSet.has(t.entry_date)) {
+      markers.push({
+        time: t.entry_date,
+        position: 'belowBar',
+        color: isCurrent ? '#22c55e' : '#4ade80',
+        shape: 'arrowUp',
+        text: isCurrent ? `▶ 買進 ${ep.toFixed(2)}` : `B ${ep.toFixed(2)}`,
+        size: isCurrent ? 2 : 1,
+      });
+    }
+    // 賣出箭頭（↓）停損橘色，正常紅色
+    if (t.exit_date && candleTimeSet.has(t.exit_date)) {
+      markers.push({
+        time: t.exit_date,
+        position: 'aboveBar',
+        color: isCurrent ? (isStop ? '#f97316' : '#ef4444') : (isStop ? '#fb923c' : '#f87171'),
+        shape: 'arrowDown',
+        text: isCurrent
+          ? `▶ 賣出 ${xp.toFixed(2)} (${tpct >= 0 ? '+' : ''}${tpct}%)`
+          : `S ${xp.toFixed(2)}`,
+        size: isCurrent ? 2 : 1,
+      });
+    }
   }
-  // Exit marker
-  const exitCandle = candles.find(c => c.time === exit_date);
-  if (exitCandle) {
-    markers.push({
-      time: exit_date,
-      position: 'aboveBar',
-      color: '#ef4444',
-      shape: 'arrowDown',
-      text: `賣出 ${exit_price.toFixed(2)} (${pct >= 0 ? '+' : ''}${pct}%)`,
-      size: 1,
-    });
-  }
+
   if (candleSeries && markers.length) {
     markers.sort((a, b) => a.time.localeCompare(b.time));
     candleSeries.setMarkers(markers);
   }
 
-  // Fit view
-  lwChart.timeScale().fitContent();
+  // ── Viewport：預設聚焦在當前交易前後 3 個月，可自由縮放 ────────────────
+  const focusFrom = new Date(entryDate);
+  focusFrom.setMonth(focusFrom.getMonth() - 3);
+  const focusTo = new Date(exit_date);
+  focusTo.setMonth(focusTo.getMonth() + 3);
+  lwChart.timeScale().setVisibleRange({
+    from: focusFrom.toISOString().substring(0, 10),
+    to:   focusTo.toISOString().substring(0, 10),
+  });
 
   // Handle resize
   const ro = new ResizeObserver(() => {

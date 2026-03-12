@@ -91,7 +91,7 @@ def get_nav():
 
 @app.route("/candles/<stock_id>/<entry_date>")
 def get_candles(stock_id: str, entry_date: str):
-    """查詢個股日K，範圍：進場前45天 ~ 出場後45天"""
+    """查詢個股全部歷史日K + 該股所有歷史交易標記"""
     if not TRADE_LOG_CSV.exists():
         return jsonify({"error": "trade_log.csv not found"}), 404
 
@@ -111,22 +111,29 @@ def get_candles(stock_id: str, entry_date: str):
     name = str(trade.get("name") or "")
 
     try:
-        entry_dt = datetime.strptime(entry_date, "%Y-%m-%d").date()
-        exit_dt = datetime.strptime(exit_date_str, "%Y-%m-%d").date()
+        datetime.strptime(entry_date, "%Y-%m-%d")
     except ValueError:
         return jsonify({"error": "Invalid date format (expected YYYY-MM-DD)"}), 400
 
-    start_dt = entry_dt - timedelta(days=45)
-    end_dt = exit_dt + timedelta(days=45)
+    # 該股所有歷史交易（用於 K 線圖標記）
+    stock_trades = [
+        {
+            "entry_date": str(t.get("entry_date") or ""),
+            "exit_date": str(t.get("exit_date") or ""),
+            "entry_price": float(t.get("entry_price") or 0),
+            "exit_price": float(t.get("exit_price") or 0),
+            "realized_pnl_pct": float(t.get("realized_pnl_pct") or 0),
+            "stoploss_triggered": bool(t.get("stoploss_triggered")),
+        }
+        for t in trades
+        if str(t.get("stock_id", "")) == stock_id
+    ]
 
+    # 拉全部歷史 K 線（不限日期範圍）
     with get_session() as session:
         rows = (
             session.query(RawPrice)
-            .filter(
-                RawPrice.stock_id == stock_id,
-                RawPrice.trading_date >= start_dt,
-                RawPrice.trading_date <= end_dt,
-            )
+            .filter(RawPrice.stock_id == stock_id)
             .order_by(RawPrice.trading_date)
             .all()
         )
@@ -153,6 +160,7 @@ def get_candles(stock_id: str, entry_date: str):
         "entry_price": entry_price,
         "exit_price": exit_price,
         "realized_pnl_pct": pnl,
+        "all_trades": stock_trades,   # 該股全部歷史交易
     })
 
 
