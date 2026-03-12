@@ -210,16 +210,30 @@
     <table id="tradeTable">
       <thead>
         <tr>
-          <th>進場日</th>
-          <th>股票代號</th>
-          <th>名稱</th>
-          <th>買進價</th>
-          <th>賣出價</th>
-          <th class="sortable sorted" onclick="sortTrades('realized_pnl_pct')" id="th-pnl">
+          <th class="sortable" onclick="sortTrades('entry_date')" id="th-entrydate">
+            進場日 <span class="sort-icon">↕</span>
+          </th>
+          <th class="sortable" onclick="sortTrades('stock_id')" id="th-stockid">
+            股票代號 <span class="sort-icon">↕</span>
+          </th>
+          <th class="sortable" onclick="sortTrades('name')" id="th-name">
+            名稱 <span class="sort-icon">↕</span>
+          </th>
+          <th class="sortable" onclick="sortTrades('entry_price')" id="th-entryprice">
+            買進價 <span class="sort-icon">↕</span>
+          </th>
+          <th class="sortable" onclick="sortTrades('exit_price')" id="th-exitprice">
+            賣出價 <span class="sort-icon">↕</span>
+          </th>
+          <th class="sortable sorted" onclick="sortTrades('realized_pnl_pct')" id="th-realizedpnlpct">
             報酬率 <span class="sort-icon">▼</span>
           </th>
-          <th>出場原因</th>
-          <th>出場日</th>
+          <th class="sortable" onclick="sortTrades('stoploss_triggered')" id="th-stoploss">
+            出場原因 <span class="sort-icon">↕</span>
+          </th>
+          <th class="sortable" onclick="sortTrades('exit_date')" id="th-exitdate">
+            出場日 <span class="sort-icon">↕</span>
+          </th>
         </tr>
       </thead>
       <tbody id="tradeBody">
@@ -466,7 +480,7 @@ function sortTrades(key, toggle = true) {
     th.classList.remove('sorted');
     th.querySelector('.sort-icon').textContent = '↕';
   });
-  const activeTh = document.getElementById('th-' + key.replace(/_/g, ''));
+  const activeTh = document.getElementById('th-' + key.toLowerCase().replace(/_/g, ''));
   if (activeTh) {
     activeTh.classList.add('sorted');
     activeTh.querySelector('.sort-icon').textContent = sortDir === -1 ? '▼' : '▲';
