@@ -130,19 +130,19 @@ def get_candles(stock_id: str, entry_date: str):
             .order_by(RawPrice.trading_date)
             .all()
         )
-
-    candles = [
-        {
-            "time": str(r.trading_date),
-            "open": float(r.open) if r.open is not None else None,
-            "high": float(r.high) if r.high is not None else None,
-            "low": float(r.low) if r.low is not None else None,
-            "close": float(r.close) if r.close is not None else None,
-            "volume": int(r.volume) if r.volume is not None else 0,
-        }
-        for r in rows
-        if r.open is not None  # 過濾無效資料
-    ]
+        # 在 session 關閉前取出所有欄位值，避免 DetachedInstanceError
+        candles = [
+            {
+                "time": str(r.trading_date),
+                "open": float(r.open) if r.open is not None else None,
+                "high": float(r.high) if r.high is not None else None,
+                "low": float(r.low) if r.low is not None else None,
+                "close": float(r.close) if r.close is not None else None,
+                "volume": int(r.volume) if r.volume is not None else 0,
+            }
+            for r in rows
+            if r.open is not None  # 過濾無效資料
+        ]
 
     return jsonify({
         "candles": candles,
