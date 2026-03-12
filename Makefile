@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build api test dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index
+.PHONY: migrate pipeline pipeline-build api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index
 
 migrate:
 	python scripts/migrate.py
@@ -18,6 +18,9 @@ test:
 
 dashboard:
 	streamlit run app/dashboard.py
+
+trade-dashboard:
+	python app/trade_dashboard.py
 
 report:
 	python scripts/export_report.py

@@ -331,6 +331,7 @@ def _simulate_period(
     atr_df: Optional[pd.DataFrame] = None,
     atr_stoploss_multiplier: Optional[float] = None,
     enable_slippage: bool = True,
+    clip_loss_pct: float = -0.50,
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -347,6 +348,7 @@ def _simulate_period(
         atr_df: 預先計算的 ATR DataFrame（stock_id, trading_date, atr）
         atr_stoploss_multiplier: ATR 倍數停損（如 2.5），覆蓋全局 stoploss_pct
         enable_slippage: 是否套用滑價模型（ATR 的 10%，上限 0.3%，適用進出場各一次）
+        clip_loss_pct: 單筆最大損失 clip（預設 -50%；診斷可傳 -1.01 停用）
 
     Returns:
         Dict with period results
@@ -456,7 +458,7 @@ def _simulate_period(
             if entry_px > 0:
                 slippage_pct = slippage_map.get(sid, 0.0)
                 ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
-                ret = max(ret, -0.50)  # 單筆最大損失 clip -50%，防止退市股拖垮整月組合
+                ret = max(ret, clip_loss_pct)  # 單筆最大損失 clip，防止退市股拖垮整月組合
                 stock_returns[sid] = ret
                 
                 # 收錄完整交易紀錄
@@ -540,6 +542,7 @@ def run_backtest(
     enable_complex_filter: bool = False, # 原始基準：無季節/RSI/200MA/空頭縮 topN
     enable_seasonal_filter: bool = False, # 獨立季節性降倉旗標（不啟用其他複雜過濾）
     topn_floor: int = 0,  # 0=不強制下限；>0 時 effective_topn 不低於此值（Change B 用）
+    clip_loss_pct: float = -0.50,  # 單筆最大損失 clip（預設 -50%）；診斷用可傳 -1.01 停用
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -977,6 +980,7 @@ def run_backtest(
             atr_df=atr_df,
             atr_stoploss_multiplier=atr_stoploss_multiplier,
             enable_slippage=enable_slippage,
+            clip_loss_pct=clip_loss_pct,
         )
 
         # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──

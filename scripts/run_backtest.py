@@ -112,6 +112,16 @@ def main():
     parser.add_argument("--seasonal-filter", action="store_true",
                         dest="enable_seasonal_filter",
                         help="啟用季節性降倉：3/10月 topN×0.5（對應 daily_pick 行為）")
+    parser.add_argument("--no-seasonal-filter", action="store_true",
+                        dest="no_seasonal_filter",
+                        help="明確停用季節性降倉（診斷用）")
+
+    # ── 診斷 ──
+    parser.add_argument("--train-lookback", type=int, default=None,
+                        dest="train_lookback_days",
+                        help="訓練視窗長度（日，如 1825=5年滾動窗）；預設 None=使用全部歷史")
+    parser.add_argument("--no-clip", action="store_true",
+                        help="停用單筆損失 clip -50%%（診斷用，傳入 clip_loss_pct=-1.01）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -170,6 +180,15 @@ def main():
 
     rebalance_freq = args.rebalance_freq or "M"
 
+    # --seasonal-filter / --no-seasonal-filter 互斥：no 優先
+    if args.no_seasonal_filter:
+        enable_seasonal_filter = False
+    else:
+        enable_seasonal_filter = args.enable_seasonal_filter
+
+    # --no-clip：停用 clip（傳入 -1.01，遠低於 -100% 故永遠不觸發）
+    clip_loss_pct = -1.01 if args.no_clip else -0.50
+
     with get_session() as session:
         result = run_backtest(
             config=config,
@@ -192,9 +211,11 @@ def main():
             feature_columns=feature_columns,
             time_weighting=time_weighting,
             enable_complex_filter=enable_complex_filter,
-            enable_seasonal_filter=args.enable_seasonal_filter,
+            enable_seasonal_filter=enable_seasonal_filter,
             topn_floor=topn_floor,
             rebalance_freq=rebalance_freq,
+            train_lookback_days=args.train_lookback_days,
+            clip_loss_pct=clip_loss_pct,
         )
 
     # ── 輸出 JSON ──
