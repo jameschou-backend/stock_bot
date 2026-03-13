@@ -21,12 +21,15 @@
 from __future__ import annotations
 
 import gc
+import os
 import time
 from datetime import date, timedelta
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
+import psutil
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -61,6 +64,16 @@ def _get_process_memory_gb() -> float:
             return 0.0
 
 
+_log_t0 = time.time()
+
+
+def _log(label: str) -> None:
+    """計時 + 記憶體監控 log（統一格式 [TIMER] label | mem=X.XGB | t=X.Xs）。"""
+    mem = psutil.Process(os.getpid()).memory_info().rss / 1024 ** 3
+    elapsed = time.time() - _log_t0
+    print(f"[TIMER] {label} | mem={mem:.1f}GB | t={elapsed:.1f}s", flush=True)
+
+
 def _format_eta(seconds: float) -> str:
     """將秒數轉為易讀時間格式。"""
     if seconds < 60:
@@ -71,8 +84,14 @@ def _format_eta(seconds: float) -> str:
 
 
 def _parse_features(series: pd.Series) -> pd.DataFrame:
-    import json
-    parsed = [json.loads(v) if isinstance(v, str) else (v if isinstance(v, dict) else {}) for v in series]
+    """解析 features_json；優先使用 orjson（快 3-5x），fallback 至標準 json。"""
+    try:
+        import orjson
+        _loads = orjson.loads
+    except ImportError:
+        import json
+        _loads = json.loads
+    parsed = [_loads(v) if isinstance(v, str) else (v if isinstance(v, dict) else {}) for v in series]
     return pd.json_normalize(parsed)
 
 
@@ -474,8 +493,10 @@ def _simulate_period(
     Returns:
         Dict with period results
     """
+    _stoploss_time = 0.0  # 計時佔位符
+
     if picks.empty:
-        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
 
     stock_ids = picks["stock_id"].tolist()
 
@@ -493,7 +514,7 @@ def _simulate_period(
     ].copy()
 
     if period_prices.empty:
-        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
 
     # ── 1 & 2. 確定進場日並取進場價 ──
     if per_stock_entry_dates:
@@ -518,7 +539,7 @@ def _simulate_period(
                 "entry_price": ep,
             })
         if not positions_list:
-            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
         positions_input = pd.DataFrame(positions_list)
         actual_entry_date = min(per_stock_entry_dates.values())  # 供 ATR/滑價 lookup 參考
         entry_prices = positions_input[["stock_id", "entry_price"]]
@@ -539,7 +560,7 @@ def _simulate_period(
         ][["stock_id", "close"]].rename(columns={"close": "entry_price"})
 
         if entry_prices.empty:
-            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
 
         positions_input = entry_prices.assign(
             entry_date=actual_entry_date,
@@ -567,6 +588,7 @@ def _simulate_period(
                 per_stock_stop[sid] = stoploss_pct
 
     # ── 4. 執行出場邏輯 ──
+    _t_sl = time.time()
     if trailing_stop_pct is not None or atr_stoploss_multiplier is not None or profit_activation_pct is not None:
         _ts = trailing_stop_pct if trailing_stop_pct is not None else (
             -0.10 if profit_activation_pct is not None else -0.15
@@ -584,6 +606,7 @@ def _simulate_period(
         stoploss_result = risk.apply_stoploss(
             positions_input, period_prices, stoploss_pct, per_stock_stop
         )
+    _stoploss_time = time.time() - _t_sl
 
     # ── 預先計算個股滑價（ATR 的 10%，上限 0.3%，進出場各一次）──
     slippage_map: Dict[str, float] = {}
@@ -645,7 +668,7 @@ def _simulate_period(
                 trades_log.append(trade_record)
 
     if not stock_returns:
-        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "trades_log": []}
+        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "trades_log": [], "_stoploss_time": _stoploss_time}
 
     # ── 5. 計算組合報酬（支援分級倉位）──
     if position_weights is not None and not position_weights.empty:
@@ -672,6 +695,7 @@ def _simulate_period(
         "stock_returns": stock_returns,
         "actual_entry_date": actual_entry_date.isoformat() if hasattr(actual_entry_date, "isoformat") else str(actual_entry_date),
         "trades_log": trades_log,
+        "_stoploss_time": _stoploss_time,
     }
 
 
@@ -753,10 +777,11 @@ def run_backtest(
         data_end = min(data_end, eval_end)
     backtest_start = eval_start if eval_start is not None else data_end - timedelta(days=30 * backtest_months)
     data_start = min_feat_date
-    if eval_start is not None and train_lookback_days:
-        # Walk-forward 測試可縮小資料抓取範圍，降低 DB I/O 與記憶體壓力
+    if train_lookback_days:
+        # 有滾動訓練視窗：以 backtest_start 為錨點往前推，縮小資料抓取範圍
         warmup_days = max(60, atr_period * 3)
-        bounded_start = eval_start - timedelta(days=train_lookback_days + warmup_days)
+        _anchor = eval_start if eval_start is not None else backtest_start
+        bounded_start = _anchor - timedelta(days=train_lookback_days + warmup_days)
         data_start = max(min_feat_date, bounded_start)
 
     exit_strategy = "trailing" if trailing_stop_pct is not None else (
@@ -774,35 +799,76 @@ def run_backtest(
     print()
 
     # ── 2. 載入資料 ──
-    # 滾動視窗模式（train_lookback_days 已設定）：只預載價格資料，
-    # features/labels 在訓練迴圈中按需載入，每次只保留一個訓練視窗以節省記憶體。
-    # 全量模式（train_lookback_days=None）：沿用原有一次性載入行為（向後相容）。
     _use_rolling_window = train_lookback_days is not None
 
-    print("  載入價格資料 ...", flush=True)
-    price_df = _load_prices(db_session, data_start, data_end)
+    # Parquet 快取目錄（第一次從 DB 建立，後續直接讀取省去 DB 往返）
+    _cache_dir = Path("artifacts/cache")
+    _cache_dir.mkdir(parents=True, exist_ok=True)
+    _cache_key = f"{data_start}_{data_end}"
+    _price_cache = _cache_dir / f"prices_{_cache_key}.parquet"
+    _feat_cache  = _cache_dir / f"features_{_cache_key}.parquet"
+    _label_cache = _cache_dir / f"labels_{_cache_key}.parquet"
+
+    # ── 載入價格資料 ──
+    _log("load_prices start")
+    _t = time.time()
+    if _price_cache.exists():
+        price_df = pd.read_parquet(_price_cache)
+    else:
+        price_df = _load_prices(db_session, data_start, data_end)
+        price_df.to_parquet(_price_cache, index=False)
+    _timer_load_prices = time.time() - _t
+    _log(f"load_prices done {_timer_load_prices:.1f}s")
+
     if price_df.empty:
         raise ValueError("資料不足，無法進行回測")
     price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
 
-    if not _use_rolling_window:
-        # 全量模式：一次性載入並預解析全部特徵/標籤資料
-        print("  載入特徵/標籤資料（全量）...", flush=True)
-        _raw_feat, label_df = _load_features_labels(db_session, data_start, data_end)
-        if _raw_feat.empty:
+    # ── 建立 Parquet 快取（若尚不存在）──
+    # 不在此全量預載入記憶體；滾動視窗每 fold 按需讀取，非滾動視窗一次讀全量
+    _timer_load_features = 0.0
+    _timer_load_labels = 0.0
+    if not _feat_cache.exists() or not _label_cache.exists():
+        _log("build_parquet_cache start (first run)")
+        _t = time.time()
+        _raw_feat_all, _label_df_tmp = _load_features_labels(db_session, data_start, data_end)
+        _log(f"db_load done {time.time()-_t:.1f}s")
+        if _raw_feat_all.empty:
             raise ValueError("資料不足，無法進行回測")
-        _raw_feat["trading_date"] = pd.to_datetime(_raw_feat["trading_date"]).dt.date
-        label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
-
-        print("  預解析特徵 JSON ...", flush=True)
-        feat_df = _parse_and_filter_features(_raw_feat, feature_columns)
-        del _raw_feat
+        _raw_feat_all["trading_date"] = pd.to_datetime(_raw_feat_all["trading_date"]).dt.date
+        _label_df_tmp["trading_date"] = pd.to_datetime(_label_df_tmp["trading_date"]).dt.date
+        _log("parse_features start")
+        _t = time.time()
+        _feat_df_tmp = _parse_and_filter_features(_raw_feat_all, feature_columns)
+        _log(f"parse_features done {time.time()-_t:.1f}s")
+        del _raw_feat_all
         gc.collect()
+        # float32 轉換：特徵欄位記憶體砍半（ML 精度足夠），per-fold 峰值 ~3.5GB 而非 ~6GB
+        _feat_num_cols = [c for c in _feat_df_tmp.columns if c not in ("stock_id", "trading_date")]
+        _feat_df_tmp[_feat_num_cols] = _feat_df_tmp[_feat_num_cols].astype("float32")
+        _log("save_parquet start (float32)")
+        _t = time.time()
+        _feat_df_tmp.to_parquet(_feat_cache, index=False)
+        _label_df_tmp.to_parquet(_label_cache, index=False)
+        del _feat_df_tmp, _label_df_tmp
+        gc.collect()
+        _log(f"save_parquet done {time.time()-_t:.1f}s")
+
+    # 非滾動視窗：一次讀全量（訓練資料隨時間累積增長）
+    # 滾動視窗：佔位符，每 fold 在迴圈內按日期範圍讀 parquet
+    if not _use_rolling_window:
+        _log("load_all_features start (non-rolling)")
+        _t = time.time()
+        feat_df = pd.read_parquet(_feat_cache)
+        label_df = pd.read_parquet(_label_cache)
+        feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
+        label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
+        _timer_load_features = time.time() - _t
+        _log(f"load_all_features done {_timer_load_features:.1f}s")
     else:
-        # 滾動視窗模式：feat_df / label_df 由迴圈中的 _rw_* 變數提供
-        print(f"  滾動視窗模式：訓練視窗 {train_lookback_days} 日，特徵按需載入", flush=True)
-        feat_df = pd.DataFrame()   # 佔位符，迴圈開始前替換
+        feat_df = pd.DataFrame()
         label_df = pd.DataFrame()
+        _log(f"rolling_window_mode: per-fold parquet load (window={train_lookback_days}d)")
 
     # ── 3. 預計算 ATR（若需要）──
     atr_df: Optional[pd.DataFrame] = None
@@ -843,9 +909,21 @@ def run_backtest(
     benchmark_tc = transaction_cost_pct if benchmark_with_cost else 0.0
 
     # ── 滾動視窗狀態 ──
-    _rw_feat_df: Optional[pd.DataFrame] = None   # 目前已載入的 features（已解析）
-    _rw_label_df: Optional[pd.DataFrame] = None  # 目前已載入的 labels
-    _rw_range: Optional[Tuple[date, date]] = None  # (start, end) of current window
+    _rw_feat_df: Optional[pd.DataFrame] = None
+    _rw_label_df: Optional[pd.DataFrame] = None
+    _rw_range: Optional[Tuple[date, date]] = None
+
+    # ── 計時器累計 ──
+    _timer_train_model    = 0.0
+    _timer_predict        = 0.0
+    _timer_breakthrough   = 0.0
+    _timer_apply_stoploss = 0.0
+    _timer_simulate       = 0.0
+    _count_train_model    = 0
+    _count_predict        = 0
+    _count_breakthrough   = 0
+    _count_apply_stoploss = 0
+    _count_simulate       = 0
 
     # ── 進度計時 ──
     _loop_start = time.time()
@@ -884,25 +962,24 @@ def run_backtest(
                 or rb_date > _rw_range[1]
             )
             if _need_reload:
+                # 釋放上一 fold 的特徵/標籤，再按日期範圍讀取新 fold
                 if _rw_feat_df is not None:
                     del _rw_feat_df, _rw_label_df
                     _rw_feat_df = None
                     _rw_label_df = None
                     gc.collect()
-                _mem = _get_process_memory_gb()
-                print(
-                    f"  [{rb_date}] 載入視窗資料 {_win_start}~{_win_end}"
-                    f" (記憶體: {_mem:.1f}GB) ...",
-                    flush=True,
-                )
-                _rf, _rl = _load_features_labels(db_session, _win_start, _win_end)
-                _rf["trading_date"] = pd.to_datetime(_rf["trading_date"]).dt.date
-                _rl["trading_date"] = pd.to_datetime(_rl["trading_date"]).dt.date
-                _rw_feat_df = _parse_and_filter_features(_rf, feature_columns)
-                _rw_label_df = _rl
+                _log(f"fold_load {_win_start}~{_win_end}")
+                _t_fold = time.time()
+                _date_filters = [
+                    ("trading_date", ">=", _win_start),
+                    ("trading_date", "<=", _win_end),
+                ]
+                _rw_feat_df = pd.read_parquet(_feat_cache, filters=_date_filters)
+                _rw_label_df = pd.read_parquet(_label_cache, filters=_date_filters)
+                _rw_feat_df["trading_date"] = pd.to_datetime(_rw_feat_df["trading_date"]).dt.date
+                _rw_label_df["trading_date"] = pd.to_datetime(_rw_label_df["trading_date"]).dt.date
                 _rw_range = (_win_start, _win_end)
-                del _rf, _rl
-                gc.collect()
+                _log(f"fold_loaded feat:{len(_rw_feat_df):,} dt={time.time()-_t_fold:.1f}s")
             feat_df = _rw_feat_df
             label_df = _rw_label_df
 
@@ -952,9 +1029,13 @@ def run_backtest(
             else:
                 _sample_weight = None  # 等權樣本（baseline 模式）
 
+            _t = time.time()
             current_model = _train_model(fmat.values, y, fast_mode=fast_mode, sample_weight=_sample_weight)
+            _dt = time.time() - _t
+            _timer_train_model += _dt
+            _count_train_model += 1
             last_train_date = rb_date
-            print(f"  [{rb_date}] 模型重訓完成 (訓練筆數: {len(y):,})", flush=True)
+            print(f"  [{rb_date}] 模型重訓完成 (訓練筆數: {len(y):,}) [TIMER] train_model: {_dt:.2f}s", flush=True)
 
         if current_model is None:
             continue
@@ -987,7 +1068,11 @@ def run_backtest(
             else:
                 fmat[col] = fmat[col].fillna(fmat[col].median())
 
+        _t = time.time()
         scores = current_model.predict(fmat.values)
+        _dt = time.time() - _t
+        _timer_predict += _dt
+        _count_predict += 1
         day_feat = day_feat.reset_index(drop=True)
         day_feat["score"] = scores
 
@@ -1146,7 +1231,7 @@ def run_backtest(
             if _bt_window:
                 # ── hold_winners：續抱股不做突破過濾，直接確認；只對新進股做突破 ──
                 _held_rows = (
-                    [r for _, r in picks.iterrows() if str(r["stock_id"]) in _hw_held_sids]
+                    [r.to_dict() for _, r in picks.iterrows() if str(r["stock_id"]) in _hw_held_sids]
                     if _hw_held_sids else []
                 )
 
@@ -1164,9 +1249,13 @@ def run_backtest(
                     _ext_sids = _extended["stock_id"].astype(str).tolist()
 
                     # 向量化一次算出所有新候選股的突破日（使用預計算的 rolling stats）
+                    _t = time.time()
                     _bt_map = _compute_breakthrough_map(
                         _ext_sids, _bt_window, bt_stats_df, feat_df
                     )
+                    _dt = time.time() - _t
+                    _timer_breakthrough += _dt
+                    _count_breakthrough += 1
 
                     # 按 score 排序取前 _slots_needed 個有突破的新進股
                     for _, _cand_row in _extended.iterrows():
@@ -1243,6 +1332,7 @@ def run_backtest(
             _trail_pct = -0.10  # 獲利 +20% 後，從高點回撤 -10% 出場
 
         # ── 模擬持有 ──
+        _t = time.time()
         result = _simulate_period(
             picks, price_df, rb_date, exit_date,
             stoploss_pct, transaction_cost_pct,
@@ -1257,6 +1347,11 @@ def run_backtest(
             per_stock_cost_override=_per_stock_cost_override,
             profit_activation_pct=_profit_act,
         )
+        _dt = time.time() - _t
+        _timer_simulate += _dt
+        _count_simulate += 1
+        _timer_apply_stoploss += result.get("_stoploss_time", 0.0)
+        _count_apply_stoploss += 1
 
         # ── Exp G：更新 hw_current_holdings ──
         # 只保留本期未觸發停損的股票（它們下期可能被續抱）
@@ -1350,6 +1445,33 @@ def run_backtest(
             f"[{_done}/{_n_periods} | 記憶體: {_mem:.1f}GB | 預估剩餘: {_format_eta(_eta)}]",
             flush=True,
         )
+
+    # ── TIMER 瓶頸報告 ──
+    _total_loop = time.time() - _loop_start
+    print("\n" + "─" * 60)
+    print("[TIMER] 效能瓶頸報告")
+    print("─" * 60)
+    print(f"  {'步驟':<28} {'次數':>5} {'總秒':>8} {'平均秒':>8}")
+    print(f"  {'-'*54}")
+    for _lbl, _cnt, _tot in [
+        ("load_prices",        1,                    _timer_load_prices),
+        ("load_features",      1,                    _timer_load_features),
+        ("load_labels",        1,                    _timer_load_labels),
+        ("train_model",        _count_train_model,   _timer_train_model),
+        ("predict",            _count_predict,       _timer_predict),
+        ("breakthrough_map",   _count_breakthrough,  _timer_breakthrough),
+        ("simulate_period",    _count_simulate,      _timer_simulate),
+        ("apply_stoploss",     _count_apply_stoploss,_timer_apply_stoploss),
+    ]:
+        _avg = _tot / max(_cnt, 1)
+        print(f"  {_lbl:<28} {_cnt:>5} {_tot:>8.2f} {_avg:>8.3f}")
+    _unaccounted = _total_loop - (
+        _timer_load_prices + _timer_load_features + _timer_load_labels
+        + _timer_train_model + _timer_predict + _timer_breakthrough + _timer_simulate
+    )
+    print(f"  {'其他（overhead）':<28} {'—':>5} {_unaccounted:>8.2f}")
+    print(f"  {'總 loop 時間':<28} {'—':>5} {_total_loop:>8.2f}")
+    print("─" * 60 + "\n")
 
     # ── 6. 計算總結指標 ──
     if not period_results:
