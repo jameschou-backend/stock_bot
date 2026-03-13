@@ -533,7 +533,7 @@ def run_backtest(
     atr_stoploss_multiplier: Optional[float] = None,  # 原始基準：無 ATR 停損
     atr_period: int = 14,
     rebalance_freq: str = "M",
-    label_horizon_buffer: int = 0,       # 原始基準：無 buffer
+    label_horizon_buffer: int = 20,      # label horizon = 20 交易日，訓練截止往前 20 天避免標籤洩漏
     enable_slippage: bool = False,       # 原始基準：無滑價模型
     fast_mode: bool = False,  # 加速模式：減少樹數（LightGBM 150 棵）
     # ── 實驗參數（10y 逐步優化用）──
@@ -562,7 +562,7 @@ def run_backtest(
         trailing_stop_pct: 移動停利比例（如 -0.12），None 停用
         atr_stoploss_multiplier: ATR 倍數動態停損（如 2.5），None 使用固定停損
         atr_period: ATR 計算週期（日）
-        label_horizon_buffer: 訓練標籤截止日往前預留天數，避免近 rb_date 的標籤使用到未來價格（預設 7）
+        label_horizon_buffer: 訓練標籤截止日往前預留天數，避免近 rb_date 的標籤使用到未來價格（預設 20，=label horizon）
 
     Returns:
         Dict 包含完整回測結果
