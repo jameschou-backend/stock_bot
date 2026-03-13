@@ -116,6 +116,14 @@ def main():
                         dest="no_seasonal_filter",
                         help="明確停用季節性降倉（診斷用）")
 
+    # ── 突破進場 ──
+    parser.add_argument("--breakthrough-entry", action="store_true",
+                        dest="enable_breakthrough_entry",
+                        help="突破確認進場：月底選股後等突破訊號再進場（最多等 10 個交易日）")
+    parser.add_argument("--breakthrough-wait", type=int, default=10,
+                        dest="breakthrough_max_wait",
+                        help="突破進場最大等待交易日（預設 10）")
+
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
                         dest="train_lookback_days",
@@ -216,6 +224,8 @@ def main():
             rebalance_freq=rebalance_freq,
             train_lookback_days=args.train_lookback_days,
             clip_loss_pct=clip_loss_pct,
+            enable_breakthrough_entry=args.enable_breakthrough_entry,
+            breakthrough_max_wait=args.breakthrough_max_wait,
         )
 
     # ── 輸出 JSON ──

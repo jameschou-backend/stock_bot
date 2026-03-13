@@ -318,6 +318,104 @@ def _precompute_market_200ma_bear(price_df: pd.DataFrame) -> Dict[date, bool]:
     return {d: bool(v) for d, v in bear_series.items()}
 
 
+def _compute_breakthrough_map(
+    candidate_sids: List[str],
+    window_dates: List[date],
+    price_df: pd.DataFrame,
+    feat_df: pd.DataFrame,
+    lookback: int = 20,
+    volume_surge_ratio: float = 1.5,
+    foreign_streak_min: int = 3,
+) -> Dict[str, date]:
+    """向量化批次計算所有候選股在視窗內的第一個突破日（替代逐股逐日掃描）。
+
+    突破條件（任一成立）：
+    - 條件一（價格）：收盤 > 前 20 日最高收盤 AND 當日量 > 20 日均量 × volume_surge_ratio
+    - 條件二（籌碼）：foreign_buy_consecutive_days >= foreign_streak_min AND 收盤 > 20 日均線
+
+    Returns:
+        {stock_id: 最早突破日} — 無突破的股票不出現在 dict 中
+    """
+    if not candidate_sids or not window_dates:
+        return {}
+
+    sids_set = set(str(s) for s in candidate_sids)
+    window_set = set(window_dates)
+    window_min = min(window_dates)
+
+    # ── 取候選股的歷史 + 視窗價格（往前需要 lookback 天以計算 rolling）──
+    cand_prices = price_df[
+        price_df["stock_id"].astype(str).isin(sids_set)
+    ][["stock_id", "trading_date", "close", "volume"]].copy()
+    cand_prices["stock_id"] = cand_prices["stock_id"].astype(str)
+    cand_prices = cand_prices.sort_values(["stock_id", "trading_date"])
+
+    if cand_prices.empty:
+        return {}
+
+    # ── 計算 rolling 指標（以前 lookback 日為參考基準，排除當日）──
+    grp = cand_prices.groupby("stock_id", group_keys=False)
+    cand_prices["close_max_20"] = grp["close"].transform(
+        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).max()
+    )
+    cand_prices["vol_avg_20"] = grp["volume"].transform(
+        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
+    )
+    cand_prices["ma_20"] = grp["close"].transform(
+        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
+    )
+
+    # ── 只保留視窗內的日期（計算當日突破）──
+    window_data = cand_prices[
+        cand_prices["trading_date"].isin(window_set)
+    ].copy()
+
+    if window_data.empty:
+        return {}
+
+    # ── 條件一：價格 + 成交量突破 ──
+    window_data["cond1"] = (
+        window_data["close_max_20"].notna()
+        & (window_data["close_max_20"] > 0)
+        & (window_data["close"] > window_data["close_max_20"])
+        & window_data["vol_avg_20"].notna()
+        & (window_data["vol_avg_20"] > 0)
+        & (window_data["volume"] > window_data["vol_avg_20"] * volume_surge_ratio)
+    )
+
+    # ── 條件二：外資籌碼 + 均線 ──
+    if "foreign_buy_consecutive_days" in feat_df.columns:
+        wf = feat_df[
+            feat_df["stock_id"].astype(str).isin(sids_set)
+            & feat_df["trading_date"].isin(window_set)
+        ][["stock_id", "trading_date", "foreign_buy_consecutive_days"]].copy()
+        wf["stock_id"] = wf["stock_id"].astype(str)
+        wf["foreign_buy_consecutive_days"] = pd.to_numeric(
+            wf["foreign_buy_consecutive_days"], errors="coerce"
+        ).fillna(0)
+        window_data = window_data.merge(wf, on=["stock_id", "trading_date"], how="left")
+        window_data["foreign_buy_consecutive_days"] = window_data.get(
+            "foreign_buy_consecutive_days", pd.Series(0.0, index=window_data.index)
+        ).fillna(0)
+        window_data["cond2"] = (
+            (window_data["foreign_buy_consecutive_days"] >= foreign_streak_min)
+            & window_data["ma_20"].notna()
+            & (window_data["ma_20"] > 0)
+            & (window_data["close"] > window_data["ma_20"])
+        )
+    else:
+        window_data["cond2"] = False
+
+    window_data["breakthrough"] = window_data["cond1"] | window_data["cond2"]
+
+    # ── 每股取最早突破日 ──
+    bt_rows = window_data[window_data["breakthrough"]][["stock_id", "trading_date"]].copy()
+    if bt_rows.empty:
+        return {}
+    bt_rows = bt_rows.sort_values("trading_date")
+    return bt_rows.groupby("stock_id")["trading_date"].first().to_dict()
+
+
 def _simulate_period(
     picks: pd.DataFrame,
     price_df: pd.DataFrame,
@@ -332,6 +430,7 @@ def _simulate_period(
     atr_stoploss_multiplier: Optional[float] = None,
     enable_slippage: bool = True,
     clip_loss_pct: float = -0.50,
+    per_stock_entry_dates: Optional[Dict[str, date]] = None,
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -358,37 +457,72 @@ def _simulate_period(
 
     stock_ids = picks["stock_id"].tolist()
 
+    # 若有 per-stock 進場日，以最早進場日為 price 載入起點
+    _price_start = entry_date
+    if per_stock_entry_dates:
+        _ps_starts = [per_stock_entry_dates.get(str(s), entry_date) for s in stock_ids]
+        if _ps_starts:
+            _price_start = min(_ps_starts)
+
     period_prices = price_df[
         (price_df["stock_id"].isin(stock_ids)) &
-        (price_df["trading_date"] >= entry_date) &
+        (price_df["trading_date"] >= _price_start) &
         (price_df["trading_date"] <= exit_date)
     ].copy()
 
     if period_prices.empty:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
-    # ── 1. 確定實際進場日（支援延遲 N 個交易日）──
-    all_trading_dates = sorted(period_prices["trading_date"].unique())
-    if entry_delay_days > 0:
-        future_dates = [d for d in all_trading_dates if d > entry_date]
-        if len(future_dates) < entry_delay_days:
+    # ── 1 & 2. 確定進場日並取進場價 ──
+    if per_stock_entry_dates:
+        # 各股獨立進場日（突破確認進場模式）
+        positions_list = []
+        for sid in stock_ids:
+            sid_str = str(sid)
+            stock_entry = per_stock_entry_dates.get(sid_str, entry_date)
+            ep_row = price_df[
+                (price_df["stock_id"].astype(str) == sid_str)
+                & (price_df["trading_date"] == stock_entry)
+            ]
+            if ep_row.empty:
+                continue
+            ep = float(ep_row["close"].iloc[0])
+            if ep <= 0:
+                continue
+            positions_list.append({
+                "stock_id": sid_str,
+                "entry_date": stock_entry,
+                "planned_exit_date": exit_date,
+                "entry_price": ep,
+            })
+        if not positions_list:
             return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
-        actual_entry_date = future_dates[entry_delay_days - 1]
+        positions_input = pd.DataFrame(positions_list)
+        actual_entry_date = min(per_stock_entry_dates.values())  # 供 ATR/滑價 lookup 參考
+        entry_prices = positions_input[["stock_id", "entry_price"]]
     else:
-        actual_entry_date = entry_date
+        # 原有邏輯：統一進場日
+        all_trading_dates = sorted(period_prices["trading_date"].unique())
+        if entry_delay_days > 0:
+            future_dates = [d for d in all_trading_dates if d > entry_date]
+            if len(future_dates) < entry_delay_days:
+                return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+            actual_entry_date = future_dates[entry_delay_days - 1]
+        else:
+            actual_entry_date = entry_date
 
-    # ── 2. 取進場價（以實際進場日收盤價估算）──
-    entry_prices = period_prices[
-        period_prices["trading_date"] == actual_entry_date
-    ][["stock_id", "close"]].rename(columns={"close": "entry_price"})
+        # ── 2. 取進場價（以實際進場日收盤價估算）──
+        entry_prices = period_prices[
+            period_prices["trading_date"] == actual_entry_date
+        ][["stock_id", "close"]].rename(columns={"close": "entry_price"})
 
-    if entry_prices.empty:
-        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
+        if entry_prices.empty:
+            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
 
-    positions_input = entry_prices.assign(
-        entry_date=actual_entry_date,
-        planned_exit_date=exit_date,
-    )[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
+        positions_input = entry_prices.assign(
+            entry_date=actual_entry_date,
+            planned_exit_date=exit_date,
+        )[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
 
     # ── 3. ATR-based 個股動態停損 ──
     per_stock_stop: Optional[Dict[str, float]] = None
@@ -543,6 +677,8 @@ def run_backtest(
     enable_seasonal_filter: bool = False, # 獨立季節性降倉旗標（不啟用其他複雜過濾）
     topn_floor: int = 0,  # 0=不強制下限；>0 時 effective_topn 不低於此值（Change B 用）
     clip_loss_pct: float = -0.50,  # 單筆最大損失 clip（預設 -50%）；診斷用可傳 -1.01 停用
+    enable_breakthrough_entry: bool = False,  # 突破確認進場：等待訊號後才進場
+    breakthrough_max_wait: int = 10,         # 最多等待幾個交易日出現突破訊號
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -933,6 +1069,56 @@ def run_backtest(
 
         picks = risk.pick_topn(day_feat, effective_topn)
 
+        # ── 突破確認進場（Breakthrough Entry Filter）──
+        # 月底選股後不立即進場，等每檔個股出現突破訊號（最多等 breakthrough_max_wait 個交易日）。
+        # 無訊號者以後排候選補位；仍無訊號者持現金。
+        # 使用向量化批次計算，避免逐股逐日掃描 price_df（效能 O(n_stocks × window)）。
+        per_stock_entry_dates: Dict[str, date] = {}
+        if enable_breakthrough_entry:
+            # 取再平衡日後的交易日視窗（最多 breakthrough_max_wait 天）
+            _bt_window = [
+                d for d in bt_trading_dates if d > rb_date
+            ][:breakthrough_max_wait]
+
+            if _bt_window:
+                # 擴大候選池（最多 effective_topn × 3 或全部候選）以便補位
+                _ext_n = min(effective_topn * 3, len(day_feat))
+                _extended = risk.pick_topn(day_feat, _ext_n)
+                _ext_sids = _extended["stock_id"].astype(str).tolist()
+
+                # 向量化一次算出所有候選股的突破日
+                _bt_map = _compute_breakthrough_map(
+                    _ext_sids, _bt_window, price_df, feat_df
+                )
+
+                # 按 score 排序取前 effective_topn 個有突破的股票
+                _confirmed_rows: List[Dict] = []
+                _entry_map: Dict[str, date] = {}
+                _orig_topn_sids = set(picks["stock_id"].astype(str).tolist())
+
+                for _, _cand_row in _extended.iterrows():
+                    if len(_confirmed_rows) >= effective_topn:
+                        break
+                    _sid = str(_cand_row["stock_id"])
+                    if _sid in _bt_map:
+                        _confirmed_rows.append(_cand_row.to_dict())
+                        _entry_map[_sid] = _bt_map[_sid]
+
+                if _confirmed_rows:
+                    picks = pd.DataFrame(_confirmed_rows)
+                    per_stock_entry_dates = _entry_map
+                    _n_replaced = sum(1 for s in _entry_map if s not in _orig_topn_sids)
+                    if _n_replaced > 0:
+                        print(
+                            f"  [{rb_date}] 突破進場：{len(_confirmed_rows)} 檔確認"
+                            f"（{_n_replaced} 檔以候補替換）",
+                            flush=True,
+                        )
+                else:
+                    # 全部候選無突破 → 持現金
+                    picks = pd.DataFrame(columns=picks.columns)
+                    print(f"  [{rb_date}] 突破進場：無訊號，本期持現金", flush=True)
+
         # ── 計算倉位權重（支援 position_sizing_method）──
         period_price_slice = price_df[price_df["trading_date"] <= rb_date]
         # position_sizing_method 優先（支援 mean_variance / risk_parity）
@@ -981,6 +1167,7 @@ def run_backtest(
             atr_stoploss_multiplier=atr_stoploss_multiplier,
             enable_slippage=enable_slippage,
             clip_loss_pct=clip_loss_pct,
+            per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
         )
 
         # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──
