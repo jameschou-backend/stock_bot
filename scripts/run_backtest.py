@@ -131,6 +131,9 @@ def main():
     parser.add_argument("--trailing-profit", action="store_true",
                         dest="trailing_profit",
                         help="Exp H：獲利達 +20%% 後啟動移動停利，從高點回撤 -10%% 出場")
+    parser.add_argument("--hold-winners-v2", action="store_true",
+                        dest="hold_winners_v2",
+                        help="Exp G2：技術面續抱（收盤>MA20 + 峰值回撤<10%% + 排名前 topN×1.5）")
 
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
@@ -236,6 +239,7 @@ def main():
             breakthrough_max_wait=args.breakthrough_max_wait,
             hold_winners=args.hold_winners,
             trailing_profit=args.trailing_profit,
+            hold_winners_v2=args.hold_winners_v2,
         )
 
     # ── 輸出 JSON ──
