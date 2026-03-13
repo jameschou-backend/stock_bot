@@ -307,6 +307,7 @@ def apply_trailing_stop(
     atr_at_entry: Optional[pd.Series] = None,
     stagnant_days: int = 10,
     stagnant_threshold: float = 0.03,
+    profit_activation_pct: Optional[float] = None,
 ) -> pd.DataFrame:
     """移動停利 + 固定停損：從持有期最高收盤回落觸發出場，或跌破固定停損，以先觸發者為準。
 
@@ -320,6 +321,8 @@ def apply_trailing_stop(
         atr_at_entry: 每檔股票進場時的 ATR 值（Series, index: stock_id）
         stagnant_days: 超過幾天不創新高啟動淘汰 (預設 10 天)
         stagnant_threshold: 在 stagnant_days 期間即使沒破底但漲幅低於此比例就視為死魚股淘汰 (預設 0.03)
+        profit_activation_pct: Exp H — 移動停利啟動閾值（如 0.20 = 獲利達 +20% 後才啟動）。
+            None = 從進場即啟動（原始行為）。
     """
     if trades_or_positions_df.empty:
         return pd.DataFrame(columns=["stock_id", "entry_price", "exit_price", "exit_date", "stoploss_triggered"])
@@ -406,37 +409,49 @@ def apply_trailing_stop(
             # 若最高點獲利超過特定門檻，緊縮 trailing_stop
             current_drawdown_stop = effective_trailing_stop
             peak_ret = peak_close / entry_price - 1
-            if peak_ret >= 0.20:
-                # 獲利超過 20% 時，拉緊停利為 5% 或是至少保本 +10%
-                current_drawdown_stop = max(current_drawdown_stop, -0.05)
-                # 另外一種保底條件：不能跌破進場的1.1倍
-                if close < entry_price * 1.10:
-                    exit_price = close
-                    exit_date = trading_date
-                    stoploss_triggered = True
-                    break
-            elif peak_ret >= 0.10:
-                # 獲利超過 10% 時，停利至少改為保本 (或小賺 2%)
-                if close < entry_price * 1.02:
+
+            if profit_activation_pct is not None:
+                # Exp H：移動停利啟動閾值 — 獲利未達閾值前不啟動 trailing
+                if peak_ret >= profit_activation_pct:
+                    drawdown_from_peak = close / peak_close - 1
+                    if effective_trailing_stop < 0 and drawdown_from_peak <= effective_trailing_stop:
+                        exit_price = close
+                        exit_date = trading_date
+                        stoploss_triggered = True
+                        break
+            else:
+                # 原始行為：階段性停利保護
+                if peak_ret >= 0.20:
+                    # 獲利超過 20% 時，拉緊停利為 5% 或是至少保本 +10%
+                    current_drawdown_stop = max(current_drawdown_stop, -0.05)
+                    # 另外一種保底條件：不能跌破進場的1.1倍
+                    if close < entry_price * 1.10:
+                        exit_price = close
+                        exit_date = trading_date
+                        stoploss_triggered = True
+                        break
+                elif peak_ret >= 0.10:
+                    # 獲利超過 10% 時，停利至少改為保本 (或小賺 2%)
+                    if close < entry_price * 1.02:
+                        exit_price = close
+                        exit_date = trading_date
+                        stoploss_triggered = True
+                        break
+
+                # 移動停利（從最高點回落）
+                drawdown_from_peak = close / peak_close - 1
+                if current_drawdown_stop < 0 and drawdown_from_peak <= current_drawdown_stop:
                     exit_price = close
                     exit_date = trading_date
                     stoploss_triggered = True
                     break
 
-            # 移動停利（從最高點回落）
-            drawdown_from_peak = close / peak_close - 1
-            if current_drawdown_stop < 0 and drawdown_from_peak <= current_drawdown_stop:
-                exit_price = close
-                exit_date = trading_date
-                stoploss_triggered = True
-                break
-
-            # 汰弱留強機制 (Time-Stop Rotation)
-            if days_since_new_high >= stagnant_days and hard_ret < stagnant_threshold:
-                exit_price = close
-                exit_date = trading_date
-                stoploss_triggered = True
-                break
+                # 汰弱留強機制 (Time-Stop Rotation)
+                if days_since_new_high >= stagnant_days and hard_ret < stagnant_threshold:
+                    exit_price = close
+                    exit_date = trading_date
+                    stoploss_triggered = True
+                    break
 
             exit_price = close
             exit_date = trading_date

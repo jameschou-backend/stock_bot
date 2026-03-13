@@ -124,6 +124,14 @@ def main():
                         dest="breakthrough_max_wait",
                         help="突破進場最大等待交易日（預設 10）")
 
+    # ── Exp G / H ──
+    parser.add_argument("--hold-winners", action="store_true",
+                        dest="hold_winners",
+                        help="Exp G：月底再平衡時仍在 TopN 的持股不賣出不買回（省手續費，讓強勢股複利）")
+    parser.add_argument("--trailing-profit", action="store_true",
+                        dest="trailing_profit",
+                        help="Exp H：獲利達 +20%% 後啟動移動停利，從高點回撤 -10%% 出場")
+
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
                         dest="train_lookback_days",
@@ -226,6 +234,8 @@ def main():
             clip_loss_pct=clip_loss_pct,
             enable_breakthrough_entry=args.enable_breakthrough_entry,
             breakthrough_max_wait=args.breakthrough_max_wait,
+            hold_winners=args.hold_winners,
+            trailing_profit=args.trailing_profit,
         )
 
     # ── 輸出 JSON ──
