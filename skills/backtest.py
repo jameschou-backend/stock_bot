@@ -25,7 +25,7 @@ import os
 import time
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -33,7 +33,7 @@ import psutil
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.models import Feature, Label, RawMarginShort, RawPrice
+from app.models import Feature, Label, RawPrice
 from skills import risk
 
 # ── 模型訓練（複用 train_ranker 邏輯）──
@@ -724,7 +724,6 @@ def run_backtest(
     clip_loss_pct: float = -0.50,  # 單筆最大損失 clip（預設 -50%）；診斷用可傳 -1.01 停用
     enable_breakthrough_entry: bool = False,  # 突破確認進場：等待訊號後才進場
     breakthrough_max_wait: int = 10,         # 最多等待幾個交易日出現突破訊號
-    enable_technical_filter: bool = False,   # Exp I：突破後再過技術面+融資過濾（MA5>MA10>MA20, close<MA20×1.08, 融資率<60%）
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -875,28 +874,6 @@ def run_backtest(
     if enable_breakthrough_entry:
         print("  預計算突破 rolling 指標（close_max_20 / vol_avg_20 / ma_20）...", flush=True)
         bt_stats_df = _precompute_breakthrough_stats(price_df, lookback=20)
-
-    # ── 3c. Exp I：載入融資餘額資料（技術面 + 融資過濾用）──
-    margin_df: Optional[pd.DataFrame] = None
-    if enable_technical_filter:
-        print("  載入融資餘額資料 ...", flush=True)
-        _margin_cache = _cache_dir / f"margin_{_cache_key}.parquet"
-        if _margin_cache.exists():
-            margin_df = pd.read_parquet(_margin_cache)
-        else:
-            _mq = db_session.query(
-                RawMarginShort.stock_id,
-                RawMarginShort.trading_date,
-                RawMarginShort.margin_purchase_balance,
-                RawMarginShort.margin_purchase_limit,
-            ).filter(
-                RawMarginShort.trading_date >= data_start,
-                RawMarginShort.trading_date <= data_end,
-            )
-            margin_df = pd.read_sql(_mq.statement, db_session.bind)
-            margin_df.to_parquet(_margin_cache, index=False)
-        margin_df["trading_date"] = pd.to_datetime(margin_df["trading_date"]).dt.date
-        print(f"  融資資料: {len(margin_df):,} 筆", flush=True)
 
     # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
@@ -1260,70 +1237,6 @@ def run_backtest(
                 else:
                     picks = pd.DataFrame(columns=picks.columns)
                     print(f"  [{rb_date}] 突破進場：無訊號，本期持現金", flush=True)
-
-        # ── Exp I：技術面 + 融資過濾 ──
-        # 條件一：MA5 > MA10 > MA20（多頭排列）
-        # 條件二：收盤 < MA20 × 1.08（避免追高）
-        # 條件三：融資使用率 < 60%（散戶未過熱）
-        if enable_technical_filter and not picks.empty:
-            _tf_sids = picks["stock_id"].astype(str).tolist()
-            # 取再平衡日前的價格歷史（至少需要 20 根）
-            _tf_price_hist = price_df[
-                price_df["stock_id"].isin(_tf_sids) &
-                (price_df["trading_date"] <= rb_date)
-            ][["stock_id", "trading_date", "close"]].sort_values("trading_date")
-            # 按股票分組（dict for O(1) lookup）
-            _tf_price_by_sid: Dict[str, Any] = {
-                str(sid): grp["close"].values
-                for sid, grp in _tf_price_hist.groupby("stock_id")
-            }
-            # 融資使用率分組
-            _tf_marg_by_sid: Dict[str, Tuple[float, float]] = {}
-            if margin_df is not None:
-                _tf_marg_hist = margin_df[
-                    margin_df["stock_id"].isin(_tf_sids) &
-                    (margin_df["trading_date"] <= rb_date)
-                ].sort_values("trading_date")
-                for _sid_m, _grp_m in _tf_marg_hist.groupby("stock_id"):
-                    if not _grp_m.empty:
-                        _row_m = _grp_m.iloc[-1]
-                        _tf_marg_by_sid[str(_sid_m)] = (
-                            float(_row_m["margin_purchase_balance"] or 0),
-                            float(_row_m["margin_purchase_limit"] or 1),
-                        )
-            _tf_keep = []
-            for _, _tf_row in picks.iterrows():
-                _tf_sid = str(_tf_row["stock_id"])
-                _tf_hist = _tf_price_by_sid.get(_tf_sid)
-                if _tf_hist is None or len(_tf_hist) < 20:
-                    continue
-                _tf_close = float(_tf_hist[-1])
-                _tf_ma5  = float(_tf_hist[-5:].mean())
-                _tf_ma10 = float(_tf_hist[-10:].mean())
-                _tf_ma20 = float(_tf_hist[-20:].mean())
-                # Condition 1: MA5 > MA10 > MA20（多頭排列）
-                if not (_tf_ma5 > _tf_ma10 > _tf_ma20):
-                    continue
-                # Condition 2: 收盤 < MA20 × 1.08（避免追高）
-                if _tf_close >= _tf_ma20 * 1.08:
-                    continue
-                # Condition 3: 融資使用率 < 60%（散戶未過熱）
-                if _tf_sid in _tf_marg_by_sid:
-                    _tf_bal, _tf_lim = _tf_marg_by_sid[_tf_sid]
-                    if _tf_lim > 0 and _tf_bal / _tf_lim >= 0.60:
-                        continue
-                _tf_keep.append(_tf_row)
-            if _tf_keep:
-                picks = pd.DataFrame(_tf_keep)
-                _n_filtered = len(_tf_sids) - len(_tf_keep)
-                if _n_filtered > 0:
-                    print(
-                        f"  [{rb_date}] technical_filter: {len(_tf_sids)}->{len(_tf_keep)} 檔"
-                        f"（過濾 {_n_filtered}）", flush=True,
-                    )
-            else:
-                picks = pd.DataFrame(columns=picks.columns)
-                print(f"  [{rb_date}] technical_filter: 全部過濾，本期持現金", flush=True)
 
         # ── 計算倉位權重（支援 position_sizing_method）──
         period_price_slice = price_df[price_df["trading_date"] <= rb_date]

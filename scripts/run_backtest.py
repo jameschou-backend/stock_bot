@@ -123,9 +123,6 @@ def main():
     parser.add_argument("--breakthrough-wait", type=int, default=10,
                         dest="breakthrough_max_wait",
                         help="突破進場最大等待交易日（預設 10）")
-    parser.add_argument("--technical-filter", action="store_true",
-                        dest="enable_technical_filter",
-                        help="Exp I：突破後再過技術面+融資過濾（MA5>MA10>MA20, close<MA20×1.08, 融資率<60%%）")
 
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
@@ -229,7 +226,6 @@ def main():
             clip_loss_pct=clip_loss_pct,
             enable_breakthrough_entry=args.enable_breakthrough_entry,
             breakthrough_max_wait=args.breakthrough_max_wait,
-            enable_technical_filter=args.enable_technical_filter,
         )
 
     # ── 輸出 JSON ──
