@@ -199,69 +199,102 @@ def apply_stoploss(
 ) -> pd.DataFrame:
     """套用停損規則，回傳每筆部位的最終出場價與是否觸發停損。
 
+    向量化實作：以 pandas merge + groupby 取代雙層 iterrows，
+    效能從 O(positions × days) Python 迴圈改為純 NumPy/Pandas 向量運算。
+
     Args:
         trades_or_positions_df: 需含 stock_id / entry_date / planned_exit_date / entry_price
         price_df: 持有期間內的價格資料
         stoploss_pct: 全局停損百分比（如 -0.07 = -7%）
         per_stock_stoploss: 個股動態停損 {stock_id: stoploss_pct}，優先於全局值
     """
+    import numpy as np
+
+    _empty = pd.DataFrame(columns=["stock_id", "entry_price", "exit_price", "exit_date", "stoploss_triggered"])
     if trades_or_positions_df.empty:
-        return pd.DataFrame(columns=["stock_id", "entry_price", "exit_price", "exit_date", "stoploss_triggered"])
+        return _empty
 
-    results = []
-    for _, row in trades_or_positions_df.iterrows():
-        stock_id = str(row["stock_id"])
-        entry_date = row["entry_date"]
-        planned_exit_date = row["planned_exit_date"]
-        entry_price = float(row["entry_price"])
-        if entry_price <= 0:
-            continue
+    pos = trades_or_positions_df.copy()
+    pos["stock_id"] = pos["stock_id"].astype(str)
+    pos["entry_price"] = pd.to_numeric(pos["entry_price"], errors="coerce")
+    pos = pos[pos["entry_price"] > 0].copy()
+    if pos.empty:
+        return _empty
 
-        effective_stoploss = (
-            per_stock_stoploss.get(stock_id, stoploss_pct)
-            if per_stock_stoploss
-            else stoploss_pct
-        )
+    # 每股有效停損（per_stock_stoploss 優先，否則用全局值）
+    if per_stock_stoploss:
+        pos["effective_sl"] = pos["stock_id"].map(per_stock_stoploss).fillna(stoploss_pct)
+    else:
+        pos["effective_sl"] = float(stoploss_pct)
 
-        stock_prices = price_df[
-            (price_df["stock_id"].astype(str) == stock_id)
-            & (price_df["trading_date"] >= entry_date)
-            & (price_df["trading_date"] <= planned_exit_date)
-        ].sort_values("trading_date")
-        if stock_prices.empty:
-            continue
+    # 價格資料
+    px = price_df[["stock_id", "trading_date", "close"]].copy()
+    px["stock_id"] = px["stock_id"].astype(str)
+    px["close"] = pd.to_numeric(px["close"], errors="coerce")
 
-        exit_price = entry_price
-        exit_date = entry_date
-        stoploss_triggered = False
-        for _, px_row in stock_prices.iterrows():
-            trading_date = px_row["trading_date"]
-            close = float(px_row["close"])
-            if trading_date == entry_date:
-                exit_price = close
-                exit_date = trading_date
-                continue
-            current_ret = close / entry_price - 1
-            if effective_stoploss < 0 and current_ret <= effective_stoploss:
-                exit_price = close
-                exit_date = trading_date
-                stoploss_triggered = True
-                break
-            exit_price = close
-            exit_date = trading_date
+    # 合併持倉與價格（同一股票的所有持有期間價格）
+    merged = px.merge(
+        pos[["stock_id", "entry_date", "planned_exit_date", "entry_price", "effective_sl"]],
+        on="stock_id",
+    )
+    merged = merged[
+        (merged["trading_date"] >= merged["entry_date"])
+        & (merged["trading_date"] <= merged["planned_exit_date"])
+    ].copy()
 
-        results.append(
-            {
-                "stock_id": stock_id,
-                "entry_date": entry_date,
-                "planned_exit_date": planned_exit_date,
-                "entry_price": entry_price,
-                "exit_price": exit_price,
-                "exit_date": exit_date,
-                "stoploss_triggered": stoploss_triggered,
-            }
-        )
-    return pd.DataFrame(results)
+    if merged.empty:
+        return _empty
+
+    merged["ret"] = merged["close"] / merged["entry_price"] - 1
+    merged = merged.sort_values("trading_date")
+
+    # ── 找最早停損觸發日（entry_date 當天不檢查，effective_sl < 0 才啟用）──
+    sl_cands = merged[
+        (merged["trading_date"] > merged["entry_date"])
+        & (merged["effective_sl"] < 0)
+        & (merged["ret"] <= merged["effective_sl"])
+    ]
+    first_sl = (
+        sl_cands.groupby("stock_id", as_index=False).first()[["stock_id", "trading_date", "close"]]
+        .rename(columns={"trading_date": "sl_date", "close": "sl_price"})
+    )
+
+    # ── 找 entry_date 之後的最後交易日（正常出場）──
+    after_entry = merged[merged["trading_date"] > merged["entry_date"]]
+    last_row = (
+        after_entry.groupby("stock_id", as_index=False).last()[["stock_id", "trading_date", "close"]]
+        .rename(columns={"trading_date": "last_date", "close": "last_price"})
+    )
+
+    # ── 取 entry_date 當日收盤（無 after-entry 資料時的 fallback）──
+    entry_day_close = (
+        merged[merged["trading_date"] == merged["entry_date"]]
+        .groupby("stock_id", as_index=False).first()[["stock_id", "close"]]
+        .rename(columns={"close": "entry_close"})
+    )
+
+    # ── 合併並決定出場 ──
+    result = pos.merge(first_sl, on="stock_id", how="left")
+    result = result.merge(last_row, on="stock_id", how="left")
+    result = result.merge(entry_day_close, on="stock_id", how="left")
+
+    use_sl = result["sl_date"].notna()
+    result["exit_date"] = np.where(
+        use_sl,
+        result["sl_date"],
+        result["last_date"].fillna(result["entry_date"]),
+    )
+    result["exit_price"] = np.where(
+        use_sl,
+        result["sl_price"],
+        result["last_price"].fillna(result["entry_close"].fillna(result["entry_price"])),
+    )
+    result["stoploss_triggered"] = use_sl
+
+    return result[
+        ["stock_id", "entry_date", "planned_exit_date", "entry_price",
+         "exit_price", "exit_date", "stoploss_triggered"]
+    ].reset_index(drop=True)
 
 
 def apply_trailing_stop(

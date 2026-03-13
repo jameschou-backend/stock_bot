@@ -318,16 +318,56 @@ def _precompute_market_200ma_bear(price_df: pd.DataFrame) -> Dict[date, bool]:
     return {d: bool(v) for d, v in bear_series.items()}
 
 
+def _precompute_breakthrough_stats(
+    price_df: pd.DataFrame,
+    lookback: int = 20,
+) -> pd.DataFrame:
+    """預先計算所有股票的突破 rolling 指標（close_max_20 / vol_avg_20 / ma_20）。
+
+    在主迴圈前一次性算完，避免 _compute_breakthrough_map 在每個再平衡期重複 rolling 計算
+    （約 117 次 → 1 次，可節省 4-6 分鐘）。
+
+    Returns:
+        DataFrame: stock_id / trading_date / close / volume / close_max_20 / vol_avg_20 / ma_20
+    """
+    if price_df.empty:
+        return pd.DataFrame(
+            columns=["stock_id", "trading_date", "close", "volume",
+                     "close_max_20", "vol_avg_20", "ma_20"]
+        )
+
+    df = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df["volume"] = pd.to_numeric(df["volume"], errors="coerce")
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df.sort_values(["stock_id", "trading_date"])
+
+    grp = df.groupby("stock_id", group_keys=False)
+    df["close_max_20"] = grp["close"].transform(
+        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).max()
+    )
+    df["vol_avg_20"] = grp["volume"].transform(
+        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
+    )
+    df["ma_20"] = grp["close"].transform(
+        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
+    )
+    return df[["stock_id", "trading_date", "close", "volume",
+               "close_max_20", "vol_avg_20", "ma_20"]]
+
+
 def _compute_breakthrough_map(
     candidate_sids: List[str],
     window_dates: List[date],
-    price_df: pd.DataFrame,
+    bt_stats_df: pd.DataFrame,
     feat_df: pd.DataFrame,
-    lookback: int = 20,
     volume_surge_ratio: float = 1.5,
     foreign_streak_min: int = 3,
 ) -> Dict[str, date]:
-    """向量化批次計算所有候選股在視窗內的第一個突破日（替代逐股逐日掃描）。
+    """向量化批次計算所有候選股在視窗內的第一個突破日。
+
+    接收預計算的 bt_stats_df（由 _precompute_breakthrough_stats 產生），
+    只需在視窗日期內做篩選，省去每期重算 rolling 的費用。
 
     突破條件（任一成立）：
     - 條件一（價格）：收盤 > 前 20 日最高收盤 AND 當日量 > 20 日均量 × volume_surge_ratio
@@ -336,38 +376,16 @@ def _compute_breakthrough_map(
     Returns:
         {stock_id: 最早突破日} — 無突破的股票不出現在 dict 中
     """
-    if not candidate_sids or not window_dates:
+    if not candidate_sids or not window_dates or bt_stats_df.empty:
         return {}
 
     sids_set = set(str(s) for s in candidate_sids)
     window_set = set(window_dates)
-    window_min = min(window_dates)
 
-    # ── 取候選股的歷史 + 視窗價格（往前需要 lookback 天以計算 rolling）──
-    cand_prices = price_df[
-        price_df["stock_id"].astype(str).isin(sids_set)
-    ][["stock_id", "trading_date", "close", "volume"]].copy()
-    cand_prices["stock_id"] = cand_prices["stock_id"].astype(str)
-    cand_prices = cand_prices.sort_values(["stock_id", "trading_date"])
-
-    if cand_prices.empty:
-        return {}
-
-    # ── 計算 rolling 指標（以前 lookback 日為參考基準，排除當日）──
-    grp = cand_prices.groupby("stock_id", group_keys=False)
-    cand_prices["close_max_20"] = grp["close"].transform(
-        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).max()
-    )
-    cand_prices["vol_avg_20"] = grp["volume"].transform(
-        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
-    )
-    cand_prices["ma_20"] = grp["close"].transform(
-        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
-    )
-
-    # ── 只保留視窗內的日期（計算當日突破）──
-    window_data = cand_prices[
-        cand_prices["trading_date"].isin(window_set)
+    # ── 直接從預計算表篩出候選股 × 視窗日期 ──
+    window_data = bt_stats_df[
+        bt_stats_df["stock_id"].isin(sids_set)
+        & bt_stats_df["trading_date"].isin(window_set)
     ].copy()
 
     if window_data.empty:
@@ -394,9 +412,11 @@ def _compute_breakthrough_map(
             wf["foreign_buy_consecutive_days"], errors="coerce"
         ).fillna(0)
         window_data = window_data.merge(wf, on=["stock_id", "trading_date"], how="left")
-        window_data["foreign_buy_consecutive_days"] = window_data.get(
-            "foreign_buy_consecutive_days", pd.Series(0.0, index=window_data.index)
-        ).fillna(0)
+        window_data["foreign_buy_consecutive_days"] = (
+            window_data.get(
+                "foreign_buy_consecutive_days", pd.Series(0.0, index=window_data.index)
+            ).fillna(0)
+        )
         window_data["cond2"] = (
             (window_data["foreign_buy_consecutive_days"] >= foreign_streak_min)
             & window_data["ma_20"].notna()
@@ -781,6 +801,13 @@ def run_backtest(
     market_weekly_drop_map = _precompute_market_weekly_drop(price_df)
     market_200ma_bear_map = _precompute_market_200ma_bear(price_df)
 
+    # ── 3b. 突破進場：一次性預計算所有股票的 rolling 突破指標 ──
+    # 避免在主迴圈中每個再平衡期重算（117 次 rolling → 1 次）
+    bt_stats_df: Optional[pd.DataFrame] = None
+    if enable_breakthrough_entry:
+        print("  預計算突破 rolling 指標（close_max_20 / vol_avg_20 / ma_20）...", flush=True)
+        bt_stats_df = _precompute_breakthrough_stats(price_df, lookback=20)
+
     # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
     rebalance_dates = _get_rebalance_dates(bt_trading_dates, freq=rebalance_freq)
@@ -1086,9 +1113,9 @@ def run_backtest(
                 _extended = risk.pick_topn(day_feat, _ext_n)
                 _ext_sids = _extended["stock_id"].astype(str).tolist()
 
-                # 向量化一次算出所有候選股的突破日
+                # 向量化一次算出所有候選股的突破日（使用預計算的 rolling stats）
                 _bt_map = _compute_breakthrough_map(
-                    _ext_sids, _bt_window, price_df, feat_df
+                    _ext_sids, _bt_window, bt_stats_df, feat_df
                 )
 
                 # 按 score 排序取前 effective_topn 個有突破的股票
