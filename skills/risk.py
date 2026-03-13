@@ -23,13 +23,20 @@ class _LiquidityConfig:
 
 
 def get_universe(session: Session, asof_date: date, config) -> pd.DataFrame:
-    """取得可用股票 universe（目前維持既有邏輯：上市且 security_type=stock）。"""
+    """取得可用股票 universe：上市/上櫃普通股，排除興櫃（EMERGING）。
+
+    興櫃股票排除原因：
+    1. 議價制（非競價撮合），回測假設盤後收盤成交不成立
+    2. 外資不可買，foreign_buy_* 特徵恆為 0，造成模型評分系統性偏差
+    3. 流動性極低，滑價與成交假設嚴重失真
+    """
     _ = asof_date
     _ = config
     stmt = (
         select(Stock.stock_id)
         .where(Stock.security_type == "stock")
         .where(Stock.is_listed == True)
+        .where(Stock.market != "EMERGING")
         .order_by(Stock.stock_id)
     )
     rows = session.execute(stmt).fetchall()

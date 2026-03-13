@@ -53,7 +53,7 @@
 預設 `selection_mode=model`：
 
 1. 讀取最近 `fallback_days + 1` 個特徵日期。
-2. 建立 universe（上市普通股）並套用 tradability filter。
+2. 建立 universe（上市/上櫃普通股，**排除興櫃 EMERGING**）並套用 tradability filter。
 3. 套用 20 日平均成交值流動性過濾（`min_amt_20` / `min_avg_turnover`）。
 4. 若啟用 market regime filter，空頭時下修有效 `topn`。
 5. 若最新日候選不足，往前 fallback。
@@ -111,7 +111,7 @@
   確保 benchmark universe 不含低流動性股票。
 - 輸出：累積/年化報酬、MDD、Sharpe、Calmar、勝率、profit factor、交易紀錄與淨值曲線。
 
-### 預設回測參數（現行生產，2026-03-11 更新）
+### 預設回測參數（現行生產，2026-03-13 更新）
 
 | 參數 | 預設值 | 說明 |
 |------|--------|------|
@@ -121,47 +121,56 @@
 | `stoploss_pct` | `-0.07` | 固定停損 7% |
 | `trailing_stop_pct` | `None` | 不啟用移動停利 |
 | `atr_stoploss_multiplier` | `None` | 不啟用 ATR 動態停損 |
-| `label_horizon_buffer` | `0` | 無標籤截止 buffer（原始基準） |
+| `label_horizon_buffer` | `20` | 消除訓練標籤前向洩漏（label horizon = 20 交易日）|
 | `enable_slippage` | `False` | 不啟用滑價模型 |
 | `time_weighting` | `False` | 等權樣本（原始基準） |
 | `enable_complex_filter` | `False` | 不啟用 RSI/熊市/200MA 等複雜過濾 |
 | `enable_seasonal_filter` | `True` | 啟用季節性降倉（3/10月 topN×0.5，floor=5）|
 | 單筆 clip | `-0.50` | `max(ret, -0.50)`：退市股最大虧損 -50% |
 
-> **備註**：`enable_seasonal_filter` 為 2026-03-11 新增參數（commit b5974be），
-> 用於對應 `daily_pick.py` 在 3/10 月永遠啟用季節性降倉的行為，解決 production ≠ backtest 的不一致。
+> **`label_horizon_buffer` 說明（2026-03-13 修正）**：
+> 標籤定義為 `future_ret_h = close_{T+20} / close_T - 1`（20 交易日 forward return）。
+> 當 `buffer=0` 時，訓練截止 `rb_date` 前 20 個交易日的樣本，其標籤涉及測試期收盤價 → **訓練標籤前向洩漏**。
+> 改為 `buffer=20`（日曆天，≈14 個交易日）後，訓練截止日往前移，消除最嚴重的洩漏區間。
+> `train_ranker.py` 的 `LABEL_HORIZON_BUFFER_DAYS` 同步改為 20（從 7）。
+
+> **`enable_seasonal_filter` 說明**：2026-03-11 新增（commit b5974be），
+> 對應 `daily_pick.py` 在 3/10 月永遠啟用季節性降倉的行為，解決 production ≠ backtest 不一致。
 > `run_backtest.py` CLI 加 `--seasonal-filter` 旗標啟用。
 
-> **現行 10y walk-forward 結果（Experiment E，commit TBD，2026-03-11）**：
-> 累積 **+10004.80%**、大盤 **+48.21%**、超額 **+9956.59%**、MDD **-27.57%**、
-> Sharpe **+1.3028**、Calmar **+2.166**
-> 期間：2016-03-22 ~ 2026-01-29，119 再平衡期，2049 筆交易，停損觸發 874 次
-> 新增特徵：`foreign_buy_streak`（ICIR=+0.583）、`volume_surge_ratio`（ICIR=+0.178）、`foreign_buy_intensity`（ICIR=-0.578）
+> **現行 10y walk-forward 結果（Experiment F，去偏後真實基準，2026-03-13）**：
+> 累積 **+205.17%**、大盤 **+55.88%**、超額 **+149.29%**、MDD **-32.62%**、
+> Sharpe **+0.4893**、Calmar **+0.3674**、年化 **+11.99%**
+> 期間：2016-05-03 ~ 2026-01-30，117 再平衡期，2019 筆交易，停損觸發 888 次
+> ⚠️ 注意：前期 Experiment E 的 +10004% 含訓練標籤前向洩漏（buffer=0），本結果為去偏後真實績效。
 >
-> 逐年報酬（與 Experiment D 比較）：
-> | 年份 | 策略（E）| 策略（D）| 大盤 | 差異 |
-> |------|---------|---------|------|------|
-> | 2016 | +33.34% | +33.35% | -4.54% | -0.01pp |
-> | 2017 | +146.31% | +146.26% | +11.57% | +0.05pp |
-> | 2018 | +102.60% | +102.60% | -15.35% | 0 |
-> | 2019 | +23.93% | +23.93% | +12.01% | 0 |
-> | 2020 | +157.68% | +157.65% | +18.11% | +0.03pp |
-> | 2021 | +46.74% | +46.69% | +19.72% | +0.05pp |
-> | 2022 | -10.38% | -10.38% | -15.83% | 0 |
-> | 2023 | +122.32% | +122.36% | +22.36% | -0.04pp |
-> | 2024 | +30.96% | +30.94% | +2.99% | +0.02pp |
-> | 2025 | +3.82% | +6.47% | -5.68% | **-2.65pp** |
-> | 2026 | +19.70% | +11.49% | +3.73% | **+8.21pp** |
->
-> **為何 seasonal_filter 大幅改善**：每次 3/10 月降倉至 topN=10，等權重每檔佔比從 5%→10%，
-> 在高超額月份（模型高信心期）雙倍放大 alpha。2022 年為唯一惡化年份（-18.81pp），
-> 因 10 月市場下跌 + 季節降倉同時壓縮至 topN=5，集中度過高。
+> 逐年報酬（Experiment F，去偏基準）：
+> | 年份 | 策略（F）| 大盤 | 超額 |
+> |------|---------|------|------|
+> | 2016 | -11.23% | +1.87% | -13.11% |
+> | 2017 | +32.89% | +11.57% | +21.32% |
+> | 2018 | -7.38% | -15.35% | +7.97% |
+> | 2019 | +13.91% | +12.01% | +1.89% |
+> | 2020 | +42.90% | +18.13% | +24.77% |
+> | 2021 | +25.92% | +19.71% | +6.20% |
+> | 2022 | -3.68% | -15.83% | +12.14% |
+> | 2023 | +14.43% | +22.37% | -7.94% |
+> | 2024 | -5.05% | +2.99% | -8.04% |
+> | 2025 | +13.97% | -5.69% | +19.66% |
+> | 2026 | +14.26% | +2.23% | +12.03% |
 
 ### 歷史基準對照
 
-- **Experiment D（seasonal_filter=True，53 特徵，commit b5974be，2026-03-11）**：
+> ⚠️ **重要說明**：Experiment A~E 均使用 `label_horizon_buffer=0`，存在訓練標籤前向洩漏，
+> 回測績效虛高。Experiment F 為 2026-03-13 去偏後的真實基準。
+
+- **Experiment F（去偏，buffer=20，含 EMERGING 過濾，2026-03-13）**：
+  累積 **+205.17%**、超額 +149.29%、MDD -32.62%、Sharpe +0.4893、Calmar +0.3674 ← **現行真實基準**
+- **Experiment E（含bias，buffer=0，56 特徵，2026-03-11，⚠️ 標籤洩漏）**：
+  累積 +10004.80%、超額 +9956.59%、MDD -27.57%、Sharpe +1.3028、Calmar +2.166
+- **Experiment D（含bias，buffer=0，seasonal_filter，53 特徵，commit b5974be，2026-03-11，⚠️ 標籤洩漏）**：
   累積 +9552.75%、超額 +9504.54%、MDD -27.57%、Sharpe +1.2958、Calmar +2.1392
-- **Experiment C（無 seasonal_filter，commit 4440fc5，2026-03-10）**：
+- **Experiment C（含bias，buffer=0，無 seasonal_filter，commit 4440fc5，2026-03-10，⚠️ 標籤洩漏）**：
   累積 +1216.35%、超額 +1167.99%、MDD -33.35%、Sharpe +0.9085、Calmar +0.8963
 
 ### 時間加權訓練（2026-03-08 新增，目前已停用）
@@ -278,6 +287,10 @@ if atr_stoploss_multiplier is not None or position_sizing == "vol_inverse" or en
 
 ## 風控補充（`skills/risk.py`）
 
+- **EMERGING 興櫃過濾（2026-03-13 新增）**：`get_universe()` 加入 `.where(Stock.market != "EMERGING")`，
+  從選股 universe 排除興櫃股（2340 → 1965 股）。興櫃為議價交易，外資無法參與，
+  `foreign_buy_*` 特徵永遠為 0，且流動性、漲跌機制與上市上櫃不同，不應納入。
+  注意：`backtest.py` 不呼叫 `get_universe()`，此過濾僅影響生產選股，不影響回測結果。
 - **ATR `min_periods`**：`compute_atr()` 的 ewm 加入 `min_periods=period`，新上市股票
   資料不足時 ATR 為 NaN，避免使用不可靠的早期估計。
 - **流動性過濾新股保護**：`apply_liquidity_filter()` 在門檻 > 0 時，排除資料筆數 < 10
@@ -332,6 +345,11 @@ A 級穩定性（`_evaluate_a_stability`）門檻說明：
   現行預設 `rebalance_freq="M"`，與 label horizon 匹配。
 - `pd.merge_asof(by="stock_id")` 需要 left key 全局單調，跨股資料不可直接使用，
   須改為 per-stock groupby loop。
+- **`backtest.py` 不呼叫 `get_universe()`**：回測的候選股過濾只用 `stock_id.str.fullmatch(r"\d{4}")`，
+  `risk.py` 的 EMERGING 過濾對回測無效。若需在回測中排除興櫃，須在 `backtest.py` 的 candidates 建立處另行過濾。
+- **訓練標籤前向洩漏歷史（已修正）**：Experiment A~E 使用 `label_horizon_buffer=0`，
+  訓練截止前 20 個交易日的標籤洩漏測試期收盤價，導致回測績效虛高（+10004% → 去偏後 +205%）。
+  2026-03-13 改為 `label_horizon_buffer=20`，Experiment F 為去偏後真實基準。
 
 ## 開發規範（務必遵守）
 
