@@ -25,7 +25,7 @@ import os
 import time
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -33,7 +33,7 @@ import psutil
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.models import Feature, Label, RawPrice
+from app.models import Feature, Label, RawMarginShort, RawPrice
 from skills import risk
 
 # ── 模型訓練（複用 train_ranker 邏輯）──
@@ -470,8 +470,6 @@ def _simulate_period(
     enable_slippage: bool = True,
     clip_loss_pct: float = -0.50,
     per_stock_entry_dates: Optional[Dict[str, date]] = None,
-    per_stock_cost_override: Optional[Dict[str, float]] = None,  # Exp G：續抱股 cost=0
-    profit_activation_pct: Optional[float] = None,  # Exp H：移動停利啟動閾值（如 0.20）
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -589,18 +587,14 @@ def _simulate_period(
 
     # ── 4. 執行出場邏輯 ──
     _t_sl = time.time()
-    if trailing_stop_pct is not None or atr_stoploss_multiplier is not None or profit_activation_pct is not None:
-        _ts = trailing_stop_pct if trailing_stop_pct is not None else (
-            -0.10 if profit_activation_pct is not None else -0.15
-        )
+    if trailing_stop_pct is not None or atr_stoploss_multiplier is not None:
         stoploss_result = risk.apply_trailing_stop(
             positions_input, price_df=period_prices,
-            trailing_stop_pct=_ts,
+            trailing_stop_pct=trailing_stop_pct if trailing_stop_pct is not None else -0.15,
             stoploss_pct=stoploss_pct,
             per_stock_stoploss=per_stock_stop,
             atr_stoploss_multiplier=atr_stoploss_multiplier,
             atr_at_entry=atr_at_entry,
-            profit_activation_pct=profit_activation_pct,
         )
     else:
         stoploss_result = risk.apply_stoploss(
@@ -640,11 +634,7 @@ def _simulate_period(
             sl_triggered = bool(row["stoploss_triggered"])
             if entry_px > 0:
                 slippage_pct = slippage_map.get(sid, 0.0)
-                # Exp G：續抱股（per_stock_cost_override[sid]=0）省去來回手續費
-                cost_pct = (
-                    per_stock_cost_override.get(sid, transaction_cost_pct)
-                    if per_stock_cost_override else transaction_cost_pct
-                )
+                cost_pct = transaction_cost_pct
                 ret = exit_px / entry_px - 1 - cost_pct - slippage_pct
                 ret = max(ret, clip_loss_pct)  # 單筆最大損失 clip，防止退市股拖垮整月組合
                 stock_returns[sid] = ret
@@ -734,9 +724,7 @@ def run_backtest(
     clip_loss_pct: float = -0.50,  # 單筆最大損失 clip（預設 -50%）；診斷用可傳 -1.01 停用
     enable_breakthrough_entry: bool = False,  # 突破確認進場：等待訊號後才進場
     breakthrough_max_wait: int = 10,         # 最多等待幾個交易日出現突破訊號
-    hold_winners: bool = False,  # Exp G：月底再平衡時仍在 TopN 的持股不賣出不買回（省手續費）
-    trailing_profit: bool = False,  # Exp H：獲利達 +20% 後啟動 -10% 移動停利
-    hold_winners_v2: bool = False,  # Exp G2：技術面續抱（MA20 + 峰值回撤<10% + 排名前 topN×1.5）
+    enable_technical_filter: bool = False,   # Exp I：突破後再過技術面+融資過濾（MA5>MA10>MA20, close<MA20×1.08, 融資率<60%）
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -888,6 +876,28 @@ def run_backtest(
         print("  預計算突破 rolling 指標（close_max_20 / vol_avg_20 / ma_20）...", flush=True)
         bt_stats_df = _precompute_breakthrough_stats(price_df, lookback=20)
 
+    # ── 3c. Exp I：載入融資餘額資料（技術面 + 融資過濾用）──
+    margin_df: Optional[pd.DataFrame] = None
+    if enable_technical_filter:
+        print("  載入融資餘額資料 ...", flush=True)
+        _margin_cache = _cache_dir / f"margin_{_cache_key}.parquet"
+        if _margin_cache.exists():
+            margin_df = pd.read_parquet(_margin_cache)
+        else:
+            _mq = db_session.query(
+                RawMarginShort.stock_id,
+                RawMarginShort.trading_date,
+                RawMarginShort.margin_purchase_balance,
+                RawMarginShort.margin_purchase_limit,
+            ).filter(
+                RawMarginShort.trading_date >= data_start,
+                RawMarginShort.trading_date <= data_end,
+            )
+            margin_df = pd.read_sql(_mq.statement, db_session.bind)
+            margin_df.to_parquet(_margin_cache, index=False)
+        margin_df["trading_date"] = pd.to_datetime(margin_df["trading_date"]).dt.date
+        print(f"  融資資料: {len(margin_df):,} 筆", flush=True)
+
     # ── 4. 找出回測期間的再平衡日 ──
     bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
     rebalance_dates = _get_rebalance_dates(bt_trading_dates, freq=rebalance_freq)
@@ -900,10 +910,6 @@ def run_backtest(
     period_results: List[Dict] = []
     all_trades_log: List[Dict] = []
     cooldown_until: Dict[str, date] = {}  # stock_id -> 冷卻截止日（停損後 N 週不再選入）
-    # Exp G：hold_winners — 追蹤目前持倉（未停損且仍在 TopN 的股票）
-    hw_current_holdings: Dict[str, date] = {}  # {stock_id: 原始進場日}
-    # Exp G2：hold_winners_v2 — 技術面續抱狀態 {stock_id: {"peak_close": float}}
-    hw_v2_holdings: Dict[str, Dict] = {}
     equity = 10000.0
     equity_curve = [{"date": rebalance_dates[0].isoformat() if rebalance_dates else data_start.isoformat(), "equity": equity}]
 
@@ -1199,100 +1205,9 @@ def run_backtest(
 
         picks = risk.pick_topn(day_feat, effective_topn)
 
-        # ── Exp G：Hold Winners — 決定續抱 vs 新進 ──
-        # 月底再平衡時，仍在 TopN 的持倉不賣出不買回，省手續費並讓強勢股複利。
-        _hw_held_sids: set = set()   # 本期續抱（不動）
-        _hw_new_sids: set = set()    # 本期新買
-        _per_stock_cost_override: Optional[Dict[str, float]] = None
-
-        if hold_winners and hw_current_holdings:
-            _new_pick_sids = set(picks["stock_id"].astype(str).tolist())
-            _hw_held_sids = set(hw_current_holdings.keys()) & _new_pick_sids
-            _hw_new_sids = _new_pick_sids - _hw_held_sids
-            if _hw_held_sids:
-                # 續抱股 cost=0（省去一次賣出+買入），新股 cost=full
-                _per_stock_cost_override = {sid: 0.0 for sid in _hw_held_sids}
-                for _ns in _hw_new_sids:
-                    _per_stock_cost_override[_ns] = transaction_cost_pct
-                print(
-                    f"  [{rb_date}] hold_winners: 續抱 {len(_hw_held_sids)} 檔"
-                    f"，新買 {len(_hw_new_sids)} 檔", flush=True,
-                )
-
-        # ── Exp G2：Hold Winners V2 — 技術面確認續抱 ──
-        # 全部成立才續抱：1) 收盤 > MA20  2) 持倉峰值回撤 < 10%  3) 模型排名前 topN × 1.5
-        if hold_winners_v2 and hw_v2_holdings:
-            # Step 1：延伸排名池（top 1.5N），確認排名條件
-            _v2_ext_n = min(int(effective_topn * 1.5), len(day_feat))
-            _v2_ext_picks = risk.pick_topn(day_feat, _v2_ext_n)
-            _v2_ext_sids = set(_v2_ext_picks["stock_id"].astype(str).tolist())
-
-            # Step 2：rb_date 收盤價
-            _v2_price_rb = {
-                str(k): v for k, v in
-                price_df[price_df["trading_date"] == rb_date]
-                .set_index("stock_id")["close"].to_dict().items()
-            }
-
-            # Step 3：持倉近 30 日價格（供 MA20 計算）
-            _v2_held_list = list(hw_v2_holdings.keys())
-            _v2_price_hist = (
-                price_df[
-                    price_df["stock_id"].isin(_v2_held_list) &
-                    (price_df["trading_date"] <= rb_date)
-                ][["stock_id", "trading_date", "close"]]
-                .sort_values("trading_date")
-            )
-
-            _hw_v2_kept: set = set()
-            for _v2_sid, _v2_info in hw_v2_holdings.items():
-                _v2_cur = _v2_price_rb.get(_v2_sid)
-                if _v2_cur is None or _v2_cur <= 0:
-                    continue
-                # Condition 3（最快，先篩）：排名在前 topN × 1.5
-                if _v2_sid not in _v2_ext_sids:
-                    continue
-                # Condition 1：收盤 > MA20（至少 10 根才計算）
-                _v2_hist = _v2_price_hist[
-                    _v2_price_hist["stock_id"] == _v2_sid
-                ]["close"].values
-                if len(_v2_hist) < 10:
-                    continue
-                _v2_ma20 = float(_v2_hist[-20:].mean())
-                if _v2_cur <= _v2_ma20:
-                    continue
-                # Condition 2：峰值回撤 < 10%
-                _v2_peak = _v2_info.get("peak_close", _v2_cur)
-                if _v2_peak <= 0 or (_v2_cur / _v2_peak - 1) < -0.10:
-                    continue
-                _hw_v2_kept.add(_v2_sid)
-
-            if _hw_v2_kept:
-                # 重建 picks：技術面續抱股 + 新進股填滿 effective_topn
-                _v2_new_slots = max(0, effective_topn - len(_hw_v2_kept))
-                _v2_held_df = day_feat[day_feat["stock_id"].astype(str).isin(_hw_v2_kept)]
-                _v2_new_cands = _v2_ext_picks[
-                    ~_v2_ext_picks["stock_id"].astype(str).isin(_hw_v2_kept)
-                ].head(_v2_new_slots)
-                picks = pd.concat([_v2_held_df, _v2_new_cands], ignore_index=True)
-                _per_stock_cost_override = {_s: 0.0 for _s in _hw_v2_kept}
-                for _ns in _v2_new_cands["stock_id"].astype(str).tolist():
-                    _per_stock_cost_override[_ns] = transaction_cost_pct
-                print(
-                    f"  [{rb_date}] hold_winners_v2: 技術面續抱 {len(_hw_v2_kept)} 檔"
-                    f"，新買 {len(_v2_new_cands)} 檔",
-                    flush=True,
-                )
-            else:
-                _hw_v2_kept = set()
-
-            # 將 v2 續抱集合同步給突破過濾邏輯（續抱股免做突破確認）
-            _hw_held_sids = _hw_v2_kept
-
         # ── 突破確認進場（Breakthrough Entry Filter）──
         # 月底選股後不立即進場，等每檔個股出現突破訊號（最多等 breakthrough_max_wait 個交易日）。
         # 無訊號者以後排候選補位；仍無訊號者持現金。
-        # hold_winners 互動：續抱股不需突破訊號，只對新進股做突破過濾。
         # 使用向量化批次計算，避免逐股逐日掃描 price_df（效能 O(n_stocks × window)）。
         per_stock_entry_dates: Dict[str, date] = {}
         if enable_breakthrough_entry:
@@ -1302,23 +1217,16 @@ def run_backtest(
             ][:breakthrough_max_wait]
 
             if _bt_window:
-                # ── hold_winners：續抱股不做突破過濾，直接確認；只對新進股做突破 ──
-                _held_rows = (
-                    [r.to_dict() for _, r in picks.iterrows() if str(r["stock_id"]) in _hw_held_sids]
-                    if _hw_held_sids else []
-                )
+                # 擴展候補池（從 day_feat 按分數排序）
+                _slots_needed = effective_topn
+                _ext_n = min(_slots_needed * 3, len(day_feat)) if _slots_needed > 0 else 0
 
-                # 新進股的擴展候補池（從 day_feat 按分數排序，扣除已續抱股）
-                _day_feat_new = day_feat[~day_feat["stock_id"].astype(str).isin(_hw_held_sids)]
-                _slots_needed = max(0, effective_topn - len(_held_rows))
-                _ext_n = min(_slots_needed * 3, len(_day_feat_new)) if _slots_needed > 0 else 0
-
-                _confirmed_rows: List[Dict] = list(_held_rows)
+                _confirmed_rows: List[Dict] = []
                 _entry_map: Dict[str, date] = {}
                 _orig_topn_sids = set(picks["stock_id"].astype(str).tolist())
 
                 if _ext_n > 0:
-                    _extended = risk.pick_topn(_day_feat_new, _ext_n)
+                    _extended = risk.pick_topn(day_feat, _ext_n)
                     _ext_sids = _extended["stock_id"].astype(str).tolist()
 
                     # 向量化一次算出所有新候選股的突破日（使用預計算的 rolling stats）
@@ -1350,16 +1258,72 @@ def run_backtest(
                             flush=True,
                         )
                 else:
-                    # 全部新候選無突破 → 持現金（但續抱股仍持有）
-                    if not _held_rows:
-                        picks = pd.DataFrame(columns=picks.columns)
-                        print(f"  [{rb_date}] 突破進場：無訊號，本期持現金", flush=True)
-                    else:
-                        picks = pd.DataFrame(_held_rows)
-                        print(
-                            f"  [{rb_date}] 突破進場：新股無訊號，僅續抱 {len(_held_rows)} 檔",
-                            flush=True,
+                    picks = pd.DataFrame(columns=picks.columns)
+                    print(f"  [{rb_date}] 突破進場：無訊號，本期持現金", flush=True)
+
+        # ── Exp I：技術面 + 融資過濾 ──
+        # 條件一：MA5 > MA10 > MA20（多頭排列）
+        # 條件二：收盤 < MA20 × 1.08（避免追高）
+        # 條件三：融資使用率 < 60%（散戶未過熱）
+        if enable_technical_filter and not picks.empty:
+            _tf_sids = picks["stock_id"].astype(str).tolist()
+            # 取再平衡日前的價格歷史（至少需要 20 根）
+            _tf_price_hist = price_df[
+                price_df["stock_id"].isin(_tf_sids) &
+                (price_df["trading_date"] <= rb_date)
+            ][["stock_id", "trading_date", "close"]].sort_values("trading_date")
+            # 按股票分組（dict for O(1) lookup）
+            _tf_price_by_sid: Dict[str, Any] = {
+                str(sid): grp["close"].values
+                for sid, grp in _tf_price_hist.groupby("stock_id")
+            }
+            # 融資使用率分組
+            _tf_marg_by_sid: Dict[str, Tuple[float, float]] = {}
+            if margin_df is not None:
+                _tf_marg_hist = margin_df[
+                    margin_df["stock_id"].isin(_tf_sids) &
+                    (margin_df["trading_date"] <= rb_date)
+                ].sort_values("trading_date")
+                for _sid_m, _grp_m in _tf_marg_hist.groupby("stock_id"):
+                    if not _grp_m.empty:
+                        _row_m = _grp_m.iloc[-1]
+                        _tf_marg_by_sid[str(_sid_m)] = (
+                            float(_row_m["margin_purchase_balance"] or 0),
+                            float(_row_m["margin_purchase_limit"] or 1),
                         )
+            _tf_keep = []
+            for _, _tf_row in picks.iterrows():
+                _tf_sid = str(_tf_row["stock_id"])
+                _tf_hist = _tf_price_by_sid.get(_tf_sid)
+                if _tf_hist is None or len(_tf_hist) < 20:
+                    continue
+                _tf_close = float(_tf_hist[-1])
+                _tf_ma5  = float(_tf_hist[-5:].mean())
+                _tf_ma10 = float(_tf_hist[-10:].mean())
+                _tf_ma20 = float(_tf_hist[-20:].mean())
+                # Condition 1: MA5 > MA10 > MA20（多頭排列）
+                if not (_tf_ma5 > _tf_ma10 > _tf_ma20):
+                    continue
+                # Condition 2: 收盤 < MA20 × 1.08（避免追高）
+                if _tf_close >= _tf_ma20 * 1.08:
+                    continue
+                # Condition 3: 融資使用率 < 60%（散戶未過熱）
+                if _tf_sid in _tf_marg_by_sid:
+                    _tf_bal, _tf_lim = _tf_marg_by_sid[_tf_sid]
+                    if _tf_lim > 0 and _tf_bal / _tf_lim >= 0.60:
+                        continue
+                _tf_keep.append(_tf_row)
+            if _tf_keep:
+                picks = pd.DataFrame(_tf_keep)
+                _n_filtered = len(_tf_sids) - len(_tf_keep)
+                if _n_filtered > 0:
+                    print(
+                        f"  [{rb_date}] technical_filter: {len(_tf_sids)}->{len(_tf_keep)} 檔"
+                        f"（過濾 {_n_filtered}）", flush=True,
+                    )
+            else:
+                picks = pd.DataFrame(columns=picks.columns)
+                print(f"  [{rb_date}] technical_filter: 全部過濾，本期持現金", flush=True)
 
         # ── 計算倉位權重（支援 position_sizing_method）──
         period_price_slice = price_df[price_df["trading_date"] <= rb_date]
@@ -1398,12 +1362,6 @@ def run_backtest(
                 atr_period=atr_period,
             )
 
-        # ── Exp H：trailing_profit 參數轉換 ──
-        _profit_act = 0.20 if trailing_profit else None
-        _trail_pct = trailing_stop_pct
-        if trailing_profit and _trail_pct is None:
-            _trail_pct = -0.10  # 獲利 +20% 後，從高點回撤 -10% 出場
-
         # ── 模擬持有 ──
         _t = time.time()
         result = _simulate_period(
@@ -1411,60 +1369,18 @@ def run_backtest(
             stoploss_pct, transaction_cost_pct,
             entry_delay_days=entry_delay_days,
             position_weights=pos_weights,
-            trailing_stop_pct=_trail_pct,
+            trailing_stop_pct=trailing_stop_pct,
             atr_df=atr_df,
             atr_stoploss_multiplier=atr_stoploss_multiplier,
             enable_slippage=enable_slippage,
             clip_loss_pct=clip_loss_pct,
             per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
-            per_stock_cost_override=_per_stock_cost_override,
-            profit_activation_pct=_profit_act,
         )
         _dt = time.time() - _t
         _timer_simulate += _dt
         _count_simulate += 1
         _timer_apply_stoploss += result.get("_stoploss_time", 0.0)
         _count_apply_stoploss += 1
-
-        # ── Exp G：更新 hw_current_holdings ──
-        # 只保留本期未觸發停損的股票（它們下期可能被續抱）
-        if hold_winners:
-            _sl_map = {t["stock_id"]: t["stoploss_triggered"] for t in result.get("trades_log", [])}
-            _survived = {
-                sid for sid in result.get("stock_returns", {})
-                if not _sl_map.get(sid, False)
-            }
-            hw_current_holdings = {}
-            for sid in _survived:
-                if sid in _hw_held_sids:
-                    hw_current_holdings[sid] = hw_current_holdings.get(sid, rb_date)
-                else:
-                    hw_current_holdings[sid] = rb_date
-
-        # ── Exp G2：更新 hw_v2_holdings（更新峰值收盤 + 剔除停損）──
-        if hold_winners_v2:
-            _sl_map_v2 = {t["stock_id"]: t["stoploss_triggered"] for t in result.get("trades_log", [])}
-            _survived_v2 = {
-                sid for sid in result.get("stock_returns", {})
-                if not _sl_map_v2.get(sid, False)
-            }
-            # 計算本期（rb_date ~ exit_date）各股最高收盤，用來更新 peak_close
-            _v2_period_prices = price_df[
-                price_df["stock_id"].isin(_survived_v2) &
-                (price_df["trading_date"] >= rb_date) &
-                (price_df["trading_date"] <= exit_date)
-            ]
-            _v2_period_peak = (
-                {str(k): v for k, v in
-                 _v2_period_prices.groupby("stock_id")["close"].max().to_dict().items()}
-                if not _v2_period_prices.empty else {}
-            )
-            _hw_v2_prev = dict(hw_v2_holdings)
-            hw_v2_holdings = {}
-            for _sid in _survived_v2:
-                _period_max = _v2_period_peak.get(_sid, 0.0)
-                _old_peak = _hw_v2_prev.get(_sid, {}).get("peak_close", 0.0)
-                hw_v2_holdings[_sid] = {"peak_close": max(_old_peak, _period_max)}
 
         # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
