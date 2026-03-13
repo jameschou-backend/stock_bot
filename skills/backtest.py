@@ -35,6 +35,10 @@ from sqlalchemy.orm import Session
 
 from app.models import Feature, Label, RawPrice
 from skills import risk
+from skills.breakthrough import (
+    precompute_stats as _precompute_breakthrough_stats,
+    compute_breakthrough_map as _compute_breakthrough_map,
+)
 
 # ── 模型訓練（複用 train_ranker 邏輯）──
 try:
@@ -335,124 +339,6 @@ def _precompute_market_200ma_bear(price_df: pd.DataFrame) -> Dict[date, bool]:
     ma200 = mkt.rolling(200, min_periods=40).mean()
     bear_series = (mkt < ma200).dropna()
     return {d: bool(v) for d, v in bear_series.items()}
-
-
-def _precompute_breakthrough_stats(
-    price_df: pd.DataFrame,
-    lookback: int = 20,
-) -> pd.DataFrame:
-    """預先計算所有股票的突破 rolling 指標（close_max_20 / vol_avg_20 / ma_20）。
-
-    在主迴圈前一次性算完，避免 _compute_breakthrough_map 在每個再平衡期重複 rolling 計算
-    （約 117 次 → 1 次，可節省 4-6 分鐘）。
-
-    Returns:
-        DataFrame: stock_id / trading_date / close / volume / close_max_20 / vol_avg_20 / ma_20
-    """
-    if price_df.empty:
-        return pd.DataFrame(
-            columns=["stock_id", "trading_date", "close", "volume",
-                     "close_max_20", "vol_avg_20", "ma_20"]
-        )
-
-    df = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
-    df["close"] = pd.to_numeric(df["close"], errors="coerce")
-    df["volume"] = pd.to_numeric(df["volume"], errors="coerce")
-    df["stock_id"] = df["stock_id"].astype(str)
-    df = df.sort_values(["stock_id", "trading_date"])
-
-    grp = df.groupby("stock_id", group_keys=False)
-    df["close_max_20"] = grp["close"].transform(
-        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).max()
-    )
-    df["vol_avg_20"] = grp["volume"].transform(
-        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
-    )
-    df["ma_20"] = grp["close"].transform(
-        lambda x: x.shift(1).rolling(lookback, min_periods=lookback).mean()
-    )
-    return df[["stock_id", "trading_date", "close", "volume",
-               "close_max_20", "vol_avg_20", "ma_20"]]
-
-
-def _compute_breakthrough_map(
-    candidate_sids: List[str],
-    window_dates: List[date],
-    bt_stats_df: pd.DataFrame,
-    feat_df: pd.DataFrame,
-    volume_surge_ratio: float = 1.5,
-    foreign_streak_min: int = 3,
-) -> Dict[str, date]:
-    """向量化批次計算所有候選股在視窗內的第一個突破日。
-
-    接收預計算的 bt_stats_df（由 _precompute_breakthrough_stats 產生），
-    只需在視窗日期內做篩選，省去每期重算 rolling 的費用。
-
-    突破條件（任一成立）：
-    - 條件一（價格）：收盤 > 前 20 日最高收盤 AND 當日量 > 20 日均量 × volume_surge_ratio
-    - 條件二（籌碼）：foreign_buy_consecutive_days >= foreign_streak_min AND 收盤 > 20 日均線
-
-    Returns:
-        {stock_id: 最早突破日} — 無突破的股票不出現在 dict 中
-    """
-    if not candidate_sids or not window_dates or bt_stats_df.empty:
-        return {}
-
-    sids_set = set(str(s) for s in candidate_sids)
-    window_set = set(window_dates)
-
-    # ── 直接從預計算表篩出候選股 × 視窗日期 ──
-    window_data = bt_stats_df[
-        bt_stats_df["stock_id"].isin(sids_set)
-        & bt_stats_df["trading_date"].isin(window_set)
-    ].copy()
-
-    if window_data.empty:
-        return {}
-
-    # ── 條件一：價格 + 成交量突破 ──
-    window_data["cond1"] = (
-        window_data["close_max_20"].notna()
-        & (window_data["close_max_20"] > 0)
-        & (window_data["close"] > window_data["close_max_20"])
-        & window_data["vol_avg_20"].notna()
-        & (window_data["vol_avg_20"] > 0)
-        & (window_data["volume"] > window_data["vol_avg_20"] * volume_surge_ratio)
-    )
-
-    # ── 條件二：外資籌碼 + 均線 ──
-    if "foreign_buy_consecutive_days" in feat_df.columns:
-        wf = feat_df[
-            feat_df["stock_id"].astype(str).isin(sids_set)
-            & feat_df["trading_date"].isin(window_set)
-        ][["stock_id", "trading_date", "foreign_buy_consecutive_days"]].copy()
-        wf["stock_id"] = wf["stock_id"].astype(str)
-        wf["foreign_buy_consecutive_days"] = pd.to_numeric(
-            wf["foreign_buy_consecutive_days"], errors="coerce"
-        ).fillna(0)
-        window_data = window_data.merge(wf, on=["stock_id", "trading_date"], how="left")
-        window_data["foreign_buy_consecutive_days"] = (
-            window_data.get(
-                "foreign_buy_consecutive_days", pd.Series(0.0, index=window_data.index)
-            ).fillna(0)
-        )
-        window_data["cond2"] = (
-            (window_data["foreign_buy_consecutive_days"] >= foreign_streak_min)
-            & window_data["ma_20"].notna()
-            & (window_data["ma_20"] > 0)
-            & (window_data["close"] > window_data["ma_20"])
-        )
-    else:
-        window_data["cond2"] = False
-
-    window_data["breakthrough"] = window_data["cond1"] | window_data["cond2"]
-
-    # ── 每股取最早突破日 ──
-    bt_rows = window_data[window_data["breakthrough"]][["stock_id", "trading_date"]].copy()
-    if bt_rows.empty:
-        return {}
-    bt_rows = bt_rows.sort_values("trading_date")
-    return bt_rows.groupby("stock_id")["trading_date"].first().to_dict()
 
 
 def _simulate_period(

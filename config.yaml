@@ -54,6 +54,8 @@ BACKTEST_ATR_PERIOD: 14          # ATR 計算週期（日）
 # 過熱過濾器（選股階段排除短線過熱標的）
 ENABLE_OVERHEAT_FILTER: false    # 是否啟用過熱過濾（建議先在回測中評估效果再開啟）
 OVERHEAT_RSI_THRESHOLD: 75       # RSI 過熱門檻（RSI > 此值視為短線過熱）
+# 突破確認進場（F+ 策略整合）
+ENABLE_BREAKTHROUGH_ENTRY: true  # 選股後標記突破狀態，輸出可進場/等待中/候補三清單
 STRATEGY_WEIGHTS_BULL: {"MomentumTrend": 0.6, "MeanReversion": 0.2, "DefensiveLowVol": 0.2}
 STRATEGY_WEIGHTS_BEAR: {"MomentumTrend": 0.2, "MeanReversion": 0.3, "DefensiveLowVol": 0.5}
 EVAL_TOPK_LIST: [10, 20]         # ranker 驗證指標使用的 K 值

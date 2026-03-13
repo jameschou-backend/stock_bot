@@ -21,8 +21,9 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import Feature, Job, ModelVersion, Pick, RawPrice
+from app.models import Feature, Job, ModelVersion, Pick, RawPrice, Stock
 from skills.build_features import FEATURE_COLUMNS
+from skills import breakthrough as _bt
 from skills import regime, risk
 from skills import tradability_filter
 from skills import multi_agent_selector
@@ -90,11 +91,12 @@ def _load_price_universe(
     db_session: Session,
     target_date,
     stock_ids: List[str],
+    lookback_days: int = 60,
 ) -> pd.DataFrame:
     if not stock_ids:
         return pd.DataFrame()
 
-    start_date = target_date - timedelta(days=30)
+    start_date = target_date - timedelta(days=lookback_days)
     stmt = (
         select(RawPrice.stock_id, RawPrice.trading_date, RawPrice.close, RawPrice.volume)
         .where(RawPrice.trading_date.between(start_date, target_date))
@@ -329,6 +331,89 @@ def _write_run_manifest(
 
     manifest_path = ARTIFACTS_DIR / f"run_manifest_daily_pick_{job_id}.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _load_stock_names(db_session: Session, stock_ids: List[str]) -> Dict[str, str]:
+    """查詢股票中文名稱，回傳 {stock_id: name}，找不到時以 stock_id 替代。"""
+    if not stock_ids:
+        return {}
+    rows = (
+        db_session.query(Stock.stock_id, Stock.name)
+        .filter(Stock.stock_id.in_(stock_ids))
+        .all()
+    )
+    result = {str(r.stock_id): str(r.name or r.stock_id) for r in rows}
+    for sid in stock_ids:
+        result.setdefault(str(sid), str(sid))
+    return result
+
+
+def _print_breakthrough_lists(
+    picks_df: pd.DataFrame,
+    backup_df: pd.DataFrame,
+    bt_status: Dict[str, Dict],
+    stock_names: Dict[str, str],
+    pick_date,
+) -> None:
+    """輸出突破確認三清單：可進場 / 等待突破中 / 候補股。"""
+    print()
+    print("=" * 62)
+    print(f"  今日選股突破狀態 ({pick_date})")
+    print("=" * 62)
+
+    ready_rows = picks_df[picks_df.get("breakthrough_ready", False) == True] if "breakthrough_ready" in picks_df.columns else pd.DataFrame()
+    waiting_rows = picks_df[picks_df.get("breakthrough_ready", True) == False] if "breakthrough_ready" in picks_df.columns else picks_df
+
+    # ── 今日可進場（已突破）──
+    n_ready = len(ready_rows)
+    print(f"\n=== 今日可進場（已突破）=== ({n_ready} 檔)")
+    if n_ready > 0:
+        print(f"  {'#':>3}  {'代號':6}  {'名稱':<12}  {'突破類型':<10}  {'模型分數':>8}")
+        print(f"  {'─'*3}  {'─'*6}  {'─'*12}  {'─'*10}  {'─'*8}")
+        for rank, (_, row) in enumerate(ready_rows.sort_values("score", ascending=False).iterrows(), 1):
+            sid = str(row["stock_id"])
+            name = stock_names.get(sid, sid)[:10]
+            bt_type = bt_status.get(sid, {}).get("type") or "-"
+            bt_label = "價格突破" if bt_type == "price" else ("外資籌碼" if bt_type == "institutional" else bt_type)
+            score = float(row.get("score", 0))
+            print(f"  {rank:>3}  {sid:6}  {name:<12}  {bt_label:<10}  {score:>8.4f}")
+    else:
+        print("  （今日無符合突破條件的股票）")
+
+    # ── 等待突破中 ──
+    n_waiting = len(waiting_rows)
+    print(f"\n=== 等待突破中 === ({n_waiting} 檔)")
+    if n_waiting > 0:
+        print(f"  {'#':>3}  {'代號':6}  {'名稱':<12}  {'等待':>4}  {'距20日高點':>10}  {'量比':>10}")
+        print(f"  {'─'*3}  {'─'*6}  {'─'*12}  {'─'*4}  {'─'*10}  {'─'*10}")
+        for rank, (_, row) in enumerate(waiting_rows.sort_values("score", ascending=False).iterrows(), 1):
+            sid = str(row["stock_id"])
+            name = stock_names.get(sid, sid)[:10]
+            days = int(row.get("days_waiting", 0))
+            info = bt_status.get(sid, {})
+            pct = info.get("pct_to_price_bt", float("nan"))
+            vol_r = info.get("vol_ratio", float("nan"))
+            pct_str = f"+{pct*100:.1f}%" if pct == pct and pct > 0 else (f"{pct*100:.1f}%" if pct == pct else "─")
+            vol_str = f"{vol_r:.2f}x/1.5x" if vol_r == vol_r else "─"
+            print(f"  {rank:>3}  {sid:6}  {name:<12}  {'第'+str(days)+'天':>4}  {pct_str:>10}  {vol_str:>10}")
+    else:
+        print("  （所有選股今日均已突破）")
+
+    # ── 候補股（備用）──
+    n_backup = len(backup_df)
+    print(f"\n=== 候補股（備用）=== ({n_backup} 檔)")
+    if n_backup > 0:
+        print(f"  {'#':>3}  {'代號':6}  {'名稱':<12}  {'模型分數':>8}")
+        print(f"  {'─'*3}  {'─'*6}  {'─'*12}  {'─'*8}")
+        for rank, (_, row) in enumerate(backup_df.sort_values("score", ascending=False).iterrows(), 1):
+            sid = str(row["stock_id"])
+            name = stock_names.get(sid, sid)[:10]
+            score = float(row.get("score", 0))
+            print(f"  {rank:>3}  {sid:6}  {name:<12}  {score:>8.4f}")
+    else:
+        print("  （無候補股）")
+
+    print()
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:
@@ -654,7 +739,41 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 percentile_map[feat] = vals.rank(pct=True)
 
             df = _filter_overheated(df, feature_df, config)
+            _df_pre_topn = df.copy()  # 供突破候補池使用（topN 前的完整候選集）
             df = risk.pick_topn(df, effective_topn)
+
+            # ── 突破確認狀態標記（F+ 策略整合）──
+            _df_backup: pd.DataFrame = pd.DataFrame()
+            bt_status: Dict[str, Dict] = {}
+            if getattr(config, "enable_breakthrough_entry", True):
+                # 候補股：topN 以外的前 5 名（rank N+1 ~ N+5）
+                _ext_n = effective_topn + 5
+                _df_ext = risk.pick_topn(_df_pre_topn, _ext_n)
+                if len(_df_ext) > effective_topn:
+                    _df_backup = _df_ext.iloc[effective_topn:].copy()
+                # feature_df.loc[df.index] 對應 pick_topn 後各股的特徵（含 foreign_buy_consecutive_days）
+                _feat_for_bt = feature_df.loc[df.index].copy()
+                _feat_for_bt.insert(0, "stock_id", df["stock_id"].values)
+                bt_status = _bt.check_today(
+                    price_df=price_df,
+                    feature_df=_feat_for_bt,
+                    stock_ids=df["stock_id"].astype(str).tolist(),
+                    target_date=chosen_date,
+                )
+                df["breakthrough_ready"] = df["stock_id"].astype(str).map(
+                    lambda sid: bt_status.get(sid, {}).get("ready", False)
+                )
+                df["breakthrough_type"] = df["stock_id"].astype(str).map(
+                    lambda sid: bt_status.get(sid, {}).get("type")
+                )
+                df["days_waiting"] = 0
+                # 輸出突破三清單
+                _all_sids = (
+                    df["stock_id"].astype(str).tolist()
+                    + _df_backup["stock_id"].astype(str).tolist()
+                )
+                _stock_names = _load_stock_names(db_session, list(set(_all_sids)))
+                _print_breakthrough_lists(df, _df_backup, bt_status, _stock_names, chosen_date)
 
             # ── 倉位配置 ──
             ps_method = str(getattr(config, "position_sizing_method", "vol_inverse"))

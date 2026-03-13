@@ -80,6 +80,8 @@ class AppConfig:
     # 過熱過濾器
     enable_overheat_filter: bool = False
     overheat_rsi_threshold: float = 75.0
+    # 突破確認進場（F+ 策略，生產選股標記用）
+    enable_breakthrough_entry: bool = True  # 是否標記今日突破狀態並輸出三清單
     # API Rate Limiting
     finmind_requests_per_hour: int = 6000  # FinMind API 每小時請求限制
     chunk_days: int = 180  # 資料抓取每個 chunk 的天數
@@ -250,4 +252,5 @@ def load_config() -> AppConfig:
         backtest_atr_period=int(pick("BACKTEST_ATR_PERIOD", 14)),
         enable_overheat_filter=str(pick("ENABLE_OVERHEAT_FILTER", "false")).lower() in {"1", "true"},
         overheat_rsi_threshold=float(pick("OVERHEAT_RSI_THRESHOLD", 75.0)),
+        enable_breakthrough_entry=str(pick("ENABLE_BREAKTHROUGH_ENTRY", "true")).lower() in {"1", "true"},
     )
