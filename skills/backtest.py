@@ -24,7 +24,6 @@ import gc
 import os
 import time
 from datetime import date, timedelta
-from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
@@ -34,7 +33,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models import Feature, Label, RawPrice
-from skills import risk
+from skills import data_store, risk
 from skills.breakthrough import (
     precompute_stats as _precompute_breakthrough_stats,
     compute_breakthrough_map as _compute_breakthrough_map,
@@ -672,77 +671,41 @@ def run_backtest(
         print(f"  訓練窗長: {train_lookback_days} 日")
     print()
 
-    # ── 2. 載入資料 ──
+    # ── 2. 載入資料（DuckDB parquet cache via data_store）──
+    # 第一次執行：MySQL 全量載入 → parquet（features 含 JSON 解析 + float32 壓縮）
+    # 後續執行：DuckDB predicate pushdown 直接讀 parquet，無 MySQL 往返
+    # TTL: 24 小時，超時自動重建
     _use_rolling_window = train_lookback_days is not None
-
-    # Parquet 快取目錄（第一次從 DB 建立，後續直接讀取省去 DB 往返）
-    _cache_dir = Path("artifacts/cache")
-    _cache_dir.mkdir(parents=True, exist_ok=True)
-    _cache_key = f"{data_start}_{data_end}"
-    _price_cache = _cache_dir / f"prices_{_cache_key}.parquet"
-    _feat_cache  = _cache_dir / f"features_{_cache_key}.parquet"
-    _label_cache = _cache_dir / f"labels_{_cache_key}.parquet"
 
     # ── 載入價格資料 ──
     _log("load_prices start")
     _t = time.time()
-    if _price_cache.exists():
-        price_df = pd.read_parquet(_price_cache)
-    else:
-        price_df = _load_prices(db_session, data_start, data_end)
-        price_df.to_parquet(_price_cache, index=False)
+    price_df = data_store.get_prices(db_session, data_start, data_end)
     _timer_load_prices = time.time() - _t
     _log(f"load_prices done {_timer_load_prices:.1f}s")
 
     if price_df.empty:
         raise ValueError("資料不足，無法進行回測")
-    price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
 
-    # ── 建立 Parquet 快取（若尚不存在）──
-    # 不在此全量預載入記憶體；滾動視窗每 fold 按需讀取，非滾動視窗一次讀全量
+    # ── 預熱 features/labels 快取（若尚未建立或已失效）──
+    # _ensure() 在 get_features/get_labels 內自動呼叫；
+    # 此處提前呼叫是為了讓 timer 能分開計量 price vs feature 建立時間
     _timer_load_features = 0.0
     _timer_load_labels = 0.0
-    if not _feat_cache.exists() or not _label_cache.exists():
-        _log("build_parquet_cache start (first run)")
-        _t = time.time()
-        _raw_feat_all, _label_df_tmp = _load_features_labels(db_session, data_start, data_end)
-        _log(f"db_load done {time.time()-_t:.1f}s")
-        if _raw_feat_all.empty:
-            raise ValueError("資料不足，無法進行回測")
-        _raw_feat_all["trading_date"] = pd.to_datetime(_raw_feat_all["trading_date"]).dt.date
-        _label_df_tmp["trading_date"] = pd.to_datetime(_label_df_tmp["trading_date"]).dt.date
-        _log("parse_features start")
-        _t = time.time()
-        _feat_df_tmp = _parse_and_filter_features(_raw_feat_all, feature_columns)
-        _log(f"parse_features done {time.time()-_t:.1f}s")
-        del _raw_feat_all
-        gc.collect()
-        # float32 轉換：特徵欄位記憶體砍半（ML 精度足夠），per-fold 峰值 ~3.5GB 而非 ~6GB
-        _feat_num_cols = [c for c in _feat_df_tmp.columns if c not in ("stock_id", "trading_date")]
-        _feat_df_tmp[_feat_num_cols] = _feat_df_tmp[_feat_num_cols].astype("float32")
-        _log("save_parquet start (float32)")
-        _t = time.time()
-        _feat_df_tmp.to_parquet(_feat_cache, index=False)
-        _label_df_tmp.to_parquet(_label_cache, index=False)
-        del _feat_df_tmp, _label_df_tmp
-        gc.collect()
-        _log(f"save_parquet done {time.time()-_t:.1f}s")
 
-    # 非滾動視窗：一次讀全量（訓練資料隨時間累積增長）
-    # 滾動視窗：佔位符，每 fold 在迴圈內按日期範圍讀 parquet
+    # 非滾動視窗：一次用 DuckDB 讀全量（訓練資料隨時間累積增長）
+    # 滾動視窗：佔位符，每 fold 在迴圈內用 DuckDB 按日期範圍讀取
     if not _use_rolling_window:
-        _log("load_all_features start (non-rolling)")
+        _log("load_all_features start (non-rolling, DuckDB)")
         _t = time.time()
-        feat_df = pd.read_parquet(_feat_cache)
-        label_df = pd.read_parquet(_label_cache)
-        feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
-        label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
+        feat_df = data_store.get_features(db_session, data_start, data_end, feature_columns)
+        label_df = data_store.get_labels(db_session, data_start, data_end)
         _timer_load_features = time.time() - _t
         _log(f"load_all_features done {_timer_load_features:.1f}s")
     else:
         feat_df = pd.DataFrame()
         label_df = pd.DataFrame()
-        _log(f"rolling_window_mode: per-fold parquet load (window={train_lookback_days}d)")
+        _log(f"rolling_window_mode: per-fold DuckDB load (window={train_lookback_days}d)")
 
     # ── 3. 預計算 ATR（若需要）──
     atr_df: Optional[pd.DataFrame] = None
@@ -842,14 +805,8 @@ def run_backtest(
                     gc.collect()
                 _log(f"fold_load {_win_start}~{_win_end}")
                 _t_fold = time.time()
-                _date_filters = [
-                    ("trading_date", ">=", _win_start),
-                    ("trading_date", "<=", _win_end),
-                ]
-                _rw_feat_df = pd.read_parquet(_feat_cache, filters=_date_filters)
-                _rw_label_df = pd.read_parquet(_label_cache, filters=_date_filters)
-                _rw_feat_df["trading_date"] = pd.to_datetime(_rw_feat_df["trading_date"]).dt.date
-                _rw_label_df["trading_date"] = pd.to_datetime(_rw_label_df["trading_date"]).dt.date
+                _rw_feat_df = data_store.get_features(db_session, _win_start, _win_end, feature_columns)
+                _rw_label_df = data_store.get_labels(db_session, _win_start, _win_end)
                 _rw_range = (_win_start, _win_end)
                 _log(f"fold_loaded feat:{len(_rw_feat_df):,} dt={time.time()-_t_fold:.1f}s")
             feat_df = _rw_feat_df
