@@ -60,6 +60,7 @@ def compute_breakthrough_map(
     window_dates: List[date],
     bt_stats_df: pd.DataFrame,
     feat_df: pd.DataFrame,
+    rb_date: Optional[date] = None,
     volume_surge_ratio: float = VOLUME_SURGE_RATIO,
     foreign_streak_min: int = FOREIGN_STREAK_MIN,
 ) -> Dict[str, date]:
@@ -72,6 +73,7 @@ def compute_breakthrough_map(
         window_dates: 突破等待視窗日期（再平衡日後最多 breakthrough_max_wait 天）
         bt_stats_df: 由 precompute_stats() 產生的 rolling 統計表
         feat_df: 特徵表（須含 foreign_buy_consecutive_days 欄位）
+        rb_date: 再平衡日（保留參數供呼叫端傳入，目前未使用）
         volume_surge_ratio: 量比門檻
         foreign_streak_min: 外資連買最低天數
 
@@ -102,8 +104,16 @@ def compute_breakthrough_map(
         & (window_data["volume"] > window_data["vol_avg_20"] * volume_surge_ratio)
     )
 
-    # ── 條件二：外資籌碼 + 均線 ──
-    if "foreign_buy_consecutive_days" in feat_df.columns:
+    # ── 條件二：籌碼突破（外資連買 ≥ foreign_streak_min 天 + 收盤 > 20日均線）──
+    # 使用 feat_df 中各 window 日期的 foreign_buy_consecutive_days。
+    # 此為當日可觀察數據（進場決策日的實際外資籌碼狀態），不構成未來洩漏。
+    if (
+        feat_df is not None
+        and not feat_df.empty
+        and "foreign_buy_consecutive_days" in feat_df.columns
+        and "stock_id" in feat_df.columns
+        and "trading_date" in feat_df.columns
+    ):
         wf = feat_df[
             feat_df["stock_id"].astype(str).isin(sids_set)
             & feat_df["trading_date"].isin(window_set)
@@ -114,9 +124,7 @@ def compute_breakthrough_map(
         ).fillna(0)
         window_data = window_data.merge(wf, on=["stock_id", "trading_date"], how="left")
         window_data["foreign_buy_consecutive_days"] = (
-            window_data.get(
-                "foreign_buy_consecutive_days", pd.Series(0.0, index=window_data.index)
-            ).fillna(0)
+            window_data["foreign_buy_consecutive_days"].fillna(0)
         )
         window_data["cond2"] = (
             (window_data["foreign_buy_consecutive_days"] >= foreign_streak_min)
