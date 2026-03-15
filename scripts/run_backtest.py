@@ -144,6 +144,12 @@ def main():
                         dest="market_filter_min_positions",
                         help="大盤過濾後最低持股數（預設 1，設 2 或 3 防止單押集中風險）")
 
+    # ── 進場訊號過濾 ──
+    parser.add_argument("--entry-filter", type=str, default=None,
+                        dest="entry_signal_filter",
+                        help="進場訊號過濾，格式：'key1=val1,key2=val2,...' "
+                             "支援：foreign_buy_streak_max, rsi_min, rsi_max, bias_20_max, volume_surge_ratio_min")
+
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
                         dest="train_lookback_days",
@@ -217,6 +223,14 @@ def main():
     # --no-clip：停用 clip（傳入 -1.01，遠低於 -100% 故永遠不觸發）
     clip_loss_pct = -1.01 if args.no_clip else -0.50
 
+    # --entry-filter：進場訊號過濾
+    _entry_signal_filter = None
+    if args.entry_signal_filter:
+        _entry_signal_filter = {}
+        for part in args.entry_signal_filter.split(","):
+            k, v = part.strip().split("=")
+            _entry_signal_filter[k.strip()] = float(v.strip())
+
     # --market-filter-tiers：漸進式大盤過濾
     _market_filter_tiers = None
     if args.market_filter_tiers:
@@ -264,6 +278,7 @@ def main():
             market_filter=args.market_filter,
             market_filter_tiers=_market_filter_tiers,
             market_filter_min_positions=args.market_filter_min_positions,
+            entry_signal_filter=_entry_signal_filter,
         )
 
     # ── 輸出 JSON ──

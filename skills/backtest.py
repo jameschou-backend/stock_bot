@@ -618,6 +618,7 @@ def run_backtest(
     market_filter: bool = False,  # 大盤過濾：前期大盤月跌>5% 持股減半，>10% 全現金
     market_filter_tiers: Optional[List[tuple]] = None,  # 漸進式大盤過濾：[(threshold, multiplier), ...] 由淺到深排序，如 [(-0.05,0.5),(-0.10,0.25),(-0.15,0.10)]
     market_filter_min_positions: int = 1,  # 大盤過濾後最低持股數（防止單押集中風險）
+    entry_signal_filter: Optional[Dict[str, object]] = None,  # 進場訊號過濾：{"foreign_buy_streak_max":3, "rsi_min":45, "rsi_max":70, "bias_20_max":0.15, "volume_surge_ratio_min":1.0}
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -1045,7 +1046,36 @@ def run_backtest(
             print(f"  [{rb_date}] [topN-floor] {effective_topn}→{topn_floor}")
             effective_topn = topn_floor
 
-        picks = risk.pick_topn(day_feat, effective_topn)
+        # ── 進場訊號過濾（entry_signal_filter）──
+        if entry_signal_filter:
+            _esf = entry_signal_filter
+            _filtered = day_feat.copy()
+            # 依序套用各條件
+            if "foreign_buy_streak_max" in _esf and "foreign_buy_streak" in _filtered.columns:
+                _filtered = _filtered[_filtered["foreign_buy_streak"] <= _esf["foreign_buy_streak_max"]]
+            if "rsi_min" in _esf and "rsi_14" in _filtered.columns:
+                _filtered = _filtered[_filtered["rsi_14"] >= _esf["rsi_min"]]
+            if "rsi_max" in _esf and "rsi_14" in _filtered.columns:
+                _filtered = _filtered[_filtered["rsi_14"] <= _esf["rsi_max"]]
+            if "bias_20_max" in _esf and "bias_20" in _filtered.columns:
+                _filtered = _filtered[_filtered["bias_20"] <= _esf["bias_20_max"]]
+            if "volume_surge_ratio_min" in _esf and "volume_surge_ratio" in _filtered.columns:
+                _filtered = _filtered[_filtered["volume_surge_ratio"] >= _esf["volume_surge_ratio_min"]]
+
+            if len(_filtered) >= effective_topn:
+                picks = risk.pick_topn(_filtered, effective_topn)
+            elif len(_filtered) >= market_filter_min_positions:
+                picks = risk.pick_topn(_filtered, min(effective_topn, len(_filtered)))
+            else:
+                # 逐步放寬：先放寬 foreign_buy_streak，再放寬 RSI
+                _relaxed = day_feat.copy()
+                if "rsi_min" in _esf and "rsi_14" in _relaxed.columns:
+                    _relaxed = _relaxed[_relaxed["rsi_14"] >= max(_esf.get("rsi_min", 0) - 10, 30)]
+                if "rsi_max" in _esf and "rsi_14" in _relaxed.columns:
+                    _relaxed = _relaxed[_relaxed["rsi_14"] <= min(_esf.get("rsi_max", 100) + 10, 85)]
+                picks = risk.pick_topn(_relaxed, min(effective_topn, max(market_filter_min_positions, len(_relaxed))))
+        else:
+            picks = risk.pick_topn(day_feat, effective_topn)
 
         # ── 突破確認進場（Breakthrough Entry Filter）──
         # 月底選股後不立即進場，等每檔個股出現突破訊號（最多等 breakthrough_max_wait 個交易日）。
