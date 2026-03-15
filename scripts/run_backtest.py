@@ -129,6 +129,14 @@ def main():
                         dest="momentum_penalty",
                         help="對 bias_20/ret_5/ret_20 乘以 0.5 再送入模型（懲罰高動能股）")
 
+    # ── ATR 動態停損 & 大盤過濾 ──
+    parser.add_argument("--atr-dynamic-stoploss", action="store_true",
+                        dest="atr_dynamic_stoploss",
+                        help="ATR 動態停損：低波動股 -15%%、高波動股 -25%%（以 atr_inv 中位數分界）")
+    parser.add_argument("--market-filter", action="store_true",
+                        dest="market_filter",
+                        help="大盤過濾：前期大盤月跌>5%% 持股減半，>10%% 全現金")
+
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
                         dest="train_lookback_days",
@@ -237,6 +245,8 @@ def main():
             enable_breakthrough_entry=args.enable_breakthrough_entry,
             breakthrough_max_wait=args.breakthrough_max_wait,
             momentum_penalty_cols=momentum_penalty_cols,
+            atr_dynamic_stoploss=args.atr_dynamic_stoploss,
+            market_filter=args.market_filter,
         )
 
     # ── 輸出 JSON ──

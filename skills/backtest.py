@@ -355,6 +355,7 @@ def _simulate_period(
     enable_slippage: bool = True,
     clip_loss_pct: float = -0.50,
     per_stock_entry_dates: Optional[Dict[str, date]] = None,
+    per_stock_stoploss_override: Optional[Dict[str, float]] = None,
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -372,6 +373,7 @@ def _simulate_period(
         atr_stoploss_multiplier: ATR 倍數停損（如 2.5），覆蓋全局 stoploss_pct
         enable_slippage: 是否套用滑價模型（ATR 的 10%，上限 0.3%，適用進出場各一次）
         clip_loss_pct: 單筆最大損失 clip（預設 -50%；診斷可傳 -1.01 停用）
+        per_stock_stoploss_override: 外部預算的個股停損 dict（覆蓋 stoploss_pct）
 
     Returns:
         Dict with period results
@@ -452,6 +454,8 @@ def _simulate_period(
 
     # ── 3. ATR-based 個股動態停損 ──
     per_stock_stop: Optional[Dict[str, float]] = None
+    if per_stock_stoploss_override:
+        per_stock_stop = per_stock_stoploss_override
     atr_at_entry: Optional[pd.Series] = None
     if atr_stoploss_multiplier is not None and atr_df is not None and not atr_df.empty:
         atr_at_entry = (
@@ -610,6 +614,8 @@ def run_backtest(
     enable_breakthrough_entry: bool = False,  # 突破確認進場：等待訊號後才進場
     breakthrough_max_wait: int = 10,         # 最多等待幾個交易日出現突破訊號
     momentum_penalty_cols: Optional[Dict[str, float]] = None,  # 動能懲罰：{col: scale}，訓練/預測前對指定特徵乘以 scale
+    atr_dynamic_stoploss: bool = False,  # ATR 動態停損：低波動股 -15%，高波動股 -25%（以 atr_inv 中位數分界）
+    market_filter: bool = False,  # 大盤過濾：前期大盤月跌>5% 持股減半，>10% 全現金
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -1132,25 +1138,57 @@ def run_backtest(
                 atr_period=atr_period,
             )
 
-        # ── 模擬持有 ──
-        _t = time.time()
-        result = _simulate_period(
-            picks, price_df, rb_date, exit_date,
-            stoploss_pct, transaction_cost_pct,
-            entry_delay_days=entry_delay_days,
-            position_weights=pos_weights,
-            trailing_stop_pct=trailing_stop_pct,
-            atr_df=atr_df,
-            atr_stoploss_multiplier=atr_stoploss_multiplier,
-            enable_slippage=enable_slippage,
-            clip_loss_pct=clip_loss_pct,
-            per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
-        )
-        _dt = time.time() - _t
-        _timer_simulate += _dt
-        _count_simulate += 1
-        _timer_apply_stoploss += result.get("_stoploss_time", 0.0)
-        _count_apply_stoploss += 1
+        # ── 大盤過濾（market_filter）：根據前期大盤報酬調整持倉 ──
+        _market_filter_skip = False
+        if market_filter and len(period_results) > 0:
+            _prev_bm = period_results[-1].get("benchmark_return", 0.0)
+            if _prev_bm < -0.10:
+                _market_filter_skip = True
+                print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -10%，本期持現金")
+            elif _prev_bm < -0.05:
+                _mf_new = max(1, effective_topn // 2)
+                if _mf_new < len(picks):
+                    picks = picks.head(_mf_new)
+                    print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
+
+        if _market_filter_skip:
+            # 全現金：0% 報酬
+            result = {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "stock_returns": {}, "trades_log": [], "_stoploss_time": 0.0}
+        else:
+            # ── ATR 動態停損：以 atr_inv 中位數分界，低波動 -15%、高波動 -25% ──
+            _per_stock_sl: Optional[Dict[str, float]] = None
+            if atr_dynamic_stoploss and "atr_inv" in day_feat.columns:
+                _atr_inv_median = float(day_feat["atr_inv"].median())
+                _per_stock_sl = {}
+                for _, _p_row in picks.iterrows():
+                    _sid = str(_p_row["stock_id"])
+                    _feat_row = day_feat[day_feat["stock_id"].astype(str) == _sid]
+                    if not _feat_row.empty:
+                        _atr_inv_val = float(_feat_row["atr_inv"].iloc[0])
+                        _per_stock_sl[_sid] = -0.15 if _atr_inv_val >= _atr_inv_median else -0.25
+                    else:
+                        _per_stock_sl[_sid] = -0.20  # fallback
+
+            # ── 模擬持有 ──
+            _t = time.time()
+            result = _simulate_period(
+                picks, price_df, rb_date, exit_date,
+                stoploss_pct, transaction_cost_pct,
+                entry_delay_days=entry_delay_days,
+                position_weights=pos_weights,
+                trailing_stop_pct=trailing_stop_pct,
+                atr_df=atr_df,
+                atr_stoploss_multiplier=atr_stoploss_multiplier,
+                enable_slippage=enable_slippage,
+                clip_loss_pct=clip_loss_pct,
+                per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
+                per_stock_stoploss_override=_per_stock_sl,
+            )
+            _dt = time.time() - _t
+            _timer_simulate += _dt
+            _count_simulate += 1
+            _timer_apply_stoploss += result.get("_stoploss_time", 0.0)
+            _count_apply_stoploss += 1
 
         # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
