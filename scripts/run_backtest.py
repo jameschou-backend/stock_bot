@@ -140,6 +140,9 @@ def main():
                         dest="market_filter_tiers",
                         help="漸進式大盤過濾，格式：'threshold1:mult1,threshold2:mult2,...' "
                              "例如 '-0.05:0.5,-0.10:0.25,-0.15:0.10'（由淺到深排序）")
+    parser.add_argument("--market-filter-min-pos", type=int, default=1,
+                        dest="market_filter_min_positions",
+                        help="大盤過濾後最低持股數（預設 1，設 2 或 3 防止單押集中風險）")
 
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
@@ -260,6 +263,7 @@ def main():
             atr_dynamic_stoploss=args.atr_dynamic_stoploss,
             market_filter=args.market_filter,
             market_filter_tiers=_market_filter_tiers,
+            market_filter_min_positions=args.market_filter_min_positions,
         )
 
     # ── 輸出 JSON ──

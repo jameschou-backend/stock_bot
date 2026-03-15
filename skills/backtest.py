@@ -617,6 +617,7 @@ def run_backtest(
     atr_dynamic_stoploss: bool = False,  # ATR 動態停損：低波動股 -15%，高波動股 -25%（以 atr_inv 中位數分界）
     market_filter: bool = False,  # 大盤過濾：前期大盤月跌>5% 持股減半，>10% 全現金
     market_filter_tiers: Optional[List[tuple]] = None,  # 漸進式大盤過濾：[(threshold, multiplier), ...] 由淺到深排序，如 [(-0.05,0.5),(-0.10,0.25),(-0.15,0.10)]
+    market_filter_min_positions: int = 1,  # 大盤過濾後最低持股數（防止單押集中風險）
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -1171,6 +1172,16 @@ def run_backtest(
                     if _mf_new < len(picks):
                         picks = picks.head(_mf_new)
                         print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
+
+        # ── 最低持股數保護（market_filter_min_positions）──
+        if not _market_filter_skip and market_filter_min_positions > 1 and len(picks) < market_filter_min_positions:
+            _need = market_filter_min_positions - len(picks)
+            _existing_sids = set(picks["stock_id"].astype(str).tolist())
+            _candidates = day_feat[~day_feat["stock_id"].astype(str).isin(_existing_sids)].sort_values("score", ascending=False)
+            _backfill = _candidates.head(_need)
+            if not _backfill.empty:
+                picks = pd.concat([picks, _backfill[picks.columns]], ignore_index=True)
+                print(f"  [{rb_date}] min_positions: {len(picks)-len(_backfill)}→{len(picks)}（補{len(_backfill)}檔）")
 
         if _market_filter_skip:
             # 全現金：0% 報酬
