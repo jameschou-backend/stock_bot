@@ -136,6 +136,10 @@ def main():
     parser.add_argument("--market-filter", action="store_true",
                         dest="market_filter",
                         help="大盤過濾：前期大盤月跌>5%% 持股減半，>10%% 全現金")
+    parser.add_argument("--market-filter-tiers", type=str, default=None,
+                        dest="market_filter_tiers",
+                        help="漸進式大盤過濾，格式：'threshold1:mult1,threshold2:mult2,...' "
+                             "例如 '-0.05:0.5,-0.10:0.25,-0.15:0.10'（由淺到深排序）")
 
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
@@ -210,6 +214,14 @@ def main():
     # --no-clip：停用 clip（傳入 -1.01，遠低於 -100% 故永遠不觸發）
     clip_loss_pct = -1.01 if args.no_clip else -0.50
 
+    # --market-filter-tiers：漸進式大盤過濾
+    _market_filter_tiers = None
+    if args.market_filter_tiers:
+        _market_filter_tiers = []
+        for part in args.market_filter_tiers.split(","):
+            thr, mult = part.strip().split(":")
+            _market_filter_tiers.append((float(thr), float(mult)))
+
     # --momentum-penalty：對高動能特徵乘以 0.5
     momentum_penalty_cols = None
     if args.momentum_penalty:
@@ -247,6 +259,7 @@ def main():
             momentum_penalty_cols=momentum_penalty_cols,
             atr_dynamic_stoploss=args.atr_dynamic_stoploss,
             market_filter=args.market_filter,
+            market_filter_tiers=_market_filter_tiers,
         )
 
     # ── 輸出 JSON ──

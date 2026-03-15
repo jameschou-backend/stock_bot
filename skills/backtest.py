@@ -616,6 +616,7 @@ def run_backtest(
     momentum_penalty_cols: Optional[Dict[str, float]] = None,  # 動能懲罰：{col: scale}，訓練/預測前對指定特徵乘以 scale
     atr_dynamic_stoploss: bool = False,  # ATR 動態停損：低波動股 -15%，高波動股 -25%（以 atr_inv 中位數分界）
     market_filter: bool = False,  # 大盤過濾：前期大盤月跌>5% 持股減半，>10% 全現金
+    market_filter_tiers: Optional[List[tuple]] = None,  # 漸進式大盤過濾：[(threshold, multiplier), ...] 由淺到深排序，如 [(-0.05,0.5),(-0.10,0.25),(-0.15,0.10)]
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -1138,18 +1139,38 @@ def run_backtest(
                 atr_period=atr_period,
             )
 
-        # ── 大盤過濾（market_filter）：根據前期大盤報酬調整持倉 ──
+        # ── 大盤過濾（market_filter / market_filter_tiers）：根據前期大盤報酬調整持倉 ──
         _market_filter_skip = False
-        if market_filter and len(period_results) > 0:
+        _mf_multiplier = 1.0  # 記錄實際持倉倍率供 period_results 保存
+        if len(period_results) > 0 and (market_filter or market_filter_tiers):
             _prev_bm = period_results[-1].get("benchmark_return", 0.0)
-            if _prev_bm < -0.10:
-                _market_filter_skip = True
-                print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -10%，本期持現金")
-            elif _prev_bm < -0.05:
-                _mf_new = max(1, effective_topn // 2)
-                if _mf_new < len(picks):
-                    picks = picks.head(_mf_new)
-                    print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
+            if market_filter_tiers:
+                # 漸進式：按 tiers 從深到淺匹配（tiers 須由淺到深排序）
+                _applied = False
+                for _thr, _mult in reversed(market_filter_tiers):
+                    if _prev_bm < _thr:
+                        _mf_multiplier = _mult
+                        _mf_new = max(1, int(effective_topn * _mult))
+                        if _mult <= 0:
+                            _market_filter_skip = True
+                            print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，本期持現金")
+                        elif _mf_new < len(picks):
+                            picks = picks.head(_mf_new)
+                            print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，持股×{_mult}→{_mf_new}")
+                        _applied = True
+                        break
+            elif market_filter:
+                # 原始二階段過濾
+                if _prev_bm < -0.10:
+                    _market_filter_skip = True
+                    _mf_multiplier = 0.0
+                    print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -10%，本期持現金")
+                elif _prev_bm < -0.05:
+                    _mf_multiplier = 0.5
+                    _mf_new = max(1, effective_topn // 2)
+                    if _mf_new < len(picks):
+                        picks = picks.head(_mf_new)
+                        print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
 
         if _market_filter_skip:
             # 全現金：0% 報酬
@@ -1239,6 +1260,7 @@ def run_backtest(
             "losses": result.get("losses", 0),
             "stock_returns": result.get("stock_returns", {}),
             "stoploss_triggered": result["stoploss_triggered"],
+            "market_filter_multiplier": _mf_multiplier,
             "equity": equity,
             "benchmark_equity": benchmark_equity,
         })
