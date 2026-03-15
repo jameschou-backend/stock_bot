@@ -124,6 +124,11 @@ def main():
                         dest="breakthrough_max_wait",
                         help="突破進場最大等待交易日（預設 10）")
 
+    # ── 動能懲罰 ──
+    parser.add_argument("--momentum-penalty", action="store_true",
+                        dest="momentum_penalty",
+                        help="對 bias_20/ret_5/ret_20 乘以 0.5 再送入模型（懲罰高動能股）")
+
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
                         dest="train_lookback_days",
@@ -197,6 +202,11 @@ def main():
     # --no-clip：停用 clip（傳入 -1.01，遠低於 -100% 故永遠不觸發）
     clip_loss_pct = -1.01 if args.no_clip else -0.50
 
+    # --momentum-penalty：對高動能特徵乘以 0.5
+    momentum_penalty_cols = None
+    if args.momentum_penalty:
+        momentum_penalty_cols = {"bias_20": 0.5, "ret_5": 0.5, "ret_20": 0.5}
+
     with get_session() as session:
         result = run_backtest(
             config=config,
@@ -226,6 +236,7 @@ def main():
             clip_loss_pct=clip_loss_pct,
             enable_breakthrough_entry=args.enable_breakthrough_entry,
             breakthrough_max_wait=args.breakthrough_max_wait,
+            momentum_penalty_cols=momentum_penalty_cols,
         )
 
     # ── 輸出 JSON ──

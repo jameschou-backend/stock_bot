@@ -609,6 +609,7 @@ def run_backtest(
     clip_loss_pct: float = -0.50,  # 單筆最大損失 clip（預設 -50%）；診斷用可傳 -1.01 停用
     enable_breakthrough_entry: bool = False,  # 突破確認進場：等待訊號後才進場
     breakthrough_max_wait: int = 10,         # 最多等待幾個交易日出現突破訊號
+    momentum_penalty_cols: Optional[Dict[str, float]] = None,  # 動能懲罰：{col: scale}，訓練/預測前對指定特徵乘以 scale
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -848,6 +849,13 @@ def run_backtest(
                 continue
 
             current_feature_names = list(fmat.columns)
+
+            # 動能懲罰：對指定特徵乘以縮放係數（訓練前）
+            if momentum_penalty_cols:
+                for _pc, _ps in momentum_penalty_cols.items():
+                    if _pc in fmat.columns:
+                        fmat[_pc] = fmat[_pc] * _ps
+
             y = merged["future_ret_h"].astype(float).values
 
             # 時間加權：近 1 年 × 2.0，1~2 年 × 1.0，>2 年 × 0.5（近期市場規律更重要）
@@ -896,6 +904,12 @@ def run_backtest(
                 fmat[col] = 0
             else:
                 fmat[col] = fmat[col].fillna(fmat[col].median())
+
+        # 動能懲罰：對指定特徵乘以縮放係數（預測前）
+        if momentum_penalty_cols:
+            for _pc, _ps in momentum_penalty_cols.items():
+                if _pc in fmat.columns:
+                    fmat[_pc] = fmat[_pc] * _ps
 
         _t = time.time()
         scores = current_model.predict(fmat.values)

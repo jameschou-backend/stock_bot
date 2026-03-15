@@ -472,6 +472,114 @@ def build_markdown(data: dict, input_path: str) -> str:
 
 
 # ─────────────────────────────────────────────
+# Plain text builder
+# ─────────────────────────────────────────────
+
+def _md_table_to_plain(lines: list[str]) -> list[str]:
+    """將 markdown 表格行轉換為對齊的純文字表格。"""
+    # 收集表格行（以 | 開頭），跳過分隔行
+    rows = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped.startswith("|"):
+            continue
+        # 跳過分隔行 |------|------|
+        if stripped.replace("|", "").replace("-", "").strip() == "":
+            continue
+        cells = [c.strip() for c in stripped.strip("|").split("|")]
+        rows.append(cells)
+
+    if not rows:
+        return []
+
+    # 計算每欄最大寬度
+    n_cols = max(len(r) for r in rows)
+    widths = [0] * n_cols
+    for r in rows:
+        for i, c in enumerate(r):
+            widths[i] = max(widths[i], len(c))
+
+    # 格式化輸出
+    result = []
+    for idx, r in enumerate(rows):
+        parts = []
+        for i in range(n_cols):
+            val = r[i] if i < len(r) else ""
+            parts.append(val.ljust(widths[i]))
+        result.append("  ".join(parts))
+        # 在表頭後加分隔線
+        if idx == 0:
+            result.append("  ".join("-" * w for w in widths))
+
+    return result
+
+
+def md_to_plain_text(md: str) -> str:
+    """將 markdown 報告轉換為純文字格式。"""
+    lines = md.split("\n")
+    out: list[str] = []
+    i = 0
+
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
+
+        # 標題：移除 # 符號
+        if stripped.startswith("#"):
+            title = stripped.lstrip("#").strip()
+            out.append("")
+            out.append(title)
+            out.append("=" * len(title) if stripped.startswith("# ") and not stripped.startswith("## ") else "-" * len(title))
+            i += 1
+            continue
+
+        # 表格：收集連續的表格行一次處理
+        if stripped.startswith("|"):
+            table_lines = []
+            while i < len(lines) and lines[i].strip().startswith("|"):
+                table_lines.append(lines[i])
+                i += 1
+            out.append("")
+            out.extend(_md_table_to_plain(table_lines))
+            out.append("")
+            continue
+
+        # 引用行：移除 > 前綴
+        if stripped.startswith(">"):
+            cleaned = stripped.lstrip("> ").strip().replace("**", "").replace("`", "")
+            out.append(cleaned)
+            i += 1
+            continue
+
+        # 粗體/code：移除 ** 和 `
+        cleaned = stripped.replace("**", "").replace("`", "")
+
+        # 列表項：移除 - 前綴，改為空格縮排
+        if cleaned.startswith("- "):
+            cleaned = "  " + cleaned[2:]
+
+        # 編號列表：保留原樣
+        # 水平線
+        if cleaned == "---":
+            out.append("")
+            i += 1
+            continue
+
+        # 斜體
+        if cleaned.startswith("*") and cleaned.endswith("*"):
+            cleaned = cleaned.strip("*")
+
+        out.append(cleaned)
+        i += 1
+
+    # 清除開頭多餘空行
+    while out and out[0] == "":
+        out.pop(0)
+
+    return "\n".join(out) + "\n"
+
+
+# ─────────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────────
 
@@ -512,6 +620,12 @@ def main():
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(md, encoding="utf-8")
     print(f"[generate_review_pack] ✅ 已輸出：{output_path}", file=sys.stderr)
+
+    # 額外輸出純文字版
+    txt_path = output_path.with_suffix(".txt")
+    txt = md_to_plain_text(md)
+    txt_path.write_text(txt, encoding="utf-8")
+    print(f"[generate_review_pack] ✅ 已輸出：{txt_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":
