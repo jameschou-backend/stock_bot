@@ -2,6 +2,20 @@
 
 本文件提供給 Claude / AI coding assistant 在本專案工作的上下文與操作規範。
 
+## 強制規則
+
+> ⚠️ 以下規則為最高優先級，任何情況下都必須遵守。
+
+1. **每次 session 開始**：必須先讀取 `memory/` 下所有檔案（decisions.md、preferences.md、project_status.md）
+2. **每次有重要發現或跑完回測**：立刻更新對應的 memory 檔案，不等到 session 結束
+3. **每次 session 結束前**：更新 `memory/project_status.md` 和 `memory/decisions.md`，commit 並 push 到 main
+4. **如果使用者說「結束」或「今天到這」**：自動觸發記憶更新流程，依序執行：
+   - 更新 `memory/decisions.md`（新增實驗結果與結論）
+   - 更新 `memory/project_status.md`（更新現況、待辦、下一步）
+   - `git add memory/ && git commit -m "docs: update memory after session" && git push origin main`
+
+---
+
 ## 專案簡介
 
 台股波段 ML 選股系統。使用 LightGBM 以 20 日 forward return 為 label，每月再平衡選股（topN 等權），
