@@ -62,9 +62,10 @@ def _train_model(train_X, train_y, fast_mode=False):
 class Position:
     __slots__ = ("stock_id", "entry_date", "entry_price", "score", "days_held",
                  "foreign_sell_streak", "peak_price", "ma_below_streak",
-                 "foreign_weak_streak", "foreign_consec_break_streak")
+                 "foreign_weak_streak", "foreign_consec_break_streak", "entry_amt_20")
 
-    def __init__(self, stock_id: str, entry_date: date, entry_price: float, score: float):
+    def __init__(self, stock_id: str, entry_date: date, entry_price: float, score: float,
+                 entry_amt_20: float = 0.0):
         self.stock_id = stock_id
         self.entry_date = entry_date
         self.entry_price = entry_price
@@ -75,6 +76,42 @@ class Position:
         self.ma_below_streak = 0             # 連續收盤低於 MA20 天數
         self.foreign_weak_streak = 0         # 連續 foreign_buy_streak_5 == 0 天數
         self.foreign_consec_break_streak = 0 # 連續 foreign_buy_consecutive_days == 0 天數
+        self.entry_amt_20 = entry_amt_20     # 進場時 20日均成交值（供分級滑價用）
+
+
+def _tiered_slippage(amt_20: float) -> float:
+    """依 20 日均成交值計算分級滑價（單程）。
+    >10億: 0.05%  |  3-10億: 0.10%  |  1-3億: 0.20%  |  <1億: 0.40%
+    """
+    if amt_20 >= 1e9:    return 0.0005
+    if amt_20 >= 3e8:    return 0.001
+    if amt_20 >= 1e8:    return 0.002
+    return 0.004
+
+
+def _precompute_liquidity_map(
+    price_df: pd.DataFrame,
+    min_avg_turnover: float,
+) -> Dict[date, set]:
+    """預先計算每個交易日符合 20 日平均成交值門檻的股票集合（單位：億元）。"""
+    if min_avg_turnover <= 0 or price_df.empty:
+        return {}
+    threshold = float(min_avg_turnover) * 1e8
+    df = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df["volume"] = pd.to_numeric(df["volume"], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", "close", "volume"])
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df.sort_values(["stock_id", "trading_date"])
+    df["turnover"] = df["close"] * df["volume"]
+    df["avg_t20"] = df.groupby("stock_id")["turnover"].transform(
+        lambda s: s.rolling(20, min_periods=5).mean()
+    )
+    eligible = df[df["avg_t20"] >= threshold][["trading_date", "stock_id"]]
+    result: Dict[date, set] = {}
+    for td, sub in eligible.groupby("trading_date"):
+        result[td] = set(sub["stock_id"].tolist())
+    return result
 
 
 def run_rotation(
@@ -118,6 +155,10 @@ def run_rotation(
     gate_rev_accel_bonus_pct: float = 0.04,  # fund_revenue_yoy_accel > 0 加 +4%
     # ── 訓練 label horizon（預設 20，可改 5/10 測試尺度匹配）──
     train_label_horizon: int = 20,        # 訓練用 N 日 forward return（從 price_df 計算）
+    # ── 流動性過濾 + 滑價 ──
+    min_avg_turnover: float = 0.0,       # 20日平均成交值門檻（億元），0=停用
+    slippage_pct: float = 0.0,           # 每筆固定滑價（進+出各一次），0=停用
+    use_tiered_slippage: bool = False,   # 依流動性分級計算滑價
     # ── 籌碼出場補充（chip exit，rank 模式下加掛）──
     chip_exit: bool = False,
     chip_exit_foreign_break_days: int = 3,   # 外資連買中斷連 N 天
@@ -209,9 +250,24 @@ def run_rotation(
 
     all_dates = sorted(price_df["trading_date"].unique())
     bt_dates = [d for d in all_dates if backtest_start <= d <= data_end]
+
+    # ── 預計算流動性合格集合 ──
+    _liquidity_map: Dict[date, set] = {}
+    if min_avg_turnover > 0:
+        t0 = time.time()
+        _liquidity_map = _precompute_liquidity_map(price_df, min_avg_turnover)
+        _sample_date = bt_dates[len(bt_dates)//2] if len(bt_dates) > 10 else None
+        _sample_count = len(_liquidity_map.get(_sample_date, set())) if _sample_date else "?"
+        print(f"  流動性地圖：{len(_liquidity_map)} 日，中段合格股約 {_sample_count} 支（{time.time()-t0:.1f}s）")
     print(f"  Trading days: {len(bt_dates)}")
 
     # ── 若 train_label_horizon != 20，從 price_df 重算 N 日 forward return 當 label ──
+    if min_avg_turnover > 0:
+        print(f"  [流動性過濾] min_avg_turnover={min_avg_turnover:.2f}億/日")
+    if slippage_pct > 0:
+        print(f"  [固定滑價] {slippage_pct:.3%}/筆（進出各半）")
+    if use_tiered_slippage:
+        print(f"  [分級滑價] <1億:0.4%, 1-3億:0.2%, 3-10億:0.1%, >10億:0.05%")
     if chip_exit:
         print(f"  [Chip Exit ON] 外資連買中斷>={chip_exit_foreign_break_days}天 AND boll_pct>{chip_exit_boll_threshold} AND 持倉>={chip_exit_min_hold}天 → 出場")
 
@@ -477,7 +533,13 @@ def run_rotation(
 
             if exit_reason:
                 exit_px = price_map.get(sid, pos.entry_price)
-                ret = exit_px / pos.entry_price - 1 - transaction_cost_pct
+                # 實際成本 = 交易成本 + 滑價（進出各計一次）
+                _slip = (
+                    _tiered_slippage(pos.entry_amt_20) * 2
+                    if use_tiered_slippage
+                    else slippage_pct
+                )
+                ret = exit_px / pos.entry_price - 1 - transaction_cost_pct - _slip
                 ret = max(ret, -0.50)
                 trades_log.append({
                     "stock_id": sid, "entry_date": str(pos.entry_date),
@@ -495,6 +557,11 @@ def run_rotation(
         if len(positions) < _current_max_pos:
             candidates = tf_today[tf_today["stock_id"].isin(entry_eligible)]
             candidates = candidates[~candidates["stock_id"].isin(positions.keys())]
+
+            # 流動性過濾
+            if _liquidity_map:
+                _eligible_today = _liquidity_map.get(today, set())
+                candidates = candidates[candidates["stock_id"].isin(_eligible_today)]
 
             if use_quality_gate and not candidates.empty:
                 # ── 硬排除：財務地雷 / 主力晚期 ──
@@ -531,9 +598,11 @@ def run_rotation(
             for _, cand in candidates.head(slots).iterrows():
                 _sid = str(cand["stock_id"])
                 if _sid in price_map:
+                    _entry_amt20 = float(cand.get("amt_20", 0) or 0)
                     positions[_sid] = Position(
                         stock_id=_sid, entry_date=today,
                         entry_price=price_map[_sid], score=float(cand["score"]),
+                        entry_amt_20=_entry_amt20,
                     )
 
         equity_curve.append({"date": str(today), "equity": equity})
@@ -549,7 +618,12 @@ def run_rotation(
     for sid in list(positions.keys()):
         pos = positions[sid]
         exit_px = lp.get(sid, pos.entry_price)
-        ret = exit_px / pos.entry_price - 1 - transaction_cost_pct
+        _slip = (
+            _tiered_slippage(pos.entry_amt_20) * 2
+            if use_tiered_slippage
+            else slippage_pct
+        )
+        ret = exit_px / pos.entry_price - 1 - transaction_cost_pct - _slip
         ret = max(ret, -0.50)
         trades_log.append({
             "stock_id": sid, "entry_date": str(pos.entry_date),
@@ -668,6 +742,9 @@ def run_rotation(
             "gate_streak_bonus_pct": gate_streak_bonus_pct,
             "gate_rev_accel_bonus_pct": gate_rev_accel_bonus_pct,
             "train_label_horizon": train_label_horizon,
+            "min_avg_turnover": min_avg_turnover,
+            "slippage_pct": slippage_pct,
+            "use_tiered_slippage": use_tiered_slippage,
             "chip_exit": chip_exit,
             "chip_exit_foreign_break_days": chip_exit_foreign_break_days,
             "chip_exit_boll_threshold": chip_exit_boll_threshold,
@@ -730,6 +807,12 @@ def main():
                         help="Oracle 模式：外資連買中斷天數（預設 3）")
     parser.add_argument("--oracle-ret5-tp", type=float, default=0.20,
                         help="Oracle 模式：5日報酬獲利了結門檻（預設 0.20）")
+    parser.add_argument("--min-avg-turnover", type=float, default=0.0,
+                        help="20日均成交值門檻（億元），0=停用。建議值：0.5=5千萬/日")
+    parser.add_argument("--slippage", type=float, default=0.0,
+                        help="每筆固定滑價（進出共計，預設 0）")
+    parser.add_argument("--tiered-slippage", action="store_true",
+                        help="依流動性分級滑價：>10億 0.1%%, 3-10億 0.2%%, 1-3億 0.4%%, <1億 0.8%%")
     parser.add_argument("--chip-exit", action="store_true",
                         help="啟用籌碼出場補充：外資連買中斷>=N天 AND boll_pct>0.90 AND 持倉>=5天")
     parser.add_argument("--chip-exit-break-days", type=int, default=3,
@@ -784,6 +867,9 @@ def main():
             oracle_boll_ob=args.oracle_boll,
             oracle_foreign_break_days=args.oracle_foreign_days,
             oracle_ret5_tp=args.oracle_ret5_tp,
+            min_avg_turnover=args.min_avg_turnover,
+            slippage_pct=args.slippage,
+            use_tiered_slippage=args.tiered_slippage,
             chip_exit=args.chip_exit,
             chip_exit_foreign_break_days=args.chip_exit_break_days,
             chip_exit_boll_threshold=args.chip_exit_boll,
