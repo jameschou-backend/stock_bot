@@ -1,12 +1,12 @@
 # 專案現況
 
-> 最後更新：2026-03-16
+> 最後更新：2026-03-16（session 2）
 
 ---
 
 ## 目前最佳回測結果
 
-**Exp D（現行生產）**，2026-03-15 驗證：
+### Strategy A（月頻，現行生產）— Exp D
 
 | 指標 | 數值 |
 |------|------|
@@ -17,16 +17,44 @@
 | Sharpe | **1.042** |
 | Calmar | **1.367** |
 | 超額報酬 | +2583.43% |
-| 勝率 | 45.45% |
 | 交易次數 | 2009 筆 |
 
 配置：月頻 + 無停損 + 漸進大盤過濾（-5%:×0.5, -10%:×0.25, -15%:×0.10）+ 最少 2 檔 + seasonal filter + label_horizon_buffer=20
 
+### Strategy C（日頻輪動）— C2 基準
+
+| 指標 | 數值 |
+|------|------|
+| 期間 | 2016-03-28 ~ 2026-02-03 |
+| 累積報酬 | **+18,395%** |
+| 年化報酬 | **+72.68%** |
+| MDD | -30.25% |
+| Sharpe | **1.622** |
+| Calmar | 2.403 |
+| 交易筆數 | 1,259 |
+| 年化成本 | **39.53%**（問題所在）|
+
+配置：daily rotation，rank_threshold=0.20，max_hold=30d，top_entry=10
+
+---
+
+## 今日完成的實驗（2026-03-16）
+
+| 實驗 | 結論 |
+|------|------|
+| C2 最小持倉（Hold5/10/15）| 無效，Force Exit 替代 Rank Drop，成本幾乎不降 |
+| C2 風控出場 Risk v1 | MA Break 太靈敏，成本反升至 51.6% |
+| C2 風控出場 Risk v2 | MA Break 更嚴重（81%出場），成本 80.8% |
+| Oracle 分析 | 每筆平均少吃 23pp；最佳出場特徵：RSI=68、Bias=9%、外資剛中斷 |
+| C2-Oracle v1 | Bug：_feat_map 未建立，訊號不觸發 |
+| C2-Oracle v2（修 bug）| Boll 太靈敏，平均持倉縮至 8.2 天，成本 55% |
+| C2-Oracle v3 | RSI>78 OR (RSI>72 AND ret5>10%)，Sharpe 1.156，仍遜基準 |
+
+**核心結論**：Rank-based exit 是有效的隱含相對強度風控，所有風控出場版本均無法在 Sharpe 上超越 C2 基準（1.622）。
+
 ---
 
 ## 目前已知問題
-
-### 已確認但尚未修復
 
 | 問題 | 影響範圍 | 說明 |
 |------|----------|------|
@@ -34,47 +62,44 @@
 | `ingest_trading_calendar.py` 用 weekday heuristic | pipeline | 尚未串接官方 TWSE 行事曆 |
 | `ingest_corporate_actions.py` 外部來源未接妥 | 除權除息 | 常見 `adj_factor=1.0` 保底 |
 
-### 已知架構注意事項
-
-- `market_context_features`（5 個市場環境特徵）**不可**在 ProcessPoolExecutor worker 內計算
-- `pd.merge_asof(by="stock_id")` 跨股資料需 per-stock groupby loop，不可用全域 merge
-- `_get_rebalance_dates()` 預設參數是 `"W"`，但 `run_backtest()` 預設是 `"M"`（命名不一致但不影響結果）
-
 ---
 
 ## 待優化項目
 
-### 近期可驗證
+### 最高優先（下次 session 優先跑）
 
-| 項目 | 說明 | 優先級 |
-|------|------|--------|
-| 突破進場（F+）在去偏版本驗證 | F+ 在含 label 洩漏版本 Sharpe 0.86，需在 buffer=20 正確基準重跑 | 高 |
-| 特徵重要性分析 | 56 個特徵是否有負貢獻或冗餘，可考慮 SHAP 分析 | 中 |
-| TWSE 行事曆接入 | 取代 weekday heuristic，提高假日判斷準確性 | 中 |
+| 項目 | 說明 | 預期效果 |
+|------|------|----------|
+| **C2 雙門檻** | entry top10% / exit top30% | 成本降 30-40%，Sharpe 維持 1.5+ |
 
-### 觀察中
+### 中優先
 
 | 項目 | 說明 |
 |------|------|
-| 2025 年表現 | Exp D 全年 +8.70%，策略整體轉弱；需觀察是否為市場環境變化或模型退化 |
-| foreign_buy_streak<=3 | 微幅改善但差異不顯著，暫不採用 |
+| 突破進場（F+）去偏驗證 | 需在 label_horizon_buffer=20 正確基準重跑 |
+| TWSE 行事曆接入 | 取代 weekday heuristic |
+| 特徵 SHAP 分析 | 56 個特徵是否有負貢獻 |
 
 ---
 
-## 近期 Commit 摘要（最近 10 個）
+## 新增工具（2026-03-16）
+
+| 工具 | 路徑 | 說明 |
+|------|------|------|
+| Oracle 分析 | `scripts/oracle_analysis.py` | 找出每筆交易最佳出場時機，分析特徵分佈 |
+| 輪動回測 | `scripts/backtest_rotation.py` | Strategy C 日頻輪動，支援 rank/risk/oracle 三種出場模式 |
+
+---
+
+## 近期 Commit 摘要
 
 | Hash | 說明 |
 |------|------|
-| be96c90 | feat: add daily frequency Strategy B（日頻策略實驗，結論劣於月頻）|
-| d53c92f | experiment: entry signal refinement（Exp F/G/H/I，結論：RSI 過濾嚴重損害）|
-| 164db20 | docs: update CLAUDE.md with current production config and experiment rule |
-| e56efcb | docs: add strategy documentation |
-| 5305365 | experiment: minimum position count protection（最少 2 檔保護）|
-| 7aeb002 | experiment: gradual market filter（漸進式大盤過濾）|
-| 632ae96 | experiment: ATR dynamic stop-loss and market filter |
-| 8ab0427 | experiment: stop_loss tuning and momentum penalty |
-| 3a7433a | feat: add generate_review_pack.py for backtest review |
-| 42954ec | fix: strengthen breakthrough.py cond2 guard |
+| c0d956b | docs: add mandatory memory update rules to CLAUDE.md |
+| b008880 | feat: add minimum holding period to reduce trading costs |
+| 6f82aa0 | docs: add persistent memory system |
+| be96c90 | feat: add daily frequency Strategy B |
+| d53c92f | experiment: entry signal refinement |
 
 ---
 
@@ -82,13 +107,11 @@
 
 | 腳本 | 用途 |
 |------|------|
-| `scripts/run_backtest.py` | 主回測入口（walk-forward）|
-| `scripts/backtest_daily.py` | 日頻策略回測（Strategy B）|
-| `scripts/run_experiment_matrix.py` | 矩陣式多實驗批次回測 |
-| `scripts/generate_review_pack.py` | 產生復盤報告 Markdown |
+| `scripts/run_backtest.py` | Strategy A 主回測（月頻 walk-forward）|
+| `scripts/backtest_rotation.py` | Strategy C 日頻輪動（rank/risk/oracle 出場）|
+| `scripts/backtest_daily.py` | Strategy B 日頻回測 |
+| `scripts/oracle_analysis.py` | Oracle 最佳出場分析（新）|
+| `scripts/generate_review_pack.py` | 產生復盤報告 |
 | `scripts/run_walkforward.py` | Walk-forward 驗證 |
-| `scripts/ic_analysis_new_features.py` | IC/ICIR 特徵分析 |
-| `scripts/compare_periods.py` | 不同期間績效比較 |
-| `scripts/update_promotion_tracker.py` | 模型升級追蹤 |
-| `scripts/run_shadow_monitor.py` | Shadow monitor 評估 |
 | `scripts/diagnose_stock.py` | 個股診斷工具 |
+| `scripts/run_shadow_monitor.py` | Shadow monitor 評估 |
