@@ -284,7 +284,7 @@ def run_rotation(
         _alt["trading_date"] = pd.to_datetime(_alt["trading_date"]).dt.date
         _alt["stock_id"] = _alt["stock_id"].astype(str)
         label_df_train = _alt
-        _eff_buffer = train_label_horizon   # buffer 與 label horizon 對齊
+        _eff_buffer = label_horizon_buffer  # 保持與主程序一致（預設 20 日曆天）
         print(f"  Alt labels: {len(label_df_train):,} rows (horizon={train_label_horizon}d)")
     else:
         label_df_train = label_df
