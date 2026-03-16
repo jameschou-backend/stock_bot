@@ -2,6 +2,29 @@
 
 本文件提供給 Claude / AI coding assistant 在本專案工作的上下文與操作規範。
 
+## 專案簡介
+
+台股波段 ML 選股系統。使用 LightGBM 以 20 日 forward return 為 label，每月再平衡選股（topN 等權），
+配合漸進式大盤過濾、季節性降倉，實現超越大盤的長期報酬。
+現行 10y walk-forward 結果：累積 +2637%、Sharpe 1.042、MDD -29.2%（Exp D，2026-03-15）。
+
+## 持久記憶系統
+
+**每次 session 開始時，請先讀取以下檔案（若與當前任務相關）：**
+
+```
+memory/decisions.md     — 策略決策、實驗結果、已試過的方向
+memory/preferences.md   — 工作偏好、Git 規範、輸出路徑慣例
+memory/project_status.md — 目前最佳結果、已知問題、待優化項目
+```
+
+**每次 session 結束時（有重要進展時），請更新上述記憶檔案：**
+- 新增實驗結果 → `memory/decisions.md`
+- 新的工作偏好或規範 → `memory/preferences.md`
+- 進度或問題變化 → `memory/project_status.md`
+
+---
+
 ## 專案定位
 
 - 專案：台股波段 ML 選股系統（Python）
