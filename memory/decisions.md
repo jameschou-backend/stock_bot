@@ -184,6 +184,21 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 
 **推薦配置**：`--train-label-horizon 10`（純 Label-10），真實成本下最佳 Sharpe。
 
+### ⚠️ Label-10 Buffer Bug 修正（2026-03-17）
+
+**問題**：`backtest_rotation.py` 中 `train_label_horizon != 20` 時，`_eff_buffer = train_label_horizon`（被覆蓋為 10），應保持 `label_horizon_buffer=20`
+
+**修正**：`_eff_buffer = label_horizon_buffer`（不隨 label horizon 改變）
+
+**修正前後對比（真實成本 0.585%，無流動性限制）**：
+
+| 版本 | 總報酬 | Sharpe | MDD | 說明 |
+|------|--------|--------|-----|------|
+| buggy（buffer=10）| +487,108% | 1.847 | -28.1% | ❌ 含前瞻偏差 |
+| **fixed（buffer=20）** | **+267,029%** | **2.314** | **-25.6%** | **✅ 正確版** |
+
+**驚喜發現**：修正後 Sharpe 反而提升 +0.47，MDD 也改善。bug 版本的洩漏造成的是「模型更激進 + 波動更大」，而非單純虛增 alpha。修正後策略品質更佳。
+
 ### P1 籌碼出場補充實驗（2026-03-16，session 4）
 
 **條件**：外資連買中斷>=3天 AND boll_pct>0.90 AND 持倉>=5天 → 提前出場
