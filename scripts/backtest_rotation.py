@@ -60,7 +60,9 @@ def _train_model(train_X, train_y, fast_mode=False):
 
 
 class Position:
-    __slots__ = ("stock_id", "entry_date", "entry_price", "score", "days_held")
+    __slots__ = ("stock_id", "entry_date", "entry_price", "score", "days_held",
+                 "foreign_sell_streak", "peak_price", "ma_below_streak",
+                 "foreign_weak_streak", "foreign_consec_break_streak")
 
     def __init__(self, stock_id: str, entry_date: date, entry_price: float, score: float):
         self.stock_id = stock_id
@@ -68,6 +70,11 @@ class Position:
         self.entry_price = entry_price
         self.score = score
         self.days_held = 0
+        self.foreign_sell_streak = 0         # 舊版相容（rank mode 用）
+        self.peak_price = entry_price
+        self.ma_below_streak = 0             # 連續收盤低於 MA20 天數
+        self.foreign_weak_streak = 0         # 連續 foreign_buy_streak_5 == 0 天數
+        self.foreign_consec_break_streak = 0 # 連續 foreign_buy_consecutive_days == 0 天數
 
 
 def run_rotation(
@@ -76,6 +83,7 @@ def run_rotation(
     backtest_months: int = 120,
     max_positions: int = 6,
     rank_threshold: float = 0.20,
+    entry_threshold: Optional[float] = None,  # 進場門檻（百分比），None=使用 top_entry_n
     max_hold_days: int = 30,
     top_entry_n: int = 10,
     retrain_freq_months: int = 3,
@@ -85,12 +93,57 @@ def run_rotation(
     market_filter_tiers: Optional[List[tuple]] = None,
     min_hold_days: int = 0,
     force_exit_threshold: Optional[float] = None,
+    # ── 風控出場參數 ──
+    exit_mode: str = "rank",  # "rank"=排名出場（原始）, "risk"=風控出場, "oracle"=Oracle 訊號出場
+    stoploss_pct: float = -0.10,
+    trailing_stop_pct: float = -0.15,
+    foreign_sell_exit_days: int = 2,
+    ma_break_days: int = 2,
+    ma_break_vol_mult: float = 1.5,
+    rsi_exit: Optional[float] = None,
+    # Oracle 模式專用參數（基於事後最優出場分析）
+    oracle_rsi_ob: float = 75.0,          # RSI 超買門檻
+    oracle_boll_ob: float = 0.95,         # Boll %B 過熱門檻
+    oracle_foreign_break_days: int = 3,   # 外資連買中斷天數
+    oracle_ret5_tp: float = 0.20,         # 5日報酬超過此值視為短期過熱
+    # ── 守門員進場品質過濾（quality gate）──
+    use_quality_gate: bool = False,
+    # 硬排除條件（任一成立即排除）
+    gate_max_streak: int = 15,            # foreign_buy_streak > N 排除（主力晚期）
+    gate_max_pe: float = 300.0,           # pe_ratio > N 排除（純炒作）
+    # 軟加分條件（符合者分數乘以 1+bonus_pct，影響進場優先序）
+    gate_streak_bonus_min: int = 2,       # foreign_buy_streak in [min, max] 加分
+    gate_streak_bonus_max: int = 8,
+    gate_streak_bonus_pct: float = 0.08,  # +8% 乘數
+    gate_rev_accel_bonus_pct: float = 0.04,  # fund_revenue_yoy_accel > 0 加 +4%
+    # ── 訓練 label horizon（預設 20，可改 5/10 測試尺度匹配）──
+    train_label_horizon: int = 20,        # 訓練用 N 日 forward return（從 price_df 計算）
+    # ── 籌碼出場補充（chip exit，rank 模式下加掛）──
+    chip_exit: bool = False,
+    chip_exit_foreign_break_days: int = 3,   # 外資連買中斷連 N 天
+    chip_exit_boll_threshold: float = 0.90,  # boll_pct 過熱門檻
+    chip_exit_min_hold: int = 5,             # 至少持倉 N 天才觸發
 ) -> Dict:
     """
-    min_hold_days: 最小持倉天數保護。持股未滿此天數時，不因排名滑落而出場。
-    force_exit_threshold: 強制出場門檻（百分位，如 0.30 = top 30%）。
-        持倉保護期間，若排名掉出此門檻（比 rank_threshold 更寬鬆），仍強制出場。
-        預設 None 表示使用 rank_threshold * 1.5。
+    exit_mode:
+        "rank" - 原始邏輯：排名掉出 rank_threshold 即出場
+        "risk" - 風控邏輯：停損 / 外資連賣 / 均線跌破放量 / 時間到期
+
+    exit_mode="oracle"：基於 Oracle 分析的訊號出場（任一觸發）：
+        1. RSI > oracle_rsi_ob AND boll_pct > oracle_boll_ob （技術面過熱，AND 條件）
+        2. foreign_buy_consecutive_days == 0 連 oracle_foreign_break_days 天（外資連買中斷）
+        3. 5日報酬 > oracle_ret5_tp （短期漲幅過大，保護獲利）
+        4. 固定停損 stoploss_pct
+        5. max_hold_days（保底）
+
+    風控出場條件（exit_mode="risk"，任一觸發即出場）：
+        stoploss_pct:          固定停損（從進場價計算），最後防線
+        trailing_stop_pct:     追蹤停損（從峰值回落，如 -0.15 = 從最高點跌 15% 出場）
+        foreign_sell_exit_days: 連續 N 天 foreign_buy_streak_5 == 0（5天內無任何買超）
+        ma_break_days:         連續 N 天收盤低於 MA20 才出場（過濾單日假跌破）
+        ma_break_vol_mult:     MA 跌破時需成交量 > N 倍均量（預設不啟用 vol 條件，設 0 停用）
+        rsi_exit:              RSI 超買出場（None = 停用）
+        max_hold_days:         最長持倉上限（保底）
     """
     if force_exit_threshold is None:
         force_exit_threshold = min(rank_threshold * 1.5, 1.0)
@@ -98,9 +151,28 @@ def run_rotation(
     print("\n" + "=" * 60)
     print("Strategy C: Dynamic Rotation Backtest")
     print("=" * 60)
-    print(f"  Rank threshold: top {rank_threshold:.0%} (sell if drops out)")
+    print(f"  Exit mode: {exit_mode}")
+    if use_quality_gate:
+        print(f"  [Quality Gate ON] streak<={gate_max_streak}, pe<={gate_max_pe:.0f}")
+        print(f"    bonus: streak {gate_streak_bonus_min}-{gate_streak_bonus_max} +{gate_streak_bonus_pct:.0%}, rev_accel>0 +{gate_rev_accel_bonus_pct:.0%}")
+    if entry_threshold is not None:
+        print(f"  Entry threshold: top {entry_threshold:.0%} (dual threshold mode)")
+    if exit_mode == "rank":
+        print(f"  Rank threshold: top {rank_threshold:.0%} (sell if drops out)")
+    elif exit_mode == "oracle":
+        print(f"  [Oracle 訊號出場]")
+        print(f"  RSI>{oracle_rsi_ob} AND Boll%B>{oracle_boll_ob} → 技術面過熱")
+        print(f"  外資連買中斷 {oracle_foreign_break_days} 天（consecutive_days==0）")
+        print(f"  5日報酬 >{oracle_ret5_tp:.0%} → 短期過熱保利")
+        print(f"  固定停損：{stoploss_pct:.0%}")
+        print(f"  Max hold：{max_hold_days} 天")
+    else:
+        print(f"  Stop loss: {stoploss_pct:.0%} (fixed) / {trailing_stop_pct:.0%} from peak (trailing)")
+        print(f"  Foreign weak: {foreign_sell_exit_days} consecutive days with foreign_buy_streak_5==0")
+        print(f"  MA20 break: {ma_break_days} consecutive days below MA20")
+        if rsi_exit:
+            print(f"  RSI overbought: >{rsi_exit}")
     print(f"  Max hold: {max_hold_days} days")
-    print(f"  Min hold: {min_hold_days} days (force exit threshold: top {force_exit_threshold:.0%})")
     print(f"  Entry: top {top_entry_n} by score")
     print(f"  Max positions: {max_positions}")
     print(f"  Transaction cost: {transaction_cost_pct:.2%} per trade")
@@ -139,6 +211,29 @@ def run_rotation(
     bt_dates = [d for d in all_dates if backtest_start <= d <= data_end]
     print(f"  Trading days: {len(bt_dates)}")
 
+    # ── 若 train_label_horizon != 20，從 price_df 重算 N 日 forward return 當 label ──
+    if chip_exit:
+        print(f"  [Chip Exit ON] 外資連買中斷>={chip_exit_foreign_break_days}天 AND boll_pct>{chip_exit_boll_threshold} AND 持倉>={chip_exit_min_hold}天 → 出場")
+
+    if train_label_horizon != 20:
+        print(f"  Computing {train_label_horizon}-day forward return labels from prices...", flush=True)
+        _pp = price_df.pivot_table(index="trading_date", columns="stock_id", values="close", aggfunc="last")
+        _pp = _pp.sort_index()
+        _fret = _pp.shift(-train_label_horizon) / _pp - 1
+        _alt = (
+            _fret.reset_index()
+            .melt(id_vars="trading_date", var_name="stock_id", value_name="future_ret_h")
+            .dropna()
+        )
+        _alt["trading_date"] = pd.to_datetime(_alt["trading_date"]).dt.date
+        _alt["stock_id"] = _alt["stock_id"].astype(str)
+        label_df_train = _alt
+        _eff_buffer = train_label_horizon   # buffer 與 label horizon 對齊
+        print(f"  Alt labels: {len(label_df_train):,} rows (horizon={train_label_horizon}d)")
+    else:
+        label_df_train = label_df
+        _eff_buffer = label_horizon_buffer
+
     _meta_cols = {"stock_id", "trading_date", "future_ret_h"}
     feat_cols = [c for c in feat_df.columns if c not in _meta_cols]
 
@@ -164,9 +259,9 @@ def run_rotation(
         need_retrain = (current_model is None or
                         (last_train_date and today - last_train_date >= retrain_interval))
         if need_retrain:
-            train_cutoff = today - timedelta(days=label_horizon_buffer)
+            train_cutoff = today - timedelta(days=_eff_buffer)
             tf = feat_df[feat_df["trading_date"] < today]
-            tl = label_df[label_df["trading_date"] < train_cutoff]
+            tl = label_df_train[label_df_train["trading_date"] < train_cutoff]
             if not tf.empty and not tl.empty:
                 merged = tf.merge(tl, on=["stock_id", "trading_date"], how="inner")
                 if len(merged) >= 1000:
@@ -226,12 +321,25 @@ def run_rotation(
             equity_curve.append({"date": str(today), "equity": equity})
             continue
 
-        # Rank threshold
+        # Rank threshold（進場與 rank 模式出場用）
         score_cutoff = tf_today["score"].quantile(1.0 - rank_threshold)
         force_cutoff = tf_today["score"].quantile(1.0 - force_exit_threshold)
         top_n_sids = set(tf_today.nlargest(top_entry_n, "score")["stock_id"].tolist())
         above_threshold = set(tf_today[tf_today["score"] >= score_cutoff]["stock_id"].tolist())
         above_force_threshold = set(tf_today[tf_today["score"] >= force_cutoff]["stock_id"].tolist())
+
+        # 雙門檻進場候選集（entry_threshold 模式）
+        if entry_threshold is not None:
+            entry_cutoff = tf_today["score"].quantile(1.0 - entry_threshold)
+            entry_eligible = set(tf_today[tf_today["score"] >= entry_cutoff]["stock_id"].tolist())
+        else:
+            entry_eligible = top_n_sids
+
+        # 風控/Oracle/chip_exit 模式：預建今日特徵查詢 dict（避免 loop 內重複 filter）
+        _feat_map: Dict[str, dict] = {}
+        if (exit_mode in ("risk", "oracle") or chip_exit) and not tf_today.empty:
+            for _, _r in tf_today.iterrows():
+                _feat_map[str(_r["stock_id"])] = _r.to_dict()
 
         # ── Market filter: adjust max positions monthly ──
         _ym = f"{today.year}-{today.month:02d}"
@@ -264,16 +372,99 @@ def run_rotation(
             pos.days_held += 1
             exit_reason = None
 
-            if pos.days_held < min_hold_days:
-                # 最小持倉保護期：只有排名掉出 force_exit_threshold 才出場
-                if sid not in above_force_threshold:
-                    exit_reason = "Force Exit"
-            else:
-                # 正常出場邏輯
-                if sid not in above_threshold:
-                    exit_reason = "Rank Drop"
-                elif pos.days_held >= max_hold_days:
+            if exit_mode == "risk":
+                # ── 風控出場邏輯（改進版）──
+                close = price_map.get(sid, pos.entry_price)
+                pos.peak_price = max(pos.peak_price, close)
+                ret_from_entry = close / pos.entry_price - 1
+                ret_from_peak  = close / pos.peak_price - 1
+
+                # 從今日特徵取風控指標
+                _feat = _feat_map.get(sid, {})
+                _fbs5  = float(_feat.get("foreign_buy_streak_5", 1) or 1)  # 5天內外資買超天數（0=全週賣）
+                _ma20  = float(_feat.get("ma_20", close) or close)
+                _vol_ratio = float(_feat.get("vol_ratio_20", 1.0) or 1.0)
+                _rsi   = float(_feat.get("rsi_14", 50) or 50)
+
+                # 更新連續弱勢外資天數（5天內都沒有買超 = 外資全面撤）
+                if _fbs5 == 0:
+                    pos.foreign_weak_streak += 1
+                else:
+                    pos.foreign_weak_streak = 0
+
+                # 更新連續低於 MA20 天數
+                if _ma20 > 0 and close < _ma20:
+                    pos.ma_below_streak += 1
+                else:
+                    pos.ma_below_streak = 0
+
+                # 出場判斷（優先序：時間 > 固定停損 > 追蹤停損 > 外資撤 > MA跌破 > RSI）
+                if pos.days_held >= max_hold_days:
                     exit_reason = "Max Hold Days"
+                elif ret_from_entry <= stoploss_pct:
+                    exit_reason = "Stop Loss"
+                elif ret_from_peak <= trailing_stop_pct:
+                    exit_reason = "Trailing Stop"
+                elif pos.foreign_weak_streak >= foreign_sell_exit_days:
+                    exit_reason = "Foreign Weak"
+                elif pos.ma_below_streak >= ma_break_days:
+                    exit_reason = "MA Break"
+                elif rsi_exit is not None and _rsi > rsi_exit:
+                    exit_reason = "RSI Overbought"
+
+            elif exit_mode == "oracle":
+                # ── Oracle 訊號出場邏輯（基於事後最優出場分析）──
+                close = price_map.get(sid, pos.entry_price)
+                ret_from_entry = close / pos.entry_price - 1
+
+                _feat = _feat_map.get(sid, {})
+                _rsi       = float(_feat.get("rsi_14", 50) or 50)
+                _boll      = float(_feat.get("boll_pct", 0.5) or 0.5)
+                _ret5      = float(_feat.get("ret_5", 0) or 0)
+                _fcd       = float(_feat.get("foreign_buy_consecutive_days", 1) or 1)
+
+                # 更新外資連買中斷天數
+                if _fcd == 0:
+                    pos.foreign_consec_break_streak += 1
+                else:
+                    pos.foreign_consec_break_streak = 0
+
+                if pos.days_held >= max_hold_days:
+                    exit_reason = "Max Hold Days"
+                elif ret_from_entry <= stoploss_pct:
+                    exit_reason = "Stop Loss"
+                elif _rsi > 78 or (_rsi > 72 and _ret5 > 0.10):
+                    exit_reason = "Tech Overbought"   # RSI>78 OR (RSI>72 AND 5日報酬>10%)
+                elif pos.foreign_consec_break_streak >= oracle_foreign_break_days:
+                    exit_reason = "Foreign Break"     # 外資連買中斷 N 天
+                elif _ret5 > oracle_ret5_tp:
+                    exit_reason = "Ret5 Take Profit"  # 5日漲幅過大，鎖利
+
+            else:
+                # ── 原始排名出場邏輯 ──
+                # 更新外資連買中斷天數（chip_exit 模式用）
+                if chip_exit:
+                    _feat = _feat_map.get(sid, {})
+                    _fcd = float(_feat.get("foreign_buy_consecutive_days", 1) or 1)
+                    if _fcd == 0:
+                        pos.foreign_consec_break_streak += 1
+                    else:
+                        pos.foreign_consec_break_streak = 0
+
+                if pos.days_held < min_hold_days:
+                    if sid not in above_force_threshold:
+                        exit_reason = "Force Exit"
+                else:
+                    if sid not in above_threshold:
+                        exit_reason = "Rank Drop"
+                    elif pos.days_held >= max_hold_days:
+                        exit_reason = "Max Hold Days"
+                    elif chip_exit and pos.days_held >= chip_exit_min_hold:
+                        _feat = _feat_map.get(sid, {})
+                        _boll = float(_feat.get("boll_pct", 0.5) or 0.5)
+                        if (pos.foreign_consec_break_streak >= chip_exit_foreign_break_days
+                                and _boll > chip_exit_boll_threshold):
+                            exit_reason = "Chip Exit"
 
             # Force exit if over current max positions
             if not exit_reason and len(positions) > _current_max_pos:
@@ -302,9 +493,40 @@ def run_rotation(
 
         # ── Check entries ──
         if len(positions) < _current_max_pos:
-            candidates = tf_today[tf_today["stock_id"].isin(top_n_sids)]
+            candidates = tf_today[tf_today["stock_id"].isin(entry_eligible)]
             candidates = candidates[~candidates["stock_id"].isin(positions.keys())]
-            candidates = candidates.sort_values("score", ascending=False)
+
+            if use_quality_gate and not candidates.empty:
+                # ── 硬排除：財務地雷 / 主力晚期 ──
+                mask = pd.Series(True, index=candidates.index)
+                if "foreign_buy_streak" in candidates.columns:
+                    _fbs = pd.to_numeric(candidates["foreign_buy_streak"], errors="coerce").fillna(0)
+                    mask &= _fbs <= gate_max_streak
+                if "pe_ratio" in candidates.columns:
+                    _pe = pd.to_numeric(candidates["pe_ratio"], errors="coerce")
+                    mask &= ~((_pe > gate_max_pe) & _pe.notna())
+                if "pb_ratio" in candidates.columns:
+                    _pb = pd.to_numeric(candidates["pb_ratio"], errors="coerce")
+                    mask &= ~((_pb < 0) & _pb.notna())
+                candidates = candidates[mask]
+
+                # ── 軟加分：籌碼啟動窗口 + 營收動能（乘數形式，保持相對排名）──
+                if not candidates.empty:
+                    _bonus = pd.Series(1.0, index=candidates.index)
+                    if "foreign_buy_streak" in candidates.columns:
+                        _fbs2 = pd.to_numeric(candidates["foreign_buy_streak"], errors="coerce").fillna(0)
+                        _in_window = (_fbs2 >= gate_streak_bonus_min) & (_fbs2 <= gate_streak_bonus_max)
+                        _bonus += _in_window.astype(float) * gate_streak_bonus_pct
+                    if "fund_revenue_yoy_accel" in candidates.columns:
+                        _accel = pd.to_numeric(candidates["fund_revenue_yoy_accel"], errors="coerce").fillna(0)
+                        _bonus += (_accel > 0).astype(float) * gate_rev_accel_bonus_pct
+                    candidates = candidates.assign(_entry_priority=candidates["score"] * _bonus)
+                    candidates = candidates.sort_values("_entry_priority", ascending=False)
+                else:
+                    candidates = candidates.sort_values("score", ascending=False)
+            else:
+                candidates = candidates.sort_values("score", ascending=False)
+
             slots = _current_max_pos - len(positions)
             for _, cand in candidates.head(slots).iterrows():
                 _sid = str(cand["stock_id"])
@@ -439,8 +661,26 @@ def run_rotation(
         "yearly_returns": yearly_rets, "cost_drag_annual": cost_drag,
         "config": {
             "strategy": "C_rotation", "max_positions": max_positions,
-            "rank_threshold": rank_threshold, "max_hold_days": max_hold_days,
+            "rank_threshold": rank_threshold, "entry_threshold": entry_threshold,
+            "max_hold_days": max_hold_days,
+            "use_quality_gate": use_quality_gate,
+            "gate_max_streak": gate_max_streak, "gate_max_pe": gate_max_pe,
+            "gate_streak_bonus_pct": gate_streak_bonus_pct,
+            "gate_rev_accel_bonus_pct": gate_rev_accel_bonus_pct,
+            "train_label_horizon": train_label_horizon,
+            "chip_exit": chip_exit,
+            "chip_exit_foreign_break_days": chip_exit_foreign_break_days,
+            "chip_exit_boll_threshold": chip_exit_boll_threshold,
+            "chip_exit_min_hold": chip_exit_min_hold,
             "min_hold_days": min_hold_days, "force_exit_threshold": force_exit_threshold,
+            "exit_mode": exit_mode, "stoploss_pct": stoploss_pct,
+            "trailing_stop_pct": trailing_stop_pct,
+            "foreign_sell_exit_days": foreign_sell_exit_days,
+            "ma_break_days": ma_break_days,
+            "ma_break_vol_mult": ma_break_vol_mult, "rsi_exit": rsi_exit,
+            "oracle_rsi_ob": oracle_rsi_ob, "oracle_boll_ob": oracle_boll_ob,
+            "oracle_foreign_break_days": oracle_foreign_break_days,
+            "oracle_ret5_tp": oracle_ret5_tp,
             "top_entry_n": top_entry_n, "transaction_cost_pct": transaction_cost_pct,
         },
     }
@@ -451,11 +691,53 @@ def main():
     parser = argparse.ArgumentParser(description="Strategy C: Dynamic Rotation")
     parser.add_argument("--months", type=int, default=120)
     parser.add_argument("--rank-threshold", type=float, default=None)
+    parser.add_argument("--entry-threshold", type=float, default=None,
+                        help="進場門檻比例（如 0.10=top10%%），None=使用 top_entry_n")
+    parser.add_argument("--quality-gate", action="store_true",
+                        help="啟用守門員進場過濾（streak>15/pe>300/pb<0 排除 + 軟加分）")
+    parser.add_argument("--gate-max-streak", type=int, default=15,
+                        help="守門員：foreign_buy_streak 上限（預設 15）")
+    parser.add_argument("--gate-max-pe", type=float, default=300.0,
+                        help="守門員：pe_ratio 上限（預設 300）")
+    parser.add_argument("--train-label-horizon", type=int, default=20,
+                        help="訓練用 label horizon（天），預設 20，可改 5/10 測試尺度匹配")
+    parser.add_argument("--transaction-cost", type=float, default=0.003,
+                        help="每筆交易成本（預設 0.003=0.3%%，台股真實約 0.00585=0.585%%）")
     parser.add_argument("--max-hold", type=int, default=None)
     parser.add_argument("--min-hold", type=int, default=0,
                         help="最小持倉天數保護（預設 0=停用）")
     parser.add_argument("--force-exit-threshold", type=float, default=None,
                         help="保護期間強制出場門檻，如 0.30=top30%（預設=rank_threshold×1.5）")
+    parser.add_argument("--exit-mode", type=str, default="rank", choices=["rank", "risk", "oracle"],
+                        help="出場模式：rank=排名出場（原始），risk=風控出場")
+    parser.add_argument("--stoploss", type=float, default=-0.10,
+                        help="固定停損（risk 模式，預設 -0.10）")
+    parser.add_argument("--trailing-stop", type=float, default=-0.15,
+                        help="追蹤停損：從峰值回落幅度（risk 模式，預設 -0.15）")
+    parser.add_argument("--foreign-sell-days", type=int, default=2,
+                        help="連續 N 天 foreign_buy_streak_5==0 出場（risk 模式，預設 2）")
+    parser.add_argument("--ma-break-days", type=int, default=2,
+                        help="連續 N 天低於 MA20 出場（risk 模式，預設 2）")
+    parser.add_argument("--ma-break-vol", type=float, default=1.5,
+                        help="MA20 跌破時量能門檻（risk 模式，預設 1.5，設 0 停用）")
+    parser.add_argument("--rsi-exit", type=float, default=None,
+                        help="RSI 超買出場門檻（risk 模式，None=停用）")
+    parser.add_argument("--oracle-rsi", type=float, default=75.0,
+                        help="Oracle 模式：RSI 過熱門檻（預設 75）")
+    parser.add_argument("--oracle-boll", type=float, default=0.95,
+                        help="Oracle 模式：Boll%%B 過熱門檻（預設 0.95）")
+    parser.add_argument("--oracle-foreign-days", type=int, default=3,
+                        help="Oracle 模式：外資連買中斷天數（預設 3）")
+    parser.add_argument("--oracle-ret5-tp", type=float, default=0.20,
+                        help="Oracle 模式：5日報酬獲利了結門檻（預設 0.20）")
+    parser.add_argument("--chip-exit", action="store_true",
+                        help="啟用籌碼出場補充：外資連買中斷>=N天 AND boll_pct>0.90 AND 持倉>=5天")
+    parser.add_argument("--chip-exit-break-days", type=int, default=3,
+                        help="外資連買中斷天數門檻（預設 3）")
+    parser.add_argument("--chip-exit-boll", type=float, default=0.90,
+                        help="Boll%%B 過熱門檻（預設 0.90）")
+    parser.add_argument("--chip-exit-min-hold", type=int, default=5,
+                        help="最小持倉天數才觸發 chip exit（預設 5）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -481,10 +763,31 @@ def main():
         result = run_rotation(
             config=config, db_session=session,
             backtest_months=args.months,
-            rank_threshold=rank_thr, max_hold_days=max_hold,
+            rank_threshold=rank_thr, entry_threshold=args.entry_threshold,
+            max_hold_days=max_hold,
+            transaction_cost_pct=args.transaction_cost,
+            use_quality_gate=args.quality_gate,
+            gate_max_streak=args.gate_max_streak,
+            gate_max_pe=args.gate_max_pe,
+            train_label_horizon=args.train_label_horizon,
             fast_mode=args.fast, market_filter_tiers=mf_tiers,
             min_hold_days=args.min_hold,
             force_exit_threshold=args.force_exit_threshold,
+            exit_mode=args.exit_mode,
+            stoploss_pct=args.stoploss,
+            trailing_stop_pct=args.trailing_stop,
+            foreign_sell_exit_days=args.foreign_sell_days,
+            ma_break_days=args.ma_break_days,
+            ma_break_vol_mult=args.ma_break_vol,
+            rsi_exit=args.rsi_exit,
+            oracle_rsi_ob=args.oracle_rsi,
+            oracle_boll_ob=args.oracle_boll,
+            oracle_foreign_break_days=args.oracle_foreign_days,
+            oracle_ret5_tp=args.oracle_ret5_tp,
+            chip_exit=args.chip_exit,
+            chip_exit_foreign_break_days=args.chip_exit_break_days,
+            chip_exit_boll_threshold=args.chip_exit_boll,
+            chip_exit_min_hold=args.chip_exit_min_hold,
         )
 
     output_path = args.output
