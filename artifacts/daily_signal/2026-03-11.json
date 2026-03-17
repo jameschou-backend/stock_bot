@@ -1,0 +1,212 @@
+{
+  "date": "2026-03-11",
+  "previous_date": "2026-03-10",
+  "capital": 1000000,
+  "num_positions": 10,
+  "amount_per_position": 100000,
+  "holdings": [
+    {
+      "stock_id": "8021",
+      "name": "尖點",
+      "score": 0.020098,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "8027",
+      "name": "鈦昇",
+      "score": 0.020098,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "9939",
+      "name": "宏全",
+      "score": 0.018593,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6116",
+      "name": "彩晶",
+      "score": 0.015471,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "8028",
+      "name": "昇陽半導體",
+      "score": 0.015471,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6016",
+      "name": "康和證",
+      "score": 0.015221,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "8016",
+      "name": "矽創",
+      "score": 0.014928,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "9933",
+      "name": "中鼎",
+      "score": 0.013246,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "3693",
+      "name": "營邦",
+      "score": 0.011854,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "3701",
+      "name": "大眾控",
+      "score": 0.011854,
+      "action": "buy",
+      "amount": 100000
+    }
+  ],
+  "changes": {
+    "buy": [
+      {
+        "stock_id": "8021",
+        "name": "尖點",
+        "score": 0.020098,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "8027",
+        "name": "鈦昇",
+        "score": 0.020098,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "9939",
+        "name": "宏全",
+        "score": 0.018593,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6116",
+        "name": "彩晶",
+        "score": 0.015471,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "8028",
+        "name": "昇陽半導體",
+        "score": 0.015471,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6016",
+        "name": "康和證",
+        "score": 0.015221,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "8016",
+        "name": "矽創",
+        "score": 0.014928,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "9933",
+        "name": "中鼎",
+        "score": 0.013246,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "3693",
+        "name": "營邦",
+        "score": 0.011854,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "3701",
+        "name": "大眾控",
+        "score": 0.011854,
+        "action": "buy",
+        "amount": 100000
+      }
+    ],
+    "sell": [
+      {
+        "stock_id": "7853",
+        "name": "政美應用",
+        "score": 0.025513
+      },
+      {
+        "stock_id": "6849",
+        "name": "奇鼎科技",
+        "score": 0.021313
+      },
+      {
+        "stock_id": "6854",
+        "name": "錼創科技-KY創",
+        "score": 0.021313
+      },
+      {
+        "stock_id": "6271",
+        "name": "同欣電",
+        "score": 0.020098
+      },
+      {
+        "stock_id": "6274",
+        "name": "台燿",
+        "score": 0.020098
+      },
+      {
+        "stock_id": "6584",
+        "name": "南俊國際",
+        "score": 0.018593
+      },
+      {
+        "stock_id": "7892",
+        "name": "元鈦科",
+        "score": 0.015345
+      },
+      {
+        "stock_id": "4577",
+        "name": "達航科技",
+        "score": 0.015221
+      },
+      {
+        "stock_id": "6269",
+        "name": "台郡",
+        "score": 0.014928
+      },
+      {
+        "stock_id": "7893",
+        "name": "睿信",
+        "score": 0.01491
+      }
+    ],
+    "hold": []
+  },
+  "summary": {
+    "buy_count": 10,
+    "sell_count": 10,
+    "hold_count": 0
+  },
+  "generated_at": "2026-03-17T19:05:08"
+}

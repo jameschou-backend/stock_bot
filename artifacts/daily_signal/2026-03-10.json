@@ -1,0 +1,167 @@
+{
+  "date": "2026-03-10",
+  "previous_date": "2026-03-04",
+  "capital": 1000000,
+  "num_positions": 10,
+  "amount_per_position": 100000,
+  "holdings": [
+    {
+      "stock_id": "7853",
+      "name": "政美應用",
+      "score": 0.025513,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6849",
+      "name": "奇鼎科技",
+      "score": 0.021313,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6854",
+      "name": "錼創科技-KY創",
+      "score": 0.021313,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6271",
+      "name": "同欣電",
+      "score": 0.020098,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6274",
+      "name": "台燿",
+      "score": 0.020098,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6584",
+      "name": "南俊國際",
+      "score": 0.018593,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "7892",
+      "name": "元鈦科",
+      "score": 0.015345,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "4577",
+      "name": "達航科技",
+      "score": 0.015221,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "6269",
+      "name": "台郡",
+      "score": 0.014928,
+      "action": "buy",
+      "amount": 100000
+    },
+    {
+      "stock_id": "7893",
+      "name": "睿信",
+      "score": 0.01491,
+      "action": "buy",
+      "amount": 100000
+    }
+  ],
+  "changes": {
+    "buy": [
+      {
+        "stock_id": "7853",
+        "name": "政美應用",
+        "score": 0.025513,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6849",
+        "name": "奇鼎科技",
+        "score": 0.021313,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6854",
+        "name": "錼創科技-KY創",
+        "score": 0.021313,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6271",
+        "name": "同欣電",
+        "score": 0.020098,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6274",
+        "name": "台燿",
+        "score": 0.020098,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6584",
+        "name": "南俊國際",
+        "score": 0.018593,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "7892",
+        "name": "元鈦科",
+        "score": 0.015345,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "4577",
+        "name": "達航科技",
+        "score": 0.015221,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "6269",
+        "name": "台郡",
+        "score": 0.014928,
+        "action": "buy",
+        "amount": 100000
+      },
+      {
+        "stock_id": "7893",
+        "name": "睿信",
+        "score": 0.01491,
+        "action": "buy",
+        "amount": 100000
+      }
+    ],
+    "sell": [
+      {
+        "stock_id": "8081",
+        "name": "致新",
+        "score": 0.025783
+      }
+    ],
+    "hold": []
+  },
+  "summary": {
+    "buy_count": 10,
+    "sell_count": 1,
+    "hold_count": 0
+  },
+  "generated_at": "2026-03-17T19:05:08"
+}
