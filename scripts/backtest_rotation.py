@@ -200,6 +200,9 @@ def run_rotation(
     vol_filter: bool = False,         # 啟用波動率過濾
     vol_threshold: float = 0.25,      # 高波動門檻（年化，預設 25%）
     vol_topn_tight: float = 0.05,     # 高波動時進場門檻（top N%，預設 top 5%）
+    # ── 分數穩定過濾：避免純排名波動換股 ──
+    score_stability: bool = False,    # 啟用分數穩定過濾
+    score_drop_threshold: float = 0.15,  # 分數下降比例門檻（佔進場分數的比例）
 ) -> Dict:
     """
     exit_mode:
@@ -234,6 +237,8 @@ def run_rotation(
         print(f"    bonus: streak {gate_streak_bonus_min}-{gate_streak_bonus_max} +{gate_streak_bonus_pct:.0%}, rev_accel>0 +{gate_rev_accel_bonus_pct:.0%}")
     if entry_threshold is not None:
         print(f"  Entry threshold: top {entry_threshold:.0%} (dual threshold mode)")
+    if score_stability:
+        print(f"  [Score Stability ON] drop_threshold={score_drop_threshold:.0%}, stoploss={stoploss_pct:.0%}")
     if exit_mode == "rank":
         print(f"  Rank threshold: top {rank_threshold:.0%} (sell if drops out)")
     elif exit_mode == "oracle":
@@ -503,6 +508,11 @@ def run_rotation(
             for _, _r in tf_today.iterrows():
                 _feat_map[str(_r["stock_id"])] = _r.to_dict()
 
+        # 分數穩定過濾：預建今日分數查詢 dict
+        _score_map: Dict[str, float] = {}
+        if score_stability and not tf_today.empty:
+            _score_map = {str(s): float(sc) for s, sc in zip(tf_today["stock_id"], tf_today["score"])}
+
         # ── Market filter: adjust max positions monthly ──
         _ym = f"{today.year}-{today.month:02d}"
         if _ym not in _monthly_bm_cache:
@@ -617,16 +627,31 @@ def run_rotation(
                     if sid not in above_force_threshold:
                         exit_reason = "Force Exit"
                 else:
-                    if sid not in above_threshold:
-                        exit_reason = "Rank Drop"
-                    elif pos.days_held >= max_hold_days:
-                        exit_reason = "Max Hold Days"
-                    elif chip_exit and pos.days_held >= chip_exit_min_hold:
-                        _feat = _feat_map.get(sid, {})
-                        _boll = float(_feat.get("boll_pct", 0.5) or 0.5)
-                        if (pos.foreign_consec_break_streak >= chip_exit_foreign_break_days
-                                and _boll > chip_exit_boll_threshold):
-                            exit_reason = "Chip Exit"
+                    # 分數穩定模式：強制停損（優先於排名判斷）
+                    if score_stability:
+                        _close = price_map.get(sid, pos.entry_price)
+                        if _close / pos.entry_price - 1 <= stoploss_pct:
+                            exit_reason = "Stop Loss"
+
+                    if not exit_reason:
+                        if sid not in above_threshold:
+                            if score_stability:
+                                # 只有模型分數顯著下降才出場（避免純排名波動換股）
+                                _today_score = _score_map.get(sid, pos.score)
+                                _score_drop_frac = (pos.score - _today_score) / max(abs(pos.score), 0.01)
+                                if _score_drop_frac >= score_drop_threshold:
+                                    exit_reason = "Score Drop"
+                                # else: 分數未顯著下降，繼續持倉
+                            else:
+                                exit_reason = "Rank Drop"
+                        elif pos.days_held >= max_hold_days:
+                            exit_reason = "Max Hold Days"
+                        elif chip_exit and pos.days_held >= chip_exit_min_hold:
+                            _feat = _feat_map.get(sid, {})
+                            _boll = float(_feat.get("boll_pct", 0.5) or 0.5)
+                            if (pos.foreign_consec_break_streak >= chip_exit_foreign_break_days
+                                    and _boll > chip_exit_boll_threshold):
+                                exit_reason = "Chip Exit"
 
             # Force exit if over current max positions
             if not exit_reason and len(positions) > _current_max_pos:
@@ -857,6 +882,7 @@ def run_rotation(
             "chip_exit_min_hold": chip_exit_min_hold,
             "min_hold_days": min_hold_days, "force_exit_threshold": force_exit_threshold,
             "vol_filter": vol_filter, "vol_threshold": vol_threshold, "vol_topn_tight": vol_topn_tight,
+            "score_stability": score_stability, "score_drop_threshold": score_drop_threshold,
             "exit_mode": exit_mode, "stoploss_pct": stoploss_pct,
             "trailing_stop_pct": trailing_stop_pct,
             "foreign_sell_exit_days": foreign_sell_exit_days,
@@ -934,6 +960,10 @@ def main():
                         help="高波動門檻（年化標準差，預設 0.25=25%%）")
     parser.add_argument("--vol-topn-tight", type=float, default=0.05,
                         help="高波動時進場門檻（top N%%，預設 0.05=top 5%%）")
+    parser.add_argument("--score-stability", action="store_true",
+                        help="啟用分數穩定過濾：分數未顯著下降時即使排名掉出也不換股")
+    parser.add_argument("--score-drop-threshold", type=float, default=0.15,
+                        help="分數下降門檻（佔進場分數比例，預設 0.15=15%%）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -990,6 +1020,8 @@ def main():
             vol_filter=args.vol_filter,
             vol_threshold=args.vol_threshold,
             vol_topn_tight=args.vol_topn_tight,
+            score_stability=args.score_stability,
+            score_drop_threshold=args.score_drop_threshold,
         )
 
     output_path = args.output
