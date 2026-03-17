@@ -1,15 +1,5 @@
 {
   "positions": {
-    "2337": {
-      "entry_date": "2026-03-10",
-      "entry_score": 0.093478,
-      "days_held": 3
-    },
-    "2485": {
-      "entry_date": "2026-03-10",
-      "entry_score": 0.085306,
-      "days_held": 3
-    },
     "2230": {
       "entry_date": "2026-03-13",
       "entry_score": 0.108905,
@@ -28,6 +18,16 @@
     "2467": {
       "entry_date": "2026-03-13",
       "entry_score": 0.099636,
+      "days_held": 0
+    },
+    "1795": {
+      "entry_date": "2026-03-13",
+      "entry_score": 0.092535,
+      "days_held": 0
+    },
+    "2413": {
+      "entry_date": "2026-03-13",
+      "entry_score": 0.092296,
       "days_held": 0
     }
   },

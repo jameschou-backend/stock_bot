@@ -344,6 +344,17 @@ def run_pick(
             "hold_count": len(hold_list),
             "total_positions": total_positions,
         },
+        # 供 telegram_bot 判斷使用者實際持倉是否應賣出
+        "above_threshold_stocks": sorted(above_threshold),
+        # 今日模型評分前 20 名（含名稱與分數），供買進建議用
+        "top_candidates": [
+            {
+                "stock_id": str(r["stock_id"]),
+                "name": names.get(str(r["stock_id"]), str(r["stock_id"])),
+                "score_today": round(float(r["score"]), 6),
+            }
+            for _, r in tf_today.nlargest(20, "score").iterrows()
+        ],
         "meta": {
             "train_samples": int(len(y_train)),
             "feat_count": len(feat_cols),

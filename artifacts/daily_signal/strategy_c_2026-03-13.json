@@ -46,23 +46,23 @@
       "amount": 166666
     },
     {
-      "stock_id": "2337",
-      "name": "旺宏",
-      "action": "hold",
-      "score_today": 0.091782,
-      "entry_date": "2026-03-10",
-      "entry_score": 0.093478,
-      "days_held": 3,
+      "stock_id": "1795",
+      "name": "美時",
+      "action": "buy",
+      "score_today": 0.092535,
+      "entry_date": "2026-03-13",
+      "entry_score": 0.092535,
+      "days_held": 0,
       "amount": 166666
     },
     {
-      "stock_id": "2485",
-      "name": "兆赫",
-      "action": "hold",
-      "score_today": 0.082352,
-      "entry_date": "2026-03-10",
-      "entry_score": 0.085306,
-      "days_held": 3,
+      "stock_id": "2413",
+      "name": "環科",
+      "action": "buy",
+      "score_today": 0.092296,
+      "entry_date": "2026-03-13",
+      "entry_score": 0.092296,
+      "days_held": 0,
       "amount": 166666
     }
   ],
@@ -107,79 +107,248 @@
         "entry_score": 0.099636,
         "days_held": 0,
         "amount": 166666
-      }
-    ],
-    "sell": [
-      {
-        "stock_id": "3576",
-        "name": "聯合再生",
-        "action": "sell",
-        "score_today": 0.146104,
-        "entry_date": "2026-03-10",
-        "entry_score": 0.146104,
-        "days_held": 3,
-        "exit_reason": "Rank Drop"
       },
       {
-        "stock_id": "3481",
-        "name": "群創",
-        "action": "sell",
-        "score_today": 0.103081,
-        "entry_date": "2026-03-10",
-        "entry_score": 0.103081,
-        "days_held": 3,
-        "exit_reason": "Rank Drop"
-      },
-      {
-        "stock_id": "6152",
-        "name": "百一",
-        "action": "sell",
-        "score_today": 0.086481,
-        "entry_date": "2026-03-10",
-        "entry_score": 0.086481,
-        "days_held": 3,
-        "exit_reason": "Rank Drop"
-      },
-      {
-        "stock_id": "3529",
-        "name": "力旺",
-        "action": "sell",
-        "score_today": 0.081819,
-        "entry_date": "2026-03-10",
-        "entry_score": 0.081819,
-        "days_held": 3,
-        "exit_reason": "Rank Drop"
-      }
-    ],
-    "hold": [
-      {
-        "stock_id": "2337",
-        "name": "旺宏",
-        "action": "hold",
-        "score_today": 0.091782,
-        "entry_date": "2026-03-10",
-        "entry_score": 0.093478,
-        "days_held": 3,
+        "stock_id": "1795",
+        "name": "美時",
+        "action": "buy",
+        "score_today": 0.092535,
+        "entry_date": "2026-03-13",
+        "entry_score": 0.092535,
+        "days_held": 0,
         "amount": 166666
       },
       {
-        "stock_id": "2485",
-        "name": "兆赫",
-        "action": "hold",
-        "score_today": 0.082352,
-        "entry_date": "2026-03-10",
-        "entry_score": 0.085306,
-        "days_held": 3,
+        "stock_id": "2413",
+        "name": "環科",
+        "action": "buy",
+        "score_today": 0.092296,
+        "entry_date": "2026-03-13",
+        "entry_score": 0.092296,
+        "days_held": 0,
         "amount": 166666
       }
-    ]
+    ],
+    "sell": [],
+    "hold": []
   },
   "summary": {
-    "buy_count": 4,
-    "sell_count": 4,
-    "hold_count": 2,
+    "buy_count": 6,
+    "sell_count": 0,
+    "hold_count": 0,
     "total_positions": 6
   },
+  "above_threshold_stocks": [
+    "1256",
+    "1303",
+    "1312",
+    "1316",
+    "1326",
+    "1436",
+    "1471",
+    "1476",
+    "1503",
+    "1519",
+    "1522",
+    "1528",
+    "1529",
+    "1538",
+    "1565",
+    "1587",
+    "1589",
+    "1590",
+    "1597",
+    "1603",
+    "1605",
+    "1618",
+    "1623",
+    "1711",
+    "1721",
+    "1727",
+    "1785",
+    "1795",
+    "1802",
+    "1808",
+    "1809",
+    "1815",
+    "1907",
+    "2009",
+    "2049",
+    "2059",
+    "2067",
+    "2206",
+    "2230",
+    "2233",
+    "2239",
+    "2241",
+    "2243",
+    "2250",
+    "2256",
+    "2305",
+    "2308",
+    "2312",
+    "2314",
+    "2316",
+    "2324",
+    "2327",
+    "2328",
+    "2329",
+    "2330",
+    "2331",
+    "2337",
+    "2338",
+    "2342",
+    "2344",
+    "2345",
+    "2349",
+    "2355",
+    "2357",
+    "2359",
+    "2360",
+    "2367",
+    "2368",
+    "2369",
+    "2374",
+    "2375",
+    "2377",
+    "2379",
+    "2383",
+    "2388",
+    "2393",
+    "2401",
+    "2402",
+    "2404",
+    "2406",
+    "2408",
+    "2409",
+    "2413",
+    "2419",
+    "2424",
+    "2426",
+    "2429",
+    "2431",
+    "2441",
+    "2449",
+    "2451",
+    "2454",
+    "2455",
+    "2457",
+    "2464",
+    "2466",
+    "2467",
+    "2480",
+    "2481",
+    "2485",
+    "2491",
+    "2493",
+    "2520",
+    "2540",
+    "2605",
+    "2637",
+    "2731"
+  ],
+  "top_candidates": [
+    {
+      "stock_id": "2230",
+      "name": "泰茂",
+      "score_today": 0.108905
+    },
+    {
+      "stock_id": "2367",
+      "name": "燿華",
+      "score_today": 0.102024
+    },
+    {
+      "stock_id": "2059",
+      "name": "川湖",
+      "score_today": 0.09994
+    },
+    {
+      "stock_id": "2467",
+      "name": "志聖",
+      "score_today": 0.099636
+    },
+    {
+      "stock_id": "1795",
+      "name": "美時",
+      "score_today": 0.092535
+    },
+    {
+      "stock_id": "2413",
+      "name": "環科",
+      "score_today": 0.092296
+    },
+    {
+      "stock_id": "2337",
+      "name": "旺宏",
+      "score_today": 0.091782
+    },
+    {
+      "stock_id": "1802",
+      "name": "台玻",
+      "score_today": 0.091755
+    },
+    {
+      "stock_id": "1815",
+      "name": "富喬",
+      "score_today": 0.090983
+    },
+    {
+      "stock_id": "2360",
+      "name": "致茂",
+      "score_today": 0.090747
+    },
+    {
+      "stock_id": "2404",
+      "name": "漢唐",
+      "score_today": 0.087249
+    },
+    {
+      "stock_id": "1711",
+      "name": "永光",
+      "score_today": 0.08654
+    },
+    {
+      "stock_id": "2368",
+      "name": "金像電",
+      "score_today": 0.086494
+    },
+    {
+      "stock_id": "2485",
+      "name": "兆赫",
+      "score_today": 0.082352
+    },
+    {
+      "stock_id": "1522",
+      "name": "堤維西",
+      "score_today": 0.074524
+    },
+    {
+      "stock_id": "1519",
+      "name": "華城",
+      "score_today": 0.074317
+    },
+    {
+      "stock_id": "2451",
+      "name": "創見",
+      "score_today": 0.073012
+    },
+    {
+      "stock_id": "2431",
+      "name": "聯昌",
+      "score_today": 0.0729
+    },
+    {
+      "stock_id": "2429",
+      "name": "銘旺科",
+      "score_today": 0.072756
+    },
+    {
+      "stock_id": "1727",
+      "name": "中華化",
+      "score_today": 0.072475
+    }
+  ],
   "meta": {
     "train_samples": 1492494,
     "feat_count": 56,
@@ -187,8 +356,8 @@
     "rank_threshold": 0.2,
     "above_threshold_count": 107,
     "score_cutoff": 0.043583,
-    "elapsed_sec": 15.4,
+    "elapsed_sec": 16.4,
     "train_label_horizon": 10
   },
-  "generated_at": "2026-03-17T20:42:13"
+  "generated_at": "2026-03-17T21:54:58"
 }

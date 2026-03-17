@@ -147,57 +147,111 @@ def _get_latest_prices(stock_ids: List[str]) -> Dict[str, float]:
 # 訊號格式化
 # ─────────────────────────────────────────────
 def _format_push_message(sig: Dict) -> str:
-    d          = sig["date"]
-    capital    = sig.get("capital", 1_000_000)
-    amt        = sig.get("amount_per_position", 0)
-    buy_list   = sig["changes"].get("buy", [])
-    sell_list  = sig["changes"].get("sell", [])
-    hold_list  = sig["changes"].get("hold", [])
-    summary    = sig["summary"]
+    """
+    以 portfolio.json（使用者實際持倉）為主：
+    - 持有 + 排名掉出 → 賣出警示
+    - 持有 + 排名保持 → 目前持倉（維持）
+    - 未持有 + 模型推薦 → 買進建議（依空位數量）
+    """
+    d       = sig["date"]
+    capital = sig.get("capital", 1_000_000)
 
-    # 解析日期，計算「建議明日執行」
+    # 今日模型資料
+    above_threshold = set(sig.get("above_threshold_stocks", []))
+    top_candidates  = sig.get("top_candidates", [])   # 前 20 名，含名稱分數
+    score_cutoff    = sig.get("meta", {}).get("score_cutoff", 0)
+
+    # 使用者真實持倉
+    pf       = _load_portfolio()
+    held     = pf.get("positions", [])
+    held_ids = {p["stock_id"] for p in held}
+
+    # 查今日收盤價（計算持倉損益）
+    prices = _get_latest_prices(list(held_ids)) if held_ids else {}
+
+    sell_list = []
+    hold_list = []
+
+    for pos in held:
+        sid        = pos["stock_id"]
+        name       = pos.get("stock_name", sid)
+        entry_px   = float(pos["entry_price"])
+        shares     = int(pos["shares"])
+        entry_date = pos.get("entry_date", "?")
+        cur_px     = prices.get(sid, entry_px)
+        pnl_pct    = (cur_px / entry_px - 1) * 100
+
+        if sid not in above_threshold:
+            sell_list.append({
+                "stock_id": sid, "name": name,
+                "entry_price": entry_px, "cur_price": cur_px,
+                "pnl_pct": pnl_pct, "shares": shares,
+                "entry_date": entry_date,
+            })
+        else:
+            hold_list.append({
+                "stock_id": sid, "name": name,
+                "entry_price": entry_px, "cur_price": cur_px,
+                "pnl_pct": pnl_pct, "shares": shares,
+                "entry_date": entry_date,
+            })
+
+    # 買進建議：模型 top 候選中，使用者尚未持有的（空位上限 6）
+    empty_slots = max(0, 6 - len(hold_list))
+    buy_list    = []
+    for c in top_candidates:
+        if len(buy_list) >= empty_slots:
+            break
+        if c["stock_id"] not in held_ids:
+            buy_list.append(c)
+
+    amt = capital // 6
+
+    # 解析日期
     try:
-        sig_date   = date.fromisoformat(d)
-        exec_label = f"（{sig_date.month}/{sig_date.day + 1} 執行）"
+        exec_label = f"（{date.fromisoformat(d).month}/{date.fromisoformat(d).day + 1} 執行）"
     except Exception:
         exec_label = ""
 
+    n_total = len(hold_list) + len(buy_list)
     lines = [
         f"📊 <b>Strategy C 每日選股 {d}</b>",
-        f"根據今日資料，建議明日 {exec_label}執行",
-        f"資金：${capital:,}｜每檔：${amt:,}",
-        f"買進 +{summary['buy_count']}  賣出 -{summary['sell_count']}  維持 {summary['hold_count']}",
+        f"建議明日 {exec_label}執行｜每檔 ${amt:,}",
+        f"買進 +{len(buy_list)}  賣出 -{len(sell_list)}  維持 {len(hold_list)}",
         "",
     ]
 
-    if buy_list:
-        lines.append("🟢 <b>買進建議</b>")
-        for h in buy_list:
-            lines.append(
-                f"  {h['stock_id']} {h['name']}｜"
-                f"建議金額 ${h.get('amount', amt):,}"
-            )
-        lines.append("")
-
     if sell_list:
-        lines.append("🔴 <b>賣出警示</b>")
+        lines.append("🔴 <b>賣出警示</b>（持倉排名掉出，建議出場）")
         for h in sell_list:
-            reason = h.get("exit_reason", "Rank Drop")
-            reason_zh = {"Rank Drop": "排名掉出", "Max Hold Days": "持倉到期"}.get(reason, reason)
+            sign = "📈" if h["pnl_pct"] >= 0 else "📉"
             lines.append(
                 f"  {h['stock_id']} {h['name']}｜"
-                f"原因：{reason_zh}｜持倉 {h.get('days_held', 0)} 天"
+                f"進場 {h['entry_date']}｜"
+                f"{sign} {h['pnl_pct']:+.1f}%"
             )
         lines.append("")
 
     if hold_list:
-        lines.append("📋 <b>目前持倉</b>")
+        lines.append("📋 <b>目前持倉</b>（排名正常，繼續持有）")
         for h in hold_list:
+            sign = "📈" if h["pnl_pct"] >= 0 else "📉"
             lines.append(
                 f"  {h['stock_id']} {h['name']}｜"
-                f"進場 {h.get('entry_date', '?')}｜"
-                f"持倉 {h.get('days_held', 0)} 天 ✅"
+                f"進場 {h['entry_date']}｜"
+                f"{sign} {h['pnl_pct']:+.1f}% ✅"
             )
+        lines.append("")
+
+    if buy_list:
+        lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
+        for h in buy_list:
+            lines.append(
+                f"  {h['stock_id']} {h['name']}｜"
+                f"分數 {h['score_today']:.4f}｜建議金額 ${amt:,}"
+            )
+    elif not held:
+        lines.append("（目前無持倉，請用 /buy 代號 價格 股數 記錄買進後，明日起會顯示持倉狀態）")
 
     return "\n".join(lines)
 
