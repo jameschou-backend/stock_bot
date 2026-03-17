@@ -71,6 +71,7 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 | **Walk-Forward v2（session 6）** | 🟠 存疑：9/14 Folds（64.3%）；Sharpe 均值 1.810；大盤過濾無效（Rank Drop 已隱性替代）|
 | **波動率過濾（session 6）** | 效果極小（-1 筆交易，Sharpe +0.016）；2020 +15pp；2024H2 無效；不列生產預設 |
 | **分數穩定過濾（session 7）** | ❌ 全面劣於基準：Sharpe 1.83-1.90 vs 2.31；Stop Loss 21%；MDD -33% vs -26%；不採用 |
+| **動態流動性門檻（session 7）** | ❌ 反效果：Sharpe 0.919 vs 固定1億 1.295；2021 量能暴增→門檻5.47億→過濾 alpha 最豐富年份；不採用 |
 
 **核心發現**：Label-10（10日 label horizon 對齊 9日平均持倉）是最重要的單一改進。Rank Drop 比任何絕對指標更快捕捉弱化訊號。阻止 Rank Drop 出場的所有嘗試（risk/oracle/vol filter/score stability）均失敗。
 
