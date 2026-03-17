@@ -62,10 +62,11 @@ def _train_model(train_X, train_y, fast_mode=False):
 class Position:
     __slots__ = ("stock_id", "entry_date", "entry_price", "score", "days_held",
                  "foreign_sell_streak", "peak_price", "ma_below_streak",
-                 "foreign_weak_streak", "foreign_consec_break_streak", "entry_amt_20")
+                 "foreign_weak_streak", "foreign_consec_break_streak", "entry_amt_20",
+                 "weight")
 
     def __init__(self, stock_id: str, entry_date: date, entry_price: float, score: float,
-                 entry_amt_20: float = 0.0):
+                 entry_amt_20: float = 0.0, weight: float = 0.0):
         self.stock_id = stock_id
         self.entry_date = entry_date
         self.entry_price = entry_price
@@ -77,6 +78,7 @@ class Position:
         self.foreign_weak_streak = 0         # 連續 foreign_buy_streak_5 == 0 天數
         self.foreign_consec_break_streak = 0 # 連續 foreign_buy_consecutive_days == 0 天數
         self.entry_amt_20 = entry_amt_20     # 進場時 20日均成交值（供分級滑價用）
+        self.weight = weight                 # 進場時部位比重（佔淨值）
 
 
 def _tiered_slippage(amt_20: float) -> float:
@@ -177,6 +179,37 @@ def _precompute_dynamic_liquidity_map(
     return result, base_market_avg, dynamic_threshold
 
 
+def _calc_position_weight(
+    amt_20: float,
+    equity: float,
+    max_position_pct: float,
+) -> float:
+    """計算動態部位比重（佔當前淨值）。
+
+    流動性分級上限（絕對元）：
+      微型股（amt_20 < 0.5億/日）：min(amt_20 × 5%, 15萬)
+      小型股（0.5-3億/日）       ：min(amt_20 × 5%, 50萬)
+      中大型股（> 3億/日）        ：amt_20 × 5%（無上限）
+
+    再與 max_position_pct × equity 取較小值，防止佔比過高。
+
+    amt_20: 20 日均成交值（億元）
+    equity: 當前淨值（元，與 total_capital 同幣別）
+    max_position_pct: 單檔最大部位佔淨值比例（如 0.20 = 20%）
+    """
+    if equity <= 0:
+        return max_position_pct
+    amt_twd = amt_20 * 1e8  # 億元 → 元
+    if amt_20 < 0.5:
+        liq_cap = min(amt_twd * 0.05, 150_000.0)
+    elif amt_20 < 3.0:
+        liq_cap = min(amt_twd * 0.05, 500_000.0)
+    else:
+        liq_cap = amt_twd * 0.05
+    pct_cap = equity * max_position_pct
+    return min(liq_cap, pct_cap) / equity
+
+
 def _precompute_vol_map(
     price_df: pd.DataFrame,
     lookback: int = 10,
@@ -253,6 +286,10 @@ def run_rotation(
     dynamic_liquidity: bool = False,     # 啟用動態門檻（取代 min_avg_turnover）
     base_liquidity: float = 1.0,         # 基準期門檻（億元），對應 base_year 的市場規模
     liquidity_lookback: int = 60,        # 計算當日市場規模的回望天數
+    # ── 動態部位控制（依流動性調整每檔部位上限）──
+    dynamic_position_sizing: bool = False,  # 啟用動態部位控制
+    total_capital: float = 3_000_000.0,     # 初始資金（元），dynamic_position_sizing=True 時有效
+    max_position_pct: float = 0.20,         # 單檔最大部位佔淨值比例（預設 20%）
     # ── 籌碼出場補充（chip exit，rank 模式下加掛）──
     chip_exit: bool = False,
     chip_exit_foreign_break_days: int = 3,   # 外資連買中斷連 N 天
@@ -414,6 +451,8 @@ def run_rotation(
         print(f"  [動態流動性] base_liquidity={base_liquidity:.1f}億，lookback={liquidity_lookback}d")
     elif min_avg_turnover > 0:
         print(f"  [流動性過濾] min_avg_turnover={min_avg_turnover:.2f}億/日")
+    if dynamic_position_sizing:
+        print(f"  [動態部位] total_capital={total_capital/1e4:.0f}萬，max_pct={max_position_pct:.0%}")
     if slippage_pct > 0:
         print(f"  [固定滑價] {slippage_pct:.3%}/筆（進出各半）")
     if use_tiered_slippage:
@@ -450,7 +489,8 @@ def run_rotation(
     last_train_date = None
     retrain_interval = timedelta(days=30 * retrain_freq_months)
 
-    equity = 10000.0
+    _initial_equity = float(total_capital) if dynamic_position_sizing else 10_000.0
+    equity = _initial_equity
     positions: Dict[str, Position] = {}
     trades_log: List[Dict] = []
     equity_curve: List[Dict] = []
@@ -760,9 +800,10 @@ def run_rotation(
                     "exit_price": exit_px, "realized_pnl_pct": ret,
                     "stoploss_triggered": False, "exit_reason": exit_reason,
                     "score": pos.score, "days_held": pos.days_held,
+                    "entry_amt_20": pos.entry_amt_20, "weight": weight,
                 })
                 exit_reasons[exit_reason] += 1
-                weight = 1.0 / max_positions
+                weight = pos.weight if dynamic_position_sizing else 1.0 / max_positions
                 equity *= (1 + ret * weight)
                 del positions[sid]
 
@@ -812,10 +853,14 @@ def run_rotation(
                 _sid = str(cand["stock_id"])
                 if _sid in price_map:
                     _entry_amt20 = float(cand.get("amt_20", 0) or 0)
+                    if dynamic_position_sizing:
+                        _w = _calc_position_weight(_entry_amt20, equity, max_position_pct)
+                    else:
+                        _w = 1.0 / max_positions
                     positions[_sid] = Position(
                         stock_id=_sid, entry_date=today,
                         entry_price=price_map[_sid], score=float(cand["score"]),
-                        entry_amt_20=_entry_amt20,
+                        entry_amt_20=_entry_amt20, weight=_w,
                     )
 
         equity_curve.append({"date": str(today), "equity": equity})
@@ -844,14 +889,16 @@ def run_rotation(
             "exit_price": exit_px, "realized_pnl_pct": ret,
             "stoploss_triggered": False, "exit_reason": "End of Backtest",
             "score": pos.score, "days_held": pos.days_held,
+            "entry_amt_20": pos.entry_amt_20, "weight": _w_eob,
         })
         exit_reasons["End of Backtest"] += 1
-        equity *= (1 + ret * (1.0 / max_positions))
+        _w_eob = pos.weight if dynamic_position_sizing else 1.0 / max_positions
+        equity *= (1 + ret * _w_eob)
 
     _total = time.time() - _t_start
 
     # ── Stats ──
-    total_return = equity / 10000.0 - 1
+    total_return = equity / _initial_equity - 1
     n_years = len(bt_dates) / 252.0
     ann_return = (1 + total_return) ** (1 / n_years) - 1 if n_years > 0 else 0
 
@@ -959,6 +1006,9 @@ def run_rotation(
             "dynamic_liquidity": dynamic_liquidity,
             "base_liquidity": base_liquidity,
             "liquidity_lookback": liquidity_lookback,
+            "dynamic_position_sizing": dynamic_position_sizing,
+            "total_capital": total_capital,
+            "max_position_pct": max_position_pct,
             "slippage_pct": slippage_pct,
             "use_tiered_slippage": use_tiered_slippage,
             "chip_exit": chip_exit,
@@ -994,6 +1044,21 @@ def run_rotation(
         for yr, thr in sorted(dynamic_threshold_history.items()):
             print(f"    {yr}: {thr:.3f}億")
         summary["dynamic_threshold_history"] = dynamic_threshold_history
+
+    # ── 動態部位統計（微型/小型/中大型股比例）──
+    if dynamic_position_sizing and trades_log:
+        micro = sum(1 for t in trades_log if float(t.get("entry_amt_20", 0) or 0) < 0.5)
+        small = sum(1 for t in trades_log if 0.5 <= float(t.get("entry_amt_20", 0) or 0) < 3.0)
+        mid   = sum(1 for t in trades_log if float(t.get("entry_amt_20", 0) or 0) >= 3.0)
+        total_t = len(trades_log)
+        print(f"\n  [部位統計]")
+        print(f"    微型股(<0.5億): {micro}筆 ({micro/total_t*100:.1f}%)")
+        print(f"    小型股(0.5-3億): {small}筆 ({small/total_t*100:.1f}%)")
+        print(f"    中大型股(>3億): {mid}筆 ({mid/total_t*100:.1f}%)")
+        summary["position_tier_breakdown"] = {
+            "micro_cap": micro, "small_cap": small, "mid_large_cap": mid,
+            "micro_pct": micro/total_t, "small_pct": small/total_t, "mid_large_pct": mid/total_t,
+        }
 
     return {"summary": summary, "periods": periods, "equity_curve": equity_curve, "trades_log": trades_log}
 
@@ -1071,6 +1136,12 @@ def main():
                         help="動態門檻基準值（億元，對應 2016 年市場規模，預設 1.0）")
     parser.add_argument("--liquidity-lookback", type=int, default=60,
                         help="計算當日市場規模的回望天數（預設 60）")
+    parser.add_argument("--position-sizing", action="store_true",
+                        help="啟用動態部位控制：依流動性分級限制每檔部位上限")
+    parser.add_argument("--total-capital", type=float, default=3_000_000.0,
+                        help="初始資金（元），position-sizing=True 時有效，預設 300萬")
+    parser.add_argument("--max-position-pct", type=float, default=0.20,
+                        help="單檔最大部位佔淨值比例（預設 0.20=20%%）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -1132,6 +1203,9 @@ def main():
             dynamic_liquidity=args.dynamic_liquidity,
             base_liquidity=args.base_liquidity,
             liquidity_lookback=args.liquidity_lookback,
+            dynamic_position_sizing=args.position_sizing,
+            total_capital=args.total_capital,
+            max_position_pct=args.max_position_pct,
         )
 
     output_path = args.output
