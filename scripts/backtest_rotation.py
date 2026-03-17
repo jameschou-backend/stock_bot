@@ -114,6 +114,69 @@ def _precompute_liquidity_map(
     return result
 
 
+def _precompute_dynamic_liquidity_map(
+    price_df: pd.DataFrame,
+    base_liquidity: float,
+    base_year: int = 2016,
+    lookback_days: int = 60,
+) -> Dict[date, set]:
+    """動態流動性門檻：門檻隨市場規模自動調整。
+
+    門檻 = base_liquidity × (過去 lookback_days 市場日均總成交值 / 基準期市場日均總成交值)
+
+    基準期：base_year 全年（1~12月）市場日均總成交值。
+    每個交易日依自身前 lookback_days 的市場規模計算動態門檻。
+    """
+    if base_liquidity <= 0 or price_df.empty:
+        return {}
+
+    df = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df["volume"] = pd.to_numeric(df["volume"], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", "close", "volume"])
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df.sort_values(["stock_id", "trading_date"])
+    df["turnover"] = df["close"] * df["volume"]
+
+    # 每日市場總成交值
+    daily_total = df.groupby("trading_date")["turnover"].sum().sort_index()
+
+    # 基準期：base_year 全年
+    base_mask = pd.Series(daily_total.index).apply(
+        lambda d: d.year == base_year if hasattr(d, "year") else False
+    )
+    base_dates = daily_total.index[base_mask.values]
+    if len(base_dates) == 0:
+        print(f"  [DynLiq] 警告：找不到 {base_year} 年資料，使用全期均值作為基準")
+        base_market_avg = float(daily_total.mean())
+    else:
+        base_market_avg = float(daily_total[base_dates].mean())
+
+    # 每日滾動市場規模（過去 lookback_days）
+    rolling_market = daily_total.rolling(lookback_days, min_periods=max(lookback_days // 2, 10)).mean()
+
+    # 動態門檻：base_liquidity（億元）× 規模倍數，轉為元
+    dynamic_threshold = rolling_market / base_market_avg * (base_liquidity * 1e8)
+
+    # 逐股 20 日均成交值
+    df["avg_t20"] = df.groupby("stock_id")["turnover"].transform(
+        lambda s: s.rolling(20, min_periods=5).mean()
+    )
+
+    # 對齊動態門檻
+    threshold_map = dynamic_threshold.to_dict()
+    result: Dict[date, set] = {}
+    for td, sub in df.groupby("trading_date"):
+        thr = threshold_map.get(td)
+        if thr is None or np.isnan(thr):
+            continue
+        eligible = sub[sub["avg_t20"] >= thr]["stock_id"].tolist()
+        if eligible:
+            result[td] = set(eligible)
+
+    return result, base_market_avg, dynamic_threshold
+
+
 def _precompute_vol_map(
     price_df: pd.DataFrame,
     lookback: int = 10,
@@ -186,6 +249,10 @@ def run_rotation(
     min_avg_turnover: float = 0.0,       # 20日平均成交值門檻（億元），0=停用
     slippage_pct: float = 0.0,           # 每筆固定滑價（進+出各一次），0=停用
     use_tiered_slippage: bool = False,   # 依流動性分級計算滑價
+    # ── 動態流動性門檻（依市場規模自動調整）──
+    dynamic_liquidity: bool = False,     # 啟用動態門檻（取代 min_avg_turnover）
+    base_liquidity: float = 1.0,         # 基準期門檻（億元），對應 base_year 的市場規模
+    liquidity_lookback: int = 60,        # 計算當日市場規模的回望天數
     # ── 籌碼出場補充（chip exit，rank 模式下加掛）──
     chip_exit: bool = False,
     chip_exit_foreign_break_days: int = 3,   # 外資連買中斷連 N 天
@@ -321,7 +388,20 @@ def run_rotation(
 
     # ── 預計算流動性合格集合 ──
     _liquidity_map: Dict[date, set] = {}
-    if min_avg_turnover > 0:
+    _dynamic_threshold_series = None  # 供後續輸出門檻走勢用
+    if dynamic_liquidity:
+        t0 = time.time()
+        _liquidity_map, _base_mkt_avg, _dynamic_threshold_series = _precompute_dynamic_liquidity_map(
+            price_df, base_liquidity=base_liquidity, base_year=2016, lookback_days=liquidity_lookback
+        )
+        _sample_date = bt_dates[len(bt_dates)//2] if len(bt_dates) > 10 else None
+        _sample_count = len(_liquidity_map.get(_sample_date, set())) if _sample_date else "?"
+        _first_thr = _dynamic_threshold_series.dropna().iloc[0] / 1e8 if len(_dynamic_threshold_series.dropna()) > 0 else "?"
+        _last_thr = _dynamic_threshold_series.dropna().iloc[-1] / 1e8 if len(_dynamic_threshold_series.dropna()) > 0 else "?"
+        print(f"  [動態流動性] base={base_liquidity:.1f}億，2016市場均量={_base_mkt_avg/1e8:.0f}億/日")
+        print(f"  [動態流動性] 門檻範圍：{_first_thr:.2f}億 → {_last_thr:.2f}億，lookback={liquidity_lookback}d")
+        print(f"  流動性地圖：{len(_liquidity_map)} 日，中段合格股約 {_sample_count} 支（{time.time()-t0:.1f}s）")
+    elif min_avg_turnover > 0:
         t0 = time.time()
         _liquidity_map = _precompute_liquidity_map(price_df, min_avg_turnover)
         _sample_date = bt_dates[len(bt_dates)//2] if len(bt_dates) > 10 else None
@@ -330,7 +410,9 @@ def run_rotation(
     print(f"  Trading days: {len(bt_dates)}")
 
     # ── 若 train_label_horizon != 20，從 price_df 重算 N 日 forward return 當 label ──
-    if min_avg_turnover > 0:
+    if dynamic_liquidity:
+        print(f"  [動態流動性] base_liquidity={base_liquidity:.1f}億，lookback={liquidity_lookback}d")
+    elif min_avg_turnover > 0:
         print(f"  [流動性過濾] min_avg_turnover={min_avg_turnover:.2f}億/日")
     if slippage_pct > 0:
         print(f"  [固定滑價] {slippage_pct:.3%}/筆（進出各半）")
@@ -874,6 +956,9 @@ def run_rotation(
             "gate_rev_accel_bonus_pct": gate_rev_accel_bonus_pct,
             "train_label_horizon": train_label_horizon,
             "min_avg_turnover": min_avg_turnover,
+            "dynamic_liquidity": dynamic_liquidity,
+            "base_liquidity": base_liquidity,
+            "liquidity_lookback": liquidity_lookback,
             "slippage_pct": slippage_pct,
             "use_tiered_slippage": use_tiered_slippage,
             "chip_exit": chip_exit,
@@ -894,6 +979,22 @@ def run_rotation(
             "top_entry_n": top_entry_n, "transaction_cost_pct": transaction_cost_pct,
         },
     }
+
+    # ── 動態門檻走勢（供分析用）──
+    dynamic_threshold_history = {}
+    if dynamic_liquidity and _dynamic_threshold_series is not None:
+        for yr in range(2016, 2027):
+            yr_vals = [
+                v / 1e8 for d, v in _dynamic_threshold_series.items()
+                if hasattr(d, "year") and d.year == yr and not np.isnan(v)
+            ]
+            if yr_vals:
+                dynamic_threshold_history[str(yr)] = round(float(np.mean(yr_vals)), 3)
+        print(f"\n  [動態門檻走勢（年均億元）]")
+        for yr, thr in sorted(dynamic_threshold_history.items()):
+            print(f"    {yr}: {thr:.3f}億")
+        summary["dynamic_threshold_history"] = dynamic_threshold_history
+
     return {"summary": summary, "periods": periods, "equity_curve": equity_curve, "trades_log": trades_log}
 
 
@@ -964,6 +1065,12 @@ def main():
                         help="啟用分數穩定過濾：分數未顯著下降時即使排名掉出也不換股")
     parser.add_argument("--score-drop-threshold", type=float, default=0.15,
                         help="分數下降門檻（佔進場分數比例，預設 0.15=15%%）")
+    parser.add_argument("--dynamic-liquidity", action="store_true",
+                        help="啟用動態流動性門檻（依市場規模自動調整，取代 min-avg-turnover）")
+    parser.add_argument("--base-liquidity", type=float, default=1.0,
+                        help="動態門檻基準值（億元，對應 2016 年市場規模，預設 1.0）")
+    parser.add_argument("--liquidity-lookback", type=int, default=60,
+                        help="計算當日市場規模的回望天數（預設 60）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -1022,6 +1129,9 @@ def main():
             vol_topn_tight=args.vol_topn_tight,
             score_stability=args.score_stability,
             score_drop_threshold=args.score_drop_threshold,
+            dynamic_liquidity=args.dynamic_liquidity,
+            base_liquidity=args.base_liquidity,
+            liquidity_lookback=args.liquidity_lookback,
         )
 
     output_path = args.output
