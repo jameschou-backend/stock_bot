@@ -794,6 +794,7 @@ def run_rotation(
                 )
                 ret = exit_px / pos.entry_price - 1 - transaction_cost_pct - _slip
                 ret = max(ret, -0.50)
+                weight = pos.weight if dynamic_position_sizing else 1.0 / max_positions
                 trades_log.append({
                     "stock_id": sid, "entry_date": str(pos.entry_date),
                     "exit_date": str(today), "entry_price": pos.entry_price,
@@ -803,7 +804,6 @@ def run_rotation(
                     "entry_amt_20": pos.entry_amt_20, "weight": weight,
                 })
                 exit_reasons[exit_reason] += 1
-                weight = pos.weight if dynamic_position_sizing else 1.0 / max_positions
                 equity *= (1 + ret * weight)
                 del positions[sid]
 
@@ -883,6 +883,7 @@ def run_rotation(
         )
         ret = exit_px / pos.entry_price - 1 - transaction_cost_pct - _slip
         ret = max(ret, -0.50)
+        _w_eob = pos.weight if dynamic_position_sizing else 1.0 / max_positions
         trades_log.append({
             "stock_id": sid, "entry_date": str(pos.entry_date),
             "exit_date": str(last_date), "entry_price": pos.entry_price,
@@ -892,7 +893,6 @@ def run_rotation(
             "entry_amt_20": pos.entry_amt_20, "weight": _w_eob,
         })
         exit_reasons["End of Backtest"] += 1
-        _w_eob = pos.weight if dynamic_position_sizing else 1.0 / max_positions
         equity *= (1 + ret * _w_eob)
 
     _total = time.time() - _t_start
@@ -934,7 +934,7 @@ def run_rotation(
         yearly_eq[e["date"][:4]] = e["equity"]
     yk = sorted(yearly_eq.keys())
     yearly_rets = {}
-    _pe = 10000.0
+    _pe = _initial_equity
     for yr in yk:
         yearly_rets[yr] = yearly_eq[yr] / _pe - 1
         _pe = yearly_eq[yr]
@@ -944,7 +944,7 @@ def run_rotation(
     mt = defaultdict(list)
     for t in trades_log:
         mt[t["exit_date"][:7]].append(t)
-    _pe2 = 10000.0
+    _pe2 = _initial_equity
     for ym in sorted(monthly_eq.keys()):
         _eq = monthly_eq[ym]
         _r = _eq / _pe2 - 1 if _pe2 > 0 else 0
