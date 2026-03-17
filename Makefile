@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index
+.PHONY: migrate pipeline pipeline-build daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index
 
 migrate:
 	python scripts/migrate.py
@@ -9,6 +9,16 @@ pipeline:
 # 跳過抓資料，只跑 data_quality + features/labels/train/pick
 pipeline-build:
 	python scripts/run_daily.py --skip-ingest
+
+# 每日選股（Strategy A：月頻 + Strategy C：日頻輪動）
+daily:
+	python scripts/run_daily.py
+	python scripts/strategy_c_pick.py
+	python scripts/daily_signal.py
+
+# 只跑 Strategy C 選股（資料已是最新時使用）
+daily-c:
+	python scripts/strategy_c_pick.py
 
 api:
 	python scripts/run_api.py

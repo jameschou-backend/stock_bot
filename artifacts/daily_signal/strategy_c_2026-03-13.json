@@ -1,0 +1,194 @@
+{
+  "strategy": "C",
+  "date": "2026-03-13",
+  "capital": 1000000,
+  "num_positions": 6,
+  "amount_per_position": 166666,
+  "holdings": [
+    {
+      "stock_id": "2230",
+      "name": "泰茂",
+      "action": "buy",
+      "score_today": 0.108905,
+      "entry_date": "2026-03-13",
+      "entry_score": 0.108905,
+      "days_held": 0,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2367",
+      "name": "燿華",
+      "action": "buy",
+      "score_today": 0.102024,
+      "entry_date": "2026-03-13",
+      "entry_score": 0.102024,
+      "days_held": 0,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2059",
+      "name": "川湖",
+      "action": "buy",
+      "score_today": 0.09994,
+      "entry_date": "2026-03-13",
+      "entry_score": 0.09994,
+      "days_held": 0,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2467",
+      "name": "志聖",
+      "action": "buy",
+      "score_today": 0.099636,
+      "entry_date": "2026-03-13",
+      "entry_score": 0.099636,
+      "days_held": 0,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2337",
+      "name": "旺宏",
+      "action": "hold",
+      "score_today": 0.091782,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.093478,
+      "days_held": 3,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2485",
+      "name": "兆赫",
+      "action": "hold",
+      "score_today": 0.082352,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.085306,
+      "days_held": 3,
+      "amount": 166666
+    }
+  ],
+  "changes": {
+    "buy": [
+      {
+        "stock_id": "2230",
+        "name": "泰茂",
+        "action": "buy",
+        "score_today": 0.108905,
+        "entry_date": "2026-03-13",
+        "entry_score": 0.108905,
+        "days_held": 0,
+        "amount": 166666
+      },
+      {
+        "stock_id": "2367",
+        "name": "燿華",
+        "action": "buy",
+        "score_today": 0.102024,
+        "entry_date": "2026-03-13",
+        "entry_score": 0.102024,
+        "days_held": 0,
+        "amount": 166666
+      },
+      {
+        "stock_id": "2059",
+        "name": "川湖",
+        "action": "buy",
+        "score_today": 0.09994,
+        "entry_date": "2026-03-13",
+        "entry_score": 0.09994,
+        "days_held": 0,
+        "amount": 166666
+      },
+      {
+        "stock_id": "2467",
+        "name": "志聖",
+        "action": "buy",
+        "score_today": 0.099636,
+        "entry_date": "2026-03-13",
+        "entry_score": 0.099636,
+        "days_held": 0,
+        "amount": 166666
+      }
+    ],
+    "sell": [
+      {
+        "stock_id": "3576",
+        "name": "聯合再生",
+        "action": "sell",
+        "score_today": 0.146104,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.146104,
+        "days_held": 3,
+        "exit_reason": "Rank Drop"
+      },
+      {
+        "stock_id": "3481",
+        "name": "群創",
+        "action": "sell",
+        "score_today": 0.103081,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.103081,
+        "days_held": 3,
+        "exit_reason": "Rank Drop"
+      },
+      {
+        "stock_id": "6152",
+        "name": "百一",
+        "action": "sell",
+        "score_today": 0.086481,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.086481,
+        "days_held": 3,
+        "exit_reason": "Rank Drop"
+      },
+      {
+        "stock_id": "3529",
+        "name": "力旺",
+        "action": "sell",
+        "score_today": 0.081819,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.081819,
+        "days_held": 3,
+        "exit_reason": "Rank Drop"
+      }
+    ],
+    "hold": [
+      {
+        "stock_id": "2337",
+        "name": "旺宏",
+        "action": "hold",
+        "score_today": 0.091782,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.093478,
+        "days_held": 3,
+        "amount": 166666
+      },
+      {
+        "stock_id": "2485",
+        "name": "兆赫",
+        "action": "hold",
+        "score_today": 0.082352,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.085306,
+        "days_held": 3,
+        "amount": 166666
+      }
+    ]
+  },
+  "summary": {
+    "buy_count": 4,
+    "sell_count": 4,
+    "hold_count": 2,
+    "total_positions": 6
+  },
+  "meta": {
+    "train_samples": 1492494,
+    "feat_count": 56,
+    "scored_stocks": 532,
+    "rank_threshold": 0.2,
+    "above_threshold_count": 107,
+    "score_cutoff": 0.043583,
+    "elapsed_sec": 15.4,
+    "train_label_horizon": 10
+  },
+  "generated_at": "2026-03-17T20:42:13"
+}

@@ -1,0 +1,152 @@
+{
+  "strategy": "C",
+  "date": "2026-03-11",
+  "capital": 1000000,
+  "num_positions": 6,
+  "amount_per_position": 166666,
+  "holdings": [
+    {
+      "stock_id": "3576",
+      "name": "聯合再生",
+      "action": "hold",
+      "score_today": 0.153634,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.146104,
+      "days_held": 1,
+      "amount": 166666
+    },
+    {
+      "stock_id": "3481",
+      "name": "群創",
+      "action": "hold",
+      "score_today": 0.148479,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.103081,
+      "days_held": 1,
+      "amount": 166666
+    },
+    {
+      "stock_id": "6152",
+      "name": "百一",
+      "action": "hold",
+      "score_today": 0.117437,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.086481,
+      "days_held": 1,
+      "amount": 166666
+    },
+    {
+      "stock_id": "3529",
+      "name": "力旺",
+      "action": "hold",
+      "score_today": 0.082829,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.081819,
+      "days_held": 1,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2485",
+      "name": "兆赫",
+      "action": "hold",
+      "score_today": 0.079449,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.085306,
+      "days_held": 1,
+      "amount": 166666
+    },
+    {
+      "stock_id": "2337",
+      "name": "旺宏",
+      "action": "hold",
+      "score_today": 0.070388,
+      "entry_date": "2026-03-10",
+      "entry_score": 0.093478,
+      "days_held": 1,
+      "amount": 166666
+    }
+  ],
+  "changes": {
+    "buy": [],
+    "sell": [],
+    "hold": [
+      {
+        "stock_id": "3576",
+        "name": "聯合再生",
+        "action": "hold",
+        "score_today": 0.153634,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.146104,
+        "days_held": 1,
+        "amount": 166666
+      },
+      {
+        "stock_id": "3481",
+        "name": "群創",
+        "action": "hold",
+        "score_today": 0.148479,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.103081,
+        "days_held": 1,
+        "amount": 166666
+      },
+      {
+        "stock_id": "6152",
+        "name": "百一",
+        "action": "hold",
+        "score_today": 0.117437,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.086481,
+        "days_held": 1,
+        "amount": 166666
+      },
+      {
+        "stock_id": "3529",
+        "name": "力旺",
+        "action": "hold",
+        "score_today": 0.082829,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.081819,
+        "days_held": 1,
+        "amount": 166666
+      },
+      {
+        "stock_id": "2485",
+        "name": "兆赫",
+        "action": "hold",
+        "score_today": 0.079449,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.085306,
+        "days_held": 1,
+        "amount": 166666
+      },
+      {
+        "stock_id": "2337",
+        "name": "旺宏",
+        "action": "hold",
+        "score_today": 0.070388,
+        "entry_date": "2026-03-10",
+        "entry_score": 0.093478,
+        "days_held": 1,
+        "amount": 166666
+      }
+    ]
+  },
+  "summary": {
+    "buy_count": 0,
+    "sell_count": 0,
+    "hold_count": 6,
+    "total_positions": 6
+  },
+  "meta": {
+    "train_samples": 1496106,
+    "feat_count": 56,
+    "scored_stocks": 2140,
+    "rank_threshold": 0.2,
+    "above_threshold_count": 428,
+    "score_cutoff": 0.033836,
+    "elapsed_sec": 15.0,
+    "train_label_horizon": 10
+  },
+  "generated_at": "2026-03-17T20:41:50"
+}
