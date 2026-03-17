@@ -114,6 +114,33 @@ def _precompute_liquidity_map(
     return result
 
 
+def _precompute_vol_map(
+    price_df: pd.DataFrame,
+    lookback: int = 10,
+) -> Dict[date, float]:
+    """計算每日市場波動率（年化）。
+    使用全市場等權重日報酬的近 N 日標準差 × sqrt(252)。
+    返回 {date: annualized_vol}，lookback 不足的早期日期不包含。
+    """
+    if price_df.empty:
+        return {}
+    df = price_df[["stock_id", "trading_date", "close"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.dropna(subset=["close"])
+    df = df.sort_values(["stock_id", "trading_date"])
+    df["ret"] = df.groupby("stock_id")["close"].pct_change()
+    # 每日等權市場報酬
+    daily_mkt = df.groupby("trading_date")["ret"].mean()
+    # 滾動 lookback 交易日標準差，年化
+    rolling_vol = daily_mkt.rolling(lookback, min_periods=max(lookback // 2, 3)).std() * np.sqrt(252)
+    result: Dict[date, float] = {}
+    for td, v in rolling_vol.items():
+        if pd.notna(v):
+            td_key = td.date() if hasattr(td, "date") else td
+            result[td_key] = float(v)
+    return result
+
+
 def run_rotation(
     config,
     db_session,
@@ -164,6 +191,15 @@ def run_rotation(
     chip_exit_foreign_break_days: int = 3,   # 外資連買中斷連 N 天
     chip_exit_boll_threshold: float = 0.90,  # boll_pct 過熱門檻
     chip_exit_min_hold: int = 5,             # 至少持倉 N 天才觸發
+    # ── 嚴格 Walk-Forward 固定視窗模式 ──
+    fixed_train_start: Optional[date] = None,  # 訓練期起始（date 物件）
+    fixed_train_end: Optional[date] = None,    # 訓練期截止（超過此日不再重訓）
+    eval_period_start: Optional[date] = None,  # 評估期起始（只跑這段）
+    eval_period_end: Optional[date] = None,    # 評估期截止
+    # ── 波動率過濾：高波動時收緊進場門檻 ──
+    vol_filter: bool = False,         # 啟用波動率過濾
+    vol_threshold: float = 0.25,      # 高波動門檻（年化，預設 25%）
+    vol_topn_tight: float = 0.05,     # 高波動時進場門檻（top N%，預設 top 5%）
 ) -> Dict:
     """
     exit_mode:
@@ -249,7 +285,34 @@ def run_rotation(
     print(f"  Labels: {len(label_df):,} rows ({time.time()-t0:.1f}s)")
 
     all_dates = sorted(price_df["trading_date"].unique())
-    bt_dates = [d for d in all_dates if backtest_start <= d <= data_end]
+    # 固定視窗模式：覆蓋 bt_dates 只跑評估期
+    if eval_period_start and eval_period_end:
+        bt_dates = [d for d in all_dates if eval_period_start <= d <= eval_period_end]
+    else:
+        bt_dates = [d for d in all_dates if backtest_start <= d <= data_end]
+
+    # ── 預計算市場波動率地圖 ──
+    # market_volatility_20 = 等權市場日報酬的近 20 日滾動標準差（未年化）
+    # 乘以 sqrt(252) 後與 vol_threshold（年化，預設 25%）比較
+    _vol_map: Dict[date, float] = {}
+    if vol_filter:
+        t0 = time.time()
+        if "market_volatility_20" in feat_df.columns:
+            _mv = (feat_df[["trading_date", "market_volatility_20"]]
+                   .dropna(subset=["market_volatility_20"])
+                   .groupby("trading_date")["market_volatility_20"]
+                   .first())
+            # 年化：原始日 std × sqrt(252)
+            _vol_map = {
+                td: float(v) * np.sqrt(252)
+                for td, v in _mv.items() if pd.notna(v) and float(v) > 0
+            }
+        else:
+            # fallback：從 price_df 自行計算等權市場 10 日滾動 vol
+            _vol_map = _precompute_vol_map(price_df, lookback=10)
+        # 統計高波動日數比例（bt_dates 範圍內）
+        _hi_vol_days = sum(1 for d in bt_dates if _vol_map.get(d, 0.0) > vol_threshold)
+        print(f"  [Vol Map] 高波動日（>{vol_threshold:.0%}）：{_hi_vol_days}/{len(bt_dates)} 天（{_hi_vol_days/max(len(bt_dates),1):.1%}）({time.time()-t0:.1f}s)")
 
     # ── 預計算流動性合格集合 ──
     _liquidity_map: Dict[date, set] = {}
@@ -270,6 +333,8 @@ def run_rotation(
         print(f"  [分級滑價] <1億:0.4%, 1-3億:0.2%, 3-10億:0.1%, >10億:0.05%")
     if chip_exit:
         print(f"  [Chip Exit ON] 外資連買中斷>={chip_exit_foreign_break_days}天 AND boll_pct>{chip_exit_boll_threshold} AND 持倉>={chip_exit_min_hold}天 → 出場")
+    if vol_filter:
+        print(f"  [Vol Filter ON] vol>{vol_threshold:.0%} 時收緊至 top {vol_topn_tight:.0%} 進場")
 
     if train_label_horizon != 20:
         print(f"  Computing {train_label_horizon}-day forward return labels from prices...", flush=True)
@@ -310,10 +375,41 @@ def run_rotation(
 
     _t_start = time.time()
 
+    # ── 固定視窗模式：預先訓練一次，評估期間不再重訓 ──
+    _fixed_window_mode = fixed_train_end is not None
+    if _fixed_window_mode:
+        _fw_start = fixed_train_start or data_start
+        _fw_label_cutoff = fixed_train_end - timedelta(days=_eff_buffer)
+        tf_fw = feat_df[
+            (feat_df["trading_date"] >= _fw_start) &
+            (feat_df["trading_date"] <= fixed_train_end)
+        ]
+        tl_fw = label_df_train[
+            (label_df_train["trading_date"] >= _fw_start) &
+            (label_df_train["trading_date"] <= _fw_label_cutoff)
+        ]
+        if not tf_fw.empty and not tl_fw.empty:
+            _merged_fw = tf_fw.merge(tl_fw, on=["stock_id", "trading_date"], how="inner")
+            if len(_merged_fw) >= 500:
+                _fmat_fw = _merged_fw.drop(columns=[c for c in _meta_cols if c in _merged_fw.columns])
+                _fmat_fw = _fmat_fw.replace([np.inf, -np.inf], np.nan)
+                for col in _fmat_fw.columns:
+                    _fmat_fw[col] = _fmat_fw[col].fillna(_fmat_fw[col].median() if not _fmat_fw[col].isna().all() else 0)
+                _valid_fw = _fmat_fw.notna().all(axis=1)
+                _fmat_fw = _fmat_fw.loc[_valid_fw]
+                if not _fmat_fw.empty:
+                    _y_fw = _merged_fw.loc[_fmat_fw.index]["future_ret_h"].astype(float).values
+                    current_feat_names = list(_fmat_fw.columns)
+                    current_model = _train_model(_fmat_fw.values, _y_fw, fast_mode=fast_mode)
+                    print(f"  [Fixed Window] 訓練完成：{_fw_start}~{fixed_train_end}，"
+                          f"{len(_y_fw):,} 樣本，特徵 {len(current_feat_names)} 個", flush=True)
+
     for day_idx, today in enumerate(bt_dates):
-        # ── Retrain ──
-        need_retrain = (current_model is None or
-                        (last_train_date and today - last_train_date >= retrain_interval))
+        # ── Retrain（固定視窗模式下跳過）──
+        need_retrain = (not _fixed_window_mode) and (
+            current_model is None or
+            (last_train_date and today - last_train_date >= retrain_interval)
+        )
         if need_retrain:
             train_cutoff = today - timedelta(days=_eff_buffer)
             tf = feat_df[feat_df["trading_date"] < today]
@@ -390,6 +486,16 @@ def run_rotation(
             entry_eligible = set(tf_today[tf_today["score"] >= entry_cutoff]["stock_id"].tolist())
         else:
             entry_eligible = top_n_sids
+
+        # ── 波動率過濾：高波動時收緊進場候選數 ──
+        # vol_topn_tight 與 0.10（正常進場）的比例，等比縮減 top_entry_n
+        # 例：vol_topn_tight=0.05、top_entry_n=10 → high-vol 只取 top 5
+        if vol_filter:
+            _today_vol = _vol_map.get(today, 0.0)
+            if _today_vol > vol_threshold:
+                _tight_n = max(1, round(top_entry_n * vol_topn_tight / 0.10))
+                _vol_entry = set(tf_today.nlargest(_tight_n, "score")["stock_id"].tolist())
+                entry_eligible = entry_eligible & _vol_entry
 
         # 風控/Oracle/chip_exit 模式：預建今日特徵查詢 dict（避免 loop 內重複 filter）
         _feat_map: Dict[str, dict] = {}
@@ -750,6 +856,7 @@ def run_rotation(
             "chip_exit_boll_threshold": chip_exit_boll_threshold,
             "chip_exit_min_hold": chip_exit_min_hold,
             "min_hold_days": min_hold_days, "force_exit_threshold": force_exit_threshold,
+            "vol_filter": vol_filter, "vol_threshold": vol_threshold, "vol_topn_tight": vol_topn_tight,
             "exit_mode": exit_mode, "stoploss_pct": stoploss_pct,
             "trailing_stop_pct": trailing_stop_pct,
             "foreign_sell_exit_days": foreign_sell_exit_days,
@@ -821,6 +928,12 @@ def main():
                         help="Boll%%B 過熱門檻（預設 0.90）")
     parser.add_argument("--chip-exit-min-hold", type=int, default=5,
                         help="最小持倉天數才觸發 chip exit（預設 5）")
+    parser.add_argument("--vol-filter", action="store_true",
+                        help="啟用波動率過濾：高波動時自動收緊進場門檻")
+    parser.add_argument("--vol-threshold", type=float, default=0.25,
+                        help="高波動門檻（年化標準差，預設 0.25=25%%）")
+    parser.add_argument("--vol-topn-tight", type=float, default=0.05,
+                        help="高波動時進場門檻（top N%%，預設 0.05=top 5%%）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -874,6 +987,9 @@ def main():
             chip_exit_foreign_break_days=args.chip_exit_break_days,
             chip_exit_boll_threshold=args.chip_exit_boll,
             chip_exit_min_hold=args.chip_exit_min_hold,
+            vol_filter=args.vol_filter,
+            vol_threshold=args.vol_threshold,
+            vol_topn_tight=args.vol_topn_tight,
         )
 
     output_path = args.output
