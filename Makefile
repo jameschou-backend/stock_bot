@@ -10,15 +10,20 @@ pipeline:
 pipeline-build:
 	python scripts/run_daily.py --skip-ingest
 
-# 每日選股（Strategy A：月頻 + Strategy C：日頻輪動）
+# 每日選股（Strategy A：月頻 + Strategy C：日頻輪動 + Telegram 推送）
 daily:
 	python scripts/run_daily.py
 	python scripts/strategy_c_pick.py
 	python scripts/daily_signal.py
+	python scripts/telegram_bot.py --push
 
 # 只跑 Strategy C 選股（資料已是最新時使用）
 daily-c:
 	python scripts/strategy_c_pick.py
+
+# 啟動 Telegram Bot 監聽模式
+bot:
+	python scripts/telegram_bot.py --listen
 
 api:
 	python scripts/run_api.py
