@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Strategy C Label-10 嚴格 Walk-Forward 驗證
 
-固定 24 個月訓練視窗 × 6 個月不重疊測試視窗，8 個 Fold。
+固定 24 個月訓練視窗 × 6 個月不重疊測試視窗。
 每個 Fold 訓練一次模型，評估期間不再重訓（嚴格 OOS）。
 
 Usage:
-    python scripts/walkforward_validation.py
+    python scripts/walkforward_validation.py                         # Folds 1-8，含大盤過濾
+    python scripts/walkforward_validation.py --no-market-filter      # Folds 1-8，無大盤過濾
+    python scripts/walkforward_validation.py --fold-start 9          # Folds 9-14（擴展）
     python scripts/walkforward_validation.py --output artifacts/walkforward_audit.md
 """
 from __future__ import annotations
@@ -23,7 +25,7 @@ from app.config import load_config
 from app.db import get_session
 from scripts.backtest_rotation import run_rotation
 
-# ── 8 個 Fold 定義 ──
+# ── Folds 1-8（原始，2018-2021）──
 FOLDS = [
     {"fold": 1, "train_start": date(2016, 1, 1),  "train_end": date(2017, 12, 31),
                "test_start":  date(2018, 1, 1),   "test_end":  date(2018, 6, 30)},
@@ -41,6 +43,19 @@ FOLDS = [
                "test_start":  date(2021, 1, 1),   "test_end":  date(2021, 6, 30)},
     {"fold": 8, "train_start": date(2019, 7, 1),  "train_end": date(2021, 6, 30),
                "test_start":  date(2021, 7, 1),   "test_end":  date(2021, 12, 31)},
+    # ── Folds 9-14（擴展，2022-2024）──
+    {"fold": 9,  "train_start": date(2020, 1, 1),  "train_end": date(2021, 12, 31),
+                "test_start":  date(2022, 1, 1),   "test_end":  date(2022, 6, 30)},
+    {"fold": 10, "train_start": date(2020, 7, 1),  "train_end": date(2022, 6, 30),
+                "test_start":  date(2022, 7, 1),   "test_end":  date(2022, 12, 31)},
+    {"fold": 11, "train_start": date(2021, 1, 1),  "train_end": date(2022, 12, 31),
+                "test_start":  date(2023, 1, 1),   "test_end":  date(2023, 6, 30)},
+    {"fold": 12, "train_start": date(2021, 7, 1),  "train_end": date(2023, 6, 30),
+                "test_start":  date(2023, 7, 1),   "test_end":  date(2023, 12, 31)},
+    {"fold": 13, "train_start": date(2022, 1, 1),  "train_end": date(2023, 12, 31),
+                "test_start":  date(2024, 1, 1),   "test_end":  date(2024, 6, 30)},
+    {"fold": 14, "train_start": date(2022, 7, 1),  "train_end": date(2024, 6, 30),
+                "test_start":  date(2024, 7, 1),   "test_end":  date(2024, 12, 31)},
 ]
 
 # Strategy A Exp D 逐年報酬（供同期對比用）
@@ -67,14 +82,24 @@ def main():
     parser.add_argument("--transaction-cost", type=float, default=0.00585,
                         help="每筆交易成本（預設台股真實 0.585%%）")
     parser.add_argument("--fast", action="store_true", help="快速模式（減少 estimators）")
+    parser.add_argument("--no-market-filter", action="store_true",
+                        help="停用大盤過濾（對比用）")
+    parser.add_argument("--fold-start", type=int, default=1,
+                        help="開始 Fold 編號（預設 1）")
+    parser.add_argument("--fold-end", type=int, default=8,
+                        help="結束 Fold 編號（預設 8；擴展版用 14）")
     args = parser.parse_args()
 
     config = load_config()
-    mf_tiers = [(-0.05, 0.5), (-0.10, 0.33), (-0.15, 0.17)]
+    mf_tiers = None if args.no_market_filter else [(-0.05, 0.5), (-0.10, 0.33), (-0.15, 0.17)]
+
+    # 根據 fold-start / fold-end 篩選要執行的 folds
+    active_folds = [f for f in FOLDS if args.fold_start <= f["fold"] <= args.fold_end]
+    total_folds = len(active_folds)
 
     results = []
     with get_session() as session:
-        for fold_def in FOLDS:
+        for fold_def in active_folds:
             fold_n = fold_def["fold"]
             train_start = fold_def["train_start"]
             train_end   = fold_def["train_end"]
@@ -125,16 +150,19 @@ def main():
     # ── 判定結果 ──
     n_pass = sum(1 for r in results if r["sharpe"] > 1.0)
     n_positive = sum(1 for r in results if r["total_return"] > 0)
-    if n_pass >= 6:
+    pass_threshold_hi = max(6, round(total_folds * 0.75))
+    pass_threshold_lo = max(5, round(total_folds * 0.625))
+    if n_pass >= pass_threshold_hi:
         verdict = "✅ 可信"
-        verdict_detail = f"{n_pass}/8 個 Fold Sharpe > 1.0，策略在嚴格 OOS 下表現穩定"
-    elif n_pass >= 5:
+        verdict_detail = f"{n_pass}/{total_folds} 個 Fold Sharpe > 1.0，策略在嚴格 OOS 下表現穩定"
+    elif n_pass >= pass_threshold_lo:
         verdict = "🟠 存疑"
-        verdict_detail = f"{n_pass}/8 個 Fold Sharpe > 1.0，需進一步驗證"
+        verdict_detail = f"{n_pass}/{total_folds} 個 Fold Sharpe > 1.0，需進一步驗證"
     else:
         verdict = "❌ 過擬合風險高"
-        verdict_detail = f"僅 {n_pass}/8 個 Fold Sharpe > 1.0，in-sample 過擬合可能性大"
+        verdict_detail = f"僅 {n_pass}/{total_folds} 個 Fold Sharpe > 1.0，in-sample 過擬合可能性大"
 
+    mf_label = "無大盤過濾" if args.no_market_filter else "含大盤過濾（-5%:×0.5, -10%:×0.33, -15%:×0.17）"
     avg_sharpe = sum(r["sharpe"] for r in results) / len(results)
     avg_return = sum(r["total_return"] for r in results) / len(results)
     avg_mdd = sum(r["max_drawdown"] for r in results) / len(results)
@@ -145,7 +173,9 @@ def main():
         "",
         f"> 產出日期：2026-03-17",
         f"> 驗證配置：`--train-label-horizon 10 --label-horizon-buffer 20`，真實成本 {args.transaction_cost:.3%}",
-        f"> 驗證方法：固定 24 個月訓練視窗 × 6 個月不重疊測試視窗，8 個 Fold，訓練一次不重訓",
+        f"> 大盤過濾：{mf_label}",
+        f"> Fold 範圍：{args.fold_start} ~ {args.fold_end}",
+        f"> 驗證方法：固定 24 個月訓練視窗 × 6 個月不重疊測試視窗，訓練一次不重訓",
         "",
         "---",
         "",
@@ -155,8 +185,8 @@ def main():
         "",
         f"| 統計 | 數值 |",
         f"|------|------|",
-        f"| 通過 Fold（Sharpe > 1.0）| {n_pass} / 8 |",
-        f"| 正報酬 Fold | {n_positive} / 8 |",
+        f"| 通過 Fold（Sharpe > 1.0）| {n_pass} / {total_folds} |",
+        f"| 正報酬 Fold | {n_positive} / {total_folds} |",
         f"| 平均 Sharpe | {avg_sharpe:.3f} |",
         f"| 平均 6M 報酬 | {avg_return:+.2%} |",
         f"| 平均 MDD | {avg_mdd:.2%} |",
@@ -233,7 +263,7 @@ def main():
         "  - 🟠 存疑：5 個 Fold Sharpe > 1.0",
         "  - ❌ 過擬合：< 4 個 Fold Sharpe > 1.0",
         "",
-        "- **局限性**：此驗證涵蓋 2018-2021 市場環境（未涵蓋 2022-2026），",
+        "- **局限性**：此驗證涵蓋 2018-2024 市場環境（未涵蓋 2025-2026），",
         "  後段的 OOS 性能仍需持續監控。",
     ]
 
