@@ -1,6 +1,6 @@
 # 專案現況
 
-> 最後更新：2026-03-17（session 7）
+> 最後更新：2026-03-18（session 8）
 
 ---
 
@@ -85,6 +85,8 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 | `backtest.py` 不呼叫 `get_universe()` | 回測 | 回測不過濾興櫃股，與生產行為不一致 |
 | `ingest_trading_calendar.py` 用 weekday heuristic | pipeline | 尚未串接官方 TWSE 行事曆 |
 | `ingest_corporate_actions.py` 外部來源未接妥 | 除權除息 | 常見 `adj_factor=1.0` 保底 |
+| **parquet cache 24h TTL** | strategy_c_pick.py | pipeline 跑完後若 cache 未過期，daily-c 仍用舊資料。解法：`rm artifacts/cache/*.parquet` 再跑 |
+| **FinMind API Quota（402）** | ingest | 密集跑 pipeline 會觸發 402 上限；backfill 靜默失敗（error_count 遞增但不拋例外）→ job 顯示 success 但資料不完整 |
 
 ---
 
@@ -96,23 +98,44 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 |------|------|----------|
 | 突破進場（F+）去偏驗證 | 需在 label_horizon_buffer=20 正確基準重跑 | 在去偏後看是否仍有效 |
 | Fold 12/14 失敗原因深挖 | 2023H2 風格轉換 + 2024H2 高波動成本 | 找出應對方案（如震盪市降頻）|
+| FinMind backfill 靜默失敗修正 | `fetch_dataset_by_stocks` 批次失敗被吞掉，job 顯示 success 但資料不完整 | 加 exception 或 row count 驗證 |
 
 ### 中優先
 
 | 項目 | 說明 |
 |------|------|
-| 突破進場（F+）去偏驗證 | 需在 label_horizon_buffer=20 正確基準重跑 |
 | TWSE 行事曆接入 | 取代 weekday heuristic |
 | 特徵 SHAP 分析 | 56 個特徵是否有負貢獻 |
+| Strategy C 每日流程自動化 | 目前需手動 `make daily`；可設 cron |
 
 ---
 
-## 新增工具（2026-03-16）
+## 新增工具（2026-03-16 ~ 2026-03-18）
 
 | 工具 | 路徑 | 說明 |
 |------|------|------|
 | Oracle 分析 | `scripts/oracle_analysis.py` | 找出每筆交易最佳出場時機，分析特徵分佈 |
 | 輪動回測 | `scripts/backtest_rotation.py` | Strategy C 日頻輪動，支援 rank/risk/oracle 三種出場模式 |
+| 每日訊號輸出 | `scripts/daily_signal.py` | 讀 picks DB，比較前日，輸出 buy/sell/hold + 建議金額 JSON |
+| Strategy C 每日選股 | `scripts/strategy_c_pick.py` | 訓練 LightGBM（Label-10），打分今日股票，輸出 strategy_c_YYYY-MM-DD.json |
+| Telegram Bot | `scripts/telegram_bot.py` | 推送每日訊號、/signal /portfolio /buy /sell /help 指令管理持倉 |
+
+## Telegram Bot 架構說明（2026-03-18）
+
+- **`portfolio.json`**：`artifacts/daily_signal/portfolio.json`，使用者**真實持倉**，由 /buy /sell 指令維護
+- **`strategy_c_state.json`**：`artifacts/daily_signal/strategy_c_state.json`，模型**模擬狀態**，由 strategy_c_pick.py 自動更新
+- 兩者完全分離：`_format_push_message` 以 portfolio.json 為主，不使用模型模擬狀態
+- signal 內 sell/hold 清單依模型分數高→低排序（2026-03-18 修正）
+- Bot 使用 raw requests（不依賴 python-telegram-bot），--push / --listen / --dry-run 三種模式
+- **注意**：修改 telegram_bot.py 後需重啟 Bot（`kill <pid> && make bot`），否則舊 process 繼續用舊程式碼
+
+## make 指令更新（2026-03-18）
+
+```makefile
+make daily      # run_daily.py + strategy_c_pick.py + daily_signal.py + telegram_bot --push
+make daily-c    # 只跑 strategy_c_pick.py（資料已最新時使用）
+make bot        # 啟動 Telegram Bot 監聽模式
+```
 
 ---
 
@@ -120,11 +143,11 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 
 | Hash | 說明 |
 |------|------|
-| c0d956b | docs: add mandatory memory update rules to CLAUDE.md |
-| b008880 | feat: add minimum holding period to reduce trading costs |
-| 6f82aa0 | docs: add persistent memory system |
-| be96c90 | feat: add daily frequency Strategy B |
-| d53c92f | experiment: entry signal refinement |
+| 6a74d52 | fix: base signal on real portfolio instead of model simulated state |
+| 381518b | feat: add Telegram bot for trading signals and portfolio management |
+| dfc8bcc | feat: add Strategy C daily pick script and make daily target |
+| fbfcf7d | feat: add daily signal generation script |
+| e00111a | experiment: dynamic position sizing - not adopted; fix backtest_rotation bugs |
 
 ---
 
@@ -135,8 +158,9 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 | `scripts/run_backtest.py` | Strategy A 主回測（月頻 walk-forward）|
 | `scripts/backtest_rotation.py` | Strategy C 日頻輪動（rank/risk/oracle 出場）|
 | `scripts/backtest_daily.py` | Strategy B 日頻回測 |
-| `scripts/oracle_analysis.py` | Oracle 最佳出場分析（新）|
+| `scripts/oracle_analysis.py` | Oracle 最佳出場分析 |
+| `scripts/strategy_c_pick.py` | Strategy C 每日實盤選股（Label-10，輸出 JSON + 模擬狀態）|
+| `scripts/daily_signal.py` | Strategy A 每日訊號（讀 picks DB，輸出 buy/sell/hold）|
+| `scripts/telegram_bot.py` | Telegram Bot（推送訊號 + 持倉管理）|
 | `scripts/generate_review_pack.py` | 產生復盤報告 |
 | `scripts/run_walkforward.py` | Walk-forward 驗證 |
-| `scripts/diagnose_stock.py` | 個股診斷工具 |
-| `scripts/run_shadow_monitor.py` | Shadow monitor 評估 |

@@ -1,6 +1,6 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-03-17（session 7）
+> 最後更新：2026-03-18（session 8）
 
 ---
 
@@ -399,6 +399,36 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 4. **當 alpha 主要在微型股時（無流動性門檻的基準）**，模型並不選微型股，所以動態部位沒有意義。
 
 **附記**：發現並修正兩個 UnboundLocalError bug（`weight` 和 `_w_eob` 在 trades_log.append 前未定義）以及年度報酬計算 bug（初始化 `_pe = 10000.0` 硬碼，應為 `_initial_equity`）。
+
+---
+
+---
+
+## 每日實盤系統架構決策（2026-03-18）
+
+### 訊號與持倉分離原則
+- **`strategy_c_state.json`**：模型模擬狀態，由 `strategy_c_pick.py` 自動維護，記錄「如果從頭跟單」的虛擬倉位
+- **`portfolio.json`**：使用者真實持倉，由 Telegram Bot 的 /buy /sell 指令維護，為 /signal 推送的唯一依據
+- 兩者不可混用：terminal 輸出的買/賣/維持是模擬狀態；Telegram 推送的賣出警示/維持是以真實持倉比對 `above_threshold_stocks`
+
+### Telegram Bot 設計決策
+- 使用 raw `requests` library（不依賴 python-telegram-bot），減少外部依賴
+- `--push` / `--listen` / `--dry-run` 三種模式
+- signal 格式：賣出警示（持倉已掉出 top 20%）→ 維持持倉 → 買進建議（模型前幾名尚未持有）
+- sell/hold 清單依模型分數高→低排序（`score_lookup` from `top_candidates`）
+- **修改程式碼後必須重啟 Bot**（kill pid + make bot），否則 long-polling process 繼續用舊程式碼
+
+### data_store parquet cache 陷阱
+- `skills/data_store.py` 的 parquet cache TTL = 24 小時
+- `make pipeline` 跑完後若 cache 尚未過期，`strategy_c_pick.py` 會直接讀舊 cache（含過期特徵）
+- **解法**：`rm artifacts/cache/*.parquet && make daily-c`
+- 或讓 `make pipeline-build` 在結尾呼叫 `data_store.invalidate()`（待改善）
+
+### FinMind API Quota 管理
+- 每次完整 pipeline ≈ 15-30 次 API 呼叫；密集跑 3-4 次/天 + backfill 可能觸發 402
+- `fetch_dataset_by_stocks` 批次失敗靜默吞掉（`error_count` 遞增但 job 仍標 success）→ 資料只有部分股票
+- 症狀：recent dates 只有 ~558 或 ~1050 筆而非正常 2318 筆
+- 恢復方式：等 quota 重置後 `DAYS=30 make backfill-prices && make pipeline`
 
 ---
 
