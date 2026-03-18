@@ -161,6 +161,18 @@ CHANGE_A_FEATURE_COLS: List[str] = BASELINE_FEATURE_COLS + [
     "trust_net_5_inv",
 ]
 
+# SHAP 剪枝特徵集（2026-03-18，SHAP 分析後移除低重要性特徵）
+# 從 FEATURE_COLUMNS 移除 8 個低重要性特徵（gain < 0.3% AND shap < 0.2%）：
+# price_volume_divergence(shap=0.005%), vol_ratio_20(0.047%), boll_pct(0.076%),
+# kd_k(0.084%), foreign_buy_consecutive_days(0.056%), willr_14(0.141%),
+# amt_ratio_20(0.114%), foreign_buy_intensity(0.135%)
+_PRUNE_SET = {
+    "price_volume_divergence", "vol_ratio_20", "boll_pct",
+    "kd_k", "foreign_buy_consecutive_days", "willr_14",
+    "amt_ratio_20", "foreign_buy_intensity",
+}
+PRUNED_FEATURE_COLS: List[str] = [f for f in FEATURE_COLUMNS if f not in _PRUNE_SET]
+
 # ProcessPoolExecutor 每個 task 包含的股票數（降低序列化次數）
 _CHUNK_SIZE = 50
 

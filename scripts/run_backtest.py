@@ -43,7 +43,7 @@ if str(ROOT) not in sys.path:
 from app.config import load_config
 from app.db import get_session
 from skills.backtest import run_backtest
-from skills.build_features import BASELINE_FEATURE_COLS, CHANGE_A_FEATURE_COLS
+from skills.build_features import BASELINE_FEATURE_COLS, CHANGE_A_FEATURE_COLS, PRUNED_FEATURE_COLS
 
 
 def main():
@@ -98,6 +98,9 @@ def main():
                         help="乾淨基準：停用時間加權訓練、停用複雜市場過濾，使用 BASELINE_FEATURE_COLS")
     parser.add_argument("--change-a", action="store_true",
                         help="Change A：在 baseline 特徵集加入 IC 最優特徵（trust_net_5_inv, theme_turnover_ratio, fund_revenue_mom）")
+    parser.add_argument("--pruned-features", action="store_true",
+                        dest="pruned_features",
+                        help="SHAP 剪枝特徵集：移除 8 個低重要性特徵（56→48 個）")
     parser.add_argument("--topn-floor", type=int, default=0,
                         dest="topn_floor",
                         help="topN 最低下限 (0=不強制；5=Change B)；與 --baseline 配合使用")
@@ -219,7 +222,10 @@ def main():
         time_weighting = False
         enable_complex_filter = False
         enable_slippage = args.slippage and not args.no_slippage  # 預設關，需 --slippage 才開
-        feature_columns = None  # 使用 DB 全部特徵
+        if args.pruned_features:
+            feature_columns = PRUNED_FEATURE_COLS  # SHAP 剪枝：56→48 特徵
+        else:
+            feature_columns = None  # 使用 DB 全部特徵
 
     # --topn-floor 在任何模式下均有效
     topn_floor = args.topn_floor
