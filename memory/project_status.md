@@ -6,20 +6,22 @@
 
 ## 目前最佳回測結果
 
-### Strategy A（月頻，現行生產）— Exp D
+### Strategy A（月頻，現行生產）— Exp D + 新特徵（2026-03-18 更新）
 
 | 指標 | 數值 |
 |------|------|
-| 期間 | 2016-05-03 ~ 2026-02-03 |
-| 累積報酬 | **+2637.11%** |
-| 年化報酬 | **+39.92%** |
+| 期間 | 2016-05-03 ~ 2026-02-05 |
+| 累積報酬 | **+2648.38%** |
+| 年化報酬 | **+39.96%** |
 | MDD | **-29.20%** |
-| Sharpe | **1.042** |
-| Calmar | **1.367** |
-| 超額報酬 | +2583.43% |
+| Sharpe | **1.0436** |
+| Calmar | **1.3685** |
+| 超額報酬 | +2593.80% |
 | 交易次數 | 2009 筆 |
 
-配置：月頻 + 無停損 + 漸進大盤過濾（-5%:×0.5, -10%:×0.25, -15%:×0.10）+ 最少 2 檔 + seasonal filter + label_horizon_buffer=20
+配置：月頻 + 無停損 + 漸進大盤過濾（-5%:×0.5, -10%:×0.25, -15%:×0.10）+ 最少 2 檔 + seasonal filter + label_horizon_buffer=20 + **62 特徵（新增 6 個投信/均線/價量特徵）**
+
+特徵欄位：56 → 62（新增 trust_consecutive_buy_days, trust_buy_5d_intensity, foreign_trust_both_buy_days, bull_ma_alignment_score, deviation_from_40d_high, price_volume_alignment）
 
 ### Strategy C（日頻輪動）— **Label-10 最佳配置**（2026-03-16 session 4 更新）
 

@@ -74,6 +74,7 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 | 強勢訊號特徵（Exp E）| foreign_buy_streak、volume_surge_ratio、foreign_buy_intensity | +2252% → +10005%（⚠️ 有 label 洩漏）| ✅ 特徵已在生產 |
 | EMERGING 過濾 | 排除興櫃股（2340→1965 股）| 修正 foreign_buy_* 永遠為 0 | ✅ 生產 |
 | label_horizon_buffer=20 | 消除訓練標籤前向洩漏 | 去偏後真實基準 | ✅ 生產 |
+| **6 個新特徵（2026-03-18）** | trust_consecutive_buy_days, trust_buy_5d_intensity, foreign_trust_both_buy_days, bull_ma_alignment_score, deviation_from_40d_high, price_volume_alignment | +2637%→+2648%, Sharpe 1.042→1.044, MDD 不變 -29.2%（FEATURE_COLUMNS: 56→62）| ✅ 生產（微幅改善）|
 
 ### ❌ 已試過但放棄
 
@@ -90,6 +91,7 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 | 時間加權訓練 | 近期樣本 weight=2.0 | 無改善 | equal-weight+月頻下無效 |
 | Market Regime Switching | bull/bear/sideways 三態 | sideways 長期損耗 | `market_regime.py` 標記 NOT IN USE |
 | 日頻 Strategy B | 每日進出場 | Sharpe 0.48，MDD -54% | 預測尺度（月）與持倉（8天）不匹配 |
+| 大盤天氣圖過濾（market_weather，2026-03-18）| 等權指數 5MA+MACD Histogram 方向：+1不變/0縮70%/-1空手 | +2648%→+2181%, Sharpe 1.044→1.022（-0.022）| 空手/縮倉期 53.4%，嚴重錯過 2019/2021/2023 牛市（-14/-23/-44pp）；程式碼保留供研究，production 不啟用 --market-weather |
 
 ### 🔬 有潛力但尚未完整驗證
 
