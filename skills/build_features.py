@@ -126,6 +126,22 @@ EXTENDED_FEATURE_COLUMNS = [
     "bull_ma_alignment_score",      # 均線多頭排列分數 0~3（close>5MA, 5MA>20MA, 20MA>60MA 各+1分）
     "deviation_from_40d_high",      # 收盤相對40日最高價乖離率（負值=尚未突破，接近0=蓄勢）
     "price_volume_alignment",       # 價量配合（漲量增 or 跌量縮 = 1，否則 = 0）
+    # 動能擴充特徵（2026-03-18 新增，6 expert consensus）
+    "ret_250_skip20",               # 12-1 動能：close.shift(20)/close.shift(250)-1（跳過最近1月）
+    "proximity_to_52w_high",        # 52週高點接近程度：close/rolling(252).max().shift(1)-1（負值=距高點%）
+    "rsi_slope_5",                  # RSI 5日斜率：(rsi_14 - rsi_14.shift(5))/5（動能加速）
+    "macd_hist_slope_3",            # MACD Histogram 3日斜率：macd_hist - macd_hist.shift(3)
+    "batting_avg_60",               # 60日勝率：日漲天數/60日（近60日上漲比例）
+    "foreign_buy_sweet_spot",       # 外資最佳買進區間：streak 1~8天（0/1 指示）
+    "foreign_cumulative_flow_60",   # 外資60日累計流量（法人中期持續佈局力道）
+    "upper_shadow_ratio",           # K線上影線比：(high-max(open,close))/body（賣壓強度）
+    "lower_shadow_ratio",           # K線下影線比：(min(open,close)-low)/body（買盤支撐）
+    "hit_limit_up_5d",              # 近5日漲停次數（強勢動能指標）
+    "margin_accel_5",               # 融資5日加速度：margin_purchase_balance.pct_change(5)
+    "momentum_consistency_score",   # 動能一致性：(ret_5>0)+(ret_20>0)+(ret_60>0) 0~3分
+    # 超額報酬特徵（post-concat，需市場環境特徵，2026-03-18 新增）
+    "excess_ret_20",                # 個股20日報酬 - 市場20日報酬（相對動能）
+    "excess_ret_60",                # 個股60日報酬 - 市場60日報酬（相對中期動能）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -554,6 +570,81 @@ def _apply_group_impl(
     # amt_ratio_20 timing（歸屬到 ATR block）
     timing["amt_ratio_20"] = timing["atr_inv"]
     timing["amt"] = timing["atr_inv"]
+
+    # ── 動能擴充特徵（2026-03-18 新增，6 expert consensus）──
+
+    # 12-1 動能（跳過最近1個月，避免短期反轉效應）
+    t0 = _t()
+    group["ret_250_skip20"] = close.shift(20) / close.shift(250) - 1
+    timing["ret_250_skip20"] = _t() - t0
+
+    # 52週高點接近程度（負值=距離52週高點的百分比）
+    t0 = _t()
+    _52w_high = close.rolling(252, min_periods=120).max().shift(1)
+    group["proximity_to_52w_high"] = close / _52w_high.replace(0, np.nan) - 1
+    timing["proximity_to_52w_high"] = _t() - t0
+
+    # RSI 5日斜率（動能加速度）
+    t0 = _t()
+    group["rsi_slope_5"] = (group["rsi_14"] - group["rsi_14"].shift(5)) / 5
+    timing["rsi_slope_5"] = _t() - t0
+
+    # MACD Histogram 3日斜率
+    t0 = _t()
+    group["macd_hist_slope_3"] = group["macd_hist"] - group["macd_hist"].shift(3)
+    timing["macd_hist_slope_3"] = _t() - t0
+
+    # 60日勝率（上漲天數比例）
+    t0 = _t()
+    group["batting_avg_60"] = (daily_ret > 0).astype(float).rolling(60, min_periods=30).mean()
+    timing["batting_avg_60"] = _t() - t0
+
+    # 外資最佳進場區間：streak 1~8天（既有動能又未過熱）
+    t0 = _t()
+    group["foreign_buy_sweet_spot"] = (
+        (group["foreign_buy_streak"] >= 1) & (group["foreign_buy_streak"] <= 8)
+    ).astype(float)
+    timing["foreign_buy_sweet_spot"] = _t() - t0
+
+    # 外資60日累計流量
+    t0 = _t()
+    group["foreign_cumulative_flow_60"] = group["foreign_net"].rolling(60, min_periods=20).sum()
+    timing["foreign_cumulative_flow_60"] = _t() - t0
+
+    # K線影線特徵（上影線/下影線比率）
+    t0 = _t()
+    _open = group["open"] if "open" in group.columns else close
+    _body = (close - _open).abs() + 1e-8
+    _upper_shadow = (high - close.clip(lower=_open)).clip(lower=0)
+    _lower_shadow = (close.clip(upper=_open) - low).clip(lower=0)
+    group["upper_shadow_ratio"] = _upper_shadow / _body
+    group["lower_shadow_ratio"] = _lower_shadow / _body
+    timing["upper_shadow_ratio"] = _t() - t0
+    timing["lower_shadow_ratio"] = timing["upper_shadow_ratio"]
+
+    # 近5日漲停次數（台股漲停≈+10%，嚴格為 ≥9.5% 排除誤差）
+    t0 = _t()
+    _daily_chg = close / close.shift(1)
+    group["hit_limit_up_5d"] = (_daily_chg >= 1.095).astype(float).rolling(5, min_periods=1).sum()
+    timing["hit_limit_up_5d"] = _t() - t0
+
+    # 融資5日加速度
+    t0 = _t()
+    if "margin_purchase_balance" in group.columns:
+        _mpb = group["margin_purchase_balance"]
+        group["margin_accel_5"] = _mpb.pct_change(5, fill_method=None)
+    else:
+        group["margin_accel_5"] = np.nan
+    timing["margin_accel_5"] = _t() - t0
+
+    # 動能一致性分數（0~3，三個週期同方向得1分）
+    t0 = _t()
+    group["momentum_consistency_score"] = (
+        (group["ret_5"] > 0).astype(int)
+        + (group["ret_20"] > 0).astype(int)
+        + (group["ret_60"] > 0).astype(int)
+    )
+    timing["momentum_consistency_score"] = _t() - t0
 
     return group, timing
 
@@ -1024,6 +1115,16 @@ def _compute_features(
                              "market_volatility_20", "sector_momentum"]:
                 featured[_mkt_col] = np.nan
         logger.info(f"[PERF] market_context_features: {time.perf_counter() - _t_mkt:.2f}s")
+
+        # ── 超額報酬特徵（需市場環境，post-concat，2026-03-18 新增）──
+        if "market_trend_20" in featured.columns and "ret_20" in featured.columns:
+            featured["excess_ret_20"] = featured["ret_20"] - featured["market_trend_20"]
+        else:
+            featured["excess_ret_20"] = np.nan
+        if "market_trend_60" in featured.columns and "ret_60" in featured.columns:
+            featured["excess_ret_60"] = featured["ret_60"] - featured["market_trend_60"]
+        else:
+            featured["excess_ret_60"] = np.nan
 
     # ── 彙整 per-feature perf 資訊 ──
     if perf_out is not None:
