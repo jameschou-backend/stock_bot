@@ -356,6 +356,7 @@ def _simulate_period(
     clip_loss_pct: float = -0.50,
     per_stock_entry_dates: Optional[Dict[str, date]] = None,
     per_stock_stoploss_override: Optional[Dict[str, float]] = None,
+    tiered_slippage_map: Optional[Dict[str, float]] = None,  # 預計算的分級滑價（來回），優先於 ATR 模型
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -493,7 +494,10 @@ def _simulate_period(
 
     # ── 預先計算個股滑價（ATR 的 10%，上限 0.3%，進出場各一次）──
     slippage_map: Dict[str, float] = {}
-    if enable_slippage and atr_df is not None and not atr_df.empty:
+    if tiered_slippage_map is not None:
+        # 優先使用呼叫方預計算的分級滑價（由 amt_20 決定流動性層級）
+        slippage_map = tiered_slippage_map
+    elif enable_slippage and atr_df is not None and not atr_df.empty:
         atr_for_slippage = (
             atr_df[atr_df["trading_date"] < actual_entry_date]
             .groupby("stock_id")["atr"]
@@ -603,6 +607,7 @@ def run_backtest(
     rebalance_freq: str = "M",
     label_horizon_buffer: int = 20,      # label horizon = 20 交易日，訓練截止往前 20 天避免標籤洩漏
     enable_slippage: bool = False,       # 原始基準：無滑價模型
+    enable_tiered_slippage: bool = False,  # 分級滑價：依 amt_20 決定流動性層級（小型股更高滑價）
     fast_mode: bool = False,  # 加速模式：減少樹數（LightGBM 150 棵）
     # ── 實驗參數（10y 逐步優化用）──
     feature_columns: Optional[List[str]] = None,  # None=用 DB 所有特徵；指定時只用列出的欄位
@@ -1242,6 +1247,25 @@ def run_backtest(
                     else:
                         _per_stock_sl[_sid] = -0.20  # fallback
 
+            # ── 分級滑價計算（依 amt_20 決定流動性層級）──
+            _tiered_slip_map: Optional[Dict[str, float]] = None
+            if enable_tiered_slippage and "amt_20" in day_feat.columns:
+                _tiered_slip_map = {}
+                for _, _p_row in picks.iterrows():
+                    _sid = str(_p_row["stock_id"])
+                    _feat_row = day_feat[day_feat["stock_id"].astype(str) == _sid]
+                    if not _feat_row.empty:
+                        _amt20 = float(_feat_row["amt_20"].iloc[0])
+                        if _amt20 >= 5e8:    # 大型股 > 5億
+                            _slip = 0.002    # 0.2% 來回
+                        elif _amt20 >= 1e8:  # 中型股 1~5億
+                            _slip = 0.006    # 0.6% 來回
+                        else:                # 小型股 < 1億
+                            _slip = 0.010    # 1.0% 來回
+                        _tiered_slip_map[_sid] = _slip
+                    else:
+                        _tiered_slip_map[_sid] = 0.006  # fallback 中型
+
             # ── 模擬持有 ──
             _t = time.time()
             result = _simulate_period(
@@ -1256,6 +1280,7 @@ def run_backtest(
                 clip_loss_pct=clip_loss_pct,
                 per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
                 per_stock_stoploss_override=_per_stock_sl,
+                tiered_slippage_map=_tiered_slip_map,
             )
             _dt = time.time() - _t
             _timer_simulate += _dt

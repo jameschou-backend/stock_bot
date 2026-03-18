@@ -105,6 +105,9 @@ def main():
                         help="Change C：啟用滑價模型（ATR 的 10%%，上限 0.3%%）")
     parser.add_argument("--no-slippage", action="store_true",
                         help="停用滑價模型（baseline 預設已停用）")
+    parser.add_argument("--tiered-slippage", action="store_true",
+                        dest="tiered_slippage",
+                        help="分級滑價模型：依 amt_20 決定流動性層級（<1億 1.0%%, 1~5億 0.6%%, >5億 0.2%% 來回）")
     parser.add_argument("--rebalance-freq", type=str, default=None,
                         dest="rebalance_freq",
                         choices=["W", "M"],
@@ -286,6 +289,7 @@ def main():
             market_filter_min_positions=args.market_filter_min_positions,
             entry_signal_filter=_entry_signal_filter,
             min_avg_turnover=args.min_avg_turnover,
+            enable_tiered_slippage=args.tiered_slippage,
         )
 
     # ── 輸出 JSON ──
