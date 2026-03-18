@@ -340,6 +340,54 @@ def _precompute_market_200ma_bear(price_df: pd.DataFrame) -> Dict[date, bool]:
     return {d: bool(v) for d, v in bear_series.items()}
 
 
+def _compute_market_weather_map(price_df: pd.DataFrame) -> Dict[date, int]:
+    """預計算每個交易日的大盤天氣狀態（基於等權市場指數）。
+
+    +1 = 偏多（index >= 5MA 且 DIF-MACD Histogram 今日 > 昨日）
+     0 = 震盪（其餘）
+    -1 = 偏空（index <= 5MA 且 DIF-MACD Histogram 今日 < 昨日）
+
+    使用 min_periods 確保資料不足時不誤判（ma5 需 5 日、MACD 需 26+9 日）。
+    """
+    if price_df.empty:
+        return {}
+    df = price_df[["trading_date", "close"]].copy()
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.dropna(subset=["trading_date", "close"])
+    if df.empty:
+        return {}
+
+    # 等權市場均價指數
+    mkt = df.groupby("trading_date")["close"].mean().sort_index()
+    if len(mkt) < 35:  # MACD 最少需要 26+9=35 日
+        return {}
+
+    # 5 日均線
+    ma5 = mkt.rolling(5, min_periods=5).mean()
+
+    # MACD(12, 26, 9)：以 adjust=False EWM，min_periods 確保早期資料不影響
+    ema12 = mkt.ewm(span=12, adjust=False, min_periods=12).mean()
+    ema26 = mkt.ewm(span=26, adjust=False, min_periods=26).mean()
+    dif = ema12 - ema26
+    signal = dif.ewm(span=9, adjust=False, min_periods=9).mean()
+    histogram = dif - signal
+
+    # 今日 histogram > 昨日 = 多頭動能增強
+    rising = histogram > histogram.shift(1)
+
+    above_ma5 = mkt >= ma5
+    below_ma5 = mkt <= ma5
+
+    weather = pd.Series(0, index=mkt.index, dtype=int)
+    weather[above_ma5 & rising] = 1
+    weather[below_ma5 & ~rising] = -1
+
+    # 移除 ma5/MACD 尚未收斂的早期日期（NaN → 0）
+    weather[ma5.isna() | histogram.isna() | histogram.shift(1).isna()] = 0
+
+    return {d: int(v) for d, v in weather.items()}
+
+
 def _simulate_period(
     picks: pd.DataFrame,
     price_df: pd.DataFrame,
@@ -619,6 +667,7 @@ def run_backtest(
     market_filter_tiers: Optional[List[tuple]] = None,  # 漸進式大盤過濾：[(threshold, multiplier), ...] 由淺到深排序，如 [(-0.05,0.5),(-0.10,0.25),(-0.15,0.10)]
     market_filter_min_positions: int = 1,  # 大盤過濾後最低持股數（防止單押集中風險）
     entry_signal_filter: Optional[Dict[str, object]] = None,  # 進場訊號過濾：{"foreign_buy_streak_max":3, "rsi_min":45, "rsi_max":70, "bias_20_max":0.15, "volume_surge_ratio_min":1.0}
+    enable_market_weather: bool = False,  # 大盤天氣圖過濾：+1=偏多不變, 0=震盪topN×70%, -1=偏空空手
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -726,6 +775,10 @@ def run_backtest(
     market_median_ret20_map = _precompute_market_median_ret20(price_df)
     market_weekly_drop_map = _precompute_market_weekly_drop(price_df)
     market_200ma_bear_map = _precompute_market_200ma_bear(price_df)
+    market_weather_map: Dict[date, int] = {}
+    if enable_market_weather:
+        print("  預計算大盤天氣圖（MA5 + MACD Histogram）...", flush=True)
+        market_weather_map = _compute_market_weather_map(price_df)
 
     # ── 3b. 突破進場：一次性預計算所有股票的 rolling 突破指標 ──
     # 避免在主迴圈中每個再平衡期重算（117 次 rolling → 1 次）
@@ -1212,6 +1265,20 @@ def run_backtest(
             if not _backfill.empty:
                 picks = pd.concat([picks, _backfill[picks.columns]], ignore_index=True)
                 print(f"  [{rb_date}] min_positions: {len(picks)-len(_backfill)}→{len(picks)}（補{len(_backfill)}檔）")
+
+        # ── 大盤天氣圖過濾（enable_market_weather）──
+        # 在 market_filter_tiers 和 min_positions 之後套用，作為最終裁決層
+        # +1=偏多不變, 0=震盪縮減70%, -1=偏空空手
+        if enable_market_weather and not _market_filter_skip and market_weather_map:
+            _weather = market_weather_map.get(rb_date, 0)
+            if _weather == -1:
+                _market_filter_skip = True
+                print(f"  [{rb_date}] market_weather=-1: 偏空（指數<=5MA且MACD動能減弱），本期持現金")
+            elif _weather == 0:
+                _weather_topn = max(market_filter_min_positions, int(len(picks) * 0.7))
+                if _weather_topn < len(picks):
+                    picks = picks.head(_weather_topn)
+                    print(f"  [{rb_date}] market_weather=0: 震盪，持股縮至{len(picks)}檔（×0.7）")
 
         if _market_filter_skip:
             # 全現金：0% 報酬

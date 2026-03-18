@@ -119,6 +119,13 @@ EXTENDED_FEATURE_COLUMNS = [
     "foreign_buy_streak",       # 外資連續「高於20日均買量」天數（嚴格版連買天數）
     "volume_surge_ratio",       # 近5日均量/近20日均量（週成交量放大比例，>2代表異常放量）
     "foreign_buy_intensity",    # 近5日外資淨買超 / 近20日均量（外資買進力道vs流動性）
+    # 投信籌碼 + 均線型態 + 價量特徵（2026-03-18 新增）
+    "trust_consecutive_buy_days",   # 投信連續買超天數（賣超歸零）
+    "trust_buy_5d_intensity",       # 投信5日累計買超張數 / 5日平均成交量（投信進場力道）
+    "foreign_trust_both_buy_days",  # 外資+投信同步買超的連續天數（雙向籌碼共振）
+    "bull_ma_alignment_score",      # 均線多頭排列分數 0~3（close>5MA, 5MA>20MA, 20MA>60MA 各+1分）
+    "deviation_from_40d_high",      # 收盤相對40日最高價乖離率（負值=尚未突破，接近0=蓄勢）
+    "price_volume_alignment",       # 價量配合（漲量增 or 跌量縮 = 1，否則 = 0）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -334,6 +341,34 @@ def _apply_group_impl(
     ).clip(-1, 1)
     timing["foreign_buy_intensity"] = _t() - t0
 
+    # ── 投信籌碼特徵（2026-03-18 新增）──
+    # trust_consecutive_buy_days: 投信連續買超天數（賣超歸零）
+    t0 = _t()
+    _trust_is_buy = (group["trust_net"] > 0).astype(int)
+    _trust_run_id = (_trust_is_buy != _trust_is_buy.shift()).cumsum()
+    group["trust_consecutive_buy_days"] = _trust_is_buy * (
+        _trust_is_buy.groupby(_trust_run_id).cumcount() + 1
+    )
+    timing["trust_consecutive_buy_days"] = _t() - t0
+
+    # trust_buy_5d_intensity: 投信5日累計買超張數 / 5日平均成交量
+    t0 = _t()
+    _vol_5avg_for_trust = volume.rolling(5, min_periods=1).mean()
+    group["trust_buy_5d_intensity"] = (
+        group["trust_net"].rolling(5, min_periods=1).sum()
+        / _vol_5avg_for_trust.replace(0, np.nan)
+    ).clip(-1, 1)
+    timing["trust_buy_5d_intensity"] = _t() - t0
+
+    # foreign_trust_both_buy_days: 外資+投信同步買超的連續天數
+    t0 = _t()
+    _both_buy = ((group["foreign_net"] > 0) & (group["trust_net"] > 0)).astype(int)
+    _both_run_id = (_both_buy != _both_buy.shift()).cumsum()
+    group["foreign_trust_both_buy_days"] = _both_buy * (
+        _both_buy.groupby(_both_run_id).cumcount() + 1
+    )
+    timing["foreign_trust_both_buy_days"] = _t() - t0
+
     # ── 趨勢與型態 ──
     t0 = _t()
     group["ma_alignment"] = (
@@ -362,6 +397,32 @@ def _apply_group_impl(
     t0 = _t()
     group["ret_60_kurt"] = daily_ret.rolling(60, min_periods=30).kurt()
     timing["ret_60_kurt"] = _t() - t0
+
+    # bull_ma_alignment_score: 均線多頭排列分數（0~3分，ma_5/ma_20/ma_60 已在上方計算完畢）
+    t0 = _t()
+    group["bull_ma_alignment_score"] = (
+        (close > group["ma_5"]).astype(int)
+        + (group["ma_5"] > group["ma_20"]).astype(int)
+        + (group["ma_20"] > group["ma_60"]).astype(int)
+    )
+    timing["bull_ma_alignment_score"] = _t() - t0
+
+    # deviation_from_40d_high: 收盤相對40日最高價乖離率（負值=尚未突破）
+    t0 = _t()
+    _rolling_max_40 = close.rolling(40).max()
+    group["deviation_from_40d_high"] = (
+        (close - _rolling_max_40) / _rolling_max_40.replace(0, np.nan)
+    )
+    timing["deviation_from_40d_high"] = _t() - t0
+
+    # price_volume_alignment: 價量配合（漲量增 or 跌量縮 = 1，否則 = 0）
+    t0 = _t()
+    _price_up = (close > close.shift(1))
+    _vol_up = (volume > volume.shift(1))
+    group["price_volume_alignment"] = (
+        (_price_up & _vol_up) | (~_price_up & ~_vol_up)
+    ).astype(int)
+    timing["price_volume_alignment"] = _t() - t0
 
     # ── 價量背離信號 ──
     t0 = _t()

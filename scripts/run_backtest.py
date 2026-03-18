@@ -144,6 +144,12 @@ def main():
                         dest="market_filter_min_positions",
                         help="大盤過濾後最低持股數（預設 1，設 2 或 3 防止單押集中風險）")
 
+    # ── 大盤天氣圖過濾 ──
+    parser.add_argument("--market-weather", action="store_true",
+                        dest="enable_market_weather",
+                        help="大盤天氣圖過濾：+1=偏多不變, 0=震盪topN×70%%, -1=偏空空手"
+                             "（基於等權市場指數 5MA + MACD Histogram 方向判斷）")
+
     # ── 進場訊號過濾 ──
     parser.add_argument("--entry-filter", type=str, default=None,
                         dest="entry_signal_filter",
@@ -279,6 +285,7 @@ def main():
             market_filter_tiers=_market_filter_tiers,
             market_filter_min_positions=args.market_filter_min_positions,
             entry_signal_filter=_entry_signal_filter,
+            enable_market_weather=args.enable_market_weather,
         )
 
     # ── 輸出 JSON ──
