@@ -624,6 +624,7 @@ def run_backtest(
     market_filter_tiers: Optional[List[tuple]] = None,  # 漸進式大盤過濾：[(threshold, multiplier), ...] 由淺到深排序，如 [(-0.05,0.5),(-0.10,0.25),(-0.15,0.10)]
     market_filter_min_positions: int = 1,  # 大盤過濾後最低持股數（防止單押集中風險）
     entry_signal_filter: Optional[Dict[str, object]] = None,  # 進場訊號過濾：{"foreign_buy_streak_max":3, "rsi_min":45, "rsi_max":70, "bias_20_max":0.15, "volume_surge_ratio_min":1.0}
+    liquidity_weighting: bool = False,   # 流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式
 ) -> Dict:
     """執行 walk-forward 回測。
 
@@ -890,6 +891,18 @@ def run_backtest(
                 _sample_weight = np.where(_days_ago <= 365, 2.0, np.where(_days_ago <= 730, 1.0, 0.5))
             else:
                 _sample_weight = None  # 等權樣本（baseline 模式）
+
+            # 流動性加權：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式
+            if liquidity_weighting and "amt_20" in merged.columns:
+                _amt20_vals = merged["amt_20"].fillna(0).clip(lower=0).values.astype(float)
+                _liq_w = np.log1p(_amt20_vals)
+                _liq_mean = _liq_w.mean()
+                if _liq_mean > 0:
+                    _liq_w = _liq_w / _liq_mean  # 歸一化：平均權重 = 1.0
+                if _sample_weight is not None:
+                    _sample_weight = _sample_weight * _liq_w  # 與時間加權相乘
+                else:
+                    _sample_weight = _liq_w
 
             _t = time.time()
             current_model = _train_model(fmat.values, y, fast_mode=fast_mode, sample_weight=_sample_weight)

@@ -108,6 +108,9 @@ def main():
     parser.add_argument("--tiered-slippage", action="store_true",
                         dest="tiered_slippage",
                         help="分級滑價模型：依 amt_20 決定流動性層級（<1億 1.0%%, 1~5億 0.6%%, >5億 0.2%% 來回）")
+    parser.add_argument("--liq-weighted", action="store_true",
+                        dest="liquidity_weighting",
+                        help="流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式")
     parser.add_argument("--rebalance-freq", type=str, default=None,
                         dest="rebalance_freq",
                         choices=["W", "M"],
@@ -290,6 +293,7 @@ def main():
             entry_signal_filter=_entry_signal_filter,
             min_avg_turnover=args.min_avg_turnover,
             enable_tiered_slippage=args.tiered_slippage,
+            liquidity_weighting=args.liquidity_weighting,
         )
 
     # ── 輸出 JSON ──
