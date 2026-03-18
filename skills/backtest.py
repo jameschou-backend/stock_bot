@@ -889,6 +889,17 @@ def run_backtest(
                 continue
 
             merged = train_feat.merge(train_label, on=["stock_id", "trading_date"], how="inner")
+
+            # 訓練資料流動性過濾（與評分階段保持一致）
+            if min_avg_turnover > 0 and liquidity_eligible_map:
+                _train_tds = pd.to_datetime(merged["trading_date"]).dt.date.values
+                _train_sids = merged["stock_id"].astype(str).values
+                _liq_ok = np.array([
+                    str(sid) in liquidity_eligible_map.get(td, set())
+                    for sid, td in zip(_train_sids, _train_tds)
+                ])
+                merged = merged[_liq_ok]
+
             if len(merged) < min_train_days:
                 print(f"  [{rb_date}] 訓練資料 {len(merged)} 筆 < {min_train_days}，跳過")
                 continue

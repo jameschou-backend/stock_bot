@@ -156,6 +156,12 @@ def main():
                         help="進場訊號過濾，格式：'key1=val1,key2=val2,...' "
                              "支援：foreign_buy_streak_max, rsi_min, rsi_max, bias_20_max, volume_surge_ratio_min")
 
+    # ── 流動性過濾 ──
+    parser.add_argument("--min-avg-turnover", type=float, default=0.0,
+                        dest="min_avg_turnover",
+                        help="流動性門檻：20日平均日成交金額（億元），0=不過濾（預設）。"
+                             "例：1=1億, 3=3億, 5=5億")
+
     # ── 診斷 ──
     parser.add_argument("--train-lookback", type=int, default=None,
                         dest="train_lookback_days",
@@ -286,6 +292,7 @@ def main():
             market_filter_min_positions=args.market_filter_min_positions,
             entry_signal_filter=_entry_signal_filter,
             enable_market_weather=args.enable_market_weather,
+            min_avg_turnover=args.min_avg_turnover,
         )
 
     # ── 輸出 JSON ──

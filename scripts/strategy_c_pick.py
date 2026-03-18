@@ -46,14 +46,15 @@ from skills import data_store
 OUTPUT_DIR  = ROOT / "artifacts" / "daily_signal"
 STATE_FILE  = OUTPUT_DIR / "strategy_c_state.json"
 
-TRAIN_LABEL_HORIZON = 10    # 10 日 forward return
-LABEL_BUFFER_DAYS   = 20    # 訓練截止緩衝（避免標籤前向洩漏）
-RANK_THRESHOLD      = 0.20  # 維持持倉的最低排名門檻（top 20%）
-TOP_ENTRY_N         = 10    # 每日候補選股池
-MAX_POSITIONS       = 6     # 最大同時持倉
-MAX_HOLD_DAYS       = 30    # 強制出場天數
-RETRAIN_MONTHS      = 36    # 訓練資料回看月數（3 年）
-RETRAIN_FREQ_DAYS   = 30    # 每隔幾天重訓一次
+TRAIN_LABEL_HORIZON    = 10    # 10 日 forward return
+LABEL_BUFFER_DAYS      = 20    # 訓練截止緩衝（避免標籤前向洩漏）
+RANK_THRESHOLD         = 0.20  # 維持持倉的最低排名門檻（top 20%）
+TOP_ENTRY_N            = 10    # 每日候補選股池
+MAX_POSITIONS          = 6     # 最大同時持倉
+MAX_HOLD_DAYS          = 30    # 強制出場天數
+RETRAIN_MONTHS         = 36    # 訓練資料回看月數（3 年）
+RETRAIN_FREQ_DAYS      = 30    # 每隔幾天重訓一次
+MIN_AVG_TURNOVER_BILL  = 1.0   # 流動性門檻：20日平均日成交金額（億元），0=不過濾
 
 _META_COLS = {"stock_id", "trading_date", "future_ret_h"}
 
@@ -210,6 +211,21 @@ def run_pick(
     tp = price_df[price_df["trading_date"] == today]
     price_map = {str(r["stock_id"]): float(r["close"]) for _, r in tp.iterrows() if float(r["close"] or 0) > 0}
     tf_today  = tf_today[tf_today["stock_id"].isin(price_map)].reset_index(drop=True)
+
+    # 流動性過濾：保留 20 日平均日成交金額 >= MIN_AVG_TURNOVER_BILL 億的股票
+    if MIN_AVG_TURNOVER_BILL > 0 and not price_df.empty:
+        _pv = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
+        _pv = _pv.sort_values(["stock_id", "trading_date"])
+        _pv["_tv"] = _pv["close"] * _pv["volume"]
+        _pv["_avg_tv20"] = _pv.groupby("stock_id")["_tv"].transform(
+            lambda s: s.rolling(20, min_periods=1).mean()
+        )
+        _threshold = MIN_AVG_TURNOVER_BILL * 1e8
+        _today_liq = _pv[_pv["trading_date"] == today]
+        _liquid_sids = set(_today_liq[_today_liq["_avg_tv20"] >= _threshold]["stock_id"].astype(str).tolist())
+        _before_liq = len(tf_today)
+        tf_today = tf_today[tf_today["stock_id"].isin(_liquid_sids)].reset_index(drop=True)
+        print(f"  流動性過濾 (>={MIN_AVG_TURNOVER_BILL:.0f}億): {_before_liq} → {len(tf_today)} 支")
 
     if tf_today.empty:
         print(f"❌ {today} 無有效股票特徵")
@@ -421,11 +437,16 @@ def _print_result(r: Dict) -> None:
 # CLI
 # ─────────────────────────────────────────────
 def main() -> None:
+    global MIN_AVG_TURNOVER_BILL
     parser = argparse.ArgumentParser(description="Strategy C 每日選股")
     parser.add_argument("--date", type=lambda s: date.fromisoformat(s), default=date.today())
     parser.add_argument("--capital", type=int, default=1_000_000)
     parser.add_argument("--reset-state", action="store_true", help="清空持倉狀態重新開始")
+    parser.add_argument("--min-avg-turnover", type=float, default=MIN_AVG_TURNOVER_BILL,
+                        dest="min_avg_turnover",
+                        help=f"流動性門檻（億元），0=不過濾（預設 {MIN_AVG_TURNOVER_BILL}）")
     args = parser.parse_args()
+    MIN_AVG_TURNOVER_BILL = args.min_avg_turnover
 
     result = run_pick(args.date, args.capital, args.reset_state)
     _print_result(result)

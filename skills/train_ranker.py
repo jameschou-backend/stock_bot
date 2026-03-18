@@ -184,6 +184,44 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
         df["trading_date"] = pd.to_datetime(df["trading_date"]).dt.date
 
+        # ── 流動性過濾（與 backtest.py 評分/訓練階段保持一致）──
+        min_avg_turnover = float(kwargs.get("min_avg_turnover", 0.0))
+        if min_avg_turnover > 0:
+            from app.models import RawPrice as _RawPrice
+            _price_stmt = (
+                select(_RawPrice.stock_id, _RawPrice.trading_date, _RawPrice.close, _RawPrice.volume)
+                .where(_RawPrice.trading_date.between(train_start, train_end))
+                .order_by(_RawPrice.stock_id, _RawPrice.trading_date)
+            )
+            _price_df = pd.read_sql(_price_stmt, db_session.get_bind())
+            if not _price_df.empty:
+                _price_df["close"] = pd.to_numeric(_price_df["close"], errors="coerce")
+                _price_df["volume"] = pd.to_numeric(_price_df["volume"], errors="coerce")
+                _price_df = _price_df.dropna(subset=["close", "volume"])
+                _price_df["stock_id"] = _price_df["stock_id"].astype(str)
+                _price_df = _price_df.sort_values(["stock_id", "trading_date"])
+                _threshold = min_avg_turnover * 1e8
+                _price_df["_tv"] = _price_df["close"] * _price_df["volume"]
+                _price_df["_avg_tv20"] = _price_df.groupby("stock_id")["_tv"].transform(
+                    lambda s: s.rolling(20, min_periods=1).mean()
+                )
+                _price_df["trading_date"] = pd.to_datetime(_price_df["trading_date"]).dt.date
+                _eligible = _price_df[_price_df["_avg_tv20"] >= _threshold]
+                _eligible_set = set(zip(_eligible["trading_date"].values, _eligible["stock_id"].values))
+                _before = len(df)
+                _liq_ok = np.array([
+                    (td, str(sid)) in _eligible_set
+                    for sid, td in zip(df["stock_id"].values, df["trading_date"].values)
+                ])
+                df = df[_liq_ok].copy()
+                df = df.reset_index(drop=True)
+                print(
+                    f"[train_ranker] 流動性過濾 (>={min_avg_turnover:.0f}億): "
+                    f"{_before:,} → {len(df):,} 筆",
+                    flush=True,
+                )
+                del _price_df, _eligible, _eligible_set
+
         feature_matrix = _parse_features(df["features_json"])
         feature_matrix = feature_matrix.replace([np.inf, -np.inf], np.nan)
 
