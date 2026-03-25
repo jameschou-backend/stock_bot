@@ -94,7 +94,9 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 
 ## Session 9 完成事項（2026-03-25）
 
-### 全面程式碼優化（7 項改動，93 tests passed）
+### 全面程式碼優化（7+9 項改動，119 tests passed）
+
+**P0-P2（先前完成）**
 
 | 項目 | 說明 |
 |------|------|
@@ -105,6 +107,42 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 | `app/api.py` 回測 timeout | asyncio 120s 逾時保護，防止 CPU 密集型卡死伺服器 |
 | `WalkForwardConfig` dataclass | 封裝 run_backtest() 30+ 參數，向後相容 |
 | `_simulate_period()` 拆分 | 3 個子函式：_get_entry_positions / _compute_slippage_map / _calc_stock_return |
+
+**P3-2（Parquet Feature Store）**
+
+| 項目 | 說明 |
+|------|------|
+| `skills/feature_store.py`（新） | FeatureStore：年份 Parquet 分區（artifacts/features/features_YYYY.parquet）|
+| `build_features.py` dual-write | MySQL + Parquet 同步寫入；_detect_schema_outdated 先查 Parquet |
+| `data_store.py` 讀取優化 | _build_features 從 FeatureStore 讀（省去 JSON 解析 60-90s）|
+| `train_ranker.py` 讀取優化 | 直接從 FeatureStore 讀特徵，跳過 JSON parse 路徑 |
+| `daily_pick.py` 讀取優化 | 候選日期與特徵均從 FeatureStore 讀 |
+| `scripts/migrate_features_to_parquet.py`（新） | 一次性 MySQL → Parquet 遷移 CLI（`make migrate-features`）|
+
+**P3-3（DAG 執行引擎）**
+
+| 項目 | 說明 |
+|------|------|
+| `pipelines/dag_executor.py`（新） | DAGNode + DAGExecutor：拓樸排序 + ThreadPoolExecutor 分層並行 |
+| `pipelines/dag_daily.py`（新） | 每日 DAG 定義：Layer 4（ingest 6 節點並行）+ Layer 6（features ∥ labels）|
+| `scripts/run_daily_dag.py`（新） | CLI 入口（`make pipeline-dag`），支援 --skip-ingest / --dry-run |
+
+---
+
+## 新增指令（Session 9 P3-2/P3-3）
+
+```makefile
+make pipeline-dag         # DAG 版 pipeline（並行 ingest，預估快 30-40%）
+make pipeline-dag-build   # DAG 版（跳過 ingest）
+make migrate-features     # 一次性遷移 MySQL features → 年份 Parquet
+```
+
+### FeatureStore 遷移注意事項
+
+1. 首次使用前須先執行 `make migrate-features`（否則 build_features 首次跑時會 dual-write，之後才走 Parquet 快路徑）
+2. Parquet 存放路徑：`artifacts/features/features_YYYY.parquet`（每年一檔）
+3. 遷移後 train_ranker / daily_pick / data_store 自動走 Parquet，不需任何手動設定
+4. 回滾方式：刪除 `artifacts/features/` 資料夾，系統自動 fallback 至 MySQL
 
 ---
 
