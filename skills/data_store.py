@@ -1,4 +1,4 @@
-"""DuckDB-accelerated data access layer with 24-hour Parquet cache.
+"""DuckDB-accelerated data access layer with data-date-aware Parquet cache.
 
 全量 10 年資料從 MySQL 載入一次，存為固定路徑 Parquet。
 後續查詢改用 DuckDB 的謂語下推（predicate pushdown）按日期範圍高效讀取，
@@ -16,7 +16,8 @@ Public API:
     artifacts/cache/features.parquet
     artifacts/cache/labels.parquet
 
-TTL: 24 小時（超時自動重建）
+快取更新策略：比對 cache 的 max(trading_date) 與資料來源的 max date，
+來源有新資料就重建（不依賴檔案時間），pipeline 跑完後 daily-c 立即拿到最新資料。
 """
 from __future__ import annotations
 
@@ -44,12 +45,27 @@ PRICES_PARQUET   = CACHE_DIR / "prices.parquet"
 FEATURES_PARQUET = CACHE_DIR / "features.parquet"
 LABELS_PARQUET   = CACHE_DIR / "labels.parquet"
 
-_TTL_SECONDS = 86_400  # 24 小時
+_TTL_SECONDS = 86_400  # 24 小時（fallback 用，正常走資料日期比對）
 
 
 # ── 快取有效性 ────────────────────────────────────────────────────────────────
+def _parquet_max_date(path: Path) -> Optional[str]:
+    """快速讀取 parquet 內的 max(trading_date)，利用 DuckDB 欄位統計避免全掃。"""
+    if not path.exists():
+        return None
+    try:
+        con = duckdb.connect()
+        result = con.execute(
+            "SELECT max(trading_date) FROM read_parquet(?)", [str(path)]
+        ).fetchone()[0]
+        con.close()
+        return str(result) if result is not None else None
+    except Exception:
+        return None
+
+
 def _is_fresh(path: Path) -> bool:
-    """True if file exists and younger than TTL."""
+    """Fallback：檔案存在且未超過 TTL（資料日期比對失敗時使用）。"""
     if not path.exists():
         return False
     return (time.time() - path.stat().st_mtime) < _TTL_SECONDS
@@ -195,13 +211,50 @@ def _build_labels(db_session: Session) -> None:
 
 
 def _ensure(db_session: Session) -> None:
-    """確保三個 parquet 都存在且未超時，否則重建。"""
+    """確保三個 parquet 存在且資料日期與來源一致，否則重建。
+
+    比對邏輯：
+      - prices / labels：比對 cache max_date vs DB max(trading_date)
+      - features：比對 cache max_date vs FeatureStore max_date（年份 Parquet）
+    只要來源有新資料（source_max > cache_max），就觸發重建，
+    不依賴檔案時間——pipeline 跑完後 daily-c 立即拿到最新資料。
+    """
+    from sqlalchemy import text as _text
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    if not _is_fresh(PRICES_PARQUET):
+
+    # ── Prices ──
+    _cache_px = _parquet_max_date(PRICES_PARQUET)
+    try:
+        _src_px = str(db_session.execute(_text("SELECT max(trading_date) FROM raw_prices")).scalar() or "")
+    except Exception:
+        _src_px = None
+    if not _cache_px or (_src_px and _cache_px < _src_px):
+        if _cache_px and _src_px:
+            print(f"  [data_store] prices cache stale ({_cache_px} < {_src_px}), rebuilding …", flush=True)
         _build_prices(db_session)
-    if not _is_fresh(FEATURES_PARQUET):
+
+    # ── Features ──
+    _cache_feat = _parquet_max_date(FEATURES_PARQUET)
+    try:
+        from skills.feature_store import FeatureStore as _FS
+        _src_feat_raw = _FS().get_max_date()
+        _src_feat = str(_src_feat_raw) if _src_feat_raw is not None else None
+    except Exception:
+        _src_feat = None
+    if not _cache_feat or (_src_feat and _cache_feat < _src_feat):
+        if _cache_feat and _src_feat:
+            print(f"  [data_store] features cache stale ({_cache_feat} < {_src_feat}), rebuilding …", flush=True)
         _build_features(db_session)
-    if not _is_fresh(LABELS_PARQUET):
+
+    # ── Labels ──
+    _cache_lbl = _parquet_max_date(LABELS_PARQUET)
+    try:
+        _src_lbl = str(db_session.execute(_text("SELECT max(trading_date) FROM labels")).scalar() or "")
+    except Exception:
+        _src_lbl = None
+    if not _cache_lbl or (_src_lbl and _cache_lbl < _src_lbl):
+        if _cache_lbl and _src_lbl:
+            print(f"  [data_store] labels cache stale ({_cache_lbl} < {_src_lbl}), rebuilding …", flush=True)
         _build_labels(db_session)
 
 
@@ -304,7 +357,7 @@ def warm_up(db_session: Session) -> None:
 
 
 def cache_info() -> dict:
-    """Return dict with each parquet's path, size (MB), and age (minutes)."""
+    """Return dict with each parquet's path, size (MB), max_date, and age (minutes)."""
     info = {}
     now = time.time()
     for label, path in [("prices", PRICES_PARQUET), ("features", FEATURES_PARQUET), ("labels", LABELS_PARQUET)]:
@@ -314,6 +367,7 @@ def cache_info() -> dict:
                 "path": str(path),
                 "size_mb": round(stat.st_size / 1e6, 1),
                 "age_min": round((now - stat.st_mtime) / 60, 1),
+                "max_date": _parquet_max_date(path),
                 "fresh": _is_fresh(path),
             }
         else:
