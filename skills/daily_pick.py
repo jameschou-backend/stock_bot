@@ -28,6 +28,10 @@ from skills import regime, risk
 from skills import tradability_filter
 from skills import multi_agent_selector
 from skills import position_sizing as _pos_sizing
+from skills.feature_utils import (
+    parse_features_json as _parse_features_json_shared,
+    impute_features as _impute_features_shared,
+)
 
 
 # 選取前 8 個特徵作為 reason 說明
@@ -56,35 +60,13 @@ def _load_latest_model(session: Session) -> ModelVersion | None:
 
 
 def _parse_features(series: pd.Series) -> pd.DataFrame:
-    import json
-
-    parsed = [json.loads(v) if isinstance(v, str) else v for v in series]
-    return pd.json_normalize(parsed)
+    """委派給 feature_utils.parse_features_json（統一實作，含 orjson 加速）。"""
+    return _parse_features_json_shared(series)
 
 
 def _impute_features(feature_df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, object]]:
-    feature_df = feature_df.copy()
-    feature_df = feature_df.replace([np.inf, -np.inf], np.nan)
-    nan_mask = feature_df.isna()
-    total_cells = int(nan_mask.size)
-    filled_cells = int(nan_mask.sum().sum())
-    all_nan_cols = [col for col in feature_df.columns if feature_df[col].isna().all()]
-
-    medians = feature_df.median(skipna=True)
-    for col in feature_df.columns:
-        if col in all_nan_cols:
-            feature_df[col] = feature_df[col].fillna(0)
-        else:
-            feature_df[col] = feature_df[col].fillna(medians[col])
-
-    fill_ratio = filled_cells / total_cells if total_cells else 0.0
-    stats = {
-        "filled_cells": filled_cells,
-        "total_cells": total_cells,
-        "fill_ratio": round(fill_ratio, 6),
-        "all_nan_cols": all_nan_cols,
-    }
-    return feature_df, stats
+    """委派給 feature_utils.impute_features（語義導向填補，修正 bias_20/boll_pct 等特徵）。"""
+    return _impute_features_shared(feature_df)
 
 
 def _load_price_universe(
@@ -421,24 +403,37 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     coverage_stats: Dict[str, object] = {}
     
     try:
-        candidate_dates = (
-            db_session.query(Feature.trading_date)
-            .distinct()
-            .order_by(Feature.trading_date.desc())
-            .limit(config.fallback_days + 1)
-            .all()
-        )
-        candidate_dates = [row[0] for row in candidate_dates]
+        # ── 取得候選日期：優先 Parquet FeatureStore，fallback MySQL ──
+        _used_parquet_dp = False
+        try:
+            from skills.feature_store import FeatureStore as _FeatureStore
+            _fs_dp = _FeatureStore()
+            if _fs_dp.get_max_date() is not None:
+                candidate_dates = _fs_dp.get_distinct_dates(config.fallback_days + 1)
+                _used_parquet_dp = True
+        except Exception as _exc:
+            pass  # fallback to MySQL
+
+        if not _used_parquet_dp:
+            candidate_dates = (
+                db_session.query(Feature.trading_date)
+                .distinct()
+                .order_by(Feature.trading_date.desc())
+                .limit(config.fallback_days + 1)
+                .all()
+            )
+            candidate_dates = [row[0] for row in candidate_dates]
+
         coverage_stats["candidate_dates_count"] = len(candidate_dates)
-        
+
         if not candidate_dates:
             finish_job(db_session, job_id, "success", logs={
-                "rows": 0, 
+                "rows": 0,
                 "reason": "no feature dates",
                 **coverage_stats,
             })
             return {"rows": 0}
-        
+
         coverage_stats["latest_feature_date"] = candidate_dates[0].isoformat()
         coverage_stats["oldest_candidate_date"] = candidate_dates[-1].isoformat()
 
@@ -477,28 +472,53 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         coverage_stats["valid_stock_universe_count"] = len(valid_stocks)
         coverage_stats["tradability"] = tradability_logs
         
-        if not valid_stocks:
-            # stocks 表為空時，不過濾（向後相容）
-            coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
-            stmt = (
-                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
-                .where(Feature.trading_date.in_(candidate_dates))
-                .order_by(Feature.stock_id, Feature.trading_date)
-            )
-        else:
-            coverage_stats["stock_universe_filter"] = "enabled"
-            stmt = (
-                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
-                .where(Feature.trading_date.in_(candidate_dates))
-                .where(Feature.stock_id.in_(valid_stocks))
-                .order_by(Feature.stock_id, Feature.trading_date)
-            )
-        
-        df = pd.read_sql(stmt, db_session.get_bind())
-        
+        # ── 讀取特徵：優先 Parquet FeatureStore，fallback MySQL ──
+        _parquet_feat_ok = False
+        df_raw: pd.DataFrame = pd.DataFrame()
+
+        if _used_parquet_dp and candidate_dates:
+            try:
+                _start_cd = min(candidate_dates)
+                _end_cd = max(candidate_dates)
+                _feat_raw = _fs_dp.read(_start_cd, _end_cd)
+                _feat_raw["trading_date"] = pd.to_datetime(_feat_raw["trading_date"]).dt.date
+                # 只保留 candidate_dates 範圍內的行
+                _feat_raw = _feat_raw[_feat_raw["trading_date"].isin(set(candidate_dates))]
+                # 套用 stock universe 過濾
+                if valid_stocks:
+                    coverage_stats["stock_universe_filter"] = "enabled"
+                    _feat_raw = _feat_raw[_feat_raw["stock_id"].isin(valid_stocks)]
+                else:
+                    coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
+                df_raw = _feat_raw
+                _parquet_feat_ok = True
+            except Exception as _exc:
+                pass  # fallback to MySQL
+
+        if not _parquet_feat_ok:
+            if not valid_stocks:
+                coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
+                stmt = (
+                    select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                    .where(Feature.trading_date.in_(candidate_dates))
+                    .order_by(Feature.stock_id, Feature.trading_date)
+                )
+            else:
+                coverage_stats["stock_universe_filter"] = "enabled"
+                stmt = (
+                    select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                    .where(Feature.trading_date.in_(candidate_dates))
+                    .where(Feature.stock_id.in_(valid_stocks))
+                    .order_by(Feature.stock_id, Feature.trading_date)
+                )
+            df_raw = pd.read_sql(stmt, db_session.get_bind())
+
+        df = df_raw
         coverage_stats["total_feature_rows"] = len(df)
-        coverage_stats["unique_stocks_with_features"] = df["stock_id"].nunique() if not df.empty else 0
-        
+        coverage_stats["unique_stocks_with_features"] = (
+            df["stock_id"].nunique() if not df.empty else 0
+        )
+
         if df.empty:
             finish_job(db_session, job_id, "success", logs={
                 "rows": 0,
@@ -507,7 +527,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             })
             return {"rows": 0}
 
-        feature_df = _parse_features(df["features_json"])
+        # ── 特徵矩陣：Parquet 路徑已預解析，MySQL 路徑需 JSON parse ──
+        if _parquet_feat_ok:
+            _non_feat_dp = {"stock_id", "trading_date", "features_json"}
+            _feat_cols_dp = [c for c in df.columns if c not in _non_feat_dp]
+            feature_df = df[_feat_cols_dp].copy().reset_index(drop=True)
+        else:
+            feature_df = _parse_features(df["features_json"])
         
         # 記錄缺失欄位
         missing_cols = [col for col in feature_names if col not in feature_df.columns]
@@ -590,20 +616,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             coverage_stats["effective_topn"] = effective_topn
 
         # ── 季節性降倉（弱勢月份）──
-        seasonal_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
-        seasonal_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+        # 委派給 risk.apply_seasonal_topn_reduction（與 backtest.py 統一邏輯）
+        _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
+        _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
         today_month = max(candidate_dates).month
-        if today_month in seasonal_weak:
-            new_topn = max(1, int(effective_topn * seasonal_mult))
-            if new_topn < effective_topn:
-                coverage_stats["seasonal_filter"] = f"month_{today_month}"
-                effective_topn = new_topn
-
-        # ── topN 絕對下限保護（防止危機+弱勢月份疊加造成 topN=1~2 的極端集中風險）──
+        # topN 絕對下限保護（防止危機+弱勢月份疊加造成 topN=1~2 的極端集中風險）
         # 極端空頭（週跌>10%）最低 3 支；一般情況最低 5 支
         _dp_extreme_bear = isinstance(weekly_drop, float) and weekly_drop < -0.10
         _dp_min_topn = 3 if _dp_extreme_bear else 5
-        if effective_topn < _dp_min_topn:
+        effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
+            effective_topn, today_month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=_dp_min_topn
+        )
+        if _reduced:
+            coverage_stats["seasonal_filter"] = f"month_{today_month}"
+        elif effective_topn < _dp_min_topn:
+            # topN floor 觸發（非季節性，但仍需保護）
             coverage_stats["topn_floor_applied"] = f"{effective_topn}→{_dp_min_topn}"
             effective_topn = _dp_min_topn
         coverage_stats["effective_topn"] = effective_topn

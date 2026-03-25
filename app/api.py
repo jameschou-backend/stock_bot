@@ -223,115 +223,137 @@ def create_strategy_config(payload: StrategyConfigIn):
         return StrategyConfigOut.model_validate(row)
 
 
+_BACKTEST_TIMEOUT_SECONDS: float = float(
+    __import__("os").environ.get("BACKTEST_API_TIMEOUT", "120")
+)
+
+
 @app.post("/strategy_runs", response_model=StrategyRunOut)
-def run_strategy_backtest(payload: StrategyRunIn):
-    register_defaults()
-    with get_session() as session:
-        config_row = (
-            session.query(StrategyConfig)
-            .filter(StrategyConfig.config_id == payload.config_id)
-            .one_or_none()
-        )
-        if config_row is None:
-            raise HTTPException(status_code=404, detail="strategy config not found")
+async def run_strategy_backtest(payload: StrategyRunIn):
+    """執行策略回測。限制最長執行時間（預設 120 秒，可用 BACKTEST_API_TIMEOUT 環境變數調整）。"""
+    import concurrent.futures
 
-        config = load_config()
-        start_date = payload.start_date
-        end_date = payload.end_date
-        raw = load_price_df(start_date, end_date)
-        df = compute_indicators(raw)
-        regime = detect_regime(df, config)
-        weights = resolve_weights(regime, config, config_row.config_json or {})
-        strategies = config_row.config_json.get("strategies") if config_row.config_json else None
+    loop = asyncio.get_event_loop()
 
-        allocations = []
-        for name, weight in weights.items():
-            if strategies and name not in strategies:
-                continue
-            allocations.append(StrategyAllocation(strategy=get_strategy(name), weight=weight))
-        if not allocations:
-            raise HTTPException(status_code=400, detail="no strategies to run")
-
-        bt_cfg = BacktestConfig(
-            start_date=start_date,
-            end_date=end_date,
-            initial_capital=payload.initial_capital if payload.initial_capital is not None else 1_000_000.0,
-            transaction_cost_pct=payload.transaction_cost_pct if payload.transaction_cost_pct is not None else 0.001425,
-            slippage_pct=payload.slippage_pct if payload.slippage_pct is not None else 0.001,
-            risk_per_trade=payload.risk_per_trade if payload.risk_per_trade is not None else 0.01,
-            position_size_multiplier=(
-                payload.position_size_multiplier if payload.position_size_multiplier is not None else 1.0
-            ),
-            target_exposure_pct=payload.target_exposure_pct if payload.target_exposure_pct is not None else 1.0,
-            max_positions=payload.max_positions if payload.max_positions is not None else 6,
-            rebalance_freq=(payload.rebalance_freq or "D").upper(),
-            min_notional_per_trade=(
-                payload.min_notional_per_trade if payload.min_notional_per_trade is not None else 1_000.0
-            ),
-            max_pyramiding_level=payload.max_pyramiding_level if payload.max_pyramiding_level is not None else 1,
-        )
-        engine = BacktestEngine(bt_cfg)
-        result = engine.run(df, allocations)
-
-        equity_curve = result["equity_curve"]
-        final_equity = equity_curve[-1]["equity"] if equity_curve else bt_cfg.initial_capital
-        total_return = final_equity / bt_cfg.initial_capital - 1
-        metrics = {
-            "regime": regime,
-            "final_equity": final_equity,
-            "total_return": total_return,
-            "equity_curve": equity_curve,
-            "trade_count": len(result["trades"]),
-        }
-        metrics = json.loads(json.dumps(metrics, default=str))
-
-        run_id = uuid.uuid4().hex
-        run_row = StrategyRun(
-            run_id=run_id,
-            config_id=config_row.config_id,
-            start_date=start_date,
-            end_date=end_date,
-            initial_capital=bt_cfg.initial_capital,
-            transaction_cost_pct=bt_cfg.transaction_cost_pct,
-            slippage_pct=bt_cfg.slippage_pct,
-            metrics_json=metrics,
-        )
-        session.add(run_row)
-
-        for t in result["trades"]:
-            trade_row = StrategyTrade(
-                run_id=run_id,
-                trade_id=uuid.uuid4().hex,
-                trading_date=t["trading_date"],
-                stock_id=t["stock_id"],
-                strategy_name=t.get("strategy_name"),
-                action=t["action"],
-                qty=t["qty"],
-                price=t["price"],
-                fee=t["fee"],
-                reason_json={
-                    "reason": t.get("reason"),
-                    "realized_pnl": t.get("realized_pnl"),
-                    "avg_cost": t.get("avg_cost"),
-                },
+    def _sync_run() -> StrategyRunOut:
+        register_defaults()
+        with get_session() as session:
+            config_row = (
+                session.query(StrategyConfig)
+                .filter(StrategyConfig.config_id == payload.config_id)
+                .one_or_none()
             )
-            session.add(trade_row)
+            if config_row is None:
+                raise HTTPException(status_code=404, detail="strategy config not found")
 
-        for p in result["positions"]:
-            pos_row = StrategyPosition(
-                run_id=run_id,
-                trading_date=p["trading_date"],
-                stock_id=p["stock_id"],
-                strategy_name=p.get("strategy_name"),
-                qty=p["qty"],
-                avg_cost=p["avg_cost"],
-                market_value=p["market_value"],
-                unrealized_pnl=p["unrealized_pnl"],
+            config = load_config()
+            start_date = payload.start_date
+            end_date = payload.end_date
+            raw = load_price_df(start_date, end_date)
+            df = compute_indicators(raw)
+            regime = detect_regime(df, config)
+            weights = resolve_weights(regime, config, config_row.config_json or {})
+            strategies = config_row.config_json.get("strategies") if config_row.config_json else None
+
+            allocations = []
+            for name, weight in weights.items():
+                if strategies and name not in strategies:
+                    continue
+                allocations.append(StrategyAllocation(strategy=get_strategy(name), weight=weight))
+            if not allocations:
+                raise HTTPException(status_code=400, detail="no strategies to run")
+
+            bt_cfg = BacktestConfig(
+                start_date=start_date,
+                end_date=end_date,
+                initial_capital=payload.initial_capital if payload.initial_capital is not None else 1_000_000.0,
+                transaction_cost_pct=payload.transaction_cost_pct if payload.transaction_cost_pct is not None else 0.001425,
+                slippage_pct=payload.slippage_pct if payload.slippage_pct is not None else 0.001,
+                risk_per_trade=payload.risk_per_trade if payload.risk_per_trade is not None else 0.01,
+                position_size_multiplier=(
+                    payload.position_size_multiplier if payload.position_size_multiplier is not None else 1.0
+                ),
+                target_exposure_pct=payload.target_exposure_pct if payload.target_exposure_pct is not None else 1.0,
+                max_positions=payload.max_positions if payload.max_positions is not None else 6,
+                rebalance_freq=(payload.rebalance_freq or "D").upper(),
+                min_notional_per_trade=(
+                    payload.min_notional_per_trade if payload.min_notional_per_trade is not None else 1_000.0
+                ),
+                max_pyramiding_level=payload.max_pyramiding_level if payload.max_pyramiding_level is not None else 1,
             )
-            session.add(pos_row)
+            engine = BacktestEngine(bt_cfg)
+            result = engine.run(df, allocations)
 
-        session.commit()
-        return StrategyRunOut.model_validate(run_row)
+            equity_curve = result["equity_curve"]
+            final_equity = equity_curve[-1]["equity"] if equity_curve else bt_cfg.initial_capital
+            total_return = final_equity / bt_cfg.initial_capital - 1
+            metrics = {
+                "regime": regime,
+                "final_equity": final_equity,
+                "total_return": total_return,
+                "equity_curve": equity_curve,
+                "trade_count": len(result["trades"]),
+            }
+            metrics = json.loads(json.dumps(metrics, default=str))
+
+            run_id = uuid.uuid4().hex
+            run_row = StrategyRun(
+                run_id=run_id,
+                config_id=config_row.config_id,
+                start_date=start_date,
+                end_date=end_date,
+                initial_capital=bt_cfg.initial_capital,
+                transaction_cost_pct=bt_cfg.transaction_cost_pct,
+                slippage_pct=bt_cfg.slippage_pct,
+                metrics_json=metrics,
+            )
+            session.add(run_row)
+
+            for t in result["trades"]:
+                trade_row = StrategyTrade(
+                    run_id=run_id,
+                    trade_id=uuid.uuid4().hex,
+                    trading_date=t["trading_date"],
+                    stock_id=t["stock_id"],
+                    strategy_name=t.get("strategy_name"),
+                    action=t["action"],
+                    qty=t["qty"],
+                    price=t["price"],
+                    fee=t["fee"],
+                    reason_json={
+                        "reason": t.get("reason"),
+                        "realized_pnl": t.get("realized_pnl"),
+                        "avg_cost": t.get("avg_cost"),
+                    },
+                )
+                session.add(trade_row)
+
+            for p in result["positions"]:
+                pos_row = StrategyPosition(
+                    run_id=run_id,
+                    trading_date=p["trading_date"],
+                    stock_id=p["stock_id"],
+                    strategy_name=p.get("strategy_name"),
+                    qty=p["qty"],
+                    avg_cost=p["avg_cost"],
+                    market_value=p["market_value"],
+                    unrealized_pnl=p["unrealized_pnl"],
+                )
+                session.add(pos_row)
+
+            session.commit()
+            return StrategyRunOut.model_validate(run_row)
+
+    # 使用 asyncio.wait_for 限制總執行時間，防止長時間回測卡死伺服器
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            future = loop.run_in_executor(executor, _sync_run)
+            return await asyncio.wait_for(future, timeout=_BACKTEST_TIMEOUT_SECONDS)
+    except asyncio.TimeoutError:
+        raise HTTPException(
+            status_code=504,
+            detail=f"回測執行超時（>{_BACKTEST_TIMEOUT_SECONDS:.0f}s），請縮短回測期間或增加 BACKTEST_API_TIMEOUT 設定。",
+        )
 
 
 @app.get("/strategy_runs/{run_id}", response_model=StrategyRunOut)

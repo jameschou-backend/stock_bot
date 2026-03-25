@@ -25,9 +25,33 @@ SLOW_QUERY_THRESHOLD: float = float(os.environ.get("SLOW_QUERY_THRESHOLD", "1.0"
 _slow_query_logger = logging.getLogger("stock_bot.slow_query")
 _SLOW_QUERIES_PATH = Path(__file__).resolve().parent.parent / "artifacts" / "slow_queries.jsonl"
 
+# JSONL rotation 設定：超過 10MB 時輪替，保留最多 5 個備份
+_SLOW_QUERIES_MAX_BYTES: int = int(os.environ.get("SLOW_QUERIES_MAX_BYTES", str(10 * 1024 * 1024)))
+_SLOW_QUERIES_BACKUP_COUNT: int = int(os.environ.get("SLOW_QUERIES_BACKUP_COUNT", "5"))
+
+
+def _rotate_slow_queries_if_needed(path: Path) -> None:
+    """若 slow_queries.jsonl 超過 _SLOW_QUERIES_MAX_BYTES，進行輪替（保留 .1 ~ .N 備份）。"""
+    try:
+        if not path.exists() or path.stat().st_size < _SLOW_QUERIES_MAX_BYTES:
+            return
+        # 刪除最舊備份（.N）並依序重命名 .1→.2, .2→.3, ...
+        for i in range(_SLOW_QUERIES_BACKUP_COUNT, 0, -1):
+            old = path.with_suffix(f".jsonl.{i}")
+            new = path.with_suffix(f".jsonl.{i + 1}") if i < _SLOW_QUERIES_BACKUP_COUNT else None
+            if old.exists():
+                if new is not None:
+                    old.replace(new)
+                else:
+                    old.unlink()
+        # 將當前檔案重命名為 .1
+        path.replace(path.with_suffix(".jsonl.1"))
+    except OSError:
+        pass  # Never let rotation failure crash the app
+
 
 def _record_slow_query(statement: str, duration: float) -> None:
-    """Append a slow query record to artifacts/slow_queries.jsonl (JSONL format)."""
+    """Append a slow query record to artifacts/slow_queries.jsonl (JSONL format, with rotation)."""
     record = {
         "ts": datetime.now().isoformat(timespec="seconds"),
         "duration_s": round(duration, 3),
@@ -35,6 +59,7 @@ def _record_slow_query(statement: str, duration: float) -> None:
     }
     try:
         _SLOW_QUERIES_PATH.parent.mkdir(parents=True, exist_ok=True)
+        _rotate_slow_queries_if_needed(_SLOW_QUERIES_PATH)
         with open(_SLOW_QUERIES_PATH, "a", encoding="utf-8") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     except OSError:

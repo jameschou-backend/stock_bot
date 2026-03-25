@@ -33,6 +33,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Feature, Label, RawPrice
+from skills.feature_utils import (
+    parse_features_json as _parse_features_json_shared,
+    filter_schema_valid_rows as _filter_schema_valid_rows_shared,
+)
 
 # ── 路徑常數 ─────────────────────────────────────────────────────────────────
 CACHE_DIR        = Path("artifacts/cache")
@@ -51,19 +55,10 @@ def _is_fresh(path: Path) -> bool:
     return (time.time() - path.stat().st_mtime) < _TTL_SECONDS
 
 
-# ── 特徵解析（與 backtest._parse_features 相同邏輯，避免循環 import）──────────
+# ── 特徵解析（委派給 feature_utils，統一實作）────────────────────────────────
 def _parse_features_json(series: pd.Series) -> pd.DataFrame:
-    try:
-        import orjson
-        _loads = orjson.loads
-    except ImportError:
-        import json
-        _loads = json.loads
-    parsed = [
-        _loads(v) if isinstance(v, str) else (v if isinstance(v, dict) else {})
-        for v in series
-    ]
-    return pd.json_normalize(parsed)
+    """委派給 feature_utils.parse_features_json（含 orjson 加速）。"""
+    return _parse_features_json_shared(series)
 
 
 def _parse_and_schema_filter(raw_feat_df: pd.DataFrame) -> pd.DataFrame:
@@ -111,8 +106,54 @@ def _build_prices(db_session: Session) -> None:
 
 
 def _build_features(db_session: Session) -> None:
-    print("  [data_store] building features.parquet (full history + parse) …", flush=True)
+    """Build the flat features cache.
+
+    優先從 FeatureStore（年份 Parquet）讀取已解析資料，
+    大幅省去 JSON 解析開銷（4M 行 × 62 特徵 ≈ 節省 60-90s）。
+    若 FeatureStore 無資料（首次使用前），fallback 至 MySQL。
+    """
+    print("  [data_store] building features.parquet …", flush=True)
     t0 = time.time()
+
+    # ── 嘗試從 FeatureStore（年份 Parquet）直接讀取 ──
+    try:
+        from skills.feature_store import FeatureStore
+        from datetime import date as _date
+        _fs = FeatureStore()
+        _max_date = _fs.get_max_date()
+        if _max_date is not None:
+            print(
+                f"  [data_store] FeatureStore found (max={_max_date}), "
+                "reading from year-partitioned Parquet …",
+                flush=True,
+            )
+            # 讀取全部歷史（2000-01-01 → _max_date 涵蓋全部年份）
+            feat_df = _fs.read(_date(2000, 1, 1), _max_date)
+            feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
+            # 確保 float32 型別（與原快取行為一致）
+            num_cols = [c for c in feat_df.columns if c not in ("stock_id", "trading_date")]
+            if num_cols:
+                feat_df[num_cols] = feat_df[num_cols].astype("float32")
+            feat_df = feat_df.sort_values(
+                ["trading_date", "stock_id"]
+            ).reset_index(drop=True)
+            feat_df.to_parquet(FEATURES_PARQUET, index=False)
+            print(
+                f"  [data_store] features saved (from FeatureStore): "
+                f"{len(feat_df):,} rows × {len(num_cols)} features "
+                f"({time.time()-t0:.1f}s total) → {FEATURES_PARQUET.name}",
+                flush=True,
+            )
+            return
+    except Exception as _exc:
+        print(
+            f"  [data_store] FeatureStore read failed ({_exc}), "
+            "falling back to MySQL …",
+            flush=True,
+        )
+
+    # ── Fallback：MySQL（FeatureStore 尚未初始化時使用）──
+    print("  [data_store] reading features from MySQL (fallback) …", flush=True)
     stmt = (
         select(Feature.stock_id, Feature.trading_date, Feature.features_json)
         .order_by(Feature.trading_date, Feature.stock_id)
@@ -129,7 +170,7 @@ def _build_features(db_session: Session) -> None:
 
     feat_df.to_parquet(FEATURES_PARQUET, index=False)
     print(
-        f"  [data_store] features saved: {len(feat_df):,} rows × "
+        f"  [data_store] features saved (from MySQL): {len(feat_df):,} rows × "
         f"{len(feat_df.columns)-2} features "
         f"({time.time()-t0:.1f}s total) → {FEATURES_PARQUET.name}",
         flush=True,
