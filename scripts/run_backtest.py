@@ -133,6 +133,17 @@ def main():
                         dest="breakthrough_max_wait",
                         help="突破進場最大等待交易日（預設 10）")
 
+    # ── 圓桌策略進場過濾組（2026-03-20）──
+    parser.add_argument("--filter-group", type=str, default=None,
+                        dest="filter_group",
+                        choices=["A", "B", "C"],
+                        help=(
+                            "圓桌策略進場過濾組（搭配 --breakthrough-entry 使用）\n"
+                            "  A（低風險）：均線多頭排列 + bias20<=20%%\n"
+                            "  B（中風險）：A + 量價背離排除 + 外資過熱排除(top80%%)\n"
+                            "  C（高風險）：B + ret_20_rank 35~75%% + ret_60_rank>30%% + volume_surge>=1.5"
+                        ))
+
     # ── 動能懲罰 ──
     parser.add_argument("--momentum-penalty", action="store_true",
                         dest="momentum_penalty",
@@ -248,6 +259,21 @@ def main():
         for part in args.entry_signal_filter.split(","):
             k, v = part.strip().split("=")
             _entry_signal_filter[k.strip()] = float(v.strip())
+
+    # --filter-group：圓桌策略進場過濾組（預設 A 的條件包含在 B、C 內）
+    _FILTER_GROUPS = {
+        "A": {"ma_alignment_min": 1.0, "bias_20_max": 0.20},
+        "B": {"ma_alignment_min": 1.0, "bias_20_max": 0.20,
+              "price_volume_divergence_min": 0.0, "foreign_buy_intensity_max_pct": 0.80},
+        "C": {"ma_alignment_min": 1.0, "bias_20_max": 0.20,
+              "price_volume_divergence_min": 0.0, "foreign_buy_intensity_max_pct": 0.80,
+              "ret_20_rank_min": 0.35, "ret_20_rank_max": 0.75,
+              "ret_60_rank_min": 0.30, "volume_surge_ratio_min": 1.5},
+    }
+    if getattr(args, "filter_group", None):
+        if _entry_signal_filter is None:
+            _entry_signal_filter = {}
+        _entry_signal_filter.update(_FILTER_GROUPS[args.filter_group])
 
     # --market-filter-tiers：漸進式大盤過濾
     _market_filter_tiers = None

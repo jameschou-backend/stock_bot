@@ -1,35 +1,35 @@
 {
   "positions": {
-    "2230": {
-      "entry_date": "2026-03-13",
-      "entry_score": 0.108905,
-      "days_held": 0
-    },
     "2367": {
       "entry_date": "2026-03-13",
       "entry_score": 0.102024,
-      "days_held": 0
-    },
-    "2059": {
-      "entry_date": "2026-03-13",
-      "entry_score": 0.09994,
-      "days_held": 0
+      "days_held": 7
     },
     "2467": {
       "entry_date": "2026-03-13",
       "entry_score": 0.099636,
-      "days_held": 0
-    },
-    "1795": {
-      "entry_date": "2026-03-13",
-      "entry_score": 0.092535,
-      "days_held": 0
+      "days_held": 7
     },
     "2413": {
       "entry_date": "2026-03-13",
       "entry_score": 0.092296,
+      "days_held": 7
+    },
+    "5246": {
+      "entry_date": "2026-03-24",
+      "entry_score": 0.112759,
+      "days_held": 0
+    },
+    "7853": {
+      "entry_date": "2026-03-24",
+      "entry_score": 0.102531,
+      "days_held": 0
+    },
+    "7419": {
+      "entry_date": "2026-03-24",
+      "entry_score": 0.095192,
       "days_held": 0
     }
   },
-  "last_run_date": "2026-03-13"
+  "last_run_date": "2026-03-24"
 }

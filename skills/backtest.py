@@ -857,7 +857,7 @@ def run_backtest(
     if not _use_rolling_window:
         _log("load_all_features start (non-rolling, DuckDB)")
         _t = time.time()
-        feat_df = data_store.get_features(db_session, data_start, data_end, feature_columns)
+        feat_df = data_store.get_features(db_session, data_start, data_end, None)  # 全欄載入，過濾延至訓練步驟
         label_df = data_store.get_labels(db_session, data_start, data_end)
         _timer_load_features = time.time() - _t
         _log(f"load_all_features done {_timer_load_features:.1f}s")
@@ -964,7 +964,7 @@ def run_backtest(
                     gc.collect()
                 _log(f"fold_load {_win_start}~{_win_end}")
                 _t_fold = time.time()
-                _rw_feat_df = data_store.get_features(db_session, _win_start, _win_end, feature_columns)
+                _rw_feat_df = data_store.get_features(db_session, _win_start, _win_end, None)  # 全欄載入
                 _rw_label_df = data_store.get_labels(db_session, _win_start, _win_end)
                 _rw_range = (_win_start, _win_end)
                 _log(f"fold_loaded feat:{len(_rw_feat_df):,} dt={time.time()-_t_fold:.1f}s")
@@ -1003,6 +1003,10 @@ def run_backtest(
             # feat_df 已預解析（2b 步驟），直接取特徵欄位（排除 meta 欄與 label）
             _meta_cols = {"stock_id", "trading_date", "future_ret_h"}
             fmat = merged.drop(columns=[c for c in _meta_cols if c in merged.columns])
+            # 若指定 feature_columns，訓練時只使用該子集（day_feat 仍保有全欄供 entry_signal_filter 使用）
+            if feature_columns is not None:
+                _avail_fc = [c for c in feature_columns if c in fmat.columns]
+                fmat = fmat[_avail_fc]
             fmat = fmat.replace([np.inf, -np.inf], np.nan)
             for col in fmat.columns:
                 if fmat[col].isna().all():
@@ -1229,6 +1233,23 @@ def run_backtest(
                 _filtered = _filtered[_filtered["bias_20"] <= _esf["bias_20_max"]]
             if "volume_surge_ratio_min" in _esf and "volume_surge_ratio" in _filtered.columns:
                 _filtered = _filtered[_filtered["volume_surge_ratio"] >= _esf["volume_surge_ratio_min"]]
+            # 新增過濾條件（2026-03-20 圓桌策略）
+            if "ma_alignment_min" in _esf and "ma_alignment" in _filtered.columns:
+                _filtered = _filtered[_filtered["ma_alignment"] >= _esf["ma_alignment_min"]]
+            if "price_volume_divergence_min" in _esf and "price_volume_divergence" in _filtered.columns:
+                _filtered = _filtered[_filtered["price_volume_divergence"] >= _esf["price_volume_divergence_min"]]
+            if "foreign_buy_intensity_max_pct" in _esf and "foreign_buy_intensity" in _filtered.columns:
+                _fi_thresh = _filtered["foreign_buy_intensity"].quantile(_esf["foreign_buy_intensity_max_pct"])
+                _filtered = _filtered[_filtered["foreign_buy_intensity"] <= _fi_thresh]
+            if ("ret_20_rank_min" in _esf or "ret_20_rank_max" in _esf) and "ret_20" in _filtered.columns:
+                _r20_pct = _filtered["ret_20"].rank(pct=True)
+                if "ret_20_rank_min" in _esf:
+                    _filtered = _filtered[_r20_pct >= _esf["ret_20_rank_min"]]
+                if "ret_20_rank_max" in _esf:
+                    _filtered = _filtered[_r20_pct[_filtered.index] <= _esf["ret_20_rank_max"]]
+            if "ret_60_rank_min" in _esf and "ret_60" in _filtered.columns:
+                _r60_pct = _filtered["ret_60"].rank(pct=True)
+                _filtered = _filtered[_r60_pct >= _esf["ret_60_rank_min"]]
 
             if len(_filtered) >= effective_topn:
                 picks = risk.pick_topn(_filtered, effective_topn)
@@ -1242,8 +1263,11 @@ def run_backtest(
                 if "rsi_max" in _esf and "rsi_14" in _relaxed.columns:
                     _relaxed = _relaxed[_relaxed["rsi_14"] <= min(_esf.get("rsi_max", 100) + 10, 85)]
                 picks = risk.pick_topn(_relaxed, min(effective_topn, max(market_filter_min_positions, len(_relaxed))))
+            # breakthrough entry 擴展池也使用過濾後的候選（_filtered），確保過濾條件不被繞過
+            _bt_candidate_pool = _filtered if len(_filtered) >= market_filter_min_positions else day_feat
         else:
             picks = risk.pick_topn(day_feat, effective_topn)
+            _bt_candidate_pool = day_feat
 
         # ── 突破確認進場（Breakthrough Entry Filter）──
         # 月底選股後不立即進場，等每檔個股出現突破訊號（最多等 breakthrough_max_wait 個交易日）。
@@ -1257,16 +1281,16 @@ def run_backtest(
             ][:breakthrough_max_wait]
 
             if _bt_window:
-                # 擴展候補池（從 day_feat 按分數排序）
+                # 擴展候補池（entry_signal_filter 啟用時從過濾後候選池取，否則從全量 day_feat 取）
                 _slots_needed = effective_topn
-                _ext_n = min(_slots_needed * 3, len(day_feat)) if _slots_needed > 0 else 0
+                _ext_n = min(_slots_needed * 3, len(_bt_candidate_pool)) if _slots_needed > 0 else 0
 
                 _confirmed_rows: List[Dict] = []
                 _entry_map: Dict[str, date] = {}
                 _orig_topn_sids = set(picks["stock_id"].astype(str).tolist())
 
                 if _ext_n > 0:
-                    _extended = risk.pick_topn(day_feat, _ext_n)
+                    _extended = risk.pick_topn(_bt_candidate_pool, _ext_n)
                     _ext_sids = _extended["stock_id"].astype(str).tolist()
 
                     # 向量化一次算出所有新候選股的突破日（使用預計算的 rolling stats）
