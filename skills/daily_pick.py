@@ -403,24 +403,37 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     coverage_stats: Dict[str, object] = {}
     
     try:
-        candidate_dates = (
-            db_session.query(Feature.trading_date)
-            .distinct()
-            .order_by(Feature.trading_date.desc())
-            .limit(config.fallback_days + 1)
-            .all()
-        )
-        candidate_dates = [row[0] for row in candidate_dates]
+        # ── 取得候選日期：優先 Parquet FeatureStore，fallback MySQL ──
+        _used_parquet_dp = False
+        try:
+            from skills.feature_store import FeatureStore as _FeatureStore
+            _fs_dp = _FeatureStore()
+            if _fs_dp.get_max_date() is not None:
+                candidate_dates = _fs_dp.get_distinct_dates(config.fallback_days + 1)
+                _used_parquet_dp = True
+        except Exception as _exc:
+            pass  # fallback to MySQL
+
+        if not _used_parquet_dp:
+            candidate_dates = (
+                db_session.query(Feature.trading_date)
+                .distinct()
+                .order_by(Feature.trading_date.desc())
+                .limit(config.fallback_days + 1)
+                .all()
+            )
+            candidate_dates = [row[0] for row in candidate_dates]
+
         coverage_stats["candidate_dates_count"] = len(candidate_dates)
-        
+
         if not candidate_dates:
             finish_job(db_session, job_id, "success", logs={
-                "rows": 0, 
+                "rows": 0,
                 "reason": "no feature dates",
                 **coverage_stats,
             })
             return {"rows": 0}
-        
+
         coverage_stats["latest_feature_date"] = candidate_dates[0].isoformat()
         coverage_stats["oldest_candidate_date"] = candidate_dates[-1].isoformat()
 
@@ -459,28 +472,53 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         coverage_stats["valid_stock_universe_count"] = len(valid_stocks)
         coverage_stats["tradability"] = tradability_logs
         
-        if not valid_stocks:
-            # stocks 表為空時，不過濾（向後相容）
-            coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
-            stmt = (
-                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
-                .where(Feature.trading_date.in_(candidate_dates))
-                .order_by(Feature.stock_id, Feature.trading_date)
-            )
-        else:
-            coverage_stats["stock_universe_filter"] = "enabled"
-            stmt = (
-                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
-                .where(Feature.trading_date.in_(candidate_dates))
-                .where(Feature.stock_id.in_(valid_stocks))
-                .order_by(Feature.stock_id, Feature.trading_date)
-            )
-        
-        df = pd.read_sql(stmt, db_session.get_bind())
-        
+        # ── 讀取特徵：優先 Parquet FeatureStore，fallback MySQL ──
+        _parquet_feat_ok = False
+        df_raw: pd.DataFrame = pd.DataFrame()
+
+        if _used_parquet_dp and candidate_dates:
+            try:
+                _start_cd = min(candidate_dates)
+                _end_cd = max(candidate_dates)
+                _feat_raw = _fs_dp.read(_start_cd, _end_cd)
+                _feat_raw["trading_date"] = pd.to_datetime(_feat_raw["trading_date"]).dt.date
+                # 只保留 candidate_dates 範圍內的行
+                _feat_raw = _feat_raw[_feat_raw["trading_date"].isin(set(candidate_dates))]
+                # 套用 stock universe 過濾
+                if valid_stocks:
+                    coverage_stats["stock_universe_filter"] = "enabled"
+                    _feat_raw = _feat_raw[_feat_raw["stock_id"].isin(valid_stocks)]
+                else:
+                    coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
+                df_raw = _feat_raw
+                _parquet_feat_ok = True
+            except Exception as _exc:
+                pass  # fallback to MySQL
+
+        if not _parquet_feat_ok:
+            if not valid_stocks:
+                coverage_stats["stock_universe_filter"] = "disabled (stocks table empty)"
+                stmt = (
+                    select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                    .where(Feature.trading_date.in_(candidate_dates))
+                    .order_by(Feature.stock_id, Feature.trading_date)
+                )
+            else:
+                coverage_stats["stock_universe_filter"] = "enabled"
+                stmt = (
+                    select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                    .where(Feature.trading_date.in_(candidate_dates))
+                    .where(Feature.stock_id.in_(valid_stocks))
+                    .order_by(Feature.stock_id, Feature.trading_date)
+                )
+            df_raw = pd.read_sql(stmt, db_session.get_bind())
+
+        df = df_raw
         coverage_stats["total_feature_rows"] = len(df)
-        coverage_stats["unique_stocks_with_features"] = df["stock_id"].nunique() if not df.empty else 0
-        
+        coverage_stats["unique_stocks_with_features"] = (
+            df["stock_id"].nunique() if not df.empty else 0
+        )
+
         if df.empty:
             finish_job(db_session, job_id, "success", logs={
                 "rows": 0,
@@ -489,7 +527,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             })
             return {"rows": 0}
 
-        feature_df = _parse_features(df["features_json"])
+        # ── 特徵矩陣：Parquet 路徑已預解析，MySQL 路徑需 JSON parse ──
+        if _parquet_feat_ok:
+            _non_feat_dp = {"stock_id", "trading_date", "features_json"}
+            _feat_cols_dp = [c for c in df.columns if c not in _non_feat_dp]
+            feature_df = df[_feat_cols_dp].copy().reset_index(drop=True)
+        else:
+            feature_df = _parse_features(df["features_json"])
         
         # 記錄缺失欄位
         missing_cols = [col for col in feature_names if col not in feature_df.columns]

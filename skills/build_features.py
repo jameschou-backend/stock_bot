@@ -991,14 +991,37 @@ def _compute_features(
 
 
 def _detect_schema_outdated(db_session: Session) -> bool:
-    """檢查 DB 中最新一筆 features_json 的欄位數是否低於預期。
-    若 < 80% 視為 schema 過時，需要補算。"""
+    """檢查最新特徵資料的欄位數是否低於預期。
+    優先查 Parquet Feature Store；若 Parquet 無資料則 fallback 至 MySQL。
+    若 < 95% 視為 schema 過時，需要補算。"""
     import json as _json
+
+    # ── 優先查 Parquet Feature Store ──
+    try:
+        from skills.feature_store import FeatureStore
+        _fs = FeatureStore()
+        _max_date = _fs.get_max_date()
+        if _max_date is not None:
+            _sample = _fs.read(_max_date, _max_date)
+            if not _sample.empty:
+                _feat_cols = [
+                    c for c in _sample.columns
+                    if c not in ("stock_id", "trading_date")
+                ]
+                return len(_feat_cols) < len(FEATURE_COLUMNS) * 0.95
+    except Exception:
+        pass  # fallback to MySQL
+
+    # ── Fallback：MySQL ──
     row = db_session.query(Feature).order_by(Feature.trading_date.desc()).first()
     if row is None:
         return False
-    existing = row.features_json if isinstance(row.features_json, dict) else _json.loads(row.features_json)
-    # 使用 0.95 閾值（原 0.8）：新增 3 個特徵時 53 < 56×0.95=53.2 → 可觸發自動補算
+    existing = (
+        row.features_json
+        if isinstance(row.features_json, dict)
+        else _json.loads(row.features_json)
+    )
+    # 0.95 閾值：新增 3 個特徵時 53 < 56×0.95=53.2 → 可觸發自動補算
     return len(existing) < len(FEATURE_COLUMNS) * 0.95
 
 
@@ -1013,7 +1036,15 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        max_feature_date = db_session.query(func.max(Feature.trading_date)).scalar()
+        # ── 讀取最新特徵日期：優先 Parquet，fallback MySQL ──
+        from skills.feature_store import FeatureStore as _FeatureStore
+        _feature_store = _FeatureStore()
+        _parquet_max = _feature_store.get_max_date()
+        max_feature_date = (
+            _parquet_max
+            if _parquet_max is not None
+            else db_session.query(func.max(Feature.trading_date)).scalar()
+        )
 
         # force_recompute_days：可由 config 指定，強制補算最近 N 天的特徵
         force_days = int(getattr(config, "force_recompute_days", 0))
@@ -1026,11 +1057,19 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         if force_days > 0 and max_feature_date is not None:
             recompute_from = max_price_date - timedelta(days=force_days)
+            # 同步刪除 Parquet 和 MySQL 中 >= recompute_from 的資料
+            _feature_store.delete_from(recompute_from)
             db_session.query(Feature).filter(Feature.trading_date >= recompute_from).delete()
             db_session.commit()
             logs["force_recompute_from"] = recompute_from.isoformat()
             logs["force_recompute_days"] = force_days
-            max_feature_date = db_session.query(func.max(Feature.trading_date)).scalar()
+            # 重新查最新日期（Parquet 優先）
+            _parquet_max = _feature_store.get_max_date()
+            max_feature_date = (
+                _parquet_max
+                if _parquet_max is not None
+                else db_session.query(func.max(Feature.trading_date)).scalar()
+            )
 
         if max_feature_date is None:
             target_start = db_session.query(func.min(RawPrice.trading_date)).scalar()
@@ -1120,6 +1159,27 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             f"[PERF] save_features: {elapsed_save:.2f}s"
             f"（{len(records):,}列，batch_size={BATCH_SIZE}）"
         )
+
+        # ── 同步寫入 Parquet Feature Store（Dual-write，確保 Parquet 始終最新）──
+        # Parquet 儲存預解析的數值欄位，供 train_ranker / daily_pick / data_store 直接讀取，
+        # 無需 JSON 解析，DuckDB predicate pushdown 讓日期範圍查詢快 3-5×。
+        try:
+            from skills.feature_store import FeatureStore
+            _fs = FeatureStore()
+            _parquet_df = featured[["stock_id", "trading_date"] + feat_cols_in_df].copy()
+            _parquet_df["trading_date"] = pd.to_datetime(
+                _parquet_df["trading_date"]
+            ).dt.date
+            _t_parquet = time.perf_counter()
+            _fs.write(_parquet_df)
+            logger.info(
+                f"[PERF] save_features_parquet: {time.perf_counter()-_t_parquet:.2f}s"
+                f"（{len(_parquet_df):,}列）"
+            )
+            del _parquet_df
+        except Exception as _exc:  # pragma: no cover
+            # Parquet 寫入失敗不中斷主流程（MySQL 仍完整保留），僅記錄 warning
+            logger.warning(f"[build_features] FeatureStore.write 失敗（不影響 MySQL）：{_exc}")
 
         # ── 輸出 feature_perf.csv ──
         if perf_records:

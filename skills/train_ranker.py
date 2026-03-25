@@ -158,17 +158,34 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         train_start = train_end - timedelta(days=365 * config.train_lookback_years)
         val_start = (pd.Timestamp(train_end) - pd.DateOffset(months=6)).date()
 
-        feature_stmt = (
-            select(Feature.stock_id, Feature.trading_date, Feature.features_json)
-            .where(Feature.trading_date.between(train_start, train_end))
-            .order_by(Feature.stock_id, Feature.trading_date)
-        )
+        # ── 讀取特徵：優先 Parquet FeatureStore，fallback MySQL ──
+        feature_df: pd.DataFrame
+        _used_parquet = False
+        try:
+            from skills.feature_store import FeatureStore as _FeatureStore
+            _fs = _FeatureStore()
+            if _fs.get_max_date() is not None:
+                feature_df = _fs.read(train_start, train_end)
+                feature_df["trading_date"] = pd.to_datetime(
+                    feature_df["trading_date"]
+                ).dt.date
+                _used_parquet = True
+        except Exception as _exc:
+            print(f"[train_ranker] FeatureStore read failed ({_exc}), falling back to MySQL …")
+
+        if not _used_parquet:
+            feature_stmt = (
+                select(Feature.stock_id, Feature.trading_date, Feature.features_json)
+                .where(Feature.trading_date.between(train_start, train_end))
+                .order_by(Feature.stock_id, Feature.trading_date)
+            )
+            feature_df = pd.read_sql(feature_stmt, db_session.get_bind())
+
         label_stmt = (
             select(Label.stock_id, Label.trading_date, Label.future_ret_h)
             .where(Label.trading_date.between(train_start, train_end))
             .order_by(Label.stock_id, Label.trading_date)
         )
-        feature_df = pd.read_sql(feature_stmt, db_session.get_bind())
         label_df = pd.read_sql(label_stmt, db_session.get_bind())
         if feature_df.empty or label_df.empty:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
@@ -218,7 +235,14 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 )
                 del _price_df, _eligible, _eligible_set
 
-        feature_matrix = _parse_features(df["features_json"])
+        # ── 特徵矩陣：Parquet 路徑已預解析，MySQL 路徑需 JSON parse ──
+        if _used_parquet:
+            # Parquet 已預先 flatten，直接取出特徵欄（排除 meta 欄和 label 欄）
+            _non_feat = {"stock_id", "trading_date", "future_ret_h", "features_json"}
+            _feat_cols_available = [c for c in df.columns if c not in _non_feat]
+            feature_matrix = df[_feat_cols_available].copy().reset_index(drop=True)
+        else:
+            feature_matrix = _parse_features(df["features_json"])
         feature_matrix = feature_matrix.replace([np.inf, -np.inf], np.nan)
 
         # ── 限縮到當前 FEATURE_COLUMNS，確保訓練/預測特徵集一致 ──

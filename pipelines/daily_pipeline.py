@@ -24,11 +24,27 @@ def _check_prices_exist(min_rows: int = 100) -> bool:
 
 
 def _check_features_exist(min_rows: int = 50) -> bool:
-    """驗證 features 表至少有 min_rows 筆近期資料（7 天內），確保 build_features 成功執行。"""
+    """驗證特徵資料至少有 min_rows 筆近期資料（7 天內），確保 build_features 成功執行。
+
+    優先檢查 Parquet FeatureStore（精確且快速），fallback 至 MySQL。
+    """
+    cutoff = (datetime.now() - timedelta(days=7)).date()
+
+    # ── 優先：Parquet FeatureStore ──
+    try:
+        from skills.feature_store import FeatureStore
+        _fs = FeatureStore()
+        _max_date = _fs.get_max_date()
+        if _max_date is not None and _max_date >= cutoff:
+            _sample = _fs.read(cutoff, _max_date)
+            return len(_sample) >= min_rows
+    except Exception:
+        pass
+
+    # ── Fallback：MySQL ──
     try:
         from sqlalchemy import func, select
         from app.models import Feature
-        cutoff = (datetime.now() - timedelta(days=7)).date()
         with get_session() as session:
             cnt = session.execute(
                 select(func.count()).select_from(Feature).where(Feature.trading_date >= cutoff)
