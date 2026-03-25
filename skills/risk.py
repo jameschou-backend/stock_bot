@@ -91,6 +91,39 @@ def pick_topn(scores_df: pd.DataFrame, topn: int) -> pd.DataFrame:
     return scores_df.sort_values("score", ascending=False).head(topn).copy()
 
 
+def apply_seasonal_topn_reduction(
+    current_topn: int,
+    target_month: int,
+    weak_months: tuple = (3, 10),
+    multiplier: float = 0.5,
+    topn_floor: int = 5,
+) -> tuple[int, bool]:
+    """套用季節性降倉：弱勢月份縮減 TopN 持股數。
+
+    統一 backtest.py 與 daily_pick.py 的季節性降倉邏輯，確保回測與實盤行為一致。
+
+    預設配置：3 月與 10 月 topN × 0.5，下限 5 檔。
+    （與 daily_pick.py 的 seasonal_weak_months=(3,10)、seasonal_topn_multiplier=0.5 一致）
+
+    Args:
+        current_topn: 套用前的 TopN。
+        target_month: 當前月份（1-12）。
+        weak_months: 弱勢月份 tuple，預設 (3, 10)。
+        multiplier: 降倉乘數，預設 0.5（縮半）。
+        topn_floor: TopN 最小下限（防止降至極端集中），預設 5。
+
+    Returns:
+        (new_topn, was_reduced)
+        was_reduced: True 表示本次有觸發降倉。
+    """
+    if target_month not in weak_months:
+        return current_topn, False
+
+    new_topn = max(topn_floor, int(current_topn * multiplier))
+    was_reduced = new_topn < current_topn
+    return new_topn, was_reduced
+
+
 def compute_atr(price_df: pd.DataFrame, period: int = 14) -> pd.DataFrame:
     """計算每支股票的 ATR（Average True Range）。
 

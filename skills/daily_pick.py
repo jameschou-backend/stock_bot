@@ -28,6 +28,10 @@ from skills import regime, risk
 from skills import tradability_filter
 from skills import multi_agent_selector
 from skills import position_sizing as _pos_sizing
+from skills.feature_utils import (
+    parse_features_json as _parse_features_json_shared,
+    impute_features as _impute_features_shared,
+)
 
 
 # 選取前 8 個特徵作為 reason 說明
@@ -56,35 +60,13 @@ def _load_latest_model(session: Session) -> ModelVersion | None:
 
 
 def _parse_features(series: pd.Series) -> pd.DataFrame:
-    import json
-
-    parsed = [json.loads(v) if isinstance(v, str) else v for v in series]
-    return pd.json_normalize(parsed)
+    """委派給 feature_utils.parse_features_json（統一實作，含 orjson 加速）。"""
+    return _parse_features_json_shared(series)
 
 
 def _impute_features(feature_df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict[str, object]]:
-    feature_df = feature_df.copy()
-    feature_df = feature_df.replace([np.inf, -np.inf], np.nan)
-    nan_mask = feature_df.isna()
-    total_cells = int(nan_mask.size)
-    filled_cells = int(nan_mask.sum().sum())
-    all_nan_cols = [col for col in feature_df.columns if feature_df[col].isna().all()]
-
-    medians = feature_df.median(skipna=True)
-    for col in feature_df.columns:
-        if col in all_nan_cols:
-            feature_df[col] = feature_df[col].fillna(0)
-        else:
-            feature_df[col] = feature_df[col].fillna(medians[col])
-
-    fill_ratio = filled_cells / total_cells if total_cells else 0.0
-    stats = {
-        "filled_cells": filled_cells,
-        "total_cells": total_cells,
-        "fill_ratio": round(fill_ratio, 6),
-        "all_nan_cols": all_nan_cols,
-    }
-    return feature_df, stats
+    """委派給 feature_utils.impute_features（語義導向填補，修正 bias_20/boll_pct 等特徵）。"""
+    return _impute_features_shared(feature_df)
 
 
 def _load_price_universe(
@@ -590,20 +572,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             coverage_stats["effective_topn"] = effective_topn
 
         # ── 季節性降倉（弱勢月份）──
-        seasonal_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
-        seasonal_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+        # 委派給 risk.apply_seasonal_topn_reduction（與 backtest.py 統一邏輯）
+        _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
+        _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
         today_month = max(candidate_dates).month
-        if today_month in seasonal_weak:
-            new_topn = max(1, int(effective_topn * seasonal_mult))
-            if new_topn < effective_topn:
-                coverage_stats["seasonal_filter"] = f"month_{today_month}"
-                effective_topn = new_topn
-
-        # ── topN 絕對下限保護（防止危機+弱勢月份疊加造成 topN=1~2 的極端集中風險）──
+        # topN 絕對下限保護（防止危機+弱勢月份疊加造成 topN=1~2 的極端集中風險）
         # 極端空頭（週跌>10%）最低 3 支；一般情況最低 5 支
         _dp_extreme_bear = isinstance(weekly_drop, float) and weekly_drop < -0.10
         _dp_min_topn = 3 if _dp_extreme_bear else 5
-        if effective_topn < _dp_min_topn:
+        effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
+            effective_topn, today_month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=_dp_min_topn
+        )
+        if _reduced:
+            coverage_stats["seasonal_filter"] = f"month_{today_month}"
+        elif effective_topn < _dp_min_topn:
+            # topN floor 觸發（非季節性，但仍需保護）
             coverage_stats["topn_floor_applied"] = f"{effective_topn}→{_dp_min_topn}"
             effective_topn = _dp_min_topn
         coverage_stats["effective_topn"] = effective_topn

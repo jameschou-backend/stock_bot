@@ -21,6 +21,10 @@ from sqlalchemy.orm import Session
 from app.job_utils import finish_job, start_job
 from app.models import Feature, Label, ModelVersion
 from skills.build_features import FEATURE_COLUMNS as _CANONICAL_FEATURES
+from skills.feature_utils import (
+    parse_features_json as _parse_features_json_shared,
+    filter_schema_valid_rows as _filter_schema_valid_rows,
+)
 
 # ── 嘗試載入 LightGBM（優先），否則回退 sklearn ──
 try:
@@ -35,16 +39,8 @@ ARTIFACT_DIR = Path(__file__).resolve().parent.parent / "artifacts" / "models"
 
 
 def _parse_features(series: pd.Series) -> pd.DataFrame:
-    def ensure_dict(value):
-        if value is None:
-            return {}
-        if isinstance(value, dict):
-            return value
-        import json
-        return json.loads(value)
-
-    parsed = [ensure_dict(v) for v in series]
-    return pd.json_normalize(parsed)
+    """委派給 feature_utils.parse_features_json（統一實作）。"""
+    return _parse_features_json_shared(series)
 
 
 def _build_model(train_X, train_y, val_X, val_y):
@@ -236,16 +232,14 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         # 根因：730d 重算後 DB 中舊 schema（19 features）資料對 48 canonical features
         # 只有約 17% 覆蓋率，median imputation 會嚴重污染訓練。
         # 門檻 50%：舊行 8/48≈17% < 50% → 過濾；新行 48/48=100% > 50% → 保留。
-        _raw_coverage = feature_matrix.notna().mean(axis=1)
-        _schema_valid_mask = _raw_coverage >= 0.50
-        _n_schema_dropped = int((~_schema_valid_mask).sum())
+        # 委派給 feature_utils.filter_schema_valid_rows（統一實作）。
+        feature_matrix, _n_schema_dropped = _filter_schema_valid_rows(feature_matrix, coverage_threshold=0.50)
         if _n_schema_dropped > 0:
             print(
                 f"[train_ranker] Schema filter: 過濾 {_n_schema_dropped:,} 筆舊版特徵資料 "
                 f"(coverage < 50%, canonical_features={len(_CANONICAL_FEATURES)})",
                 flush=True,
             )
-            feature_matrix = feature_matrix.loc[_schema_valid_mask]
             df = df.loc[feature_matrix.index].copy()
         if feature_matrix.empty:
             finish_job(db_session, job_id, "success", logs={"rows": 0, "reason": "no valid schema rows"})

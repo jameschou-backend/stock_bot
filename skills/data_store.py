@@ -33,6 +33,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models import Feature, Label, RawPrice
+from skills.feature_utils import (
+    parse_features_json as _parse_features_json_shared,
+    filter_schema_valid_rows as _filter_schema_valid_rows_shared,
+)
 
 # ── 路徑常數 ─────────────────────────────────────────────────────────────────
 CACHE_DIR        = Path("artifacts/cache")
@@ -51,19 +55,10 @@ def _is_fresh(path: Path) -> bool:
     return (time.time() - path.stat().st_mtime) < _TTL_SECONDS
 
 
-# ── 特徵解析（與 backtest._parse_features 相同邏輯，避免循環 import）──────────
+# ── 特徵解析（委派給 feature_utils，統一實作）────────────────────────────────
 def _parse_features_json(series: pd.Series) -> pd.DataFrame:
-    try:
-        import orjson
-        _loads = orjson.loads
-    except ImportError:
-        import json
-        _loads = json.loads
-    parsed = [
-        _loads(v) if isinstance(v, str) else (v if isinstance(v, dict) else {})
-        for v in series
-    ]
-    return pd.json_normalize(parsed)
+    """委派給 feature_utils.parse_features_json（含 orjson 加速）。"""
+    return _parse_features_json_shared(series)
 
 
 def _parse_and_schema_filter(raw_feat_df: pd.DataFrame) -> pd.DataFrame:

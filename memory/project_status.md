@@ -1,6 +1,6 @@
 # 專案現況
 
-> 最後更新：2026-03-18（session 8）
+> 最後更新：2026-03-25（session 9）
 
 ---
 
@@ -89,6 +89,22 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 | `ingest_corporate_actions.py` 外部來源未接妥 | 除權除息 | 常見 `adj_factor=1.0` 保底 |
 | **parquet cache 24h TTL** | strategy_c_pick.py | pipeline 跑完後若 cache 未過期，daily-c 仍用舊資料。解法：`rm artifacts/cache/*.parquet` 再跑 |
 | **FinMind API Quota（402）** | ingest | 密集跑 pipeline 會觸發 402 上限；backfill 靜默失敗（error_count 遞增但不拋例外）→ job 顯示 success 但資料不完整 |
+
+---
+
+## Session 9 完成事項（2026-03-25）
+
+### 全面程式碼優化（7 項改動，93 tests passed）
+
+| 項目 | 說明 |
+|------|------|
+| `skills/feature_utils.py`（新） | 共用 parse_features_json / impute_features / filter_schema_valid_rows |
+| `risk.apply_seasonal_topn_reduction()` | 統一季節性降倉，消除 backtest/daily_pick 雙重實作 |
+| `daily_pipeline.py` checkpoint | 三階段資料驗證（prices/features/labels），靜默失敗立即中斷 |
+| `app/db.py` JSONL rotation | 超過 10MB 自動輪替，保留 5 備份 |
+| `app/api.py` 回測 timeout | asyncio 120s 逾時保護，防止 CPU 密集型卡死伺服器 |
+| `WalkForwardConfig` dataclass | 封裝 run_backtest() 30+ 參數，向後相容 |
+| `_simulate_period()` 拆分 | 3 個子函式：_get_entry_positions / _compute_slippage_map / _calc_stock_return |
 
 ---
 

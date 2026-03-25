@@ -1,6 +1,33 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-03-18（session 8）
+> 最後更新：2026-03-25（session 9）
+
+---
+
+## 程式碼優化決策（2026-03-25，session 9）
+
+### 已執行的全面優化
+
+**P0 — 正確性（消除重複邏輯）**
+1. **建立 `skills/feature_utils.py`**（新檔案）：
+   - `parse_features_json()`：共用 JSON 解析（orjson 優先），統一 backtest/train_ranker/daily_pick/data_store 四處重複實作
+   - `impute_features()`：語義導向特徵填補，`boll_pct` 填 0.5、`rsi_14` 填 50（而非一律填 0）
+   - `filter_schema_valid_rows()`：共用 schema 遷移過濾（50% 覆蓋率門檻）
+2. **建立 `risk.apply_seasonal_topn_reduction()`**：統一 backtest.py 與 daily_pick.py 季節性降倉邏輯，消除雙重獨立實作
+
+**P1 — 穩定性**
+3. **`daily_pipeline.py` checkpoint 驗證**：新增 `_check_prices_exist()`、`_check_features_exist()`、`_check_labels_exist()` 三個驗證函式，ingest_prices → build_features → build_labels 各階段執行後驗證資料行數，靜默失敗立即中斷
+4. **`app/db.py` JSONL rotation**：`_rotate_slow_queries_if_needed()` 超過 10MB 時輪替（保留 5 備份），環境變數可調整 `SLOW_QUERIES_MAX_BYTES`、`SLOW_QUERIES_BACKUP_COUNT`
+5. **`app/api.py` 回測 timeout**：`/strategy_runs` endpoint 改為 async + ThreadPoolExecutor + `asyncio.wait_for(timeout=120s)`，逾時回傳 HTTP 504
+
+**P2 — 程式碼品質**
+6. **`WalkForwardConfig` dataclass**（`skills/backtest.py`）：封裝 run_backtest() 30+ 參數，支援 `run_backtest(..., wf_config=cfg)` 呼叫方式，向後相容原有 kwargs
+7. **重構 `_simulate_period()`**：拆出三個獨立子函式：
+   - `_get_entry_positions()`：確定進場日與進場價（支援突破/統一進場兩種模式）
+   - `_compute_slippage_map()`：計算個股滑價（ATR 模型或分級滑價）
+   - `_calc_stock_return()`：計算單筆報酬（含成本/滑價/clip）
+
+**驗收**：93 個測試全部通過，FutureWarning（pandas fillna）消除
 
 ---
 

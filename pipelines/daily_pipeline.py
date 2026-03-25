@@ -1,11 +1,56 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from app.config import load_config
 from app.db import get_session
 from app.models import ModelVersion
+
+
+def _check_prices_exist(min_rows: int = 100) -> bool:
+    """驗證 raw_prices 表至少有 min_rows 筆近期資料（7 天內），確保 ingest_prices 成功執行。"""
+    try:
+        from sqlalchemy import func, select
+        from app.models import RawPrice
+        cutoff = (datetime.now() - timedelta(days=7)).date()
+        with get_session() as session:
+            cnt = session.execute(
+                select(func.count()).select_from(RawPrice).where(RawPrice.trading_date >= cutoff)
+            ).scalar() or 0
+        return int(cnt) >= min_rows
+    except Exception:
+        return False
+
+
+def _check_features_exist(min_rows: int = 50) -> bool:
+    """驗證 features 表至少有 min_rows 筆近期資料（7 天內），確保 build_features 成功執行。"""
+    try:
+        from sqlalchemy import func, select
+        from app.models import Feature
+        cutoff = (datetime.now() - timedelta(days=7)).date()
+        with get_session() as session:
+            cnt = session.execute(
+                select(func.count()).select_from(Feature).where(Feature.trading_date >= cutoff)
+            ).scalar() or 0
+        return int(cnt) >= min_rows
+    except Exception:
+        return False
+
+
+def _check_labels_exist(min_rows: int = 50) -> bool:
+    """驗證 labels 表至少有 min_rows 筆近期資料（30 天內），確保 build_labels 成功執行。"""
+    try:
+        from sqlalchemy import func, select
+        from app.models import Label
+        cutoff = (datetime.now() - timedelta(days=30)).date()
+        with get_session() as session:
+            cnt = session.execute(
+                select(func.count()).select_from(Label).where(Label.trading_date >= cutoff)
+            ).scalar() or 0
+        return int(cnt) >= min_rows
+    except Exception:
+        return False
 
 
 def _should_train(config) -> bool:
@@ -111,11 +156,33 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
     from skills import data_quality
     run_skill("data_quality_check", data_quality.run)
 
+    # ── Checkpoint 1：price 資料驗證 ──
+    # 確保 ingest_prices 確實寫入資料，避免因 API 靜默失敗導致後續特徵計算在空資料上運行
+    if not skip_ingest and not _check_prices_exist():
+        raise RuntimeError(
+            "[pipeline checkpoint] ingest_prices 後 raw_prices 近 7 天資料不足 100 筆，"
+            "請確認 FinMind API 是否正常。可跑 make backfill-10y 補齊。"
+        )
+
     from skills import build_features
     run_skill("build_features", build_features.run)
 
+    # ── Checkpoint 2：feature 資料驗證 ──
+    if not _check_features_exist():
+        raise RuntimeError(
+            "[pipeline checkpoint] build_features 後 features 近 7 天資料不足 50 筆，"
+            "特徵計算可能失敗，請檢查 build_features 日誌。"
+        )
+
     from skills import build_labels
     run_skill("build_labels", build_labels.run)
+
+    # ── Checkpoint 3：label 資料驗證 ──
+    if not _check_labels_exist():
+        raise RuntimeError(
+            "[pipeline checkpoint] build_labels 後 labels 近 30 天資料不足 50 筆，"
+            "標籤計算可能失敗，請檢查 build_labels 日誌。"
+        )
 
     if _should_train(config):
         from skills import train_ranker

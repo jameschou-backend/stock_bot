@@ -38,6 +38,11 @@ from skills.breakthrough import (
     precompute_stats as _precompute_breakthrough_stats,
     compute_breakthrough_map as _compute_breakthrough_map,
 )
+from skills.feature_utils import (
+    parse_features_json as _parse_features_json_shared,
+    impute_features as _impute_features_shared,
+    filter_schema_valid_rows as _filter_schema_valid_rows,
+)
 
 # ── 模型訓練（複用 train_ranker 邏輯）──
 try:
@@ -87,15 +92,8 @@ def _format_eta(seconds: float) -> str:
 
 
 def _parse_features(series: pd.Series) -> pd.DataFrame:
-    """解析 features_json；優先使用 orjson（快 3-5x），fallback 至標準 json。"""
-    try:
-        import orjson
-        _loads = orjson.loads
-    except ImportError:
-        import json
-        _loads = json.loads
-    parsed = [_loads(v) if isinstance(v, str) else (v if isinstance(v, dict) else {}) for v in series]
-    return pd.json_normalize(parsed)
+    """解析 features_json；委派給 feature_utils.parse_features_json（統一實作）。"""
+    return _parse_features_json_shared(series)
 
 
 def _train_model(
@@ -340,6 +338,118 @@ def _precompute_market_200ma_bear(price_df: pd.DataFrame) -> Dict[date, bool]:
     return {d: bool(v) for d, v in bear_series.items()}
 
 
+def _get_entry_positions(
+    stock_ids: list,
+    price_df: pd.DataFrame,
+    period_prices: pd.DataFrame,
+    entry_date: date,
+    exit_date: date,
+    entry_delay_days: int,
+    per_stock_entry_dates: Optional[Dict[str, date]],
+) -> Tuple[Optional[pd.DataFrame], date, pd.DataFrame]:
+    """確定實際進場日及每股進場價，回傳 (positions_input, actual_entry_date, entry_prices)。
+
+    若無法取得任何進場價，回傳 (None, entry_date, empty_df)。
+    """
+    if per_stock_entry_dates:
+        # 各股獨立進場日（突破確認進場模式）
+        positions_list = []
+        for sid in stock_ids:
+            sid_str = str(sid)
+            stock_entry = per_stock_entry_dates.get(sid_str, entry_date)
+            ep_row = price_df[
+                (price_df["stock_id"].astype(str) == sid_str)
+                & (price_df["trading_date"] == stock_entry)
+            ]
+            if ep_row.empty:
+                continue
+            ep = float(ep_row["close"].iloc[0])
+            if ep <= 0:
+                continue
+            positions_list.append({
+                "stock_id": sid_str,
+                "entry_date": stock_entry,
+                "planned_exit_date": exit_date,
+                "entry_price": ep,
+            })
+        if not positions_list:
+            return None, entry_date, pd.DataFrame()
+        positions_input = pd.DataFrame(positions_list)
+        actual_entry_date = min(per_stock_entry_dates.values())  # 供 ATR/滑價 lookup 參考
+        entry_prices = positions_input[["stock_id", "entry_price"]]
+    else:
+        # 原有邏輯：統一進場日
+        all_trading_dates = sorted(period_prices["trading_date"].unique())
+        if entry_delay_days > 0:
+            future_dates = [d for d in all_trading_dates if d > entry_date]
+            if len(future_dates) < entry_delay_days:
+                return None, entry_date, pd.DataFrame()
+            actual_entry_date = future_dates[entry_delay_days - 1]
+        else:
+            actual_entry_date = entry_date
+
+        entry_prices = period_prices[
+            period_prices["trading_date"] == actual_entry_date
+        ][["stock_id", "close"]].rename(columns={"close": "entry_price"})
+
+        if entry_prices.empty:
+            return None, actual_entry_date, pd.DataFrame()
+
+        positions_input = entry_prices.assign(
+            entry_date=actual_entry_date,
+            planned_exit_date=exit_date,
+        )[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
+
+    return positions_input, actual_entry_date, entry_prices
+
+
+def _compute_slippage_map(
+    entry_prices: pd.DataFrame,
+    atr_df: Optional[pd.DataFrame],
+    actual_entry_date: date,
+    enable_slippage: bool,
+    tiered_slippage_map: Optional[Dict[str, float]],
+) -> Dict[str, float]:
+    """計算每股來回滑價（ATR 的 10%，上限 0.3%，進出場各一次）。
+
+    優先使用 tiered_slippage_map（外部預計算的分級滑價），
+    其次使用 ATR 模型推算，最後回傳空 dict（無滑價）。
+    """
+    if tiered_slippage_map is not None:
+        return tiered_slippage_map
+    if not enable_slippage or atr_df is None or atr_df.empty:
+        return {}
+
+    atr_for_slippage = (
+        atr_df[atr_df["trading_date"] < actual_entry_date]
+        .groupby("stock_id")["atr"]
+        .last()
+    )
+    slippage_map: Dict[str, float] = {}
+    for _, ep_row in entry_prices.iterrows():
+        sid = str(ep_row["stock_id"])
+        ep = float(ep_row["entry_price"])
+        if sid in atr_for_slippage.index and ep > 0:
+            atr_pct = float(atr_for_slippage[sid]) / ep
+            slippage_one_way = min(atr_pct * 0.1, 0.003)  # 單邊上限 0.3%
+            slippage_map[sid] = slippage_one_way * 2       # 來回 × 2
+        else:
+            slippage_map[sid] = 0.0
+    return slippage_map
+
+
+def _calc_stock_return(
+    entry_px: float,
+    exit_px: float,
+    transaction_cost_pct: float,
+    slippage_pct: float,
+    clip_loss_pct: float,
+) -> float:
+    """計算單筆股票報酬（扣除交易成本與滑價，並套用 clip 防止退市股拖垮組合）。"""
+    ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
+    return max(ret, clip_loss_pct)
+
+
 def _simulate_period(
     picks: pd.DataFrame,
     price_df: pd.DataFrame,
@@ -403,55 +513,12 @@ def _simulate_period(
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
 
     # ── 1 & 2. 確定進場日並取進場價 ──
-    if per_stock_entry_dates:
-        # 各股獨立進場日（突破確認進場模式）
-        positions_list = []
-        for sid in stock_ids:
-            sid_str = str(sid)
-            stock_entry = per_stock_entry_dates.get(sid_str, entry_date)
-            ep_row = price_df[
-                (price_df["stock_id"].astype(str) == sid_str)
-                & (price_df["trading_date"] == stock_entry)
-            ]
-            if ep_row.empty:
-                continue
-            ep = float(ep_row["close"].iloc[0])
-            if ep <= 0:
-                continue
-            positions_list.append({
-                "stock_id": sid_str,
-                "entry_date": stock_entry,
-                "planned_exit_date": exit_date,
-                "entry_price": ep,
-            })
-        if not positions_list:
-            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
-        positions_input = pd.DataFrame(positions_list)
-        actual_entry_date = min(per_stock_entry_dates.values())  # 供 ATR/滑價 lookup 參考
-        entry_prices = positions_input[["stock_id", "entry_price"]]
-    else:
-        # 原有邏輯：統一進場日
-        all_trading_dates = sorted(period_prices["trading_date"].unique())
-        if entry_delay_days > 0:
-            future_dates = [d for d in all_trading_dates if d > entry_date]
-            if len(future_dates) < entry_delay_days:
-                return {"return": 0.0, "trades": 0, "stoploss_triggered": 0}
-            actual_entry_date = future_dates[entry_delay_days - 1]
-        else:
-            actual_entry_date = entry_date
-
-        # ── 2. 取進場價（以實際進場日收盤價估算）──
-        entry_prices = period_prices[
-            period_prices["trading_date"] == actual_entry_date
-        ][["stock_id", "close"]].rename(columns={"close": "entry_price"})
-
-        if entry_prices.empty:
-            return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
-
-        positions_input = entry_prices.assign(
-            entry_date=actual_entry_date,
-            planned_exit_date=exit_date,
-        )[["stock_id", "entry_date", "planned_exit_date", "entry_price"]]
+    positions_input, actual_entry_date, entry_prices = _get_entry_positions(
+        stock_ids, price_df, period_prices, entry_date, exit_date,
+        entry_delay_days, per_stock_entry_dates,
+    )
+    if positions_input is None:
+        return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
 
     # ── 3. ATR-based 個股動態停損 ──
     per_stock_stop: Optional[Dict[str, float]] = None
@@ -493,26 +560,10 @@ def _simulate_period(
     _stoploss_time = time.time() - _t_sl
 
     # ── 預先計算個股滑價（ATR 的 10%，上限 0.3%，進出場各一次）──
-    slippage_map: Dict[str, float] = {}
-    if tiered_slippage_map is not None:
-        # 優先使用呼叫方預計算的分級滑價（由 amt_20 決定流動性層級）
-        slippage_map = tiered_slippage_map
-    elif enable_slippage and atr_df is not None and not atr_df.empty:
-        atr_for_slippage = (
-            atr_df[atr_df["trading_date"] < actual_entry_date]
-            .groupby("stock_id")["atr"]
-            .last()
-        )
-        for _, ep_row in entry_prices.iterrows():
-            sid = str(ep_row["stock_id"])
-            ep = float(ep_row["entry_price"])
-            if sid in atr_for_slippage.index and ep > 0:
-                atr_pct = float(atr_for_slippage[sid]) / ep
-                # 單邊滑價 = ATR 10%，上限 0.3%；來回 × 2
-                slippage_one_way = min(atr_pct * 0.1, 0.003)
-                slippage_map[sid] = slippage_one_way * 2  # 進出場各一次
-            else:
-                slippage_map[sid] = 0.0
+    slippage_map = _compute_slippage_map(
+        entry_prices, atr_df, actual_entry_date,
+        enable_slippage, tiered_slippage_map,
+    )
 
     stoploss_count = 0
     stock_returns: Dict[str, float] = {}
@@ -526,12 +577,12 @@ def _simulate_period(
             exit_date_val = str(row["exit_date"])
             sl_triggered = bool(row["stoploss_triggered"])
             if entry_px > 0:
-                slippage_pct = slippage_map.get(sid, 0.0)
-                cost_pct = transaction_cost_pct
-                ret = exit_px / entry_px - 1 - cost_pct - slippage_pct
-                ret = max(ret, clip_loss_pct)  # 單筆最大損失 clip，防止退市股拖垮整月組合
+                ret = _calc_stock_return(
+                    entry_px, exit_px, transaction_cost_pct,
+                    slippage_map.get(sid, 0.0), clip_loss_pct,
+                )
                 stock_returns[sid] = ret
-                
+
                 # 收錄完整交易紀錄
                 reason = "Stop Loss / Trailing Stop" if sl_triggered else "Normal Rebalance Exit"
                 pick_row = picks[picks["stock_id"].astype(str) == sid]
@@ -582,6 +633,68 @@ def _simulate_period(
     }
 
 
+# ── Walk-Forward 回測參數封裝 ────────────────────────────────────────────────
+from dataclasses import dataclass, field
+
+
+@dataclass
+class WalkForwardConfig:
+    """Walk-forward 回測所有參數的型別安全封裝。
+
+    取代 run_backtest() 30+ 個零散 kwargs，提升可讀性與可維護性。
+    向後相容：run_backtest() 仍接受原有的 kwargs，並在內部自動建構此物件。
+
+    使用方式：
+        cfg = WalkForwardConfig(backtest_months=120, enable_seasonal_filter=True)
+        results = run_backtest(config, session, wf_config=cfg)
+    """
+    # ── 基本設定 ──
+    backtest_months: int = 24
+    retrain_freq_months: int = 3
+    topn: int = 20
+    stoploss_pct: float = -0.07
+    transaction_cost_pct: float = 0.00585
+    min_train_days: int = 500
+    min_avg_turnover: float = 0.0
+    eval_start: Optional[date] = None
+    eval_end: Optional[date] = None
+    train_lookback_days: Optional[int] = None
+
+    # ── 進出場設定 ──
+    entry_delay_days: int = 0
+    risk_free_rate: float = 0.015
+    benchmark_with_cost: bool = True
+    position_sizing: str = "equal"
+    position_sizing_method: str = "risk_parity"
+    trailing_stop_pct: Optional[float] = None
+    atr_stoploss_multiplier: Optional[float] = None
+    atr_period: int = 14
+    rebalance_freq: str = "M"
+    label_horizon_buffer: int = 20
+    enable_slippage: bool = False
+    enable_tiered_slippage: bool = False
+    fast_mode: bool = False
+    clip_loss_pct: float = -0.50
+
+    # ── 特徵與訓練設定 ──
+    feature_columns: Optional[List[str]] = None
+    time_weighting: bool = False
+    liquidity_weighting: bool = False
+    momentum_penalty_cols: Optional[Dict[str, float]] = None
+
+    # ── 過濾器設定 ──
+    enable_complex_filter: bool = False
+    enable_seasonal_filter: bool = False
+    topn_floor: int = 0
+    enable_breakthrough_entry: bool = False
+    breakthrough_max_wait: int = 10
+    atr_dynamic_stoploss: bool = False
+    market_filter: bool = False
+    market_filter_tiers: Optional[List[tuple]] = None
+    market_filter_min_positions: int = 1
+    entry_signal_filter: Optional[Dict[str, object]] = None
+
+
 def run_backtest(
     config,
     db_session: Session,
@@ -625,30 +738,60 @@ def run_backtest(
     market_filter_min_positions: int = 1,  # 大盤過濾後最低持股數（防止單押集中風險）
     entry_signal_filter: Optional[Dict[str, object]] = None,  # 進場訊號過濾：{"foreign_buy_streak_max":3, "rsi_min":45, "rsi_max":70, "bias_20_max":0.15, "volume_surge_ratio_min":1.0}
     liquidity_weighting: bool = False,   # 流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式
+    wf_config: Optional["WalkForwardConfig"] = None,  # 型別安全封裝（優先於上方 kwargs）
 ) -> Dict:
     """執行 walk-forward 回測。
 
     Args:
         config: AppConfig
         db_session: DB session
-        backtest_months: 回測幾個月
-        retrain_freq_months: 每幾個月重訓模型
-        topn: 每期選幾檔
-        stoploss_pct: 全局固定停損比例（如 -0.07）
-        transaction_cost_pct: 來回交易成本
-        min_train_days: 最低訓練天數
-        entry_delay_days: 進場延遲交易日（1=決策日次一交易日執行，更符合實際）
-        risk_free_rate: 無風險利率（年化，Sharpe 計算用）
-        benchmark_with_cost: Benchmark 是否套用相同交易成本（公平比較）
-        position_sizing: 倉位分配方式 equal|score_tiered|vol_inverse
-        trailing_stop_pct: 移動停利比例（如 -0.12），None 停用
-        atr_stoploss_multiplier: ATR 倍數動態停損（如 2.5），None 使用固定停損
-        atr_period: ATR 計算週期（日）
-        label_horizon_buffer: 訓練標籤截止日往前預留天數，避免近 rb_date 的標籤使用到未來價格（預設 20，=label horizon）
+        wf_config: WalkForwardConfig 物件，若提供則覆蓋下方所有 kwargs（建議新程式碼使用）。
+        （其餘 kwargs 為向後相容保留，當 wf_config=None 時生效）
 
     Returns:
         Dict 包含完整回測結果
     """
+    # ── wf_config 覆蓋 kwargs（向後相容）──
+    if wf_config is not None:
+        backtest_months        = wf_config.backtest_months
+        retrain_freq_months    = wf_config.retrain_freq_months
+        topn                   = wf_config.topn
+        stoploss_pct           = wf_config.stoploss_pct
+        transaction_cost_pct   = wf_config.transaction_cost_pct
+        min_train_days         = wf_config.min_train_days
+        min_avg_turnover       = wf_config.min_avg_turnover
+        eval_start             = wf_config.eval_start
+        eval_end               = wf_config.eval_end
+        train_lookback_days    = wf_config.train_lookback_days
+        entry_delay_days       = wf_config.entry_delay_days
+        risk_free_rate         = wf_config.risk_free_rate
+        benchmark_with_cost    = wf_config.benchmark_with_cost
+        position_sizing        = wf_config.position_sizing
+        position_sizing_method = wf_config.position_sizing_method
+        trailing_stop_pct      = wf_config.trailing_stop_pct
+        atr_stoploss_multiplier= wf_config.atr_stoploss_multiplier
+        atr_period             = wf_config.atr_period
+        rebalance_freq         = wf_config.rebalance_freq
+        label_horizon_buffer   = wf_config.label_horizon_buffer
+        enable_slippage        = wf_config.enable_slippage
+        enable_tiered_slippage = wf_config.enable_tiered_slippage
+        fast_mode              = wf_config.fast_mode
+        clip_loss_pct          = wf_config.clip_loss_pct
+        feature_columns        = wf_config.feature_columns
+        time_weighting         = wf_config.time_weighting
+        liquidity_weighting    = wf_config.liquidity_weighting
+        momentum_penalty_cols  = wf_config.momentum_penalty_cols
+        enable_complex_filter  = wf_config.enable_complex_filter
+        enable_seasonal_filter = wf_config.enable_seasonal_filter
+        topn_floor             = wf_config.topn_floor
+        enable_breakthrough_entry = wf_config.enable_breakthrough_entry
+        breakthrough_max_wait  = wf_config.breakthrough_max_wait
+        atr_dynamic_stoploss   = wf_config.atr_dynamic_stoploss
+        market_filter          = wf_config.market_filter
+        market_filter_tiers    = wf_config.market_filter_tiers
+        market_filter_min_positions = wf_config.market_filter_min_positions
+        entry_signal_filter    = wf_config.entry_signal_filter
+
     print("\n" + "=" * 60)
     print("Walk-Forward Backtest")
     print("=" * 60)
@@ -994,13 +1137,13 @@ def run_backtest(
                 print(f"  [{rb_date}] 空頭市場 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
 
             # ── 季節性降倉（弱勢月份）──
-            seasonal_weak = getattr(config, "seasonal_weak_months", (3, 10))
-            seasonal_mult = getattr(config, "seasonal_topn_multiplier", 0.5)
-            if rb_date.month in seasonal_weak:
-                new_topn = max(1, int(effective_topn * seasonal_mult))
-                if new_topn < effective_topn:
-                    print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月，topN {effective_topn} → {new_topn}")
-                    effective_topn = new_topn
+            _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
+            _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+            effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
+                effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=1
+            )
+            if _reduced:
+                print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月（complex_filter），topN → {effective_topn}")
 
             # ── topN 絕對下限保護 ──
             _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
@@ -1058,17 +1201,13 @@ def run_backtest(
 
         # ── 獨立季節性降倉（enable_complex_filter=False 時也可啟用，對應 daily_pick 行為）──
         if not enable_complex_filter and enable_seasonal_filter:
-            _s_weak = getattr(config, "seasonal_weak_months", (3, 10))
+            _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
             _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
-            if rb_date.month in _s_weak:
-                _new = max(1, int(effective_topn * _s_mult))
-                if _new < effective_topn:
-                    print(f"  [{rb_date}] seasonal_filter: 月份{rb_date.month} topN {effective_topn}→{_new}")
-                    effective_topn = _new
-            # topN 絕對下限保護（避免弱勢月 topN=1~2）
-            _sf_min = 5
-            if effective_topn < _sf_min:
-                effective_topn = _sf_min
+            effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
+                effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=5
+            )
+            if _reduced:
+                print(f"  [{rb_date}] seasonal_filter: 月份{rb_date.month} topN → {effective_topn}")
 
         # ── 顯式 topN floor（Change B 實驗用，enable_complex_filter 無關）──
         if topn_floor > 0 and effective_topn < topn_floor:
