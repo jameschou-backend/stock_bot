@@ -29,6 +29,8 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from skills.breakthrough import check_today as _check_breakthrough_today
+
 try:
     import lightgbm as lgb
     _HAS_LGBM = True
@@ -295,6 +297,21 @@ def run_pick(
             "days_held": 0,
         })
 
+    # ── 突破確認偵測（供 /signal 顯示進場點位）──
+    # 對「top 20 候選 + 維持持倉」計算今日突破狀態，不改變選股邏輯，純粹提供執行參考。
+    _top20_sids = set(tf_today.nlargest(20, "score")["stock_id"].astype(str).tolist())
+    _bt_sids = list(_top20_sids | {p["stock_id"] for p in hold_list})
+    _bt_feat_today = feat_df[feat_df["trading_date"] == today].copy() if "trading_date" in feat_df.columns else pd.DataFrame()
+    try:
+        bt_status = _check_breakthrough_today(
+            price_df=price_df,
+            feature_df=_bt_feat_today,
+            stock_ids=_bt_sids,
+            target_date=today,
+        )
+    except Exception:
+        bt_status = {}
+
     # ── 建立今日持倉清單 ──
     total_positions = len(hold_list) + len(buy_list)
     amount_per_pos  = capital // total_positions if total_positions > 0 else 0
@@ -317,6 +334,15 @@ def run_pick(
             if action == "sell":
                 entry["exit_reason"] = p.get("exit_reason", "Rank Drop")
                 entry.pop("amount", None)
+            # 突破狀態（buy / hold 才附加）
+            if action in ("buy", "hold") and sid in bt_status:
+                bt = bt_status[sid]
+                entry["breakthrough_ready"]    = bt["ready"]
+                entry["breakthrough_type"]     = bt.get("type")
+                entry["close_max_20"]          = round(bt.get("close_max_20", 0), 2)
+                entry["vol_ratio"]             = round(bt.get("vol_ratio", 0), 2) if bt.get("vol_ratio") else None
+                entry["pct_to_price_bt"]       = round(bt.get("pct_to_price_bt", 0), 4) if bt.get("pct_to_price_bt") is not None else None
+                entry["ma_20"]                 = round(bt.get("ma_20", 0), 2)
             out.append(entry)
         return out
 
@@ -362,12 +388,22 @@ def run_pick(
         },
         # 供 telegram_bot 判斷使用者實際持倉是否應賣出
         "above_threshold_stocks": sorted(above_threshold),
-        # 今日模型評分前 20 名（含名稱與分數），供買進建議用
+        # 今日模型評分前 20 名（含名稱、分數、突破狀態），供買進建議用
         "top_candidates": [
             {
                 "stock_id": str(r["stock_id"]),
                 "name": names.get(str(r["stock_id"]), str(r["stock_id"])),
                 "score_today": round(float(r["score"]), 6),
+                **({
+                    "breakthrough_ready": bt_status[str(r["stock_id"])]["ready"],
+                    "breakthrough_type":  bt_status[str(r["stock_id"])].get("type"),
+                    "close_max_20":       round(bt_status[str(r["stock_id"])].get("close_max_20", 0), 2),
+                    "vol_ratio":          round(bt_status[str(r["stock_id"])].get("vol_ratio", 0), 2)
+                                          if bt_status[str(r["stock_id"])].get("vol_ratio") is not None else None,
+                    "pct_to_price_bt":    round(bt_status[str(r["stock_id"])].get("pct_to_price_bt", 0), 4)
+                                          if bt_status[str(r["stock_id"])].get("pct_to_price_bt") is not None else None,
+                    "ma_20":              round(bt_status[str(r["stock_id"])].get("ma_20", 0), 2),
+                } if str(r["stock_id"]) in bt_status else {}),
             }
             for _, r in tf_today.nlargest(20, "score").iterrows()
         ],

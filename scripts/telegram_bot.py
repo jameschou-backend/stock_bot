@@ -244,12 +244,43 @@ def _format_push_message(sig: Dict) -> str:
         lines.append("")
 
     if buy_list:
-        lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
-        for h in buy_list:
-            lines.append(
-                f"  {h['stock_id']} {h['name']}｜"
-                f"分數 {h['score_today']:.4f}｜建議金額 ${amt:,}"
-            )
+        # 區分今日已突破 vs 等待突破
+        ready_buys   = [h for h in buy_list if h.get("breakthrough_ready")]
+        waiting_buys = [h for h in buy_list if not h.get("breakthrough_ready") and "breakthrough_ready" in h]
+        no_bt_buys   = [h for h in buy_list if "breakthrough_ready" not in h]  # 無突破資料（舊格式相容）
+
+        if ready_buys:
+            lines.append("🟢 <b>買進建議</b>（今日已突破，可直接進場）")
+            for h in ready_buys:
+                bt_type = "價格突破" if h.get("breakthrough_type") == "price" else "外資籌碼"
+                vol_r   = f"量比 {h['vol_ratio']:.1f}x" if h.get("vol_ratio") else ""
+                lines.append(
+                    f"  {h['stock_id']} {h['name']}｜"
+                    f"<b>{bt_type}</b> ✅｜"
+                    f"{vol_r}｜建議 ${amt:,}"
+                )
+            lines.append("")
+
+        if waiting_buys:
+            lines.append("⏳ <b>等待突破</b>（模型看好，尚未出現量價訊號）")
+            for h in waiting_buys:
+                close_max = h.get("close_max_20", 0)
+                pct_gap   = h.get("pct_to_price_bt")
+                gap_str   = f"距突破 +{pct_gap*100:.1f}%" if pct_gap and pct_gap > 0 else ""
+                lines.append(
+                    f"  {h['stock_id']} {h['name']}｜"
+                    f"突破點 >{close_max:.1f} 且量>均×1.5｜"
+                    f"{gap_str}｜建議 ${amt:,}"
+                )
+            lines.append("")
+
+        if no_bt_buys:
+            lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
+            for h in no_bt_buys:
+                lines.append(
+                    f"  {h['stock_id']} {h['name']}｜"
+                    f"分數 {h['score_today']:.4f}｜建議金額 ${amt:,}"
+                )
     elif not held:
         lines.append("（目前無持倉，請用 /buy 代號 價格 股數 記錄買進後，明日起會顯示持倉狀態）")
 
