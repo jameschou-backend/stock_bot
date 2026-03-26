@@ -187,8 +187,16 @@ def _format_push_message(sig: Dict) -> str:
         cur_px     = prices.get(sid, entry_px)
         pnl_pct    = (cur_px / entry_px - 1) * 100
 
-        cost_amt = entry_px * shares
-        pnl_amt  = (cur_px - entry_px) * shares
+        # 與券商損益試算公式一致：
+        #   現值     = 現價 × 股數 - 賣出手續費(floor) - 交易稅(floor)
+        #   付出成本 = entry_price × 股數（entry_price 已含買進手續費）
+        #   損益     = 現值 - 付出成本
+        hypo_sell_fee = int(cur_px * shares * _SELL_FEE_RATE)
+        hypo_sell_tax = int(cur_px * shares * _SELL_TAX_RATE)
+        net_cur_val   = cur_px * shares - hypo_sell_fee - hypo_sell_tax
+        cost_amt      = entry_px * shares
+        pnl_amt       = net_cur_val - cost_amt
+        pnl_pct       = pnl_amt / cost_amt * 100 if cost_amt > 0 else 0.0
 
         if sid not in above_threshold:
             sell_list.append({
@@ -351,13 +359,15 @@ def _format_portfolio() -> str:
         shares     = int(pos["shares"])
         entry_date = pos.get("entry_date", "?")
         cur_px     = prices.get(sid, entry_px)
-        pnl_pct    = (cur_px / entry_px - 1) * 100
-        pnl_amt    = (cur_px - entry_px) * shares
         days_held  = (today - date.fromisoformat(entry_date)).days if entry_date != "?" else 0
         cost       = entry_px * shares
-        mkt_val    = cur_px * shares
+        hypo_fee   = int(cur_px * shares * _SELL_FEE_RATE)
+        hypo_tax   = int(cur_px * shares * _SELL_TAX_RATE)
+        net_val    = cur_px * shares - hypo_fee - hypo_tax
+        pnl_amt    = net_val - cost
+        pnl_pct    = pnl_amt / cost * 100 if cost > 0 else 0.0
         total_cost += cost
-        total_mkt  += mkt_val
+        total_mkt  += net_val
         sign       = "🟢" if pnl_pct >= 0 else "🔴"
         lines.append(
             f"{sign} <b>{sid} {name}</b>\n"
@@ -372,7 +382,7 @@ def _format_portfolio() -> str:
     lines += [
         "",
         f"{sign} <b>整體損益：{total_pnl_pct:+.1f}%（{total_pnl_amt:+,.0f} 元）</b>",
-        f"投入成本：${total_cost:,.0f}｜目前市值：${total_mkt:,.0f}",
+        f"投入成本：${total_cost:,.0f}｜淨現值（含假設賣出費稅）：${total_mkt:,.0f}",
     ]
     return "\n".join(lines)
 
