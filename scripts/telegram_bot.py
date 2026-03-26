@@ -377,8 +377,17 @@ def _format_portfolio() -> str:
     return "\n".join(lines)
 
 
+_BUY_FEE_RATE  = 0.001425   # 買進手續費 0.1425%（未打折）
+_SELL_FEE_RATE = 0.001425   # 賣出手續費 0.1425%
+_SELL_TAX_RATE = 0.003      # 證交稅 0.3%
+
+
 def _cmd_buy(args: List[str]) -> str:
-    """處理 /buy 2330 855 1000"""
+    """處理 /buy 2330 855 1000
+
+    entry_price 儲存含手續費的均攤成本（total_paid / shares），
+    讓 P&L 計算反映真實付出金額。
+    """
     if len(args) < 3:
         return "❌ 格式錯誤\n用法：/buy 代號 價格 股數\n例：/buy 2330 855 1000"
     stock_id = args[0].strip()
@@ -387,6 +396,11 @@ def _cmd_buy(args: List[str]) -> str:
         shares = int(args[2])
     except ValueError:
         return "❌ 價格或股數格式錯誤"
+
+    # 含手續費的總付出 & 均攤成本（手續費無條件捨去，與多數券商一致）
+    fee         = int(price * shares * _BUY_FEE_RATE)
+    total_paid  = price * shares + fee
+    cost_px     = total_paid / shares   # 含費均攤成本
 
     # 查股票名稱
     name = stock_id
@@ -401,33 +415,32 @@ def _cmd_buy(args: List[str]) -> str:
         pass
 
     pf = _load_portfolio()
-    # 若同代號已存在則更新（加碼）
+    # 若同代號已存在則更新（加碼）— 以含費總成本加權平均
     existing = next((p for p in pf["positions"] if p["stock_id"] == stock_id), None)
     if existing:
-        old_cost   = existing["entry_price"] * existing["shares"]
-        new_cost   = price * shares
+        old_total  = existing["entry_price"] * existing["shares"]  # 原含費總成本
         total_sh   = existing["shares"] + shares
-        avg_px     = (old_cost + new_cost) / total_sh
-        existing["entry_price"] = round(avg_px, 2)
+        avg_px     = (old_total + total_paid) / total_sh
+        existing["entry_price"] = round(avg_px, 4)
         existing["shares"]      = total_sh
         existing["stock_name"]  = name
-        action_msg = f"已加碼，均價更新為 ${avg_px:.2f}"
+        action_msg = f"已加碼，含費均價更新為 ${avg_px:.2f}"
     else:
         pf["positions"].append({
-            "stock_id":   stock_id,
-            "stock_name": name,
-            "entry_date": date.today().isoformat(),
-            "entry_price": price,
-            "shares":     shares,
+            "stock_id":    stock_id,
+            "stock_name":  name,
+            "entry_date":  date.today().isoformat(),
+            "entry_price": round(cost_px, 4),   # 含費均攤成本
+            "shares":      shares,
         })
         action_msg = "買進記錄完成"
 
     _save_portfolio(pf)
-    cost = price * shares
     return (
         f"✅ {action_msg}\n"
-        f"{stock_id} {name}｜${price:.1f} × {shares:,} 股\n"
-        f"金額：${cost:,.0f}"
+        f"{stock_id} {name}｜{price:.1f} × {shares:,} 股\n"
+        f"手續費：${fee:,}｜<b>總付出：${total_paid:,.0f}</b>\n"
+        f"含費均攤成本：${cost_px:.2f}/股"
     )
 
 
@@ -446,11 +459,18 @@ def _cmd_sell(args: List[str]) -> str:
     if not existing:
         return f"❌ 持倉中找不到 {stock_id}"
 
-    entry_px = float(existing["entry_price"])
-    shares   = int(existing["shares"])
-    pnl_pct  = (sell_price / entry_px - 1) * 100
-    pnl_amt  = (sell_price - entry_px) * shares
-    name     = existing.get("stock_name", stock_id)
+    entry_px    = float(existing["entry_price"])   # 含買進手續費的均攤成本
+    shares      = int(existing["shares"])
+    name        = existing.get("stock_name", stock_id)
+
+    # 賣出實收金額（扣手續費＋交易稅，均無條件捨去）
+    sell_fee    = int(sell_price * shares * _SELL_FEE_RATE)
+    sell_tax    = int(sell_price * shares * _SELL_TAX_RATE)
+    net_sell    = sell_price * shares - sell_fee - sell_tax
+
+    total_cost  = entry_px * shares   # 原始含費總成本
+    pnl_amt     = net_sell - total_cost
+    pnl_pct     = pnl_amt / total_cost * 100
 
     pf["positions"] = [p for p in pf["positions"] if p["stock_id"] != stock_id]
     _save_portfolio(pf)
@@ -458,9 +478,11 @@ def _cmd_sell(args: List[str]) -> str:
     sign = "🟢" if pnl_pct >= 0 else "🔴"
     return (
         f"{sign} 賣出成功\n"
-        f"{stock_id} {name}\n"
-        f"成本 ${entry_px:.1f} → 賣出 ${sell_price:.1f}｜{shares:,} 股\n"
-        f"損益：{pnl_pct:+.1f}%（${pnl_amt:+,.0f}）"
+        f"{stock_id} {name}｜{shares:,} 股\n"
+        f"含費成本 {entry_px:.2f} → 賣出 {sell_price:.1f}\n"
+        f"手續費：${sell_fee:,}  交易稅：${sell_tax:,}\n"
+        f"實收：${net_sell:,.0f}\n"
+        f"<b>損益：{pnl_pct:+.1f}%（{pnl_amt:+,.0f} 元）</b>"
     )
 
 
