@@ -160,6 +160,12 @@ def _format_push_message(sig: Dict) -> str:
     above_threshold = set(sig.get("above_threshold_stocks", []))
     top_candidates  = sig.get("top_candidates", [])   # 前 20 名，含名稱分數
     score_cutoff    = sig.get("meta", {}).get("score_cutoff", 0)
+    # 建立 score lookup（holdings + top_candidates 合併，供顯示持倉分數用）
+    score_map: Dict[str, float] = {}
+    for h in sig.get("holdings", []):
+        score_map[h["stock_id"]] = h.get("score_today", 0.0)
+    for c in top_candidates:
+        score_map.setdefault(c["stock_id"], c.get("score_today", 0.0))
 
     # 使用者真實持倉
     pf       = _load_portfolio()
@@ -181,19 +187,26 @@ def _format_push_message(sig: Dict) -> str:
         cur_px     = prices.get(sid, entry_px)
         pnl_pct    = (cur_px / entry_px - 1) * 100
 
+        cost_amt = entry_px * shares
+        pnl_amt  = (cur_px - entry_px) * shares
+
         if sid not in above_threshold:
             sell_list.append({
                 "stock_id": sid, "name": name,
                 "entry_price": entry_px, "cur_price": cur_px,
-                "pnl_pct": pnl_pct, "shares": shares,
+                "pnl_pct": pnl_pct, "pnl_amt": pnl_amt,
+                "cost_amt": cost_amt, "shares": shares,
                 "entry_date": entry_date,
+                "score": score_map.get(sid),
             })
         else:
             hold_list.append({
                 "stock_id": sid, "name": name,
                 "entry_price": entry_px, "cur_price": cur_px,
-                "pnl_pct": pnl_pct, "shares": shares,
+                "pnl_pct": pnl_pct, "pnl_amt": pnl_amt,
+                "cost_amt": cost_amt, "shares": shares,
                 "entry_date": entry_date,
+                "score": score_map.get(sid),
             })
 
     # 買進建議：模型 top 候選中，使用者尚未持有的（空位上限 6）
@@ -216,7 +229,7 @@ def _format_push_message(sig: Dict) -> str:
     n_total = len(hold_list) + len(buy_list)
     lines = [
         f"📊 <b>Strategy C 每日選股 {d}</b>",
-        f"建議明日 {exec_label}執行｜每檔 ${amt:,}",
+        f"建議明日 {exec_label}執行",
         f"買進 +{len(buy_list)}  賣出 -{len(sell_list)}  維持 {len(hold_list)}",
         "",
     ]
@@ -225,21 +238,37 @@ def _format_push_message(sig: Dict) -> str:
         lines.append("🔴 <b>賣出警示</b>（持倉排名掉出，建議出場）")
         for h in sell_list:
             sign = "📈" if h["pnl_pct"] >= 0 else "📉"
+            score_str = f"｜模型 {h['score']:.4f}" if h.get("score") is not None else ""
+            pnl_str = f"{h['pnl_amt']:+,.0f}"
             lines.append(
-                f"  {h['stock_id']} {h['name']}｜"
-                f"進場 {h['entry_date']}｜"
-                f"{sign} {h['pnl_pct']:+.1f}%"
+                f"  <b>{h['stock_id']} {h['name']}</b>｜"
+                f"成本 {h['entry_price']:.1f}×{h['shares']}股｜"
+                f"現價 {h['cur_price']:.1f}｜"
+                f"{sign} {h['pnl_pct']:+.1f}%（{pnl_str}）"
+                f"{score_str}"
             )
         lines.append("")
 
     if hold_list:
-        lines.append("📋 <b>目前持倉</b>（排名正常，繼續持有）")
+        total_cost = sum(h["cost_amt"] for h in hold_list)
+        total_pnl  = sum(h["pnl_amt"] for h in hold_list)
+        total_pct  = total_pnl / total_cost * 100 if total_cost > 0 else 0
+        total_sign = "📈" if total_pnl >= 0 else "📉"
+        lines.append(
+            f"📋 <b>目前持倉</b>  "
+            f"總成本 ${total_cost:,.0f}｜"
+            f"{total_sign} {total_pct:+.1f}%（{total_pnl:+,.0f}）"
+        )
         for h in hold_list:
             sign = "📈" if h["pnl_pct"] >= 0 else "📉"
+            score_str = f"｜模型 {h['score']:.4f}" if h.get("score") is not None else ""
+            pnl_str = f"{h['pnl_amt']:+,.0f}"
             lines.append(
-                f"  {h['stock_id']} {h['name']}｜"
-                f"進場 {h['entry_date']}｜"
-                f"{sign} {h['pnl_pct']:+.1f}% ✅"
+                f"  <b>{h['stock_id']} {h['name']}</b>｜"
+                f"成本 {h['entry_price']:.1f}×{h['shares']}股｜"
+                f"現價 {h['cur_price']:.1f}｜"
+                f"{sign} {h['pnl_pct']:+.1f}%（{pnl_str}）"
+                f"{score_str} ✅"
             )
         lines.append("")
 
@@ -255,9 +284,8 @@ def _format_push_message(sig: Dict) -> str:
                 bt_type = "價格突破" if h.get("breakthrough_type") == "price" else "外資籌碼"
                 vol_r   = f"量比 {h['vol_ratio']:.1f}x" if h.get("vol_ratio") else ""
                 lines.append(
-                    f"  {h['stock_id']} {h['name']}｜"
-                    f"<b>{bt_type}</b> ✅｜"
-                    f"{vol_r}｜建議 ${amt:,}"
+                    f"  <b>{h['stock_id']} {h['name']}</b>｜"
+                    f"<b>{bt_type}</b> ✅｜{vol_r}｜分數 {h['score_today']:.4f}"
                 )
             lines.append("")
 
@@ -268,9 +296,9 @@ def _format_push_message(sig: Dict) -> str:
                 pct_gap   = h.get("pct_to_price_bt")
                 gap_str   = f"距突破 +{pct_gap*100:.1f}%" if pct_gap and pct_gap > 0 else ""
                 lines.append(
-                    f"  {h['stock_id']} {h['name']}｜"
+                    f"  <b>{h['stock_id']} {h['name']}</b>｜"
                     f"突破點 >{close_max:.1f} 且量>均×1.5｜"
-                    f"{gap_str}｜建議 ${amt:,}"
+                    f"{gap_str}｜分數 {h['score_today']:.4f}"
                 )
             lines.append("")
 
@@ -278,8 +306,7 @@ def _format_push_message(sig: Dict) -> str:
             lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
             for h in no_bt_buys:
                 lines.append(
-                    f"  {h['stock_id']} {h['name']}｜"
-                    f"分數 {h['score_today']:.4f}｜建議金額 ${amt:,}"
+                    f"  <b>{h['stock_id']} {h['name']}</b>｜分數 {h['score_today']:.4f}"
                 )
     elif not held:
         lines.append("（目前無持倉，請用 /buy 代號 價格 股數 記錄買進後，明日起會顯示持倉狀態）")
@@ -325,6 +352,7 @@ def _format_portfolio() -> str:
         entry_date = pos.get("entry_date", "?")
         cur_px     = prices.get(sid, entry_px)
         pnl_pct    = (cur_px / entry_px - 1) * 100
+        pnl_amt    = (cur_px - entry_px) * shares
         days_held  = (today - date.fromisoformat(entry_date)).days if entry_date != "?" else 0
         cost       = entry_px * shares
         mkt_val    = cur_px * shares
@@ -332,18 +360,19 @@ def _format_portfolio() -> str:
         total_mkt  += mkt_val
         sign       = "🟢" if pnl_pct >= 0 else "🔴"
         lines.append(
-            f"{sign} {sid} {name}\n"
-            f"   進場 {entry_date}（{days_held}天）\n"
-            f"   成本 ${entry_px:.1f}｜現價 ${cur_px:.1f}｜"
-            f"{pnl_pct:+.1f}%｜{shares}股"
+            f"{sign} <b>{sid} {name}</b>\n"
+            f"   進場 {entry_date}（{days_held}天）｜{shares}股\n"
+            f"   成本 {entry_px:.1f}  現價 {cur_px:.1f}\n"
+            f"   損益 {pnl_pct:+.1f}%（{pnl_amt:+,.0f} 元）"
         )
 
-    total_pnl = (total_mkt / total_cost - 1) * 100 if total_cost > 0 else 0.0
-    sign = "🟢" if total_pnl >= 0 else "🔴"
+    total_pnl_amt = total_mkt - total_cost
+    total_pnl_pct = total_pnl_amt / total_cost * 100 if total_cost > 0 else 0.0
+    sign = "🟢" if total_pnl_pct >= 0 else "🔴"
     lines += [
         "",
-        f"{sign} <b>整體損益：{total_pnl:+.1f}%</b>",
-        f"成本：${total_cost:,.0f}｜市值：${total_mkt:,.0f}",
+        f"{sign} <b>整體損益：{total_pnl_pct:+.1f}%（{total_pnl_amt:+,.0f} 元）</b>",
+        f"投入成本：${total_cost:,.0f}｜目前市值：${total_mkt:,.0f}",
     ]
     return "\n".join(lines)
 
