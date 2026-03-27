@@ -155,6 +155,12 @@ def run_pick(
         all_sids = feat_df["stock_id"].unique().tolist()
         names = _load_names(session, all_sids)
 
+        # 興櫃清單：議價交易、外資無法參與，排除以免 foreign_buy_* 特徵永遠為 0
+        _emerging_ids = {
+            str(r.stock_id)
+            for r in session.query(Stock.stock_id).filter(Stock.market == "EMERGING").all()
+        }
+
     # ── 確認今日有特徵資料 ──
     available_feat_dates = sorted(feat_df["trading_date"].unique(), reverse=True)
     if not available_feat_dates:
@@ -208,6 +214,7 @@ def run_pick(
     # ── 對今日打分 ──
     tf_today = feat_df[feat_df["trading_date"] == today].copy()
     tf_today  = tf_today[tf_today["stock_id"].str.fullmatch(r"\d{4}")].reset_index(drop=True)
+    tf_today  = tf_today[~tf_today["stock_id"].isin(_emerging_ids)].reset_index(drop=True)
 
     # 今日有收盤價的股票
     tp = price_df[price_df["trading_date"] == today]
