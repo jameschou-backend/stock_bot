@@ -10,6 +10,7 @@
   /portfolio  持倉與損益
   /buy XXXX 價格 股數   記錄買進
   /sell XXXX 價格       記錄賣出
+  /why XXXX             多智能體矛盾分析
   /help       指令說明
 
 環境變數（.env）：
@@ -160,12 +161,6 @@ def _format_push_message(sig: Dict) -> str:
     above_threshold = set(sig.get("above_threshold_stocks", []))
     top_candidates  = sig.get("top_candidates", [])   # 前 20 名，含名稱分數
     score_cutoff    = sig.get("meta", {}).get("score_cutoff", 0)
-    # 建立 score lookup（holdings + top_candidates 合併，供顯示持倉分數用）
-    score_map: Dict[str, float] = {}
-    for h in sig.get("holdings", []):
-        score_map[h["stock_id"]] = h.get("score_today", 0.0)
-    for c in top_candidates:
-        score_map.setdefault(c["stock_id"], c.get("score_today", 0.0))
 
     # 使用者真實持倉
     pf       = _load_portfolio()
@@ -187,34 +182,19 @@ def _format_push_message(sig: Dict) -> str:
         cur_px     = prices.get(sid, entry_px)
         pnl_pct    = (cur_px / entry_px - 1) * 100
 
-        # 與券商損益試算公式一致：
-        #   現值     = 現價 × 股數 - 賣出手續費(floor) - 交易稅(floor)
-        #   付出成本 = entry_price × 股數（entry_price 已含買進手續費）
-        #   損益     = 現值 - 付出成本
-        hypo_sell_fee = int(cur_px * shares * _SELL_FEE_RATE)
-        hypo_sell_tax = int(cur_px * shares * _SELL_TAX_RATE)
-        net_cur_val   = cur_px * shares - hypo_sell_fee - hypo_sell_tax
-        cost_amt      = entry_px * shares
-        pnl_amt       = net_cur_val - cost_amt
-        pnl_pct       = pnl_amt / cost_amt * 100 if cost_amt > 0 else 0.0
-
         if sid not in above_threshold:
             sell_list.append({
                 "stock_id": sid, "name": name,
                 "entry_price": entry_px, "cur_price": cur_px,
-                "pnl_pct": pnl_pct, "pnl_amt": pnl_amt,
-                "cost_amt": cost_amt, "shares": shares,
+                "pnl_pct": pnl_pct, "shares": shares,
                 "entry_date": entry_date,
-                "score": score_map.get(sid),
             })
         else:
             hold_list.append({
                 "stock_id": sid, "name": name,
                 "entry_price": entry_px, "cur_price": cur_px,
-                "pnl_pct": pnl_pct, "pnl_amt": pnl_amt,
-                "cost_amt": cost_amt, "shares": shares,
+                "pnl_pct": pnl_pct, "shares": shares,
                 "entry_date": entry_date,
-                "score": score_map.get(sid),
             })
 
     # 買進建議：模型 top 候選中，使用者尚未持有的（空位上限 6）
@@ -237,7 +217,7 @@ def _format_push_message(sig: Dict) -> str:
     n_total = len(hold_list) + len(buy_list)
     lines = [
         f"📊 <b>Strategy C 每日選股 {d}</b>",
-        f"建議明日 {exec_label}執行",
+        f"建議明日 {exec_label}執行｜每檔 ${amt:,}",
         f"買進 +{len(buy_list)}  賣出 -{len(sell_list)}  維持 {len(hold_list)}",
         "",
     ]
@@ -246,76 +226,31 @@ def _format_push_message(sig: Dict) -> str:
         lines.append("🔴 <b>賣出警示</b>（持倉排名掉出，建議出場）")
         for h in sell_list:
             sign = "📈" if h["pnl_pct"] >= 0 else "📉"
-            score_str = f"｜模型 {h['score']:.4f}" if h.get("score") is not None else ""
-            pnl_str = f"{h['pnl_amt']:+,.0f}"
             lines.append(
-                f"  <b>{h['stock_id']} {h['name']}</b>｜"
-                f"成本 {h['entry_price']:.1f}×{h['shares']}股｜"
-                f"現價 {h['cur_price']:.1f}｜"
-                f"{sign} {h['pnl_pct']:+.1f}%（{pnl_str}）"
-                f"{score_str}"
+                f"  {h['stock_id']} {h['name']}｜"
+                f"進場 {h['entry_date']}｜"
+                f"{sign} {h['pnl_pct']:+.1f}%"
             )
         lines.append("")
 
     if hold_list:
-        total_cost = sum(h["cost_amt"] for h in hold_list)
-        total_pnl  = sum(h["pnl_amt"] for h in hold_list)
-        total_pct  = total_pnl / total_cost * 100 if total_cost > 0 else 0
-        total_sign = "📈" if total_pnl >= 0 else "📉"
-        lines.append(
-            f"📋 <b>目前持倉</b>  "
-            f"總成本 ${total_cost:,.0f}｜"
-            f"{total_sign} {total_pct:+.1f}%（{total_pnl:+,.0f}）"
-        )
+        lines.append("📋 <b>目前持倉</b>（排名正常，繼續持有）")
         for h in hold_list:
             sign = "📈" if h["pnl_pct"] >= 0 else "📉"
-            score_str = f"｜模型 {h['score']:.4f}" if h.get("score") is not None else ""
-            pnl_str = f"{h['pnl_amt']:+,.0f}"
             lines.append(
-                f"  <b>{h['stock_id']} {h['name']}</b>｜"
-                f"成本 {h['entry_price']:.1f}×{h['shares']}股｜"
-                f"現價 {h['cur_price']:.1f}｜"
-                f"{sign} {h['pnl_pct']:+.1f}%（{pnl_str}）"
-                f"{score_str} ✅"
+                f"  {h['stock_id']} {h['name']}｜"
+                f"進場 {h['entry_date']}｜"
+                f"{sign} {h['pnl_pct']:+.1f}% ✅"
             )
         lines.append("")
 
     if buy_list:
-        # 區分今日已突破 vs 等待突破
-        ready_buys   = [h for h in buy_list if h.get("breakthrough_ready")]
-        waiting_buys = [h for h in buy_list if not h.get("breakthrough_ready") and "breakthrough_ready" in h]
-        no_bt_buys   = [h for h in buy_list if "breakthrough_ready" not in h]  # 無突破資料（舊格式相容）
-
-        if ready_buys:
-            lines.append("🟢 <b>買進建議</b>（今日已突破，可直接進場）")
-            for h in ready_buys:
-                bt_type = "價格突破" if h.get("breakthrough_type") == "price" else "外資籌碼"
-                vol_r   = f"量比 {h['vol_ratio']:.1f}x" if h.get("vol_ratio") else ""
-                lines.append(
-                    f"  <b>{h['stock_id']} {h['name']}</b>｜"
-                    f"<b>{bt_type}</b> ✅｜{vol_r}｜分數 {h['score_today']:.4f}"
-                )
-            lines.append("")
-
-        if waiting_buys:
-            lines.append("⏳ <b>等待突破</b>（模型看好，尚未出現量價訊號）")
-            for h in waiting_buys:
-                close_max = h.get("close_max_20", 0)
-                pct_gap   = h.get("pct_to_price_bt")
-                gap_str   = f"距突破 +{pct_gap*100:.1f}%" if pct_gap and pct_gap > 0 else ""
-                lines.append(
-                    f"  <b>{h['stock_id']} {h['name']}</b>｜"
-                    f"突破點 >{close_max:.1f} 且量>均×1.5｜"
-                    f"{gap_str}｜分數 {h['score_today']:.4f}"
-                )
-            lines.append("")
-
-        if no_bt_buys:
-            lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
-            for h in no_bt_buys:
-                lines.append(
-                    f"  <b>{h['stock_id']} {h['name']}</b>｜分數 {h['score_today']:.4f}"
-                )
+        lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
+        for h in buy_list:
+            lines.append(
+                f"  {h['stock_id']} {h['name']}｜"
+                f"分數 {h['score_today']:.4f}｜建議金額 ${amt:,}"
+            )
     elif not held:
         lines.append("（目前無持倉，請用 /buy 代號 價格 股數 記錄買進後，明日起會顯示持倉狀態）")
 
@@ -359,45 +294,32 @@ def _format_portfolio() -> str:
         shares     = int(pos["shares"])
         entry_date = pos.get("entry_date", "?")
         cur_px     = prices.get(sid, entry_px)
+        pnl_pct    = (cur_px / entry_px - 1) * 100
         days_held  = (today - date.fromisoformat(entry_date)).days if entry_date != "?" else 0
         cost       = entry_px * shares
-        hypo_fee   = int(cur_px * shares * _SELL_FEE_RATE)
-        hypo_tax   = int(cur_px * shares * _SELL_TAX_RATE)
-        net_val    = cur_px * shares - hypo_fee - hypo_tax
-        pnl_amt    = net_val - cost
-        pnl_pct    = pnl_amt / cost * 100 if cost > 0 else 0.0
+        mkt_val    = cur_px * shares
         total_cost += cost
-        total_mkt  += net_val
+        total_mkt  += mkt_val
         sign       = "🟢" if pnl_pct >= 0 else "🔴"
         lines.append(
-            f"{sign} <b>{sid} {name}</b>\n"
-            f"   進場 {entry_date}（{days_held}天）｜{shares}股\n"
-            f"   成本 {entry_px:.1f}  現價 {cur_px:.1f}\n"
-            f"   損益 {pnl_pct:+.1f}%（{pnl_amt:+,.0f} 元）"
+            f"{sign} {sid} {name}\n"
+            f"   進場 {entry_date}（{days_held}天）\n"
+            f"   成本 ${entry_px:.1f}｜現價 ${cur_px:.1f}｜"
+            f"{pnl_pct:+.1f}%｜{shares}股"
         )
 
-    total_pnl_amt = total_mkt - total_cost
-    total_pnl_pct = total_pnl_amt / total_cost * 100 if total_cost > 0 else 0.0
-    sign = "🟢" if total_pnl_pct >= 0 else "🔴"
+    total_pnl = (total_mkt / total_cost - 1) * 100 if total_cost > 0 else 0.0
+    sign = "🟢" if total_pnl >= 0 else "🔴"
     lines += [
         "",
-        f"{sign} <b>整體損益：{total_pnl_pct:+.1f}%（{total_pnl_amt:+,.0f} 元）</b>",
-        f"投入成本：${total_cost:,.0f}｜淨現值（含假設賣出費稅）：${total_mkt:,.0f}",
+        f"{sign} <b>整體損益：{total_pnl:+.1f}%</b>",
+        f"成本：${total_cost:,.0f}｜市值：${total_mkt:,.0f}",
     ]
     return "\n".join(lines)
 
 
-_BUY_FEE_RATE  = 0.001425   # 買進手續費 0.1425%（未打折）
-_SELL_FEE_RATE = 0.001425   # 賣出手續費 0.1425%
-_SELL_TAX_RATE = 0.003      # 證交稅 0.3%
-
-
 def _cmd_buy(args: List[str]) -> str:
-    """處理 /buy 2330 855 1000
-
-    entry_price 儲存含手續費的均攤成本（total_paid / shares），
-    讓 P&L 計算反映真實付出金額。
-    """
+    """處理 /buy 2330 855 1000"""
     if len(args) < 3:
         return "❌ 格式錯誤\n用法：/buy 代號 價格 股數\n例：/buy 2330 855 1000"
     stock_id = args[0].strip()
@@ -406,11 +328,6 @@ def _cmd_buy(args: List[str]) -> str:
         shares = int(args[2])
     except ValueError:
         return "❌ 價格或股數格式錯誤"
-
-    # 含手續費的總付出 & 均攤成本（手續費無條件捨去，與多數券商一致）
-    fee         = int(price * shares * _BUY_FEE_RATE)
-    total_paid  = price * shares + fee
-    cost_px     = total_paid / shares   # 含費均攤成本
 
     # 查股票名稱
     name = stock_id
@@ -425,32 +342,33 @@ def _cmd_buy(args: List[str]) -> str:
         pass
 
     pf = _load_portfolio()
-    # 若同代號已存在則更新（加碼）— 以含費總成本加權平均
+    # 若同代號已存在則更新（加碼）
     existing = next((p for p in pf["positions"] if p["stock_id"] == stock_id), None)
     if existing:
-        old_total  = existing["entry_price"] * existing["shares"]  # 原含費總成本
+        old_cost   = existing["entry_price"] * existing["shares"]
+        new_cost   = price * shares
         total_sh   = existing["shares"] + shares
-        avg_px     = (old_total + total_paid) / total_sh
-        existing["entry_price"] = round(avg_px, 4)
+        avg_px     = (old_cost + new_cost) / total_sh
+        existing["entry_price"] = round(avg_px, 2)
         existing["shares"]      = total_sh
         existing["stock_name"]  = name
-        action_msg = f"已加碼，含費均價更新為 ${avg_px:.2f}"
+        action_msg = f"已加碼，均價更新為 ${avg_px:.2f}"
     else:
         pf["positions"].append({
-            "stock_id":    stock_id,
-            "stock_name":  name,
-            "entry_date":  date.today().isoformat(),
-            "entry_price": round(cost_px, 4),   # 含費均攤成本
-            "shares":      shares,
+            "stock_id":   stock_id,
+            "stock_name": name,
+            "entry_date": date.today().isoformat(),
+            "entry_price": price,
+            "shares":     shares,
         })
         action_msg = "買進記錄完成"
 
     _save_portfolio(pf)
+    cost = price * shares
     return (
         f"✅ {action_msg}\n"
-        f"{stock_id} {name}｜{price:.1f} × {shares:,} 股\n"
-        f"手續費：${fee:,}｜<b>總付出：${total_paid:,.0f}</b>\n"
-        f"含費均攤成本：${cost_px:.2f}/股"
+        f"{stock_id} {name}｜${price:.1f} × {shares:,} 股\n"
+        f"金額：${cost:,.0f}"
     )
 
 
@@ -469,18 +387,11 @@ def _cmd_sell(args: List[str]) -> str:
     if not existing:
         return f"❌ 持倉中找不到 {stock_id}"
 
-    entry_px    = float(existing["entry_price"])   # 含買進手續費的均攤成本
-    shares      = int(existing["shares"])
-    name        = existing.get("stock_name", stock_id)
-
-    # 賣出實收金額（扣手續費＋交易稅，均無條件捨去）
-    sell_fee    = int(sell_price * shares * _SELL_FEE_RATE)
-    sell_tax    = int(sell_price * shares * _SELL_TAX_RATE)
-    net_sell    = sell_price * shares - sell_fee - sell_tax
-
-    total_cost  = entry_px * shares   # 原始含費總成本
-    pnl_amt     = net_sell - total_cost
-    pnl_pct     = pnl_amt / total_cost * 100
+    entry_px = float(existing["entry_price"])
+    shares   = int(existing["shares"])
+    pnl_pct  = (sell_price / entry_px - 1) * 100
+    pnl_amt  = (sell_price - entry_px) * shares
+    name     = existing.get("stock_name", stock_id)
 
     pf["positions"] = [p for p in pf["positions"] if p["stock_id"] != stock_id]
     _save_portfolio(pf)
@@ -488,11 +399,9 @@ def _cmd_sell(args: List[str]) -> str:
     sign = "🟢" if pnl_pct >= 0 else "🔴"
     return (
         f"{sign} 賣出成功\n"
-        f"{stock_id} {name}｜{shares:,} 股\n"
-        f"含費成本 {entry_px:.2f} → 賣出 {sell_price:.1f}\n"
-        f"手續費：${sell_fee:,}  交易稅：${sell_tax:,}\n"
-        f"實收：${net_sell:,.0f}\n"
-        f"<b>損益：{pnl_pct:+.1f}%（{pnl_amt:+,.0f} 元）</b>"
+        f"{stock_id} {name}\n"
+        f"成本 ${entry_px:.1f} → 賣出 ${sell_price:.1f}｜{shares:,} 股\n"
+        f"損益：{pnl_pct:+.1f}%（${pnl_amt:+,.0f}）"
     )
 
 
@@ -501,6 +410,101 @@ def _cmd_signal() -> str:
     if not sig:
         return "❌ 今日尚無選股訊號，請先執行 make daily-c"
     return _format_push_message(sig)
+
+
+def _cmd_why(args: List[str]) -> str:
+    """處理 /why 2330 — 顯示多智能體矛盾分析。"""
+    if not args:
+        return "❌ 請提供股票代號\n用法：/why 2330"
+
+    stock_id = args[0].strip()
+
+    try:
+        from skills.feature_store import FeatureStore
+        from skills.multi_agent_selector import explain_stock, _zscore
+        import pandas as pd
+        from datetime import date as _date
+
+        fs = FeatureStore()
+        max_date = fs.get_max_date()
+        if max_date is None:
+            return "❌ FeatureStore 無資料"
+
+        # 讀取最近 5 天，取最新一筆此股票的特徵
+        from datetime import timedelta
+        start = max_date - timedelta(days=10)
+        feat_df = fs.read(start, max_date)
+        feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
+        feat_df["stock_id"] = feat_df["stock_id"].astype(str)
+        stock_rows = feat_df[feat_df["stock_id"] == stock_id].sort_values("trading_date")
+
+        if stock_rows.empty:
+            return f"❌ {stock_id} 無近期特徵資料（FeatureStore max_date={max_date}）"
+
+        row = stock_rows.iloc[-1].copy()
+        row_date = row["trading_date"]
+
+        # 計算當日截面的 z_map（用全市場當日資料）
+        day_df = feat_df[feat_df["trading_date"] == row_date].reset_index(drop=True)
+        z_map = {
+            "ret_20":         _zscore(day_df.get("ret_20",         pd.Series(0.0, index=day_df.index))),
+            "foreign_net_20": _zscore(day_df.get("foreign_net_20", pd.Series(0.0, index=day_df.index))),
+        }
+        # 找到 row 在 day_df 中的 index（用於 z_map 對齊）
+        match_idx = day_df[day_df["stock_id"] == stock_id].index
+        if len(match_idx) == 0:
+            row_in_day = row.copy()
+            row_in_day.name = 0
+            z_map_single = {k: pd.Series([float(v.iloc[0]) if len(v) > 0 else 0.0], index=[0])
+                            for k, v in z_map.items()}
+        else:
+            row_in_day = day_df.loc[match_idx[0]].copy()
+            z_map_single = z_map
+
+        ratio_median = float(
+            pd.to_numeric(day_df.get("margin_short_ratio"), errors="coerce").median(skipna=True) or 0.2
+        )
+
+        result = explain_stock(row_in_day, dq_ctx={}, z_map=z_map_single, ratio_median=ratio_median)
+        sv     = result["supervisor"]
+        agents = result["agents"]
+
+        # 組裝訊息
+        verdict_emoji = {"PASS": "✅", "WATCH": "⚠️", "CONFLICT": "❌"}.get(sv["verdict"], "❓")
+        lines = [
+            f"🔍 <b>{stock_id}</b> 多智能體分析（{row_date}）",
+            f"{verdict_emoji} Supervisor：{sv['verdict']}（衝突分 {sv['conflict_score']:.3f}）",
+            f"說明：{sv['explanation']}",
+            "",
+            "── 各 Agent 訊號 ──",
+        ]
+
+        agent_label = {
+            "tech":   "📈 技術面",
+            "flow":   "🏦 法人買賣",
+            "margin": "📊 融資融券",
+            "fund":   "💰 基本面",
+            "theme":  "🔥 主題熱度",
+        }
+        sig_emoji = {-2: "🔴🔴", -1: "🔴", 0: "⚪", 1: "🟢", 2: "🟢🟢"}
+        for name, a in agents.items():
+            label = agent_label.get(name, name)
+            if bool(a.get("unavailable")):
+                reason = a["reasons"][0] if a.get("reasons") else "無資料"
+                lines.append(f"{label}：⚫ 無資料（{reason}）")
+            else:
+                sig = int(a.get("signal", 0))
+                conf = float(a.get("confidence", 0.0))
+                reasons = "、".join(str(r) for r in a.get("reasons", []))
+                lines.append(f"{label}：{sig_emoji.get(sig,'?')} 信號={sig} 信心={conf:.2f}")
+                if reasons:
+                    lines.append(f"   {reasons}")
+
+        return "\n".join(lines)
+
+    except Exception as exc:
+        import traceback
+        return f"❌ /why 執行失敗：{exc}\n{traceback.format_exc()[-400:]}"
 
 
 HELP_TEXT = """\
@@ -512,6 +516,7 @@ HELP_TEXT = """\
              記錄買進（例：/buy 2330 855 1000）
 /sell 代號 價格
              記錄賣出（例：/sell 2330 900）
+/why 代號    多智能體矛盾分析（例：/why 2330）
 /help        顯示本說明"""
 
 
@@ -537,6 +542,8 @@ def _dispatch(bot: TelegramBot, text: str, chat_id: str) -> None:
         reply = _cmd_buy(args)
     elif cmd == "/sell":
         reply = _cmd_sell(args)
+    elif cmd == "/why":
+        reply = _cmd_why(args)
     else:
         reply = f"❓ 未知指令：{cmd}\n輸入 /help 查看所有指令"
 
