@@ -119,6 +119,9 @@ EXTENDED_FEATURE_COLUMNS = [
     "foreign_buy_streak",       # 外資連續「高於20日均買量」天數（嚴格版連買天數）
     "volume_surge_ratio",       # 近5日均量/近20日均量（週成交量放大比例，>2代表異常放量）
     "foreign_buy_intensity",    # 近5日外資淨買超 / 近20日均量（外資買進力道vs流動性）
+    # 相對強弱排名（全市場截面，ProcessPoolExecutor 外計算，2026-03-30 新增）
+    "rs_rank_20",               # ret_20 在全市場當日百分位排名（0=最弱, 1=最強）
+    "rs_rank_60",               # ret_60 在全市場當日百分位排名（0=最弱, 1=最強）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -975,6 +978,19 @@ def _compute_features(
                              "market_volatility_20", "sector_momentum"]:
                 featured[_mkt_col] = np.nan
         logger.info(f"[PERF] market_context_features: {time.perf_counter() - _t_mkt:.2f}s")
+
+    # ── 相對強弱排名（全市場截面，ProcessPoolExecutor 外計算）──────────────────
+    if not featured.empty:
+        _t_rs = time.perf_counter()
+        # rs_rank_20 / rs_rank_60：個股報酬在同日全市場的百分位（0=最弱, 1=最強）
+        for _rs_col, _src_col in [("rs_rank_20", "ret_20"), ("rs_rank_60", "ret_60")]:
+            if _src_col in featured.columns:
+                featured[_rs_col] = featured.groupby("trading_date")[_src_col].transform(
+                    lambda x: x.rank(pct=True, na_option="keep")
+                )
+            else:
+                featured[_rs_col] = np.nan
+        logger.info(f"[PERF] rs_rank: {time.perf_counter() - _t_rs:.3f}s")
 
     # ── 彙整 per-feature perf 資訊 ──
     if perf_out is not None:
