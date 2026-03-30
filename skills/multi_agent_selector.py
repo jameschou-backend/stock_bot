@@ -10,10 +10,12 @@ import pandas as pd
 AGENT_NAMES = ["tech", "flow", "margin", "fund", "theme"]
 SIGNAL_TO_SCORE = {-2: -1.0, -1: -0.5, 0: 0.0, 1: 0.5, 2: 1.0}
 
-# 使用 FeatureStore 實際存在的欄位（2026-03-27 確認）
+# 使用 FeatureStore 實際存在的欄位（2026-03-30 確認）
+# chip_flow_intensity_20 = (foreign_net + trust_net + dealer_net).rolling(20).sum()
+# → 已涵蓋三大法人合計；three_instn_net_20b 僅存在 2026-03-18 前舊資料，已移除
 AGENT_REQUIRED_COLUMNS = {
     "tech":   ["ret_20", "boll_pct", "rsi_14", "macd_hist", "drawdown_60", "vol_ratio_20"],
-    "flow":   ["foreign_net_20", "trust_net_20", "three_instn_net_20b", "chip_flow_intensity_20"],
+    "flow":   ["foreign_net_20", "trust_net_20", "chip_flow_intensity_20"],
     "margin": ["short_balance_chg_20", "margin_short_ratio"],
     "fund":   ["fund_revenue_yoy", "fund_revenue_mom", "fund_revenue_yoy_accel"],
     "theme":  ["theme_return_20", "theme_turnover_ratio"],
@@ -118,31 +120,31 @@ def _flow_agent(row: pd.Series, z_map: Dict[str, pd.Series], dq_ctx: Dict[str, o
     if missing:
         return _mark_unavailable(out, f"missing columns: {missing}")
 
-    foreign   = float(pd.to_numeric(row.get("foreign_net_20"),       errors="coerce") or 0.0)
-    trust     = float(pd.to_numeric(row.get("trust_net_20"),          errors="coerce") or 0.0)
-    three_ins = float(pd.to_numeric(row.get("three_instn_net_20b"),   errors="coerce") or 0.0)
-    intensity = float(pd.to_numeric(row.get("chip_flow_intensity_20"),errors="coerce") or 0.0)
+    foreign   = float(pd.to_numeric(row.get("foreign_net_20"),        errors="coerce") or 0.0)
+    trust     = float(pd.to_numeric(row.get("trust_net_20"),           errors="coerce") or 0.0)
+    intensity = float(pd.to_numeric(row.get("chip_flow_intensity_20"), errors="coerce") or 0.0)
     z_foreign = float(z_map["foreign_net_20"].loc[row.name] if row.name in z_map["foreign_net_20"].index else 0.0)
 
-    if foreign > 0 and intensity > 0.002 and z_foreign > 0.5:
+    # chip_flow_intensity_20 = (foreign + trust + dealer).rolling(20).sum()
+    # intensity > 0 等同三大法人合計為正；trust 補充法人結構
+    if foreign > 0 and intensity > 0 and z_foreign > 0.5:
         signal = 2
-    elif foreign > 0 or three_ins > 0:
+    elif foreign > 0 or trust > 0 or intensity > 0:
         signal = 1
-    elif foreign < 0 and intensity < -0.002 and z_foreign < -0.5:
+    elif foreign < 0 and intensity < 0 and z_foreign < -0.5:
         signal = -2
     elif foreign < 0:
         signal = -1
     else:
         signal = 0
 
-    conf = _clip01((abs(z_foreign) + min(abs(intensity) * 100, 2.0)) / 4.0)
+    conf = _clip01((abs(z_foreign) + min(abs(intensity) / max(abs(intensity), 1e-8), 2.0)) / 4.0)
     out["signal"] = signal
     out["confidence"] = conf
     out["reasons"] = [
         f"foreign_net_20={foreign:.2f}",
         f"trust_net_20={trust:.2f}",
-        f"three_instn_net_20b={three_ins:.2f}",
-        f"chip_flow_intensity_20={intensity:.6f}",
+        f"chip_flow_intensity_20={intensity:.2f}",
     ]
     out["risk_flags"] = _risk_flags(row)
     return out
