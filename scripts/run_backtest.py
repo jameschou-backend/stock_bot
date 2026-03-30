@@ -191,6 +191,14 @@ def main():
     parser.add_argument("--output", type=str, default=None,
                         help="結果輸出 JSON 路徑")
 
+    # ── 實驗紀錄 ──
+    parser.add_argument("--log-experiment", action="store_true",
+                        dest="log_experiment",
+                        help="自動寫入 artifacts/experiments/<timestamp>_<name>.json 實驗紀錄")
+    parser.add_argument("--experiment-name", type=str, default=None,
+                        dest="experiment_name",
+                        help="實驗名稱（用於紀錄檔名，如 'liq_weighted_v2'）")
+
     args = parser.parse_args()
     config = load_config()
 
@@ -339,6 +347,109 @@ def main():
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2, default=str)
     print(f"\n結果已儲存: {output_path}")
+
+    # ── 實驗紀錄 ──
+    if args.log_experiment:
+        _log_experiment(result, args, sys.argv)
+
+
+def _log_experiment(result: dict, args, argv: list) -> None:
+    """將實驗結果寫入 artifacts/experiments/ 目錄，供跨次比較。
+
+    檔案格式：artifacts/experiments/<YYYYMMDD_HHMMSS>_<name>.json
+    """
+    summary = result.get("summary", {})
+    periods = result.get("periods", [])
+
+    # ── 逐年報酬（依 period exit_date 年份歸組）──
+    yearly: dict[str, dict] = {}
+    for p in periods:
+        try:
+            yr = str(p.get("exit_date", ""))[:4]
+            if not yr.isdigit():
+                continue
+            strat_r = float(p.get("return", 0.0))
+            bm_r    = float(p.get("benchmark_return", 0.0))
+            if yr not in yearly:
+                yearly[yr] = {"strategy_cum": 1.0, "benchmark_cum": 1.0}
+            yearly[yr]["strategy_cum"]  *= (1 + strat_r)
+            yearly[yr]["benchmark_cum"] *= (1 + bm_r)
+        except Exception:
+            continue
+
+    yearly_returns = {
+        yr: {
+            "strategy":  round(v["strategy_cum"] - 1, 4),
+            "benchmark": round(v["benchmark_cum"] - 1, 4),
+            "excess":    round(v["strategy_cum"] - v["benchmark_cum"], 4),
+        }
+        for yr, v in sorted(yearly.items())
+    }
+
+    # ── CLI 摘要（去掉程式路徑，只留關鍵 flags）──
+    cli_str = " ".join(str(a) for a in argv[1:])   # 去掉 scripts/run_backtest.py
+
+    # ── 組裝 experiment record ──
+    exp_name = args.experiment_name or "exp"
+    ts       = datetime.now().strftime("%Y%m%d_%H%M%S")
+    record   = {
+        "timestamp":       datetime.now().isoformat(timespec="seconds"),
+        "name":            exp_name,
+        "cli":             cli_str,
+        "params": {
+            "months":                  args.months,
+            "stoploss":                summary.get("config", {}).get("stoploss_pct"),
+            "seasonal_filter":         args.enable_seasonal_filter,
+            "market_filter_tiers":     args.market_filter_tiers,
+            "market_filter_min_pos":   args.market_filter_min_positions,
+            "liq_weighted":            args.liquidity_weighting,
+            "pruned_features":         getattr(args, "pruned_features", False),
+            "rebalance_freq":          args.rebalance_freq or "M",
+            "entry_delay_days":        summary.get("config", {}).get("entry_delay_days"),
+            "breakthrough_entry":      getattr(args, "enable_breakthrough_entry", False),
+        },
+        "metrics": {
+            "total_return":            summary.get("total_return"),
+            "annualized_return":       summary.get("annualized_return"),
+            "benchmark_total_return":  summary.get("benchmark_total_return"),
+            "excess_return":           summary.get("excess_return"),
+            "max_drawdown":            summary.get("max_drawdown"),
+            "sharpe_ratio":            summary.get("sharpe_ratio"),
+            "calmar_ratio":            summary.get("calmar_ratio"),
+            "win_rate":                summary.get("win_rate"),
+            "profit_factor":           summary.get("profit_factor"),
+            "total_trades":            summary.get("total_trades"),
+            "total_periods":           summary.get("total_periods"),
+            "backtest_start":          str(summary.get("backtest_start", "")),
+            "backtest_end":            str(summary.get("backtest_end", "")),
+        },
+        "yearly_returns": yearly_returns,
+    }
+
+    exp_dir = ROOT / "artifacts" / "experiments"
+    exp_dir.mkdir(parents=True, exist_ok=True)
+    safe_name = exp_name.replace("/", "_").replace(" ", "_")[:40]
+    exp_path  = exp_dir / f"{ts}_{safe_name}.json"
+    with open(exp_path, "w", encoding="utf-8") as f:
+        json.dump(record, f, ensure_ascii=False, indent=2, default=str)
+
+    # ── 終端摘要列印 ──
+    m = record["metrics"]
+    print(f"\n{'═'*55}")
+    print(f"📋 實驗紀錄：{exp_name}")
+    print(f"   期間：{m['backtest_start']} ~ {m['backtest_end']}")
+    print(f"   累積  {m['total_return']:>+8.2%}  大盤 {m['benchmark_total_return']:>+8.2%}"
+          f"  超額 {m['excess_return']:>+8.2%}")
+    print(f"   年化  {m['annualized_return']:>+8.2%}  MDD  {m['max_drawdown']:>+8.2%}"
+          f"  Sharpe {m['sharpe_ratio']:>6.3f}")
+    print(f"   Calmar {(m['calmar_ratio'] or 0):>6.3f}  勝率 {m['win_rate']:>6.2%}")
+    print(f"\n   逐年報酬（策略 vs 大盤）：")
+    for yr, v in yearly_returns.items():
+        sign = "▲" if v["strategy"] >= 0 else "▼"
+        print(f"   {yr}: {sign} {v['strategy']:>+8.2%}  大盤 {v['benchmark']:>+8.2%}"
+              f"  超額 {v['excess']:>+8.2%}")
+    print(f"\n   紀錄已儲存: {exp_path}")
+    print(f"{'═'*55}")
 
 
 if __name__ == "__main__":
