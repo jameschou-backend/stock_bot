@@ -722,6 +722,8 @@ class WalkForwardConfig:
     entry_signal_filter: Optional[Dict[str, object]] = None
     # ── 投資組合熔斷 ──
     portfolio_circuit_breaker_pct: Optional[float] = None  # 月中累積虧損觸發全出場（如 -0.15）
+    # ── Label 設定 ──
+    label_type: str = "abs"  # "abs"=絕對報酬（現行）；"excess"=等權超額報酬（P1-2）
 
 
 def run_backtest(
@@ -768,6 +770,7 @@ def run_backtest(
     entry_signal_filter: Optional[Dict[str, object]] = None,  # 進場訊號過濾：{"foreign_buy_streak_max":3, "rsi_min":45, "rsi_max":70, "bias_20_max":0.15, "volume_surge_ratio_min":1.0}
     liquidity_weighting: bool = False,   # 流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式
     portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷閾值（如 -0.15）
+    label_type: str = "abs",  # "abs"=絕對報酬；"excess"=等權超額報酬（P1-2）
     wf_config: Optional["WalkForwardConfig"] = None,  # 型別安全封裝（優先於上方 kwargs）
 ) -> Dict:
     """執行 walk-forward 回測。
@@ -822,14 +825,12 @@ def run_backtest(
         market_filter_min_positions = wf_config.market_filter_min_positions
         entry_signal_filter    = wf_config.entry_signal_filter
         portfolio_circuit_breaker_pct = wf_config.portfolio_circuit_breaker_pct
+        label_type             = wf_config.label_type
 
-    # 若 wf_config 未提供，確保 wf_config.portfolio_circuit_breaker_pct 仍可在 _simulate_period 中使用
-    # （透過 local 變數 portfolio_circuit_breaker_pct 傳入）
+    # 若 wf_config 未提供，補上 label_type 預設值
     if wf_config is None:
-        # 建立一個最小 WalkForwardConfig 物件供 _simulate_period 使用
-        _wf_cb = portfolio_circuit_breaker_pct  # type: Optional[float]
-    else:
-        _wf_cb = portfolio_circuit_breaker_pct  # already set above
+        label_type = label_type  # kwargs 已直接賦值，保持不變
+    _wf_cb = portfolio_circuit_breaker_pct  # 統一暫存，供 _simulate_period 使用
 
     print("\n" + "=" * 60)
     print("Walk-Forward Backtest")
@@ -900,6 +901,13 @@ def run_backtest(
         label_df = data_store.get_labels(db_session, data_start, data_end)
         _timer_load_features = time.time() - _t
         _log(f"load_all_features done {_timer_load_features:.1f}s")
+        # ── P1-2: 超額報酬 label 轉換（label_type="excess"）──
+        if label_type == "excess" and not label_df.empty:
+            mkt_ret = label_df.groupby("trading_date")["future_ret_h"].mean().rename("_mkt_ret")
+            label_df = label_df.join(mkt_ret, on="trading_date")
+            label_df["future_ret_h"] = label_df["future_ret_h"] - label_df["_mkt_ret"]
+            label_df = label_df.drop(columns=["_mkt_ret"])
+            print(f"  [label_type=excess] 已將 future_ret_h 轉換為等權超額報酬", flush=True)
     else:
         feat_df = pd.DataFrame()
         label_df = pd.DataFrame()

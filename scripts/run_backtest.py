@@ -186,6 +186,9 @@ def main():
                         dest="portfolio_circuit_breaker_pct",
                         help="投資組合熔斷：月中等權累積報酬跌破此值時全出場（如 0.15 = -15%%）。"
                              "傳正數即可，內部自動取負值。")
+    parser.add_argument("--excess-label", action="store_true",
+                        dest="excess_label",
+                        help="P1-2：使用等權超額報酬作為訓練 label（future_ret_h - 市場均值）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -343,6 +346,7 @@ def main():
                 if args.portfolio_circuit_breaker_pct is not None
                 else None
             ),
+            label_type="excess" if args.excess_label else "abs",
         )
 
     # ── 輸出 JSON ──
