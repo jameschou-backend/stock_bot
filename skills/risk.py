@@ -91,6 +91,47 @@ def pick_topn(scores_df: pd.DataFrame, topn: int) -> pd.DataFrame:
     return scores_df.sort_values("score", ascending=False).head(topn).copy()
 
 
+def apply_sector_constraint(
+    scores_df: pd.DataFrame,
+    topn: int,
+    sector_map: dict[str, str] | None = None,
+    max_per_sector: int = 3,
+) -> pd.DataFrame:
+    """依產業集中限制選出 TopN。
+
+    依分數由高到低依序納入，同一產業超過 max_per_sector 檔後跳過，
+    直到湊滿 topn 或候選用盡為止。
+    若 sector_map 為 None 或 max_per_sector <= 0，退化為 pick_topn。
+
+    Args:
+        scores_df: 含 stock_id / score 的 DataFrame。
+        topn: 最終選出股數上限。
+        sector_map: {stock_id: industry_category}，None 代表不套用限制。
+        max_per_sector: 同一產業最多納入幾檔，預設 3。
+
+    Returns:
+        篩選後的 DataFrame（行數 ≤ topn）。
+    """
+    if scores_df.empty:
+        return scores_df.copy()
+    if not sector_map or max_per_sector <= 0:
+        return pick_topn(scores_df, topn)
+
+    sorted_df = scores_df.sort_values("score", ascending=False)
+    sector_counts: dict[str, int] = {}
+    selected_idx = []
+    for idx, row in sorted_df.iterrows():
+        sid = str(row["stock_id"])
+        sector = sector_map.get(sid, "未分類")
+        if sector_counts.get(sector, 0) < max_per_sector:
+            selected_idx.append(idx)
+            sector_counts[sector] = sector_counts.get(sector, 0) + 1
+        if len(selected_idx) >= topn:
+            break
+
+    return sorted_df.loc[selected_idx].copy()
+
+
 def apply_seasonal_topn_reduction(
     current_topn: int,
     target_month: int,

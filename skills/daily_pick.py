@@ -330,6 +330,12 @@ def _load_stock_names(db_session: Session, stock_ids: List[str]) -> Dict[str, st
     return result
 
 
+def _load_sector_map(db_session: Session) -> Dict[str, str]:
+    """查詢所有股票的產業別，回傳 {stock_id: industry_category}。"""
+    rows = db_session.query(Stock.stock_id, Stock.industry_category).all()
+    return {str(r.stock_id): str(r.industry_category or "未分類") for r in rows}
+
+
 def _print_breakthrough_lists(
     picks_df: pd.DataFrame,
     backup_df: pd.DataFrame,
@@ -767,7 +773,15 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
             df = _filter_overheated(df, feature_df, config)
             _df_pre_topn = df.copy()  # 供突破候補池使用（topN 前的完整候選集）
-            df = risk.pick_topn(df, effective_topn)
+
+            # ── 產業集中限制（P1-1）──
+            _sector_max = int(getattr(config, "sector_max_per_industry", 0))
+            if _sector_max > 0:
+                _sector_map = _load_sector_map(db_session)
+                df = risk.apply_sector_constraint(df, effective_topn, _sector_map, _sector_max)
+                coverage_stats["sector_constraint"] = f"max_{_sector_max}_per_sector"
+            else:
+                df = risk.pick_topn(df, effective_topn)
 
             # ── 突破確認狀態標記（F+ 策略整合）──
             _df_backup: pd.DataFrame = pd.DataFrame()

@@ -62,6 +62,8 @@ class AppConfig:
     # 季節性過濾器
     seasonal_weak_months: Tuple[int, ...] = (3, 10)
     seasonal_topn_multiplier: float = 0.5
+    # 產業集中限制（0=不啟用，>0=每個產業最多持股數）
+    sector_max_per_industry: int = 0
     # 停損冷卻機制
     stoploss_cooldown_weeks: int = 3
     # 回測基礎設定
@@ -214,6 +216,7 @@ def load_config() -> AppConfig:
         regime_detector=str(pick("REGIME_DETECTOR", "ma")),
         seasonal_weak_months=_parse_eval_topk_list(pick("SEASONAL_WEAK_MONTHS", "3,10")),
         seasonal_topn_multiplier=float(pick("SEASONAL_TOPN_MULTIPLIER", 0.5)),
+        sector_max_per_industry=int(pick("SECTOR_MAX_PER_INDUSTRY", 0)),
         stoploss_cooldown_weeks=int(pick("STOPLOSS_COOLDOWN_WEEKS", 3)),
         stoploss_pct=float(pick("STOPLOSS_PCT", -0.07)),
         transaction_cost_pct=float(pick("TRANSACTION_COST_PCT", 0.001425)),
