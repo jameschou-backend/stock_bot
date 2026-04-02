@@ -767,6 +767,7 @@ def run_backtest(
     market_filter_min_positions: int = 1,  # 大盤過濾後最低持股數（防止單押集中風險）
     entry_signal_filter: Optional[Dict[str, object]] = None,  # 進場訊號過濾：{"foreign_buy_streak_max":3, "rsi_min":45, "rsi_max":70, "bias_20_max":0.15, "volume_surge_ratio_min":1.0}
     liquidity_weighting: bool = False,   # 流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式
+    portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷閾值（如 -0.15）
     wf_config: Optional["WalkForwardConfig"] = None,  # 型別安全封裝（優先於上方 kwargs）
 ) -> Dict:
     """執行 walk-forward 回測。
@@ -820,6 +821,15 @@ def run_backtest(
         market_filter_tiers    = wf_config.market_filter_tiers
         market_filter_min_positions = wf_config.market_filter_min_positions
         entry_signal_filter    = wf_config.entry_signal_filter
+        portfolio_circuit_breaker_pct = wf_config.portfolio_circuit_breaker_pct
+
+    # 若 wf_config 未提供，確保 wf_config.portfolio_circuit_breaker_pct 仍可在 _simulate_period 中使用
+    # （透過 local 變數 portfolio_circuit_breaker_pct 傳入）
+    if wf_config is None:
+        # 建立一個最小 WalkForwardConfig 物件供 _simulate_period 使用
+        _wf_cb = portfolio_circuit_breaker_pct  # type: Optional[float]
+    else:
+        _wf_cb = portfolio_circuit_breaker_pct  # already set above
 
     print("\n" + "=" * 60)
     print("Walk-Forward Backtest")
@@ -1486,7 +1496,7 @@ def run_backtest(
                 per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
                 per_stock_stoploss_override=_per_stock_sl,
                 tiered_slippage_map=_tiered_slip_map,
-                portfolio_circuit_breaker_pct=wf_config.portfolio_circuit_breaker_pct,
+                portfolio_circuit_breaker_pct=_wf_cb,
             )
             _dt = time.time() - _t
             _timer_simulate += _dt
