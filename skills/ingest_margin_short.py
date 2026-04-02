@@ -153,26 +153,27 @@ def _fetch_margin_smart(
     bulk_chunk_days: int,
     logs: Dict[str, object],
 ) -> pd.DataFrame:
-    """逐檔抓取（融資融券建議直接逐檔）
-    
+    """批次抓取融資融券資料（每批 500 檔一次 API call）
+
     Returns:
         合併後的 DataFrame
     """
-    logs["fetch_mode"] = "by_stock"
+    logs["fetch_mode"] = "batch_query"
     stock_ids = _get_stock_list(token, requests_per_hour, max_retries, backoff_seconds)
     logs["stock_list_count"] = len(stock_ids)
-    
+
     if not stock_ids:
         logs["warning"] = "無法取得股票清單，跳過抓取"
         return pd.DataFrame()
-    
+
     return fetch_dataset_by_stocks(
         DATASET,
         start_date,
         end_date,
         stock_ids,
         token=token,
-        use_batch_query=False,
+        batch_size=500,
+        use_batch_query=True,
         requests_per_hour=requests_per_hour,
         max_retries=max_retries,
         backoff_seconds=backoff_seconds,

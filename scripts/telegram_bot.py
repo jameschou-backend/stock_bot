@@ -226,10 +226,11 @@ def _format_push_message(sig: Dict) -> str:
         lines.append("🔴 <b>賣出警示</b>（持倉排名掉出，建議出場）")
         for h in sell_list:
             sign = "📈" if h["pnl_pct"] >= 0 else "📉"
+            pnl_amt = (h["cur_price"] - h["entry_price"]) * h["shares"]
             lines.append(
                 f"  {h['stock_id']} {h['name']}｜"
-                f"進場 {h['entry_date']}｜"
-                f"{sign} {h['pnl_pct']:+.1f}%"
+                f"成本 {h['entry_price']:.1f}×{h['shares']}股｜現價 {h['cur_price']:.1f}｜"
+                f"{sign} {h['pnl_pct']:+.1f}%（{pnl_amt:+,.0f}）"
             )
         lines.append("")
 
@@ -237,20 +238,47 @@ def _format_push_message(sig: Dict) -> str:
         lines.append("📋 <b>目前持倉</b>（排名正常，繼續持有）")
         for h in hold_list:
             sign = "📈" if h["pnl_pct"] >= 0 else "📉"
+            pnl_amt = (h["cur_price"] - h["entry_price"]) * h["shares"]
             lines.append(
                 f"  {h['stock_id']} {h['name']}｜"
-                f"進場 {h['entry_date']}｜"
-                f"{sign} {h['pnl_pct']:+.1f}% ✅"
+                f"成本 {h['entry_price']:.1f}×{h['shares']}股｜現價 {h['cur_price']:.1f}｜"
+                f"{sign} {h['pnl_pct']:+.1f}%（{pnl_amt:+,.0f}）✅"
             )
         lines.append("")
 
     if buy_list:
-        lines.append("🟢 <b>買進建議</b>（模型評分最高，尚未持有）")
-        for h in buy_list:
-            lines.append(
-                f"  {h['stock_id']} {h['name']}｜"
-                f"分數 {h['score_today']:.4f}｜建議金額 ${amt:,}"
-            )
+        # 分「已突破」與「等待突破」兩類
+        ready  = [h for h in buy_list if h.get("breakthrough_ready")]
+        waiting = [h for h in buy_list if not h.get("breakthrough_ready")]
+
+        if ready:
+            lines.append("🟢 <b>買進建議</b>（今日已突破，可直接進場）")
+            for h in ready:
+                bt_type = h.get("breakthrough_type", "")
+                if bt_type == "institutional":
+                    bt_label = "外資籌碼 ✅"
+                elif bt_type == "price":
+                    bt_label = "價格突破 ✅"
+                else:
+                    bt_label = "突破 ✅"
+                vol = h.get("vol_ratio", 0)
+                lines.append(
+                    f"  {h['stock_id']} {h['name']}｜{bt_label}｜"
+                    f"量比 {vol:.1f}x｜分數 {h['score_today']:.4f}"
+                )
+            lines.append("")
+
+        if waiting:
+            lines.append("⏳ <b>等待突破</b>（模型看好，尚未現量價訊號）")
+            for h in waiting:
+                bt_px  = h.get("close_max_20", 0)
+                pct    = h.get("pct_to_price_bt", 0) * 100
+                vol    = h.get("vol_ratio", 0)
+                lines.append(
+                    f"  {h['stock_id']} {h['name']}｜"
+                    f"突破點 >{bt_px:.0f} 且量>均×1.5｜"
+                    f"距突破 {pct:+.1f}%｜分數 {h['score_today']:.4f}"
+                )
     elif not held:
         lines.append("（目前無持倉，請用 /buy 代號 價格 股數 記錄買進後，明日起會顯示持倉狀態）")
 

@@ -153,24 +153,32 @@ def _make_mock_session(features_json: dict | None) -> MagicMock:
     return mock_session
 
 
+def _patch_feature_store_empty():
+    """讓 FeatureStore 初始化拋出例外，強制 fallback 至 MySQL 路徑。"""
+    return patch("skills.feature_store.FeatureStore", side_effect=Exception("mock: no parquet"))
+
+
 def test_detect_schema_outdated_no_rows():
     """DB 無任何資料時應回傳 False（不觸發 recompute）。"""
-    session = _make_mock_session(None)
-    assert _detect_schema_outdated(session) is False
+    with _patch_feature_store_empty():
+        session = _make_mock_session(None)
+        assert _detect_schema_outdated(session) is False
 
 
 def test_detect_schema_outdated_full_schema():
     """features_json 已包含所有 FEATURE_COLUMNS 時應回傳 False（schema 正常）。"""
-    full = {col: 0.0 for col in FEATURE_COLUMNS}
-    session = _make_mock_session(full)
-    assert _detect_schema_outdated(session) is False
+    with _patch_feature_store_empty():
+        full = {col: 0.0 for col in FEATURE_COLUMNS}
+        session = _make_mock_session(full)
+        assert _detect_schema_outdated(session) is False
 
 
 def test_detect_schema_outdated_old_schema():
-    """features_json 只有舊版 19 欄時（< 80% of 43）應回傳 True（觸發補算）。"""
-    old_19 = {col: 0.0 for col in FEATURE_COLUMNS[:19]}
-    session = _make_mock_session(old_19)
-    assert _detect_schema_outdated(session) is True
+    """features_json 只有舊版 19 欄時（< 95% of FEATURE_COLUMNS）應回傳 True（觸發補算）。"""
+    with _patch_feature_store_empty():
+        old_19 = {col: 0.0 for col in FEATURE_COLUMNS[:19]}
+        session = _make_mock_session(old_19)
+        assert _detect_schema_outdated(session) is True
 
 
 def test_detect_schema_outdated_json_string():
@@ -183,17 +191,16 @@ def test_detect_schema_outdated_json_string():
 def test_detect_schema_outdated_partial_schema():
     """features_json 欄位數剛好在 95% 門檻附近的邊界測試。
     實作使用浮點比較：len(existing) < len(FEATURE_COLUMNS) * 0.95
-    56 * 0.95 = 53.2，故 ceil(53.2)=54 欄才算「不小於門檻」。
-    門檻從 0.8 → 0.95 以便偵測新增 3 個特徵（53→56）時觸發自動補算。
+    58 * 0.95 = 55.1，故 ceil(55.1)=56 欄才算「不小於門檻」。
     """
     import math
-    # ceil(56 * 0.95) = 54：剛好過門檻，應回傳 False
-    min_ok = math.ceil(len(FEATURE_COLUMNS) * 0.95)
-    at_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok]}
-    session_ok = _make_mock_session(at_threshold)
-    assert _detect_schema_outdated(session_ok) is False
+    with _patch_feature_store_empty():
+        min_ok = math.ceil(len(FEATURE_COLUMNS) * 0.95)
+        at_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok]}
+        session_ok = _make_mock_session(at_threshold)
+        assert _detect_schema_outdated(session_ok) is False
 
-    # min_ok - 1 = 53：嚴格小於 53.2，應回傳 True（觸發補算）
-    below_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok - 1]}
-    session_bad = _make_mock_session(below_threshold)
-    assert _detect_schema_outdated(session_bad) is True
+    with _patch_feature_store_empty():
+        below_threshold = {col: 0.0 for col in FEATURE_COLUMNS[:min_ok - 1]}
+        session_bad = _make_mock_session(below_threshold)
+        assert _detect_schema_outdated(session_bad) is True
