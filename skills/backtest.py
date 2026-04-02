@@ -467,6 +467,7 @@ def _simulate_period(
     per_stock_entry_dates: Optional[Dict[str, date]] = None,
     per_stock_stoploss_override: Optional[Dict[str, float]] = None,
     tiered_slippage_map: Optional[Dict[str, float]] = None,  # 預計算的分級滑價（來回），優先於 ATR 模型
+    portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷：月中等權報酬跌破此值時全出場
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -558,6 +559,32 @@ def _simulate_period(
             positions_input, period_prices, stoploss_pct, per_stock_stop
         )
     _stoploss_time = time.time() - _t_sl
+
+    # ── P0-3: 投資組合熔斷（月中等權累積報酬 < threshold 時全出場）──
+    if portfolio_circuit_breaker_pct is not None and portfolio_circuit_breaker_pct < 0 and not stoploss_result.empty:
+        px_cb = period_prices[["stock_id", "trading_date", "close"]].copy()
+        px_cb["stock_id"] = px_cb["stock_id"].astype(str)
+        ep_cb = entry_prices.copy()
+        ep_cb["stock_id"] = ep_cb["stock_id"].astype(str)
+        cb_merged = px_cb.merge(ep_cb, on="stock_id", how="inner")
+        cb_merged = cb_merged[cb_merged["trading_date"] > actual_entry_date].copy()
+        if not cb_merged.empty:
+            cb_merged["daily_ret"] = cb_merged["close"] / cb_merged["entry_price"] - 1
+            daily_port = cb_merged.groupby("trading_date")["daily_ret"].mean().sort_index()
+            breach = daily_port[daily_port < portfolio_circuit_breaker_pct]
+            if not breach.empty:
+                cb_date = breach.index[0]
+                # 取熔斷日各股收盤價
+                cb_prices = px_cb[px_cb["trading_date"] == cb_date].set_index("stock_id")["close"]
+                for idx, row in stoploss_result.iterrows():
+                    sid = str(row["stock_id"])
+                    # 僅覆蓋尚未觸發停損、且月底出場日晚於熔斷日的部位
+                    if not row["stoploss_triggered"] and row["exit_date"] > cb_date:
+                        cb_px = cb_prices.get(sid)
+                        if cb_px is not None and cb_px > 0:
+                            stoploss_result.at[idx, "exit_date"] = cb_date
+                            stoploss_result.at[idx, "exit_price"] = float(cb_px)
+                            stoploss_result.at[idx, "stoploss_triggered"] = True  # 計入熔斷計數
 
     # ── 預先計算個股滑價（ATR 的 10%，上限 0.3%，進出場各一次）──
     slippage_map = _compute_slippage_map(
@@ -693,6 +720,8 @@ class WalkForwardConfig:
     market_filter_tiers: Optional[List[tuple]] = None
     market_filter_min_positions: int = 1
     entry_signal_filter: Optional[Dict[str, object]] = None
+    # ── 投資組合熔斷 ──
+    portfolio_circuit_breaker_pct: Optional[float] = None  # 月中累積虧損觸發全出場（如 -0.15）
 
 
 def run_backtest(
@@ -1457,6 +1486,7 @@ def run_backtest(
                 per_stock_entry_dates=per_stock_entry_dates if per_stock_entry_dates else None,
                 per_stock_stoploss_override=_per_stock_sl,
                 tiered_slippage_map=_tiered_slip_map,
+                portfolio_circuit_breaker_pct=wf_config.portfolio_circuit_breaker_pct,
             )
             _dt = time.time() - _t
             _timer_simulate += _dt

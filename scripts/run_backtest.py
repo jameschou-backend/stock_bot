@@ -182,6 +182,10 @@ def main():
                         help="訓練視窗長度（日，如 1825=5年滾動窗）；預設 None=使用全部歷史")
     parser.add_argument("--no-clip", action="store_true",
                         help="停用單筆損失 clip -50%%（診斷用，傳入 clip_loss_pct=-1.01）")
+    parser.add_argument("--portfolio-circuit-breaker", type=float, default=None,
+                        dest="portfolio_circuit_breaker_pct",
+                        help="投資組合熔斷：月中等權累積報酬跌破此值時全出場（如 0.15 = -15%%）。"
+                             "傳正數即可，內部自動取負值。")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -334,6 +338,11 @@ def main():
             min_avg_turnover=args.min_avg_turnover,
             enable_tiered_slippage=args.tiered_slippage,
             liquidity_weighting=args.liquidity_weighting,
+            portfolio_circuit_breaker_pct=(
+                -abs(args.portfolio_circuit_breaker_pct)
+                if args.portfolio_circuit_breaker_pct is not None
+                else None
+            ),
         )
 
     # ── 輸出 JSON ──
