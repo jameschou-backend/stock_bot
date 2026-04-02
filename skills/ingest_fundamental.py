@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 
 from app.finmind import (
     FinMindError,
-    fetch_dataset,
+    fetch_dataset_by_stocks,
     fetch_stock_list,
 )
 from app.job_utils import finish_job, start_job, update_job
@@ -207,46 +207,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         total_rows = 0
         total_stocks = len(stock_ids)
-        error_stocks = 0
-        logs["stocks_total"] = total_stocks
+        batch_size = 500
+        total_batches = (total_stocks + batch_size - 1) // batch_size
+        logs.update({"stocks_total": total_stocks, "fetch_mode": "batch_query"})
 
-        for stock_idx, stock_id in enumerate(stock_ids, start=1):
-            logs["progress"] = {
-                "current_stock": stock_idx,
-                "total_stocks": total_stocks,
-                "current_chunk": stock_idx,
-                "total_chunks": total_stocks,
-                "chunk_start": start_date.isoformat(),
-                "chunk_end": end_date.isoformat(),
-                "rows": total_rows,
-                "stock_id": stock_id,
-            }
-            update_job(db_session, job_id, logs=logs, commit=True)
-
-            try:
-                df = fetch_dataset(
-                    DATASET,
-                    start_date,
-                    end_date,
-                    token=config.finmind_token,
-                    data_id=stock_id,
-                    requests_per_hour=config.finmind_requests_per_hour,
-                    max_retries=config.finmind_retry_max,
-                    backoff_seconds=config.finmind_retry_backoff,
-                    timeout=120,
-                )
-            except FinMindError:
-                error_stocks += 1
-                continue
-
+        # ── 批次寫入 callback（每批抓完立即寫入，中斷也不丟失已完成批次）──
+        def _write_batch(df: pd.DataFrame) -> int:
             if df.empty:
-                continue
-
-            norm = _normalize_fundamentals(df)
+                return 0
+            try:
+                norm = _normalize_fundamentals(df)
+            except FinMindError:
+                return 0
             records: List[Dict] = _to_mysql_safe_records(norm)
             if not records:
-                continue
-
+                return 0
             stmt = insert(RawFundamental).values(records)
             stmt = stmt.on_duplicate_key_update(
                 revenue_current_month=stmt.inserted.revenue_current_month,
@@ -257,9 +232,40 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             )
             db_session.execute(stmt)
             db_session.commit()
-            total_rows += len(records)
+            return len(records)
 
-        logs.update({"rows": total_rows, "stocks_with_error": error_stocks})
+        # ── 批次進度回報 callback ──
+        def _on_progress(current_batch: int, total: int) -> None:
+            logs["progress"] = {
+                "current_chunk": current_batch,
+                "total_chunks": total,
+                "chunk_start": start_date.isoformat(),
+                "chunk_end": end_date.isoformat(),
+                "rows": total_rows,
+            }
+            update_job(db_session, job_id, logs=logs, commit=True)
+
+        fetch_dataset_by_stocks(
+            DATASET,
+            start_date,
+            end_date,
+            stock_ids,
+            token=config.finmind_token,
+            batch_size=batch_size,
+            use_batch_query=True,
+            requests_per_hour=config.finmind_requests_per_hour,
+            max_retries=config.finmind_retry_max,
+            backoff_seconds=config.finmind_retry_backoff,
+            batch_write_callback=_write_batch,
+            progress_callback=_on_progress,
+            debug=True,
+            timeout=60,
+        )
+
+        # batch_write_callback 模式下 fetch_dataset_by_stocks 回傳空 DF，
+        # 實際寫入數由 _write_batch 累計，直接查 DB 取最終 row count。
+        total_rows = db_session.query(func.count(RawFundamental.stock_id)).scalar() or 0
+        logs.update({"rows": total_rows, "total_batches": total_batches})
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:  # pragma: no cover - pipeline runtime
