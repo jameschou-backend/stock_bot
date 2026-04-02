@@ -1,25 +1,39 @@
 # 專案現況
 
-> 最後更新：2026-03-25（session 9）
+> 最後更新：2026-04-02（session 10）
 
 ---
 
 ## 目前最佳回測結果
 
-### Strategy A（月頻，現行生產）— Exp D + 新特徵（2026-03-18 更新）
+### Strategy A（月頻，現行生產）— 2026-04-02 確認基準
 
 | 指標 | 數值 |
 |------|------|
-| 期間 | 2016-05-03 ~ 2026-02-05 |
-| 累積報酬 | **+2648.38%** |
-| 年化報酬 | **+39.96%** |
-| MDD | **-29.20%** |
-| Sharpe | **1.0436** |
-| Calmar | **1.3685** |
-| 超額報酬 | +2593.80% |
-| 交易次數 | 2009 筆 |
+| 期間 | 2016-04-25 ~ 2026-03-04 |
+| 累積報酬 | **+3351%** |
+| 年化報酬 | **+43.2%** |
+| MDD | **-27.3%** |
+| Sharpe | **1.104** |
+| Calmar | **1.583** |
+| 超額報酬 | +3296.9% |
 
-配置：月頻 + 無停損 + 漸進大盤過濾（-5%:×0.5, -10%:×0.25, -15%:×0.10）+ 最少 2 檔 + seasonal filter + label_horizon_buffer=20 + **62 特徵（新增 6 個投信/均線/價量特徵）**
+配置：月頻 + 無停損 + 漸進大盤過濾（-5%:×0.5, -10%:×0.25, -15%:×0.10）+ 最少 2 檔 + seasonal filter + label_horizon_buffer=20 + liq-weighted + SHAP 剪枝 48 特徵
+
+CLI：
+```
+python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
+  --market-filter-tiers="-0.05:0.5,-0.10:0.25,-0.15:0.10" --market-filter-min-pos 2 \
+  --liq-weighted --pruned-features
+```
+
+#### 2026-04-02 Session 10 已驗證排除方向（見 decisions.md 詳細結果）
+
+| 實驗 | 累積報酬 | Sharpe | MDD | 結論 |
+|------|---------|--------|-----|------|
+| 突破進場（P0-2）| +465% | 0.683 | -41.5% | ❌ 2020 踏空 -30% 超額 |
+| 熔斷 -15%（P0-3）| +1092% | 0.821 | -36.6% | ❌ MDD 惡化、年化腰斬 |
+| 超額報酬 label（P1-2）| +859% | 0.750 | -47.3% | ❌ 2022 -33.85% 大虧 |
 
 特徵欄位：56 → 62（新增 trust_consecutive_buy_days, trust_buy_5d_intensity, foreign_trust_both_buy_days, bull_ma_alignment_score, deviation_from_40d_high, price_volume_alignment）
 

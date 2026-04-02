@@ -501,3 +501,73 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 ### fund revenue 前向洩漏（2026-03-04 修正）
 - 月營收加 45 天公告延遲：`available_date = trading_date + 45 days`
 - 改為 per-stock groupby `merge_asof`（全域 merge 需要全局單調，跨股資料不符合）
+
+---
+
+## 2026-04-02 實驗系列（Session 10）
+
+### 背景
+以「資深交易員 / 量化分析師」角度全面審視策略，依 P0→P1→P2 優先序逐一測試。
+現行生產基準：累積 +3351% / Sharpe 1.104 / MDD -27.3%（月頻 + 無停損 + 漸進大盤過濾 + liq-weighted + SHAP 剪枝 48 特徵）
+
+---
+
+### P0-2：突破確認進場（enable_breakthrough_entry）
+**實驗設定**：生產配置 + `--breakthrough-entry`（等待最多 10 日出現新高+大量訊號）
+**10y 結果**（artifacts/experiments/20260402_113128_breakthrough_vs_direct_entry.json）：
+- 累積 **+465%**、年化 +19.2%、MDD -41.5%、Sharpe 0.683、Calmar 0.463
+- 2020 年：**-11.68%（大盤 +18.25%，超額 -29.93%）** ← 核心問題
+
+**結論：❌ 不採用**
+- COVID V型急拉行情沒有「新高+大量」訊號，突破策略踏空只持 2 檔
+- 月頻策略靠「月底直接進場、持滿一個月」捕捉 20 日 label horizon，突破等待邏輯與模型時間尺度不符
+- 對比基準 +3351%，累積報酬差距高達 2886pp
+
+---
+
+### P0-3：投資組合熔斷機制（portfolio_circuit_breaker_pct=-0.15）
+**實驗設定**：生產配置 + `--portfolio-circuit-breaker 0.15`（月中等權累積跌超 15% 全出場）
+**10y 結果**（artifacts/experiments/20260402_114421_circuit_breaker_15pct.json）：
+- 累積 **+1092%**、年化 +28.6%、MDD -36.6%、Sharpe 0.821、Calmar 0.781
+- 2021 年：**+14.5%（vs 基準 +83.8%）** ← 月中波動頻繁觸發，錯過後段大漲
+- 2022 年：+9.96%（比基準 -9.08% 好，但不足以彌補其他年度的損失）
+
+**結論：❌ 不採用**
+- MDD 反而從 -27.3% 惡化至 -36.6%（熔斷後空手，但空頭期間已損失）
+- 月頻策略須持滿整月才能捕捉 20 日 label，強迫中途出場等於和 label horizon 對著幹
+- 已實作程式碼保留（`--portfolio-circuit-breaker` flag），供未來特殊場景研究用
+
+---
+
+### P1-1：產業集中限制（apply_sector_constraint）
+**實作**：commit bc102a9
+- `risk.py` 新增 `apply_sector_constraint()`，greedy 選股時同產業最多持 N 檔
+- `daily_pick.py` 新增 `_load_sector_map()`，讀取 Stock.industry_category
+- `config.py` 新增 `sector_max_per_industry: int = 0`（預設關閉）
+- 啟用方式：`SECTOR_MAX_PER_INDUSTRY=3`
+
+**回測驗證**：未執行（優先做 P1-2，且本功能主要針對生產端集中風險，非回測指標提升）
+
+---
+
+### P1-2：超額報酬 Label（label_type="excess"）
+**實驗設定**：生產配置 + `--excess-label`（future_ret_h 換成個股 - 等權市場均值）
+**10y 結果**（artifacts/experiments/20260402_124732_excess_label_p1_2.json）：
+- 累積 **+859%**、年化 +25.8%、MDD -47.3%、Sharpe 0.750、Calmar 0.545
+- 2022 年：**-33.85%（基準只 -9.08%）** ← 超額報酬 label 讓模型喪失對大盤走勢的感知
+- 2019 年：+3.91% 超額 -0.73%（首次跑輸大盤）
+
+**結論：❌ 不採用**
+- LightGBM cross-sectional ranking 本質上已在學超額報酬（相對排名），再加一層超額轉換是冗餘
+- 硬換 label 反而破壞模型對絕對市場走勢的感知，空頭時無法縮手
+- 已實作程式碼保留（`--excess-label` flag），供未來搭配其他架構研究
+
+---
+
+### 本 session 效能改善
+- **`ingest_margin_short` 批次查詢**（commit fe8e6a4）：3039 次個別 API → ~7 次批次，~30x 加速
+- Pipeline 總時間：~2 小時 → 幾分鐘（融資融券段）
+
+### 總結
+三個優化方向（突破進場、熔斷機制、超額報酬 label）全部驗證失敗。
+**現行生產配置（月頻直接進場 + 絕對報酬 label + 漸進大盤過濾 + liq-weighted + 48 特徵）維持不變。**
