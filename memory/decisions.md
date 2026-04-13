@@ -1,6 +1,6 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-03-25（session 9）
+> 最後更新：2026-04-13（session 11）
 
 ---
 
@@ -571,3 +571,43 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 ### 總結
 三個優化方向（突破進場、熔斷機制、超額報酬 label）全部驗證失敗。
 **現行生產配置（月頻直接進場 + 絕對報酬 label + 漸進大盤過濾 + liq-weighted + 48 特徵）維持不變。**
+
+---
+
+## Session 11（2026-04-13）程式優化 + rs_rank 驗證
+
+### 程式優化（commit 484c4fb）
+
+1. **labels 加 trading_date index**：CREATE INDEX ix_labels_trading_date ON labels(trading_date)
+   - MAX/GROUP BY 查詢：~2s → 即時
+
+2. **ingest_corporate_actions 改增量模式**：只補算 price_adjust_factors 未覆蓋日期
+   - 31.1s → 0.02s（**~1500x 加速**）
+   - 原因：每次重算 365 天 × 2000 股 ≈ 730,000 筆 upsert → 改為只插入新日期（每日幾百筆）
+
+3. **Strategy C 加距突破上限過濾**（MAX_BREAKTHROUGH_DIST = 0.30）
+   - 距20日高點 >30% 且未突破的買進候選直接跳過，換後排候補遞補
+   - bt_status 計算移至進場判斷前，讓過濾邏輯能使用突破距離
+   - 目的：避免威剛 +41%、晶豪科 +39% 這類幾乎不可能在 10 天內突破的股票佔用名額
+
+### rs_rank 特徵驗證（2026-04-13）
+
+**背景**：rs_rank_20 / rs_rank_60（個股報酬在全市場當日百分位排名）已進入 FEATURE_COLUMNS（58特徵），PRUNED_FEATURE_COLS 從 48 → 50。
+
+**實驗**：以當前 adj_close 資料跑兩組 10y walk-forward：
+- 50 特徵（含 rs_rank）：累積 **+1863%**、Sharpe **0.98**、MDD -27.83%
+- 48 特徵（不含 rs_rank）：累積 **+1863%**、Sharpe **0.98**、MDD -27.83%
+
+**結論：rs_rank 特徵完全中性**，有無均不影響結果。LightGBM 已從其他特徵（ret_20、ret_60 等）隱式學到相同資訊。
+
+**adj_close 資料更新影響**：
+- 舊快照（2026-03-18）：+3351% / Sharpe 1.104
+- 當前快照（2026-04-13）：+1863% / Sharpe 0.98
+- 差距（-1488pp）**完全來自 adj_close 回溯調整**，與特徵無關
+- adj_close 因除權息回溯計算會改變歷史報酬估計，為正常現象
+- 當前快照為最新且最準確的數字，CLAUDE.md 基準應更新為 +1863% / Sharpe 0.98
+
+**生產決策**：
+- rs_rank 特徵保留（neutral，不刪除）
+- PRUNED_FEATURE_COLS 維持 50 特徵
+- 生產基準更新為 **+1863% / Sharpe 0.98**（2026-04-13 adj_close 快照）
