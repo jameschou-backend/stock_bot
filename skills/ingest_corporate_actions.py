@@ -5,7 +5,7 @@ from typing import Dict, Iterable, List, Tuple
 from zoneinfo import ZoneInfo
 
 import pandas as pd
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
@@ -55,6 +55,16 @@ def _build_default_adjust_factors(
     start_date: date,
     end_date: date,
 ) -> Iterable[Dict]:
+    # 增量模式：只補算 price_adjust_factors 尚未覆蓋的日期，避免每次重新 upsert 全部 365 天
+    max_existing = session.execute(
+        select(func.max(PriceAdjustFactor.trading_date))
+    ).scalar()
+    if max_existing is not None:
+        incremental_start = max_existing + timedelta(days=1)
+        if incremental_start > end_date:
+            return  # 已是最新，無需補算
+        start_date = max(start_date, incremental_start)
+
     stmt = (
         select(RawPrice.stock_id, RawPrice.trading_date)
         .where(RawPrice.trading_date.between(start_date, end_date))

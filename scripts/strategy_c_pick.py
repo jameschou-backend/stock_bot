@@ -54,6 +54,7 @@ RANK_THRESHOLD         = 0.20  # 維持持倉的最低排名門檻（top 20%）
 TOP_ENTRY_N            = 10    # 每日候補選股池
 MAX_POSITIONS          = 6     # 最大同時持倉
 MAX_HOLD_DAYS          = 30    # 強制出場天數
+MAX_BREAKTHROUGH_DIST  = 0.30  # 新買進距突破上限（>30% 的股不進場，等更近的候補）
 RETRAIN_MONTHS         = 36    # 訓練資料回看月數（3 年）
 RETRAIN_FREQ_DAYS      = 30    # 每隔幾天重訓一次
 MIN_AVG_TURNOVER_BILL  = 1.0   # 流動性門檻：20日平均日成交金額（億元），0=不過濾
@@ -286,26 +287,8 @@ def run_pick(
 
     remaining_slots = MAX_POSITIONS - len(hold_list)
 
-    # ── 進場判斷 ──
-    held_sids = {p["stock_id"] for p in hold_list}
-    buy_list  = []
-    candidates = (
-        tf_today[tf_today["stock_id"].isin(top_n_pool - held_sids - exits_done)]
-        .sort_values("score", ascending=False)
-    )
-    for _, row in candidates.iterrows():
-        if len(buy_list) >= remaining_slots:
-            break
-        sid = str(row["stock_id"])
-        buy_list.append({
-            "stock_id": sid,
-            "entry_date": today.isoformat(),
-            "entry_score": round(float(row["score"]), 6),
-            "days_held": 0,
-        })
-
-    # ── 突破確認偵測（供 /signal 顯示進場點位）──
-    # 對「top 20 候選 + 維持持倉」計算今日突破狀態，不改變選股邏輯，純粹提供執行參考。
+    # ── 突破確認偵測（先算，供進場過濾 + /signal 顯示）──
+    # 對「top 20 候選 + 維持持倉」計算今日突破狀態
     _top20_sids = set(tf_today.nlargest(20, "score")["stock_id"].astype(str).tolist())
     _bt_sids = list(_top20_sids | {p["stock_id"] for p in hold_list})
     _bt_feat_today = feat_df[feat_df["trading_date"] == today].copy() if "trading_date" in feat_df.columns else pd.DataFrame()
@@ -318,6 +301,29 @@ def run_pick(
         )
     except Exception:
         bt_status = {}
+
+    # ── 進場判斷 ──
+    held_sids = {p["stock_id"] for p in hold_list}
+    buy_list  = []
+    candidates = (
+        tf_today[tf_today["stock_id"].isin(top_n_pool - held_sids - exits_done)]
+        .sort_values("score", ascending=False)
+    )
+    for _, row in candidates.iterrows():
+        if len(buy_list) >= remaining_slots:
+            break
+        sid = str(row["stock_id"])
+        # 距突破上限過濾：距條件一 >30% 且尚未突破 → 跳過，用後排候補遞補
+        _bt_info = bt_status.get(sid, {})
+        _pct_dist = _bt_info.get("pct_to_price_bt", 0.0) or 0.0
+        if not _bt_info.get("ready", False) and _pct_dist > MAX_BREAKTHROUGH_DIST:
+            continue
+        buy_list.append({
+            "stock_id": sid,
+            "entry_date": today.isoformat(),
+            "entry_score": round(float(row["score"]), 6),
+            "days_held": 0,
+        })
 
     # ── 建立今日持倉清單 ──
     total_positions = len(hold_list) + len(buy_list)

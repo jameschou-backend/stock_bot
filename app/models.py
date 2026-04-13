@@ -194,6 +194,10 @@ class Label(Base):
     trading_date = Column(Date, primary_key=True)
     future_ret_h = Column(DECIMAL(18, 8), nullable=True)
 
+    __table_args__ = (
+        Index("ix_labels_trading_date", "trading_date"),
+    )
+
 
 class ModelVersion(Base):
     __tablename__ = "model_versions"
