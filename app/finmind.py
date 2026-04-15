@@ -12,11 +12,14 @@
 
 from __future__ import annotations
 
+import logging
 import random
 import re
 import time
 from datetime import date, timedelta
 from typing import Any, Callable, Dict, Iterable, List, Optional
+
+logger = logging.getLogger(__name__)
 
 import pandas as pd
 import requests
@@ -222,6 +225,7 @@ def fetch_dataset_by_stocks(
     backoff_seconds: float = 1.0,
     debug: bool = False,
     timeout: int = 60,
+    error_rate_threshold: float = 0.5,
 ) -> pd.DataFrame:
     """批次抓取資料（當全市場抓取不可用時）
     
@@ -243,9 +247,14 @@ def fetch_dataset_by_stocks(
         use_batch_query: 是否使用批次查詢（一次傳多個 data_id）
         batch_write_callback: 每批寫入回調函數 callback(df) -> rows_written
                               如果提供，每批抓完後立即寫入 DB，中斷也不會丟失已寫資料
-    
+        error_rate_threshold: 錯誤率閾值（0.0~1.0），超過此比例則拋出 FinMindError
+                              預設 0.5（50% 的 batch 失敗即視為配額耗盡，不繼續）
+
     Returns:
         合併後的 DataFrame（如果有 batch_write_callback 則回傳空 DataFrame）
+
+    Raises:
+        FinMindError: 配額錯誤（402/429）或錯誤率超過 error_rate_threshold
     """
     if not stock_ids:
         return pd.DataFrame()
@@ -255,14 +264,22 @@ def fetch_dataset_by_stocks(
     api_calls = 0
     total_written = 0
     error_count = 0
+    quota_error_count = 0  # 402/429 配額錯誤（所有後續 call 都會失敗，應立即停止）
     empty_count = 0
     first_error: Optional[str] = None
     _first_data_logged = False
-    
+
+    def _is_quota_error(exc: FinMindError) -> bool:
+        """判斷是否為配額耗盡錯誤（402/429）"""
+        msg = str(exc)
+        return "402" in msg or "429" in msg or "quota" in msg.lower() or "超過" in msg
+
+    total_batches = (total + batch_size - 1) // batch_size
+
     for i in range(0, total, batch_size):
         batch = stock_ids[i:i + batch_size]
         batch_dfs = []
-        
+
         if use_batch_query:
             # 優化：一次 API call 抓取整批股票
             # FinMind 支援 data_id 用逗號分隔多個股票代碼
@@ -282,11 +299,21 @@ def fetch_dataset_by_stocks(
                 api_calls += 1
                 if not df.empty:
                     batch_dfs.append(df)
-            except FinMindError:
+            except FinMindError as exc:
                 error_count += 1
-                if debug and first_error is None:
-                    first_error = f"batch data_id={batch_data_id}"
-                # 批次失敗時，降級為逐檔抓取
+                if first_error is None:
+                    first_error = f"batch data_id={batch_data_id}: {exc}"
+                if _is_quota_error(exc):
+                    quota_error_count += 1
+                    logger.error(
+                        "[finmind] 配額錯誤（%s），已完成 %d/%d batches，停止抓取 %s",
+                        exc, i // batch_size + 1, total_batches, dataset,
+                    )
+                    raise FinMindError(
+                        f"FinMind 配額耗盡 ({exc})，dataset={dataset} 已中止，"
+                        f"請稍後重試或升級方案"
+                    ) from exc
+                # 非配額錯誤：降級為逐檔抓取
                 for stock_id in batch:
                     try:
                         df = fetch_dataset(
@@ -303,12 +330,18 @@ def fetch_dataset_by_stocks(
                         api_calls += 1
                         if not df.empty:
                             batch_dfs.append(df)
-                    except FinMindError:
-                        # 單檔失敗不中斷整體流程
+                    except FinMindError as exc2:
                         error_count += 1
-                        if debug and first_error is None:
-                            first_error = f"stock_id={stock_id}"
-                        pass
+                        if first_error is None:
+                            first_error = f"stock_id={stock_id}: {exc2}"
+                        if _is_quota_error(exc2):
+                            quota_error_count += 1
+                            logger.error(
+                                "[finmind] 配額錯誤（%s），停止抓取 %s", exc2, dataset
+                            )
+                            raise FinMindError(
+                                f"FinMind 配額耗盡 ({exc2})，dataset={dataset} 已中止"
+                            ) from exc2
         else:
             # 傳統模式：逐檔抓取
             for j, stock_id in enumerate(batch):
@@ -333,16 +366,22 @@ def fetch_dataset_by_stocks(
                     else:
                         empty_count += 1
                 except FinMindError as exc:
-                    # 單檔失敗不中斷整體流程
                     error_count += 1
-                    if debug and first_error is None:
+                    if first_error is None:
                         first_error = f"stock_id={stock_id}: {exc}"
-                    pass
+                    if _is_quota_error(exc):
+                        quota_error_count += 1
+                        logger.error(
+                            "[finmind] 配額錯誤（%s），停止抓取 %s", exc, dataset
+                        )
+                        raise FinMindError(
+                            f"FinMind 配額耗盡 ({exc})，dataset={dataset} 已中止"
+                        ) from exc
 
                 # 每檔都更新進度（逐檔模式下即時顯示）
                 if progress_callback:
                     progress_callback(i + j + 1, total)
-        
+
         # 處理這批資料
         if batch_dfs:
             batch_df = pd.concat(batch_dfs, ignore_index=True)
@@ -353,26 +392,52 @@ def fetch_dataset_by_stocks(
             else:
                 # 累積到最後合併
                 all_dfs.append(batch_df)
-        
+
         # batch_query 模式在 batch 結束時更新進度
         if use_batch_query and progress_callback:
             progress_callback(min(i + batch_size, total), total)
-        
+
         # 批次間延遲
         if i + batch_size < total:
             time.sleep(batch_delay)
-    
+
+        # 錯誤率檢查：每 10 批次或處理完畢時檢查
+        batches_done = i // batch_size + 1
+        if error_rate_threshold > 0 and batches_done % 10 == 0:
+            err_rate = error_count / max(api_calls, 1)
+            if err_rate > error_rate_threshold:
+                logger.error(
+                    "[finmind] %s 錯誤率過高 %.1f%% (%d/%d calls)，first_error=%s，停止抓取",
+                    dataset, err_rate * 100, error_count, api_calls, first_error,
+                )
+                raise FinMindError(
+                    f"FinMind {dataset} 錯誤率 {err_rate:.0%} 超過閾值 {error_rate_threshold:.0%}，"
+                    f"共 {error_count} 次失敗（{api_calls} calls），first_error={first_error}"
+                )
+
+    # 最終錯誤率檢查
+    if error_count > 0:
+        err_rate = error_count / max(api_calls, 1)
+        log_fn = logger.warning if err_rate < error_rate_threshold else logger.error
+        log_fn(
+            "[finmind] %s 完成：api_calls=%d, errors=%d (%.1f%%), empty=%d, written=%d, first_error=%s",
+            dataset, api_calls, error_count, err_rate * 100, empty_count, total_written, first_error,
+        )
+        if error_rate_threshold > 0 and err_rate > error_rate_threshold:
+            raise FinMindError(
+                f"FinMind {dataset} 最終錯誤率 {err_rate:.0%} 超過閾值 {error_rate_threshold:.0%}，"
+                f"共 {error_count} 次失敗（{api_calls} calls），first_error={first_error}"
+            )
+
     # 如果有 batch_write_callback，資料已經寫入，回傳空 DataFrame
     if batch_write_callback:
         if debug and (error_count or empty_count):
-            print(f"\n[finmind] {dataset} api_calls={api_calls} empty={empty_count} errors={error_count} first_error={first_error}", flush=True)
+            print(f"\n[finmind] {dataset} api_calls={api_calls} empty={empty_count} errors={error_count}", flush=True)
         return pd.DataFrame()
-    
+
     if not all_dfs:
         return pd.DataFrame()
-    
-    if debug and error_count:
-        print(f"[finmind] {dataset} errors={error_count} first_error={first_error}")
+
     return pd.concat(all_dfs, ignore_index=True)
 
 
