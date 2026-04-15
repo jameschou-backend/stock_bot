@@ -1,6 +1,6 @@
 # 專案現況
 
-> 最後更新：2026-04-15（session 12）
+> 最後更新：2026-04-15（session 13）
 
 ---
 
@@ -105,7 +105,32 @@ alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，
 | `ingest_trading_calendar.py` 用 weekday heuristic | pipeline | 尚未串接官方 TWSE 行事曆 |
 | `ingest_corporate_actions.py` 外部來源未接妥 | 除權除息 | 常見 `adj_factor=1.0` 保底 |
 | **parquet cache 24h TTL** | strategy_c_pick.py | pipeline 跑完後若 cache 未過期，daily-c 仍用舊資料。解法：`rm artifacts/cache/*.parquet` 再跑 |
-| **FinMind API Quota（402）** | ingest | 密集跑 pipeline 會觸發 402 上限；backfill 靜默失敗（error_count 遞增但不拋例外）→ job 顯示 success 但資料不完整 |
+| ~~**FinMind API Quota（402）**~~ | ~~ingest~~ | ~~**已修正（2026-04-15）**~~：402/429 配額錯誤現在立即拋出 FinMindError，不再靜默繼續 |
+
+---
+
+## Session 13 完成事項（2026-04-15）
+
+### 三項優化驗證 + FinMind 修正
+
+**驗證結果（10y WF，均不採用為生產配置）**：
+
+| 實驗 | 累積報酬 | MDD | Sharpe | Calmar | 結論 |
+|------|---------|-----|--------|--------|------|
+| **Baseline（50feat）** | **+1863%** | **-27.8%** | **0.980** | **1.268** | ← 生產配置 |
+| IC衰減剪枝（42feat）| +1784% | -29.0% | 1.072 | 1.198 | ❌ 2023 -83pp 退化 |
+| ensemble-3（42feat）| +1523% | -34.5% | 0.955 | 0.948 | ❌ 全面劣於基準 |
+| cs-norm（截面Z-score）| +104% | -49.1% | 0.339 | 0.153 | ❌ 完全失效 |
+
+**關鍵發現**：
+- IC「衰減」不等於「無用」：ma_20/60、foreign_buy_streak 等動能特徵在 2023 強勢多頭至關重要
+- 截面 Z-score 正規化在月頻設定下破壞跨期排名信號，不適合此策略
+- Ensemble 3 checkpoints：模型間相關性過高，diversity 不足以提升 Sharpe
+
+**FinMind 配額錯誤修正（commit d2c209c）**：
+- `app/finmind.py`：402/429 配額錯誤現立即 raise，不靜默繼續
+- 新增 `error_rate_threshold=0.5`
+- 改用 logger.error/warning 記錄
 
 ---
 
