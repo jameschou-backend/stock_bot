@@ -174,7 +174,26 @@ _PRUNE_SET = {
     "kd_k", "foreign_buy_consecutive_days", "willr_14",
     "amt_ratio_20", "foreign_buy_intensity",
 }
-PRUNED_FEATURE_COLS: List[str] = [f for f in FEATURE_COLUMNS if f not in _PRUNE_SET]
+
+# IC 衰減剪枝集（2026-04-15，近 2 年 Spearman IC 分析）
+# 失效標準：近期 IC 幾乎歸零（|IC| < 0.005）或符號翻轉（|衰減%| > 80%）
+# ma_5(-87.7%), ma_20(-95.6%), ma_60(-103.4%↗符號翻轉),
+# amt_20(-108.8%↗), amt(-115.7%↗), foreign_net_20(+79.5%↗),
+# fund_revenue_mom(-64.2%), foreign_buy_streak(-76.8%)
+_IC_DECAY_PRUNE_SET = {
+    "ma_5", "ma_20", "ma_60",
+    "amt_20", "amt",
+    "foreign_net_20",
+    "fund_revenue_mom",
+    "foreign_buy_streak",
+}
+
+# SHAP + IC 聯合剪枝（2026-04-15，58 → 42 特徵）
+# = FEATURE_COLUMNS - _PRUNE_SET(8) - _IC_DECAY_PRUNE_SET(8)
+PRUNED_FEATURE_COLS: List[str] = [
+    f for f in FEATURE_COLUMNS
+    if f not in _PRUNE_SET and f not in _IC_DECAY_PRUNE_SET
+]
 
 # ProcessPoolExecutor 每個 task 包含的股票數（降低序列化次數）
 _CHUNK_SIZE = 50
