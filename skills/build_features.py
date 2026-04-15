@@ -175,21 +175,13 @@ _PRUNE_SET = {
     "amt_ratio_20", "foreign_buy_intensity",
 }
 
-# IC 衰減剪枝集（2026-04-15，近 2 年 Spearman IC 分析）
-# 失效標準：近期 IC 幾乎歸零（|IC| < 0.005）或符號翻轉（|衰減%| > 80%）
-# ma_5(-87.7%), ma_20(-95.6%), ma_60(-103.4%↗符號翻轉),
-# amt_20(-108.8%↗), amt(-115.7%↗), foreign_net_20(+79.5%↗),
-# fund_revenue_mom(-64.2%), foreign_buy_streak(-76.8%)
-_IC_DECAY_PRUNE_SET = {
-    "ma_5", "ma_20", "ma_60",
-    "amt_20", "amt",
-    "foreign_net_20",
-    "fund_revenue_mom",
-    "foreign_buy_streak",
-}
+# IC 衰減剪枝集（2026-04-15，近 2 年 IC 分析，10y WF 驗證後放棄）
+# 結論：IC 衰減的特徵（ma_5/20/60、foreign_buy_streak 等）在強勢多頭（2023 +141%→+57%）仍不可或缺
+# 10y WF: 42feat ret=1784% Sharpe=1.07 vs 50feat ret=1863% Sharpe=0.98
+# Sharpe 微升 +0.09 但 2023 績效大幅退化（-83pp），Calmar 也從 1.27→1.20 惡化 → 不採用
+_IC_DECAY_PRUNE_SET: set = set()  # 保留所有 50 個 SHAP 剪枝後特徵
 
-# SHAP + IC 聯合剪枝（2026-04-15，58 → 42 特徵）
-# = FEATURE_COLUMNS - _PRUNE_SET(8) - _IC_DECAY_PRUNE_SET(8)
+# SHAP 剪枝（2026-03-18，58 → 50 特徵）
 PRUNED_FEATURE_COLS: List[str] = [
     f for f in FEATURE_COLUMNS
     if f not in _PRUNE_SET and f not in _IC_DECAY_PRUNE_SET
