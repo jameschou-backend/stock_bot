@@ -1157,11 +1157,24 @@ def run_backtest(
                 _td_vals = pd.to_datetime(merged["trading_date"]).values
                 _sort_idx = np.argsort(_td_vals, kind="stable")
                 _fmat_arr = fmat.values[_sort_idx]
-                _y_sorted = y[_sort_idx]
+                _y_cont = y[_sort_idx]           # 連續 forward return
                 _sw_sorted = _sample_weight[_sort_idx] if _sample_weight is not None else None
                 # group = 每個 trading_date 的股票數（LightGBM LambdaRank 需要）
-                _, _gcounts = np.unique(_td_vals[_sort_idx], return_counts=True)
+                _td_sorted = _td_vals[_sort_idx]
+                _unique_td, _gcounts = np.unique(_td_sorted, return_counts=True)
                 _train_groups = _gcounts.astype(np.int32)
+                # LGBMRanker 需要 int label：將各截面的連續 return 轉為 quintile 排名（0~4）
+                _y_sorted_int = np.empty(len(_y_cont), dtype=np.int32)
+                _pos = 0
+                for _gc in _gcounts:
+                    _seg = _y_cont[_pos: _pos + _gc]
+                    # 截面內按分位數分組：0(最低)~4(最高)
+                    _ranks = _seg.argsort().argsort()  # 0~(gc-1)
+                    _n_bins = min(5, _gc)
+                    _bins = (_ranks * _n_bins / _gc).astype(np.int32).clip(0, _n_bins - 1)
+                    _y_sorted_int[_pos: _pos + _gc] = _bins
+                    _pos += _gc
+                _y_sorted = _y_sorted_int
             else:
                 _fmat_arr = fmat.values
                 _y_sorted = y
