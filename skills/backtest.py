@@ -20,11 +20,12 @@
 
 from __future__ import annotations
 
+import collections
 import gc
 import os
 import time
 from datetime import date, timedelta
-from typing import Dict, List, Optional, Tuple
+from typing import Deque, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
@@ -32,7 +33,7 @@ import psutil
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from app.models import Feature, Label, RawPrice
+from app.models import Feature, Label, RawPrice, Stock
 from skills import data_store, risk
 from skills.breakthrough import (
     precompute_stats as _precompute_breakthrough_stats,
@@ -42,6 +43,7 @@ from skills.feature_utils import (
     parse_features_json as _parse_features_json_shared,
     impute_features as _impute_features_shared,
     filter_schema_valid_rows as _filter_schema_valid_rows,
+    cross_section_normalize as _cross_section_normalize,
 )
 
 # ── 模型訓練（複用 train_ranker 邏輯）──
@@ -101,27 +103,52 @@ def _train_model(
     train_y: np.ndarray,
     fast_mode: bool = False,
     sample_weight: Optional[np.ndarray] = None,
+    train_groups: Optional[np.ndarray] = None,
 ):
     """訓練一個輕量級模型供回測使用。fast_mode=True 時減少樹數以加速。
-    sample_weight 支援時間加權（近期樣本權重更高）。
+
+    train_groups（非 None）時啟用 LambdaRank 模式：
+      - 資料須按 trading_date 排序
+      - train_groups 為每個 query（日期）的樣本數陣列
+      - 直接優化 top-20 排名一致性（NDCG@20），比 regression 更貼近選股目標
     """
     n_est = 150 if fast_mode else 500
     if _HAS_LGBM:
-        model = lgb.LGBMRegressor(
-            n_estimators=n_est,
-            learning_rate=0.05,
-            max_depth=6,
-            num_leaves=31,
-            subsample=0.8,
-            colsample_bytree=0.8,
-            reg_alpha=0.1,
-            reg_lambda=0.1,
-            min_child_samples=50,
-            random_state=42,
-            n_jobs=-1,
-            verbose=-1,
-        )
-        model.fit(train_X, train_y, sample_weight=sample_weight)
+        if train_groups is not None:
+            # LambdaRank：直接優化截面排名（NDCG@20）
+            model = lgb.LGBMRanker(
+                n_estimators=n_est,
+                learning_rate=0.05,
+                max_depth=6,
+                num_leaves=31,
+                subsample=0.8,
+                colsample_bytree=0.8,
+                reg_alpha=0.1,
+                reg_lambda=0.1,
+                min_child_samples=10,       # ranking 每 query 樣本數少，需放寬
+                lambdarank_truncation_level=20,  # 只關心 top-20 排名
+                random_state=42,
+                n_jobs=-1,
+                verbose=-1,
+            )
+            model.fit(train_X, train_y, group=train_groups, sample_weight=sample_weight)
+        else:
+            # Regression 模式（現行預設）
+            model = lgb.LGBMRegressor(
+                n_estimators=n_est,
+                learning_rate=0.05,
+                max_depth=6,
+                num_leaves=31,
+                subsample=0.8,
+                colsample_bytree=0.8,
+                reg_alpha=0.1,
+                reg_lambda=0.1,
+                min_child_samples=50,
+                random_state=42,
+                n_jobs=-1,
+                verbose=-1,
+            )
+            model.fit(train_X, train_y, sample_weight=sample_weight)
     else:
         n_est_gbr = 100 if fast_mode else 300
         model = GradientBoostingRegressor(
@@ -724,6 +751,12 @@ class WalkForwardConfig:
     portfolio_circuit_breaker_pct: Optional[float] = None  # 月中累積虧損觸發全出場（如 -0.15）
     # ── Label 設定 ──
     label_type: str = "abs"  # "abs"=絕對報酬（現行）；"excess"=等權超額報酬（P1-2）
+    # ── LambdaRank ──
+    use_lambdarank: bool = False  # True=優化 NDCG@20 截面排名；False=regression（現行）
+    # ── 截面正規化 ──
+    cross_section_normalize: bool = False  # True=每個再平衡期特徵截面 Z-score 正規化
+    # ── Ensemble ──
+    ensemble_n_checkpoints: int = 1  # 保留最近 N 次重訓 checkpoint 並平均排名分數（1=停用）
 
 
 def run_backtest(
@@ -771,6 +804,9 @@ def run_backtest(
     liquidity_weighting: bool = False,   # 流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式
     portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷閾值（如 -0.15）
     label_type: str = "abs",  # "abs"=絕對報酬；"excess"=等權超額報酬（P1-2）
+    use_lambdarank: bool = False,  # True=LambdaRank(NDCG@20)；False=regression（現行）
+    cross_section_normalize: bool = False,  # True=每個再平衡期特徵截面 Z-score 正規化
+    ensemble_n_checkpoints: int = 1,  # 保留最近 N 次重訓 checkpoint 並平均排名（1=停用）
     wf_config: Optional["WalkForwardConfig"] = None,  # 型別安全封裝（優先於上方 kwargs）
 ) -> Dict:
     """執行 walk-forward 回測。
@@ -826,10 +862,14 @@ def run_backtest(
         entry_signal_filter    = wf_config.entry_signal_filter
         portfolio_circuit_breaker_pct = wf_config.portfolio_circuit_breaker_pct
         label_type             = wf_config.label_type
+        use_lambdarank         = wf_config.use_lambdarank
+        cross_section_normalize = wf_config.cross_section_normalize
+        ensemble_n_checkpoints = wf_config.ensemble_n_checkpoints
 
-    # 若 wf_config 未提供，補上 label_type 預設值
+    # 若 wf_config 未提供，補上預設值
     if wf_config is None:
-        label_type = label_type  # kwargs 已直接賦值，保持不變
+        label_type = label_type
+        use_lambdarank = use_lambdarank  # kwargs 直接賦值
     _wf_cb = portfolio_circuit_breaker_pct  # 統一暫存，供 _simulate_period 使用
 
     print("\n" + "=" * 60)
@@ -901,6 +941,11 @@ def run_backtest(
         label_df = data_store.get_labels(db_session, data_start, data_end)
         _timer_load_features = time.time() - _t
         _log(f"load_all_features done {_timer_load_features:.1f}s")
+        # ── P2-1: 截面 Z-score 正規化（在 label 轉換前完成，保留 date/id 欄位）──
+        if cross_section_normalize and not feat_df.empty:
+            _t = time.time()
+            feat_df = _cross_section_normalize(feat_df, date_col="trading_date")
+            print(f"  [cs_norm] 截面 Z-score 正規化完成 ({time.time()-_t:.1f}s)", flush=True)
         # ── P1-2: 超額報酬 label 轉換（label_type="excess"）──
         if label_type == "excess" and not label_df.empty:
             mkt_ret = label_df.groupby("trading_date")["future_ret_h"].mean().rename("_mkt_ret")
@@ -920,6 +965,13 @@ def run_backtest(
         atr_df = risk.compute_atr(price_df, period=atr_period)
     liquidity_eligible_map = _precompute_liquidity_eligible_map(price_df, min_avg_turnover)
     market_median_ret20_map = _precompute_market_median_ret20(price_df)
+    # ── P3-2: 載入興櫃股 ID，回測 universe 與 production 一致 ──
+    _emerging_ids: set = {
+        str(r.stock_id)
+        for r in db_session.query(Stock.stock_id).filter(Stock.market == "EMERGING").all()
+    }
+    if _emerging_ids:
+        print(f"  EMERGING 過濾：排除 {len(_emerging_ids)} 支興櫃股", flush=True)
     market_weekly_drop_map = _precompute_market_weekly_drop(price_df)
     market_200ma_bear_map = _precompute_market_200ma_bear(price_df)
 
@@ -939,6 +991,8 @@ def run_backtest(
     current_model = None
     current_feature_names = None
     last_train_date = None
+    # Ensemble checkpoint buffer（P2-2）：保留最近 ensemble_n_checkpoints 個模型
+    _model_buf: Deque = collections.deque(maxlen=max(1, ensemble_n_checkpoints))
     period_results: List[Dict] = []
     all_trades_log: List[Dict] = []
     cooldown_until: Dict[str, date] = {}  # stock_id -> 冷卻截止日（停損後 N 週不再選入）
@@ -1098,13 +1152,37 @@ def run_backtest(
                 else:
                     _sample_weight = _liq_w
 
+            # ── LambdaRank：按 trading_date 排序並計算 group sizes ──
+            if use_lambdarank:
+                _td_vals = pd.to_datetime(merged["trading_date"]).values
+                _sort_idx = np.argsort(_td_vals, kind="stable")
+                _fmat_arr = fmat.values[_sort_idx]
+                _y_sorted = y[_sort_idx]
+                _sw_sorted = _sample_weight[_sort_idx] if _sample_weight is not None else None
+                # group = 每個 trading_date 的股票數（LightGBM LambdaRank 需要）
+                _, _gcounts = np.unique(_td_vals[_sort_idx], return_counts=True)
+                _train_groups = _gcounts.astype(np.int32)
+            else:
+                _fmat_arr = fmat.values
+                _y_sorted = y
+                _sw_sorted = _sample_weight
+                _train_groups = None
+
             _t = time.time()
-            current_model = _train_model(fmat.values, y, fast_mode=fast_mode, sample_weight=_sample_weight)
+            current_model = _train_model(
+                _fmat_arr, _y_sorted,
+                fast_mode=fast_mode,
+                sample_weight=_sw_sorted,
+                train_groups=_train_groups,
+            )
             _dt = time.time() - _t
             _timer_train_model += _dt
             _count_train_model += 1
             last_train_date = rb_date
-            print(f"  [{rb_date}] 模型重訓完成 (訓練筆數: {len(y):,}) [TIMER] train_model: {_dt:.2f}s", flush=True)
+            _model_buf.append(current_model)  # P2-2: 加入 ensemble buffer
+            print(f"  [{rb_date}] 模型重訓完成 (訓練筆數: {len(y):,}) [TIMER] train_model: {_dt:.2f}s"
+                  + (f"  [ensemble={len(_model_buf)}/{ensemble_n_checkpoints}]" if ensemble_n_checkpoints > 1 else ""),
+                  flush=True)
 
         if current_model is None:
             continue
@@ -1112,12 +1190,16 @@ def run_backtest(
         # ── 對當日股票評分 ──
         day_feat = feat_df[feat_df["trading_date"] == rb_date].copy()
         day_feat = day_feat[day_feat["stock_id"].str.fullmatch(r"\d{4}")]
+        if _emerging_ids:
+            day_feat = day_feat[~day_feat["stock_id"].isin(_emerging_ids)]
 
         if day_feat.empty:
             for fallback in range(1, 6):
                 fb_date = rb_date - timedelta(days=fallback)
                 day_feat = feat_df[feat_df["trading_date"] == fb_date].copy()
                 day_feat = day_feat[day_feat["stock_id"].str.fullmatch(r"\d{4}")]
+                if _emerging_ids:
+                    day_feat = day_feat[~day_feat["stock_id"].isin(_emerging_ids)]
                 if not day_feat.empty:
                     break
 
@@ -1144,7 +1226,15 @@ def run_backtest(
                     fmat[_pc] = fmat[_pc] * _ps
 
         _t = time.time()
-        scores = current_model.predict(fmat.values)
+        if ensemble_n_checkpoints > 1 and len(_model_buf) > 1:
+            # P2-2: Ensemble：各模型預測的「截面排名百分位」取平均，再轉為最終分數
+            _raw_preds = np.array([m.predict(fmat.values) for m in _model_buf])  # (n_models, n_stocks)
+            # rank-based averaging：每個模型的預測分數轉換為截面排名百分位（0~1）
+            _n = _raw_preds.shape[1]
+            _ranked = np.argsort(np.argsort(_raw_preds, axis=1), axis=1).astype(float) / max(_n - 1, 1)
+            scores = _ranked.mean(axis=0)
+        else:
+            scores = current_model.predict(fmat.values)
         _dt = time.time() - _t
         _timer_predict += _dt
         _count_predict += 1

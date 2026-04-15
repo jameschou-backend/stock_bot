@@ -139,3 +139,72 @@ def filter_schema_valid_rows(
     valid_mask = coverage >= coverage_threshold
     n_dropped = int((~valid_mask).sum())
     return feature_matrix.loc[valid_mask].copy(), n_dropped
+
+
+def cross_section_normalize(
+    df: pd.DataFrame,
+    date_col: str = "trading_date",
+    min_stocks: int = 10,
+    clip_sigma: float = 3.0,
+) -> pd.DataFrame:
+    """截面 Z-score 正規化。
+
+    對每個 trading_date，將各數值特徵標準化為 zero-mean / unit-variance，
+    消除特徵絕對值尺度跨年漂移（例如成交量在不同市場環境下的量級差異）。
+
+    LightGBM 是基於排序的樹模型，截面 z-score 本身不改變分裂閾值的資訊量，
+    但對 regularization（feature scale 影響 reg_alpha/reg_lambda 的相對強度）
+    以及截面特徵間的交互作用有正面影響。
+
+    步驟：
+    1. 無窮大 → NaN
+    2. 各期截面中位數填補（median imputation，避免影響標準化的 scale）
+    3. 截面 Z-score：(x - μ) / (σ + ε)
+    4. 截斷極值：clip 至 [-clip_sigma, +clip_sigma]（預設 ±3σ）
+    5. 保留 date_col 與非數值欄位不變
+
+    Args:
+        df: 含 trading_date（或其他日期欄位）+ 數值特徵的 DataFrame。
+            date_col 欄位用於按期分組；其餘非數值欄位（stock_id 等）原樣保留。
+        date_col: 分組欄位名稱（預設 "trading_date"）。
+        min_stocks: 每個截面股票數低於此值時，直接跳過（避免除以接近零的 std）。
+        clip_sigma: 極值截斷 sigma（預設 3.0）。
+
+    Returns:
+        正規化後的 DataFrame（原始 index 與 column 順序維持不變）。
+    """
+    if df.empty:
+        return df.copy()
+
+    # 確認 date_col 存在
+    if date_col not in df.columns:
+        return df.copy()
+
+    num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+    if not num_cols:
+        return df.copy()
+
+    out = df.copy()
+    out[num_cols] = out[num_cols].replace([np.inf, -np.inf], np.nan)
+
+    def _normalize_group(g: pd.DataFrame) -> pd.DataFrame:
+        if len(g) < min_stocks:
+            return g
+        sub = g[num_cols].copy()
+        # 截面中位數填補
+        medians = sub.median(skipna=True)
+        for col in num_cols:
+            sub[col] = sub[col].fillna(float(medians[col]))
+        # Z-score
+        mean = sub.mean()
+        std = sub.std().clip(lower=1e-8)
+        sub = (sub - mean) / std
+        # 極值截斷
+        if clip_sigma > 0:
+            sub = sub.clip(lower=-clip_sigma, upper=clip_sigma)
+        g = g.copy()
+        g[num_cols] = sub.values
+        return g
+
+    out = out.groupby(date_col, group_keys=False).apply(_normalize_group)
+    return out

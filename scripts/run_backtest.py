@@ -189,6 +189,15 @@ def main():
     parser.add_argument("--excess-label", action="store_true",
                         dest="excess_label",
                         help="P1-2：使用等權超額報酬作為訓練 label（future_ret_h - 市場均值）")
+    parser.add_argument("--lambdarank", action="store_true",
+                        dest="use_lambdarank",
+                        help="P1：使用 LightGBM LambdaRank 替代 regression，直接優化 NDCG@20 截面排名")
+    parser.add_argument("--cs-norm", action="store_true",
+                        dest="cross_section_normalize",
+                        help="P2-1：截面 Z-score 正規化，消除特徵絕對值尺度跨年漂移")
+    parser.add_argument("--ensemble", type=int, default=1,
+                        dest="ensemble_n_checkpoints", metavar="N",
+                        help="P2-2：保留最近 N 次重訓 checkpoint 並平均排名分數（預設 1=停用，建議 3）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -347,6 +356,9 @@ def main():
                 else None
             ),
             label_type="excess" if args.excess_label else "abs",
+            use_lambdarank=getattr(args, "use_lambdarank", False),
+            cross_section_normalize=getattr(args, "cross_section_normalize", False),
+            ensemble_n_checkpoints=getattr(args, "ensemble_n_checkpoints", 1),
         )
 
     # ── 輸出 JSON ──

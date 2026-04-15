@@ -41,6 +41,7 @@ except ImportError:
 from app.db import get_session
 from app.models import Stock, StrategyCTrade
 from skills import data_store
+from skills.feature_utils import cross_section_normalize as _cs_normalize
 
 # ─────────────────────────────────────────────
 # 常數
@@ -261,6 +262,11 @@ def run_pick(
     label_df["trading_date"] = pd.to_datetime(label_df["trading_date"]).dt.date
     label_df["stock_id"]     = label_df["stock_id"].astype(str)
     print(f"  Labels ({TRAIN_LABEL_HORIZON}d): {len(label_df):,} rows ({time.time()-t0:.1f}s)")
+
+    # ── 截面 Z-score 正規化（消除特徵絕對值尺度跨年漂移）──
+    t0 = time.time()
+    feat_df = _cs_normalize(feat_df, date_col="trading_date")
+    print(f"  截面 Z-score 正規化: {time.time()-t0:.1f}s")
 
     # ── 特徵欄位 ──
     feat_cols = [c for c in feat_df.columns if c not in _META_COLS]

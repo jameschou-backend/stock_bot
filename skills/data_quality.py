@@ -359,15 +359,153 @@ def check_data_quality(session: Session, config) -> QualityReport:
             issue.severity = "warning"
         issues.extend(cov_issues)
     
-    # === 4. 計算整體指標 ===
+    # === 4. P2-3: 異常值偵測 ===
+    spike_issues, spike_metrics = _check_price_spikes(session, reference_date)
+    issues.extend(spike_issues)
+    metrics.update(spike_metrics)
+
+    ct_issues, ct_metrics = _check_cross_table_consistency(session, reference_date)
+    issues.extend(ct_issues)
+    metrics.update(ct_metrics)
+
+    # === 5. 計算整體指標 ===
     metrics["total_issues"] = len(issues)
     metrics["error_count"] = len([i for i in issues if i.severity == "error"])
     metrics["warning_count"] = len([i for i in issues if i.severity == "warning"])
-    
+
     # 判斷是否通過（只看 error）
     has_error = any(i.severity == "error" for i in issues)
-    
+
     return QualityReport(passed=not has_error, issues=issues, metrics=metrics)
+
+
+def _check_price_spikes(
+    session: Session,
+    reference_date: date,
+    lookback_days: int = 5,
+    spike_threshold: float = 0.50,
+    max_warnings: int = 20,
+) -> Tuple[List[QualityIssue], Dict[str, object]]:
+    """偵測異常漲跌幅（單日收盤價變動 > spike_threshold）。
+
+    使用資料庫最近 lookback_days 個交易日的收盤價，計算日報酬並找出超過門檻的紀錄。
+    結果作為 warning（不阻斷 pipeline），但記入 metrics 供觀察。
+
+    Args:
+        session: DB session。
+        reference_date: 最新資料日期。
+        lookback_days: 回看天數（預設 5 個交易日）。
+        spike_threshold: 異常門檻（預設 50%）。
+        max_warnings: 最多回傳的 warning 數量，避免輸出過長。
+
+    Returns:
+        (issues, metrics)
+    """
+    issues: List[QualityIssue] = []
+    metrics: Dict[str, object] = {}
+    try:
+        cutoff = reference_date - timedelta(days=lookback_days * 2 + 5)  # 多抓幾天保留足夠窗口
+        rows = session.execute(
+            text("""
+                SELECT stock_id, trading_date, close
+                FROM raw_prices
+                WHERE trading_date >= :cutoff AND trading_date <= :ref
+                  AND close > 0
+                ORDER BY stock_id, trading_date
+            """),
+            {"cutoff": cutoff.isoformat(), "ref": reference_date.isoformat()},
+        ).fetchall()
+
+        if not rows:
+            metrics["price_spike_check"] = "no_data"
+            return issues, metrics
+
+        import pandas as _pd
+        df = _pd.DataFrame(rows, columns=["stock_id", "trading_date", "close"])
+        df["close"] = _pd.to_numeric(df["close"], errors="coerce")
+        df = df.dropna(subset=["close"])
+
+        # 計算日報酬
+        df = df.sort_values(["stock_id", "trading_date"])
+        df["ret"] = df.groupby("stock_id")["close"].pct_change()
+
+        # 過濾最近 lookback_days 個交易日的資料
+        recent_dates = sorted(df["trading_date"].unique())[-lookback_days:]
+        df = df[df["trading_date"].isin(recent_dates)]
+
+        spikes = df[df["ret"].abs() > spike_threshold].copy()
+        spike_count = len(spikes)
+        metrics["price_spike_count"] = spike_count
+        metrics["price_spike_threshold"] = spike_threshold
+
+        if spike_count > 0:
+            spikes_summary = (
+                spikes.nlargest(max_warnings, "ret")[["stock_id", "trading_date", "ret"]]
+                .assign(ret=lambda x: x["ret"].round(4))
+                .to_dict("records")
+            )
+            metrics["price_spike_samples"] = [
+                {"stock_id": str(r["stock_id"]), "date": str(r["trading_date"]), "ret": float(r["ret"])}
+                for r in spikes_summary
+            ]
+            issues.append(QualityIssue(
+                category="price_spike",
+                message=f"偵測到 {spike_count} 筆單日漲跌幅超過 {spike_threshold:.0%}（最近 {lookback_days} 交易日）",
+                severity="warning",
+            ))
+        else:
+            metrics["price_spike_samples"] = []
+
+    except Exception as exc:
+        metrics["price_spike_check_error"] = str(exc)
+
+    return issues, metrics
+
+
+def _check_cross_table_consistency(
+    session: Session,
+    reference_date: date,
+) -> Tuple[List[QualityIssue], Dict[str, object]]:
+    """跨表一致性檢查：features 最新日期是否落後 prices 最新日期。
+
+    主要偵測：build_features 是否忘記跑、features 表空洞（有 prices 但無 features）。
+
+    Returns:
+        (issues, metrics)
+    """
+    issues: List[QualityIssue] = []
+    metrics: Dict[str, object] = {}
+    try:
+        feat_max = session.execute(text("SELECT MAX(trading_date) FROM features")).scalar()
+        price_max = session.execute(text("SELECT MAX(trading_date) FROM raw_prices")).scalar()
+
+        if feat_max is not None and price_max is not None:
+            import pandas as _pd
+            feat_max_d = _pd.to_datetime(feat_max).date() if not isinstance(feat_max, date) else feat_max
+            price_max_d = _pd.to_datetime(price_max).date() if not isinstance(price_max, date) else price_max
+            lag = (price_max_d - feat_max_d).days
+            metrics["features_lag_vs_prices_days"] = lag
+            metrics["features_max_date"] = str(feat_max_d)
+            metrics["prices_max_date_cross"] = str(price_max_d)
+
+            if lag > 5:
+                issues.append(QualityIssue(
+                    category="features_stale_vs_prices",
+                    message=f"features 最新日期 {feat_max_d} 落後 raw_prices {price_max_d} 達 {lag} 日，請執行 make pipeline-build",
+                    severity="warning",
+                ))
+        else:
+            if feat_max is None:
+                metrics["features_max_date"] = None
+                issues.append(QualityIssue(
+                    category="features_empty",
+                    message="features 表為空，請執行 make pipeline-build",
+                    severity="warning",
+                ))
+    except Exception as exc:
+        metrics["cross_table_check_error"] = str(exc)
+
+    return issues, metrics
 
 
 def _resolve_report_date(session: Session, tz: str) -> date:
