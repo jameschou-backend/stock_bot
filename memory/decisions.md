@@ -1,6 +1,69 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-04-13（session 11）
+> 最後更新：2026-04-15（session 12）
+
+---
+
+## Session 12 優化（2026-04-15）
+
+### 已完成的優化（5 項）
+
+**P1-4 Strategy C 持倉寫入 DB 稽核 log**
+- 新增 `strategy_c_trades` 表（append-only），記錄每日 buy/sell/hold/skip 動作
+- `app/models.py` 加 `StrategyCTrade` ORM model（欄位：entry_score, exit_reason, pct_to_breakthrough 等）
+- `storage/migrations/010_strategy_c_trades.sql` DDL
+- `scripts/strategy_c_pick.py` 新增 `_write_trades_to_db()`，失敗僅 warning 不阻斷主流程
+- JSON 備份仍保留，DB 為額外稽核管道
+
+**P3-2 Backtest universe EMERGING 過濾**
+- `skills/backtest.py`: 從 DB 載入興櫃股 ID，在再平衡日評分時排除
+- 使回測 universe 與 production `get_universe()` 一致（371 支興櫃股）
+
+**P2-1 截面 Z-score 特徵正規化**
+- `skills/feature_utils.py`: 新增 `cross_section_normalize()`（每 trading_date 截面 z-score + ±3σ 截斷）
+- `skills/backtest.py`: 可選 `--cs-norm` flag
+- `scripts/strategy_c_pick.py`: 預設啟用截面正規化
+
+**P2-2 Ensemble 3 model checkpoints**
+- `skills/backtest.py`: `collections.deque(maxlen=N)` 保存最近 N 次重訓模型
+- 多模型以截面排名百分位平均，降低 variance
+- CLI: `--ensemble N`（預設 1=停用）
+
+**P2-3 資料品質異常值偵測**
+- `skills/data_quality.py`: 新增 `_check_price_spikes()`（偵測單日 ±50% 漲跌，記 warning）
+- 新增 `_check_cross_table_consistency()`（features 落後 raw_prices >5 天，提醒 pipeline-build）
+
+### LambdaRank 驗證結果（2026-04-15）
+
+使用標準生產配置（--months 120 --seasonal-filter --no-stoploss --market-filter-tiers --liq-weighted --pruned-features）+  EMERGING 過濾：
+
+| 配置 | 累積報酬 | 大盤 | 超額 | MDD | Sharpe | Calmar | 年化 |
+|------|---------|------|------|-----|--------|--------|------|
+| Regression（基準）| +186.7% | +57.1% | +129.7% | -42.4% | 0.478 | 0.266 | 11.3% |
+| **LambdaRank（NDCG@20）** | **+194.0%** | +59.5% | **+134.5%** | -42.4% | **0.488** | **0.273** | **11.6%** |
+
+**結論**：LambdaRank 微幅改善（+7.3pp 累積、+0.01 Sharpe），MDD 相同。
+改善幅度不顯著（<5%），維持 regression 為生產配置；LambdaRank 作為備選研究方向保留。
+
+**注意**：LambdaRank label 需離散化，實作為截面 quintile 排名整數（0~4）。
+
+### IC 衰減分析結果（2026-04-15，近期基準=最近 2 年 2024-04 以後）
+
+**❌ 失效 8 個（近期 IC 幾乎歸零）**：
+`foreign_buy_streak`（-76.8%）、`fund_revenue_mom`（-64.2%）、`foreign_net_20`（+79.5% sign flip）、
+`ma_5`（-87.7%）、`ma_20`（-95.6%）、`ma_60`（-103.4% sign flip）、`amt_20`（-108.8% sign flip）、`amt`（-115.7% sign flip）
+
+**⚠️ 衰減 4 個（近期 IC < 歷史 50%）**：
+`short_balance_chg_5`（-78.9%）、`fund_revenue_yoy_accel`（-68.1%）、`short_balance_chg_20`、`theme_return_20`（-69.5%）
+
+**🔺 增強 12 個**：`trust_net_5`、`ret_60_kurt`、`drawdown_60`、`trust_net_20`、`sector_momentum`、`vol_ratio_20` 等
+
+**✅ 穩定 34 個**：`atr_inv`、`vol_20_inv`、`ret_5`、`willr_14`、`market_trend_60/20`、`boll_pct`、`cci_20`、`bias_20`、`rsi_14`、`market_above_200ma`、`ret_10/20/60` 等
+
+**策略建議**：
+- 8 個失效特徵（尤其 ma_5/ma_20/ma_60 在近期完全無預測力）可考慮移除或替換
+- LightGBM 對失效特徵有一定容忍度（樹會自然降低 split gain），但移除可提升模型稳定性
+- rs_rank_20/rs_rank_60 因 IC=NaN（特徵太新，未覆蓋足夠月份），暫不評估
 
 ---
 

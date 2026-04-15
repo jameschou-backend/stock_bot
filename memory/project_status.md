@@ -1,6 +1,6 @@
 # 專案現況
 
-> 最後更新：2026-04-13（session 11）
+> 最後更新：2026-04-15（session 12）
 
 ---
 
@@ -163,22 +163,46 @@ make migrate-features     # 一次性遷移 MySQL features → 年份 Parquet
 
 ---
 
+## Session 12 完成事項（2026-04-15）
+
+| 項目 | 說明 |
+|------|------|
+| P1-4 Strategy C DB 稽核 log | `strategy_c_trades` 表 + ORM + _write_trades_to_db() |
+| P3-2 Backtest EMERGING 過濾 | 回測與生產 universe 一致（371 股）|
+| P2-1 截面 Z-score 正規化 | `cross_section_normalize()` + --cs-norm flag |
+| P2-2 Ensemble checkpoints | deque buffer + --ensemble N flag |
+| P2-3 資料品質異常偵測 | price spike ±50% + features/prices 一致性 |
+| LambdaRank 10y 驗證 | 微幅改善（+7.3pp, +0.01 Sharpe），不採用為生產配置 |
+| IC 衰減分析 | 8 失效特徵（ma_5/20/60 等）+ 4 衰減特徵，34 穩定 |
+
+### 已知問題更新
+
+| 問題 | 狀態 |
+|------|------|
+| `backtest.py` 不過濾興櫃股 | ✅ P3-2 已修正（session 12）|
+| `ingest_trading_calendar.py` weekday heuristic | ❌ 待修（P3-1）|
+| `ingest_corporate_actions.py` 外部來源未接妥 | ❌ 待修 |
+| parquet cache 24h TTL | ❌ 待修 |
+| FinMind API Quota 靜默失敗 | ❌ 待修 |
+
+---
+
 ## 待優化項目
 
 ### 最高優先（下次 session 優先跑）
 
 | 項目 | 說明 | 預期效果 |
 |------|------|----------|
-| 突破進場（F+）去偏驗證 | 需在 label_horizon_buffer=20 正確基準重跑 | 在去偏後看是否仍有效 |
-| Fold 12/14 失敗原因深挖 | 2023H2 風格轉換 + 2024H2 高波動成本 | 找出應對方案（如震盪市降頻）|
+| 失效特徵剪枝（IC 衰減）| 移除 ma_5/ma_20/ma_60/amt/amt_20 等 8 個近期失效特徵 | 模型穩定性提升 |
 | FinMind backfill 靜默失敗修正 | `fetch_dataset_by_stocks` 批次失敗被吞掉，job 顯示 success 但資料不完整 | 加 exception 或 row count 驗證 |
 
 ### 中優先
 
 | 項目 | 說明 |
 |------|------|
-| TWSE 行事曆接入 | 取代 weekday heuristic |
-| 特徵 SHAP 分析 | 56 個特徵是否有負貢獻 |
+| TWSE 行事曆接入（P3-1）| 取代 weekday heuristic |
+| --cs-norm backtest 驗證 | 截面 Z-score 是否改善 10y Sharpe |
+| --ensemble 3 backtest 驗證 | 3 checkpoint ensemble 是否穩定改善 |
 | Strategy C 每日流程自動化 | 目前需手動 `make daily`；可設 cron |
 
 ---
