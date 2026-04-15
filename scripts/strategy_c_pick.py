@@ -39,7 +39,7 @@ except ImportError:
     _HAS_LGBM = False
 
 from app.db import get_session
-from app.models import Stock
+from app.models import Stock, StrategyCTrade
 from skills import data_store
 
 # ─────────────────────────────────────────────
@@ -117,6 +117,82 @@ def _load_names(session, stock_ids: List[str]) -> Dict[str, str]:
     for sid in stock_ids:
         result.setdefault(sid, sid)
     return result
+
+
+# ─────────────────────────────────────────────
+# DB 稽核 log
+# ─────────────────────────────────────────────
+def _write_trades_to_db(
+    run_date: date,
+    buy_list: List[Dict],
+    sell_list: List[Dict],
+    hold_list: List[Dict],
+    score_map: Dict[str, float],
+    bt_status: Dict,
+    amount_per_pos: int = 0,
+) -> None:
+    """將今日 buy/sell/hold 動作寫入 strategy_c_trades（append-only）。"""
+    records = []
+
+    def _pct_dist(sid: str) -> Optional[float]:
+        v = bt_status.get(sid, {}).get("pct_to_price_bt")
+        return float(v) if v is not None else None
+
+    for p in buy_list:
+        sid = p["stock_id"]
+        records.append(StrategyCTrade(
+            run_date=run_date,
+            stock_id=sid,
+            action="buy",
+            entry_date=run_date,
+            entry_score=p.get("entry_score"),
+            days_held=0,
+            exit_reason=None,
+            amount=amount_per_pos or None,
+            score_today=score_map.get(sid),
+            pct_to_breakthrough=_pct_dist(sid),
+        ))
+
+    for p in sell_list:
+        sid = p["stock_id"]
+        records.append(StrategyCTrade(
+            run_date=run_date,
+            stock_id=sid,
+            action="sell",
+            entry_date=date.fromisoformat(p["entry_date"]) if p.get("entry_date") else None,
+            entry_score=p.get("entry_score"),
+            days_held=p.get("days_held"),
+            exit_reason=p.get("exit_reason"),
+            amount=None,
+            score_today=score_map.get(sid),
+            pct_to_breakthrough=_pct_dist(sid),
+        ))
+
+    for p in hold_list:
+        sid = p["stock_id"]
+        records.append(StrategyCTrade(
+            run_date=run_date,
+            stock_id=sid,
+            action="hold",
+            entry_date=date.fromisoformat(p["entry_date"]) if p.get("entry_date") else None,
+            entry_score=p.get("entry_score"),
+            days_held=p.get("days_held"),
+            exit_reason=None,
+            amount=amount_per_pos or None,
+            score_today=score_map.get(sid),
+            pct_to_breakthrough=_pct_dist(sid),
+        ))
+
+    if not records:
+        return
+
+    try:
+        with get_session() as session:
+            session.add_all(records)
+            session.commit()
+        print(f"  DB 稽核 log：{len(records)} 筆寫入 strategy_c_trades ✅")
+    except Exception as e:
+        print(f"  ⚠️  DB 稽核 log 寫入失敗（不影響主流程）：{e}")
 
 
 # ─────────────────────────────────────────────
@@ -432,6 +508,17 @@ def run_pick(
         },
         "generated_at": datetime.now().isoformat(timespec="seconds"),
     }
+
+    # ── 寫入 DB 稽核 log ──
+    _write_trades_to_db(
+        run_date=today,
+        buy_list=buy_list,
+        sell_list=sell_list,
+        hold_list=hold_list,
+        score_map=score_map,
+        bt_status=bt_status,
+        amount_per_pos=amount_per_pos,
+    )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUTPUT_DIR / f"strategy_c_{today}.json"

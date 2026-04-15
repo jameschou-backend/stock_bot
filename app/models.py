@@ -300,3 +300,26 @@ class StrategyPosition(Base):
     unrealized_pnl = Column(DECIMAL(18, 6), nullable=False)
 
     __table_args__ = (Index("idx_strategy_positions_date", "trading_date"),)
+
+
+class StrategyCTrade(Base):
+    """Strategy C 每日進出場稽核 log（append-only）"""
+    __tablename__ = "strategy_c_trades"
+
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    run_date = Column(Date, nullable=False)          # 執行日期（今天）
+    stock_id = Column(String(16), nullable=False)
+    action = Column(String(16), nullable=False)       # buy / sell / hold / skip
+    entry_date = Column(Date)                         # 實際進場日（buy 時設定）
+    entry_score = Column(DECIMAL(18, 6))              # 進場時模型分數
+    days_held = Column(BigInteger)                    # 已持有天數（sell/hold 時）
+    exit_reason = Column(String(64))                  # 出場原因（sell 時）
+    amount = Column(DECIMAL(18, 2))                   # 交易金額（正=買入，負=賣出）
+    score_today = Column(DECIMAL(18, 6))              # 今日模型分數
+    pct_to_breakthrough = Column(DECIMAL(18, 4))      # 距突破點距離（% ，正=尚未突破）
+    created_at = Column(DateTime, server_default=func.now())
+
+    __table_args__ = (
+        Index("ix_sc_trades_run_date", "run_date"),
+        Index("ix_sc_trades_stock", "stock_id"),
+    )
