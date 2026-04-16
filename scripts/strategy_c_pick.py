@@ -41,7 +41,7 @@ except ImportError:
 from app.db import get_session
 from app.models import Stock, StrategyCTrade
 from skills import data_store
-from skills.feature_utils import cross_section_normalize as _cs_normalize
+# cross_section_normalize 已移除：backtest 未使用此正規化，保留會造成 production ≠ backtest
 
 # ─────────────────────────────────────────────
 # 常數
@@ -59,6 +59,7 @@ MAX_BREAKTHROUGH_DIST  = 0.30  # 新買進距突破上限（>30% 的股不進場
 RETRAIN_MONTHS         = 36    # 訓練資料回看月數（3 年）
 RETRAIN_FREQ_DAYS      = 30    # 每隔幾天重訓一次
 MIN_AVG_TURNOVER_BILL  = 1.0   # 流動性門檻：20日平均日成交金額（億元），0=不過濾
+USE_EXCESS_LABEL       = True  # 超額報酬 label：future_ret_h -= 同日截面均值（與 backtest --excess-label 一致）
 
 _META_COLS = {"stock_id", "trading_date", "future_ret_h"}
 
@@ -263,10 +264,16 @@ def run_pick(
     label_df["stock_id"]     = label_df["stock_id"].astype(str)
     print(f"  Labels ({TRAIN_LABEL_HORIZON}d): {len(label_df):,} rows ({time.time()-t0:.1f}s)")
 
-    # ── 截面 Z-score 正規化（消除特徵絕對值尺度跨年漂移）──
-    t0 = time.time()
-    feat_df = _cs_normalize(feat_df, date_col="trading_date")
-    print(f"  截面 Z-score 正規化: {time.time()-t0:.1f}s")
+    # ── 超額報酬 label（與 backtest --excess-label 一致）──
+    if USE_EXCESS_LABEL:
+        label_df["future_ret_h"] = label_df["future_ret_h"].replace([np.inf, -np.inf], np.nan)
+        _mkt_ret = label_df.groupby("trading_date")["future_ret_h"].mean().rename("mkt_ret_h")
+        label_df = label_df.merge(_mkt_ret.reset_index(), on="trading_date", how="left")
+        label_df["future_ret_h"] = label_df["future_ret_h"] - label_df["mkt_ret_h"].fillna(0)
+        label_df = label_df.drop(columns=["mkt_ret_h"])
+        label_df["future_ret_h"] = label_df["future_ret_h"].clip(-1.5, 1.5)
+        label_df = label_df.dropna(subset=["future_ret_h"])
+        print(f"  Excess label applied: {len(label_df):,} rows")
 
     # ── 特徵欄位 ──
     feat_cols = [c for c in feat_df.columns if c not in _META_COLS]
@@ -511,6 +518,7 @@ def run_pick(
             "score_cutoff": round(score_cutoff, 6),
             "elapsed_sec": round(elapsed, 1),
             "train_label_horizon": TRAIN_LABEL_HORIZON,
+            "use_excess_label": USE_EXCESS_LABEL,
         },
         "generated_at": datetime.now().isoformat(timespec="seconds"),
     }
