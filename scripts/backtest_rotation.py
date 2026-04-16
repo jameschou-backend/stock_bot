@@ -40,7 +40,7 @@ except ImportError:
 from sklearn.ensemble import GradientBoostingRegressor
 
 
-def _train_model(train_X, train_y, fast_mode=False):
+def _train_model(train_X, train_y, sample_weight=None, fast_mode=False):
     n_est = 150 if fast_mode else 500
     if _HAS_LGBM:
         model = lgb.LGBMRegressor(
@@ -49,13 +49,13 @@ def _train_model(train_X, train_y, fast_mode=False):
             reg_alpha=0.1, reg_lambda=0.1, min_child_samples=50,
             random_state=42, n_jobs=-1, verbose=-1,
         )
-        model.fit(train_X, train_y)
+        model.fit(train_X, train_y, sample_weight=sample_weight)
     else:
         model = GradientBoostingRegressor(
             n_estimators=100 if fast_mode else 300, learning_rate=0.05,
             max_depth=5, subsample=0.8, random_state=42,
         )
-        model.fit(train_X, train_y)
+        model.fit(train_X, train_y, sample_weight=sample_weight)
     return model
 
 
@@ -295,6 +295,10 @@ def run_rotation(
     chip_exit_foreign_break_days: int = 3,   # 外資連買中斷連 N 天
     chip_exit_boll_threshold: float = 0.90,  # boll_pct 過熱門檻
     chip_exit_min_hold: int = 5,             # 至少持倉 N 天才觸發
+    # ── 流動性加權訓練 ──
+    liq_weighted: bool = False,          # 啟用流動性加權訓練（sample_weight ∝ log(1+amt_20*1e8)）
+    # ── 超額報酬 label（vs 大盤）──
+    use_excess_label: bool = False,      # 啟用超額報酬 label：future_ret_h - 當期等權市場報酬
     # ── 嚴格 Walk-Forward 固定視窗模式 ──
     fixed_train_start: Optional[date] = None,  # 訓練期起始（date 物件）
     fixed_train_end: Optional[date] = None,    # 訓練期截止（超過此日不再重訓）
@@ -451,6 +455,10 @@ def run_rotation(
         print(f"  [動態流動性] base_liquidity={base_liquidity:.1f}億，lookback={liquidity_lookback}d")
     elif min_avg_turnover > 0:
         print(f"  [流動性過濾] min_avg_turnover={min_avg_turnover:.2f}億/日")
+    if liq_weighted:
+        print(f"  [Liq-Weighted] sample_weight ∝ log(1+amt_20)")
+    if use_excess_label:
+        print(f"  [Excess Label] label = future_ret_h - 等權市場報酬")
     if dynamic_position_sizing:
         print(f"  [動態部位] total_capital={total_capital/1e4:.0f}萬，max_pct={max_position_pct:.0%}")
     if slippage_pct > 0:
@@ -480,6 +488,19 @@ def run_rotation(
     else:
         label_df_train = label_df
         _eff_buffer = label_horizon_buffer
+
+    # ── 超額報酬 label：future_ret_h - 等權市場報酬 ──
+    if use_excess_label:
+        # 計算每個 trading_date 的等權市場報酬（N日 forward return 等權平均）
+        _liq_grp = label_df_train.groupby("trading_date")["future_ret_h"]
+        _mkt_ret = _liq_grp.mean().rename("mkt_ret_h")
+        label_df_train = label_df_train.merge(
+            _mkt_ret.reset_index(), on="trading_date", how="left"
+        )
+        label_df_train["future_ret_h"] = label_df_train["future_ret_h"] - label_df_train["mkt_ret_h"].fillna(0)
+        label_df_train = label_df_train.drop(columns=["mkt_ret_h"])
+        print(f"  Excess label applied. Mean label: {label_df_train['future_ret_h'].mean():.4f} "
+              f"(std={label_df_train['future_ret_h'].std():.4f})", flush=True)
 
     _meta_cols = {"stock_id", "trading_date", "future_ret_h"}
     feat_cols = [c for c in feat_df.columns if c not in _meta_cols]
@@ -527,7 +548,12 @@ def run_rotation(
                 if not _fmat_fw.empty:
                     _y_fw = _merged_fw.loc[_fmat_fw.index]["future_ret_h"].astype(float).values
                     current_feat_names = list(_fmat_fw.columns)
-                    current_model = _train_model(_fmat_fw.values, _y_fw, fast_mode=fast_mode)
+                    _sw_fw = None
+                    if liq_weighted and "amt_20" in _merged_fw.columns:
+                        _amt_fw = _merged_fw.loc[_fmat_fw.index, "amt_20"].fillna(0).values
+                        _sw_fw = np.log1p(np.abs(_amt_fw) * 1e8).clip(min=0.1)
+                        _sw_fw = _sw_fw / _sw_fw.mean()
+                    current_model = _train_model(_fmat_fw.values, _y_fw, sample_weight=_sw_fw, fast_mode=fast_mode)
                     print(f"  [Fixed Window] 訓練完成：{_fw_start}~{fixed_train_end}，"
                           f"{len(_y_fw):,} 樣本，特徵 {len(current_feat_names)} 個", flush=True)
 
@@ -557,11 +583,18 @@ def run_rotation(
                     if not fmat.empty:
                         y = merged["future_ret_h"].astype(float).values
                         current_feat_names = list(fmat.columns)
+                        # 流動性加權訓練
+                        _sw = None
+                        if liq_weighted and "amt_20" in merged.columns:
+                            _amt = merged.loc[fmat.index, "amt_20"].fillna(0).values
+                            _sw = np.log1p(np.abs(_amt) * 1e8).clip(min=0.1)
+                            _sw = _sw / _sw.mean()  # 正規化，平均權重 = 1
                         _t = time.time()
-                        current_model = _train_model(fmat.values, y, fast_mode=fast_mode)
+                        current_model = _train_model(fmat.values, y, sample_weight=_sw, fast_mode=fast_mode)
                         last_train_date = today
                         if day_idx % 250 == 0 or day_idx < 3:
-                            print(f"  [{today}] Model trained ({len(y):,} rows, {time.time()-_t:.1f}s)", flush=True)
+                            _sw_info = f", liq-weighted" if _sw is not None else ""
+                            print(f"  [{today}] Model trained ({len(y):,} rows{_sw_info}, {time.time()-_t:.1f}s)", flush=True)
 
         if current_model is None:
             continue
@@ -1027,6 +1060,8 @@ def run_rotation(
             "oracle_foreign_break_days": oracle_foreign_break_days,
             "oracle_ret5_tp": oracle_ret5_tp,
             "top_entry_n": top_entry_n, "transaction_cost_pct": transaction_cost_pct,
+            "liq_weighted": liq_weighted,
+            "use_excess_label": use_excess_label,
         },
     }
 
@@ -1142,6 +1177,10 @@ def main():
                         help="初始資金（元），position-sizing=True 時有效，預設 300萬")
     parser.add_argument("--max-position-pct", type=float, default=0.20,
                         help="單檔最大部位佔淨值比例（預設 0.20=20%%）")
+    parser.add_argument("--liq-weighted", action="store_true",
+                        help="啟用流動性加權訓練（sample_weight ∝ log(1+amt_20*1e8)）")
+    parser.add_argument("--excess-label", action="store_true",
+                        help="啟用超額報酬 label（future_ret_h - 等權市場報酬）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -1206,6 +1245,8 @@ def main():
             dynamic_position_sizing=args.position_sizing,
             total_capital=args.total_capital,
             max_position_pct=args.max_position_pct,
+            liq_weighted=args.liq_weighted,
+            use_excess_label=args.excess_label,
         )
 
     output_path = args.output
