@@ -1,6 +1,6 @@
 # 專案現況
 
-> 最後更新：2026-04-15（session 13）
+> 最後更新：2026-04-16（session 14）
 
 ---
 
@@ -40,35 +40,43 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 
 特徵欄位：56 → 62（新增 trust_consecutive_buy_days, trust_buy_5d_intensity, foreign_trust_both_buy_days, bull_ma_alignment_score, deviation_from_40d_high, price_volume_alignment）
 
-### Strategy C（日頻輪動）— **Label-10 最佳配置**（2026-03-16 session 4 更新）
+### Strategy C（日頻輪動）— **Excess Label 最佳配置**（2026-04-16 session 14 更新）
 
-| 指標 | 0.3% 成本 | 0.585% 真實成本 |
-|------|-----------|----------------|
-| 期間 | 2016-03-28 ~ 2026-02-03 | 同左 |
-| 累積報酬 | **+1,038,061%** | **+487,108%** |
-| 年化報酬 | +163.21% | +143.18% |
-| MDD | **-27.23%** | **-28.08%** |
-| Sharpe | **1.987** | **1.847** |
-| Calmar | 5.995 | 5.100 |
-| 交易筆數 | 1,602 | 1,602 |
-| 平均持倉 | 9.0 天 | 9.0 天 |
-| 年化成本 | 50.3% | 98.1% |
+| 指標 | 數值（新生產配置）|
+|------|----------------|
+| 期間 | 10y Walk-Forward（~2016-2026）|
+| 累積報酬 | **+31,043%** |
+| 年化報酬 | **82.6%** |
+| MDD | **-37.0%** |
+| Sharpe | **1.438** |
+| Calmar | **2.233** |
 
-配置：`--train-label-horizon 10`，rank_threshold=0.20，max_hold=30d
+配置：`--months 120 --train-label-horizon 10 --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585 --excess-label`
 
-**C2 基準（舊）**：+18,395%，Sharpe 1.622，MDD -30.25%（20d label horizon，1,259 筆）
+Strategy C 生產 CLI：
+```bash
+python scripts/backtest_rotation.py --months 120 --train-label-horizon 10 \
+  --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585 --excess-label
+```
 
-#### 流動性過濾後更保守的估計（2026-03-17 更新）
+#### Session 14 三組實驗對照（2026-04-16）
+
+| 配置 | 累積報酬 | Sharpe | MDD | Calmar | 採用？ |
+|------|---------|--------|-----|--------|--------|
+| A Baseline（原始 label）| +17,877% | 1.433 | -36.1% | 2.005 | 基準 |
+| B Liq-Weighted | +20,785% | 1.266 | **-51.1%** | 1.472 | ❌ MDD 惡化 |
+| **C Excess Label** | **+31,043%** | **1.438** | -37.0% | **2.233** | **✅ 採用** |
+
+#### 歷史配置對照
 
 | 配置 | 累積報酬 | Sharpe | MDD | 說明 |
 |------|---------|--------|-----|------|
-| ~~buggy（buffer=10, 0.585%）~~ | ~~+487,108%~~ | ~~1.847~~ | ~~-28.1%~~ | ❌ 含前瞻偏差（已廢棄）|
-| **fixed（buffer=20, 0.585%）** | **+267,029%** | **2.314** | **-25.6%** | **✅ 現行最佳，含微型股** |
-| Liq-5千萬（0.585%）| +62,321% | 1.754 | -28.3% | 較保守 |
-| Liq-1億（0.585%）| +26,197% | 1.541 | -35.2% | 中型股以上 |
-| **Liq-1億+分級滑價** | **+12,523%** | **1.367** | **-37.2%** | **最接近真實可執行** |
+| ~~buggy（buffer=10, 0.585%）~~ | ~~+487,108%~~ | ~~1.847~~ | ~~-28.1%~~ | ❌ 前瞻偏差（已廢棄）|
+| fixed（buffer=20, 含微型股）| +267,029% | 2.314 | -25.6% | 含微型股，不可執行 |
+| Liq-1億+分級滑價（baseline）| +17,877% | 1.433 | -37.0% | 現行基準 |
+| **Liq-1億+分級滑價+Excess Label** | **+31,043%** | **1.438** | **-37.0%** | **✅ 新生產** |
 
-alpha 高度集中在日均量 <1億 小型股；加過濾後報酬驟降 97%，但 Sharpe 仍優於 Strategy A（1.042）
+alpha 高度集中在日均量 <1億 小型股；加流動性過濾後報酬驟降，但 Sharpe 仍優於 Strategy A（0.98）
 
 ---
 

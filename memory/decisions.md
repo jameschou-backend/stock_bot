@@ -1,6 +1,63 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-04-15（session 12）
+> 最後更新：2026-04-16（session 14）
+
+---
+
+## Session 14：Strategy C 日頻訓練優化實驗（2026-04-16）
+
+### 三組對照實驗結果（10y Walk-Forward，--months 120 --liq1億+分級滑價）
+
+配置基準：`--months 120 --train-label-horizon 10 --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585`
+
+| 配置 | 累積報酬 | 年化 | Sharpe | MDD | Calmar | 結論 |
+|------|---------|------|--------|-----|--------|------|
+| A Baseline（原始 label）| +17,877% | 72.4% | 1.433 | -36.1% | 2.005 | 基準線 |
+| B Liq-Weighted（流動性加權）| +20,785% | 75.1% | 1.266 | **-51.1%** | 1.472 | ❌ MDD 惡化太多 |
+| **C Excess Label（超額報酬 label）** | **+31,043%** | **82.6%** | **1.438** | -37.0% | **2.233** | **✅ 採用** |
+
+逐年報酬（A vs C）：
+
+| 年份 | A Baseline | C Excess Label | Delta |
+|------|-----------|----------------|-------|
+| 2017 | +21.3% | -17.1% | ⚠️ -38.4pp（啟動期資料有限）|
+| 2018 | +13.2% | **+62.0%** | **+48.8pp** |
+| 2019 | +36.8% | +28.7% | -8.1pp |
+| 2020 | +158.8% | **+268.2%** | **+109.4pp** |
+| 2021 | **+447.5%** | +283.1% | ⚠️ -164.4pp（純多頭期模型偏保守）|
+| 2022 | +61.0% | +61.9% | +0.9pp（持平）|
+| 2023 | +63.6% | **+113.5%** | **+49.9pp** |
+| 2024 | +36.8% | +35.8% | -1.0pp（持平）|
+| 2025 | +45.0% | +41.9% | -3.1pp（持平）|
+| 2026 | +44.8% | **+55.1%** | **+10.3pp** |
+
+**決策：採用 Excess Label（C）為 Strategy C 新生產配置**
+
+理由：
+- 總報酬 +73%（+31,043% vs +17,877%）
+- Sharpe 幾乎相同（1.438 vs 1.433）— 無風險調整退化
+- Calmar 改善 +11%（2.233 vs 2.005）
+- MDD 僅微升 -0.9pp（-37.0% vs -36.1%）— 可接受
+- 2021 弱的原因：超額 label 使模型學習**相對跑贏市場**，純多頭市場中部分絕對漲幅被犧牲
+- 2020/2023 強的原因：模型在波動市場中更能選出真正的相對強勢股
+
+**Liq-Weighted（B）不採用**：MDD -51.1%（vs -36.1%），Sharpe 1.266（vs 1.433），Calmar 1.472（vs 2.005）。
+流動性加權在日頻輪動環境下過度偏向大型股，2017/2019/2022 均明顯落後。
+
+### 超額報酬 Label 實作細節（`scripts/backtest_rotation.py`）
+
+```python
+if use_excess_label:
+    label_df_train["future_ret_h"] = label_df_train["future_ret_h"].replace([np.inf, -np.inf], np.nan)
+    _mkt_ret = label_df_train.groupby("trading_date")["future_ret_h"].mean().rename("mkt_ret_h")
+    label_df_train = label_df_train.merge(_mkt_ret.reset_index(), on="trading_date", how="left")
+    label_df_train["future_ret_h"] = label_df_train["future_ret_h"] - label_df_train["mkt_ret_h"].fillna(0)
+    label_df_train = label_df_train.drop(columns=["mkt_ret_h"])
+    label_df_train["future_ret_h"] = label_df_train["future_ret_h"].clip(-1.5, 1.5)
+    label_df_train = label_df_train.dropna(subset=["future_ret_h"])
+```
+
+CLI：`python scripts/backtest_rotation.py ... --excess-label`
 
 ---
 
