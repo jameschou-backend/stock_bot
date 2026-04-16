@@ -311,6 +311,11 @@ def run_rotation(
     # ── 分數穩定過濾：避免純排名波動換股 ──
     score_stability: bool = False,    # 啟用分數穩定過濾
     score_drop_threshold: float = 0.15,  # 分數下降比例門檻（佔進場分數的比例）
+    # ── 自適應 rank threshold：空頭時收緊出場門檻 ──
+    adaptive_rank_threshold: bool = False,  # 啟用後依前月大盤報酬動態調整 rank_threshold
+    # 空頭分級（前月大盤報酬 → rank_threshold 倍率）
+    # 正常(>-5%): ×1.0, 輕空(<-5%): ×1.25, 中空(<-10%): ×1.5, 重空(<-15%): ×1.75
+    adaptive_rank_bear_tiers: Optional[List[tuple]] = None,
 ) -> Dict:
     """
     exit_mode:
@@ -531,6 +536,7 @@ def run_rotation(
     # Monthly benchmark for market filter
     _monthly_bm_cache: Dict[str, float] = {}
     _current_max_pos = max_positions
+    _current_rank_threshold = rank_threshold  # 可能由 adaptive_rank_threshold 每月動態調整
 
     _t_start = time.time()
 
@@ -644,8 +650,8 @@ def run_rotation(
             equity_curve.append({"date": str(today), "equity": equity})
             continue
 
-        # Rank threshold（進場與 rank 模式出場用）
-        score_cutoff = tf_today["score"].quantile(1.0 - rank_threshold)
+        # Rank threshold（進場與 rank 模式出場用；adaptive 模式下每月動態調整）
+        score_cutoff = tf_today["score"].quantile(1.0 - _current_rank_threshold)
         force_cutoff = tf_today["score"].quantile(1.0 - force_exit_threshold)
         top_n_sids = set(tf_today.nlargest(top_entry_n, "score")["stock_id"].tolist())
         above_threshold = set(tf_today[tf_today["score"] >= score_cutoff]["stock_id"].tolist())
@@ -702,6 +708,17 @@ def run_rotation(
                     if _prev_bm < _thr:
                         _current_max_pos = max(1, int(max_positions * _mult))
                         break
+            # ── Adaptive rank threshold：空頭時收緊出場門檻 ──
+            _bear_tiers = adaptive_rank_bear_tiers or [(-0.05, 1.25), (-0.10, 1.50), (-0.15, 1.75)]
+            if adaptive_rank_threshold:
+                _rank_mult = 1.0
+                for _thr, _mult in reversed(_bear_tiers):
+                    if _prev_bm < _thr:
+                        _rank_mult = _mult
+                        break
+                _current_rank_threshold = min(rank_threshold * _rank_mult, 0.50)
+            else:
+                _current_rank_threshold = rank_threshold
             _monthly_bm_cache[_ym] = 0.0  # placeholder
 
         # ── Check exits ──
@@ -1192,6 +1209,10 @@ def main():
                         help="啟用流動性加權訓練（sample_weight ∝ log(1+amt_20*1e8)）")
     parser.add_argument("--excess-label", action="store_true",
                         help="啟用超額報酬 label（future_ret_h - 等權市場報酬）")
+    parser.add_argument("--adaptive-rank-threshold", action="store_true",
+                        help="空頭時動態收緊 rank_threshold（-5%%:x1.25, -10%%:x1.5, -15%%:x1.75）")
+    parser.add_argument("--max-positions", type=int, default=None,
+                        help="最大同時持倉數（預設 6）")
     parser.add_argument("--config", type=int, default=None, choices=[1, 2, 3],
                         help="Preset: 1=loose, 2=moderate, 3=aggressive")
     parser.add_argument("--fast", action="store_true")
@@ -1258,6 +1279,8 @@ def main():
             max_position_pct=args.max_position_pct,
             liq_weighted=args.liq_weighted,
             use_excess_label=args.excess_label,
+            adaptive_rank_threshold=args.adaptive_rank_threshold,
+            max_positions=args.max_positions or 6,
         )
 
     output_path = args.output
