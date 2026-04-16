@@ -491,14 +491,25 @@ def run_rotation(
 
     # ── 超額報酬 label：future_ret_h - 等權市場報酬 ──
     if use_excess_label:
-        # 計算每個 trading_date 的等權市場報酬（N日 forward return 等權平均）
-        _liq_grp = label_df_train.groupby("trading_date")["future_ret_h"]
-        _mkt_ret = _liq_grp.mean().rename("mkt_ret_h")
+        # 先清除 inf（退市/除權等異常值）
+        label_df_train = label_df_train.copy()
+        label_df_train["future_ret_h"] = label_df_train["future_ret_h"].replace(
+            [np.inf, -np.inf], np.nan
+        )
+        # 計算每個 trading_date 的等權市場報酬（N日 forward return 等權平均，排除 NaN）
+        _mkt_ret = (
+            label_df_train.groupby("trading_date")["future_ret_h"]
+            .mean()
+            .rename("mkt_ret_h")
+        )
         label_df_train = label_df_train.merge(
             _mkt_ret.reset_index(), on="trading_date", how="left"
         )
         label_df_train["future_ret_h"] = label_df_train["future_ret_h"] - label_df_train["mkt_ret_h"].fillna(0)
         label_df_train = label_df_train.drop(columns=["mkt_ret_h"])
+        # 最終 clip 防止殘留極端值
+        label_df_train["future_ret_h"] = label_df_train["future_ret_h"].clip(-1.5, 1.5)
+        label_df_train = label_df_train.dropna(subset=["future_ret_h"])
         print(f"  Excess label applied. Mean label: {label_df_train['future_ret_h'].mean():.4f} "
               f"(std={label_df_train['future_ret_h'].std():.4f})", flush=True)
 
