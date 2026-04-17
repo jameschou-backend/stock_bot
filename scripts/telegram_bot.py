@@ -1,12 +1,15 @@
-"""Telegram Bot：Strategy C 交易通知與持倉管理。
+"""Telegram Bot：Strategy C / D 交易通知與持倉管理。
 
 模式：
-  --push      讀取今日 strategy_c 訊號，發送到 Telegram
+  --push      讀取今日訊號，發送到 Telegram（預設 Strategy C）
   --listen    啟動長輪詢，等待使用者指令
   --dry-run   印出訊息內容，不實際發送
+  --strategy  選擇策略（c=Strategy C, d=Strategy D）
 
 指令（Listen 模式）：
-  /signal     今日選股建議
+  /signal     今日 Strategy C 選股建議
+  /signal c   今日 Strategy C 選股建議
+  /signal d   今日 Strategy D 選股建議（label=5d + trailing stop -25%）
   /portfolio  持倉與損益
   /buy XXXX 價格 股數   記錄買進
   /sell XXXX 價格       記錄賣出
@@ -433,10 +436,11 @@ def _cmd_sell(args: List[str]) -> str:
     )
 
 
-def _cmd_signal() -> str:
-    sig = _load_latest_signal()
+def _cmd_signal(strategy: str = "c") -> str:
+    sig = _load_latest_signal(strategy=strategy)
     if not sig:
-        return "❌ 今日尚無選股訊號，請先執行 make daily-c"
+        make_cmd = f"make daily-{strategy}"
+        return f"❌ 今日尚無 Strategy {strategy.upper()} 訊號，請先執行 {make_cmd}"
     return _format_push_message(sig)
 
 
@@ -536,9 +540,11 @@ def _cmd_why(args: List[str]) -> str:
 
 
 HELP_TEXT = """\
-📖 <b>Strategy C Bot 指令</b>
+📖 <b>Strategy C/D Bot 指令</b>
 
-/signal      今日選股建議
+/signal      今日 Strategy C 選股建議
+/signal c    今日 Strategy C 選股建議（日頻、Rank Drop 出場）
+/signal d    今日 Strategy D 選股建議（label=5d + trailing stop -25%）
 /portfolio   持倉狀況與損益
 /buy 代號 價格 股數
              記錄買進（例：/buy 2330 855 1000）
@@ -563,7 +569,11 @@ def _dispatch(bot: TelegramBot, text: str, chat_id: str) -> None:
     if cmd == "/help":
         reply = HELP_TEXT
     elif cmd == "/signal":
-        reply = _cmd_signal()
+        # /signal       → Strategy C（預設）
+        # /signal c     → Strategy C
+        # /signal d     → Strategy D
+        strat = args[0].lower() if args and args[0].lower() in ("c", "d") else "c"
+        reply = _cmd_signal(strategy=strat)
     elif cmd == "/portfolio":
         reply = _format_portfolio()
     elif cmd == "/buy":
