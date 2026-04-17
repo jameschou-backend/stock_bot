@@ -53,7 +53,7 @@ TRAIN_LABEL_HORIZON    = 10    # 10 日 forward return
 LABEL_BUFFER_DAYS      = 20    # 訓練截止緩衝（避免標籤前向洩漏）
 RANK_THRESHOLD         = 0.20  # 維持持倉的最低排名門檻（top 20%）
 TOP_ENTRY_N            = 10    # 每日候補選股池
-MAX_POSITIONS          = 6     # 最大同時持倉
+MAX_POSITIONS          = 4     # 最大同時持倉（2026-04-16 實驗：pos=4 報酬 3.3x，Calmar 2.649）
 MAX_HOLD_DAYS          = 30    # 強制出場天數
 MAX_BREAKTHROUGH_DIST  = 0.30  # 新買進距突破上限（>30% 的股不進場，等更近的候補）
 RETRAIN_MONTHS         = 36    # 訓練資料回看月數（3 年）

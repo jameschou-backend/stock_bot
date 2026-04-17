@@ -51,21 +51,33 @@ python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
 | Sharpe | **1.438** |
 | Calmar | **2.233** |
 
-配置：`--months 120 --train-label-horizon 10 --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585 --excess-label`
+配置：`--months 120 --train-label-horizon 10 --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585 --excess-label --max-positions 4`
 
 Strategy C 生產 CLI：
 ```bash
 python scripts/backtest_rotation.py --months 120 --train-label-horizon 10 \
-  --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585 --excess-label
+  --min-avg-turnover 1.0 --tiered-slippage --transaction-cost 0.00585 --excess-label --max-positions 4
 ```
 
-#### Session 14 三組實驗對照（2026-04-16）
+#### Session 14 實驗總結
+
+**Label 實驗（三組對照）**
 
 | 配置 | 累積報酬 | Sharpe | MDD | Calmar | 採用？ |
 |------|---------|--------|-----|--------|--------|
 | A Baseline（原始 label）| +17,877% | 1.433 | -36.1% | 2.005 | 基準 |
 | B Liq-Weighted | +20,785% | 1.266 | **-51.1%** | 1.472 | ❌ MDD 惡化 |
 | **C Excess Label** | **+31,043%** | **1.438** | -37.0% | **2.233** | **✅ 採用** |
+
+**P1 持倉數實驗（excess label 基礎上）**
+
+| 配置 | 累積報酬 | Sharpe | MDD | Calmar | 採用？ |
+|------|---------|--------|-----|--------|--------|
+| excess (pos=6, 基準) | +31,043% | 1.438 | -37.0% | 2.233 | 前基準 |
+| P1-A excess+liq-weighted | +34,561% | **1.630** | -36.8% | 2.302 | 待評估 |
+| P1-B excess+adaptive rank | +31,043% | 1.438 | -37.0% | 2.233 | ❌ 無效 |
+| **P1-C excess+pos=4** | **+102,240%** | 1.480 | -40.4% | **2.649** | **✅ 採用** |
+| P1-D excess+pos=8 | +24,124% | 1.596 | -34.0% | 2.290 | ❌ 報酬下降 |
 
 #### 歷史配置對照
 
@@ -74,7 +86,8 @@ python scripts/backtest_rotation.py --months 120 --train-label-horizon 10 \
 | ~~buggy（buffer=10, 0.585%）~~ | ~~+487,108%~~ | ~~1.847~~ | ~~-28.1%~~ | ❌ 前瞻偏差（已廢棄）|
 | fixed（buffer=20, 含微型股）| +267,029% | 2.314 | -25.6% | 含微型股，不可執行 |
 | Liq-1億+分級滑價（baseline）| +17,877% | 1.433 | -37.0% | 現行基準 |
-| **Liq-1億+分級滑價+Excess Label** | **+31,043%** | **1.438** | **-37.0%** | **✅ 新生產** |
+| Liq-1億+分級滑價+Excess Label (pos=6) | +31,043% | 1.438 | -37.0% | 前生產 |
+| **Liq-1億+分級滑價+Excess Label+pos=4** | **+102,240%** | **1.480** | **-40.4%** | **✅ 新生產** |
 
 alpha 高度集中在日均量 <1億 小型股；加流動性過濾後報酬驟降，但 Sharpe 仍優於 Strategy A（0.98）
 
