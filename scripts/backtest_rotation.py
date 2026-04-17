@@ -256,9 +256,9 @@ def run_rotation(
     # ── 風控出場參數 ──
     exit_mode: str = "rank",  # "rank"=排名出場（原始）, "risk"=風控出場, "oracle"=Oracle 訊號出場
     stoploss_pct: float = -1.0,   # -1=停用；rank 模式下設 -0.15/-0.20 等加掛硬停損
-    trailing_stop_pct: float = -0.15,
+    trailing_stop_pct: float = -1.0,  # -1=停用；rank 模式下設 -0.20 等啟用追蹤停損
     foreign_sell_exit_days: int = 2,
-    ma_break_days: int = 2,
+    ma_break_days: int = 0,   # 0=停用；rank 模式下設 2/3 啟用 MA20 跌破出場
     ma_break_vol_mult: float = 1.5,
     rsi_exit: Optional[float] = None,
     # Oracle 模式專用參數（基於事後最優出場分析）
@@ -810,13 +810,26 @@ def run_rotation(
                     if sid not in above_force_threshold:
                         exit_reason = "Force Exit"
                 else:
-                    # 固定停損（rank 模式下也可啟用，stoploss_pct=-1 表示停用）
                     _close = price_map.get(sid, pos.entry_price)
-                    if stoploss_pct > -1.0 and _close / pos.entry_price - 1 <= stoploss_pct:
+                    # 更新追蹤停損用最高價
+                    pos.peak_price = max(pos.peak_price, _close)
+                    ret_from_entry = _close / pos.entry_price - 1
+                    ret_from_peak  = _close / pos.peak_price - 1
+                    # 更新 MA20 跌破連續天數
+                    _feat_r = _feat_map.get(sid, {})
+                    _ma20_r = float(_feat_r.get("ma_20", _close) or _close)
+                    if _ma20_r > 0 and _close < _ma20_r:
+                        pos.ma_below_streak += 1
+                    else:
+                        pos.ma_below_streak = 0
+
+                    # 出場優先序：固定停損 > 追蹤停損 > MA 跌破 → rank drop
+                    if stoploss_pct > -1.0 and ret_from_entry <= stoploss_pct:
                         exit_reason = "Stop Loss"
-                    # 分數穩定模式：停損已在上方處理，此處保留 score_drop 邏輯用
-                    if not exit_reason and score_stability:
-                        pass  # score_drop check below
+                    elif trailing_stop_pct > -1.0 and ret_from_peak <= trailing_stop_pct:
+                        exit_reason = "Trailing Stop"
+                    elif ma_break_days > 0 and pos.ma_below_streak >= ma_break_days:
+                        exit_reason = "MA Break"
 
                     if not exit_reason:
                         if sid not in above_threshold:
@@ -1157,7 +1170,7 @@ def main():
                         help="追蹤停損：從峰值回落幅度（risk 模式，預設 -0.15）")
     parser.add_argument("--foreign-sell-days", type=int, default=2,
                         help="連續 N 天 foreign_buy_streak_5==0 出場（risk 模式，預設 2）")
-    parser.add_argument("--ma-break-days", type=int, default=2,
+    parser.add_argument("--ma-break-days", type=int, default=0,
                         help="連續 N 天低於 MA20 出場（risk 模式，預設 2）")
     parser.add_argument("--ma-break-vol", type=float, default=1.5,
                         help="MA20 跌破時量能門檻（risk 模式，預設 1.5，設 0 停用）")
