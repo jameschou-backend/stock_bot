@@ -106,9 +106,9 @@ class TelegramBot:
 # ─────────────────────────────────────────────
 # 讀取今日最新訊號
 # ─────────────────────────────────────────────
-def _load_latest_signal() -> Optional[Dict]:
-    """找最新的 strategy_c_YYYY-MM-DD.json。"""
-    files = sorted(SIGNAL_DIR.glob("strategy_c_20*.json"), reverse=True)
+def _load_latest_signal(strategy: str = "c") -> Optional[Dict]:
+    """找最新的 strategy_{c|d}_YYYY-MM-DD.json。"""
+    files = sorted(SIGNAL_DIR.glob(f"strategy_{strategy}_20*.json"), reverse=True)
     if not files:
         return None
     return json.loads(files[0].read_text(encoding="utf-8"))
@@ -587,6 +587,8 @@ def main() -> None:
     group.add_argument("--push",    action="store_true", help="推送今日訊號")
     group.add_argument("--listen",  action="store_true", help="啟動監聽模式")
     group.add_argument("--dry-run", action="store_true", help="印出訊息（不發送）")
+    parser.add_argument("--strategy", type=str, default="c", choices=["c", "d"],
+                        help="使用哪個策略的訊號（c=Strategy C, d=Strategy D，預設 c）")
     args = parser.parse_args()
 
     # 載入 token
@@ -607,9 +609,10 @@ def main() -> None:
 
     # ── 推送模式 ──
     if args.push or args.dry_run:
-        sig = _load_latest_signal()
+        sig = _load_latest_signal(strategy=args.strategy)
         if not sig:
-            print("❌ 找不到訊號檔案，請先執行 python scripts/strategy_c_pick.py")
+            pick_script = f"python scripts/strategy_{args.strategy}_pick.py"
+            print(f"❌ 找不到訊號檔案，請先執行 {pick_script}")
             sys.exit(1)
         msg = _format_push_message(sig)
         ok  = bot.send(msg)

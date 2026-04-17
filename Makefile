@@ -33,6 +33,11 @@ daily:
 daily-c:
 	python scripts/strategy_c_pick.py
 
+# Strategy D 選股 + 推送 TG（label=5d + trailing stop -25%）
+daily-d:
+	python scripts/strategy_d_pick.py
+	python scripts/telegram_bot.py --push --strategy d
+
 # 啟動 Telegram Bot 監聽模式
 bot:
 	python scripts/telegram_bot.py --listen
