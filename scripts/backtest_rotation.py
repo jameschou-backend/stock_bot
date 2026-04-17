@@ -255,7 +255,7 @@ def run_rotation(
     force_exit_threshold: Optional[float] = None,
     # ── 風控出場參數 ──
     exit_mode: str = "rank",  # "rank"=排名出場（原始）, "risk"=風控出場, "oracle"=Oracle 訊號出場
-    stoploss_pct: float = -0.10,
+    stoploss_pct: float = -1.0,   # -1=停用；rank 模式下設 -0.15/-0.20 等加掛硬停損
     trailing_stop_pct: float = -0.15,
     foreign_sell_exit_days: int = 2,
     ma_break_days: int = 2,
@@ -810,11 +810,13 @@ def run_rotation(
                     if sid not in above_force_threshold:
                         exit_reason = "Force Exit"
                 else:
-                    # 分數穩定模式：強制停損（優先於排名判斷）
-                    if score_stability:
-                        _close = price_map.get(sid, pos.entry_price)
-                        if _close / pos.entry_price - 1 <= stoploss_pct:
-                            exit_reason = "Stop Loss"
+                    # 固定停損（rank 模式下也可啟用，stoploss_pct=-1 表示停用）
+                    _close = price_map.get(sid, pos.entry_price)
+                    if stoploss_pct > -1.0 and _close / pos.entry_price - 1 <= stoploss_pct:
+                        exit_reason = "Stop Loss"
+                    # 分數穩定模式：停損已在上方處理，此處保留 score_drop 邏輯用
+                    if not exit_reason and score_stability:
+                        pass  # score_drop check below
 
                     if not exit_reason:
                         if sid not in above_threshold:
@@ -1149,7 +1151,7 @@ def main():
                         help="保護期間強制出場門檻，如 0.30=top30%（預設=rank_threshold×1.5）")
     parser.add_argument("--exit-mode", type=str, default="rank", choices=["rank", "risk", "oracle"],
                         help="出場模式：rank=排名出場（原始），risk=風控出場")
-    parser.add_argument("--stoploss", type=float, default=-0.10,
+    parser.add_argument("--stoploss", type=float, default=-1.0,
                         help="固定停損（risk 模式，預設 -0.10）")
     parser.add_argument("--trailing-stop", type=float, default=-0.15,
                         help="追蹤停損：從峰值回落幅度（risk 模式，預設 -0.15）")
