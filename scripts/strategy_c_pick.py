@@ -62,8 +62,10 @@ MIN_AVG_TURNOVER_BILL  = 1.0   # 流動性門檻：20日平均日成交金額（
 USE_EXCESS_LABEL       = True  # 超額報酬 label：future_ret_h -= 同日截面均值（與 backtest --excess-label 一致）
 USE_RANK_LABEL         = True  # 截面排名 label：excess return → 當日百分位排名 [0,1]→[-1,1]
                                 #   → MSE on rank ≈ 直接優化 Spearman IC，消除極端值主導 loss
-USE_RANKING_OBJ        = True  # LGBMRanker(LambdaRank)：直接優化 NDCG 排序目標
-                                #   需要資料依 trading_date 排序 + int 相關度標籤（0-4）
+                                #   36m 回測：Sharpe 1.47→1.73（+17%）、Calmar +31%、MDD -9.6pp、勝率 49.5%→53.3%
+USE_RANKING_OBJ        = False # LGBMRanker(LambdaRank)：直接優化 NDCG 排序目標
+                                #   ⚠️ 36m 回測：cumulative 572%→97%（int 0-4 離散化太粗，退化）
+                                #   維持 False，使用 Rank Label + MSE 即可達到 IC 優化效果
 
 _META_COLS = {"stock_id", "trading_date", "future_ret_h"}
 
