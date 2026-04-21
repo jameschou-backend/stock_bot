@@ -60,6 +60,10 @@ RETRAIN_MONTHS         = 36    # 訓練資料回看月數（3 年）
 RETRAIN_FREQ_DAYS      = 30    # 每隔幾天重訓一次
 MIN_AVG_TURNOVER_BILL  = 1.0   # 流動性門檻：20日平均日成交金額（億元），0=不過濾
 USE_EXCESS_LABEL       = True  # 超額報酬 label：future_ret_h -= 同日截面均值（與 backtest --excess-label 一致）
+USE_RANK_LABEL         = True  # 截面排名 label：excess return → 當日百分位排名 [0,1]→[-1,1]
+                                #   → MSE on rank ≈ 直接優化 Spearman IC，消除極端值主導 loss
+USE_RANKING_OBJ        = True  # LGBMRanker(LambdaRank)：直接優化 NDCG 排序目標
+                                #   需要資料依 trading_date 排序 + int 相關度標籤（0-4）
 
 _META_COLS = {"stock_id", "trading_date", "future_ret_h"}
 
@@ -67,21 +71,41 @@ _META_COLS = {"stock_id", "trading_date", "future_ret_h"}
 # ─────────────────────────────────────────────
 # 訓練 / 打分
 # ─────────────────────────────────────────────
-def _train_model(X: np.ndarray, y: np.ndarray):
-    if _HAS_LGBM:
+def _train_model(
+    X: np.ndarray,
+    y: np.ndarray,
+    groups: Optional[List[int]] = None,
+) -> object:
+    """
+    groups != None  → LGBMRanker(LambdaRank)，直接優化 NDCG 排序目標
+                      y 必須為 int 相關度標籤（0-4），且 X/y 依 trading_date 排序。
+    groups is None  → LGBMRegressor(MSE)，搭配 rank label 或 excess label 使用。
+    """
+    if _HAS_LGBM and groups is not None:
+        # ── LambdaRank：直接優化排序 ──
+        m = lgb.LGBMRanker(
+            n_estimators=500, learning_rate=0.05, max_depth=6,
+            num_leaves=31, subsample=0.8, colsample_bytree=0.8,
+            reg_alpha=0.1, reg_lambda=0.1, min_child_samples=20,
+            random_state=42, n_jobs=-1, verbose=-1,
+        )
+        m.fit(X, y, group=groups)
+    elif _HAS_LGBM:
+        # ── MSE 回歸（搭配 rank label 使用）──
         m = lgb.LGBMRegressor(
             n_estimators=500, learning_rate=0.05, max_depth=6,
             num_leaves=31, subsample=0.8, colsample_bytree=0.8,
             reg_alpha=0.1, reg_lambda=0.1, min_child_samples=50,
             random_state=42, n_jobs=-1, verbose=-1,
         )
+        m.fit(X, y)
     else:
         from sklearn.ensemble import GradientBoostingRegressor
         m = GradientBoostingRegressor(
             n_estimators=300, learning_rate=0.05, max_depth=5,
             subsample=0.8, random_state=42,
         )
-    m.fit(X, y)
+        m.fit(X, y)
     return m
 
 
@@ -264,7 +288,7 @@ def run_pick(
     label_df["stock_id"]     = label_df["stock_id"].astype(str)
     print(f"  Labels ({TRAIN_LABEL_HORIZON}d): {len(label_df):,} rows ({time.time()-t0:.1f}s)")
 
-    # ── 超額報酬 label（與 backtest --excess-label 一致）──
+    # ── Step 1：超額報酬 label（market-neutral，與 backtest --excess-label 一致）──
     if USE_EXCESS_LABEL:
         label_df["future_ret_h"] = label_df["future_ret_h"].replace([np.inf, -np.inf], np.nan)
         _mkt_ret = label_df.groupby("trading_date")["future_ret_h"].mean().rename("mkt_ret_h")
@@ -274,6 +298,18 @@ def run_pick(
         label_df["future_ret_h"] = label_df["future_ret_h"].clip(-1.5, 1.5)
         label_df = label_df.dropna(subset=["future_ret_h"])
         print(f"  Excess label applied: {len(label_df):,} rows")
+
+    # ── Step 2：截面排名 label（IC 優化核心）──
+    # 把 excess return 轉為當日截面百分位排名 [0,1]，再 scale 到 [-1,1]
+    # MSE on rank ≈ 優化 Spearman IC；消除極端值（暴漲/暴跌股）主導 loss 的問題
+    if USE_RANK_LABEL:
+        label_df["future_ret_h"] = (
+            label_df.groupby("trading_date")["future_ret_h"]
+            .rank(pct=True)          # [0, 1] 截面百分位
+            .mul(2).sub(1)           # → [-1, 1]，0 = 中位數
+        )
+        print(f"  Rank label applied: range [{label_df['future_ret_h'].min():.2f}, "
+              f"{label_df['future_ret_h'].max():.2f}]")
 
     # ── 特徵欄位 ──
     feat_cols = [c for c in feat_df.columns if c not in _META_COLS]
@@ -288,17 +324,33 @@ def run_pick(
         print(f"❌ 訓練樣本不足（{len(merged)} 筆），請回填更多歷史資料")
         sys.exit(1)
 
+    # ── 準備訓練矩陣 ──
+    # LambdaRank 需要依 trading_date 排序，一般回歸則不需要
+    if USE_RANKING_OBJ and _HAS_LGBM:
+        merged = merged.sort_values(["trading_date", "stock_id"]).reset_index(drop=True)
+
     fmat_train = _prep_fmat(
         merged.drop(columns=[c for c in _META_COLS if c in merged.columns]),
         feat_cols,
     )
     valid = fmat_train.notna().all(axis=1)
     fmat_train = fmat_train.loc[valid]
-    y_train    = merged.loc[fmat_train.index]["future_ret_h"].astype(float).values
+    merged_valid = merged.loc[fmat_train.index]
+
+    if USE_RANKING_OBJ and _HAS_LGBM:
+        # LambdaRank：rank label [-1,1] → int 相關度 0-4
+        _pct = (merged_valid["future_ret_h"].values + 1) / 2  # [-1,1] → [0,1]
+        y_train = np.clip((_pct * 5).astype(int), 0, 4)       # [0,1] → int 0-4
+        # group = 每個 trading_date 有幾支股票（必須與排序對齊）
+        _groups = merged_valid.groupby("trading_date", sort=False).size().tolist()
+    else:
+        y_train = merged_valid["future_ret_h"].astype(float).values
+        _groups = None
 
     t0 = time.time()
-    print(f"  訓練模型（{len(y_train):,} 樣本，{len(feat_cols)} 特徵）...", end=" ", flush=True)
-    model = _train_model(fmat_train.values, y_train)
+    obj_label = "LambdaRank" if (_groups is not None) else ("RankLabel+MSE" if USE_RANK_LABEL else "MSE")
+    print(f"  訓練模型（{len(y_train):,} 樣本，{len(feat_cols)} 特徵，{obj_label}）...", end=" ", flush=True)
+    model = _train_model(fmat_train.values, y_train, groups=_groups)
     print(f"{time.time()-t0:.1f}s")
 
     # ── 對今日打分 ──

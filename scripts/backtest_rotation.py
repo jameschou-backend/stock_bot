@@ -40,9 +40,23 @@ except ImportError:
 from sklearn.ensemble import GradientBoostingRegressor
 
 
-def _train_model(train_X, train_y, sample_weight=None, fast_mode=False):
+def _train_model(train_X, train_y, sample_weight=None, fast_mode=False, groups=None):
+    """
+    groups != None  → LGBMRanker(LambdaRank)，直接優化 NDCG 排序目標
+                      train_y 為 int 相關度（0-4），train_X 依 trading_date 排序。
+    groups is None  → LGBMRegressor(MSE)，可搭配 rank label 或 excess label 使用。
+    """
     n_est = 150 if fast_mode else 500
-    if _HAS_LGBM:
+    if _HAS_LGBM and groups is not None:
+        # ── LambdaRank ──
+        model = lgb.LGBMRanker(
+            n_estimators=n_est, learning_rate=0.05, max_depth=6,
+            num_leaves=31, subsample=0.8, colsample_bytree=0.8,
+            reg_alpha=0.1, reg_lambda=0.1, min_child_samples=20,
+            random_state=42, n_jobs=-1, verbose=-1,
+        )
+        model.fit(train_X, train_y, group=groups, sample_weight=sample_weight)
+    elif _HAS_LGBM:
         model = lgb.LGBMRegressor(
             n_estimators=n_est, learning_rate=0.05, max_depth=6,
             num_leaves=31, subsample=0.8, colsample_bytree=0.8,
@@ -299,6 +313,10 @@ def run_rotation(
     liq_weighted: bool = False,          # 啟用流動性加權訓練（sample_weight ∝ log(1+amt_20*1e8)）
     # ── 超額報酬 label（vs 大盤）──
     use_excess_label: bool = False,      # 啟用超額報酬 label：future_ret_h - 當期等權市場報酬
+    # ── IC 優化：截面排名 label + LambdaRank ──
+    use_rank_label: bool = False,        # 截面排名 label：excess return → 百分位 [0,1] → [-1,1]
+                                         #   → MSE on rank ≈ 直接優化 Spearman IC
+    use_ranking_obj: bool = False,       # LGBMRanker(LambdaRank)：直接優化 NDCG 排序
     # ── 嚴格 Walk-Forward 固定視窗模式 ──
     fixed_train_start: Optional[date] = None,  # 訓練期起始（date 物件）
     fixed_train_end: Optional[date] = None,    # 訓練期截止（超過此日不再重訓）
@@ -464,6 +482,10 @@ def run_rotation(
         print(f"  [Liq-Weighted] sample_weight ∝ log(1+amt_20)")
     if use_excess_label:
         print(f"  [Excess Label] label = future_ret_h - 等權市場報酬")
+    if use_rank_label:
+        print(f"  [Rank Label] 截面百分位排名 → [-1, 1]（IC 優化）")
+    if use_ranking_obj:
+        print(f"  [LambdaRank] LGBMRanker，直接優化 NDCG 排序目標")
     if dynamic_position_sizing:
         print(f"  [動態部位] total_capital={total_capital/1e4:.0f}萬，max_pct={max_position_pct:.0%}")
     if slippage_pct > 0:
@@ -517,6 +539,19 @@ def run_rotation(
         label_df_train = label_df_train.dropna(subset=["future_ret_h"])
         print(f"  Excess label applied. Mean label: {label_df_train['future_ret_h'].mean():.4f} "
               f"(std={label_df_train['future_ret_h'].std():.4f})", flush=True)
+
+    # ── 截面排名 label（IC 優化）──
+    # 把 excess return 轉為當日截面百分位排名 [0,1]，再 scale 到 [-1,1]
+    # MSE on rank ≈ 優化 Spearman IC；消除極端值（暴漲/暴跌股）主導 loss 的問題
+    if use_rank_label:
+        label_df_train = label_df_train.copy()
+        label_df_train["future_ret_h"] = (
+            label_df_train.groupby("trading_date")["future_ret_h"]
+            .rank(pct=True)    # [0, 1] 截面百分位
+            .mul(2).sub(1)     # → [-1, 1]，0 = 中位數
+        )
+        print(f"  Rank label applied. Range [{label_df_train['future_ret_h'].min():.3f}, "
+              f"{label_df_train['future_ret_h'].max():.3f}]", flush=True)
 
     _meta_cols = {"stock_id", "trading_date", "future_ret_h"}
     feat_cols = [c for c in feat_df.columns if c not in _meta_cols]
@@ -598,20 +633,36 @@ def run_rotation(
                     fmat = fmat.loc[valid]
                     merged = merged.loc[fmat.index]
                     if not fmat.empty:
-                        y = merged["future_ret_h"].astype(float).values
                         current_feat_names = list(fmat.columns)
                         # 流動性加權訓練
                         _sw = None
                         if liq_weighted and "amt_20" in merged.columns:
                             _amt = merged.loc[fmat.index, "amt_20"].fillna(0).values
                             _sw = np.log1p(np.abs(_amt) * 1e8).clip(min=0.1)
-                            _sw = _sw / _sw.mean()  # 正規化，平均權重 = 1
+                            _sw = _sw / _sw.mean()
+
+                        _groups = None
+                        if use_ranking_obj and _HAS_LGBM:
+                            # LambdaRank：需依 trading_date 排序，int 相關度標籤 0-4
+                            if not merged.index.equals(merged.sort_values("trading_date").index):
+                                merged = merged.sort_values(["trading_date", "stock_id"]).reset_index(drop=True)
+                                fmat   = fmat.loc[merged.index] if set(fmat.index).issubset(set(merged.index)) else fmat
+                            _pct = (merged["future_ret_h"].values + 1) / 2  # [-1,1]→[0,1]
+                            y    = np.clip((_pct * 5).astype(int), 0, 4)
+                            _groups = merged.groupby("trading_date", sort=False).size().tolist()
+                            if _sw is not None:
+                                _sw = _sw[:len(y)]  # 對齊長度
+                        else:
+                            y = merged["future_ret_h"].astype(float).values
+
                         _t = time.time()
-                        current_model = _train_model(fmat.values, y, sample_weight=_sw, fast_mode=fast_mode)
+                        current_model = _train_model(fmat.values, y, sample_weight=_sw,
+                                                     fast_mode=fast_mode, groups=_groups)
                         last_train_date = today
                         if day_idx % 250 == 0 or day_idx < 3:
-                            _sw_info = f", liq-weighted" if _sw is not None else ""
-                            print(f"  [{today}] Model trained ({len(y):,} rows{_sw_info}, {time.time()-_t:.1f}s)", flush=True)
+                            _obj = "LambdaRank" if _groups else ("RankLabel" if use_rank_label else "MSE")
+                            _sw_info = ", liq-weighted" if _sw is not None else ""
+                            print(f"  [{today}] Model trained ({len(y):,} rows, {_obj}{_sw_info}, {time.time()-_t:.1f}s)", flush=True)
 
         if current_model is None:
             continue
@@ -1224,6 +1275,10 @@ def main():
                         help="啟用流動性加權訓練（sample_weight ∝ log(1+amt_20*1e8)）")
     parser.add_argument("--excess-label", action="store_true",
                         help="啟用超額報酬 label（future_ret_h - 等權市場報酬）")
+    parser.add_argument("--rank-label", action="store_true",
+                        help="截面排名 label：excess return → 當日百分位 [0,1]→[-1,1]（IC 優化）")
+    parser.add_argument("--ranking-obj", action="store_true",
+                        help="LGBMRanker(LambdaRank)：直接優化 NDCG 排序目標（需 --rank-label）")
     parser.add_argument("--adaptive-rank-threshold", action="store_true",
                         help="空頭時動態收緊 rank_threshold（-5%%:x1.25, -10%%:x1.5, -15%%:x1.75）")
     parser.add_argument("--max-positions", type=int, default=None,
@@ -1294,6 +1349,8 @@ def main():
             max_position_pct=args.max_position_pct,
             liq_weighted=args.liq_weighted,
             use_excess_label=args.excess_label,
+            use_rank_label=args.rank_label,
+            use_ranking_obj=args.ranking_obj,
             adaptive_rank_threshold=args.adaptive_rank_threshold,
             max_positions=args.max_positions or 6,
         )

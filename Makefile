@@ -33,6 +33,21 @@ daily:
 daily-c:
 	python scripts/strategy_c_pick.py
 
+# Strategy C 回測對比：MSE baseline vs RankLabel vs LambdaRank
+bt-rank-compare:
+	@echo "=== Baseline (excess label only) ==="
+	python scripts/backtest_rotation.py --months 36 --max-positions 4 \
+	  --exit-mode rank --excess-label \
+	  --output artifacts/bt_rank_baseline.json
+	@echo "=== Rank Label (MSE on rank) ==="
+	python scripts/backtest_rotation.py --months 36 --max-positions 4 \
+	  --exit-mode rank --excess-label --rank-label \
+	  --output artifacts/bt_rank_label.json
+	@echo "=== LambdaRank (direct ranking obj) ==="
+	python scripts/backtest_rotation.py --months 36 --max-positions 4 \
+	  --exit-mode rank --excess-label --rank-label --ranking-obj \
+	  --output artifacts/bt_lambdarank.json
+
 # Strategy D 選股 + 推送 TG（label=5d + trailing stop -25%）
 daily-d:
 	python scripts/strategy_d_pick.py
