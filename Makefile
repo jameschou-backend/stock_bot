@@ -144,6 +144,14 @@ backfill-institutional:
 dq-report:
 	python scripts/data_quality_report.py --days $${DAYS:-180}
 
+# 評估歷史訊號績效（IC / 命中率 / 超額報酬）
+eval-signal:
+	python scripts/eval_signal_perf.py --strategy $${STRATEGY:-c} --topn $${TOPN:-10}
+
+# 評估 Strategy D 訊號績效
+eval-signal-d:
+	python scripts/eval_signal_perf.py --strategy d --topn 4
+
 experiment-matrix:
 	python scripts/run_experiment_matrix.py --matrix experiments/multi_agent_matrix.yaml --resume
 
