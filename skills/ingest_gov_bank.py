@@ -29,14 +29,12 @@ from sqlalchemy.orm import Session
 
 from app.finmind import (
     FinMindError,
-    date_chunks,
-    fetch_dataset_by_stocks,
-    fetch_stock_list,
+    fetch_dataset,
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawGovBank, Stock
 
-DATASET = "TaiwanstockGovernmentBankBuySell"
+DATASET = "TaiwanStockGovernmentBankBuySell"
 UPDATE_COLS = ["gov_net", "bank_count_buy", "bank_count_sell"]
 
 
@@ -121,37 +119,35 @@ def run(config, db_session: Session, **kwargs) -> Dict:
 
         print(f"[ingest_gov_bank] {start_date} ~ {end_date}", flush=True)
 
+        # TaiwanStockGovernmentBankBuySell：
+        # - 不接受 data_id（全市場資料，無法按股票篩選）
+        # - 資料量過大，API 只允許單日查詢（end_date 不傳或設為 None）
+        # → 逐日查詢，每日一次 API call
         allowed_stock_ids = _load_allowed_stock_ids(db_session)
         logs["allowed_stock_ids"] = len(allowed_stock_ids)
+        logs["fetch_mode"] = "daily_bulk"
 
-        stock_ids = fetch_stock_list(
-            config.finmind_token,
-            requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
-            max_retries=getattr(config, "finmind_retry_max", 3),
-            backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
-        )
-        if not stock_ids:
-            logs["warning"] = "無法取得股票清單，跳過抓取"
-            logs["rows"] = 0
-            finish_job(db_session, job_id, "success", logs=logs)
-            return {"rows": 0}
-
-        chunk_days = getattr(config, "chunk_days", 180)
-        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=chunk_days))
-        logs["chunks_total"] = len(chunk_ranges)
+        # 產生所有日期（含週末，API 會自動回傳空值）
+        all_dates = [
+            start_date + timedelta(days=d)
+            for d in range((end_date - start_date).days + 1)
+        ]
+        # 跳過週末（台股週一至五）
+        trading_dates = [d for d in all_dates if d.weekday() < 5]
+        logs["days_total"] = len(trading_dates)
         total_rows = 0
+        commit_buffer: List[Dict] = []
 
-        for i, (chunk_start, chunk_end) in enumerate(chunk_ranges, 1):
-            update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{len(chunk_ranges)}"}, commit=True)
+        for i, query_date in enumerate(trading_dates, 1):
+            if i % 50 == 0:
+                update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{len(trading_dates)}", "rows": total_rows}, commit=True)
+                print(f"  [{i}/{len(trading_dates)}] 已處理 {total_rows} 筆...", flush=True)
 
-            df = fetch_dataset_by_stocks(
-                DATASET,
-                chunk_start,
-                chunk_end,
-                stock_ids,
+            df = fetch_dataset(
+                dataset=DATASET,
+                start_date=query_date,
+                end_date=None,   # 此 dataset 僅支援單日，不傳 end_date
                 token=config.finmind_token,
-                batch_size=500,
-                use_batch_query=True,
                 requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
                 max_retries=getattr(config, "finmind_retry_max", 3),
                 backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
@@ -163,13 +159,24 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             if agg_df.empty:
                 continue
 
-            records: List[Dict] = agg_df.to_dict("records")
-            stmt = insert(RawGovBank).values(records)
+            commit_buffer.extend(agg_df.to_dict("records"))
+
+            # 每 30 天 commit 一次，避免事務過長
+            if len(commit_buffer) >= 500:
+                stmt = insert(RawGovBank).values(commit_buffer)
+                stmt = stmt.on_duplicate_key_update({col: stmt.inserted[col] for col in UPDATE_COLS})
+                db_session.execute(stmt)
+                db_session.commit()
+                total_rows += len(commit_buffer)
+                commit_buffer.clear()
+
+        # 最後 flush
+        if commit_buffer:
+            stmt = insert(RawGovBank).values(commit_buffer)
             stmt = stmt.on_duplicate_key_update({col: stmt.inserted[col] for col in UPDATE_COLS})
             db_session.execute(stmt)
             db_session.commit()
-            total_rows += len(records)
-            print(f"  chunk {i}/{len(chunk_ranges)}: {len(records)} 筆", flush=True)
+            total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
         print(f"  ✅ gov_bank: {total_rows} 筆", flush=True)

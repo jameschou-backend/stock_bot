@@ -89,38 +89,52 @@ def _aggregate_holding(df: pd.DataFrame, allowed_stock_ids: Optional[Set[str]] =
 
     # 欄位容錯
     level_col = next((c for c in ["HoldingSharesLevel", "holdingSharesLevel", "level"] if c in df.columns), None)
-    unit_col = next((c for c in ["unit", "Unit", "shares"] if c in df.columns), None)
+    # percent 欄位（0~100）最直接可靠，優先使用
+    pct_col    = next((c for c in ["percent", "Percent"] if c in df.columns), None)
     people_col = next((c for c in ["people", "People", "holders"] if c in df.columns), None)
 
-    if level_col is None or unit_col is None:
+    if level_col is None:
         raise FinMindError(
-            f"TaiwanStockHoldingSharesPer missing required columns; got: {df.columns.tolist()}"
+            f"TaiwanStockHoldingSharesPer missing HoldingSharesLevel column; got: {df.columns.tolist()}"
         )
+    if pct_col is None and (c := next((c for c in ["unit", "Unit", "shares"] if c in df.columns), None)):
+        # fallback: 用 unit 自算比例
+        df["_pct_src"] = pd.to_numeric(df[c], errors="coerce").fillna(0)
+        use_unit_fallback = True
+    else:
+        df["_pct_src"] = pd.to_numeric(df[pct_col], errors="coerce").fillna(0) if pct_col else 0
+        use_unit_fallback = False
 
-    df["unit"] = pd.to_numeric(df[unit_col], errors="coerce").fillna(0)
     df["people"] = pd.to_numeric(df[people_col], errors="coerce").fillna(0) if people_col else 0
     df["level_min"] = df[level_col].apply(_parse_level_min)
 
     results = []
     for (stock_id, trading_date), grp in df.groupby(["stock_id", "trading_date"]):
-        total_unit = grp["unit"].sum()
         total_people = int(grp["people"].sum())
 
-        if total_unit <= 0:
-            continue
-
-        large = grp[grp["level_min"] >= LARGE_HOLDER_MIN_SHARES]["unit"].sum()
-        small = grp[grp["level_min"] < LARGE_HOLDER_MIN_SHARES]["unit"].sum()
-
-        # 最高級別（level_min 最大的那一組）
-        top_row = grp.loc[grp["level_min"].idxmax()]
-        top_pct = float(top_row["unit"]) / float(total_unit)
+        if use_unit_fallback:
+            total_src = grp["_pct_src"].sum()
+            if total_src <= 0:
+                continue
+            large_pct = float(grp[grp["level_min"] >= LARGE_HOLDER_MIN_SHARES]["_pct_src"].sum()) / float(total_src)
+            small_pct = float(grp[grp["level_min"] < LARGE_HOLDER_MIN_SHARES]["_pct_src"].sum()) / float(total_src)
+            top_row   = grp.loc[grp["level_min"].idxmax()]
+            top_pct   = float(top_row["_pct_src"]) / float(total_src)
+        else:
+            # percent 欄位已是 0~100，直接加總再除以 100
+            total_pct = grp["_pct_src"].sum()
+            if total_pct <= 0:
+                continue
+            large_pct = float(grp[grp["level_min"] >= LARGE_HOLDER_MIN_SHARES]["_pct_src"].sum()) / 100.0
+            small_pct = float(grp[grp["level_min"] < LARGE_HOLDER_MIN_SHARES]["_pct_src"].sum()) / 100.0
+            top_row   = grp.loc[grp["level_min"].idxmax()]
+            top_pct   = float(top_row["_pct_src"]) / 100.0
 
         results.append({
             "stock_id": stock_id,
             "trading_date": trading_date,
-            "large_holder_pct": round(float(large) / float(total_unit), 4),
-            "small_holder_pct": round(float(small) / float(total_unit), 4),
+            "large_holder_pct": round(large_pct, 4),
+            "small_holder_pct": round(small_pct, 4),
             "top_level_pct": round(top_pct, 4),
             "holder_count": total_people,
         })
@@ -163,23 +177,26 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        # 持股分級為週資料，用較大 chunk 減少 API 次數
-        chunk_days = getattr(config, "chunk_days", 180)
-        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=chunk_days))
-        logs["chunks_total"] = len(chunk_ranges)
+        # TaiwanStockHoldingSharesPer 不支援 batch data_id（comma-separated）
+        # 須逐股查詢（use_batch_query=False）。週資料量小，一次抓全區間（一個 chunk）
+        logs["fetch_mode"] = "per_stock_no_batch"
         total_rows = 0
+        commit_buffer: List[Dict] = []
+        total_stocks = len(stock_ids)
 
-        for i, (chunk_start, chunk_end) in enumerate(chunk_ranges, 1):
-            update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{len(chunk_ranges)}"}, commit=True)
+        for i, sid in enumerate(stock_ids, 1):
+            if i % 200 == 0:
+                update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{total_stocks}", "rows": total_rows}, commit=True)
+                print(f"  [{i}/{total_stocks}] 已寫 {total_rows} 筆...", flush=True)
 
             df = fetch_dataset_by_stocks(
                 DATASET,
-                chunk_start,
-                chunk_end,
-                stock_ids,
+                start_date,
+                end_date,
+                [sid],                   # 一次一股
                 token=config.finmind_token,
-                batch_size=500,
-                use_batch_query=True,
+                batch_size=1,
+                use_batch_query=False,   # 跳過無效的 batch attempt
                 requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
                 max_retries=getattr(config, "finmind_retry_max", 3),
                 backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
@@ -187,17 +204,25 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             if df is None or df.empty:
                 continue
 
-            agg_df = _aggregate_holding(df, allowed_stock_ids=allowed_stock_ids or None)
+            agg_df = _aggregate_holding(df, allowed_stock_ids=None)  # 已逐股，不需再過濾
             if agg_df.empty:
                 continue
 
-            records: List[Dict] = agg_df.to_dict("records")
-            stmt = insert(RawHoldingDist).values(records)
+            commit_buffer.extend(agg_df.to_dict("records"))
+            if len(commit_buffer) >= 2000:
+                stmt = insert(RawHoldingDist).values(commit_buffer)
+                stmt = stmt.on_duplicate_key_update({col: stmt.inserted[col] for col in UPDATE_COLS})
+                db_session.execute(stmt)
+                db_session.commit()
+                total_rows += len(commit_buffer)
+                commit_buffer.clear()
+
+        if commit_buffer:
+            stmt = insert(RawHoldingDist).values(commit_buffer)
             stmt = stmt.on_duplicate_key_update({col: stmt.inserted[col] for col in UPDATE_COLS})
             db_session.execute(stmt)
             db_session.commit()
-            total_rows += len(records)
-            print(f"  chunk {i}/{len(chunk_ranges)}: {len(records)} 筆", flush=True)
+            total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
         print(f"  ✅ holding_dist: {total_rows} 筆", flush=True)

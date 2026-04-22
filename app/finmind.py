@@ -61,7 +61,7 @@ def _sleep_backoff(attempt: int, base_seconds: float, retry_after: float | None 
 def fetch_dataset(
     dataset: str,
     start_date: date,
-    end_date: date,
+    end_date: Optional[date] = None,
     token: str | None = None,
     data_id: str | None = None,
     rate_limit: bool = True,
@@ -88,8 +88,9 @@ def fetch_dataset(
     params: Dict[str, Any] = {
         "dataset": dataset,
         "start_date": start_date.isoformat(),
-        "end_date": end_date.isoformat(),
     }
+    if end_date is not None:
+        params["end_date"] = end_date.isoformat()
     if data_id:
         params["data_id"] = data_id
 

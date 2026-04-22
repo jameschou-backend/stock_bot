@@ -73,11 +73,15 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         # 正規化
-        rename_map = {"date": "date"}
-        df = df.rename(columns=rename_map)
+        df.columns = [c.lower() for c in df.columns]  # 統一小寫欄位名
+        if "date" not in df.columns:
+            df = df.rename(columns={df.columns[0]: "date"})
         df["date"]   = pd.to_datetime(df["date"]).dt.date
-        df["score"]  = pd.to_numeric(df.get("score",  df.get("Score",  0)), errors="coerce").fillna(0).astype(int)
-        df["rating"] = df.get("rating", df.get("Rating", "Unknown")).astype(str).str.strip()
+        score_col = next((c for c in ["score", "value", "close"] if c in df.columns), None)
+        df["score"] = pd.to_numeric(df[score_col], errors="coerce").fillna(0).astype(int) \
+            if score_col else 0
+        rating_col = next((c for c in ["rating", "name"] if c in df.columns), None)
+        df["rating"] = df[rating_col].astype(str).str.strip() if rating_col else "Unknown"
         df = df[["date", "score", "rating"]].drop_duplicates(subset=["date"])
 
         # Upsert

@@ -1,6 +1,6 @@
 -- Migration 011: Sponsor 專屬資料表
 -- TaiwanStockTradingDailyReport / TaiwanStockHoldingSharesPer /
--- TaiwanStockKBar / TaiwanstockGovernmentBankBuySell / CnnFearGreedIndex
+-- TaiwanStockKBar / TaiwanStockGovernmentBankBuySell / CnnFearGreedIndex
 
 -- ── Priority 1：分點券商聚合 ──────────────────────────────────────
 CREATE TABLE IF NOT EXISTS raw_broker_trades (

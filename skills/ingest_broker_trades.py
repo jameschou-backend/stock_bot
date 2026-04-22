@@ -29,7 +29,6 @@ from sqlalchemy.orm import Session
 
 from app.finmind import (
     FinMindError,
-    date_chunks,
     fetch_dataset_by_stocks,
     fetch_stock_list,
 )
@@ -113,9 +112,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     logs: Dict = {}
     try:
         today = datetime.now(ZoneInfo(config.tz)).date()
-        default_start = today - timedelta(days=365 * config.train_lookback_years)
-        start_date = _resolve_start_date(db_session, default_start)
-        end_date   = today
+        end_date = today
+
+        # TaiwanStockTradingDailyReport 限制：
+        #   - 不支援 batch data_id（逗號分隔多股）
+        #   - 不支援日期範圍（每次只能查單日，end_date 須為 None）
+        #   - 每日增量設計：預設只抓最近 2 天，避免歷史回補耗盡 API 配額
+        #     （5年歷史 ≈ 2000股 × 1250天 = 250萬 API calls，不切實際）
+        default_start = today - timedelta(days=2)
+        max_db = db_session.query(func.max(RawBrokerTrade.trading_date)).scalar()
+        start_date = (max_db + timedelta(days=1)) if max_db is not None else default_start
 
         logs["start_date"] = start_date.isoformat()
         logs["end_date"]   = end_date.isoformat()
@@ -143,23 +149,29 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        # 分點資料量大，使用較小的 chunk（30 天）避免單次請求超時
-        chunk_days = min(getattr(config, "chunk_days", 180), 30)
-        chunk_ranges = list(date_chunks(start_date, end_date, chunk_days=chunk_days))
-        logs["chunks_total"] = len(chunk_ranges)
+        # 逐日查詢（每日一次），每日再逐股查詢
+        all_dates = [
+            start_date + timedelta(days=d)
+            for d in range((end_date - start_date).days + 1)
+            if (start_date + timedelta(days=d)).weekday() < 5  # 跳週末
+        ]
+        logs["days_total"] = len(all_dates)
+        logs["fetch_mode"] = "per_day_per_stock"
         total_rows = 0
 
-        for i, (chunk_start, chunk_end) in enumerate(chunk_ranges, 1):
-            update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{len(chunk_ranges)}"}, commit=True)
+        for day_idx, query_date in enumerate(all_dates, 1):
+            print(f"  [{day_idx}/{len(all_dates)}] {query_date}", flush=True)
+            update_job(db_session, job_id, logs={**logs, "progress": f"{day_idx}/{len(all_dates)}", "rows": total_rows}, commit=True)
 
+            # 逐股查詢（不支援 batch），end_date=None 表示單日
             df = fetch_dataset_by_stocks(
                 DATASET,
-                chunk_start,
-                chunk_end,
+                query_date,
+                query_date,   # start=end 同一天，fetch_dataset_by_stocks 內部使用 end_date=None 會自動處理
                 stock_ids,
                 token=config.finmind_token,
-                batch_size=200,  # 分點資料每批次少一點，避免逾時
-                use_batch_query=True,
+                batch_size=1,
+                use_batch_query=False,
                 requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
                 max_retries=getattr(config, "finmind_retry_max", 3),
                 backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
@@ -177,7 +189,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             db_session.execute(stmt)
             db_session.commit()
             total_rows += len(records)
-            print(f"  chunk {i}/{len(chunk_ranges)}: {len(records)} 筆", flush=True)
+            print(f"    → {len(records)} 筆寫入", flush=True)
 
         logs["rows"] = total_rows
         print(f"  ✅ broker_trades: {total_rows} 筆", flush=True)
