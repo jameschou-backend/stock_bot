@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index
+.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor
 
 migrate:
 	python scripts/migrate.py
@@ -155,6 +155,33 @@ backfill-prices:
 
 backfill-institutional:
 	python scripts/backfill_institutional.py --days $${DAYS:-180}
+
+# === Sponsor 資料集回補 ===
+# 注意：需要 FinMind Sponsor 計劃才能存取這些資料集
+
+# CNN 恐懼貪婪指數（最輕量，先跑這個測試 Sponsor token）
+backfill-fear-greed:
+	python scripts/backfill_sponsor.py --dataset fear_greed
+
+# 官股銀行買賣超（輕量，全市場每日）
+backfill-gov-bank:
+	python scripts/backfill_sponsor.py --dataset gov_bank
+
+# 持股分級週報（每週一次，資料量小）
+backfill-holding-dist:
+	python scripts/backfill_sponsor.py --dataset holding_dist
+
+# 分點券商聚合（資料量大，需要較長時間）
+backfill-broker-trades:
+	python scripts/backfill_sponsor.py --dataset broker_trades
+
+# 分鐘K線日內特徵（資料量最大，需要最長時間）
+backfill-kbar:
+	python scripts/backfill_sponsor.py --dataset kbar_features
+
+# 回補所有 Sponsor 資料集（依優先序）
+backfill-sponsor:
+	python scripts/backfill_sponsor.py --dataset all
 
 dq-report:
 	python scripts/data_quality_report.py --days $${DAYS:-180}

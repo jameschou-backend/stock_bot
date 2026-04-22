@@ -165,6 +165,27 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         # 9. 題材/金流（由產業聚合，研究用；失敗不中斷）
         from skills import ingest_theme_flow
         _run_optional_skill("ingest_theme_flow", ingest_theme_flow.run)
+
+        # ── Sponsor 專屬資料集（選用，失敗不中斷）──────────────────────
+        # 10. 分點券商聚合（TaiwanStockTradingDailyReport）
+        from skills import ingest_broker_trades
+        _run_optional_skill("ingest_broker_trades", ingest_broker_trades.run)
+
+        # 11. 持股分級週報（TaiwanStockHoldingSharesPer）
+        from skills import ingest_holding_dist
+        _run_optional_skill("ingest_holding_dist", ingest_holding_dist.run)
+
+        # 12. 分鐘K線日內特徵（TaiwanStockKBar）
+        from skills import ingest_kbar_features
+        _run_optional_skill("ingest_kbar_features", ingest_kbar_features.run)
+
+        # 13. 官股銀行買賣超（TaiwanstockGovernmentBankBuySell）
+        from skills import ingest_gov_bank
+        _run_optional_skill("ingest_gov_bank", ingest_gov_bank.run)
+
+        # 14. CNN 恐懼貪婪指數（CnnFearGreedIndex）
+        from skills import ingest_fear_greed
+        _run_optional_skill("ingest_fear_greed", ingest_fear_greed.run)
     else:
         print("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
 

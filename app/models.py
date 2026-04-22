@@ -302,6 +302,117 @@ class StrategyPosition(Base):
     __table_args__ = (Index("idx_strategy_positions_date", "trading_date"),)
 
 
+# ─────────────────────────────────────────────────────────────
+# Priority 1：分點券商追蹤（TaiwanStockTradingDailyReport）
+# ─────────────────────────────────────────────────────────────
+class RawBrokerTrade(Base):
+    """分點券商每日買賣超聚合（Sponsor 專屬）
+
+    不存原始逐筆資料（每日數百萬行），改存計算好的聚合指標：
+    - top5_net：前5大淨買超分點的淨買超合計（張）
+    - top5_concentration：前5大分點淨買超 / 全部分點 |淨買超| 之比（0-1）
+    - buy_broker_count：今日淨買超分點數
+    - sell_broker_count：今日淨賣超分點數
+    - total_net：全部分點合計淨買超（應≈三大法人外資）
+    """
+    __tablename__ = "raw_broker_trades"
+
+    stock_id       = Column(String(16), primary_key=True)
+    trading_date   = Column(Date,       primary_key=True)
+    top5_net       = Column(BigInteger)        # Top-5 分點淨買超（張）
+    top5_concentration = Column(DECIMAL(10, 6))  # Top-5 集中度（0-1）
+    buy_broker_count   = Column(BigInteger)    # 淨買超分點數
+    sell_broker_count  = Column(BigInteger)    # 淨賣超分點數
+    total_net      = Column(BigInteger)        # 全部分點合計淨買超（張）
+
+    __table_args__ = (Index("idx_raw_broker_trading_date", "trading_date"),)
+
+
+# ─────────────────────────────────────────────────────────────
+# Priority 2：持股分級（TaiwanStockHoldingSharesPer）
+# ─────────────────────────────────────────────────────────────
+class RawHoldingDist(Base):
+    """持股分級週報（每週五公布，反映散戶/大戶結構）
+
+    - large_holder_pct：大戶（≥1000張）持股百分比（%）
+    - small_holder_pct：散戶（<1000張）持股百分比（%）
+    - top_level_pct：最大持股級別（>10萬張）百分比（%）
+    - holder_count：總股東人數
+    """
+    __tablename__ = "raw_holding_dist"
+
+    stock_id         = Column(String(16), primary_key=True)
+    trading_date     = Column(Date,       primary_key=True)  # 公布日（通常週五）
+    large_holder_pct = Column(DECIMAL(10, 4))  # 大戶持股 % (>=1000張)
+    small_holder_pct = Column(DECIMAL(10, 4))  # 散戶持股 % (<1000張)
+    top_level_pct    = Column(DECIMAL(10, 4))  # 頂級大戶持股 % (>10萬張或最高級)
+    holder_count     = Column(BigInteger)       # 總股東人數
+
+    __table_args__ = (Index("idx_raw_holding_dist_date", "trading_date"),)
+
+
+# ─────────────────────────────────────────────────────────────
+# Priority 3：分鐘 K 線日內聚合特徵（TaiwanStockKBar）
+# ─────────────────────────────────────────────────────────────
+class RawKBarDaily(Base):
+    """分鐘K線日內特徵聚合（每日 1 筆，避免存海量分鐘資料）
+
+    - morning_ret：開盤後 30 分鐘累積報酬（09:01-09:30）
+    - close_vol_ratio：尾盤 30 分鐘成交量 / 日總成交量
+    - intraday_high_pos：收盤相對日內高低點位置（0=最低, 1=最高）
+    - vwap_dev：收盤偏離 VWAP 程度（(close-vwap)/vwap）
+    """
+    __tablename__ = "raw_kbar_daily"
+
+    stock_id          = Column(String(16), primary_key=True)
+    trading_date      = Column(Date,       primary_key=True)
+    morning_ret       = Column(DECIMAL(10, 6))  # 早盤 30 分鐘報酬
+    close_vol_ratio   = Column(DECIMAL(10, 6))  # 尾盤量佔比
+    intraday_high_pos = Column(DECIMAL(10, 6))  # 收盤位置（0-1）
+    vwap_dev          = Column(DECIMAL(10, 6))  # 收盤偏離 VWAP
+
+    __table_args__ = (Index("idx_raw_kbar_daily_date", "trading_date"),)
+
+
+# ─────────────────────────────────────────────────────────────
+# Priority 4：官股銀行買賣超（TaiwanstockGovernmentBankBuySell）
+# ─────────────────────────────────────────────────────────────
+class RawGovBank(Base):
+    """8大官股銀行每日合計淨買超（護盤/賣壓訊號）
+
+    - gov_net：8 大行庫合計淨買超（張），正=護盤買入，負=倒貨
+    - bank_count_buy：今日淨買超行庫數
+    - bank_count_sell：今日淨賣超行庫數
+    """
+    __tablename__ = "raw_gov_bank"
+
+    stock_id        = Column(String(16), primary_key=True)
+    trading_date    = Column(Date,       primary_key=True)
+    gov_net         = Column(BigInteger)   # 8行庫合計淨買超（張）
+    bank_count_buy  = Column(BigInteger)   # 買超行庫數
+    bank_count_sell = Column(BigInteger)   # 賣超行庫數
+
+    __table_args__ = (Index("idx_raw_gov_bank_date", "trading_date"),)
+
+
+# ─────────────────────────────────────────────────────────────
+# Priority 5：CNN 恐懼貪婪指數（CnnFearGreedIndex）
+# ─────────────────────────────────────────────────────────────
+class RawFearGreed(Base):
+    """CNN 恐懼貪婪指數（全球情緒指標，市場層級，非個股）
+
+    - score：恐懼貪婪分數 0-100（0=極度恐懼，100=極度貪婪）
+    - rating：文字評級（Extreme Fear/Fear/Neutral/Greed/Extreme Greed）
+    """
+    __tablename__ = "raw_fear_greed"
+
+    date   = Column(Date, primary_key=True)
+    score  = Column(BigInteger)       # 0-100
+    rating = Column(String(32))       # Extreme Fear / Fear / Neutral / Greed / Extreme Greed
+
+    __table_args__ = ()
+
+
 class StrategyCTrade(Base):
     """Strategy C 每日進出場稽核 log（append-only）"""
     __tablename__ = "strategy_c_trades"

@@ -36,8 +36,13 @@ from app.job_utils import finish_job, start_job
 from app.models import (
     Feature,
     PriceAdjustFactor,
+    RawBrokerTrade,
+    RawFearGreed,
     RawFundamental,
+    RawGovBank,
+    RawHoldingDist,
     RawInstitutional,
+    RawKBarDaily,
     RawMarginShort,
     RawPrice,
     RawThemeFlow,
@@ -122,6 +127,22 @@ EXTENDED_FEATURE_COLUMNS = [
     # 相對強弱排名（全市場截面，ProcessPoolExecutor 外計算，2026-03-30 新增）
     "rs_rank_20",               # ret_20 在全市場當日百分位排名（0=最弱, 1=最強）
     "rs_rank_60",               # ret_60 在全市場當日百分位排名（0=最弱, 1=最強）
+    # ── Sponsor 資料集特徵（2026-04-22 新增，資料存在時有值，否則 NaN）──
+    # 分點券商聚合（TaiwanStockTradingDailyReport）
+    "broker_top5_conc",         # 當日前5分點淨買超集中度（0~1，越高代表籌碼越集中）
+    "broker_net_5d",            # 近5日分點合計淨買超 / 近20日均量（外資以外籌碼動向）
+    "broker_buy_days_5",        # 近5日分點淨買超天數（0~5，連買信號）
+    # 持股分級（TaiwanStockHoldingSharesPer，週資料前向填充）
+    "large_holder_pct",         # 大戶（>=1000張）持股比例（0~1）
+    "large_holder_chg_4w",      # 大戶持股比例 4 週變動（籌碼集散速度）
+    # 分鐘K線日內特徵（TaiwanStockKBar）
+    "kbar_morning_ret",         # 開盤後30分鐘報酬（09:01-09:30，強弱信號）
+    "kbar_intraday_pos",        # 收盤在當日振幅中的位置（0=最低, 1=最高）
+    # 官股銀行（TaiwanstockGovernmentBankBuySell）
+    "gov_bank_net_5d",          # 近5日官股銀行合計淨買超 / 近20日均量（政府資金方向）
+    # CNN 恐懼貪婪指數（市場層面，ProcessPoolExecutor 外計算）
+    "fear_greed_norm",          # CNN 恐懼貪婪分數 / 100（0=極度恐懼, 1=極度貪婪）
+    "fear_greed_chg_5d",        # 恐懼貪婪指數近5日變動（情緒轉變速度）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -520,6 +541,77 @@ def _apply_group_impl(
     timing["amt_ratio_20"] = timing["atr_inv"]
     timing["amt"] = timing["atr_inv"]
 
+    # ── Sponsor 特徵（資料存在時計算；若無則 NaN）──────────────────
+    # 分點券商（broker_trades）
+    t0 = _t()
+    if "broker_top5_concentration" in group.columns:
+        group["broker_top5_conc"] = pd.to_numeric(group["broker_top5_concentration"], errors="coerce")
+    else:
+        group["broker_top5_conc"] = np.nan
+    if "broker_total_net" in group.columns:
+        _broker_net = pd.to_numeric(group["broker_total_net"], errors="coerce").fillna(0)
+        group["broker_net_5d"] = (
+            _broker_net.rolling(5, min_periods=1).sum()
+            / group["amt_20"].replace(0, np.nan)
+        ).clip(-1, 1)
+        group["broker_buy_days_5"] = (_broker_net > 0).astype(int).rolling(5, min_periods=1).sum()
+    else:
+        group["broker_net_5d"] = np.nan
+        group["broker_buy_days_5"] = np.nan
+    timing["broker_top5_conc"] = _t() - t0
+    timing["broker_net_5d"] = timing["broker_top5_conc"]
+    timing["broker_buy_days_5"] = timing["broker_top5_conc"]
+
+    # 持股分級（holding_dist，已 forward-fill 為週資料 → 每日）
+    t0 = _t()
+    if "large_holder_pct_raw" in group.columns:
+        _lhp = pd.to_numeric(group["large_holder_pct_raw"], errors="coerce")
+        group["large_holder_pct"] = _lhp
+        # 4 週 ≈ 28 天；持股分級每週一筆，向前 4 筆即為 4 週前的值
+        group["large_holder_chg_4w"] = _lhp - _lhp.shift(4)
+    else:
+        group["large_holder_pct"] = np.nan
+        group["large_holder_chg_4w"] = np.nan
+    timing["large_holder_pct"] = _t() - t0
+    timing["large_holder_chg_4w"] = timing["large_holder_pct"]
+
+    # 分鐘K線日內特徵（kbar_daily）
+    t0 = _t()
+    if "kbar_morning_ret_raw" in group.columns:
+        group["kbar_morning_ret"] = pd.to_numeric(group["kbar_morning_ret_raw"], errors="coerce")
+    else:
+        group["kbar_morning_ret"] = np.nan
+    if "kbar_intraday_pos_raw" in group.columns:
+        group["kbar_intraday_pos"] = pd.to_numeric(group["kbar_intraday_pos_raw"], errors="coerce")
+    else:
+        group["kbar_intraday_pos"] = np.nan
+    timing["kbar_morning_ret"] = _t() - t0
+    timing["kbar_intraday_pos"] = timing["kbar_morning_ret"]
+
+    # 官股銀行（gov_bank）
+    t0 = _t()
+    if "gov_net_raw" in group.columns:
+        _gov = pd.to_numeric(group["gov_net_raw"], errors="coerce").fillna(0)
+        group["gov_bank_net_5d"] = (
+            _gov.rolling(5, min_periods=1).sum()
+            / group["amt_20"].replace(0, np.nan)
+        ).clip(-1, 1)
+    else:
+        group["gov_bank_net_5d"] = np.nan
+    timing["gov_bank_net_5d"] = _t() - t0
+
+    # CNN 恐懼貪婪（market-level，同日所有股票值相同）
+    t0 = _t()
+    if "fear_greed_score_raw" in group.columns:
+        _fg = pd.to_numeric(group["fear_greed_score_raw"], errors="coerce")
+        group["fear_greed_norm"] = _fg / 100.0
+        group["fear_greed_chg_5d"] = _fg.diff(5) / 100.0
+    else:
+        group["fear_greed_norm"] = np.nan
+        group["fear_greed_chg_5d"] = np.nan
+    timing["fear_greed_norm"] = _t() - t0
+    timing["fear_greed_chg_5d"] = timing["fear_greed_norm"]
+
     return group, timing
 
 
@@ -792,6 +884,185 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             how="left",
         )
 
+    # ── 分點券商聚合（Sponsor）──
+    t0 = time.perf_counter()
+    try:
+        broker_stmt = (
+            select(
+                RawBrokerTrade.stock_id,
+                RawBrokerTrade.trading_date,
+                RawBrokerTrade.top5_concentration,
+                RawBrokerTrade.total_net,
+            )
+            .where(RawBrokerTrade.trading_date.between(start_date, end_date))
+        )
+        broker_df = pd.read_sql(broker_stmt, session.get_bind())
+    except Exception:
+        broker_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_broker_trades: {elapsed:.2f}s（{len(broker_df):,}列）")
+
+    if broker_df.empty:
+        price_df["broker_top5_concentration"] = np.nan
+        price_df["broker_total_net"] = np.nan
+    else:
+        broker_df["stock_id"] = broker_df["stock_id"].astype(str)
+        broker_df["trading_date"] = pd.to_datetime(broker_df["trading_date"], errors="coerce")
+        for col in ["top5_concentration", "total_net"]:
+            broker_df[col] = pd.to_numeric(broker_df[col], errors="coerce")
+        broker_df = broker_df.rename(columns={
+            "top5_concentration": "broker_top5_concentration",
+            "total_net": "broker_total_net",
+        })
+        price_df = price_df.merge(
+            broker_df[["stock_id", "trading_date", "broker_top5_concentration", "broker_total_net"]],
+            on=["stock_id", "trading_date"],
+            how="left",
+        )
+
+    # ── 持股分級週報（Sponsor，週資料→前向填充）──
+    t0 = time.perf_counter()
+    try:
+        holding_stmt = (
+            select(
+                RawHoldingDist.stock_id,
+                RawHoldingDist.trading_date,
+                RawHoldingDist.large_holder_pct,
+            )
+            .where(RawHoldingDist.trading_date.between(start_date - timedelta(days=30), end_date))
+            .order_by(RawHoldingDist.stock_id, RawHoldingDist.trading_date)
+        )
+        holding_df = pd.read_sql(holding_stmt, session.get_bind())
+    except Exception:
+        holding_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_holding_dist: {elapsed:.2f}s（{len(holding_df):,}列）")
+
+    if holding_df.empty:
+        price_df["large_holder_pct_raw"] = np.nan
+    else:
+        holding_df["stock_id"] = holding_df["stock_id"].astype(str)
+        holding_df["trading_date"] = pd.to_datetime(holding_df["trading_date"], errors="coerce")
+        holding_df["large_holder_pct"] = pd.to_numeric(holding_df["large_holder_pct"], errors="coerce")
+        holding_df = holding_df.sort_values(["stock_id", "trading_date"])
+        # 使用 merge_asof per-stock 前向填充週資料到每日
+        price_df = price_df.sort_values(["stock_id", "trading_date"])
+        merged_holding = []
+        for sid, sub in price_df.groupby("stock_id", sort=False):
+            sub_h = holding_df[holding_df["stock_id"] == sid]
+            if sub_h.empty:
+                sub = sub.copy()
+                sub["large_holder_pct_raw"] = np.nan
+                merged_holding.append(sub)
+                continue
+            aligned = pd.merge_asof(
+                sub.sort_values("trading_date"),
+                sub_h.sort_values("trading_date")[["trading_date", "large_holder_pct"]],
+                on="trading_date",
+                direction="backward",
+            )
+            aligned = aligned.rename(columns={"large_holder_pct": "large_holder_pct_raw"})
+            merged_holding.append(aligned)
+        price_df = pd.concat(merged_holding, ignore_index=True)
+
+    # ── 分鐘K線日內特徵（Sponsor）──
+    t0 = time.perf_counter()
+    try:
+        kbar_stmt = (
+            select(
+                RawKBarDaily.stock_id,
+                RawKBarDaily.trading_date,
+                RawKBarDaily.morning_ret,
+                RawKBarDaily.intraday_high_pos,
+            )
+            .where(RawKBarDaily.trading_date.between(start_date, end_date))
+        )
+        kbar_df = pd.read_sql(kbar_stmt, session.get_bind())
+    except Exception:
+        kbar_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_kbar_daily: {elapsed:.2f}s（{len(kbar_df):,}列）")
+
+    if kbar_df.empty:
+        price_df["kbar_morning_ret_raw"] = np.nan
+        price_df["kbar_intraday_pos_raw"] = np.nan
+    else:
+        kbar_df["stock_id"] = kbar_df["stock_id"].astype(str)
+        kbar_df["trading_date"] = pd.to_datetime(kbar_df["trading_date"], errors="coerce")
+        for col in ["morning_ret", "intraday_high_pos"]:
+            kbar_df[col] = pd.to_numeric(kbar_df[col], errors="coerce")
+        kbar_df = kbar_df.rename(columns={
+            "morning_ret": "kbar_morning_ret_raw",
+            "intraday_high_pos": "kbar_intraday_pos_raw",
+        })
+        price_df = price_df.merge(
+            kbar_df[["stock_id", "trading_date", "kbar_morning_ret_raw", "kbar_intraday_pos_raw"]],
+            on=["stock_id", "trading_date"],
+            how="left",
+        )
+
+    # ── 官股銀行（Sponsor）──
+    t0 = time.perf_counter()
+    try:
+        gov_stmt = (
+            select(
+                RawGovBank.stock_id,
+                RawGovBank.trading_date,
+                RawGovBank.gov_net,
+            )
+            .where(RawGovBank.trading_date.between(start_date, end_date))
+        )
+        gov_df = pd.read_sql(gov_stmt, session.get_bind())
+    except Exception:
+        gov_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_gov_bank: {elapsed:.2f}s（{len(gov_df):,}列）")
+
+    if gov_df.empty:
+        price_df["gov_net_raw"] = np.nan
+    else:
+        gov_df["stock_id"] = gov_df["stock_id"].astype(str)
+        gov_df["trading_date"] = pd.to_datetime(gov_df["trading_date"], errors="coerce")
+        gov_df["gov_net"] = pd.to_numeric(gov_df["gov_net"], errors="coerce").fillna(0)
+        gov_df = gov_df.rename(columns={"gov_net": "gov_net_raw"})
+        price_df = price_df.merge(
+            gov_df[["stock_id", "trading_date", "gov_net_raw"]],
+            on=["stock_id", "trading_date"],
+            how="left",
+        )
+
+    # ── CNN 恐懼貪婪指數（Sponsor，市場層面 → 按 trading_date join）──
+    t0 = time.perf_counter()
+    try:
+        fg_stmt = (
+            select(
+                RawFearGreed.date.label("trading_date"),
+                RawFearGreed.score,
+            )
+            .where(RawFearGreed.date.between(start_date - timedelta(days=10), end_date))
+            .order_by(RawFearGreed.date)
+        )
+        fg_df = pd.read_sql(fg_stmt, session.get_bind())
+    except Exception:
+        fg_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_fear_greed: {elapsed:.2f}s（{len(fg_df):,}列）")
+
+    if fg_df.empty:
+        price_df["fear_greed_score_raw"] = np.nan
+    else:
+        fg_df["trading_date"] = pd.to_datetime(fg_df["trading_date"], errors="coerce")
+        fg_df["score"] = pd.to_numeric(fg_df["score"], errors="coerce")
+        fg_df = fg_df.rename(columns={"score": "fear_greed_score_raw"})
+        # 使用 merge_asof 填補缺日（週末/假日）
+        price_df = price_df.sort_values("trading_date")
+        price_df = pd.merge_asof(
+            price_df,
+            fg_df.sort_values("trading_date")[["trading_date", "fear_greed_score_raw"]],
+            on="trading_date",
+            direction="backward",
+        )
+
     return price_df
 
 
@@ -1002,6 +1273,7 @@ def _compute_features(
             else:
                 featured[_rs_col] = np.nan
         logger.info(f"[PERF] rs_rank: {time.perf_counter() - _t_rs:.3f}s")
+
 
     # ── 彙整 per-feature perf 資訊 ──
     if perf_out is not None:
