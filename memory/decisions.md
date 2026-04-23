@@ -1,6 +1,52 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-04-23（session 15）
+> 最後更新：2026-04-23（session 16）
+
+---
+
+## Session 16：新增 PER/借券/季報資料集 + 修正 daily-c/d 特徵過濾（2026-04-23）
+
+### 新增資料集（Sponsor 專屬，commit 67b1918）
+
+**動機**：已有 Sponsor 計劃，尚未使用的重要資料集包括：
+- TaiwanStockPER：每日 PER/PBR/殖利率 → 價值因子（Fama-French 經典）
+- TaiwanStockSecuritiesLending：借券餘額/費率 → 放空壓力信號
+- 季報（BalanceSheet + FinancialStatements + CashFlowsStatement）：ROE/負債比/營益率
+
+**架構決策**：
+1. 所有新特徵初始加入 `_PRUNE_SET`（不影響現行回測），待 10y 回補完成 + SHAP IC 分析後決定是否啟用
+2. 所有新特徵加入 `_SPONSOR_FEATURES`（NaN 保留，不 fillna(0)）
+3. 季報使用 60 天公告延遲（同月營收 45 天機制，per-stock `merge_asof`）
+4. PER/借券每日資料，`ingest_per` 按股票一次一call；SecuritiesLending 逐筆資料 90 天 chunk
+
+**新增特徵**：
+- `per_ratio`（本益比）、`pbr_ratio`（本淨比）、`dividend_yield`（殖利率%）、`earnings_yield`（=1/PER）
+- `lending_balance_ratio`（借券餘額/近20日均量）、`lending_fee_rate`（借券費率%年率）
+- `roe_ttm`（股東權益報酬率%）、`debt_ratio_q`（負債比率%）、`operating_margin_q`（營業利益率%）
+
+**FEATURE_COLUMNS 計數**：59 → 68（+9 個新特徵，全在 `_PRUNE_SET` 中）
+
+**Bug 修正：strategy_c/d 使用全部 68 特徵（應只用 PRUNED 集合）**：
+```python
+# 修正前（strategy_c_pick.py / strategy_d_pick.py）：
+feat_cols = [c for c in feat_df.columns if c not in _META_COLS]  # 全部 68 特徵
+
+# 修正後：
+from skills.build_features import _PRUNE_SET as _BF_PRUNE_SET
+feat_cols = [c for c in feat_df.columns if c not in _META_COLS and c not in _BF_PRUNE_SET]
+```
+影響：daily-c/d 訓練現在與 backtest `--pruned-features` 一致，移除 17 個低重要性特徵。
+
+**測試**：
+- `test_detect_schema_outdated_json_string` 補 `_patch_feature_store_empty()` 修正（原本缺少 patch）
+- 119 tests passed
+
+**回補進度**：PER backfill 已在背景啟動（10y, ~2000 stocks, ~2000 API calls）
+
+### 結論
+- Sponsor 基礎設施完整（5 個舊資料集 + 3 個新資料集 = 8 個 Sponsor tables）
+- 新特徵需 10y 資料回補後才能做 IC 分析，預估 3-5 天完成
+- 若 IC 分析確認有效（IC > 0.02 且 ICIR > 0.5），從 `_PRUNE_SET` 移出並重跑 10y WF
 
 ---
 
