@@ -194,6 +194,10 @@ _PRUNE_SET = {
     "price_volume_divergence", "vol_ratio_20", "boll_pct",
     "kd_k", "foreign_buy_consecutive_days", "willr_14",
     "amt_ratio_20", "foreign_buy_intensity",
+    # broker_trades / kbar_daily 尚無歷史資料（每日增量，資料累積中）
+    # 待資料足夠（建議 60+ 交易日）後移回一般特徵池並重新 SHAP 剪枝
+    "broker_top5_conc", "broker_net_5d", "broker_buy_days_5",
+    "kbar_morning_ret", "kbar_intraday_pos",
 }
 
 # IC 衰減剪枝集（2026-04-15，近 2 年 IC 分析，10y WF 驗證後放棄）
@@ -201,6 +205,18 @@ _PRUNE_SET = {
 # 10y WF: 42feat ret=1784% Sharpe=1.07 vs 50feat ret=1863% Sharpe=0.98
 # Sharpe 微升 +0.09 但 2023 績效大幅退化（-83pp），Calmar 也從 1.27→1.20 惡化 → 不採用
 _IC_DECAY_PRUNE_SET: set = set()  # 保留所有 50 個 SHAP 剪枝後特徵
+
+# Sponsor 資料集特徵集合（2026-04-22）
+# 這些特徵當來源資料不存在時應保留 NaN（null），而非用 0 填補。
+# 理由：LightGBM 可原生處理 NaN（透過缺失值分支路由），
+# 但 0 會被誤判為有效信號（如 fear_greed_norm=0 等於「極度恐懼」，large_holder_pct=0 等於無大戶）。
+_SPONSOR_FEATURES: set = {
+    "broker_top5_conc", "broker_net_5d", "broker_buy_days_5",
+    "large_holder_pct", "large_holder_chg_4w",
+    "kbar_morning_ret", "kbar_intraday_pos",
+    "gov_bank_net_5d",
+    "fear_greed_norm", "fear_greed_chg_5d",
+}
 
 # SHAP 剪枝（2026-03-18，58 → 50 特徵）
 PRUNED_FEATURE_COLS: List[str] = [
@@ -548,13 +564,20 @@ def _apply_group_impl(
         group["broker_top5_conc"] = pd.to_numeric(group["broker_top5_concentration"], errors="coerce")
     else:
         group["broker_top5_conc"] = np.nan
-    if "broker_total_net" in group.columns:
+    # broker_net_5d / broker_buy_days_5：只在該股確實有分點資料時計算；
+    # 若欄位存在但全為 NaN（源資料尚未回補），保留 NaN 而非填 0，
+    # 讓 LightGBM 以缺失值分支路由處理，避免假零信號污染訓練資料。
+    # 即使部分日期有資料，無資料日仍應保留 NaN（避免 fillna(0)+rolling 造成歷史假零）。
+    if "broker_total_net" in group.columns and group["broker_total_net"].notna().any():
         _broker_net = pd.to_numeric(group["broker_total_net"], errors="coerce").fillna(0)
+        _has_broker_data = group["broker_total_net"].notna()
         group["broker_net_5d"] = (
             _broker_net.rolling(5, min_periods=1).sum()
             / group["amt_20"].replace(0, np.nan)
-        ).clip(-1, 1)
-        group["broker_buy_days_5"] = (_broker_net > 0).astype(int).rolling(5, min_periods=1).sum()
+        ).clip(-1, 1).where(_has_broker_data, other=np.nan)
+        group["broker_buy_days_5"] = (
+            (_broker_net > 0).astype(int).rolling(5, min_periods=1).sum()
+        ).where(_has_broker_data, other=np.nan)
     else:
         group["broker_net_5d"] = np.nan
         group["broker_buy_days_5"] = np.nan
@@ -588,9 +611,9 @@ def _apply_group_impl(
     timing["kbar_morning_ret"] = _t() - t0
     timing["kbar_intraday_pos"] = timing["kbar_morning_ret"]
 
-    # 官股銀行（gov_bank）
+    # 官股銀行（gov_bank）：只在有實際資料時計算，全 NaN 時保留 NaN
     t0 = _t()
-    if "gov_net_raw" in group.columns:
+    if "gov_net_raw" in group.columns and group["gov_net_raw"].notna().any():
         _gov = pd.to_numeric(group["gov_net_raw"], errors="coerce").fillna(0)
         group["gov_bank_net_5d"] = (
             _gov.rolling(5, min_periods=1).sum()
@@ -1414,12 +1437,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         target_start_ts = pd.Timestamp(target_start)
         featured = featured[featured["trading_date"] >= target_start_ts]
 
-        # 核心特徵必須存在；擴充特徵允許 NaN，用 0 填補
+        # 核心特徵必須存在；擴充特徵允許 NaN，用 0 填補（Sponsor 特徵除外）
+        # Sponsor 特徵（broker / kbar / holding_dist / gov_bank / fear_greed）：
+        #   來源資料缺失時應保留 NaN，讓 LightGBM 透過缺失值分支路由處理。
+        #   fillna(0) 會產生假零信號（如 fear_greed_norm=0 等於「極度恐懼」），
+        #   污染 4+ 年訓練資料（Sponsor API 資料只有近期有值）。
         featured = featured.dropna(subset=CORE_FEATURE_COLUMNS)
         featured = featured.replace([np.inf, -np.inf], np.nan)
         featured = featured.dropna(subset=CORE_FEATURE_COLUMNS)
         for col in EXTENDED_FEATURE_COLUMNS:
-            if col in featured.columns:
+            if col in featured.columns and col not in _SPONSOR_FEATURES:
                 featured[col] = featured[col].fillna(0)
 
         if featured.empty:
@@ -1430,17 +1457,30 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         t_save = time.perf_counter()
         feat_cols_in_df = [col for col in FEATURE_COLUMNS if col in featured.columns]
         # numpy 一次性轉換，比 iterrows 快 10x 以上
-        _feat_arr = featured[feat_cols_in_df].to_numpy(dtype=float, na_value=0.0)
+        # na_value=float('nan') 保留 NaN（Sponsor 特徵來源缺失時），
+        # 寫 JSON 時將 Sponsor NaN 轉為 None（MySQL JSON null），
+        # 讓後續讀取端（json.loads）得到 None → 轉 np.nan → LightGBM 缺失值路由。
+        _feat_arr = featured[feat_cols_in_df].to_numpy(dtype=float, na_value=float('nan'))
         _stock_ids = featured["stock_id"].tolist()
         _trading_dates = [pd.Timestamp(d).date() for d in featured["trading_date"].tolist()]
-        records = [
-            {
+        # 找出 Sponsor 特徵在 feat_cols_in_df 中的索引，供快速 NaN→None 替換
+        _sponsor_idx_set = {
+            i for i, c in enumerate(feat_cols_in_df) if c in _SPONSOR_FEATURES
+        }
+        records = []
+        for sid, td, row in zip(_stock_ids, _trading_dates, _feat_arr):
+            flist = row.tolist()
+            fdict = dict(zip(feat_cols_in_df, flist))
+            # Sponsor NaN → None（JSON null）；非 Sponsor NaN → 0（已在 fillna 階段處理）
+            for idx in _sponsor_idx_set:
+                v = flist[idx]
+                if isinstance(v, float) and (v != v):  # fast NaN check (NaN != NaN)
+                    fdict[feat_cols_in_df[idx]] = None
+            records.append({
                 "stock_id": sid,
                 "trading_date": td,
-                "features_json": dict(zip(feat_cols_in_df, row.tolist())),
-            }
-            for sid, td, row in zip(_stock_ids, _trading_dates, _feat_arr)
-        ]
+                "features_json": fdict,
+            })
 
         # BATCH_SIZE 必須讓 INSERT 封包 < max_allowed_packet（預設 4MB）
         # 每筆 features_json ≈ 1,775 bytes（56特徵）；500×1775 = 0.88MB，安全邊際充足

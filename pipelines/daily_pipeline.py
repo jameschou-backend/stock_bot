@@ -55,11 +55,16 @@ def _check_features_exist(min_rows: int = 50) -> bool:
 
 
 def _check_labels_exist(min_rows: int = 50) -> bool:
-    """驗證 labels 表至少有 min_rows 筆近期資料（30 天內），確保 build_labels 成功執行。"""
+    """驗證 labels 表至少有 min_rows 筆近期資料（60 天內），確保 build_labels 成功執行。
+
+    使用 60 天而非 30 天：label horizon = 20 交易日 ≈ 28-30 日曆天，
+    最近 20 個交易日的 label 天生無法計算（沒有未來價格），
+    故最新的 label 必然落在 30-35 天前，需用 60 天窗口才能正確驗證。
+    """
     try:
         from sqlalchemy import func, select
         from app.models import Label
-        cutoff = (datetime.now() - timedelta(days=30)).date()
+        cutoff = (datetime.now() - timedelta(days=60)).date()
         with get_session() as session:
             cnt = session.execute(
                 select(func.count()).select_from(Label).where(Label.trading_date >= cutoff)
