@@ -1,6 +1,101 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-04-16（session 14）
+> 最後更新：2026-04-23（session 15）
+
+---
+
+## Session 15：Sponsor Dataset NaN 修正 + 特徵評估（2026-04-23）
+
+### 背景
+新增 5 個 Sponsor 資料集（gov_bank、large_holder、fear_greed、broker_trades、kbar_features）後，
+發現 `build_features.py` 的 `fillna(0)` 邏輯對 Sponsor 特徵造成語意錯誤：
+- `fear_greed_norm=0` → 「極度恐懼」（有效訊號），`0` 是正確語意
+- `broker_top5_conc=0`（無資料）→ `0` 被模型誤解為「無券商集中度」（應為 `NaN`）
+- `large_holder_pct=0`（無資料）→ `0` 被模型誤解為「零大股東」（應為 `NaN`）
+
+LightGBM 對 `NaN` 的處理是透過 missing-value split routing（走最佳分支），
+對 `0` 則視為真實訊號。混淆後模型在 Sponsor 特徵缺失期間學到錯誤的零值偏差。
+
+### 修正內容（`skills/build_features.py`，commit ed6194c）
+
+**1. 新增 `_SPONSOR_FEATURES` 常數**（位於 `_PRUNE_SET` 之後）：
+```python
+_SPONSOR_FEATURES: set = {
+    "broker_top5_conc", "broker_net_5d", "broker_buy_days_5",
+    "large_holder_pct", "large_holder_chg_4w",
+    "kbar_morning_ret", "kbar_intraday_pos",
+    "gov_bank_net_5d",
+    "fear_greed_norm", "fear_greed_chg_5d",
+}
+```
+
+**2. `fillna(0)` 迴圈排除 Sponsor 特徵**：
+```python
+for col in EXTENDED_FEATURE_COLUMNS:
+    if col in featured.columns and col not in _SPONSOR_FEATURES:
+        featured[col] = featured[col].fillna(0)
+```
+
+**3. `broker_net_5d`、`broker_buy_days_5` 加 `.where(_has_broker_data, other=np.nan)` 遮罩**：
+確保僅有原始資料的日期才有有效數值，其餘保持 NaN（非零填充）。
+
+**4. `gov_bank_net_5d` 同樣加資料存在性判斷**。
+
+**5. JSON 構建改用 NaN → None 轉換**（`na_value=float('nan')` + 逐 sponsor 欄位轉 `None`）：
+MySQL 的 `features_json` 儲存 `null` 而非 `0`，讓 `orjson.loads()` 回傳 `None`，
+LightGBM 的 `split_missing_as_default` 正確路由。
+
+### FinMind API 確認（`TaiwanStockTradingDailyReport`）
+
+使用者假設 TaiwanStockTradingDailyReport 支援日期區間查詢（每股一次呼叫即可取得全部歷史），
+測試驗證結果：**完全不支援**。
+- 加 `end_date` → HTTP 400 "size too large, only send one day"
+- 不加 `end_date` → 只回傳 `start_date` 那一天的資料
+- 不加 `data_id` → HTTP 400 "data_id can't be none"
+
+**結論**：每次呼叫 = 1 股票 × 1 天。歷史回補需要 2000 股 × 2500 天 = 500 萬次 API call（不可行）。
+設計保持每日增量（僅抓最近 2 天）是正確決策。
+
+### 全量特徵重建結果
+
+- **FORCE_RECOMPUTE_DAYS=3650**，乾淨刪除 Parquet（`rm artifacts/features/features_*.parquet`）
+  與 MySQL（`DELETE FROM features`）後重建
+- **成果**：4,271,120 rows，68 features，2016-02-15 ~ 2026-04-22
+- Sponsor 特徵（`broker_top5_conc`、`kbar_morning_ret`、`kbar_intraday_pos`）正確儲存 `null`
+- `fear_greed_norm=0` 和 `large_holder_pct=0` 確認為合法原始值（非缺失）
+
+### 10y Walk-Forward 回測結果（Sponsor 特徵評估）
+
+| 指標 | 數值 |
+|------|------|
+| 期間 | 2016-05-16 ~ 2026-03-23 |
+| 累積報酬 | **+1444.12%**（大盤 +63.55%，超額 +1380.57%）|
+| MDD | **-31.98%** |
+| Sharpe | **0.9493** |
+| Calmar | **1.0015** |
+
+**結論：Sponsor 特徵對回測結果零改善**（與去除 Sponsor 特徵的 April 2026 基線相同）。
+
+**失效原因分析**：
+- `large_holder_pct`：全市場 99% 股票無持股分級資料 → 幾乎全為 NaN，模型幾乎不使用
+- `fear_greed_norm`：全市場同一個值，無截面區分力（變異數為零）
+- `gov_bank_net_5d`：官股銀行訊號偏弱/中性，SHAP 貢獻極低
+- `broker_top5_conc`、`kbar_*`：僅有 2-3 天資料，LightGBM 訓練樣本不足
+
+**生產決策**：
+- Sponsor 特徵**保留在 FEATURE_COLUMNS** 供未來重新評估
+- Sponsor 特徵**不加入 PRUNED_FEATURE_COLS**（生產訓練仍用 50 特徵）
+- 待 broker_trades / kbar_features 累積 60+ 天資料後，重新跑 SHAP 分析判斷是否有預測力
+
+### adj_close 資料更新影響說明
+
+| 快照時間 | 累積報酬 | Sharpe | 說明 |
+|---------|---------|--------|------|
+| 2026-03-18 | +3351% | 1.104 | 已不可重現（adj_close 已回溯調整）|
+| 2026-04-13 | +1863% | 0.980 | 50 特徵，SHAP 剪枝 |
+| **2026-04-23** | **+1444%** | **0.9493** | **68 特徵（含 Sponsor NaN），最新快照** |
+
+adj_close 因除權息回溯計算每次跑都可能有微幅差異，為正常現象。
 
 ---
 
