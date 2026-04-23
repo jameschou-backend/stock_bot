@@ -41,6 +41,7 @@ except ImportError:
 from app.db import get_session
 from app.models import Stock, StrategyCTrade
 from skills import data_store
+from skills.build_features import _PRUNE_SET as _BF_PRUNE_SET
 # cross_section_normalize 已移除：backtest 未使用此正規化，保留會造成 production ≠ backtest
 
 # ─────────────────────────────────────────────
@@ -313,8 +314,8 @@ def run_pick(
         print(f"  Rank label applied: range [{label_df['future_ret_h'].min():.2f}, "
               f"{label_df['future_ret_h'].max():.2f}]")
 
-    # ── 特徵欄位 ──
-    feat_cols = [c for c in feat_df.columns if c not in _META_COLS]
+    # ── 特徵欄位（排除 meta cols 與 _PRUNE_SET 低重要性特徵）──
+    feat_cols = [c for c in feat_df.columns if c not in _META_COLS and c not in _BF_PRUNE_SET]
 
     # ── 訓練模型（截止到 today - LABEL_BUFFER_DAYS）──
     train_cutoff = today - timedelta(days=LABEL_BUFFER_DAYS)

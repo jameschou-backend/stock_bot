@@ -191,6 +191,18 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         # 14. CNN 恐懼貪婪指數（CnnFearGreedIndex）
         from skills import ingest_fear_greed
         _run_optional_skill("ingest_fear_greed", ingest_fear_greed.run)
+
+        # 15. 本益比/殖利率/本淨比（TaiwanStockPER，Sponsor，每日價值因子）
+        from skills import ingest_per
+        _run_optional_skill("ingest_per", ingest_per.run)
+
+        # 16. 借券餘額聚合（TaiwanStockSecuritiesLending，Sponsor）
+        from skills import ingest_securities_lending
+        _run_optional_skill("ingest_securities_lending", ingest_securities_lending.run)
+
+        # 17. 季報財務摘要（BalanceSheet + FinancialStatements + CashFlow，Sponsor，60天延遲）
+        from skills import ingest_quarterly_fundamental
+        _run_optional_skill("ingest_quarterly_fundamental", ingest_quarterly_fundamental.run)
     else:
         print("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
 

@@ -413,6 +413,82 @@ class RawFearGreed(Base):
     __table_args__ = ()
 
 
+# ─────────────────────────────────────────────────────────────
+# Priority 6：本益比/殖利率/本淨比（TaiwanStockPER）
+# ─────────────────────────────────────────────────────────────
+class RawPER(Base):
+    """每日 PER/PBR/殖利率（Sponsor 專屬，每股每日一筆）
+
+    - per:            本益比（Price-to-Earnings Ratio）；< 0 代表虧損
+    - pbr:            本淨比（Price-to-Book Ratio）；1 = 市價等於帳面
+    - dividend_yield: 現金殖利率（%），台灣高殖利率股票通常具防禦性
+    """
+    __tablename__ = "raw_per"
+
+    stock_id        = Column(String(16), primary_key=True)
+    trading_date    = Column(Date,       primary_key=True)
+    per             = Column(DECIMAL(12, 4))   # 本益比
+    pbr             = Column(DECIMAL(12, 4))   # 本淨比
+    dividend_yield  = Column(DECIMAL(10, 6))   # 現金殖利率（%）
+
+    __table_args__ = (Index("idx_raw_per_trading_date", "trading_date"),)
+
+
+# ─────────────────────────────────────────────────────────────
+# Priority 7：借券餘額聚合（TaiwanStockSecuritiesLending）
+# ─────────────────────────────────────────────────────────────
+class RawSecuritiesLending(Base):
+    """每日借券餘額聚合（Sponsor 專屬）
+
+    借券餘額持續增加代表機構投資人放空意願上升（看空信號）。
+    高借券費率表示稀缺的可借股票（放空需求旺盛）。
+
+    - lending_balance:          借券餘額（張）
+    - lending_fee_rate:         加權平均借券費率（% 年率）
+    - lending_transaction_count: 當日借出筆數（市場參與度）
+    """
+    __tablename__ = "raw_securities_lending"
+
+    stock_id                    = Column(String(16), primary_key=True)
+    trading_date                = Column(Date,       primary_key=True)
+    lending_balance             = Column(BigInteger)         # 借券餘額（張）
+    lending_fee_rate            = Column(DECIMAL(10, 6))     # 借券費率（%年率）
+    lending_transaction_count   = Column(BigInteger)         # 借出筆數
+
+    __table_args__ = (Index("idx_raw_securities_lending_date", "trading_date"),)
+
+
+# ─────────────────────────────────────────────────────────────
+# Priority 8：季報財務摘要（BalanceSheet + FinancialStatements + CashFlow）
+# ─────────────────────────────────────────────────────────────
+class RawQuarterlyFundamental(Base):
+    """季報財務摘要（Sponsor 專屬，約 60 天公告延遲）
+
+    聚合自 TaiwanStockBalanceSheet / TaiwanStockFinancialStatements /
+    TaiwanStockCashFlowsStatement 三個 dataset。
+
+    - report_date:       財報截止日（季底：0331/0630/0930/1231）
+    - roe:               股東權益報酬率（TTM，%）
+    - roa:               資產報酬率（%）
+    - debt_ratio:        負債比率（負債/資產，%），過高表示財務槓桿風險
+    - operating_margin:  營業利益率（%）
+    - net_margin:        稅後淨利率（%）
+    - fcf_per_share:     自由現金流量/股（元），正值代表真實獲利能力
+    """
+    __tablename__ = "raw_quarterly_fundamental"
+
+    stock_id            = Column(String(16), primary_key=True)
+    report_date         = Column(Date,       primary_key=True)
+    roe                 = Column(DECIMAL(10, 6))
+    roa                 = Column(DECIMAL(10, 6))
+    debt_ratio          = Column(DECIMAL(10, 6))
+    operating_margin    = Column(DECIMAL(10, 6))
+    net_margin          = Column(DECIMAL(10, 6))
+    fcf_per_share       = Column(DECIMAL(12, 6))
+
+    __table_args__ = (Index("idx_raw_qfund_report_date", "report_date"),)
+
+
 class StrategyCTrade(Base):
     """Strategy C 每日進出場稽核 log（append-only）"""
     __tablename__ = "strategy_c_trades"

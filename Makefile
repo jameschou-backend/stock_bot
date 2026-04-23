@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor
+.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors
 
 migrate:
 	python scripts/migrate.py
@@ -179,9 +179,29 @@ backfill-broker-trades:
 backfill-kbar:
 	python scripts/backfill_sponsor.py --dataset kbar_features
 
-# 回補所有 Sponsor 資料集（依優先序）
+# 回補所有 Sponsor 資料集（依優先序，含舊版 P1-P5）
 backfill-sponsor:
 	python scripts/backfill_sponsor.py --dataset all
+
+# === 價值因子 + 借券 + 季報（Sponsor，2026-04-23 新增）===
+
+# 本益比/殖利率/本淨比（最推薦先跑，每股一次 API call，每日資料）
+backfill-per:
+	python scripts/backfill_sponsor.py --dataset per
+
+# 借券餘額聚合（逐筆資料量大，時間較長）
+backfill-securities-lending:
+	python scripts/backfill_sponsor.py --dataset securities_lending
+
+# 季報財務摘要（三個 dataset 合併，每季一筆，時間較長）
+backfill-quarterly-fundamental:
+	python scripts/backfill_sponsor.py --dataset quarterly_fundamental
+
+# 一次回補 PER + 借券 + 季報（推薦在 backfill-sponsor 後執行）
+backfill-value-factors:
+	python scripts/backfill_sponsor.py --dataset per && \
+	python scripts/backfill_sponsor.py --dataset securities_lending && \
+	python scripts/backfill_sponsor.py --dataset quarterly_fundamental
 
 dq-report:
 	python scripts/data_quality_report.py --days $${DAYS:-180}

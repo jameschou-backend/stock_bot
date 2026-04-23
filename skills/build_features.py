@@ -44,7 +44,10 @@ from app.models import (
     RawInstitutional,
     RawKBarDaily,
     RawMarginShort,
+    RawPER,
     RawPrice,
+    RawQuarterlyFundamental,
+    RawSecuritiesLending,
     RawThemeFlow,
     Stock,
 )
@@ -143,6 +146,18 @@ EXTENDED_FEATURE_COLUMNS = [
     # CNN 恐懼貪婪指數（市場層面，ProcessPoolExecutor 外計算）
     "fear_greed_norm",          # CNN 恐懼貪婪分數 / 100（0=極度恐懼, 1=極度貪婪）
     "fear_greed_chg_5d",        # 恐懼貪婪指數近5日變動（情緒轉變速度）
+    # ── 價值因子（TaiwanStockPER，2026-04-23 新增，資料存在時有值，否則 NaN）──
+    "per_ratio",                # 本益比（越低越便宜；< 0 代表虧損）
+    "pbr_ratio",                # 本淨比（< 1 = 市價低於帳面，潛在低估）
+    "dividend_yield",           # 現金殖利率（%，台灣高殖利率股防禦性強）
+    "earnings_yield",           # 盈利收益率 = 1/PER（比 PER 更線性，適合模型訓練）
+    # ── 借券（TaiwanStockSecuritiesLending，2026-04-23 新增）──
+    "lending_balance_ratio",    # 借券餘額 / 近20日均量（放空壓力相對成交量）
+    "lending_fee_rate",         # 借券費率（%年率，高費率=稀缺放空標的）
+    # ── 季報財務（TaiwanStockBalanceSheet 等，2026-04-23 新增，60天公告延遲）──
+    "roe_ttm",                  # 股東權益報酬率（%，Fama-French 品質因子）
+    "debt_ratio_q",             # 負債比率（%，越低財務越健全）
+    "operating_margin_q",       # 營業利益率（%，業務獲利能力）
 ]
 
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
@@ -198,6 +213,11 @@ _PRUNE_SET = {
     # 待資料足夠（建議 60+ 交易日）後移回一般特徵池並重新 SHAP 剪枝
     "broker_top5_conc", "broker_net_5d", "broker_buy_days_5",
     "kbar_morning_ret", "kbar_intraday_pos",
+    # 2026-04-23 新增：PER/借券/季報特徵 — 回補中，暫入 _PRUNE_SET
+    # 待 10y 回補完成 + SHAP IC 分析後決定是否移回主特徵池
+    "per_ratio", "pbr_ratio", "dividend_yield", "earnings_yield",
+    "lending_balance_ratio", "lending_fee_rate",
+    "roe_ttm", "debt_ratio_q", "operating_margin_q",
 }
 
 # IC 衰減剪枝集（2026-04-15，近 2 年 IC 分析，10y WF 驗證後放棄）
@@ -216,6 +236,10 @@ _SPONSOR_FEATURES: set = {
     "kbar_morning_ret", "kbar_intraday_pos",
     "gov_bank_net_5d",
     "fear_greed_norm", "fear_greed_chg_5d",
+    # 2026-04-23 新增：PER/借券/季報特徵（NaN = 無資料，LightGBM 缺失分支路由）
+    "per_ratio", "pbr_ratio", "dividend_yield", "earnings_yield",
+    "lending_balance_ratio", "lending_fee_rate",
+    "roe_ttm", "debt_ratio_q", "operating_margin_q",
 }
 
 # SHAP 剪枝（2026-03-18，58 → 50 特徵）
@@ -634,6 +658,61 @@ def _apply_group_impl(
         group["fear_greed_chg_5d"] = np.nan
     timing["fear_greed_norm"] = _t() - t0
     timing["fear_greed_chg_5d"] = timing["fear_greed_norm"]
+
+    # ── 價值因子（PER/PBR/殖利率，每日資料，Sponsor）──
+    t0 = _t()
+    if "per_raw" in group.columns:
+        _per = pd.to_numeric(group["per_raw"], errors="coerce")
+        _pbr = pd.to_numeric(group.get("pbr_raw", pd.Series(np.nan, index=group.index)), errors="coerce")
+        _div = pd.to_numeric(group.get("dividend_yield_raw", pd.Series(np.nan, index=group.index)), errors="coerce")
+        group["per_ratio"] = _per
+        group["pbr_ratio"] = _pbr
+        group["dividend_yield"] = _div
+        # earnings_yield = 1/PER（負 PER 代表虧損，保留負值）
+        group["earnings_yield"] = (1.0 / _per.replace(0, np.nan)).clip(-10, 50)
+    else:
+        group["per_ratio"] = np.nan
+        group["pbr_ratio"] = np.nan
+        group["dividend_yield"] = np.nan
+        group["earnings_yield"] = np.nan
+    timing["per_ratio"] = _t() - t0
+    timing["pbr_ratio"] = timing["per_ratio"]
+    timing["dividend_yield"] = timing["per_ratio"]
+    timing["earnings_yield"] = timing["per_ratio"]
+
+    # ── 借券特徵（TaiwanStockSecuritiesLending，Sponsor）──
+    t0 = _t()
+    if "lending_balance_raw" in group.columns and group["lending_balance_raw"].notna().any():
+        _lb = pd.to_numeric(group["lending_balance_raw"], errors="coerce").fillna(0)
+        _lfr = pd.to_numeric(group.get("lending_fee_rate_raw", pd.Series(np.nan, index=group.index)), errors="coerce")
+        _has_lending = group["lending_balance_raw"].notna()
+        group["lending_balance_ratio"] = (
+            _lb / group["amt_20"].replace(0, np.nan)
+        ).clip(0, 5).where(_has_lending, other=np.nan)
+        group["lending_fee_rate"] = _lfr
+    else:
+        group["lending_balance_ratio"] = np.nan
+        group["lending_fee_rate"] = np.nan
+    timing["lending_balance_ratio"] = _t() - t0
+    timing["lending_fee_rate"] = timing["lending_balance_ratio"]
+
+    # ── 季報財務（ROE/debt_ratio/operating_margin，Sponsor，60天延遲）──
+    t0 = _t()
+    if "roe_raw" in group.columns:
+        group["roe_ttm"] = pd.to_numeric(group["roe_raw"], errors="coerce")
+    else:
+        group["roe_ttm"] = np.nan
+    if "debt_ratio_raw" in group.columns:
+        group["debt_ratio_q"] = pd.to_numeric(group["debt_ratio_raw"], errors="coerce")
+    else:
+        group["debt_ratio_q"] = np.nan
+    if "operating_margin_raw" in group.columns:
+        group["operating_margin_q"] = pd.to_numeric(group["operating_margin_raw"], errors="coerce")
+    else:
+        group["operating_margin_q"] = np.nan
+    timing["roe_ttm"] = _t() - t0
+    timing["debt_ratio_q"] = timing["roe_ttm"]
+    timing["operating_margin_q"] = timing["roe_ttm"]
 
     return group, timing
 
@@ -1085,6 +1164,148 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             on="trading_date",
             direction="backward",
         )
+
+    # ── 本益比/殖利率/本淨比（PER，Sponsor，每日）──
+    t0 = time.perf_counter()
+    try:
+        per_stmt = (
+            select(
+                RawPER.stock_id,
+                RawPER.trading_date,
+                RawPER.per,
+                RawPER.pbr,
+                RawPER.dividend_yield,
+            )
+            .where(RawPER.trading_date.between(start_date, end_date))
+        )
+        per_df = pd.read_sql(per_stmt, session.get_bind())
+    except Exception:
+        per_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_per: {elapsed:.2f}s（{len(per_df):,}列）")
+
+    if per_df.empty:
+        price_df["per_raw"] = np.nan
+        price_df["pbr_raw"] = np.nan
+        price_df["dividend_yield_raw"] = np.nan
+    else:
+        per_df["stock_id"] = per_df["stock_id"].astype(str)
+        per_df["trading_date"] = pd.to_datetime(per_df["trading_date"], errors="coerce")
+        for col in ["per", "pbr", "dividend_yield"]:
+            per_df[col] = pd.to_numeric(per_df[col], errors="coerce")
+        per_df = per_df.rename(columns={
+            "per": "per_raw",
+            "pbr": "pbr_raw",
+            "dividend_yield": "dividend_yield_raw",
+        })
+        price_df = price_df.merge(
+            per_df[["stock_id", "trading_date", "per_raw", "pbr_raw", "dividend_yield_raw"]],
+            on=["stock_id", "trading_date"],
+            how="left",
+        )
+
+    # ── 借券餘額（SecuritiesLending，Sponsor，每日）──
+    t0 = time.perf_counter()
+    try:
+        lending_stmt = (
+            select(
+                RawSecuritiesLending.stock_id,
+                RawSecuritiesLending.trading_date,
+                RawSecuritiesLending.lending_balance,
+                RawSecuritiesLending.lending_fee_rate,
+            )
+            .where(RawSecuritiesLending.trading_date.between(start_date, end_date))
+        )
+        lending_df = pd.read_sql(lending_stmt, session.get_bind())
+    except Exception:
+        lending_df = pd.DataFrame()
+    elapsed = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_securities_lending: {elapsed:.2f}s（{len(lending_df):,}列）")
+
+    if lending_df.empty:
+        price_df["lending_balance_raw"] = np.nan
+        price_df["lending_fee_rate_raw"] = np.nan
+    else:
+        lending_df["stock_id"] = lending_df["stock_id"].astype(str)
+        lending_df["trading_date"] = pd.to_datetime(lending_df["trading_date"], errors="coerce")
+        for col in ["lending_balance", "lending_fee_rate"]:
+            lending_df[col] = pd.to_numeric(lending_df[col], errors="coerce")
+        lending_df = lending_df.rename(columns={
+            "lending_balance": "lending_balance_raw",
+            "lending_fee_rate": "lending_fee_rate_raw",
+        })
+        price_df = price_df.merge(
+            lending_df[["stock_id", "trading_date", "lending_balance_raw", "lending_fee_rate_raw"]],
+            on=["stock_id", "trading_date"],
+            how="left",
+        )
+
+    # ── 季報財務（QuarterlyFundamental，Sponsor，60天公告延遲）──
+    t0 = time.perf_counter()
+    try:
+        qfund_stmt = (
+            select(
+                RawQuarterlyFundamental.stock_id,
+                RawQuarterlyFundamental.report_date,
+                RawQuarterlyFundamental.roe,
+                RawQuarterlyFundamental.debt_ratio,
+                RawQuarterlyFundamental.operating_margin,
+            )
+            .where(RawQuarterlyFundamental.report_date.between(
+                start_date - timedelta(days=450),   # 往前 15 個月確保有最新季報
+                end_date,
+            ))
+            .order_by(RawQuarterlyFundamental.stock_id, RawQuarterlyFundamental.report_date)
+        )
+        qfund_df = pd.read_sql(qfund_stmt, session.get_bind())
+    except Exception:
+        qfund_df = pd.DataFrame()
+    elapsed_fetch = time.perf_counter() - t0
+    logger.info(f"[PERF] fetch_quarterly_fundamental: {elapsed_fetch:.2f}s（{len(qfund_df):,}列）")
+
+    t0 = time.perf_counter()
+    if qfund_df.empty:
+        price_df["roe_raw"] = np.nan
+        price_df["debt_ratio_raw"] = np.nan
+        price_df["operating_margin_raw"] = np.nan
+    else:
+        qfund_df["stock_id"] = qfund_df["stock_id"].astype(str)
+        qfund_df["report_date"] = pd.to_datetime(qfund_df["report_date"], errors="coerce")
+        for col in ["roe", "debt_ratio", "operating_margin"]:
+            qfund_df[col] = pd.to_numeric(qfund_df[col], errors="coerce")
+        # 加入 60 天公告延遲（同月營收的 45 天機制）
+        qfund_df["available_date"] = qfund_df["report_date"] + pd.Timedelta(days=60)
+        qfund_df = qfund_df.sort_values(["stock_id", "available_date"])
+        price_df = price_df.sort_values(["stock_id", "trading_date"])
+        qmerged = []
+        for sid, sub in price_df.groupby("stock_id", sort=False):
+            sub_q = qfund_df[qfund_df["stock_id"] == sid]
+            if sub_q.empty:
+                sub = sub.copy()
+                sub["roe_raw"] = np.nan
+                sub["debt_ratio_raw"] = np.nan
+                sub["operating_margin_raw"] = np.nan
+                qmerged.append(sub)
+                continue
+            aligned = pd.merge_asof(
+                sub.sort_values("trading_date"),
+                sub_q.sort_values("available_date")[
+                    ["available_date", "roe", "debt_ratio", "operating_margin"]
+                ],
+                left_on="trading_date",
+                right_on="available_date",
+                direction="backward",
+            )
+            aligned = aligned.drop(columns=["available_date"], errors="ignore")
+            aligned = aligned.rename(columns={
+                "roe": "roe_raw",
+                "debt_ratio": "debt_ratio_raw",
+                "operating_margin": "operating_margin_raw",
+            })
+            qmerged.append(aligned)
+        price_df = pd.concat(qmerged, ignore_index=True)
+    elapsed_merge = time.perf_counter() - t0
+    logger.info(f"[PERF] merge_quarterly_fundamental: {elapsed_merge:.2f}s（per-stock merge_asof）")
 
     return price_df
 

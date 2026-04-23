@@ -33,10 +33,18 @@ DATASETS = {
     "holding_dist": ("skills.ingest_holding_dist", "ingest_holding_dist"),
     "broker_trades": ("skills.ingest_broker_trades", "ingest_broker_trades"),
     "kbar_features": ("skills.ingest_kbar_features", "ingest_kbar_features"),
+    # 2026-04-23 新增：價值因子 / 借券 / 季報
+    "per": ("skills.ingest_per", "ingest_per"),
+    "securities_lending": ("skills.ingest_securities_lending", "ingest_securities_lending"),
+    "quarterly_fundamental": ("skills.ingest_quarterly_fundamental", "ingest_quarterly_fundamental"),
 }
 
 # 執行順序（all 模式）：依資料量由小到大，避免大任務失敗影響小任務
-ALL_ORDER = ["fear_greed", "gov_bank", "holding_dist", "broker_trades", "kbar_features"]
+ALL_ORDER = [
+    "fear_greed", "gov_bank", "holding_dist",
+    "broker_trades", "kbar_features",
+    "per", "securities_lending", "quarterly_fundamental",
+]
 
 
 def _run_one(name: str, config) -> dict:

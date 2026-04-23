@@ -183,9 +183,10 @@ def test_detect_schema_outdated_old_schema():
 
 def test_detect_schema_outdated_json_string():
     """features_json 存為 JSON 字串時也應正確解析。"""
-    full = {col: 0.0 for col in FEATURE_COLUMNS}
-    session = _make_mock_session(json.dumps(full))
-    assert _detect_schema_outdated(session) is False
+    with _patch_feature_store_empty():
+        full = {col: 0.0 for col in FEATURE_COLUMNS}
+        session = _make_mock_session(json.dumps(full))
+        assert _detect_schema_outdated(session) is False
 
 
 def test_detect_schema_outdated_partial_schema():
