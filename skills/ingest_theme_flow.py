@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, Iterator, List
 from zoneinfo import ZoneInfo
@@ -16,6 +17,8 @@ from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
 from app.models import RawPrice, RawThemeFlow, Stock
+
+logger = logging.getLogger(__name__)
 
 
 def _resolve_start_date(session: Session, default_start: date) -> date:
@@ -175,16 +178,20 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": len(records)}
     except Exception as exc:  # pragma: no cover
+        logger.error("[ingest_theme_flow] 失敗: %s", exc, exc_info=True)
         # 若前面 SQL 失敗，先 rollback，避免後續寫 jobs 時觸發 invalid transaction。
         try:
             db_session.rollback()
-        except Exception:
-            pass
+        except Exception as rb_exc:
+            logger.warning("[ingest_theme_flow] rollback 失敗: %s", rb_exc)
 
         logs["error"] = str(exc)
         try:
             finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
-        except Exception:
+        except Exception as finish_exc:
             # 不覆蓋原始例外，保留最初失敗原因給上層處理。
-            pass
+            logger.warning(
+                "[ingest_theme_flow] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

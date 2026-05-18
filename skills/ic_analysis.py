@@ -4,12 +4,15 @@
 from __future__ import annotations
 
 import json
+import logging
 import warnings
 from pathlib import Path
 from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 from scipy.stats import spearmanr
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -136,7 +139,7 @@ def _run_alphalens_tearsheet(
         return ic
 
     except Exception as exc:
-        print(f"  [alphalens] {factor_name} 失敗：{exc}")
+        logger.warning("[alphalens] %s 失敗：%s", factor_name, exc)
         return None
 
 
@@ -302,24 +305,24 @@ def run(config=None, db_session: Session = None, horizons: List[int] = None,
     md_path = ARTIFACT_DIR / "ic_report.md"
 
     def _run(session: Session) -> Dict:
-        print("[ic_analysis] 讀取 raw_prices ...")
+        logger.info("[ic_analysis] 讀取 raw_prices ...")
         price_pivot = _load_prices(session)
         if price_pivot.empty:
-            print("[ic_analysis] prices 表為空，中止。")
+            logger.warning("[ic_analysis] prices 表為空，中止。")
             return {"csv": str(csv_path), "md": str(md_path),
                     "features_analyzed": 0, "alphalens_dir": str(ALPHALENS_DIR)}
 
-        print("[ic_analysis] 讀取 features ...")
+        logger.info("[ic_analysis] 讀取 features ...")
         factor_df = _load_factors(session)
         if factor_df.empty:
-            print("[ic_analysis] features 表為空，中止。")
+            logger.warning("[ic_analysis] features 表為空，中止。")
             return {"csv": str(csv_path), "md": str(md_path),
                     "features_analyzed": 0, "alphalens_dir": str(ALPHALENS_DIR)}
 
-        print(f"[ic_analysis] 計算截面 IC（horizons={horizons}）...")
+        logger.info("[ic_analysis] 計算截面 IC（horizons=%s）...", horizons)
         ic_table = _compute_ic_table_scipy(factor_df, price_pivot, horizons)
         if ic_table.empty:
-            print("[ic_analysis] IC 計算結果為空，中止。")
+            logger.warning("[ic_analysis] IC 計算結果為空，中止。")
             return {"csv": str(csv_path), "md": str(md_path),
                     "features_analyzed": 0, "alphalens_dir": str(ALPHALENS_DIR)}
 
@@ -344,7 +347,7 @@ def run(config=None, db_session: Session = None, horizons: List[int] = None,
                 .head(max_factors_tearsheet)["feature"]
                 .tolist()
             )
-            print(f"[ic_analysis] 產出 alphalens tear sheet（{len(best_features)} 個因子）...")
+            logger.info("[ic_analysis] 產出 alphalens tear sheet（%d 個因子）...", len(best_features))
             al_periods = tuple(horizons)
             for feat_name in best_features:
                 if feat_name not in factor_df.columns:
@@ -354,7 +357,7 @@ def run(config=None, db_session: Session = None, horizons: List[int] = None,
                     factor_series, price_pivot, feat_name, ALPHALENS_DIR, al_periods
                 )
 
-        print(f"[ic_analysis] 完成。分析 {n_feat} 個特徵，輸出至 {md_path}")
+        logger.info("[ic_analysis] 完成。分析 %d 個特徵，輸出至 %s", n_feat, md_path)
         return {
             "csv": str(csv_path),
             "md": str(md_path),

@@ -18,6 +18,7 @@ Fields:  date, stock_id, securities_trader_id, securities_trader, buy, sell
 """
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -33,6 +34,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawGovBank, Stock
+
+logger = logging.getLogger(__name__)
 
 DATASET = "TaiwanStockGovernmentBankBuySell"
 UPDATE_COLS = ["gov_net", "bank_count_buy", "bank_count_sell"]
@@ -117,7 +120,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        print(f"[ingest_gov_bank] {start_date} ~ {end_date}", flush=True)
+        logger.info("[ingest_gov_bank] %s ~ %s", start_date, end_date)
 
         # TaiwanStockGovernmentBankBuySell：
         # - 不接受 data_id（全市場資料，無法按股票篩選）
@@ -141,7 +144,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         for i, query_date in enumerate(trading_dates, 1):
             if i % 50 == 0:
                 update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{len(trading_dates)}", "rows": total_rows}, commit=True)
-                print(f"  [{i}/{len(trading_dates)}] 已處理 {total_rows} 筆...", flush=True)
+                logger.info("[%d/%d] 已處理 %d 筆...", i, len(trading_dates), total_rows)
 
             df = fetch_dataset(
                 dataset=DATASET,
@@ -179,11 +182,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
-        print(f"  ✅ gov_bank: {total_rows} 筆", flush=True)
+        logger.info("gov_bank: %d 筆", total_rows)
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error("[ingest_gov_bank] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_gov_bank] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_gov_bank] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

@@ -18,6 +18,7 @@ Fields（原始）：
 """
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -33,6 +34,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawQuarterlyFundamental, Stock
+
+logger = logging.getLogger(__name__)
 
 # 資產負債表欄位：type 對應的 value 欄位名稱（FinMind 原始文字）
 BS_ROW_MAP = {
@@ -166,9 +169,17 @@ def _compute_metrics(bs: pd.DataFrame, is_: pd.DataFrame, cf: pd.DataFrame) -> p
 
 
 def _fetch_one_dataset(dataset: str, stock_id: str, start: date, end: date, config) -> pd.DataFrame:
-    """抓取單一 dataset（容錯，失敗回傳空 DataFrame）"""
+    """抓取單一 dataset。
+
+    錯誤分流：
+    - 配額錯誤（FinMindError 含 402/429/quota/超過）→ 重新拋出（讓整批 ingest 中止）。
+    - 其他 FinMindError（單股暫時性問題）→ 記錄 warning 後回傳空 DF，繼續下一檔。
+
+    注意：不再用 `except Exception: return pd.DataFrame()` 靜默吞錯
+    （CLAUDE.md 禁止 silent fallback）。
+    """
     try:
-        return fetch_dataset(
+        df = fetch_dataset(
             dataset=dataset,
             start_date=start,
             end_date=end,
@@ -178,8 +189,27 @@ def _fetch_one_dataset(dataset: str, stock_id: str, start: date, end: date, conf
             max_retries=getattr(config, "finmind_retry_max", 3),
             backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
             timeout=120,
-        ) or pd.DataFrame()
-    except Exception:
+        )
+        return df if df is not None else pd.DataFrame()
+    except FinMindError as exc:
+        msg = str(exc)
+        is_quota = (
+            "402" in msg or "429" in msg
+            or "quota" in msg.lower()
+            or "超過" in msg
+        )
+        if is_quota:
+            # 系統性配額錯誤，後續所有 stock 都會失敗，立刻中止整個 ingest
+            logger.error(
+                "[ingest_quarterly_fundamental] FinMind 配額錯誤 dataset=%s stock_id=%s: %s",
+                dataset, stock_id, exc,
+            )
+            raise
+        # 單股暫時性錯誤（schema 變動、無資料等）：warn 並繼續
+        logger.warning(
+            "[ingest_quarterly_fundamental] %s stock_id=%s 抓取失敗（跳過此檔）: %s",
+            dataset, stock_id, exc,
+        )
         return pd.DataFrame()
 
 
@@ -211,7 +241,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         logs["stocks"] = len(stock_ids)
-        print(f"[ingest_quarterly_fundamental] {start_date} ~ {end_date}，{len(stock_ids)} 檔", flush=True)
+        logger.info(
+            "[ingest_quarterly_fundamental] %s ~ %s，%d 檔",
+            start_date, end_date, len(stock_ids),
+        )
 
         total_rows = 0
         commit_buffer: List[Dict] = []
@@ -223,7 +256,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     logs={**logs, "progress": f"{i}/{len(stock_ids)}", "rows": total_rows},
                     commit=True,
                 )
-                print(f"  [{i}/{len(stock_ids)}] rows={total_rows}", flush=True)
+                logger.info("[%d/%d] rows=%d", i, len(stock_ids), total_rows)
 
             # 每檔股票一次抓全期（季報資料量小，一年只有 4 筆）
             bs_raw = _fetch_one_dataset("TaiwanStockBalanceSheet", stock_id, start_date, end_date, config)
@@ -250,13 +283,26 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
-        print(f"  ✅ ingest_quarterly_fundamental: {total_rows} 筆", flush=True)
+        logger.info("ingest_quarterly_fundamental: %d 筆", total_rows)
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error(
+            "[ingest_quarterly_fundamental] 失敗: %s", exc, exc_info=True,
+        )
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning(
+                "[ingest_quarterly_fundamental] rollback 失敗: %s", rb_exc
+            )
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_quarterly_fundamental] finish_job 寫入失敗: %s", finish_exc
+            )
         raise
 
 

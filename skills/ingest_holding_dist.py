@@ -16,6 +16,7 @@ Fields:  date, stock_id, HoldingSharesLevel, people, unit
 """
 from __future__ import annotations
 
+import logging
 import re
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
@@ -34,6 +35,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawHoldingDist, Stock
+
+logger = logging.getLogger(__name__)
 
 DATASET = "TaiwanStockHoldingSharesPer"
 UPDATE_COLS = ["large_holder_pct", "small_holder_pct", "top_level_pct", "holder_count"]
@@ -160,7 +163,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        print(f"[ingest_holding_dist] {start_date} ~ {end_date}", flush=True)
+        logger.info("[ingest_holding_dist] %s ~ %s", start_date, end_date)
 
         allowed_stock_ids = _load_allowed_stock_ids(db_session)
         logs["allowed_stock_ids"] = len(allowed_stock_ids)
@@ -187,7 +190,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         for i, sid in enumerate(stock_ids, 1):
             if i % 200 == 0:
                 update_job(db_session, job_id, logs={**logs, "progress": f"{i}/{total_stocks}", "rows": total_rows}, commit=True)
-                print(f"  [{i}/{total_stocks}] 已寫 {total_rows} 筆...", flush=True)
+                logger.info("[%d/%d] 已寫 %d 筆...", i, total_stocks, total_rows)
 
             df = fetch_dataset_by_stocks(
                 DATASET,
@@ -225,11 +228,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
-        print(f"  ✅ holding_dist: {total_rows} 筆", flush=True)
+        logger.info("holding_dist: %d 筆", total_rows)
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error("[ingest_holding_dist] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_holding_dist] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_holding_dist] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

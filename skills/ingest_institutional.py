@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -26,6 +27,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawInstitutional, Stock
+
+logger = logging.getLogger(__name__)
 
 
 DATASET = "TaiwanStockInstitutionalInvestorsBuySell"
@@ -252,6 +255,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:  # pragma: no cover - exercised by pipeline
+        logger.error("[ingest_institutional] 失敗: %s", exc, exc_info=True)
         logs["error"] = str(exc)
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_institutional] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

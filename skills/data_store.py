@@ -22,6 +22,7 @@ Public API:
 from __future__ import annotations
 
 import gc
+import logging
 import time
 from datetime import date
 from pathlib import Path
@@ -32,6 +33,8 @@ import numpy as np
 import pandas as pd
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
 
 from app.models import Feature, Label, RawPrice
 from skills.feature_utils import (
@@ -91,7 +94,7 @@ def _parse_and_schema_filter(raw_feat_df: pd.DataFrame) -> pd.DataFrame:
         mask = feat_df[num_cols].notna().sum(axis=1) >= thr
         n_drop = int((~mask).sum())
         if n_drop:
-            print(f"  [data_store] schema filter: dropped {n_drop:,} stale rows", flush=True)
+            logger.info("[data_store] schema filter: dropped %s stale rows", f"{n_drop:,}")
         feat_df = feat_df.loc[mask].reset_index(drop=True)
         feat_df[num_cols] = feat_df[num_cols].astype("float32")
 
@@ -100,7 +103,7 @@ def _parse_and_schema_filter(raw_feat_df: pd.DataFrame) -> pd.DataFrame:
 
 # ── 快取建立 ──────────────────────────────────────────────────────────────────
 def _build_prices(db_session: Session) -> None:
-    print("  [data_store] building prices.parquet (full history) …", flush=True)
+    logger.info("[data_store] building prices.parquet (full history) …")
     t0 = time.time()
     stmt = (
         select(
@@ -114,10 +117,9 @@ def _build_prices(db_session: Session) -> None:
     for col in ("open", "high", "low", "close", "volume"):
         df[col] = pd.to_numeric(df[col], errors="coerce")
     df.to_parquet(PRICES_PARQUET, index=False)
-    print(
-        f"  [data_store] prices saved: {len(df):,} rows "
-        f"({time.time()-t0:.1f}s) → {PRICES_PARQUET.name}",
-        flush=True,
+    logger.info(
+        "[data_store] prices saved: %s rows (%.1fs) -> %s",
+        f"{len(df):,}", time.time() - t0, PRICES_PARQUET.name,
     )
 
 
@@ -128,7 +130,7 @@ def _build_features(db_session: Session) -> None:
     大幅省去 JSON 解析開銷（4M 行 × 62 特徵 ≈ 節省 60-90s）。
     若 FeatureStore 無資料（首次使用前），fallback 至 MySQL。
     """
-    print("  [data_store] building features.parquet …", flush=True)
+    logger.info("[data_store] building features.parquet …")
     t0 = time.time()
 
     # ── 嘗試從 FeatureStore（年份 Parquet）直接讀取 ──
@@ -138,10 +140,9 @@ def _build_features(db_session: Session) -> None:
         _fs = FeatureStore()
         _max_date = _fs.get_max_date()
         if _max_date is not None:
-            print(
-                f"  [data_store] FeatureStore found (max={_max_date}), "
-                "reading from year-partitioned Parquet …",
-                flush=True,
+            logger.info(
+                "[data_store] FeatureStore found (max=%s), reading from year-partitioned Parquet …",
+                _max_date,
             )
             # 讀取全部歷史（2000-01-01 → _max_date 涵蓋全部年份）
             feat_df = _fs.read(_date(2000, 1, 1), _max_date)
@@ -154,47 +155,42 @@ def _build_features(db_session: Session) -> None:
                 ["trading_date", "stock_id"]
             ).reset_index(drop=True)
             feat_df.to_parquet(FEATURES_PARQUET, index=False)
-            print(
-                f"  [data_store] features saved (from FeatureStore): "
-                f"{len(feat_df):,} rows × {len(num_cols)} features "
-                f"({time.time()-t0:.1f}s total) → {FEATURES_PARQUET.name}",
-                flush=True,
+            logger.info(
+                "[data_store] features saved (from FeatureStore): %s rows x %d features (%.1fs total) -> %s",
+                f"{len(feat_df):,}", len(num_cols), time.time() - t0, FEATURES_PARQUET.name,
             )
             return
     except Exception as _exc:
-        print(
-            f"  [data_store] FeatureStore read failed ({_exc}), "
-            "falling back to MySQL …",
-            flush=True,
+        logger.warning(
+            "[data_store] FeatureStore read failed (%s), falling back to MySQL …",
+            _exc,
         )
 
     # ── Fallback：MySQL（FeatureStore 尚未初始化時使用）──
-    print("  [data_store] reading features from MySQL (fallback) …", flush=True)
+    logger.info("[data_store] reading features from MySQL (fallback) …")
     stmt = (
         select(Feature.stock_id, Feature.trading_date, Feature.features_json)
         .order_by(Feature.trading_date, Feature.stock_id)
     )
     raw = pd.read_sql(stmt, db_session.get_bind())
     raw["trading_date"] = pd.to_datetime(raw["trading_date"]).dt.date
-    print(f"  [data_store] db_load done ({time.time()-t0:.1f}s), parsing …", flush=True)
+    logger.info("[data_store] db_load done (%.1fs), parsing …", time.time() - t0)
 
     t1 = time.time()
     feat_df = _parse_and_schema_filter(raw)
     del raw
     gc.collect()
-    print(f"  [data_store] parse done ({time.time()-t1:.1f}s), saving …", flush=True)
+    logger.info("[data_store] parse done (%.1fs), saving …", time.time() - t1)
 
     feat_df.to_parquet(FEATURES_PARQUET, index=False)
-    print(
-        f"  [data_store] features saved (from MySQL): {len(feat_df):,} rows × "
-        f"{len(feat_df.columns)-2} features "
-        f"({time.time()-t0:.1f}s total) → {FEATURES_PARQUET.name}",
-        flush=True,
+    logger.info(
+        "[data_store] features saved (from MySQL): %s rows x %d features (%.1fs total) -> %s",
+        f"{len(feat_df):,}", len(feat_df.columns) - 2, time.time() - t0, FEATURES_PARQUET.name,
     )
 
 
 def _build_labels(db_session: Session) -> None:
-    print("  [data_store] building labels.parquet (full history) …", flush=True)
+    logger.info("[data_store] building labels.parquet (full history) …")
     t0 = time.time()
     stmt = (
         select(Label.stock_id, Label.trading_date, Label.future_ret_h)
@@ -203,10 +199,9 @@ def _build_labels(db_session: Session) -> None:
     df = pd.read_sql(stmt, db_session.get_bind())
     df["trading_date"] = pd.to_datetime(df["trading_date"]).dt.date
     df.to_parquet(LABELS_PARQUET, index=False)
-    print(
-        f"  [data_store] labels saved: {len(df):,} rows "
-        f"({time.time()-t0:.1f}s) → {LABELS_PARQUET.name}",
-        flush=True,
+    logger.info(
+        "[data_store] labels saved: %s rows (%.1fs) -> %s",
+        f"{len(df):,}", time.time() - t0, LABELS_PARQUET.name,
     )
 
 
@@ -230,7 +225,10 @@ def _ensure(db_session: Session) -> None:
         _src_px = None
     if not _cache_px or (_src_px and _cache_px < _src_px):
         if _cache_px and _src_px:
-            print(f"  [data_store] prices cache stale ({_cache_px} < {_src_px}), rebuilding …", flush=True)
+            logger.info(
+                "[data_store] prices cache stale (%s < %s), rebuilding …",
+                _cache_px, _src_px,
+            )
         _build_prices(db_session)
 
     # ── Features ──
@@ -243,7 +241,10 @@ def _ensure(db_session: Session) -> None:
         _src_feat = None
     if not _cache_feat or (_src_feat and _cache_feat < _src_feat):
         if _cache_feat and _src_feat:
-            print(f"  [data_store] features cache stale ({_cache_feat} < {_src_feat}), rebuilding …", flush=True)
+            logger.info(
+                "[data_store] features cache stale (%s < %s), rebuilding …",
+                _cache_feat, _src_feat,
+            )
         _build_features(db_session)
 
     # ── Labels ──
@@ -254,7 +255,10 @@ def _ensure(db_session: Session) -> None:
         _src_lbl = None
     if not _cache_lbl or (_src_lbl and _cache_lbl < _src_lbl):
         if _cache_lbl and _src_lbl:
-            print(f"  [data_store] labels cache stale ({_cache_lbl} < {_src_lbl}), rebuilding …", flush=True)
+            logger.info(
+                "[data_store] labels cache stale (%s < %s), rebuilding …",
+                _cache_lbl, _src_lbl,
+            )
         _build_labels(db_session)
 
 
@@ -346,14 +350,14 @@ def invalidate() -> None:
     for p in (PRICES_PARQUET, FEATURES_PARQUET, LABELS_PARQUET):
         if p.exists():
             p.unlink()
-            print(f"  [data_store] invalidated: {p.name}", flush=True)
+            logger.info("[data_store] invalidated: %s", p.name)
 
 
 def warm_up(db_session: Session) -> None:
     """Force-build all caches (useful after pipeline update to pre-warm before backtest)."""
     invalidate()
     _ensure(db_session)
-    print("  [data_store] warm-up complete.", flush=True)
+    logger.info("[data_store] warm-up complete.")
 
 
 def cache_info() -> dict:

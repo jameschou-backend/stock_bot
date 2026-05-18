@@ -17,6 +17,7 @@ Fields:  date, stock_id, transaction_type, volume, fee_rate,
 """
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -32,6 +33,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawSecuritiesLending, Stock
+
+logger = logging.getLogger(__name__)
 
 DATASET = "TaiwanStockSecuritiesLending"
 UPDATE_COLS = ["lending_balance", "lending_fee_rate", "lending_transaction_count"]
@@ -151,7 +154,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         logs["stocks"] = len(stock_ids)
-        print(f"[ingest_securities_lending] {start_date} ~ {end_date}，{len(stock_ids)} 檔", flush=True)
+        logger.info(
+            "[ingest_securities_lending] %s ~ %s，%d 檔",
+            start_date, end_date, len(stock_ids),
+        )
 
         # SecuritiesLending 資料量大（逐筆），使用 90 天 chunk 避免超時
         CHUNK_DAYS = 90
@@ -172,7 +178,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     logs={**logs, "progress": f"{i}/{len(stock_ids)}", "rows": total_rows},
                     commit=True,
                 )
-                print(f"  [{i}/{len(stock_ids)}] rows={total_rows}", flush=True)
+                logger.info("[%d/%d] rows=%d", i, len(stock_ids), total_rows)
 
             for range_start, range_end in date_ranges:
                 try:
@@ -187,9 +193,26 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                         backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
                         timeout=120,
                     )
-                except Exception as exc:
-                    # 逐筆資料量大，可能超時；記錄但繼續下一檔
-                    print(f"  ⚠️ {stock_id} {range_start}~{range_end}: {exc}", flush=True)
+                except FinMindError as exc:
+                    # 配額錯誤（402/429）→ 後續所有股票都會失敗，立即中止整個 ingest
+                    msg = str(exc)
+                    is_quota = (
+                        "402" in msg or "429" in msg
+                        or "quota" in msg.lower()
+                        or "超過" in msg
+                    )
+                    if is_quota:
+                        logger.error(
+                            "[ingest_securities_lending] FinMind 配額錯誤 stock_id=%s "
+                            "range=%s~%s: %s",
+                            stock_id, range_start, range_end, exc,
+                        )
+                        raise
+                    # 其他單股暫時錯誤（資料量大可能超時）：警告後繼續下一個 range/stock
+                    logger.warning(
+                        "[ingest_securities_lending] %s %s~%s 抓取失敗（跳過此區間）: %s",
+                        stock_id, range_start, range_end, exc,
+                    )
                     continue
 
                 if df is None or df.empty:
@@ -211,13 +234,23 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
-        print(f"  ✅ ingest_securities_lending: {total_rows} 筆", flush=True)
+        logger.info("ingest_securities_lending: %d 筆", total_rows)
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error("[ingest_securities_lending] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_securities_lending] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_securities_lending] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise
 
 

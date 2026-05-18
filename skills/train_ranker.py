@@ -3,10 +3,13 @@
 """
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
 import hashlib
 from pathlib import Path
 from typing import Dict, Iterable
+
+logger = logging.getLogger(__name__)
 
 try:
     import joblib
@@ -171,7 +174,10 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 ).dt.date
                 _used_parquet = True
         except Exception as _exc:
-            print(f"[train_ranker] FeatureStore read failed ({_exc}), falling back to MySQL …")
+            logger.warning(
+                "[train_ranker] FeatureStore read failed (%s), falling back to MySQL …",
+                _exc,
+            )
 
         if not _used_parquet:
             feature_stmt = (
@@ -228,10 +234,9 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 ])
                 df = df[_liq_ok].copy()
                 df = df.reset_index(drop=True)
-                print(
-                    f"[train_ranker] 流動性過濾 (>={min_avg_turnover:.0f}億): "
-                    f"{_before:,} → {len(df):,} 筆",
-                    flush=True,
+                logger.info(
+                    "[train_ranker] 流動性過濾 (>=%.0f億): %s -> %s 筆",
+                    min_avg_turnover, f"{_before:,}", f"{len(df):,}",
                 )
                 del _price_df, _eligible, _eligible_set
 
@@ -259,10 +264,9 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         # 委派給 feature_utils.filter_schema_valid_rows（統一實作）。
         feature_matrix, _n_schema_dropped = _filter_schema_valid_rows(feature_matrix, coverage_threshold=0.50)
         if _n_schema_dropped > 0:
-            print(
-                f"[train_ranker] Schema filter: 過濾 {_n_schema_dropped:,} 筆舊版特徵資料 "
-                f"(coverage < 50%, canonical_features={len(_CANONICAL_FEATURES)})",
-                flush=True,
+            logger.info(
+                "[train_ranker] Schema filter: 過濾 %s 筆舊版特徵資料 (coverage < 50%%, canonical_features=%d)",
+                f"{_n_schema_dropped:,}", len(_CANONICAL_FEATURES),
             )
             df = df.loc[feature_matrix.index].copy()
         if feature_matrix.empty:

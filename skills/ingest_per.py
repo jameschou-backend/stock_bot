@@ -14,6 +14,7 @@ Fields:  date, stock_id, dividend_yield, PER, PBR
 """
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -29,6 +30,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawPER, Stock
+
+logger = logging.getLogger(__name__)
 
 DATASET = "TaiwanStockPER"
 UPDATE_COLS = ["per", "pbr", "dividend_yield"]
@@ -108,7 +111,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             return {"rows": 0}
 
         logs["stocks"] = len(stock_ids)
-        print(f"[ingest_per] {start_date} ~ {end_date}，{len(stock_ids)} 檔", flush=True)
+        logger.info("[ingest_per] %s ~ %s，%d 檔", start_date, end_date, len(stock_ids))
 
         # TaiwanStockPER 支援 data_id + 日期區間 → 每檔股票一次 API call
         # 為避免 10 年資料量過大單次超時，若超過 365 天改為 chunk
@@ -130,7 +133,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     logs={**logs, "progress": f"{i}/{len(stock_ids)}", "rows": total_rows},
                     commit=True,
                 )
-                print(f"  [{i}/{len(stock_ids)}] rows={total_rows}", flush=True)
+                logger.info("[%d/%d] rows=%d", i, len(stock_ids), total_rows)
 
             for range_start, range_end in date_ranges:
                 df = fetch_dataset(
@@ -162,13 +165,22 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             total_rows += len(commit_buffer)
 
         logs["rows"] = total_rows
-        print(f"  ✅ ingest_per: {total_rows} 筆", flush=True)
+        logger.info("ingest_per: %d 筆", total_rows)
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error("[ingest_per] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_per] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_per] finish_job 寫入失敗（保留原始例外）: %s", finish_exc
+            )
         raise
 
 

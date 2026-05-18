@@ -363,7 +363,10 @@ def fetch_dataset_by_stocks(
                         batch_dfs.append(df)
                         if debug and not _first_data_logged:
                             _first_data_logged = True
-                            print(f"\n  [debug] 首筆回傳: stock_id={stock_id}, rows={len(df)}, cols={list(df.columns[:6])}", flush=True)
+                            logger.debug(
+                                "[finmind] 首筆回傳: stock_id=%s, rows=%d, cols=%s",
+                                stock_id, len(df), list(df.columns[:6]),
+                            )
                     else:
                         empty_count += 1
                 except FinMindError as exc:
@@ -433,7 +436,10 @@ def fetch_dataset_by_stocks(
     # 如果有 batch_write_callback，資料已經寫入，回傳空 DataFrame
     if batch_write_callback:
         if debug and (error_count or empty_count):
-            print(f"\n[finmind] {dataset} api_calls={api_calls} empty={empty_count} errors={error_count}", flush=True)
+            logger.debug(
+                "[finmind] %s api_calls=%d empty=%d errors=%d",
+                dataset, api_calls, empty_count, error_count,
+            )
         return pd.DataFrame()
 
     if not all_dfs:

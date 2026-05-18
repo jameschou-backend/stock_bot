@@ -6,9 +6,12 @@
 from __future__ import annotations
 
 import json
+import logging
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Dict, List, Tuple
+
+logger = logging.getLogger(__name__)
 
 try:
     import joblib
@@ -344,36 +347,42 @@ def _print_breakthrough_lists(
     pick_date,
 ) -> None:
     """輸出突破確認三清單：可進場 / 等待突破中 / 候補股。"""
-    print()
-    print("=" * 62)
-    print(f"  今日選股突破狀態 ({pick_date})")
-    print("=" * 62)
+    logger.info("")
+    logger.info("=" * 62)
+    logger.info("  今日選股突破狀態 (%s)", pick_date)
+    logger.info("=" * 62)
 
     ready_rows = picks_df[picks_df.get("breakthrough_ready", False) == True] if "breakthrough_ready" in picks_df.columns else pd.DataFrame()
     waiting_rows = picks_df[picks_df.get("breakthrough_ready", True) == False] if "breakthrough_ready" in picks_df.columns else picks_df
 
     # ── 今日可進場（已突破）──
     n_ready = len(ready_rows)
-    print(f"\n=== 今日可進場（已突破）=== ({n_ready} 檔)")
+    logger.info("=== 今日可進場（已突破）=== (%d 檔)", n_ready)
     if n_ready > 0:
-        print(f"  {'#':>3}  {'代號':6}  {'名稱':<12}  {'突破類型':<10}  {'模型分數':>8}")
-        print(f"  {'─'*3}  {'─'*6}  {'─'*12}  {'─'*10}  {'─'*8}")
+        logger.info("  %3s  %-6s  %-12s  %-10s  %8s", "#", "代號", "名稱", "突破類型", "模型分數")
+        logger.info("  %s  %s  %s  %s  %s", "─" * 3, "─" * 6, "─" * 12, "─" * 10, "─" * 8)
         for rank, (_, row) in enumerate(ready_rows.sort_values("score", ascending=False).iterrows(), 1):
             sid = str(row["stock_id"])
             name = stock_names.get(sid, sid)[:10]
             bt_type = bt_status.get(sid, {}).get("type") or "-"
             bt_label = "價格突破" if bt_type == "price" else ("外資籌碼" if bt_type == "institutional" else bt_type)
             score = float(row.get("score", 0))
-            print(f"  {rank:>3}  {sid:6}  {name:<12}  {bt_label:<10}  {score:>8.4f}")
+            logger.info("  %3d  %-6s  %-12s  %-10s  %8.4f", rank, sid, name, bt_label, score)
     else:
-        print("  （今日無符合突破條件的股票）")
+        logger.info("  （今日無符合突破條件的股票）")
 
     # ── 等待突破中 ──
     n_waiting = len(waiting_rows)
-    print(f"\n=== 等待突破中 === ({n_waiting} 檔)")
+    logger.info("=== 等待突破中 === (%d 檔)", n_waiting)
     if n_waiting > 0:
-        print(f"  {'#':>3}  {'代號':6}  {'名稱':<12}  {'等待':>4}  {'距20日高點':>10}  {'量比':>10}")
-        print(f"  {'─'*3}  {'─'*6}  {'─'*12}  {'─'*4}  {'─'*10}  {'─'*10}")
+        logger.info(
+            "  %3s  %-6s  %-12s  %4s  %10s  %10s",
+            "#", "代號", "名稱", "等待", "距20日高點", "量比",
+        )
+        logger.info(
+            "  %s  %s  %s  %s  %s  %s",
+            "─" * 3, "─" * 6, "─" * 12, "─" * 4, "─" * 10, "─" * 10,
+        )
         for rank, (_, row) in enumerate(waiting_rows.sort_values("score", ascending=False).iterrows(), 1):
             sid = str(row["stock_id"])
             name = stock_names.get(sid, sid)[:10]
@@ -383,25 +392,28 @@ def _print_breakthrough_lists(
             vol_r = info.get("vol_ratio", float("nan"))
             pct_str = f"+{pct*100:.1f}%" if pct == pct and pct > 0 else (f"{pct*100:.1f}%" if pct == pct else "─")
             vol_str = f"{vol_r:.2f}x/1.5x" if vol_r == vol_r else "─"
-            print(f"  {rank:>3}  {sid:6}  {name:<12}  {'第'+str(days)+'天':>4}  {pct_str:>10}  {vol_str:>10}")
+            logger.info(
+                "  %3d  %-6s  %-12s  %4s  %10s  %10s",
+                rank, sid, name, "第" + str(days) + "天", pct_str, vol_str,
+            )
     else:
-        print("  （所有選股今日均已突破）")
+        logger.info("  （所有選股今日均已突破）")
 
     # ── 候補股（備用）──
     n_backup = len(backup_df)
-    print(f"\n=== 候補股（備用）=== ({n_backup} 檔)")
+    logger.info("=== 候補股（備用）=== (%d 檔)", n_backup)
     if n_backup > 0:
-        print(f"  {'#':>3}  {'代號':6}  {'名稱':<12}  {'模型分數':>8}")
-        print(f"  {'─'*3}  {'─'*6}  {'─'*12}  {'─'*8}")
+        logger.info("  %3s  %-6s  %-12s  %8s", "#", "代號", "名稱", "模型分數")
+        logger.info("  %s  %s  %s  %s", "─" * 3, "─" * 6, "─" * 12, "─" * 8)
         for rank, (_, row) in enumerate(backup_df.sort_values("score", ascending=False).iterrows(), 1):
             sid = str(row["stock_id"])
             name = stock_names.get(sid, sid)[:10]
             score = float(row.get("score", 0))
-            print(f"  {rank:>3}  {sid:6}  {name:<12}  {score:>8.4f}")
+            logger.info("  %3d  %-6s  %-12s  %8.4f", rank, sid, name, score)
     else:
-        print("  （無候補股）")
+        logger.info("  （無候補股）")
 
-    print()
+    logger.info("")
 
 
 def run(config, db_session: Session, **kwargs) -> Dict:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, Iterable, List, Tuple
 from zoneinfo import ZoneInfo
@@ -11,6 +12,8 @@ from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
 from app.models import CorporateAction, PriceAdjustFactor, RawPrice
+
+logger = logging.getLogger(__name__)
 
 
 TODO_SOURCE_HINTS = [
@@ -148,6 +151,19 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         finish_job(db_session, job_id, "success", logs=logs)
         return logs
     except Exception as exc:  # pragma: no cover
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs={"error": str(exc)})
+        logger.error("[ingest_corporate_actions] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_corporate_actions] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(
+                db_session, job_id, "failed",
+                error_text=str(exc), logs={"error": str(exc)},
+            )
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_corporate_actions] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

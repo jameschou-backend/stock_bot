@@ -16,11 +16,14 @@
 """
 from __future__ import annotations
 
+import logging
 import warnings
 from typing import Dict
 
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 
 _MAX_WEIGHT = 0.15
@@ -95,7 +98,7 @@ def _mean_variance_weights(prices: pd.DataFrame, stock_ids: list[str]) -> dict[s
         return {sid: w / total for sid, w in result.items()}
 
     except Exception as exc:
-        print(f"  [position_sizing] mean_variance 失敗（{exc}），fallback vol_inverse")
+        logger.warning("[position_sizing] mean_variance 失敗（%s），fallback vol_inverse", exc)
         return _vol_inverse_weights(prices, stock_ids)
 
 
@@ -138,7 +141,7 @@ def _risk_parity_weights(prices: pd.DataFrame, stock_ids: list[str]) -> dict[str
         return {sid: w / total for sid, w in capped.items()}
 
     except Exception as exc:
-        print(f"  [position_sizing] risk_parity 失敗（{exc}），fallback vol_inverse")
+        logger.warning("[position_sizing] risk_parity 失敗（%s），fallback vol_inverse", exc)
         return _vol_inverse_weights(prices, stock_ids)
 
 

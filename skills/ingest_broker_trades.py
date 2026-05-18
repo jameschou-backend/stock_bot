@@ -18,6 +18,7 @@ Fields:  date, stock_id, securities_trader_id, securities_trader, buy, sell
 """
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -34,6 +35,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawBrokerTrade, Stock
+
+logger = logging.getLogger(__name__)
 
 DATASET = "TaiwanStockTradingDailyReport"
 UPDATE_COLS = ["top5_net", "top5_concentration", "buy_broker_count", "sell_broker_count", "total_net"]
@@ -132,7 +135,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        print(f"[ingest_broker_trades] {start_date} ~ {end_date}", flush=True)
+        logger.info("[ingest_broker_trades] %s ~ %s", start_date, end_date)
 
         allowed_stock_ids = _load_allowed_stock_ids(db_session)
         logs["allowed_stock_ids"] = len(allowed_stock_ids)
@@ -160,7 +163,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         total_rows = 0
 
         for day_idx, query_date in enumerate(all_dates, 1):
-            print(f"  [{day_idx}/{len(all_dates)}] {query_date}", flush=True)
+            logger.info("[%d/%d] %s", day_idx, len(all_dates), query_date)
             update_job(db_session, job_id, logs={**logs, "progress": f"{day_idx}/{len(all_dates)}", "rows": total_rows}, commit=True)
 
             # 逐股查詢（不支援 batch），end_date=None 表示單日
@@ -189,14 +192,24 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             db_session.execute(stmt)
             db_session.commit()
             total_rows += len(records)
-            print(f"    → {len(records)} 筆寫入", flush=True)
+            logger.info("-> %d 筆寫入", len(records))
 
         logs["rows"] = total_rows
-        print(f"  ✅ broker_trades: {total_rows} 筆", flush=True)
+        logger.info("broker_trades: %d 筆", total_rows)
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error("[ingest_broker_trades] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_broker_trades] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_broker_trades] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

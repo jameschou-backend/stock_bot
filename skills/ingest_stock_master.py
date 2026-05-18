@@ -9,6 +9,7 @@ FinMind Datasets:
 
 from __future__ import annotations
 
+import logging
 import re
 from datetime import date, datetime
 from typing import Dict, List, Set
@@ -21,6 +22,8 @@ from sqlalchemy.orm import Session
 from app.finmind import FinMindError, fetch_dataset
 from app.job_utils import finish_job, start_job
 from app.models import Stock, StockStatusHistory
+
+logger = logging.getLogger(__name__)
 
 
 STOCK_INFO_DATASET = "TaiwanStockInfo"
@@ -126,7 +129,13 @@ def _fetch_delisting_info(
     max_retries: int,
     backoff_seconds: float,
 ) -> pd.DataFrame:
-    """從 TaiwanStockDelisting 抓取下市櫃資料"""
+    """從 TaiwanStockDelisting 抓取下市櫃資料
+
+    錯誤分流：
+    - 配額錯誤（402/429）→ 重新拋出（系統性錯誤，整批 ingest 應中止）。
+    - 其他 FinMindError（權限不足、schema 不符）→ 記錄 warning 後回傳空 DF，
+      讓 stock master 仍可更新基本資料；下市資訊由後續 session 補。
+    """
     try:
         df = fetch_dataset(
             DELISTING_DATASET,
@@ -138,8 +147,22 @@ def _fetch_delisting_info(
             backoff_seconds=backoff_seconds,
         )
         return df
-    except FinMindError:
-        # 下市櫃表可能因權限問題無法取得
+    except FinMindError as exc:
+        msg = str(exc)
+        is_quota = (
+            "402" in msg or "429" in msg
+            or "quota" in msg.lower()
+            or "超過" in msg
+        )
+        if is_quota:
+            logger.error(
+                "[ingest_stock_master] FinMind 配額錯誤（delisting）: %s", exc
+            )
+            raise
+        logger.warning(
+            "[ingest_stock_master] 下市櫃表無法取得（權限不足或 schema 變動）: %s",
+            exc,
+        )
         return pd.DataFrame()
 
 
@@ -197,8 +220,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     if sid and d:
                         try:
                             delisting_dates[sid] = pd.to_datetime(d).date()
-                        except Exception:
-                            pass
+                        except (ValueError, TypeError) as exc:
+                            # 來源資料可能含非法日期字串；不影響其他股票，warn 即可
+                            logger.warning(
+                                "[ingest_stock_master] 無法解析 stock_id=%s 的下市日期 %r: %s",
+                                sid, d, exc,
+                            )
         
         # 取得現有 stocks
         existing = _get_existing_stocks(db_session)
@@ -290,6 +317,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         return logs
         
     except Exception as exc:  # pragma: no cover
+        logger.error("[ingest_stock_master] 失敗: %s", exc, exc_info=True)
         logs["error"] = str(exc)
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_stock_master] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

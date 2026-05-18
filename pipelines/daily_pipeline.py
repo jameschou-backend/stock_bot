@@ -1,11 +1,14 @@
 from __future__ import annotations
 
+import logging
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 from app.config import load_config
 from app.db import get_session
 from app.models import ModelVersion
+
+logger = logging.getLogger(__name__)
 
 
 def _check_prices_exist(min_rows: int = 100) -> bool:
@@ -150,7 +153,7 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
             try:
                 run_skill(skill_name, runner)
             except Exception as exc:
-                print(f"[WARN] {skill_name} failed: {exc}")
+                logger.warning("[WARN] %s failed: %s", skill_name, exc)
                 try:
                     from app.job_utils import finish_job, start_job
                     with get_session() as session:
@@ -204,7 +207,7 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         from skills import ingest_quarterly_fundamental
         _run_optional_skill("ingest_quarterly_fundamental", ingest_quarterly_fundamental.run)
     else:
-        print("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
+        logger.info("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
 
     # 8. Data Quality Check: 確保資料完整性，若不達標則 fail-fast
     from skills import data_quality

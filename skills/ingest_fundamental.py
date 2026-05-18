@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional
 from zoneinfo import ZoneInfo
@@ -21,6 +22,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawFundamental, Stock
+
+logger = logging.getLogger(__name__)
 
 
 DATASET = "TaiwanStockMonthRevenue"
@@ -217,7 +220,13 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 return 0
             try:
                 norm = _normalize_fundamentals(df)
-            except FinMindError:
+            except FinMindError as exc:
+                # Schema 變動（缺少必要欄位）：警告但跳過該批，
+                # 不阻擋整個 ingest（其他批可能正常）。資料缺漏由 data_quality 偵測。
+                logger.warning(
+                    "[ingest_fundamental] normalize 失敗，跳過該批 %d 筆: %s",
+                    len(df), exc,
+                )
                 return 0
             records: List[Dict] = _to_mysql_safe_records(norm)
             if not records:
@@ -269,6 +278,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:  # pragma: no cover - pipeline runtime
+        logger.error("[ingest_fundamental] 失敗: %s", exc, exc_info=True)
         logs["error"] = str(exc)
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_fundamental] finish_job 寫入失敗（保留原始例外）: %s", finish_exc
+            )
         raise

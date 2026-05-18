@@ -10,6 +10,7 @@ Fields:  date, score (0-100), rating (Extreme Fear/Fear/Neutral/Greed/Extreme Gr
 """
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict
 from zoneinfo import ZoneInfo
@@ -22,6 +23,8 @@ from sqlalchemy.orm import Session
 from app.finmind import FinMindError, fetch_dataset
 from app.job_utils import finish_job, start_job
 from app.models import RawFearGreed
+
+logger = logging.getLogger(__name__)
 
 DATASET = "CnnFearGreedIndex"
 
@@ -53,7 +56,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0}
 
-        print(f"[ingest_fear_greed] {start_date} ~ {end_date}", flush=True)
+        logger.info("[ingest_fear_greed] %s ~ %s", start_date, end_date)
 
         # CnnFearGreedIndex 不需要 data_id（非個股資料）
         df = fetch_dataset(
@@ -96,11 +99,21 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             db_session.commit()
 
         logs["rows"] = len(rows)
-        print(f"  ✅ Fear & Greed: {len(rows)} 筆", flush=True)
+        logger.info("Fear & Greed: %d 筆", len(rows))
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": len(rows)}
 
     except Exception as exc:
-        db_session.rollback()
-        finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        logger.error("[ingest_fear_greed] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_fear_greed] rollback 失敗: %s", rb_exc)
+        try:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_fear_greed] finish_job 寫入失敗（保留原始例外）: %s",
+                finish_exc,
+            )
         raise

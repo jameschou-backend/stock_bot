@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import date, datetime, timedelta
 from typing import Dict, List
 from zoneinfo import ZoneInfo
@@ -26,6 +27,8 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawPrice
+
+logger = logging.getLogger(__name__)
 
 
 DATASET = "TaiwanStockPrice"
@@ -167,13 +170,16 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:
+        logger.error("[ingest_prices] 失敗: %s", exc, exc_info=True)
         try:
             db_session.rollback()
-        except Exception:
-            pass
+        except Exception as rb_exc:
+            logger.warning("[ingest_prices] rollback 失敗: %s", rb_exc)
         try:
             logs["error"] = str(exc)
             finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
-        except Exception:
-            pass
+        except Exception as finish_exc:
+            logger.warning(
+                "[ingest_prices] finish_job 寫入失敗（保留原始例外）: %s", finish_exc
+            )
         raise
