@@ -13,7 +13,8 @@ from pathlib import Path
 from typing import List, Optional
 
 import psutil
-from fastapi import FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, Path as FastAPIPath, Query, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, text as sql_text
 
 from app.config import load_config
@@ -51,6 +52,26 @@ from skills.strategy_factory.engine import BacktestConfig, BacktestEngine, Strat
 from skills.strategy_factory.registry import get as get_strategy, register_defaults
 
 app = FastAPI(title="Stock Bot ML API", version="0.1.0")
+
+# CORS: 預設只允許本機 dashboard / dev 工具呼叫。若需對外開放，請改為明確的 origin 列表。
+_ALLOWED_ORIGINS = [
+    "http://localhost",
+    "http://localhost:5001",
+    "http://localhost:8501",
+    "http://127.0.0.1",
+    "http://127.0.0.1:5001",
+    "http://127.0.0.1:8501",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_ALLOWED_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
+# 四碼台股 stock_id 約束（與 risk/build_features 一致）
+_STOCK_ID_PATTERN = r"^\d{4}$"
 
 
 def _to_float(value):
@@ -135,7 +156,10 @@ def get_picks(date: Optional[date] = Query(default=None)):
 
 
 @app.get("/stock/{stock_id}", response_model=StockDetailOut)
-def get_stock(stock_id: str, date: Optional[date] = Query(default=None)):
+def get_stock(
+    stock_id: str = FastAPIPath(..., pattern=_STOCK_ID_PATTERN, description="四碼台股代號"),
+    date: Optional[date] = Query(default=None),
+):
     with get_session() as session:
         target_date = date
         if target_date is None:
@@ -357,7 +381,9 @@ async def run_strategy_backtest(payload: StrategyRunIn):
 
 
 @app.get("/strategy_runs/{run_id}", response_model=StrategyRunOut)
-def get_strategy_run(run_id: str):
+def get_strategy_run(
+    run_id: str = FastAPIPath(..., min_length=8, max_length=64, pattern=r"^[A-Za-z0-9_\-]+$"),
+):
     with get_session() as session:
         row = session.query(StrategyRun).filter(StrategyRun.run_id == run_id).one_or_none()
         if row is None:
@@ -366,7 +392,9 @@ def get_strategy_run(run_id: str):
 
 
 @app.get("/strategy_runs/{run_id}/trades", response_model=List[StrategyTradeOut])
-def get_strategy_trades(run_id: str):
+def get_strategy_trades(
+    run_id: str = FastAPIPath(..., min_length=8, max_length=64, pattern=r"^[A-Za-z0-9_\-]+$"),
+):
     with get_session() as session:
         rows = (
             session.query(StrategyTrade)

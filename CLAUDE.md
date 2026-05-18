@@ -382,8 +382,9 @@ memory/project_status.md — 目前最佳結果、已知問題、待優化項目
 
 ### Market Regime Switching 研究紀錄（2026-03-09 實驗，已移除）
 
-> **⚠️ 已移除**：`skills/market_regime.py` 標記為 `# NOT IN USE`，`backtest.py` / `daily_pick.py` 不再呼叫。
-> 保留供未來研究參考。
+> **⚠️ 已刪除（2026-05-18）**：`skills/market_regime.py` 已從 source tree 移除。
+> 此處保留 24m 實驗紀錄供未來研究比較。如需重建模組，可參考此處規則描述與 git 歷史
+> （`git log --all -- skills/market_regime.py`）。
 
 **三態規則（向量化）**：
 - bull: 等權指數 > 200MA AND 60日報酬 > 0 AND 20日報酬 > -5%
