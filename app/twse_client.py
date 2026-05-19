@@ -33,7 +33,12 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_DELAY: float = float(os.environ.get("TWSE_REQUEST_DELAY", "1.5"))
 DEFAULT_TIMEOUT: float = float(os.environ.get("TWSE_TIMEOUT", "30"))
+DEFAULT_MAX_RETRIES: int = int(os.environ.get("TWSE_MAX_RETRIES", "3"))
+DEFAULT_RETRY_BACKOFF: float = float(os.environ.get("TWSE_RETRY_BACKOFF", "2.0"))
 USER_AGENT: str = "Mozilla/5.0 (compatible; stock_bot/1.0)"
+
+# 5xx + 429（Cloudflare 限流）視為可重試。404/400/403 不重試（語意錯誤）。
+_RETRYABLE_STATUSES = {429, 500, 502, 503, 504, 520, 521, 522, 524}
 
 # TWSE OpenAPI（無 date 參數）
 TWSE_OAPI_STOCK_DAY_ALL = "https://openapi.twse.com.tw/v1/exchangeReport/STOCK_DAY_ALL"
@@ -158,24 +163,54 @@ class TWSEClient:
     失敗時 raise TWSEError；個別 row 解析失敗會 logger.warning 並 skip。
     """
 
-    def __init__(self, delay: float = DEFAULT_DELAY, timeout: float = DEFAULT_TIMEOUT):
+    def __init__(
+        self,
+        delay: float = DEFAULT_DELAY,
+        timeout: float = DEFAULT_TIMEOUT,
+        max_retries: int = DEFAULT_MAX_RETRIES,
+        retry_backoff: float = DEFAULT_RETRY_BACKOFF,
+    ):
         self.delay = delay
         self.timeout = timeout
+        self.max_retries = max_retries
+        self.retry_backoff = retry_backoff
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": USER_AGENT, "Accept": "application/json"})
         self._limiter = _RateLimiter(delay=delay)
 
     # ── HTTP 底層 ────────────────────────────────
     def _get_json(self, url: str, params: Optional[Dict[str, Any]] = None) -> Any:
-        self._limiter.wait()
-        try:
-            resp = self.session.get(url, params=params, timeout=self.timeout, allow_redirects=True)
-            resp.raise_for_status()
-            return resp.json()
-        except requests.RequestException as exc:
-            raise TWSEError(f"HTTP request failed: {url} params={params}: {exc}") from exc
-        except ValueError as exc:
-            raise TWSEError(f"JSON decode failed: {url} params={params}: {exc}") from exc
+        last_exc: Optional[Exception] = None
+        for attempt in range(self.max_retries + 1):
+            self._limiter.wait()
+            try:
+                resp = self.session.get(
+                    url, params=params, timeout=self.timeout, allow_redirects=True
+                )
+                if resp.status_code in _RETRYABLE_STATUSES and attempt < self.max_retries:
+                    wait_s = self.retry_backoff * (2 ** attempt)
+                    logger.warning(
+                        "TWSE %s status=%d (retryable) attempt %d/%d, sleeping %.1fs",
+                        url, resp.status_code, attempt + 1, self.max_retries, wait_s,
+                    )
+                    time.sleep(wait_s)
+                    continue
+                resp.raise_for_status()
+                return resp.json()
+            except requests.RequestException as exc:
+                last_exc = exc
+                if attempt < self.max_retries:
+                    wait_s = self.retry_backoff * (2 ** attempt)
+                    logger.warning(
+                        "TWSE %s request error attempt %d/%d: %s; sleeping %.1fs",
+                        url, attempt + 1, self.max_retries, exc, wait_s,
+                    )
+                    time.sleep(wait_s)
+                    continue
+                raise TWSEError(f"HTTP request failed: {url} params={params}: {exc}") from exc
+            except ValueError as exc:
+                raise TWSEError(f"JSON decode failed: {url} params={params}: {exc}") from exc
+        raise TWSEError(f"HTTP request exhausted retries: {url} params={params}: {last_exc}")
 
     # ── 1. OHLCV ───────────────────────────────────
     def fetch_prices_latest(self) -> List[Dict[str, Any]]:
@@ -332,7 +367,9 @@ class TWSEClient:
     def _parse_twse_legacy_stock_day(payload: Any, trading_date: date) -> List[Dict[str, Any]]:
         """TWSE Legacy STOCK_DAY_ALL: {stat, date, fields, data}，data row 為 list。
 
-        欄位順序（fields 預期）：證券代號、證券名稱、成交股數、成交筆數、成交金額、開盤價、最高價、最低價、收盤價、漲跌價差。
+        實測欄位順序（2026-05 確認）：
+        0:證券代號 1:證券名稱 2:成交股數 3:成交金額 4:開盤價
+        5:最高價 6:最低價 7:收盤價 8:漲跌價差 9:成交筆數
         """
         if not isinstance(payload, dict):
             raise TWSEError(f"expected dict for TWSE legacy STOCK_DAY_ALL, got {type(payload).__name__}")
@@ -349,13 +386,13 @@ class TWSEClient:
                     "name": r[1] if len(r) > 1 else None,
                     "trading_date": trading_date,
                     "volume": safe_int(r[2]),
-                    "transactions": safe_int(r[3]),
-                    "amount": safe_float(r[4]),
-                    "open": safe_float(r[5]),
-                    "high": safe_float(r[6]),
-                    "low": safe_float(r[7]),
-                    "close": safe_float(r[8]),
-                    "spread": safe_float(r[9]) if len(r) > 9 else None,
+                    "amount": safe_float(r[3]),
+                    "open": safe_float(r[4]),
+                    "high": safe_float(r[5]),
+                    "low": safe_float(r[6]),
+                    "close": safe_float(r[7]),
+                    "spread": safe_float(r[8]),
+                    "transactions": safe_int(r[9]) if len(r) > 9 else None,
                     "market": "TWSE",
                 })
             except (IndexError, KeyError) as exc:

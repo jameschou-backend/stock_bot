@@ -299,14 +299,17 @@ class TestTPExOAPIPer:
 
 class TestTWSELegacyStockDay:
     def test_basic_parse_with_comma_numbers(self):
+        # 實測欄位順序（2026-05 確認）：
+        # 0:證券代號 1:證券名稱 2:成交股數 3:成交金額 4:開盤價
+        # 5:最高價 6:最低價 7:收盤價 8:漲跌價差 9:成交筆數
         payload = {
             "stat": "OK",
             "date": "20260515",
-            "fields": ["證券代號", "證券名稱", "成交股數", "成交筆數", "成交金額",
-                       "開盤價", "最高價", "最低價", "收盤價", "漲跌價差"],
+            "fields": ["證券代號", "證券名稱", "成交股數", "成交金額", "開盤價",
+                       "最高價", "最低價", "收盤價", "漲跌價差", "成交筆數"],
             "data": [
-                ["2330", "台積電", "12,345,678", "15,000", "10,500,000,000",
-                 "850.00", "855.00", "848.00", "852.00", "+2.00"],
+                ["2330", "台積電", "12,345,678", "10,500,000,000", "850.00",
+                 "855.00", "848.00", "852.00", "+2.00", "15,000"],
             ],
         }
         rows = TWSEClient._parse_twse_legacy_stock_day(payload, date(2026, 5, 15))
@@ -316,7 +319,23 @@ class TestTWSELegacyStockDay:
         assert r["volume"] == 12345678
         assert r["amount"] == 10500000000.0
         assert r["open"] == 850.0
+        assert r["high"] == 855.0
+        assert r["low"] == 848.0
         assert r["close"] == 852.0
+        assert r["spread"] == 2.0
+        assert r["transactions"] == 15000
+
+    def test_ohlc_invariants_hold(self):
+        """high >= max(open, close) >= min(open, close) >= low —— 防止 off-by-one regression。"""
+        payload = {
+            "stat": "OK",
+            "fields": [],
+            "data": [["2330", "台積電", "100", "1000", "10.0", "12.0", "9.0", "11.0", "+1.0", "50"]],
+        }
+        rows = TWSEClient._parse_twse_legacy_stock_day(payload, date(2026, 5, 15))
+        r = rows[0]
+        assert r["high"] >= max(r["open"], r["close"])
+        assert r["low"] <= min(r["open"], r["close"])
 
     def test_non_ok_stat_returns_empty(self):
         payload = {"stat": "很抱歉，無此資料。", "data": []}
