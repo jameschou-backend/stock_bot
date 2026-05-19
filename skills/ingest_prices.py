@@ -120,10 +120,17 @@ def _normalize_twse_prices(rows: List[Dict], allowed_pattern: str = r"\d{4,6}") 
 
 
 def _run_twse(config, db_session: Session) -> Dict:
-    """TWSE/TPEx Legacy 後端：逐日抓全市場 OHLCV。
+    """TWSE/TPEx 後端 (daily 增量限定)。
 
-    對 daily 增量（start==end==今日）只 2 個 API call（TWSE + TPEx）。
-    對 backfill 需逐日 loop，rate-limit 預設 1.5s/req → 約 2500 日 × 2 call × 1.5s ≈ 125 分鐘。
+    ⚠️ 重要限制：TWSE STOCK_DAY_ALL endpoint **不接受 date 參數**，永遠回最新一天
+    （實測 2026-05-19 確認，與 deep-research 結論不同）。所以本後端：
+    - 只能處理「DB 最新一日 + 1 ~ today」≤ 1 天的場景（=正常 daily 增量）
+    - 若 DB 落後超過 1 天（連假/休假/中斷），本後端會 raise，要求暫時切回
+      INGEST_PRICES_SOURCE=finmind 把缺失補完，再切回 twse
+    - row 內的 trading_date 用 TWSE/TPEx server 回傳的最新交易日（不一定是今天，
+      週末/假日會是上一個工作日）
+
+    institutional / margin / per 的 legacy endpoint 真的接受 date，不受此限制。
     """
     job_id = start_job(db_session, "ingest_prices", commit=True)
     logs: Dict[str, object] = {"source": "twse"}
@@ -132,7 +139,12 @@ def _run_twse(config, db_session: Session) -> Dict:
         default_start = today - timedelta(days=365 * config.train_lookback_years)
         start_date = _resolve_start_date(db_session, default_start)
         end_date = today
-        logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
+        days_gap = (end_date - start_date).days
+        logs.update({
+            "start_date": start_date.isoformat(),
+            "end_date": end_date.isoformat(),
+            "days_gap": days_gap,
+        })
 
         if start_date > end_date:
             logs["rows"] = 0
@@ -140,50 +152,47 @@ def _run_twse(config, db_session: Session) -> Dict:
             finish_job(db_session, job_id, "success", logs=logs)
             return {"rows": 0, "start_date": start_date, "end_date": end_date}
 
+        # TWSE STOCK_DAY_ALL 只回最新一天，無法 backfill 多天。
+        # 容忍 1 天 gap（涵蓋假日/週末延遲），更長則拒絕並提示 fallback。
+        # 注意：1 個自然週末 = 2 天 gap，因此 7 天才算「真的長時間中斷」。
+        MAX_GAP_DAYS = 7
+        if days_gap > MAX_GAP_DAYS:
+            msg = (
+                f"TWSE prices backend 無法 backfill 超過 {MAX_GAP_DAYS} 天的歷史："
+                f"DB 最新 {start_date - timedelta(days=1)}, 今天 {end_date}, 缺 {days_gap} 天。"
+                f"請暫時設 INGEST_PRICES_SOURCE=finmind 把缺失歷史補完，再切回 twse。"
+                f"原因：TWSE STOCK_DAY_ALL endpoint 不接受 date 參數，無法歷史查詢。"
+            )
+            logger.error("[ingest_prices/twse] %s", msg)
+            logs["error"] = msg
+            logs["fallback_hint"] = "set INGEST_PRICES_SOURCE=finmind temporarily"
+            finish_job(db_session, job_id, "failed", error_text=msg, logs=logs)
+            raise RuntimeError(msg)
+
         client = TWSEClient()
+        # 抓最新一天（TWSE OpenAPI 與 legacy 結果相同，這裡用 OpenAPI 較單純）
+        rows = client.fetch_prices_latest()
+        df = _normalize_twse_prices(rows)
         total_rows = 0
-        skipped_days = 0
-        current = start_date
-        days_total = (end_date - start_date).days + 1
-        days_done = 0
 
-        while current <= end_date:
-            # 週末快速 skip（TWSE/TPEx legacy 對假日回空 data，但仍會打網路；本地跳過更省）
-            if current.weekday() >= 5:
-                current += timedelta(days=1)
-                days_done += 1
-                continue
-            try:
-                rows = client.fetch_prices_history(current)
-            except TWSEError as exc:
-                logger.warning("[ingest_prices/twse] %s fetch failed: %s", current, exc)
-                skipped_days += 1
-                current += timedelta(days=1)
-                days_done += 1
-                continue
+        if not df.empty:
+            # 用 row 內的 trading_date（TWSE 自帶的最新交易日，可能是今天或上一個工作日）
+            unique_dates = sorted(df["trading_date"].unique())
+            logs["fetched_trading_dates"] = [str(d) for d in unique_dates]
+            records: List[Dict] = df.to_dict("records")
+            BATCH_SIZE = 5000
+            for i in range(0, len(records), BATCH_SIZE):
+                batch = records[i : i + BATCH_SIZE]
+                stmt = insert(RawPrice).values(batch)
+                update_cols = {
+                    col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]
+                }
+                stmt = stmt.on_duplicate_key_update(**update_cols)
+                db_session.execute(stmt)
+                db_session.commit()
+            total_rows = len(records)
 
-            df = _normalize_twse_prices(rows)
-            if not df.empty:
-                records: List[Dict] = df.to_dict("records")
-                BATCH_SIZE = 5000
-                for i in range(0, len(records), BATCH_SIZE):
-                    batch = records[i : i + BATCH_SIZE]
-                    stmt = insert(RawPrice).values(batch)
-                    update_cols = {
-                        col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]
-                    }
-                    stmt = stmt.on_duplicate_key_update(**update_cols)
-                    db_session.execute(stmt)
-                    db_session.commit()
-                total_rows += len(records)
-
-            days_done += 1
-            if days_done % 20 == 0:
-                logs["progress"] = {"days_done": days_done, "days_total": days_total, "rows": total_rows}
-                update_job(db_session, job_id, logs=logs, commit=True)
-            current += timedelta(days=1)
-
-        logs.update({"rows": total_rows, "days": days_total, "skipped_days": skipped_days})
+        logs["rows"] = total_rows
         finish_job(db_session, job_id, "success", logs=logs)
         return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
     except Exception as exc:

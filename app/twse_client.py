@@ -221,12 +221,29 @@ class TWSEClient:
         return rows
 
     def fetch_prices_history(self, trading_date: date) -> List[Dict[str, Any]]:
-        """TWSE + TPEx Legacy 指定 date 全市場 OHLCV（用於 backfill）。"""
+        """TWSE + TPEx Legacy 指定 date 全市場 OHLCV。
+
+        ⚠️ 實測（2026-05-19）：**TWSE STOCK_DAY_ALL legacy 不接受 date 參數**，
+        即使送 `?date=20260515` 也永遠回最新一天。本方法呼叫後會驗證 server
+        回的 `date` 是否等於請求的 `trading_date`，不一致時：
+        - WARN log + 拋出 TWSEError 避免把錯日資料寫入 DB
+
+        如果你需要的是「最新一天」，請改用 fetch_prices_latest()，行為明確。
+        """
         rows: List[Dict[str, Any]] = []
         twse_resp = self._get_json(
             TWSE_LEGACY_STOCK_DAY_ALL,
             params={"date": trading_date.strftime("%Y%m%d"), "response": "json"},
         )
+        # Sanity check：legacy STOCK_DAY_ALL 回的 date 必須 == 請求 date，否則代表
+        # server 忽略了 date 參數（已實測 TWSE 此 endpoint 不尊重 date）。
+        server_date = (twse_resp.get("date") if isinstance(twse_resp, dict) else None) or ""
+        expected = trading_date.strftime("%Y%m%d")
+        if server_date and server_date != expected:
+            raise TWSEError(
+                f"TWSE STOCK_DAY_ALL ignored date param: requested {expected}, "
+                f"server returned {server_date}. Use fetch_prices_latest() instead."
+            )
         rows.extend(self._parse_twse_legacy_stock_day(twse_resp, trading_date))
         tpex_resp = self._get_json(
             TPEX_LEGACY_DAILY_QUOTES,
