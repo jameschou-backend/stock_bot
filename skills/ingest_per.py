@@ -1,20 +1,17 @@
 """Priority 6：本益比/殖利率/本淨比（TaiwanStockPER）
 
-從 FinMind 抓取每日 PER/PBR/殖利率，寫入 raw_per 表。
+從 FinMind 或 TWSE/TPEx 官方 API 抓取每日 PER/PBR/殖利率，寫入 raw_per 表。
 
-Dataset: TaiwanStockPER
-Fields:  date, stock_id, dividend_yield, PER, PBR
-頻率：   每日（交易日）
-限制：   Sponsor 計劃；支援 data_id + 日期區間查詢（每檔股票一次 API call）
+來源切換：env var INGEST_PER_SOURCE
+  - finmind（預設）：TaiwanStockPER（Sponsor），per-stock × 日期區間
+  - twse：TWSE BWIBBU_d Legacy + TPEx peQryDate Legacy 全市場一日一 call
 
-回補策略：
-- 增量：從 DB 最大日期 +1 開始抓取今日資料（快速）
-- 全量回補：FORCE_RECOMPUTE_PER=1 env var 或 backfill_per.py 腳本
-- 每次按股票批次查詢，每批 ~500 檔（FinMind data_id 支援多股）
+DB schema 不變。
 """
 from __future__ import annotations
 
 import logging
+import os
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
@@ -30,11 +27,40 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawPER, Stock
+from app.twse_client import TWSEClient, TWSEError
 
 logger = logging.getLogger(__name__)
 
 DATASET = "TaiwanStockPER"
 UPDATE_COLS = ["per", "pbr", "dividend_yield"]
+SOURCE_ENV = "INGEST_PER_SOURCE"
+
+
+def _resolve_source() -> str:
+    val = os.environ.get(SOURCE_ENV, "finmind").lower().strip()
+    if val not in ("finmind", "twse"):
+        logger.warning(
+            "[ingest_per] unknown %s=%r, falling back to 'finmind'", SOURCE_ENV, val
+        )
+        return "finmind"
+    return val
+
+
+def _normalize_twse_per(rows: List[Dict]) -> pd.DataFrame:
+    """TWSEClient.fetch_per_history → raw_per schema。"""
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df[df["stock_id"].str.fullmatch(r"\d{4,6}")]
+    df = df.dropna(subset=["stock_id", "trading_date"], how="any")
+    for col in ("per", "pbr", "dividend_yield"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+        else:
+            df[col] = None
+    df = df.drop_duplicates(subset=["stock_id", "trading_date"])
+    return df[["stock_id", "trading_date", "per", "pbr", "dividend_yield"]]
 
 
 def _resolve_start_date(session: Session, default_start: date) -> date:
@@ -81,7 +107,89 @@ def _normalize_per(df: pd.DataFrame) -> pd.DataFrame:
     return df[["stock_id", "trading_date", "per", "pbr", "dividend_yield"]]
 
 
+def _run_twse(config, db_session: Session) -> Dict:
+    job_id = start_job(db_session, "ingest_per", commit=True)
+    logs: Dict[str, object] = {"source": "twse"}
+    try:
+        today = datetime.now(ZoneInfo(config.tz)).date()
+        default_start = today - timedelta(days=365 * config.train_lookback_years)
+        start_date = _resolve_start_date(db_session, default_start)
+        end_date = today
+        logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
+
+        if start_date > end_date:
+            logs["rows"] = 0
+            logs["skip_reason"] = "start_date > end_date"
+            finish_job(db_session, job_id, "success", logs=logs)
+            return {"rows": 0, "start_date": start_date, "end_date": end_date}
+
+        client = TWSEClient()
+        total_rows = 0
+        skipped_days = 0
+        current = start_date
+        days_total = (end_date - start_date).days + 1
+        days_done = 0
+
+        while current <= end_date:
+            if current.weekday() >= 5:
+                current += timedelta(days=1)
+                days_done += 1
+                continue
+            try:
+                rows = client.fetch_per_history(current)
+            except TWSEError as exc:
+                logger.warning("[ingest_per/twse] %s fetch failed: %s", current, exc)
+                skipped_days += 1
+                current += timedelta(days=1)
+                days_done += 1
+                continue
+
+            df = _normalize_twse_per(rows)
+            if not df.empty:
+                records = df.to_dict("records")
+                BATCH_SIZE = 5000
+                for i in range(0, len(records), BATCH_SIZE):
+                    batch = records[i : i + BATCH_SIZE]
+                    stmt = insert(RawPER).values(batch)
+                    stmt = stmt.on_duplicate_key_update(
+                        {col: stmt.inserted[col] for col in UPDATE_COLS}
+                    )
+                    db_session.execute(stmt)
+                    db_session.commit()
+                total_rows += len(records)
+
+            days_done += 1
+            if days_done % 20 == 0:
+                logs["progress"] = {"days_done": days_done, "days_total": days_total, "rows": total_rows}
+                update_job(db_session, job_id, logs=logs, commit=True)
+            current += timedelta(days=1)
+
+        logs.update({"rows": total_rows, "days": days_total, "skipped_days": skipped_days})
+        finish_job(db_session, job_id, "success", logs=logs)
+        return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
+    except Exception as exc:
+        logger.error("[ingest_per/twse] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_per/twse] rollback 失敗: %s", rb_exc)
+        try:
+            logs["error"] = str(exc)
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning("[ingest_per/twse] finish_job 寫入失敗: %s", finish_exc)
+        raise
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
+    """Dispatch 到 FinMind 或 TWSE 後端。"""
+    source = _resolve_source()
+    if source == "twse":
+        return _run_twse(config, db_session)
+    return _run_finmind(config, db_session)
+
+
+def _run_finmind(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "ingest_per", commit=True)
     logs: Dict = {}
     try:

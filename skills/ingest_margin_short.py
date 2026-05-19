@@ -1,19 +1,18 @@
 """Ingest Margin Short 模組
 
-從 FinMind 抓取融資融券資料寫入 raw_margin_short 表。
+從 FinMind 或 TWSE/TPEx 官方 API 抓取融資融券寫入 raw_margin_short 表。
 
-FinMind Dataset: TaiwanStockMarginPurchaseShortSale
-- 資料區間：2001-01-01 至今
-- 更新時間：星期一至五 21:00
+來源切換：env var INGEST_MARGIN_SHORT_SOURCE
+  - finmind（預設）：批次查詢或全市場
+  - twse：TWSE MI_MARGN Legacy + TPEx margin/balance Legacy
 
-支援兩種模式：
-1. 全市場抓取（需較高權限）
-2. 逐檔抓取（適用免費/低階會員）
+DB schema 不變。
 """
 
 from __future__ import annotations
 
 import logging
+import os
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional
 from zoneinfo import ZoneInfo
@@ -32,11 +31,23 @@ from app.finmind import (
 )
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawMarginShort
+from app.twse_client import TWSEClient, TWSEError
 
 logger = logging.getLogger(__name__)
 
 
 DATASET = "TaiwanStockMarginPurchaseShortSale"
+SOURCE_ENV = "INGEST_MARGIN_SHORT_SOURCE"
+
+
+def _resolve_source() -> str:
+    val = os.environ.get(SOURCE_ENV, "finmind").lower().strip()
+    if val not in ("finmind", "twse"):
+        logger.warning(
+            "[ingest_margin_short] unknown %s=%r, falling back to 'finmind'", SOURCE_ENV, val
+        )
+        return "finmind"
+    return val
 
 # 股票清單快取
 _stock_list_cache: Optional[List[str]] = None
@@ -184,7 +195,135 @@ def _fetch_margin_smart(
     )
 
 
+MARGIN_UPDATE_COLS = [
+    "margin_purchase_buy", "margin_purchase_sell", "margin_purchase_cash_repay",
+    "margin_purchase_limit", "margin_purchase_balance",
+    "short_sale_buy", "short_sale_sell", "short_sale_cash_repay",
+    "short_sale_limit", "short_sale_balance",
+    "offset_loan_and_short", "note",
+]
+
+
+def _normalize_twse_margin(rows: List[Dict]) -> pd.DataFrame:
+    """TWSEClient.fetch_margin_short_history 回傳 → raw_margin_short schema。
+
+    TWSE 欄位對應：
+    - margin_purchase_today_balance → margin_purchase_balance（DB 欄位名不同）
+    - short_sale_today_balance → short_sale_balance
+    """
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df["stock_id"] = df["stock_id"].astype(str)
+    df = df[df["stock_id"].str.fullmatch(r"\d{4,6}")]
+    df = df.dropna(subset=["stock_id", "trading_date"], how="any")
+
+    # TWSE 欄位 → DB schema 重新命名
+    rename = {
+        "margin_purchase_today_balance": "margin_purchase_balance",
+        "short_sale_today_balance": "short_sale_balance",
+        "margin_purchase_cash_repayment": "margin_purchase_cash_repay",
+        "short_sale_cash_repayment": "short_sale_cash_repay",
+    }
+    df = df.rename(columns=rename)
+
+    keep_cols = [
+        "stock_id", "trading_date",
+        "margin_purchase_buy", "margin_purchase_sell", "margin_purchase_cash_repay",
+        "margin_purchase_limit", "margin_purchase_balance",
+        "short_sale_buy", "short_sale_sell", "short_sale_cash_repay",
+        "short_sale_limit", "short_sale_balance",
+        "offset_loan_and_short", "note",
+    ]
+    for col in keep_cols:
+        if col not in df.columns:
+            df[col] = None
+    df = df.drop_duplicates(subset=["stock_id", "trading_date"])
+    return df[keep_cols]
+
+
+def _run_twse(config, db_session: Session) -> Dict:
+    job_id = start_job(db_session, "ingest_margin_short", commit=True)
+    logs: Dict[str, object] = {"source": "twse"}
+    try:
+        today = datetime.now(ZoneInfo(config.tz)).date()
+        default_start = today - timedelta(days=365 * config.train_lookback_years)
+        start_date = _resolve_start_date(db_session, default_start)
+        end_date = today
+        logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
+
+        if start_date > end_date:
+            logs["rows"] = 0
+            logs["skip_reason"] = "start_date > end_date"
+            finish_job(db_session, job_id, "success", logs=logs)
+            return {"rows": 0, "start_date": start_date, "end_date": end_date}
+
+        client = TWSEClient()
+        total_rows = 0
+        skipped_days = 0
+        current = start_date
+        days_total = (end_date - start_date).days + 1
+        days_done = 0
+
+        while current <= end_date:
+            if current.weekday() >= 5:
+                current += timedelta(days=1)
+                days_done += 1
+                continue
+            try:
+                rows = client.fetch_margin_short_history(current)
+            except TWSEError as exc:
+                logger.warning("[ingest_margin_short/twse] %s fetch failed: %s", current, exc)
+                skipped_days += 1
+                current += timedelta(days=1)
+                days_done += 1
+                continue
+
+            df = _normalize_twse_margin(rows)
+            if not df.empty:
+                records = df.to_dict("records")
+                BATCH_SIZE = 5000
+                for i in range(0, len(records), BATCH_SIZE):
+                    batch = records[i : i + BATCH_SIZE]
+                    stmt = insert(RawMarginShort).values(batch)
+                    update_cols = {col: stmt.inserted[col] for col in MARGIN_UPDATE_COLS}
+                    stmt = stmt.on_duplicate_key_update(**update_cols)
+                    db_session.execute(stmt)
+                    db_session.commit()
+                total_rows += len(records)
+
+            days_done += 1
+            if days_done % 20 == 0:
+                logs["progress"] = {"days_done": days_done, "days_total": days_total, "rows": total_rows}
+                update_job(db_session, job_id, logs=logs, commit=True)
+            current += timedelta(days=1)
+
+        logs.update({"rows": total_rows, "days": days_total, "skipped_days": skipped_days})
+        finish_job(db_session, job_id, "success", logs=logs)
+        return {"rows": total_rows, "start_date": start_date, "end_date": end_date}
+    except Exception as exc:
+        logger.error("[ingest_margin_short/twse] 失敗: %s", exc, exc_info=True)
+        try:
+            db_session.rollback()
+        except Exception as rb_exc:
+            logger.warning("[ingest_margin_short/twse] rollback 失敗: %s", rb_exc)
+        try:
+            logs["error"] = str(exc)
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
+        except Exception as finish_exc:
+            logger.warning("[ingest_margin_short/twse] finish_job 寫入失敗: %s", finish_exc)
+        raise
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
+    """Dispatch 到 FinMind 或 TWSE 後端。"""
+    source = _resolve_source()
+    if source == "twse":
+        return _run_twse(config, db_session)
+    return _run_finmind(config, db_session)
+
+
+def _run_finmind(config, db_session: Session, **kwargs) -> Dict:
     """執行融資融券資料抓取
     
     Returns:
