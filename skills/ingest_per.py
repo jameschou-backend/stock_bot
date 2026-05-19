@@ -47,7 +47,11 @@ def _resolve_source() -> str:
 
 
 def _normalize_twse_per(rows: List[Dict]) -> pd.DataFrame:
-    """TWSEClient.fetch_per_history → raw_per schema。"""
+    """TWSEClient.fetch_per_history → raw_per schema.
+
+    虧損股 PER='-' 經 safe_float→None，pd.to_numeric 再變 NaN，必須在 to_dict
+    前轉回 None 以免 MySQL 報 'nan can not be used with MySQL'。
+    """
     if not rows:
         return pd.DataFrame()
     df = pd.DataFrame(rows)
@@ -60,7 +64,11 @@ def _normalize_twse_per(rows: List[Dict]) -> pd.DataFrame:
         else:
             df[col] = None
     df = df.drop_duplicates(subset=["stock_id", "trading_date"])
-    return df[["stock_id", "trading_date", "per", "pbr", "dividend_yield"]]
+    df = df[["stock_id", "trading_date", "per", "pbr", "dividend_yield"]]
+    # numeric NaN -> None（MySQL 相容）；trading_date/stock_id 仍保有原 dtype
+    for col in ("per", "pbr", "dividend_yield"):
+        df[col] = df[col].astype(object).where(df[col].notna(), None)
+    return df
 
 
 def _resolve_start_date(session: Session, default_start: date) -> date:

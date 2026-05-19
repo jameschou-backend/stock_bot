@@ -116,7 +116,11 @@ def _normalize_twse_prices(rows: List[Dict], allowed_pattern: str = r"\d{4,6}") 
     df = df.dropna(subset=["stock_id", "trading_date"], how="any")
     df = df.dropna(subset=["open", "high", "low", "close"], how="all")
     df = df.drop_duplicates(subset=["stock_id", "trading_date"])
-    return df[["stock_id", "trading_date", "open", "high", "low", "close", "volume"]]
+    df = df[["stock_id", "trading_date", "open", "high", "low", "close", "volume"]]
+    # 個別欄位 NaN -> None（MySQL 不接受 NaN）
+    for col in ("open", "high", "low", "close", "volume"):
+        df[col] = df[col].astype(object).where(df[col].notna(), None)
+    return df
 
 
 def _run_twse(config, db_session: Session) -> Dict:

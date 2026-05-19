@@ -211,7 +211,13 @@ def _normalize_twse_institutional(rows: List[Dict]) -> pd.DataFrame:
         if col not in df.columns:
             df[col] = None
     df = df.drop_duplicates(subset=["stock_id", "trading_date"])
-    return df[keep_cols]
+    df = df[keep_cols]
+    # 數值欄位 NaN -> None（MySQL 不接受 NaN）
+    for col in keep_cols:
+        if col in ("stock_id", "trading_date"):
+            continue
+        df[col] = df[col].astype(object).where(df[col].notna(), None)
+    return df
 
 
 def _run_twse(config, db_session: Session) -> Dict:
