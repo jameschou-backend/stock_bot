@@ -173,15 +173,37 @@ INGEST_PER_SOURCE=twse             # TWSE BWIBBU_d + TPEx peQryDate
 
 **測試規模**：119 → 139（session 17）→ 150（Phase 1）→ 210（Phase 2a）→ 211（fix）→ 242（Phase 2b，+31 toggle tests）
 
-**待使用者驗證**：
-1. `python scripts/compare_twse_vs_finmind.py 2026-05-15 --with-finmind`（dotenv 已修，現在能對照付費 token）→ 看 match_rate 接近 100% 嗎？
-2. 試切一個開關：`INGEST_PRICES_SOURCE=twse` + `make pipeline-build`（不要 `make pipeline` 避免 ingest 全跑）
-3. 驗證 5/20 第一次 daily 跑能成功
+**實測結果（2026-05-19 晚）**：
+- compare_twse_vs_finmind.py 跑出 prices 88% / institutional 6% / margin 100% / per 100%
+- institutional 6% 是腳本 bug（FinMind long format 被當 wide 處理），實測 2330 數據 100% 一致
+- prices 88% 是因為 **TWSE STOCK_DAY_ALL legacy 不接受 date 參數**（永遠回最新一天）—— 已 curl 證實，加 sanity check
+- T86 / MI_MARGN / BWIBBU_d 接受 date，可 backfill
 
-**未測試項目（風險）**：
-- Phase 2b 寫完未實際跑 `INGEST_*_SOURCE=twse make pipeline`，僅靠單元測試
-- TWSE T86 / margin legacy 欄位順序假設來自 deep-research，未在「真實一日資料」上 normalize 驗證
-- Backfill 速度未驗證（估 ~125 min / 10y）
+**FinMind batch query 也壞了**（2026-05-19）：
+- `fetch_dataset_by_stocks(..., use_batch_query=True)` 對 ~500 stock_id 用逗號連起來查詢回 HTTP 400 "parameter data_id is illegal"
+- 應是 FinMind 改 URL 長度限制或 schema
+- pipeline 之前跑 2514 API call 一筆都沒寫入
+- workaround: `scripts/backfill_prices_single_stock.py`（per-stock 一檔一 call）
+
+**緊急 backfill 結果**：
+- raw_prices 5/8-5/19 (~18,550 rows) 透過 FinMind single-stock backfill 完成（21 分鐘 / 2514 API calls）
+- raw_institutional / raw_margin_short 透過 TWSE backfill（既有 _run_twse，1-2 分鐘）
+- raw_per 4/24-5/19 (33,277 rows) 透過 TWSE backfill（修完 NaN bug 後成功）
+
+**NaN bug 修正**：TWSE legacy 對虧損股 PER 給 '-'，safe_float→None，pd.to_numeric→NaN，pymysql 報「nan can not be used with MySQL」。4 個 _normalize_twse_* 都加 `.astype(object).where(notna, None)` 處理。
+
+**最終切換步驟**（使用者今晚做）：
+```
+# .env 加入 5 行
+INGEST_PRICES_SOURCE=twse
+INGEST_INSTITUTIONAL_SOURCE=twse
+INGEST_MARGIN_SHORT_SOURCE=twse
+INGEST_PER_SOURCE=twse
+SPONSOR_INGEST=off
+```
+明天 5/20 sponsor 過期後 daily pipeline 完全免費運作（~10 API calls 全走 TWSE）。
+
+**測試規模**：242 tests pass（含 Phase 2a + 2b 共 91 新測試）
 
 ---
 
