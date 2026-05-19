@@ -30,6 +30,13 @@ from typing import Any, Dict, List, Optional, Tuple
 # 確保能 import 專案模組
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# 載入 .env（讓 FINMIND_TOKEN 可被 os.environ 讀到，與 daily pipeline 一致）
+try:
+    from dotenv import load_dotenv
+    load_dotenv(Path(__file__).resolve().parent.parent / ".env", override=False)
+except ImportError:
+    pass
+
 from app.twse_client import TWSEClient, TWSEError  # noqa: E402
 
 ARTIFACTS_DIR = Path(__file__).resolve().parent.parent / "artifacts" / "twse_finmind_diff"
