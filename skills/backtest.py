@@ -1173,67 +1173,479 @@ class BacktestPipeline:
             "n_samples": len(y),
         }
 
+    # ── Helper：當日特徵評分（含 momentum penalty + ensemble averaging）──
+    def _score_day_features(
+        self,
+        rb_date: date,
+        day_feat: pd.DataFrame,
+        current_model,
+        current_feature_names: List[str],
+        model_buf: Deque,
+    ) -> Tuple[pd.DataFrame, float]:
+        """對 day_feat 評分並寫入 `score` 欄；回傳 (day_feat, predict_secs)。"""
+        # feat_df 已預解析，直接從展開後的 DataFrame 取特徵欄位
+        fmat = day_feat.drop(columns=["stock_id", "trading_date"], errors="ignore")
+        for col in current_feature_names:
+            if col not in fmat.columns:
+                fmat[col] = 0
+        fmat = fmat[current_feature_names]
+        fmat = fmat.replace([np.inf, -np.inf], np.nan)
+        for col in fmat.columns:
+            if fmat[col].isna().all():
+                fmat[col] = 0
+            else:
+                fmat[col] = fmat[col].fillna(fmat[col].median())
+
+        # 動能懲罰：對指定特徵乘以縮放係數（預測前）
+        if self.momentum_penalty_cols:
+            for _pc, _ps in self.momentum_penalty_cols.items():
+                if _pc in fmat.columns:
+                    fmat[_pc] = fmat[_pc] * _ps
+
+        _t = time.time()
+        if self.ensemble_n_checkpoints > 1 and len(model_buf) > 1:
+            # P2-2: Ensemble：各模型預測的「截面排名百分位」取平均，再轉為最終分數
+            _raw_preds = np.array([m.predict(fmat.values) for m in model_buf])  # (n_models, n_stocks)
+            # rank-based averaging：每個模型的預測分數轉換為截面排名百分位（0~1）
+            _n = _raw_preds.shape[1]
+            _ranked = np.argsort(np.argsort(_raw_preds, axis=1), axis=1).astype(float) / max(_n - 1, 1)
+            scores = _ranked.mean(axis=0)
+        else:
+            scores = current_model.predict(fmat.values)
+        _dt = time.time() - _t
+        day_feat = day_feat.reset_index(drop=True)
+        day_feat["score"] = scores
+        return day_feat, _dt
+
+    # ── Helper：停損冷卻過濾 ──
+    def _apply_cooldown_filter(
+        self,
+        day_feat: pd.DataFrame,
+        rb_date: date,
+        cooldown_until: Dict[str, date],
+    ) -> pd.DataFrame:
+        """根據冷卻表排除停損後仍在冷卻期的股票。"""
+        if cooldown_until:
+            excluded = {sid for sid, expiry in cooldown_until.items() if expiry > rb_date}
+            if excluded:
+                before_n = len(day_feat)
+                day_feat = day_feat[~day_feat["stock_id"].astype(str).isin(excluded)]
+                n_excl = before_n - len(day_feat)
+                if n_excl > 0:
+                    print(f"  [{rb_date}] 停損冷卻：排除 {n_excl} 檔")
+        return day_feat
+
+    # ── Helper：大盤環境濾網（複雜 / 簡單分支 + 季節性 + topN floor + RSI/低波動加權 + 動態現金）──
+    def _apply_market_regime_filter(
+        self,
+        day_feat: pd.DataFrame,
+        rb_date: date,
+        effective_topn: int,
+    ) -> Tuple[pd.DataFrame, int, float, bool]:
+        """套用大盤環境濾網；回傳 (day_feat, effective_topn, cash_ratio, day_feat_empty_flag)。
+
+        當 RSI 過濾後 day_feat 為空時 day_feat_empty_flag=True，caller 應 continue。
+        """
+        config = self.config
+        topn = self.topn
+        enable_complex_filter = self.enable_complex_filter
+        enable_seasonal_filter = self.enable_seasonal_filter
+        topn_floor = self.topn_floor
+        market_median_ret20_map = self.market_median_ret20_map
+        market_weekly_drop_map = self.market_weekly_drop_map
+        market_200ma_bear_map = self.market_200ma_bear_map
+
+        _cash_ratio = 0.0
+        median_ret = market_median_ret20_map.get(rb_date)
+        weekly_drop = market_weekly_drop_map.get(rb_date)
+
+        if enable_complex_filter:
+            # ── 複雜過濾（v2-v7 最佳化設定）──
+            crisis_threshold = getattr(config, "market_filter_weekly_drop_threshold", -0.03)
+            crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, topn // 4))
+            bear_topn = getattr(config, "market_filter_bear_topn", max(3, topn // 3))
+
+            if weekly_drop is not None and weekly_drop < crisis_threshold:
+                effective_topn = min(effective_topn, crisis_topn)
+                print(f"  [{rb_date}] 危機模式 (週跌 {weekly_drop:.2%})，topN → {effective_topn}")
+            elif median_ret is not None and median_ret < -0.03:
+                effective_topn = min(effective_topn, bear_topn)
+                print(f"  [{rb_date}] 空頭市場 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
+
+            # ── 季節性降倉（弱勢月份）──
+            _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
+            _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+            effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
+                effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=1
+            )
+            if _reduced:
+                print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月（complex_filter），topN → {effective_topn}")
+
+            # ── topN 絕對下限保護 ──
+            _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
+            _min_topn = 3 if _extreme_bear else 5
+            if effective_topn < _min_topn:
+                print(f"  [{rb_date}] [topN-floor] {effective_topn}→{_min_topn} (min_topn={_min_topn})")
+                effective_topn = _min_topn
+
+            # ── 判斷是否為空頭環境 ──
+            _is_bear_env = (
+                (weekly_drop is not None and weekly_drop < crisis_threshold) or
+                (median_ret is not None and median_ret < -0.03)
+            )
+
+            # ── RSI 自適應過濾 ──
+            if _is_bear_env and "rsi_14" in day_feat.columns:
+                _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
+                _20d = median_ret if median_ret is not None else 0.0
+                if _5d_bounce > 0.03:
+                    _rsi_threshold = None
+                elif _20d < -0.15:
+                    _rsi_threshold = 75
+                else:
+                    _rsi_threshold = 80
+                if _rsi_threshold is not None:
+                    _rsi_before = len(day_feat)
+                    day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= _rsi_threshold]
+                    _rsi_removed = _rsi_before - len(day_feat)
+                    if _rsi_removed > 0:
+                        print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>{_rsi_threshold})")
+                    if day_feat.empty:
+                        return day_feat, effective_topn, _cash_ratio, True
+
+            # ── 低波動加權（atr_inv z-score 加分）──
+            if _is_bear_env and "atr_inv" in day_feat.columns:
+                _atr_inv = day_feat["atr_inv"]
+                _atr_std = float(_atr_inv.std())
+                if _atr_std > 0:
+                    day_feat = day_feat.copy()
+                    day_feat["score"] = (
+                        day_feat["score"] + 0.3 * (_atr_inv - _atr_inv.mean()) / _atr_std
+                    )
+
+            # ── 動態現金保留機制 ──
+            _200ma_bear = market_200ma_bear_map.get(rb_date, False)
+            if _200ma_bear:
+                _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
+                _cash_ratio = 0.10 if _5d_bounce > 0.03 else 0.30
+
+        else:
+            # ── 簡單過濾（baseline 模式）：20d 中位數跌幅 > 4% 才縮減 topN ──
+            if median_ret is not None and median_ret < -0.04:
+                effective_topn = max(2, topn // 3)
+                print(f"  [{rb_date}] 大盤環境不佳 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
+
+        # ── 獨立季節性降倉（enable_complex_filter=False 時也可啟用，對應 daily_pick 行為）──
+        if not enable_complex_filter and enable_seasonal_filter:
+            _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
+            _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+            effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
+                effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=5
+            )
+            if _reduced:
+                print(f"  [{rb_date}] seasonal_filter: 月份{rb_date.month} topN → {effective_topn}")
+
+        # ── 顯式 topN floor（Change B 實驗用，enable_complex_filter 無關）──
+        if topn_floor > 0 and effective_topn < topn_floor:
+            print(f"  [{rb_date}] [topN-floor] {effective_topn}→{topn_floor}")
+            effective_topn = topn_floor
+
+        return day_feat, effective_topn, _cash_ratio, False
+
+    # ── Helper：進場訊號過濾 + topN 選股 ──
+    def _apply_entry_signal_filter(
+        self,
+        day_feat: pd.DataFrame,
+        effective_topn: int,
+    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """套用進場訊號過濾並選取 topN；回傳 (picks, bt_candidate_pool)。"""
+        entry_signal_filter = self.entry_signal_filter
+        market_filter_min_positions = self.market_filter_min_positions
+
+        if entry_signal_filter:
+            _esf = entry_signal_filter
+            _filtered = day_feat.copy()
+            # 依序套用各條件
+            if "foreign_buy_streak_max" in _esf and "foreign_buy_streak" in _filtered.columns:
+                _filtered = _filtered[_filtered["foreign_buy_streak"] <= _esf["foreign_buy_streak_max"]]
+            if "rsi_min" in _esf and "rsi_14" in _filtered.columns:
+                _filtered = _filtered[_filtered["rsi_14"] >= _esf["rsi_min"]]
+            if "rsi_max" in _esf and "rsi_14" in _filtered.columns:
+                _filtered = _filtered[_filtered["rsi_14"] <= _esf["rsi_max"]]
+            if "bias_20_max" in _esf and "bias_20" in _filtered.columns:
+                _filtered = _filtered[_filtered["bias_20"] <= _esf["bias_20_max"]]
+            if "volume_surge_ratio_min" in _esf and "volume_surge_ratio" in _filtered.columns:
+                _filtered = _filtered[_filtered["volume_surge_ratio"] >= _esf["volume_surge_ratio_min"]]
+            # 新增過濾條件（2026-03-20 圓桌策略）
+            if "ma_alignment_min" in _esf and "ma_alignment" in _filtered.columns:
+                _filtered = _filtered[_filtered["ma_alignment"] >= _esf["ma_alignment_min"]]
+            if "price_volume_divergence_min" in _esf and "price_volume_divergence" in _filtered.columns:
+                _filtered = _filtered[_filtered["price_volume_divergence"] >= _esf["price_volume_divergence_min"]]
+            if "foreign_buy_intensity_max_pct" in _esf and "foreign_buy_intensity" in _filtered.columns:
+                _fi_thresh = _filtered["foreign_buy_intensity"].quantile(_esf["foreign_buy_intensity_max_pct"])
+                _filtered = _filtered[_filtered["foreign_buy_intensity"] <= _fi_thresh]
+            if ("ret_20_rank_min" in _esf or "ret_20_rank_max" in _esf) and "ret_20" in _filtered.columns:
+                _r20_pct = _filtered["ret_20"].rank(pct=True)
+                if "ret_20_rank_min" in _esf:
+                    _filtered = _filtered[_r20_pct >= _esf["ret_20_rank_min"]]
+                if "ret_20_rank_max" in _esf:
+                    _filtered = _filtered[_r20_pct[_filtered.index] <= _esf["ret_20_rank_max"]]
+            if "ret_60_rank_min" in _esf and "ret_60" in _filtered.columns:
+                _r60_pct = _filtered["ret_60"].rank(pct=True)
+                _filtered = _filtered[_r60_pct >= _esf["ret_60_rank_min"]]
+
+            if len(_filtered) >= effective_topn:
+                picks = risk.pick_topn(_filtered, effective_topn)
+            elif len(_filtered) >= market_filter_min_positions:
+                picks = risk.pick_topn(_filtered, min(effective_topn, len(_filtered)))
+            else:
+                # 逐步放寬：先放寬 foreign_buy_streak，再放寬 RSI
+                _relaxed = day_feat.copy()
+                if "rsi_min" in _esf and "rsi_14" in _relaxed.columns:
+                    _relaxed = _relaxed[_relaxed["rsi_14"] >= max(_esf.get("rsi_min", 0) - 10, 30)]
+                if "rsi_max" in _esf and "rsi_14" in _relaxed.columns:
+                    _relaxed = _relaxed[_relaxed["rsi_14"] <= min(_esf.get("rsi_max", 100) + 10, 85)]
+                picks = risk.pick_topn(_relaxed, min(effective_topn, max(market_filter_min_positions, len(_relaxed))))
+            # breakthrough entry 擴展池也使用過濾後的候選（_filtered），確保過濾條件不被繞過
+            _bt_candidate_pool = _filtered if len(_filtered) >= market_filter_min_positions else day_feat
+        else:
+            picks = risk.pick_topn(day_feat, effective_topn)
+            _bt_candidate_pool = day_feat
+        return picks, _bt_candidate_pool
+
+    # ── Helper：突破確認進場 ──
+    def _apply_breakthrough_filter(
+        self,
+        picks: pd.DataFrame,
+        bt_candidate_pool: pd.DataFrame,
+        rb_date: date,
+        effective_topn: int,
+        feat_df: pd.DataFrame,
+    ) -> Tuple[pd.DataFrame, Dict[str, date], float, int]:
+        """套用突破進場過濾；回傳 (picks, per_stock_entry_dates, breakthrough_secs, count_inc)。"""
+        per_stock_entry_dates: Dict[str, date] = {}
+        _bt_secs = 0.0
+        _bt_count = 0
+        if not self.enable_breakthrough_entry:
+            return picks, per_stock_entry_dates, _bt_secs, _bt_count
+
+        # 取再平衡日後的交易日視窗（最多 breakthrough_max_wait 天）
+        _bt_window = [
+            d for d in self.bt_trading_dates if d > rb_date
+        ][:self.breakthrough_max_wait]
+
+        if not _bt_window:
+            return picks, per_stock_entry_dates, _bt_secs, _bt_count
+
+        # 擴展候補池（entry_signal_filter 啟用時從過濾後候選池取，否則從全量 day_feat 取）
+        _slots_needed = effective_topn
+        _ext_n = min(_slots_needed * 3, len(bt_candidate_pool)) if _slots_needed > 0 else 0
+
+        _confirmed_rows: List[Dict] = []
+        _entry_map: Dict[str, date] = {}
+        _orig_topn_sids = set(picks["stock_id"].astype(str).tolist())
+
+        if _ext_n > 0:
+            _extended = risk.pick_topn(bt_candidate_pool, _ext_n)
+            _ext_sids = _extended["stock_id"].astype(str).tolist()
+
+            # 向量化一次算出所有新候選股的突破日（使用預計算的 rolling stats）
+            _t = time.time()
+            _bt_map = _compute_breakthrough_map(
+                _ext_sids, _bt_window, self.bt_stats_df, feat_df
+            )
+            _bt_secs = time.time() - _t
+            _bt_count = 1
+
+            # 按 score 排序取前 _slots_needed 個有突破的新進股
+            for _, _cand_row in _extended.iterrows():
+                if len(_confirmed_rows) >= effective_topn:
+                    break
+                _sid = str(_cand_row["stock_id"])
+                if _sid in _bt_map:
+                    _confirmed_rows.append(_cand_row.to_dict())
+                    _entry_map[_sid] = _bt_map[_sid]
+
+        if _confirmed_rows:
+            picks = pd.DataFrame(_confirmed_rows)
+            per_stock_entry_dates = _entry_map
+            _n_replaced = sum(1 for s in _entry_map if s not in _orig_topn_sids)
+            if _n_replaced > 0:
+                print(
+                    f"  [{rb_date}] 突破進場：{len(_confirmed_rows)} 檔確認"
+                    f"（{_n_replaced} 檔以候補替換）",
+                    flush=True,
+                )
+        else:
+            picks = pd.DataFrame(columns=picks.columns)
+            print(f"  [{rb_date}] 突破進場：無訊號，本期持現金", flush=True)
+        return picks, per_stock_entry_dates, _bt_secs, _bt_count
+
+    # ── Helper：倉位權重計算 ──
+    def _compute_position_weights(
+        self,
+        picks: pd.DataFrame,
+        rb_date: date,
+    ) -> pd.DataFrame:
+        """根據 position_sizing / position_sizing_method 計算倉位權重。"""
+        period_price_slice = self.price_df[self.price_df["trading_date"] <= rb_date]
+        # position_sizing_method 優先（支援 mean_variance / risk_parity）
+        _ps_method = self.position_sizing_method if self.position_sizing_method != "vol_inverse" else self.position_sizing
+        if _ps_method in ("mean_variance", "risk_parity"):
+            try:
+                from skills import position_sizing as _pos_mod
+                _pick_sids = picks["stock_id"].astype(str).tolist()
+                # 只傳 picks 股票的價格（避免全市場股票含 0/inf 資料干擾協方差估計）
+                _picks_prices = period_price_slice[
+                    period_price_slice["stock_id"].isin(_pick_sids)
+                ]
+                _price_pivot = (
+                    _picks_prices.pivot_table(
+                        index="trading_date", columns="stock_id", values="close"
+                    )
+                    if not _picks_prices.empty else pd.DataFrame()
+                )
+                _scores_map = {str(r["stock_id"]): float(r["score"]) for _, r in picks.iterrows()}
+                _weight_map = _pos_mod.compute_weights(_price_pivot, _scores_map, method=_ps_method)
+                pos_weights = pd.DataFrame(
+                    [{"stock_id": sid, "weight": w} for sid, w in _weight_map.items()]
+                )
+            except Exception as _ps_exc:
+                print(f"  [{rb_date}] position_sizing {_ps_method} 失敗（{_ps_exc}），fallback vol_inverse")
+                pos_weights = risk.compute_position_weights(
+                    picks, method="vol_inverse",
+                    price_df=period_price_slice,
+                    atr_period=self.atr_period,
+                )
+        else:
+            pos_weights = risk.compute_position_weights(
+                picks, method=self.position_sizing,
+                price_df=period_price_slice if self.position_sizing == "vol_inverse" else None,
+                atr_period=self.atr_period,
+            )
+        return pos_weights
+
+    # ── Helper：漸進式大盤過濾（market_filter_tiers / market_filter）──
+    def _apply_market_filter_tiers(
+        self,
+        picks: pd.DataFrame,
+        period_results: List[Dict],
+        rb_date: date,
+        effective_topn: int,
+    ) -> Tuple[pd.DataFrame, bool, float]:
+        """根據前期大盤報酬調整持倉；回傳 (picks, market_filter_skip, mf_multiplier)。"""
+        _market_filter_skip = False
+        _mf_multiplier = 1.0  # 記錄實際持倉倍率供 period_results 保存
+        if len(period_results) > 0 and (self.market_filter or self.market_filter_tiers):
+            _prev_bm = period_results[-1].get("benchmark_return", 0.0)
+            if self.market_filter_tiers:
+                # 漸進式：按 tiers 從深到淺匹配（tiers 須由淺到深排序）
+                _applied = False
+                for _thr, _mult in reversed(self.market_filter_tiers):
+                    if _prev_bm < _thr:
+                        _mf_multiplier = _mult
+                        _mf_new = max(1, int(effective_topn * _mult))
+                        if _mult <= 0:
+                            _market_filter_skip = True
+                            print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，本期持現金")
+                        elif _mf_new < len(picks):
+                            picks = picks.head(_mf_new)
+                            print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，持股×{_mult}→{_mf_new}")
+                        _applied = True
+                        break
+            elif self.market_filter:
+                # 原始二階段過濾
+                if _prev_bm < -0.10:
+                    _market_filter_skip = True
+                    _mf_multiplier = 0.0
+                    print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -10%，本期持現金")
+                elif _prev_bm < -0.05:
+                    _mf_multiplier = 0.5
+                    _mf_new = max(1, effective_topn // 2)
+                    if _mf_new < len(picks):
+                        picks = picks.head(_mf_new)
+                        print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
+        return picks, _market_filter_skip, _mf_multiplier
+
+    # ── Helper：大盤等權基準（向量化）──
+    def _compute_benchmark_return(
+        self,
+        rb_date: date,
+        exit_date: date,
+    ) -> float:
+        """計算大盤等權基準報酬（套用相同流動性門檻、不設停損、無滑價）。"""
+        price_df = self.price_df
+        min_avg_turnover = self.min_avg_turnover
+        liquidity_eligible_map = self.liquidity_eligible_map
+        benchmark_tc = self.benchmark_tc
+
+        all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
+        if min_avg_turnover > 0 and liquidity_eligible_map:
+            eligible_set = liquidity_eligible_map.get(rb_date, set())
+            all_stocks_on_date = [s for s in all_stocks_on_date if str(s) in eligible_set]
+
+        # 向量化：直接計算 rb_date → exit_date 期間各股等權報酬均值
+        _bm_mask = (
+            price_df["stock_id"].isin(all_stocks_on_date) &
+            price_df["trading_date"].isin([rb_date, exit_date])
+        )
+        _bm_prices = price_df[_bm_mask][["stock_id", "trading_date", "close"]].pivot_table(
+            index="stock_id", columns="trading_date", values="close"
+        )
+        if rb_date in _bm_prices.columns and exit_date in _bm_prices.columns:
+            _bm_valid = _bm_prices[[rb_date, exit_date]].dropna()
+            # Bug-2 fix：排除 rb_date 或 exit_date 價格為 0 的股票，避免除以零產生 +inf%
+            _bm_valid = _bm_valid[
+                (_bm_valid[rb_date] > 0) & (_bm_valid[exit_date] > 0)
+            ]
+            if not _bm_valid.empty:
+                _raw_bm_ret = _bm_valid[exit_date] / _bm_valid[rb_date] - 1 - benchmark_tc
+                # 二次防禦：過濾殘留的 inf/nan（adj_factor 異常等邊緣情況）
+                _raw_bm_ret = _raw_bm_ret.replace([np.inf, -np.inf], np.nan).dropna()
+                benchmark_ret = float(_raw_bm_ret.mean()) if not _raw_bm_ret.empty else 0.0
+            else:
+                benchmark_ret = 0.0
+        else:
+            benchmark_ret = 0.0
+        return benchmark_ret
+
     # ── 3. 主迴圈：逐期訓練 + 模擬 ─────────────────────────────────────────
     def run(self) -> Dict:
         """執行 walk-forward 主流程：prepare → loop → finalize。"""
         if not self.rebalance_dates:
             self.prepare()
 
-        # 從 self 解出常用引用（沿用原 local 變數名，減少 diff）
+        # 從 self 解出常用引用（沿用原 local 變數名，減少 diff）。P2-2 refactor 後，
+        # 多個過濾邏輯已抽到 helper method，僅保留迴圈主體 / 摘要區段仍會用到的別名。
         config                 = self.config
         db_session             = self.db_session
         price_df               = self.price_df
         atr_df                 = self.atr_df
-        bt_stats_df            = self.bt_stats_df
         liquidity_eligible_map = self.liquidity_eligible_map
-        market_median_ret20_map = self.market_median_ret20_map
-        market_weekly_drop_map = self.market_weekly_drop_map
-        market_200ma_bear_map  = self.market_200ma_bear_map
         _emerging_ids          = self.emerging_ids
         rebalance_dates        = self.rebalance_dates
         bt_trading_dates       = self.bt_trading_dates
         data_start             = self.data_start
         data_end               = self.data_end
 
-        # 設定別名（為了維持下方原本邏輯）
-        backtest_months        = self.backtest_months
+        # 迴圈主體 / 摘要區段仍需的設定別名
         retrain_freq_months    = self.retrain_freq_months
-        topn                   = self.topn
         stoploss_pct           = self.stoploss_pct
         transaction_cost_pct   = self.transaction_cost_pct
-        min_train_days         = self.min_train_days
         min_avg_turnover       = self.min_avg_turnover
         train_lookback_days    = self.train_lookback_days
         entry_delay_days       = self.entry_delay_days
         risk_free_rate         = self.risk_free_rate
         benchmark_with_cost    = self.benchmark_with_cost
         position_sizing        = self.position_sizing
-        position_sizing_method = self.position_sizing_method
         trailing_stop_pct      = self.trailing_stop_pct
         atr_stoploss_multiplier = self.atr_stoploss_multiplier
-        atr_period             = self.atr_period
         rebalance_freq         = self.rebalance_freq
-        label_horizon_buffer   = self.label_horizon_buffer
         enable_slippage        = self.enable_slippage
         enable_tiered_slippage = self.enable_tiered_slippage
-        fast_mode              = self.fast_mode
         clip_loss_pct          = self.clip_loss_pct
-        feature_columns        = self.feature_columns
-        time_weighting         = self.time_weighting
-        liquidity_weighting    = self.liquidity_weighting
-        momentum_penalty_cols  = self.momentum_penalty_cols
-        enable_complex_filter  = self.enable_complex_filter
-        enable_seasonal_filter = self.enable_seasonal_filter
-        topn_floor             = self.topn_floor
-        enable_breakthrough_entry = self.enable_breakthrough_entry
-        breakthrough_max_wait  = self.breakthrough_max_wait
         atr_dynamic_stoploss   = self.atr_dynamic_stoploss
-        market_filter          = self.market_filter
-        market_filter_tiers    = self.market_filter_tiers
         market_filter_min_positions = self.market_filter_min_positions
-        entry_signal_filter    = self.entry_signal_filter
-        label_type             = self.label_type
-        use_lambdarank         = self.use_lambdarank
         ensemble_n_checkpoints = self.ensemble_n_checkpoints
         _use_rolling_window    = self._use_rolling_window
         _wf_cb                 = self.portfolio_circuit_breaker_pct
@@ -1367,40 +1779,11 @@ class BacktestPipeline:
             if day_feat.empty:
                 continue
 
-            # feat_df 已預解析，直接從展開後的 DataFrame 取特徵欄位
-            fmat = day_feat.drop(columns=["stock_id", "trading_date"], errors="ignore")
-            for col in current_feature_names:
-                if col not in fmat.columns:
-                    fmat[col] = 0
-            fmat = fmat[current_feature_names]
-            fmat = fmat.replace([np.inf, -np.inf], np.nan)
-            for col in fmat.columns:
-                if fmat[col].isna().all():
-                    fmat[col] = 0
-                else:
-                    fmat[col] = fmat[col].fillna(fmat[col].median())
-
-            # 動能懲罰：對指定特徵乘以縮放係數（預測前）
-            if momentum_penalty_cols:
-                for _pc, _ps in momentum_penalty_cols.items():
-                    if _pc in fmat.columns:
-                        fmat[_pc] = fmat[_pc] * _ps
-
-            _t = time.time()
-            if ensemble_n_checkpoints > 1 and len(_model_buf) > 1:
-                # P2-2: Ensemble：各模型預測的「截面排名百分位」取平均，再轉為最終分數
-                _raw_preds = np.array([m.predict(fmat.values) for m in _model_buf])  # (n_models, n_stocks)
-                # rank-based averaging：每個模型的預測分數轉換為截面排名百分位（0~1）
-                _n = _raw_preds.shape[1]
-                _ranked = np.argsort(np.argsort(_raw_preds, axis=1), axis=1).astype(float) / max(_n - 1, 1)
-                scores = _ranked.mean(axis=0)
-            else:
-                scores = current_model.predict(fmat.values)
-            _dt = time.time() - _t
+            day_feat, _dt = self._score_day_features(
+                rb_date, day_feat, current_model, current_feature_names, _model_buf,
+            )
             _timer_predict += _dt
             _count_predict += 1
-            day_feat = day_feat.reset_index(drop=True)
-            day_feat["score"] = scores
 
             # 流動性過濾
             if min_avg_turnover > 0:
@@ -1410,288 +1793,35 @@ class BacktestPipeline:
                     continue
 
             # ── 停損冷卻過濾 ──
-            if cooldown_until:
-                excluded = {sid for sid, expiry in cooldown_until.items() if expiry > rb_date}
-                if excluded:
-                    before_n = len(day_feat)
-                    day_feat = day_feat[~day_feat["stock_id"].astype(str).isin(excluded)]
-                    n_excl = before_n - len(day_feat)
-                    if n_excl > 0:
-                        print(f"  [{rb_date}] 停損冷卻：排除 {n_excl} 檔")
+            day_feat = self._apply_cooldown_filter(day_feat, rb_date, cooldown_until)
 
-            # ── 大盤環境濾網 (Market Regime Filter) ──
-            effective_topn = topn
-            _cash_ratio = 0.0
-            median_ret = market_median_ret20_map.get(rb_date)
-            weekly_drop = market_weekly_drop_map.get(rb_date)
+            # ── 大盤環境濾網 (Market Regime Filter) + 季節性降倉 + topN floor ──
+            day_feat, effective_topn, _cash_ratio, _day_feat_empty = self._apply_market_regime_filter(
+                day_feat, rb_date, self.topn,
+            )
+            if _day_feat_empty:
+                continue
 
-            if enable_complex_filter:
-                # ── 複雜過濾（v2-v7 最佳化設定）──
-                crisis_threshold = getattr(config, "market_filter_weekly_drop_threshold", -0.03)
-                crisis_topn = getattr(config, "market_filter_crisis_topn", max(2, topn // 4))
-                bear_topn = getattr(config, "market_filter_bear_topn", max(3, topn // 3))
-
-                if weekly_drop is not None and weekly_drop < crisis_threshold:
-                    effective_topn = min(effective_topn, crisis_topn)
-                    print(f"  [{rb_date}] 危機模式 (週跌 {weekly_drop:.2%})，topN → {effective_topn}")
-                elif median_ret is not None and median_ret < -0.03:
-                    effective_topn = min(effective_topn, bear_topn)
-                    print(f"  [{rb_date}] 空頭市場 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
-
-                # ── 季節性降倉（弱勢月份）──
-                _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
-                _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
-                effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
-                    effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=1
-                )
-                if _reduced:
-                    print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月（complex_filter），topN → {effective_topn}")
-
-                # ── topN 絕對下限保護 ──
-                _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
-                _min_topn = 3 if _extreme_bear else 5
-                if effective_topn < _min_topn:
-                    print(f"  [{rb_date}] [topN-floor] {effective_topn}→{_min_topn} (min_topn={_min_topn})")
-                    effective_topn = _min_topn
-
-                # ── 判斷是否為空頭環境 ──
-                _is_bear_env = (
-                    (weekly_drop is not None and weekly_drop < crisis_threshold) or
-                    (median_ret is not None and median_ret < -0.03)
-                )
-
-                # ── RSI 自適應過濾 ──
-                if _is_bear_env and "rsi_14" in day_feat.columns:
-                    _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
-                    _20d = median_ret if median_ret is not None else 0.0
-                    if _5d_bounce > 0.03:
-                        _rsi_threshold = None
-                    elif _20d < -0.15:
-                        _rsi_threshold = 75
-                    else:
-                        _rsi_threshold = 80
-                    if _rsi_threshold is not None:
-                        _rsi_before = len(day_feat)
-                        day_feat = day_feat[day_feat["rsi_14"].fillna(0) <= _rsi_threshold]
-                        _rsi_removed = _rsi_before - len(day_feat)
-                        if _rsi_removed > 0:
-                            print(f"  [{rb_date}] 空頭RSI過濾: 移除{_rsi_removed}檔(rsi>{_rsi_threshold})")
-                        if day_feat.empty:
-                            continue
-
-                # ── 低波動加權（atr_inv z-score 加分）──
-                if _is_bear_env and "atr_inv" in day_feat.columns:
-                    _atr_inv = day_feat["atr_inv"]
-                    _atr_std = float(_atr_inv.std())
-                    if _atr_std > 0:
-                        day_feat = day_feat.copy()
-                        day_feat["score"] = (
-                            day_feat["score"] + 0.3 * (_atr_inv - _atr_inv.mean()) / _atr_std
-                        )
-
-                # ── 動態現金保留機制 ──
-                _200ma_bear = market_200ma_bear_map.get(rb_date, False)
-                if _200ma_bear:
-                    _5d_bounce = market_weekly_drop_map.get(rb_date, 0.0)
-                    _cash_ratio = 0.10 if _5d_bounce > 0.03 else 0.30
-
-            else:
-                # ── 簡單過濾（baseline 模式）：20d 中位數跌幅 > 4% 才縮減 topN ──
-                if median_ret is not None and median_ret < -0.04:
-                    effective_topn = max(2, topn // 3)
-                    print(f"  [{rb_date}] 大盤環境不佳 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
-
-            # ── 獨立季節性降倉（enable_complex_filter=False 時也可啟用，對應 daily_pick 行為）──
-            if not enable_complex_filter and enable_seasonal_filter:
-                _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
-                _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
-                effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
-                    effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=5
-                )
-                if _reduced:
-                    print(f"  [{rb_date}] seasonal_filter: 月份{rb_date.month} topN → {effective_topn}")
-
-            # ── 顯式 topN floor（Change B 實驗用，enable_complex_filter 無關）──
-            if topn_floor > 0 and effective_topn < topn_floor:
-                print(f"  [{rb_date}] [topN-floor] {effective_topn}→{topn_floor}")
-                effective_topn = topn_floor
-
-            # ── 進場訊號過濾（entry_signal_filter）──
-            if entry_signal_filter:
-                _esf = entry_signal_filter
-                _filtered = day_feat.copy()
-                # 依序套用各條件
-                if "foreign_buy_streak_max" in _esf and "foreign_buy_streak" in _filtered.columns:
-                    _filtered = _filtered[_filtered["foreign_buy_streak"] <= _esf["foreign_buy_streak_max"]]
-                if "rsi_min" in _esf and "rsi_14" in _filtered.columns:
-                    _filtered = _filtered[_filtered["rsi_14"] >= _esf["rsi_min"]]
-                if "rsi_max" in _esf and "rsi_14" in _filtered.columns:
-                    _filtered = _filtered[_filtered["rsi_14"] <= _esf["rsi_max"]]
-                if "bias_20_max" in _esf and "bias_20" in _filtered.columns:
-                    _filtered = _filtered[_filtered["bias_20"] <= _esf["bias_20_max"]]
-                if "volume_surge_ratio_min" in _esf and "volume_surge_ratio" in _filtered.columns:
-                    _filtered = _filtered[_filtered["volume_surge_ratio"] >= _esf["volume_surge_ratio_min"]]
-                # 新增過濾條件（2026-03-20 圓桌策略）
-                if "ma_alignment_min" in _esf and "ma_alignment" in _filtered.columns:
-                    _filtered = _filtered[_filtered["ma_alignment"] >= _esf["ma_alignment_min"]]
-                if "price_volume_divergence_min" in _esf and "price_volume_divergence" in _filtered.columns:
-                    _filtered = _filtered[_filtered["price_volume_divergence"] >= _esf["price_volume_divergence_min"]]
-                if "foreign_buy_intensity_max_pct" in _esf and "foreign_buy_intensity" in _filtered.columns:
-                    _fi_thresh = _filtered["foreign_buy_intensity"].quantile(_esf["foreign_buy_intensity_max_pct"])
-                    _filtered = _filtered[_filtered["foreign_buy_intensity"] <= _fi_thresh]
-                if ("ret_20_rank_min" in _esf or "ret_20_rank_max" in _esf) and "ret_20" in _filtered.columns:
-                    _r20_pct = _filtered["ret_20"].rank(pct=True)
-                    if "ret_20_rank_min" in _esf:
-                        _filtered = _filtered[_r20_pct >= _esf["ret_20_rank_min"]]
-                    if "ret_20_rank_max" in _esf:
-                        _filtered = _filtered[_r20_pct[_filtered.index] <= _esf["ret_20_rank_max"]]
-                if "ret_60_rank_min" in _esf and "ret_60" in _filtered.columns:
-                    _r60_pct = _filtered["ret_60"].rank(pct=True)
-                    _filtered = _filtered[_r60_pct >= _esf["ret_60_rank_min"]]
-
-                if len(_filtered) >= effective_topn:
-                    picks = risk.pick_topn(_filtered, effective_topn)
-                elif len(_filtered) >= market_filter_min_positions:
-                    picks = risk.pick_topn(_filtered, min(effective_topn, len(_filtered)))
-                else:
-                    # 逐步放寬：先放寬 foreign_buy_streak，再放寬 RSI
-                    _relaxed = day_feat.copy()
-                    if "rsi_min" in _esf and "rsi_14" in _relaxed.columns:
-                        _relaxed = _relaxed[_relaxed["rsi_14"] >= max(_esf.get("rsi_min", 0) - 10, 30)]
-                    if "rsi_max" in _esf and "rsi_14" in _relaxed.columns:
-                        _relaxed = _relaxed[_relaxed["rsi_14"] <= min(_esf.get("rsi_max", 100) + 10, 85)]
-                    picks = risk.pick_topn(_relaxed, min(effective_topn, max(market_filter_min_positions, len(_relaxed))))
-                # breakthrough entry 擴展池也使用過濾後的候選（_filtered），確保過濾條件不被繞過
-                _bt_candidate_pool = _filtered if len(_filtered) >= market_filter_min_positions else day_feat
-            else:
-                picks = risk.pick_topn(day_feat, effective_topn)
-                _bt_candidate_pool = day_feat
+            # ── 進場訊號過濾（entry_signal_filter）+ topN 選股 ──
+            picks, _bt_candidate_pool = self._apply_entry_signal_filter(day_feat, effective_topn)
 
             # ── 突破確認進場（Breakthrough Entry Filter）──
             # 月底選股後不立即進場，等每檔個股出現突破訊號（最多等 breakthrough_max_wait 個交易日）。
             # 無訊號者以後排候選補位；仍無訊號者持現金。
             # 使用向量化批次計算，避免逐股逐日掃描 price_df（效能 O(n_stocks × window)）。
-            per_stock_entry_dates: Dict[str, date] = {}
-            if enable_breakthrough_entry:
-                # 取再平衡日後的交易日視窗（最多 breakthrough_max_wait 天）
-                _bt_window = [
-                    d for d in bt_trading_dates if d > rb_date
-                ][:breakthrough_max_wait]
-
-                if _bt_window:
-                    # 擴展候補池（entry_signal_filter 啟用時從過濾後候選池取，否則從全量 day_feat 取）
-                    _slots_needed = effective_topn
-                    _ext_n = min(_slots_needed * 3, len(_bt_candidate_pool)) if _slots_needed > 0 else 0
-
-                    _confirmed_rows: List[Dict] = []
-                    _entry_map: Dict[str, date] = {}
-                    _orig_topn_sids = set(picks["stock_id"].astype(str).tolist())
-
-                    if _ext_n > 0:
-                        _extended = risk.pick_topn(_bt_candidate_pool, _ext_n)
-                        _ext_sids = _extended["stock_id"].astype(str).tolist()
-
-                        # 向量化一次算出所有新候選股的突破日（使用預計算的 rolling stats）
-                        _t = time.time()
-                        _bt_map = _compute_breakthrough_map(
-                            _ext_sids, _bt_window, bt_stats_df, feat_df
-                        )
-                        _dt = time.time() - _t
-                        _timer_breakthrough += _dt
-                        _count_breakthrough += 1
-
-                        # 按 score 排序取前 _slots_needed 個有突破的新進股
-                        for _, _cand_row in _extended.iterrows():
-                            if len(_confirmed_rows) >= effective_topn:
-                                break
-                            _sid = str(_cand_row["stock_id"])
-                            if _sid in _bt_map:
-                                _confirmed_rows.append(_cand_row.to_dict())
-                                _entry_map[_sid] = _bt_map[_sid]
-
-                    if _confirmed_rows:
-                        picks = pd.DataFrame(_confirmed_rows)
-                        per_stock_entry_dates = _entry_map
-                        _n_replaced = sum(1 for s in _entry_map if s not in _orig_topn_sids)
-                        if _n_replaced > 0:
-                            print(
-                                f"  [{rb_date}] 突破進場：{len(_confirmed_rows)} 檔確認"
-                                f"（{_n_replaced} 檔以候補替換）",
-                                flush=True,
-                            )
-                    else:
-                        picks = pd.DataFrame(columns=picks.columns)
-                        print(f"  [{rb_date}] 突破進場：無訊號，本期持現金", flush=True)
+            picks, per_stock_entry_dates, _bt_dt, _bt_inc = self._apply_breakthrough_filter(
+                picks, _bt_candidate_pool, rb_date, effective_topn, feat_df,
+            )
+            _timer_breakthrough += _bt_dt
+            _count_breakthrough += _bt_inc
 
             # ── 計算倉位權重（支援 position_sizing_method）──
-            period_price_slice = price_df[price_df["trading_date"] <= rb_date]
-            # position_sizing_method 優先（支援 mean_variance / risk_parity）
-            _ps_method = position_sizing_method if position_sizing_method != "vol_inverse" else position_sizing
-            if _ps_method in ("mean_variance", "risk_parity"):
-                try:
-                    from skills import position_sizing as _pos_mod
-                    _pick_sids = picks["stock_id"].astype(str).tolist()
-                    # 只傳 picks 股票的價格（避免全市場股票含 0/inf 資料干擾協方差估計）
-                    _picks_prices = period_price_slice[
-                        period_price_slice["stock_id"].isin(_pick_sids)
-                    ]
-                    _price_pivot = (
-                        _picks_prices.pivot_table(
-                            index="trading_date", columns="stock_id", values="close"
-                        )
-                        if not _picks_prices.empty else pd.DataFrame()
-                    )
-                    _scores_map = {str(r["stock_id"]): float(r["score"]) for _, r in picks.iterrows()}
-                    _weight_map = _pos_mod.compute_weights(_price_pivot, _scores_map, method=_ps_method)
-                    pos_weights = pd.DataFrame(
-                        [{"stock_id": sid, "weight": w} for sid, w in _weight_map.items()]
-                    )
-                except Exception as _ps_exc:
-                    print(f"  [{rb_date}] position_sizing {_ps_method} 失敗（{_ps_exc}），fallback vol_inverse")
-                    pos_weights = risk.compute_position_weights(
-                        picks, method="vol_inverse",
-                        price_df=period_price_slice,
-                        atr_period=atr_period,
-                    )
-            else:
-                pos_weights = risk.compute_position_weights(
-                    picks, method=position_sizing,
-                    price_df=period_price_slice if position_sizing == "vol_inverse" else None,
-                    atr_period=atr_period,
-                )
+            pos_weights = self._compute_position_weights(picks, rb_date)
 
             # ── 大盤過濾（market_filter / market_filter_tiers）：根據前期大盤報酬調整持倉 ──
-            _market_filter_skip = False
-            _mf_multiplier = 1.0  # 記錄實際持倉倍率供 period_results 保存
-            if len(period_results) > 0 and (market_filter or market_filter_tiers):
-                _prev_bm = period_results[-1].get("benchmark_return", 0.0)
-                if market_filter_tiers:
-                    # 漸進式：按 tiers 從深到淺匹配（tiers 須由淺到深排序）
-                    _applied = False
-                    for _thr, _mult in reversed(market_filter_tiers):
-                        if _prev_bm < _thr:
-                            _mf_multiplier = _mult
-                            _mf_new = max(1, int(effective_topn * _mult))
-                            if _mult <= 0:
-                                _market_filter_skip = True
-                                print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，本期持現金")
-                            elif _mf_new < len(picks):
-                                picks = picks.head(_mf_new)
-                                print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，持股×{_mult}→{_mf_new}")
-                            _applied = True
-                            break
-                elif market_filter:
-                    # 原始二階段過濾
-                    if _prev_bm < -0.10:
-                        _market_filter_skip = True
-                        _mf_multiplier = 0.0
-                        print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -10%，本期持現金")
-                    elif _prev_bm < -0.05:
-                        _mf_multiplier = 0.5
-                        _mf_new = max(1, effective_topn // 2)
-                        if _mf_new < len(picks):
-                            picks = picks.head(_mf_new)
-                            print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
+            picks, _market_filter_skip, _mf_multiplier = self._apply_market_filter_tiers(
+                picks, period_results, rb_date, effective_topn,
+            )
 
             # ── 最低持股數保護（market_filter_min_positions）──
             if not _market_filter_skip and market_filter_min_positions > 1 and len(picks) < market_filter_min_positions:
@@ -1764,34 +1894,7 @@ class BacktestPipeline:
                 _count_apply_stoploss += 1
 
             # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──
-            all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
-            if min_avg_turnover > 0 and liquidity_eligible_map:
-                eligible_set = liquidity_eligible_map.get(rb_date, set())
-                all_stocks_on_date = [s for s in all_stocks_on_date if str(s) in eligible_set]
-
-            # 向量化：直接計算 rb_date → exit_date 期間各股等權報酬均值
-            _bm_mask = (
-                price_df["stock_id"].isin(all_stocks_on_date) &
-                price_df["trading_date"].isin([rb_date, exit_date])
-            )
-            _bm_prices = price_df[_bm_mask][["stock_id", "trading_date", "close"]].pivot_table(
-                index="stock_id", columns="trading_date", values="close"
-            )
-            if rb_date in _bm_prices.columns and exit_date in _bm_prices.columns:
-                _bm_valid = _bm_prices[[rb_date, exit_date]].dropna()
-                # Bug-2 fix：排除 rb_date 或 exit_date 價格為 0 的股票，避免除以零產生 +inf%
-                _bm_valid = _bm_valid[
-                    (_bm_valid[rb_date] > 0) & (_bm_valid[exit_date] > 0)
-                ]
-                if not _bm_valid.empty:
-                    _raw_bm_ret = _bm_valid[exit_date] / _bm_valid[rb_date] - 1 - benchmark_tc
-                    # 二次防禦：過濾殘留的 inf/nan（adj_factor 異常等邊緣情況）
-                    _raw_bm_ret = _raw_bm_ret.replace([np.inf, -np.inf], np.nan).dropna()
-                    benchmark_ret = float(_raw_bm_ret.mean()) if not _raw_bm_ret.empty else 0.0
-                else:
-                    benchmark_ret = 0.0
-            else:
-                benchmark_ret = 0.0
+            benchmark_ret = self._compute_benchmark_return(rb_date, exit_date)
 
             period_ret = result["return"]
             # 現金保留：_cash_ratio 部分以 0% 報酬計（等效縮減風險敞口）

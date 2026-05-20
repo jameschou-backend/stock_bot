@@ -516,8 +516,6 @@ A 級穩定性（`_evaluate_a_stability`）門檻說明：
   現行預設 `rebalance_freq="M"`，與 label horizon 匹配。
 - `pd.merge_asof(by="stock_id")` 需要 left key 全局單調，跨股資料不可直接使用，
   須改為 per-stock groupby loop。
-- **`backtest.py` 不呼叫 `get_universe()`**：回測的候選股過濾只用 `stock_id.str.fullmatch(r"\d{4}")`，
-  `risk.py` 的 EMERGING 過濾對回測無效。若需在回測中排除興櫃，須在 `backtest.py` 的 candidates 建立處另行過濾。
 - **訓練標籤前向洩漏歷史（已修正）**：Experiment A~E 使用 `label_horizon_buffer=0`，
   訓練截止前 20 個交易日的標籤洩漏測試期收盤價，導致回測績效虛高（+10004% → 去偏後 +205%）。
   2026-03-13 改為 `label_horizon_buffer=20`，Experiment F 為去偏後真實基準。
