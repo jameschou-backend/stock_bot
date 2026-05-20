@@ -1,0 +1,152 @@
+name: Tests
+
+# Push 到 main 或 PR 時自動跑 pytest + import smoke。
+# 不跑 ingest（會撞 FinMind/TWSE rate limit）也不跑 backtest（要 MySQL）。
+# 真實 daily pipeline 由 nightly.yml 在排程時跑。
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# 同一個 ref 連續 push 時取消舊的，省 CI 分鐘數
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: pytest + import smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run pytest
+        run: python -m pytest tests/ -v --tb=short --durations=10
+        env:
+          # 測試用 SQLite in-memory，避免 CI 需要 MySQL
+          DB_DIALECT: sqlite
+          DB_HOST: ""
+          DB_PORT: "0"
+          DB_NAME: ":memory:"
+          DB_USER: ""
+          DB_PASSWORD: ""
+          FINMIND_TOKEN: ""
+          TZ: Asia/Taipei
+
+      - name: Import smoke test (production modules)
+        run: |
+          python -c "
+          import importlib
+          modules = [
+              # app/
+              'app.api', 'app.config', 'app.db', 'app.finmind', 'app.models',
+              'app.twse_client', 'app.schemas', 'app.rate_limiter',
+              # skills/ — strategy core
+              'skills.backtest', 'skills.build_features', 'skills.build_labels',
+              'skills.daily_pick', 'skills.data_store', 'skills.feature_store',
+              'skills.feature_utils', 'skills.ic_analysis',
+              'skills.multi_agent_selector', 'skills.position_sizing',
+              'skills.regime', 'skills.risk', 'skills.tradability_filter',
+              'skills.train_ranker',
+              # skills/ — ingest（16 個）
+              'skills.ingest_broker_trades', 'skills.ingest_corporate_actions',
+              'skills.ingest_fear_greed', 'skills.ingest_fundamental',
+              'skills.ingest_gov_bank', 'skills.ingest_holding_dist',
+              'skills.ingest_institutional', 'skills.ingest_kbar_features',
+              'skills.ingest_margin_short', 'skills.ingest_per',
+              'skills.ingest_prices', 'skills.ingest_quarterly_fundamental',
+              'skills.ingest_securities_lending', 'skills.ingest_stock_master',
+              'skills.ingest_theme_flow', 'skills.ingest_trading_calendar',
+              # pipelines/
+              'pipelines.daily_pipeline', 'pipelines.dag_daily', 'pipelines.dag_executor',
+          ]
+          failed = []
+          for m in modules:
+              try:
+                  importlib.import_module(m)
+              except Exception as exc:
+                  failed.append((m, str(exc)))
+          if failed:
+              for m, e in failed:
+                  print(f'❌ {m}: {e}')
+              raise SystemExit(1)
+          print(f'✓ All {len(modules)} modules import clean')
+          "
+
+      - name: Verify backtest invariants (P2-1 + P1-1 protection)
+        run: |
+          python -c "
+          import inspect
+          from skills.backtest import run_backtest, BacktestPipeline, WalkForwardConfig, _calc_stock_return
+          from skills import train_ranker
+
+          # P1-1 guard: label_horizon_buffer default must remain >= 20
+          # (prevents the +10004% -> +205% leakage regression)
+          sig = inspect.signature(run_backtest)
+          buf = sig.parameters['label_horizon_buffer'].default
+          assert buf >= 20, f'label_horizon_buffer default {buf} < 20 → label leakage'
+
+          wf = WalkForwardConfig()
+          assert wf.label_horizon_buffer >= 20, f'WalkForwardConfig buffer {wf.label_horizon_buffer} < 20'
+
+          # train_ranker.LABEL_HORIZON_BUFFER_DAYS lives in run() function-locally;
+          # source-level regex check (mirrors tests/test_label_leakage.py).
+          src = inspect.getsource(train_ranker.run)
+          import re
+          m = re.search(r'LABEL_HORIZON_BUFFER_DAYS\s*=\s*(\d+)', src)
+          assert m, 'LABEL_HORIZON_BUFFER_DAYS not found in train_ranker.run'
+          assert int(m.group(1)) >= 20, f'LABEL_HORIZON_BUFFER_DAYS = {m.group(1)} < 20'
+
+          # P2-1 guard: BacktestPipeline class must exist with prepare + _train_model_for_period + run
+          assert BacktestPipeline.__name__ == 'BacktestPipeline'
+          for attr in ('prepare', '_train_model_for_period', 'run'):
+              assert hasattr(BacktestPipeline, attr), f'BacktestPipeline missing {attr}()'
+
+          # P1-1 guard: -50% clip still default in run_backtest / WalkForwardConfig
+          # (clip_loss_pct is a required arg in _calc_stock_return; default lives in callers)
+          assert sig.parameters['clip_loss_pct'].default == -0.50, \
+              f'run_backtest clip_loss_pct default {sig.parameters["clip_loss_pct"].default} != -0.50'
+          assert wf.clip_loss_pct == -0.50, \
+              f'WalkForwardConfig clip_loss_pct {wf.clip_loss_pct} != -0.50'
+
+          # Source-level: ensure the actual max(ret, clip) line still exists in _calc_stock_return
+          src2 = inspect.getsource(_calc_stock_return)
+          assert 'max(ret, clip_loss_pct)' in src2, 'clip line removed from _calc_stock_return'
+
+          print(f'✓ Invariants OK: buffer={buf}, clip=-0.50, BacktestPipeline intact')
+          "
+
+      - name: Verify ingest source toggles default to finmind
+        run: |
+          python -c "
+          from skills import ingest_prices, ingest_institutional, ingest_margin_short, ingest_per
+          for mod, name in [(ingest_prices, 'prices'), (ingest_institutional, 'institutional'),
+                            (ingest_margin_short, 'margin_short'), (ingest_per, 'per')]:
+              src = mod._resolve_source()
+              assert src == 'finmind', f'{name} default source {src} != finmind (backward-compat broken)'
+          print('✓ All 4 ingest sources default to finmind')
+          "
+
+      - name: Print test summary
+        if: always()
+        run: |
+          echo '## CI Summary' >> $GITHUB_STEP_SUMMARY
+          echo '- Python: 3.10' >> $GITHUB_STEP_SUMMARY
+          echo "- Tests run on commit ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
