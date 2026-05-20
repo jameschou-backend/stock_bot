@@ -96,12 +96,15 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     return _run_finmind(config, db_session)
 
 
-def _normalize_twse_prices(rows: List[Dict], allowed_pattern: str = r"\d{4,6}") -> pd.DataFrame:
+def _normalize_twse_prices(rows: List[Dict], allowed_pattern: str = r"\d{4}") -> pd.DataFrame:
     """TWSEClient.fetch_prices_history 回傳的 row 已含必要欄位，僅做型別 + 過濾。
 
     過濾條件：
-    - stock_id 必為 4-6 碼數字（含 ETF），與 _normalize_prices() 行為一致
+    - stock_id 必為 4 碼數字（與生產 universe 一致，排除 ETF 0050/00xxx 與權證/6碼）
     - 必要欄位（open/high/low/close）至少有一個非 NaN（全空則整列丟棄）
+
+    註：TWSE STOCK_DAY_ALL + TPEx daily_close_quotes 給全市場含 ETF/興櫃/權證，
+    每日多 ~4000 row 進 DB 不會被 model 用到。在 ingest 層過濾。
     """
     if not rows:
         return pd.DataFrame()

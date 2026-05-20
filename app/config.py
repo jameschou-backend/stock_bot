@@ -47,8 +47,13 @@ class AppConfig:
     ai_assist_max_code_lines: int = 200
     ai_assist_max_log_lines: int = 200
     bootstrap_days: int = 365
-    min_avg_turnover: float = 0.5  # 20日平均成交值門檻（億元）
-    min_amt_20: float = 5e7  # 20日平均成交值門檻（元）
+    # 20 日平均成交值門檻——**單位為「億元」**（歷史相容名稱）。
+    # 新 code 請呼叫 skills.risk.resolve_liquidity_threshold_twd(config) 取「元」單位門檻，
+    # 不要直接乘 1e8，避免不同 caller 各自轉換造成單位錯誤。
+    min_avg_turnover: float = 0.5  # 億元
+    # 20 日平均成交值門檻——**單位為「元」**（優先於 min_avg_turnover）。
+    # 若 > 0，resolve_liquidity_threshold_twd() 直接回此值；否則回 min_avg_turnover × 1e8。
+    min_amt_20: float = 5e7  # 元（= 0.5 億）
     use_adjusted_price: bool = True
     enable_tradability_filter: bool = True
     fallback_days: int = 10

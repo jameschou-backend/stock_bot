@@ -219,6 +219,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 _price_df = _price_df.dropna(subset=["close", "volume"])
                 _price_df["stock_id"] = _price_df["stock_id"].astype(str)
                 _price_df = _price_df.sort_values(["stock_id", "trading_date"])
+                # `min_avg_turnover` 此處為「億元」單位（向後相容語意），× 1e8 轉成元
+                # 新 code 請用 skills.risk.resolve_liquidity_threshold_twd(config)
                 _threshold = min_avg_turnover * 1e8
                 _price_df["_tv"] = _price_df["close"] * _price_df["volume"]
                 _price_df["_avg_tv20"] = _price_df.groupby("stock_id")["_tv"].transform(

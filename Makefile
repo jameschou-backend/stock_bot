@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors
+.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors
 
 migrate:
 	python scripts/migrate.py
@@ -74,6 +74,20 @@ report:
 
 cron-daily:
 	bash scripts/cron_daily.sh
+
+# 一鍵把 cron_daily.sh 安裝到 crontab，工作日 17:30 跑。
+# 重複執行不會 duplicate（先 grep 篩掉舊條目）。
+schedule-install:
+	@PROJECT_DIR=$$(pwd); \
+	ENTRY="30 17 * * 1-5 cd $$PROJECT_DIR && bash scripts/cron_daily.sh"; \
+	CURRENT=$$(crontab -l 2>/dev/null | grep -v "stock_bot.*cron_daily.sh" || true); \
+	{ if [ -n "$$CURRENT" ]; then echo "$$CURRENT"; fi; echo "$$ENTRY"; } | crontab -; \
+	echo "✓ 已安裝 cron entry：$$ENTRY"; \
+	echo "  確認：crontab -l | grep cron_daily"
+
+schedule-uninstall:
+	@crontab -l 2>/dev/null | grep -v "stock_bot.*cron_daily.sh" | crontab - ; \
+	echo "✓ 已移除 cron entry"
 
 ai-prompt:
 	AI_ASSIST_ENABLED=0 python scripts/ai_prompt_demo.py

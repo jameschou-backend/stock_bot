@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from datetime import date, datetime, timedelta
 from typing import Dict, Iterable, List, Tuple
 from zoneinfo import ZoneInfo
@@ -12,15 +13,32 @@ from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
 from app.models import CorporateAction, PriceAdjustFactor, RawPrice
+from app.twse_client import TWSEClient, TWSEError
 
 logger = logging.getLogger(__name__)
 
 
 TODO_SOURCE_HINTS = [
-    "TWSE 除權除息公告",
-    "公開資訊觀測站（MOPS）公司行為事件",
-    "FinMind 若提供對應 corporate action dataset",
+    "TWSE 除權除息公告（已實作，設 INGEST_CORPORATE_ACTIONS_SOURCE=twse 啟用）",
+    "TPEx 除權除息（未實作，TODO）",
+    "公開資訊觀測站（MOPS）—— 用於配股配息細節（未實作）",
 ]
+
+SOURCE_ENV = "INGEST_CORPORATE_ACTIONS_SOURCE"
+
+
+def _resolve_source() -> str:
+    """讀 INGEST_CORPORATE_ACTIONS_SOURCE。
+
+    - 'none'（預設）：不抓外部資料，price_adjust_factors 全填 1.0 保留現行行為
+    - 'twse'：呼叫 TWSE TWT49U 抓除權除息事件，寫入 corporate_actions 表
+      （price_adjust_factors 仍維持 1.0，cumulative adj 重算屬 Stage 後續工作）
+    """
+    val = os.environ.get(SOURCE_ENV, "none").lower().strip()
+    if val not in ("none", "twse"):
+        logger.warning("[ingest_corporate_actions] unknown %s=%r, falling back to 'none'", SOURCE_ENV, val)
+        return "none"
+    return val
 
 
 def _date_range_from_input(date_range: Tuple[date, date] | None, tz: str) -> Tuple[date, date]:
@@ -35,8 +53,25 @@ def _fetch_external_actions(
     end_date: date,
     config,
 ) -> pd.DataFrame:
-    # TODO: 接上正式來源（TWSE / MOPS / FinMind）
-    _ = start_date, end_date, config
+    """根據 INGEST_CORPORATE_ACTIONS_SOURCE 抓除權除息事件。"""
+    source = _resolve_source()
+    if source == "none":
+        _ = start_date, end_date, config
+        return pd.DataFrame()
+    if source == "twse":
+        try:
+            client = TWSEClient()
+            rows = client.fetch_ex_rights_history(start_date, end_date)
+        except TWSEError as exc:
+            logger.warning("[ingest_corporate_actions] TWSE fetch failed: %s", exc)
+            return pd.DataFrame()
+        if not rows:
+            return pd.DataFrame()
+        df = pd.DataFrame(rows)
+        # 對齊舊 schema：CorporateAction 表用 action_date / action_type / adj_factor / payload_json
+        # 已在 client 內就是這個欄位名
+        df = df[df["stock_id"].astype(str).str.fullmatch(r"\d{4}")]
+        return df
     return pd.DataFrame()
 
 
@@ -116,13 +151,20 @@ def run_date_range(config, db_session: Session, date_range: Tuple[date, date] | 
         action_df["action_date"] = pd.to_datetime(action_df["action_date"], errors="coerce").dt.date
         action_df["adj_factor"] = pd.to_numeric(action_df.get("adj_factor"), errors="coerce")
         for _, row in action_df.iterrows():
+            # payload_json：保留來源原始細節（pre_close / ref_price / value_amount）方便未來 audit
+            payload = row.get("payload_json")
+            if not isinstance(payload, dict):
+                payload = {}
+            for k in ("pre_close", "ref_price", "value_amount", "market"):
+                if k in row and pd.notna(row[k]):
+                    payload[k] = row[k] if not isinstance(row[k], float) else float(row[k])
             action_records.append(
                 {
                     "stock_id": row["stock_id"],
                     "action_date": row["action_date"],
                     "action_type": str(row.get("action_type", "OTHER")),
                     "adj_factor": None if pd.isna(row["adj_factor"]) else float(row["adj_factor"]),
-                    "payload_json": row.get("payload_json", {}),
+                    "payload_json": payload,
                 }
             )
 
@@ -131,16 +173,21 @@ def run_date_range(config, db_session: Session, date_range: Tuple[date, date] | 
     factor_records = list(_build_default_adjust_factors(db_session, start_date, end_date))
     factors_upserted = _upsert_adjust_factors(db_session, factor_records)
 
+    source = _resolve_source()
     logs.update(
         {
+            "source": source,
             "actions_upserted": actions_upserted,
             "factors_upserted": factors_upserted,
-            "warning": (
-                "No external corporate action source connected yet; "
-                "default adj_factor=1.0 was written for observed raw_prices dates."
-            ),
         }
     )
+    if source == "none":
+        logs["warning"] = (
+            "INGEST_CORPORATE_ACTIONS_SOURCE=none：未抓除權除息事件，"
+            "price_adjust_factors 全填 1.0（保留舊行為）。"
+            "切到 'twse' 啟用後 corporate_actions 表會填上事件，"
+            "price_adjust_factors cumulative 重算屬後續 Stage 工作。"
+        )
     return logs
 
 

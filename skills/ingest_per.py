@@ -56,7 +56,7 @@ def _normalize_twse_per(rows: List[Dict]) -> pd.DataFrame:
         return pd.DataFrame()
     df = pd.DataFrame(rows)
     df["stock_id"] = df["stock_id"].astype(str)
-    df = df[df["stock_id"].str.fullmatch(r"\d{4,6}")]
+    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]  # 與生產 universe 一致（排除 ETF/權證）
     df = df.dropna(subset=["stock_id", "trading_date"], how="any")
     for col in ("per", "pbr", "dividend_yield"):
         if col in df.columns:

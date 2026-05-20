@@ -48,10 +48,9 @@ PRICES_PARQUET   = CACHE_DIR / "prices.parquet"
 FEATURES_PARQUET = CACHE_DIR / "features.parquet"
 LABELS_PARQUET   = CACHE_DIR / "labels.parquet"
 
-_TTL_SECONDS = 86_400  # 24 小時（fallback 用，正常走資料日期比對）
-
-
 # ── 快取有效性 ────────────────────────────────────────────────────────────────
+# 注意：cache 失效判斷只用「資料日期比對」（_ensure 內部比對 max_date vs source max_date）
+# 不再用 mtime+TTL，因為那會造成 pipeline 跑完但 cache 未過期時 daily-c 用舊資料。
 def _parquet_max_date(path: Path) -> Optional[str]:
     """快速讀取 parquet 內的 max(trading_date)，利用 DuckDB 欄位統計避免全掃。"""
     if not path.exists():
@@ -65,13 +64,6 @@ def _parquet_max_date(path: Path) -> Optional[str]:
         return str(result) if result is not None else None
     except Exception:
         return None
-
-
-def _is_fresh(path: Path) -> bool:
-    """Fallback：檔案存在且未超過 TTL（資料日期比對失敗時使用）。"""
-    if not path.exists():
-        return False
-    return (time.time() - path.stat().st_mtime) < _TTL_SECONDS
 
 
 # ── 特徵解析（委派給 feature_utils，統一實作）────────────────────────────────
@@ -360,20 +352,50 @@ def warm_up(db_session: Session) -> None:
     logger.info("[data_store] warm-up complete.")
 
 
-def cache_info() -> dict:
-    """Return dict with each parquet's path, size (MB), max_date, and age (minutes)."""
+def cache_info(db_session: Optional[Session] = None) -> dict:
+    """Return dict with each parquet's path, size (MB), max_date, and sync status.
+
+    Args:
+        db_session: 若提供，會比對 DB 來源 max_date 並回報 `synced` 旗標
+                    （True = cache 與來源同步、安全使用；False = cache 落後、下次 _ensure 會重建）。
+                    不提供時 synced 欄位不存在（純 cache 內容報告）。
+    """
+    from sqlalchemy import text as _text
+
     info = {}
     now = time.time()
+    sources = {}
+    if db_session is not None:
+        try:
+            sources["prices"] = str(db_session.execute(_text("SELECT max(trading_date) FROM raw_prices")).scalar() or "")
+        except Exception:
+            sources["prices"] = None
+        try:
+            from skills.feature_store import FeatureStore as _FS
+            mx = _FS().get_max_date()
+            sources["features"] = str(mx) if mx is not None else None
+        except Exception:
+            sources["features"] = None
+        try:
+            sources["labels"] = str(db_session.execute(_text("SELECT max(trading_date) FROM labels")).scalar() or "")
+        except Exception:
+            sources["labels"] = None
+
     for label, path in [("prices", PRICES_PARQUET), ("features", FEATURES_PARQUET), ("labels", LABELS_PARQUET)]:
         if path.exists():
             stat = path.stat()
-            info[label] = {
+            cache_max = _parquet_max_date(path)
+            entry = {
                 "path": str(path),
                 "size_mb": round(stat.st_size / 1e6, 1),
                 "age_min": round((now - stat.st_mtime) / 60, 1),
-                "max_date": _parquet_max_date(path),
-                "fresh": _is_fresh(path),
+                "max_date": cache_max,
             }
+            if db_session is not None:
+                src = sources.get(label)
+                entry["source_max_date"] = src
+                entry["synced"] = bool(cache_max and src and cache_max >= src)
+            info[label] = entry
         else:
             info[label] = {"path": str(path), "exists": False}
     return info

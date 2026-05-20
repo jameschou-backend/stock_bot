@@ -63,6 +63,9 @@ TPEX_LEGACY_3INSTI = "https://www.tpex.org.tw/www/zh-tw/insti/dailyTrade"
 TPEX_LEGACY_MARGIN = "https://www.tpex.org.tw/www/zh-tw/margin/balance"
 TPEX_LEGACY_PER = "https://www.tpex.org.tw/www/zh-tw/afterTrading/peQryDate"
 
+# 除權除息計算結果表（TWSE TWT49U；接受 strDate / endDate 區間）
+TWSE_LEGACY_EX_RIGHTS = "https://www.twse.com.tw/rwd/zh/exRight/TWT49U"
+
 
 class TWSEError(Exception):
     """TWSE/TPEx 請求或解析失敗。"""
@@ -308,6 +311,60 @@ class TWSEClient:
         rows.extend(self._parse_twse_oapi_per(self._get_json(TWSE_OAPI_BWIBBU_ALL)))
         rows.extend(self._parse_tpex_oapi_per(self._get_json(TPEX_OAPI_PER)))
         return rows
+
+    # ── 5. 除權除息事件 ───────────────────────────────
+    def fetch_ex_rights_history(self, start_date: date, end_date: date) -> List[Dict[str, Any]]:
+        """TWSE 除權除息計算結果表（一次取區間）。
+
+        欄位（依官網 fields 順序）：
+        0:資料日期 1:股票代號 2:股票名稱 3:除權息前收盤價 4:除權息參考價
+        5:權值+息值 6:權/息 7:漲停價格 ...
+        """
+        params = {
+            "strDate": start_date.strftime("%Y%m%d"),
+            "endDate": end_date.strftime("%Y%m%d"),
+            "response": "json",
+        }
+        payload = self._get_json(TWSE_LEGACY_EX_RIGHTS, params=params)
+        return self._parse_twse_legacy_ex_rights(payload)
+
+    @staticmethod
+    def _parse_twse_legacy_ex_rights(payload: Any) -> List[Dict[str, Any]]:
+        if not isinstance(payload, dict):
+            raise TWSEError(f"expected dict for TWSE ex-rights, got {type(payload).__name__}")
+        if payload.get("stat") and payload["stat"] != "OK":
+            logger.warning("TWSE ex-rights stat=%s", payload["stat"])
+            return []
+        out: List[Dict[str, Any]] = []
+        for r in payload.get("data") or []:
+            try:
+                if not r or len(r) < 7:
+                    continue
+                trading_date = roc_date_to_west(r[0])
+                stock_id = r[1]
+                pre_close = safe_float(r[3])
+                ref_price = safe_float(r[4])
+                value_amt = safe_float(r[5])
+                kind = (r[6] or "").strip()  # "權" / "息" / "權息"
+                # adj_factor：除權息前收盤價 / 除權息參考價
+                # （未來價 → 歷史價的還原乘數，>= 1.0）
+                if pre_close and ref_price and ref_price > 0:
+                    adj_factor = pre_close / ref_price
+                else:
+                    adj_factor = None
+                out.append({
+                    "stock_id": stock_id,
+                    "action_date": trading_date,
+                    "action_type": kind or "OTHER",
+                    "pre_close": pre_close,
+                    "ref_price": ref_price,
+                    "value_amount": value_amt,
+                    "adj_factor": adj_factor,
+                    "market": "TWSE",
+                })
+            except (IndexError, KeyError, TWSEError) as exc:
+                logger.warning("TWSE ex-rights row skipped: %s row=%s", exc, r)
+        return out
 
     def fetch_per_history(self, trading_date: date) -> List[Dict[str, Any]]:
         rows: List[Dict[str, Any]] = []

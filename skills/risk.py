@@ -43,6 +43,21 @@ def get_universe(session: Session, asof_date: date, config) -> pd.DataFrame:
     return pd.DataFrame({"stock_id": [str(row[0]) for row in rows]})
 
 
+def resolve_liquidity_threshold_twd(config) -> float:
+    """**單一真相**：從 config 解析 20 日平均成交值門檻，**統一回傳以「元（TWD）」為單位**。
+
+    避免重複的單位陷阱：
+    - `config.min_amt_20` 已是「元」（優先讀）
+    - `config.min_avg_turnover` 是「億元」（向後相容，× 1e8）
+
+    呼叫者拿到後可直接跟 close × volume（元）比較，**禁止再乘 1e8**。
+    """
+    min_amt_20 = float(getattr(config, "min_amt_20", 0.0) or 0.0)
+    if min_amt_20 > 0:
+        return min_amt_20
+    return float(getattr(config, "min_avg_turnover", 0.0) or 0.0) * 1e8
+
+
 def apply_liquidity_filter(price_df: pd.DataFrame, config) -> pd.DataFrame:
     """以近 20 日平均成交值（close * volume）做流動性過濾。"""
     if price_df.empty:
@@ -55,12 +70,7 @@ def apply_liquidity_filter(price_df: pd.DataFrame, config) -> pd.DataFrame:
     if df.empty:
         return pd.DataFrame(columns=["stock_id", "avg_turnover"])
 
-    min_amt_20 = float(getattr(config, "min_amt_20", 0.0) or 0.0)
-    if min_amt_20 > 0:
-        threshold = min_amt_20
-    else:
-        # 向後相容：舊版使用「億元」門檻
-        threshold = float(getattr(config, "min_avg_turnover", 0.0)) * 1e8
+    threshold = resolve_liquidity_threshold_twd(config)
 
     recent = (
         df.sort_values(["stock_id", "trading_date"])
