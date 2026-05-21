@@ -156,11 +156,16 @@ def hrp_weights(
         n = returns_df.shape[1]
         return np.full(n, 1.0 / max(n, 1)) if n > 0 else np.array([])
 
-    # 過濾 min_periods 不足的股票
-    valid_cols = [c for c in returns_df.columns
-                  if returns_df[c].notna().sum() >= min_periods]
+    # 過濾條件：min_periods 不足 OR std == 0（後者會讓 corr 出現 NaN）
+    valid_cols = []
+    for c in returns_df.columns:
+        s = returns_df[c]
+        if s.notna().sum() < min_periods:
+            continue
+        if s.fillna(0).std(ddof=1) < 1e-12:  # 幾乎為 0，無波動 → 排除
+            continue
+        valid_cols.append(c)
     if len(valid_cols) < 2:
-        # 不足 2 個 valid → 等權 fallback
         n = returns_df.shape[1]
         return np.full(n, 1.0 / n)
 
@@ -168,11 +173,26 @@ def hrp_weights(
     corr = np.corrcoef(returns_valid, rowvar=False)
     cov = np.cov(returns_valid, rowvar=False)
 
+    # NaN/inf 防呆：剔除 corr 含 NaN 的列/行（罕見但發生過）
+    if not np.all(np.isfinite(corr)):
+        bad = np.where(~np.all(np.isfinite(corr), axis=1))[0]
+        if len(bad):
+            keep_mask = np.ones(len(valid_cols), dtype=bool)
+            keep_mask[bad] = False
+            if keep_mask.sum() < 2:
+                n = returns_df.shape[1]
+                return np.full(n, 1.0 / n)
+            valid_cols = [valid_cols[i] for i in range(len(valid_cols)) if keep_mask[i]]
+            returns_valid = returns_valid[:, keep_mask]
+            corr = np.corrcoef(returns_valid, rowvar=False)
+            cov = np.cov(returns_valid, rowvar=False)
+
     # Distance + hierarchical clustering
     dist = correlation_distance(corr)
-    # squareform 要求 symmetric + 0 diagonal
     np.fill_diagonal(dist, 0.0)
-    dist = (dist + dist.T) / 2.0  # 嚴格 symmetric（消除浮點誤差）
+    dist = (dist + dist.T) / 2.0
+    # 額外保險：dist 內任何 NaN / inf 都置 0（不影響 cluster 結構）
+    dist = np.nan_to_num(dist, nan=0.0, posinf=1.0, neginf=0.0)
     dist_condensed = squareform(dist, checks=False)
     link = linkage(dist_condensed, method="single")
     sort_order = quasi_diagonal_order(link)
