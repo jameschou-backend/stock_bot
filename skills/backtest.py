@@ -757,6 +757,12 @@ class WalkForwardConfig:
     cross_section_normalize: bool = False  # True=每個再平衡期特徵截面 Z-score 正規化
     # ── Ensemble ──
     ensemble_n_checkpoints: int = 1  # 保留最近 N 次重訓 checkpoint 並平均排名分數（1=停用）
+    # ── Volatility Targeting（Stage 7.2）──
+    # > 0 啟用：每月 _apply_market_regime_filter 後估 picks 60d realized vol，
+    # 若 > target → cash_ratio = max(原值, 1 - target/realized)。0 = disabled。
+    # 10y WF 驗證：Sharpe Δ +0.078, MDD Δ +4.29pp（target=0.30 時）
+    vol_target_pct: float = 0.0
+    vol_target_lookback_days: int = 60
 
 
 class BacktestPipeline:
@@ -822,6 +828,9 @@ class BacktestPipeline:
         self.use_lambdarank         = wf_config.use_lambdarank
         self.cross_section_normalize = wf_config.cross_section_normalize
         self.ensemble_n_checkpoints = wf_config.ensemble_n_checkpoints
+        # Stage 7.2 Vol Targeting
+        self.vol_target_pct         = wf_config.vol_target_pct
+        self.vol_target_lookback_days = wf_config.vol_target_lookback_days
 
         # ── prepare() 階段填入的執行狀態 ──
         self.price_df: pd.DataFrame = pd.DataFrame()
@@ -1350,7 +1359,52 @@ class BacktestPipeline:
             print(f"  [{rb_date}] [topN-floor] {effective_topn}→{topn_floor}")
             effective_topn = topn_floor
 
+        # ── Stage 7.2 Vol Targeting：若 picks 60d realized vol > target，
+        # 拉高 cash_ratio 減少總部位。disabled (vol_target_pct=0) 時跳過。
+        if self.vol_target_pct > 0 and effective_topn > 0 and not day_feat.empty:
+            _vt_extra_cash = self._compute_vol_target_cash_share(
+                day_feat, rb_date, effective_topn
+            )
+            if _vt_extra_cash > _cash_ratio:
+                _cash_ratio = _vt_extra_cash
+
         return day_feat, effective_topn, _cash_ratio, False
+
+    # ── Stage 7.2 Helper：vol-target cash share ──
+    def _compute_vol_target_cash_share(
+        self,
+        day_feat: pd.DataFrame,
+        rb_date: date,
+        effective_topn: int,
+    ) -> float:
+        """估 picks 60d realized vol，若 > target 計算需要 hold 多少 cash。
+
+        從 day_feat 估 top-N picks（依 score / model_score），用
+        skills.vol_targeting.compute_vol_scaler_for_picks 算 scaler。
+        任何錯誤 silently fallback 0（不縮減）。
+        """
+        try:
+            from skills.vol_targeting import compute_vol_scaler_for_picks
+            _sc = None
+            for c in ("score", "model_score"):
+                if c in day_feat.columns:
+                    _sc = c
+                    break
+            if _sc:
+                _top = day_feat.nlargest(effective_topn, _sc)
+            else:
+                _top = day_feat.head(effective_topn)
+            _pick_sids = _top["stock_id"].astype(str).tolist()
+            if len(_pick_sids) < 2:
+                return 0.0
+            vt = compute_vol_scaler_for_picks(
+                _pick_sids, self.price_df, rb_date,
+                target_vol=float(self.vol_target_pct),
+                lookback_days=int(self.vol_target_lookback_days),
+            )
+            return float(vt.get("cash_share", 0.0))
+        except Exception:
+            return 0.0
 
     # ── Helper：進場訊號過濾 + topN 選股 ──
     def _apply_entry_signal_filter(
@@ -2191,6 +2245,8 @@ def run_backtest(
     use_lambdarank: bool = False,
     cross_section_normalize: bool = False,
     ensemble_n_checkpoints: int = 1,
+    vol_target_pct: float = 0.0,
+    vol_target_lookback_days: int = 60,
     wf_config: Optional["WalkForwardConfig"] = None,
 ) -> Dict:
     """執行 walk-forward 回測（向後相容 wrapper）。
@@ -2252,5 +2308,7 @@ def run_backtest(
             use_lambdarank=use_lambdarank,
             cross_section_normalize=cross_section_normalize,
             ensemble_n_checkpoints=ensemble_n_checkpoints,
+            vol_target_pct=vol_target_pct,
+            vol_target_lookback_days=vol_target_lookback_days,
         )
     return BacktestPipeline(config, db_session, wf_config).run()

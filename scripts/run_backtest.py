@@ -198,6 +198,13 @@ def main():
     parser.add_argument("--ensemble", type=int, default=1,
                         dest="ensemble_n_checkpoints", metavar="N",
                         help="P2-2：保留最近 N 次重訓 checkpoint 並平均排名分數（預設 1=停用，建議 3）")
+    parser.add_argument("--vol-target", type=float, default=0.0,
+                        dest="vol_target_pct", metavar="VOL",
+                        help="Stage 7.2 Vol Targeting：picks 60d realized vol > VOL 時拉高 cash_ratio。"
+                             "預設 0=停用；建議 0.30（10y WF Sharpe Δ +0.078, MDD Δ +4.29pp）")
+    parser.add_argument("--vol-target-lookback", type=int, default=60,
+                        dest="vol_target_lookback_days", metavar="N",
+                        help="vol-target 回溯天數（預設 60）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -359,6 +366,8 @@ def main():
             use_lambdarank=getattr(args, "use_lambdarank", False),
             cross_section_normalize=getattr(args, "cross_section_normalize", False),
             ensemble_n_checkpoints=getattr(args, "ensemble_n_checkpoints", 1),
+            vol_target_pct=getattr(args, "vol_target_pct", 0.0),
+            vol_target_lookback_days=getattr(args, "vol_target_lookback_days", 60),
         )
 
     # ── 輸出 JSON ──
