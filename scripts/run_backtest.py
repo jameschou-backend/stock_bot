@@ -205,6 +205,13 @@ def main():
     parser.add_argument("--vol-target-lookback", type=int, default=60,
                         dest="vol_target_lookback_days", metavar="N",
                         help="vol-target 回溯天數（預設 60）")
+    parser.add_argument("--use-stacking", action="store_true",
+                        dest="use_stacking",
+                        help="Stage 6.1：啟用 LightGBM+XGBoost+CatBoost rank-averaged stacking。"
+                             "Quick eval IC lift +7.1%%；與 --use-lambdarank 互斥。")
+    parser.add_argument("--stacking-val-frac", type=float, default=0.20,
+                        dest="stacking_val_frac",
+                        help="stacking 切尾段 val 比例（預設 0.20）")
 
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
@@ -368,6 +375,8 @@ def main():
             ensemble_n_checkpoints=getattr(args, "ensemble_n_checkpoints", 1),
             vol_target_pct=getattr(args, "vol_target_pct", 0.0),
             vol_target_lookback_days=getattr(args, "vol_target_lookback_days", 60),
+            use_stacking=getattr(args, "use_stacking", False),
+            stacking_val_frac=getattr(args, "stacking_val_frac", 0.20),
         )
 
     # ── 輸出 JSON ──

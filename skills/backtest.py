@@ -24,6 +24,7 @@ import collections
 import gc
 import os
 import time
+from dataclasses import dataclass as _module_dataclass
 from datetime import date, timedelta
 from typing import Deque, Dict, List, Optional, Tuple
 
@@ -157,6 +158,26 @@ def _train_model(
         )
         model.fit(train_X, train_y, sample_weight=sample_weight)
     return model
+
+
+@_module_dataclass
+class _StackingAdapter:
+    """讓 StackingEnsemble 能與 backtest 內 `model.predict(X_ndarray)` 介面相容。
+
+    `is_stacking=False` 時降級為一般 LightGBM regressor（小樣本 fallback）。
+    """
+    model: object
+    feature_names: List[str]
+    is_stacking: bool
+
+    def predict(self, X) -> np.ndarray:
+        if not self.is_stacking:
+            return self.model.predict(X)
+        # StackingEnsemble 需要 DataFrame：把 ndarray 包成 DataFrame（features 順序與訓練一致）
+        import pandas as _pd  # noqa
+        if not isinstance(X, _pd.DataFrame):
+            X = _pd.DataFrame(np.asarray(X), columns=self.feature_names)
+        return self.model.predict(X)
 
 
 def _load_prices(
@@ -763,6 +784,11 @@ class WalkForwardConfig:
     # 10y WF 驗證：Sharpe Δ +0.078, MDD Δ +4.29pp（target=0.30 時）
     vol_target_pct: float = 0.0
     vol_target_lookback_days: int = 60
+    # ── Stacking Ensemble（Stage 6.1）──
+    # True 啟用 LightGBM + XGBoost + CatBoost rank-averaged stacking。
+    # Quick eval IC lift +7.1%。與 use_lambdarank 互斥（stacking 使用 regressor）。
+    use_stacking: bool = False
+    stacking_val_frac: float = 0.20  # 末段切多少比例做 early-stopping 驗證
 
 
 class BacktestPipeline:
@@ -831,6 +857,14 @@ class BacktestPipeline:
         # Stage 7.2 Vol Targeting
         self.vol_target_pct         = wf_config.vol_target_pct
         self.vol_target_lookback_days = wf_config.vol_target_lookback_days
+        # Stage 6.1 Stacking
+        self.use_stacking           = wf_config.use_stacking
+        self.stacking_val_frac      = wf_config.stacking_val_frac
+        if self.use_stacking and self.use_lambdarank:
+            raise ValueError(
+                "use_stacking 與 use_lambdarank 互斥：stacking base models "
+                "為 regressor，無法接受 LambdaRank 的 int label。"
+            )
 
         # ── prepare() 階段填入的執行狀態 ──
         self.price_df: pd.DataFrame = pd.DataFrame()
@@ -1166,12 +1200,18 @@ class BacktestPipeline:
             _train_groups = None
 
         _t = time.time()
-        current_model = _train_model(
-            _fmat_arr, _y_sorted,
-            fast_mode=fast_mode,
-            sample_weight=_sw_sorted,
-            train_groups=_train_groups,
-        )
+        if self.use_stacking:
+            # Stage 6.1: LightGBM + XGBoost + CatBoost rank-averaged
+            current_model = self._train_stacking_for_period(
+                fmat, y, current_feature_names,
+            )
+        else:
+            current_model = _train_model(
+                _fmat_arr, _y_sorted,
+                fast_mode=fast_mode,
+                sample_weight=_sw_sorted,
+                train_groups=_train_groups,
+            )
         _dt = time.time() - _t
         model_buf.append(current_model)  # P2-2: 加入 ensemble buffer
         return {
@@ -1181,6 +1221,41 @@ class BacktestPipeline:
             "train_secs": _dt,
             "n_samples": len(y),
         }
+
+    # ── Stage 6.1 Helper：訓練 stacking ensemble + ndarray-compatible 適配 ──
+    def _train_stacking_for_period(
+        self,
+        fmat: pd.DataFrame,
+        y: np.ndarray,
+        feature_names: List[str],
+    ) -> "_StackingAdapter":
+        """切尾段 val 給 early-stopping，訓 LGBM+XGB+CatBoost，回傳 ndarray-compat adapter。
+
+        注意：不傳 sample_weight 給 base trainers，因為 xgb / catboost early-stopping
+        對權重 + small val set 有時不穩；stacking 增益主要來自演算法 diversity。
+        """
+        from skills.stacking import train_stacking_ensemble
+        _val_frac = float(self.stacking_val_frac)
+        if not 0.05 <= _val_frac <= 0.5:
+            _val_frac = 0.20
+        _n = len(fmat)
+        _n_val = max(1, int(_n * _val_frac))
+        _n_tr = _n - _n_val
+        if _n_tr < 50 or _n_val < 10:
+            # 樣本太少時降級到 LightGBM 單模型，避免 stacking 在小樣本失敗
+            print(f"  [stacking] 樣本不足 (train={_n_tr}, val={_n_val})，降級至 LGBM regression")
+            _model = _train_model(
+                fmat.values, y, fast_mode=self.fast_mode,
+                sample_weight=None, train_groups=None,
+            )
+            return _StackingAdapter(model=_model, feature_names=feature_names, is_stacking=False)
+        _tr_X, _val_X = fmat.iloc[:_n_tr], fmat.iloc[_n_tr:]
+        _tr_y, _val_y = y[:_n_tr], y[_n_tr:]
+        _ens = train_stacking_ensemble(
+            train_X=_tr_X, train_y=_tr_y,
+            val_X=_val_X, val_y=_val_y,
+        )
+        return _StackingAdapter(model=_ens, feature_names=feature_names, is_stacking=True)
 
     # ── Helper：當日特徵評分（含 momentum penalty + ensemble averaging）──
     def _score_day_features(
@@ -2247,6 +2322,8 @@ def run_backtest(
     ensemble_n_checkpoints: int = 1,
     vol_target_pct: float = 0.0,
     vol_target_lookback_days: int = 60,
+    use_stacking: bool = False,
+    stacking_val_frac: float = 0.20,
     wf_config: Optional["WalkForwardConfig"] = None,
 ) -> Dict:
     """執行 walk-forward 回測（向後相容 wrapper）。
@@ -2310,5 +2387,7 @@ def run_backtest(
             ensemble_n_checkpoints=ensemble_n_checkpoints,
             vol_target_pct=vol_target_pct,
             vol_target_lookback_days=vol_target_lookback_days,
+            use_stacking=use_stacking,
+            stacking_val_frac=stacking_val_frac,
         )
     return BacktestPipeline(config, db_session, wf_config).run()
