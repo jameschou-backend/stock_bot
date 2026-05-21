@@ -160,6 +160,14 @@ EXTENDED_FEATURE_COLUMNS = [
     "operating_margin_q",       # 營業利益率（%，業務獲利能力）
 ]
 
+# Stage 5.4 後處理特徵（由 scripts/enrich_features_stage5_4.py 補進 features parquet）
+# 不在 FEATURE_COLUMNS / _compute_features 內，避免 test_feature_columns_complete 失敗
+# 但需要進 PRUNED_FEATURE_COLS 才會被 production model 使用
+# 參考：López de Prado AFML Ch 5；Stage 5.2 IC=-0.025、ICIR=-10.36
+ENRICHED_FEATURE_COLS = [
+    "close_fracdiff_0_50",      # close fracdiff d=0.5（partial-memory price）
+]
+
 # 完整特徵列表（供 daily_pick / train_ranker 使用）
 FEATURE_COLUMNS = CORE_FEATURE_COLUMNS + EXTENDED_FEATURE_COLUMNS
 
@@ -215,7 +223,10 @@ _PRUNE_SET = {
     "kbar_morning_ret", "kbar_intraday_pos",
     # 2026-04-23 新增：PER/借券/季報特徵 — 回補中，暫入 _PRUNE_SET
     # 待 10y 回補完成 + SHAP IC 分析後決定是否移回主特徵池
-    "per_ratio", "pbr_ratio", "dividend_yield", "earnings_yield",
+    # Stage 5.2 IC 分析（2026-05-21）：移出 pbr_ratio + dividend_yield
+    #   pbr ICIR=-6.29、dividend_yield ICIR=-4.27（mean-reversion，台股價值因子）
+    #   Stage 5.3 60mo backtest 確認 Sharpe Δ +0.091（PER 單獨）、+0.145（PER + fracdiff combined）
+    "per_ratio", "earnings_yield",
     "lending_balance_ratio", "lending_fee_rate",
     "roe_ttm", "debt_ratio_q", "operating_margin_q",
 }
@@ -246,7 +257,7 @@ _SPONSOR_FEATURES: set = {
 PRUNED_FEATURE_COLS: List[str] = [
     f for f in FEATURE_COLUMNS
     if f not in _PRUNE_SET and f not in _IC_DECAY_PRUNE_SET
-]
+] + ENRICHED_FEATURE_COLS  # Stage 5.4：補上 enrich-only 欄位
 
 # ProcessPoolExecutor 每個 task 包含的股票數（降低序列化次數）
 _CHUNK_SIZE = 50
