@@ -2,7 +2,8 @@
 
 設計目標：
 - 預設（未設或 'on'）：執行全部 sponsor ingest（向後相容）
-- 'off' / 'false' / '0' / 'no'：跳過 6 個 per-stock 重型 sponsor ingest
+- 'off' / 'false' / '0' / 'no'：跳過 5 個 per-stock 重型 sponsor ingest
+  （ingest_per 自 Stage 5 起獨立每日跑，已移出此區塊）
 
 對應 pipelines/daily_pipeline.py 的 _should_run_sponsor_ingest()。
 """

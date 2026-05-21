@@ -202,8 +202,15 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         from skills import ingest_fear_greed
         _run_optional_skill("ingest_fear_greed", ingest_fear_greed.run)
 
+        # 15. 本益比/殖利率/本淨比（PER）— Stage 5 移出 sponsor 區塊
+        # 切到 TWSE 後是日頻單 call 的低成本 ingest（與 gov_bank/fear_greed 同級），
+        # 因此無條件每日跑。若仍走 FinMind 路徑（INGEST_PER_SOURCE=finmind），
+        # 會變成 per-stock 重型，此時請另設 SPONSOR_INGEST=off 並改用 backfill 腳本。
+        from skills import ingest_per
+        _run_optional_skill("ingest_per", ingest_per.run)
+
         # Per-stock 重型 sponsor ingest（受 SPONSOR_INGEST 開關控制；預設 on 保留原行為）
-        # 設 SPONSOR_INGEST=off 跳過下列 6 個，每日省 ~12,000 FinMind API calls
+        # 設 SPONSOR_INGEST=off 跳過下列 5 個，每日省 ~10,000 FinMind API calls
         if _should_run_sponsor_ingest():
             # 10. 分點券商聚合（TaiwanStockTradingDailyReport）
             from skills import ingest_broker_trades
@@ -217,10 +224,6 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
             from skills import ingest_kbar_features
             _run_optional_skill("ingest_kbar_features", ingest_kbar_features.run)
 
-            # 15. 本益比/殖利率/本淨比（TaiwanStockPER，Sponsor，每日價值因子）
-            from skills import ingest_per
-            _run_optional_skill("ingest_per", ingest_per.run)
-
             # 16. 借券餘額聚合（TaiwanStockSecuritiesLending，Sponsor）
             from skills import ingest_securities_lending
             _run_optional_skill("ingest_securities_lending", ingest_securities_lending.run)
@@ -230,9 +233,9 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
             _run_optional_skill("ingest_quarterly_fundamental", ingest_quarterly_fundamental.run)
         else:
             logger.info(
-                "[skip-sponsor-ingest] SPONSOR_INGEST=off，跳過 6 個 per-stock 重型 sponsor ingest "
-                "(broker_trades / holding_dist / kbar_features / per / securities_lending / "
-                "quarterly_fundamental)。預估省 ~12,000 FinMind API calls/day。"
+                "[skip-sponsor-ingest] SPONSOR_INGEST=off，跳過 5 個 per-stock 重型 sponsor ingest "
+                "(broker_trades / holding_dist / kbar_features / securities_lending / "
+                "quarterly_fundamental)。預估省 ~10,000 FinMind API calls/day。"
             )
     else:
         logger.info("[skip-ingest] 跳過資料抓取，直接進入 data quality check + 建置流程")
