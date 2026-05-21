@@ -27,6 +27,154 @@ def _compute_labels(df: pd.DataFrame, horizon: int) -> pd.DataFrame:
     return df.groupby("stock_id", group_keys=False).apply(apply_group)
 
 
+# ──────────────────────────────────────────────
+# Triple-Barrier labels (López de Prado, "Advances in Financial Machine Learning" Ch 3)
+#
+# 每個 entry 同時設三個 barrier，誰先觸到就決定 label：
+#   profit-take (upper):  close >= entry × (1 + upper_pt)   → tb_label=+1
+#   stop-loss   (lower):  close <= entry × (1 + lower_sl)   → tb_label=-1
+#   time        (max_h):  既沒 pt 也沒 sl 撐到第 max_horizon 天 → tb_label= 0
+#
+# 比固定 horizon 好的地方：
+#   - 自然編碼風險回報比（pt/sl ratio）
+#   - 避免「20 天後剛好回檔」造成 false negative
+#   - 對 outlier 友善（不會被 +200% 或 -100% 主導訓練）
+#
+# 為什麼 opt-in（不寫進 labels 表）：
+#   - DB schema 不動，與既有 fixed-horizon label 並存
+#   - 走 parquet 路徑（artifacts/labels/triple_barrier.parquet），由
+#     scripts/build_triple_barrier_labels.py 產出
+# ──────────────────────────────────────────────
+
+
+def triple_barrier_labels(
+    prices: pd.DataFrame,
+    upper_pt: float = 0.15,
+    lower_sl: float = -0.07,
+    max_horizon: int = 20,
+) -> pd.DataFrame:
+    """Triple-Barrier Method 純函式（每股向量化，不打 DB / 不打網路）。
+
+    Args:
+        prices: DataFrame 需含 stock_id / trading_date / close 三欄
+        upper_pt: profit-take 上界（如 +0.15 = +15%）
+        lower_sl: stop-loss 下界（如 -0.07 = -7%；應為負數）
+        max_horizon: 時間 barrier（交易日數，預設 20）
+
+    Returns:
+        DataFrame 含欄位：
+          stock_id, trading_date,
+          tb_label (-1/0/+1),
+          tb_return (float)：觸 barrier 當下的實際 return（pt 通常略 >= upper_pt，
+                            sl 通常略 <= lower_sl，time barrier 為當期 max_horizon return）
+          tb_exit_type ('pt'/'sl'/'time')
+          tb_exit_day_offset (1~max_horizon)
+        後 max_horizon 列因 forward window 不足無法 label，**會被 drop**。
+
+    Raises:
+        ValueError: upper_pt <= 0 / lower_sl >= 0 / max_horizon < 1 / 缺欄位
+    """
+    if upper_pt <= 0:
+        raise ValueError(f"upper_pt 必為正數（+15% = 0.15），got {upper_pt}")
+    if lower_sl >= 0:
+        raise ValueError(f"lower_sl 必為負數（-7% = -0.07），got {lower_sl}")
+    if max_horizon < 1:
+        raise ValueError(f"max_horizon >= 1，got {max_horizon}")
+    required = {"stock_id", "trading_date", "close"}
+    missing = required - set(prices.columns)
+    if missing:
+        raise ValueError(f"prices 缺欄位: {sorted(missing)}")
+
+    df = prices.copy()
+    df["trading_date"] = pd.to_datetime(df["trading_date"]).dt.date
+    df["close"] = pd.to_numeric(df["close"], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", "close"])
+    df = df.sort_values(["stock_id", "trading_date"]).reset_index(drop=True)
+    if df.empty:
+        return pd.DataFrame(columns=[
+            "stock_id", "trading_date", "tb_label",
+            "tb_return", "tb_exit_type", "tb_exit_day_offset",
+        ])
+
+    out_chunks = []
+    for stock_id, g in df.groupby("stock_id", sort=False):
+        g = g.reset_index(drop=True)
+        close = g["close"].to_numpy()
+        n = len(close)
+        if n <= 1:
+            continue
+
+        labels = np.zeros(n, dtype=np.int8)
+        returns = np.full(n, np.nan)
+        exit_types = np.empty(n, dtype=object)
+        exit_offsets = np.zeros(n, dtype=np.int32)
+        valid = np.zeros(n, dtype=bool)
+
+        # 對每個 entry index i，往後看 max_horizon 天
+        for i in range(n):
+            entry_px = close[i]
+            if not np.isfinite(entry_px) or entry_px <= 0:
+                continue
+            # forward window 末端（不含當日）
+            end = min(i + max_horizon, n - 1)
+            if end <= i:
+                # 後面沒任何資料，無法 label
+                continue
+            upper = entry_px * (1 + upper_pt)
+            lower = entry_px * (1 + lower_sl)
+            hit_pt = -1
+            hit_sl = -1
+            for offset in range(1, end - i + 1):
+                p = close[i + offset]
+                if not np.isfinite(p):
+                    continue
+                if p >= upper:
+                    hit_pt = offset
+                    break
+                if p <= lower:
+                    hit_sl = offset
+                    break
+            if hit_pt > 0:
+                labels[i] = 1
+                returns[i] = close[i + hit_pt] / entry_px - 1
+                exit_types[i] = "pt"
+                exit_offsets[i] = hit_pt
+                valid[i] = True
+            elif hit_sl > 0:
+                labels[i] = -1
+                returns[i] = close[i + hit_sl] / entry_px - 1
+                exit_types[i] = "sl"
+                exit_offsets[i] = hit_sl
+                valid[i] = True
+            else:
+                # 時間 barrier：撐到 end 都沒觸發
+                if end - i >= max_horizon:
+                    labels[i] = 0
+                    returns[i] = close[i + max_horizon] / entry_px - 1
+                    exit_types[i] = "time"
+                    exit_offsets[i] = max_horizon
+                    valid[i] = True
+                # 若 forward window 不足 max_horizon 天，整列丟棄
+        if not valid.any():
+            continue
+        chunk = pd.DataFrame({
+            "stock_id": g["stock_id"].iloc[valid],
+            "trading_date": g["trading_date"].iloc[valid],
+            "tb_label": labels[valid],
+            "tb_return": returns[valid],
+            "tb_exit_type": exit_types[valid],
+            "tb_exit_day_offset": exit_offsets[valid],
+        })
+        out_chunks.append(chunk)
+
+    if not out_chunks:
+        return pd.DataFrame(columns=[
+            "stock_id", "trading_date", "tb_label",
+            "tb_return", "tb_exit_type", "tb_exit_day_offset",
+        ])
+    return pd.concat(out_chunks, ignore_index=True)
+
+
 def run(config, db_session: Session, **kwargs) -> Dict:
     job_id = start_job(db_session, "build_labels")
     try:
