@@ -57,13 +57,22 @@ def _load_per_df() -> pd.DataFrame:
 
 
 def _patch_get_features(per_df: pd.DataFrame):
-    """Monkey-patch data_store.get_features 注入 pbr_ratio + dividend_yield。"""
+    """Monkey-patch data_store.get_features 注入 pbr_ratio + dividend_yield。
+
+    重要：features parquet 內可能已有同名欄位（全 NaN 預留 schema），
+    直接 merge 會變 `pbr_ratio_x` / `pbr_ratio_y` 導致 backtest 找不到 'pbr_ratio'。
+    必須先 drop 既有 placeholder 欄位。
+    """
     original = data_store.get_features
 
     def patched(*args, **kwargs):
         feat = original(*args, **kwargs)
-        if all(c in feat.columns for c in INJECT_COLS):
+        # 若已含實質資料（非全 NaN），不再 merge
+        if all(c in feat.columns and feat[c].notna().sum() > 0 for c in INJECT_COLS):
             return feat
+        drop_cols = [c for c in INJECT_COLS if c in feat.columns]
+        if drop_cols:
+            feat = feat.drop(columns=drop_cols)
         feat = feat.merge(per_df, on=["stock_id", "trading_date"], how="left")
         return feat
 

@@ -63,12 +63,17 @@ def _load_fracdiff_df(path: Path) -> pd.DataFrame:
 
 
 def _patch(per_df, fracdiff_df):
+    """Monkey-patch with placeholder-column drop（修 5.3 bug）。"""
     original = data_store.get_features
 
     def patched(*args, **kwargs):
         feat = original(*args, **kwargs)
-        if all(c in feat.columns for c in NEW_FEATURES):
+        if all(c in feat.columns and feat[c].notna().sum() > 0 for c in NEW_FEATURES):
             return feat
+        # 先 drop features parquet 內可能存在的全 NaN placeholder
+        drop_cols = [c for c in NEW_FEATURES if c in feat.columns]
+        if drop_cols:
+            feat = feat.drop(columns=drop_cols)
         feat = feat.merge(per_df, on=["stock_id", "trading_date"], how="left")
         feat = feat.merge(fracdiff_df, on=["stock_id", "trading_date"], how="left")
         return feat
