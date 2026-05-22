@@ -17,3 +17,8 @@ logs/
 .pytest_cache/
 artifacts/run_manifest_*.json
 .claude/
+
+# Stage 9.1 MLflow
+mlruns/
+mlartifacts/
+optuna.db

@@ -44,6 +44,12 @@ from app.config import load_config
 from app.db import get_session
 from skills.backtest import run_backtest
 from skills.build_features import BASELINE_FEATURE_COLS, CHANGE_A_FEATURE_COLS, PRUNED_FEATURE_COLS
+from skills.mlflow_tracking import (
+    DEFAULT_EXPERIMENT,
+    log_backtest_result,
+    log_params,
+    start_mlflow_run,
+)
 
 
 def main():
@@ -213,6 +219,18 @@ def main():
                         dest="stacking_val_frac",
                         help="stacking 切尾段 val 比例（預設 0.20）")
 
+    # ── Stage 9.1 MLflow ──
+    parser.add_argument("--mlflow", action="store_true",
+                        dest="mlflow_enabled",
+                        help="Stage 9.1：啟用 MLflow 追蹤（寫入 ./mlruns/）。"
+                             "用 `mlflow ui --port 5000` 查看 dashboard。")
+    parser.add_argument("--mlflow-experiment", type=str, default=DEFAULT_EXPERIMENT,
+                        dest="mlflow_experiment",
+                        help=f"MLflow experiment 名（預設 {DEFAULT_EXPERIMENT}）")
+    parser.add_argument("--mlflow-run-name", type=str, default=None,
+                        dest="mlflow_run_name",
+                        help="MLflow run 名（預設 timestamp_gitSHA）")
+
     # ── 速度 ──
     parser.add_argument("--fast", action="store_true",
                         help="快速模式：LightGBM 樹數 500→150，加速 ~3x（精度略降）")
@@ -326,7 +344,23 @@ def main():
     if args.momentum_penalty:
         momentum_penalty_cols = {"bias_20": 0.5, "ret_5": 0.5, "ret_20": 0.5}
 
-    with get_session() as session:
+    # ── Stage 9.1：MLflow run context（disabled 時為 no-op）──
+    _mlflow_enabled = getattr(args, "mlflow_enabled", False)
+    _mlflow_exp = getattr(args, "mlflow_experiment", DEFAULT_EXPERIMENT)
+    _mlflow_run_name = getattr(args, "mlflow_run_name", None)
+
+    with get_session() as session, start_mlflow_run(
+        experiment_name=_mlflow_exp,
+        run_name=_mlflow_run_name,
+        enabled=_mlflow_enabled,
+    ) as _mlflow_run:
+        # log CLI args 作為 params（過濾 mlflow 自身 + sensitive）
+        if _mlflow_run is not None:
+            _cli_params = {
+                k: v for k, v in vars(args).items()
+                if not k.startswith("mlflow_") and k not in ("output",)
+            }
+            log_params(_cli_params, mlflow_run=_mlflow_run)
         result = run_backtest(
             config=config,
             db_session=session,
@@ -378,6 +412,9 @@ def main():
             use_stacking=getattr(args, "use_stacking", False),
             stacking_val_frac=getattr(args, "stacking_val_frac", 0.20),
         )
+
+        # ── Stage 9.1：寫入 mlflow metrics / artifacts ──
+        log_backtest_result(result, mlflow_run=_mlflow_run)
 
     # ── 輸出 JSON ──
     output_path = args.output
