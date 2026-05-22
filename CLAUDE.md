@@ -246,6 +246,29 @@ memory/project_status.md — 目前最佳結果、已知問題、待優化項目
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 7.3 Kelly Criterion 加權實驗（2026-05-22，⚠️ NEGATIVE）
+
+Half-Kelly fractional weighting：每月 top-N picks 不再等權，依 `f_i ∝ μ_i / σ²_i` 加權
+（μ_i 從 model score percentile 線性校正至 [5%, 35%]，σ_i 用 60d daily vol 年化，
+half-Kelly ×0.5，individual cap 10%）。
+
+| 指標 | Baseline 60mo | +Kelly Half 60mo | Δ |
+|------|--------------|------------------|---|
+| 累積 | +772.63% | +765.91% | -6.72pp ❌ |
+| Sharpe | 1.368 | 1.269 | -0.099 ❌ |
+| MDD | -40.74% | -41.43% | -0.69pp ❌ |
+| Calmar | 1.355 | 1.327 | -0.028 ❌ |
+
+> **失敗原因**：
+> 1. Half-Kelly 對 μ 估計誤差仍敏感，percentile → [5%, 35%] 線性外推太粗略。
+> 2. 個股 60d vol 噪音大；反 vol 配重恰好偏向低 vol mean-reverting 股。
+> 3. Cap 0.10 ≈ 10 個有效部位，比等權 1/20=5% 更集中，反降 diversification。
+> 4. Top picks 已有產業相關性（流動性加權偏同類股），Kelly tilt 沒帶來 idiosyncratic 增益。
+>
+> **保留 `skills/kelly.py` + 18 tests 作為研究入口**，未整合到 backtest.py。
+> 與 [[stage61-stacking-negative]]、Stage 6.2 Multi-Horizon、Stage 7.1 HRP 同列 NEGATIVE
+> 結果。教訓：position-sizing 改動在乾淨 equal-weight + market filter 的基準上很難取得增量。
+
 #### Stage 6.1 Stacking Ensemble 實驗（2026-05-22，⚠️ NEGATIVE）
 
 異質模型 stacking：LightGBM + XGBoost + CatBoost rank-averaged。
