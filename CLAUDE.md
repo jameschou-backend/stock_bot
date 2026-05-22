@@ -246,6 +246,32 @@ memory/project_status.md — 目前最佳結果、已知問題、待優化項目
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 8.1 結構化籌碼資料 IC 再評估（2026-05-22，⚠️ NEGATIVE）
+
+兩條子路線都未取得增量：
+
+**8.1a `_PRUNE_SET` 內 20 個特徵重新跑 36mo / 60mo IC**：
+- 36mo：僅 `foreign_buy_consecutive_days` ICIR=+0.31 邊際達標，無顯著回收
+- 60mo：擴大樣本後 0/20 達標（樣本擴大 ICIR 反而弱化 → 36mo 邊際是 noise）
+- 多數 sponsor 特徵 coverage=0%（FinMind sponsor token 2026-05-20 過期，無法 backfill）
+
+**8.1b 5 個訊號組合新特徵**（不需新 ingest，純用 raw_prices+institutional+margin）：
+| 特徵 | ICIR | 結論 |
+|------|------|------|
+| inst_consensus_5d | -0.137 | ⚠️ 弱 |
+| **foreign_net_vol_20** | **+0.292** | ⚠️ 差 0.01 達標 |
+| intraday_strength_5d | -0.175 | ⚠️ 弱 |
+| opening_gap_5d | +0.061 | ⚠️ 弱 |
+| margin_share_zscore_20 | -0.065 | ⚠️ 弱 |
+
+> **結論**：production model 已含 48 特徵，新增結構化特徵邊際 ROI 極低；LightGBM
+> 從現有 ret/foreign_net/margin 等已隱式學到組合訊號。Stage 8 進一步需要：
+>   - (a) 接付費 alt data（FinMind sponsor / TEJ / Yahoo Premium）
+>   - (b) LLM/NLP 新聞情感（需要新 scraper + LLM API budget）
+>
+> 兩個 IC 評估 script 保留於 `scripts/ic_analysis_pruned_set.py` /
+> `scripts/ic_analysis_combo_features.py` 作為未來再評估入口。
+
 #### Stage 7.3 Kelly Criterion 加權實驗（2026-05-22，⚠️ NEGATIVE）
 
 Half-Kelly fractional weighting：每月 top-N picks 不再等權，依 `f_i ∝ μ_i / σ²_i` 加權
