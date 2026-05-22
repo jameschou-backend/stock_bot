@@ -56,6 +56,34 @@ memory/project_status.md — 目前最佳結果、已知問題、待優化項目
 - 啟動 Dashboard：`make dashboard`
 - 產出報表：`make report`
 
+## Stage 9 工程化工具（2026-05-22）
+
+### 9.1 MLflow 實驗追蹤
+回測自動寫入 `mlruns/`，跨 run 比較、artifact 保留：
+```bash
+python scripts/run_backtest.py --months 120 ... --mlflow --mlflow-experiment my_exp
+mlflow ui --port 5000   # http://localhost:5000 dashboard
+```
+`--mlflow` 啟用，否則 byte-identical 跳過所有追蹤邏輯（`skills/mlflow_tracking.py`）。
+
+### 9.2 Optuna 超參數搜尋
+5 維 TPE 搜尋（topn / min_avg_turnover / vol_target / ensemble_n / liquidity_weighting），
+SQLite 可續跑，自動進 MLflow tracking：
+```bash
+python scripts/optuna_search.py --n-trials 30 --months 60   # ~2-3h
+python scripts/optuna_search.py --resume                     # 中斷續跑
+```
+搜尋完印 top-5，手動跑 `--months 120` 完整驗證 top-3 候選。
+
+### 9.3 Prefect 工作流編排
+`pipelines/prefect_flow.py` 將 daily pipeline 拆 5 個 task 群組，加 retry/checkpoint/Web UI：
+```bash
+python -m pipelines.prefect_flow              # 本地直接跑
+prefect server start                          # Web UI :4200
+prefect deploy ...                            # scheduled flow
+```
+原 `make pipeline` 走 `pipelines/daily_pipeline.py` 保留向後相容。
+
 ## 核心流程與檔案
 
 - Pipeline 入口：`pipelines/daily_pipeline.py`
