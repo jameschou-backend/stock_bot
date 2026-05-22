@@ -246,6 +246,31 @@ memory/project_status.md — 目前最佳結果、已知問題、待優化項目
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 6.1 Stacking Ensemble 實驗（2026-05-22，⚠️ NEGATIVE）
+
+異質模型 stacking：LightGBM + XGBoost + CatBoost rank-averaged。
+Quick eval（60mo）顯示截面 IC lift +7.1%，但 10y WF portfolio 表現嚴重退化。
+
+| 指標 | Baseline 10y | +Stacking 10y | Δ |
+|------|-------------|---------------|---|
+| 累積報酬 | +3471.73% | +716.18% | **-2755pp** ❌ |
+| 年化報酬 | +43.75% | +23.75% | -20.00pp ❌ |
+| 超額報酬 | +3396.05% | +640.50% | -2755pp ❌ |
+| Sharpe | 1.15 | 0.83 | -0.32 ❌ |
+| MDD | -39.15% | -42.87% | -3.72pp ❌ |
+| Calmar | 1.12 | 0.55 | -0.57 ❌ |
+| 勝率 | 46.76% | 44.92% | -1.84pp ❌ |
+
+> **失敗原因分析**：
+> 1. Quick eval IC lift（+7.1%）量測「截面排名相關」，不直接對應 portfolio Sharpe。
+> 2. Stacking 切 20% 樣本做 early-stopping val，實際訓練集縮減 20%，反而傷害 LightGBM 在百萬筆資料下的優勢。
+> 3. XGBoost / CatBoost 在 48 個樹狀特徵 + 數百萬樣本上沒比 LightGBM 強，rank-averaging 反而稀釋 LGBM 的單獨贏家訊號。
+> 4. 三 base model 各自 800 顆樹 + early stopping 對 portfolio top-K 排名一致性貢獻有限。
+>
+> **保留 code 但 production flag 預設關閉**：
+> `--use-stacking` 仍可用做未來進一步研究（如改用 Sharpe-weighted ensemble 而非等權 rank-average），但生產配置維持 LightGBM 單模型。
+> 與 Stage 6.2 Multi-Horizon、Stage 7.1 HRP 同列 NEGATIVE 結果保留。
+
 #### Strategy B 日頻策略實驗（2026-03-15）
 
 獨立的日頻策略（`scripts/backtest_daily.py`），每日掃描進場訊號，個別部位管理。
