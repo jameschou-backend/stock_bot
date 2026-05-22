@@ -39,9 +39,11 @@ from skills.mlflow_tracking import (
 )
 
 # 預設搜尋空間 — 5 維度（精簡）
+# NOTE: min_avg_turnover 單位是「億元」（backtest.py:310 內部 × 1e8）
+#       生產預設 1.0（1 億元），範圍 0.5~3.0 對應 5千萬~3億元，合理流動性門檻
 DEFAULT_SEARCH_DIMS = {
     "topn": [10, 15, 20, 25],
-    "min_avg_turnover_log": (7.5, 8.5),  # log10：1e7.5 ~ 1e8.5
+    "min_avg_turnover": (0.5, 3.0),      # 億元，step 0.5
     "vol_target_pct": (0.0, 0.40),       # 0=disabled, > 0 啟用
     "ensemble_n_checkpoints": [1, 3, 5],
     "liquidity_weighting": [True, False],
@@ -52,10 +54,11 @@ def objective(trial: optuna.Trial, months: int, mlflow_experiment: str | None) -
     """單一 trial：跑一次 60mo backtest，回傳 Sharpe ratio。"""
     # ── 從 search space 取參 ──
     topn = trial.suggest_categorical("topn", DEFAULT_SEARCH_DIMS["topn"])
-    min_avg_turnover = 10 ** trial.suggest_float(
-        "min_avg_turnover_log",
-        DEFAULT_SEARCH_DIMS["min_avg_turnover_log"][0],
-        DEFAULT_SEARCH_DIMS["min_avg_turnover_log"][1],
+    min_avg_turnover = trial.suggest_float(
+        "min_avg_turnover",
+        DEFAULT_SEARCH_DIMS["min_avg_turnover"][0],
+        DEFAULT_SEARCH_DIMS["min_avg_turnover"][1],
+        step=0.5,
     )
     vol_target_pct = trial.suggest_float(
         "vol_target_pct",

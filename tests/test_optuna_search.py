@@ -35,9 +35,10 @@ def test_search_dims_have_valid_ranges():
     dims = mod.DEFAULT_SEARCH_DIMS
     assert all(isinstance(v, list) and len(v) >= 2 for v in dims.values()
                if isinstance(v, list))
-    # min_avg_turnover_log 是 tuple (low, high)
-    lo, hi = dims["min_avg_turnover_log"]
+    # min_avg_turnover 是 tuple (low, high)（單位：億元）
+    lo, hi = dims["min_avg_turnover"]
     assert lo < hi
+    assert 0 < lo < hi < 10  # sanity: 億元範圍合理
 
 
 def test_objective_signature():
