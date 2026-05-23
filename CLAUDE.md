@@ -274,6 +274,37 @@ prefect deploy ...                            # scheduled flow
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 9.2 Optuna search v2 10y 驗證（2026-05-23，⚠️ NEGATIVE）
+
+Optuna 30 trials × 60mo 搜尋出 best Sharpe 0.68（trial #8）+ low-MDD 候選（trial #4），
+拿 top-2 對 production baseline 跑 10y 對照，兩個 candidates 全面崩盤。
+
+| Metric | Baseline (prod) | Trial #8 best Sharpe | Trial #4 low MDD |
+|--------|----------------|---------------------|------------------|
+| 累積 | **+3471.73%** | +137.27% | +54.55% |
+| 年化 | **+43.75%** | +9.16% | +4.52% |
+| 超額 | **+3396%** | +49% | -34% ❌ |
+| MDD | -39.15% | -53.32% | **-11.07%** ✅ |
+| Sharpe | **1.15** | 0.38 | 0.38 |
+| Calmar | **1.12** | 0.17 | 0.41 |
+
+> **失敗根因**：
+> 1. **60mo 不夠 representative**：缺 2017-2020 中小型股大牛市，TPE 學到的 best
+>    僅反映 2021-2026 較弱期局部最優
+> 2. **`min_avg_turnover ≥ 0.5` 強制過濾**：search space 把 turnover 起點設 0.5 億，
+>    過濾掉牛市中小型股 → 17-20 期間傷害巨大
+> 3. **`topn ≤ 15` 過度集中**：60mo 看不出但 10y idiosyncratic risk 累積
+> 4. **缺 baseline 對應點**：search space 沒涵蓋 `min_avg_turnover=0` 與 `topn=20`
+>    的 production 預設，TPE 無法回到該區域
+>
+> **下次重跑修正方向**：
+>   - `min_avg_turnover ∈ [0, 3.0]`（含 0）
+>   - `topn ∈ [15, 25]`（不要 10）
+>   - search 期改 120mo（10y 直接）— 雖然每 trial 變 ~30min × 30 ≈ 15h
+>
+> **Stage 9 工具本身有效**（MLflow tracking、Optuna SQLite、Prefect retry），
+> 此次 search space 設計失敗不影響工具價值。
+
 #### Stage 8.1 結構化籌碼資料 IC 再評估（2026-05-22，⚠️ NEGATIVE）
 
 兩條子路線都未取得增量：
