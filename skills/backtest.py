@@ -768,6 +768,9 @@ class WalkForwardConfig:
     market_filter_tiers: Optional[List[tuple]] = None
     market_filter_min_positions: int = 1
     entry_signal_filter: Optional[Dict[str, object]] = None
+    # Stage 10.4 D1：近 20 日報酬 < threshold 的 candidate 排除
+    # （0.0=disabled；< 0 啟用，例如 -0.15）。DD attribution 顯示 5301 在 -38% 後仍被選中
+    recent_dd_skip_pct: float = 0.0
     # ── 投資組合熔斷 ──
     portfolio_circuit_breaker_pct: Optional[float] = None  # 月中累積虧損觸發全出場（如 -0.15）
     # ── Label 設定 ──
@@ -849,6 +852,8 @@ class BacktestPipeline:
         self.market_filter_tiers    = wf_config.market_filter_tiers
         self.market_filter_min_positions = wf_config.market_filter_min_positions
         self.entry_signal_filter    = wf_config.entry_signal_filter
+        # Stage 10.4 D1
+        self.recent_dd_skip_pct     = wf_config.recent_dd_skip_pct
         self.portfolio_circuit_breaker_pct = wf_config.portfolio_circuit_breaker_pct
         self.label_type             = wf_config.label_type
         self.use_lambdarank         = wf_config.use_lambdarank
@@ -1490,6 +1495,16 @@ class BacktestPipeline:
         """套用進場訊號過濾並選取 topN；回傳 (picks, bt_candidate_pool)。"""
         entry_signal_filter = self.entry_signal_filter
         market_filter_min_positions = self.market_filter_min_positions
+
+        # Stage 10.4 D1：上 20 日報酬 < threshold 排除（已暴雷股下月不再 pick）
+        if self.recent_dd_skip_pct < 0 and "ret_20" in day_feat.columns:
+            _before_n = len(day_feat)
+            day_feat = day_feat[day_feat["ret_20"] >= self.recent_dd_skip_pct]
+            _n_excl = _before_n - len(day_feat)
+            if _n_excl > 0:
+                # 限制 log 頻率：只在過濾數 > 5 時印
+                if _n_excl > 5:
+                    print(f"  [recent_dd_skip] 排除 {_n_excl} 檔 (ret_20 < {self.recent_dd_skip_pct:.2%})")
 
         if entry_signal_filter:
             _esf = entry_signal_filter
@@ -2324,6 +2339,7 @@ def run_backtest(
     vol_target_lookback_days: int = 60,
     use_stacking: bool = False,
     stacking_val_frac: float = 0.20,
+    recent_dd_skip_pct: float = 0.0,
     wf_config: Optional["WalkForwardConfig"] = None,
 ) -> Dict:
     """執行 walk-forward 回測（向後相容 wrapper）。
@@ -2389,5 +2405,6 @@ def run_backtest(
             vol_target_lookback_days=vol_target_lookback_days,
             use_stacking=use_stacking,
             stacking_val_frac=stacking_val_frac,
+            recent_dd_skip_pct=recent_dd_skip_pct,
         )
     return BacktestPipeline(config, db_session, wf_config).run()

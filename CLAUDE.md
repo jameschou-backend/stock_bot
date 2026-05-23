@@ -282,6 +282,42 @@ prefect deploy ...                            # scheduled flow
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 10.4 D1 recent_dd_skip filter（2026-05-23，⚠️ NEGATIVE）
+
+Stage 10.3 DD attribution 發現 -33% MDD 的 28% 來自 5301（觀光餐旅）一檔，
+連續 2 個月被 model 選中（4 月 -38% → 5 月還選 → 6 月再跌 -50%）。設計 D1：
+`ret_20 < threshold` 排除 candidate，避免持續持有已暴雷股。
+
+**60mo threshold sweep** (vs baseline_v2 topn=30 Sharpe 1.7551 / MDD -33.00%)：
+
+| Threshold | Sharpe | MDD | Calmar | 勝率 | vs baseline |
+|-----------|--------|------|--------|------|----|
+| -15% | 1.6116 | -25.35% | 2.17 | 48.33% | Sharpe ❌ -0.14 |
+| -20% | 1.7502 | -25.49% | 2.46 | 48.80% | Sharpe ≈, Calmar +0.46 ✅ |
+| -25% | 1.7725 | -25.53% | 2.51 | 48.93% | Sharpe **+0.02**, Calmar **+0.51** ✅✅ |
+
+**60mo 最佳：-25%（dominant 全面贏 baseline）**
+
+**10y 驗證（-25% threshold）vs baseline (topn=30)**：
+
+| Metric | Baseline | D1 -25% | Δ |
+|--------|----------|---------|---|
+| 累積 | +5115% | +3088% | **-2028pp** ❌ |
+| MDD | -33.00% | **-36.14%** | **-3.14pp** ❌ |
+| Sharpe | 1.33 | 1.30 | -0.03 |
+| Calmar | 1.50 | 1.16 | -0.34 ❌ |
+
+> **失敗根因**：60mo (2021-2026) -25% 剛好 cover 5301 那種暴雷，看似 dominant。
+> 但 10y (2016-2026) 期間，-25% 過濾**把 2017-2020 中小型股牛市的「跌深反彈」
+> 機會一併排掉**，alpha 大失，MDD 也沒改善（其他年份新暴雷股 emerge）。
+>
+> **教訓重申**：60mo POSITIVE ≠ 10y POSITIVE。Optuna v2 與 D1 都是同樣模式。
+> 任何 portfolio-level filter 都必須 10y validation。
+>
+> **保留 `recent_dd_skip_pct` 為 opt-in flag**（CLI `--recent-dd-skip PCT`），
+> 預設 0=disabled。未來若有 regime-aware 設計可能 work（例如只在大盤
+> 200ma 上方啟用過濾），但 unconditional filter 不適合。
+
 #### Stage 9.2 Optuna search v2 10y 驗證（2026-05-23，⚠️ NEGATIVE）
 
 Optuna 30 trials × 60mo 搜尋出 best Sharpe 0.68（trial #8）+ low-MDD 候選（trial #4），

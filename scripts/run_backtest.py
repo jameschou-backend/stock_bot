@@ -218,6 +218,10 @@ def main():
     parser.add_argument("--stacking-val-frac", type=float, default=0.20,
                         dest="stacking_val_frac",
                         help="stacking 切尾段 val 比例（預設 0.20）")
+    parser.add_argument("--recent-dd-skip", type=float, default=0.0,
+                        dest="recent_dd_skip_pct", metavar="PCT",
+                        help="Stage 10.4 D1：ret_20 < PCT 時排除 candidate（負值啟用，"
+                             "例如 -0.15 代表上月跌 15%% 不選）。0=disabled。")
 
     # ── Stage 9.1 MLflow ──
     parser.add_argument("--mlflow", action="store_true",
@@ -411,6 +415,7 @@ def main():
             vol_target_lookback_days=getattr(args, "vol_target_lookback_days", 60),
             use_stacking=getattr(args, "use_stacking", False),
             stacking_val_frac=getattr(args, "stacking_val_frac", 0.20),
+            recent_dd_skip_pct=getattr(args, "recent_dd_skip_pct", 0.0),
         )
 
         # ── Stage 9.1：寫入 mlflow metrics / artifacts ──
