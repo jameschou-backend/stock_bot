@@ -20,7 +20,7 @@
 
 台股波段 ML 選股系統。使用 LightGBM 以 20 日 forward return 為 label，每月再平衡選股（topN 等權），
 配合漸進式大盤過濾、季節性降倉，實現超越大盤的長期報酬。
-現行 10y walk-forward 結果：累積 **+3351%**、Sharpe **1.104**、MDD -27.3%（2026-03-18，流動性加權 + SHAP剪枝 48特徵）。
+現行 10y walk-forward 結果：累積 **+5115%**、Sharpe **1.33**、MDD **-33%**（2026-05-23 Stage 10.1，topn 20→30 + 流動性加權 + SHAP剪枝 48特徵）。
 
 ## 持久記憶系統
 
@@ -197,12 +197,14 @@ prefect deploy ...                            # scheduled flow
 | `market_filter_min_positions` | `2` | 大盤過濾後最低持股數（防止單押集中風險） |
 | 單筆 clip | `-0.50` | `max(ret, -0.50)`：退市股最大虧損 -50% |
 
-> **生產 CLI 指令**：
+> **生產 CLI 指令（2026-05-23 更新，topn 20→30）**：
 > ```bash
-> python scripts/run_backtest.py --months 120 --seasonal-filter --no-stoploss \
+> python scripts/run_backtest.py --months 120 --topn 30 --seasonal-filter --no-stoploss \
 >   --market-filter-tiers="-0.05:0.5,-0.10:0.25,-0.15:0.10" --market-filter-min-pos 2 \
 >   --liq-weighted --pruned-features
 > ```
+> 注意：`topn` 預設值已從 20 改為 30（app/config.py + skills/backtest.py）。
+> 若 .env 顯式設了 `TOPN=20` 需手動移除或改為 30。
 
 > **`label_horizon_buffer` 說明（2026-03-13 修正）**：
 > 標籤定義為 `future_ret_h = close_{T+20} / close_T - 1`（20 交易日 forward return）。
@@ -214,11 +216,16 @@ prefect deploy ...                            # scheduled flow
 > 對應 `daily_pick.py` 在 3/10 月永遠啟用季節性降倉的行為，解決 production ≠ backtest 不一致。
 > `run_backtest.py` CLI 加 `--seasonal-filter` 旗標啟用。
 
-> **現行 10y walk-forward 結果（2026-03-18，流動性加權 + SHAP剪枝 48特徵）**：
-> 累積 **+3351.49%**、大盤 **+54.58%**、超額 **+3296.91%**、MDD **-27.31%**、
-> Sharpe **+1.104**、Calmar **+1.583**、年化 **+43.23%**
-> 期間：2016-05-03 ~ 2026-02-05、勝率 45.89%
-> 配置：無停損 + 漸進大盤過濾（-5%:x0.5, -10%:x0.25, -15%:x0.10）+ 最少 2 檔 + 流動性加權 + SHAP剪枝
+> **現行 10y walk-forward 結果（Stage 10.1，2026-05-23，topn=30）**：
+> 累積 **+5115.80%**、大盤 **+75.68%**、超額 **+5040.12%**、MDD **-33.00%**、
+> Sharpe **+1.33**、Calmar **+1.50**、年化 **+49.38%**
+> 勝率 47.23%、交易次數 3028（topn=20 為 2019）
+> 配置：topn=30 + 無停損 + 漸進大盤過濾 + 最少 2 檔 + 流動性加權 + SHAP剪枝
+>
+> vs topn=20 baseline 改進：Sharpe +0.18, MDD +6.15pp, cum +1644pp, Calmar +0.38
+>
+> **舊基準（topn=20，2026-03-18 快照，已過時）**：
+> 累積 +3351.49%、Sharpe +1.104、MDD -27.31%、Calmar +1.583
 >
 > 逐年報酬（現行基準，2026-03-18）：
 > | 年份 | 策略 | 大盤 | 超額 |
@@ -244,7 +251,8 @@ prefect deploy ...                            # scheduled flow
 
 | 實驗 | 配置 | 累積報酬 | MDD | Sharpe | Calmar | 說明 |
 |------|------|---------|-----|--------|--------|------|
-| **剪枝+流動性加權（2026-03-18）** | **+liq-weighted+pruned(48特徵)** | **+3351%** | **-27%** | **1.104** | **1.583** | **← 現行生產** |
+| **Stage 10.1 topn=30（2026-05-23）** | **+topn=30** | **+5115%** | **-33%** | **1.33** | **1.50** | **← 現行生產** |
+| 剪枝+流動性加權 topn=20（2026-03-18 快照）| +liq-weighted+pruned(48特徵) | +3351% | -27% | 1.104 | 1.583 | 舊基準，adj_close 已更新 |
 | 流動性加權（56特徵）| 漸進過濾+最少2檔+liq-weighted | +2948% | -27% | 1.082 | 1.510 | |
 | 無加權基準（2026-03-18）| 漸進過濾+最少2檔 | +1795% | -29% | 1.009 | 1.188 | adj_close 2026-03-18 快照 |
 | 流動性加權+分級滑價 | 同上+tiered-slip | +1061% | -30% | 0.813 | 0.930 | 現實成本壓力測試 |

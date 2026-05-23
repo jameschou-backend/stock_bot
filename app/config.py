@@ -188,7 +188,7 @@ def load_config() -> AppConfig:
         db_name=str(pick("DB_NAME", "stock_bot")),
         db_user=str(pick("DB_USER", "")),
         db_password=str(pick("DB_PASSWORD", "")),
-        topn=int(pick("TOPN", 20)),
+        topn=int(pick("TOPN", 30)),
         label_horizon_days=int(pick("LABEL_HORIZON_DAYS", 20)),
         train_lookback_years=int(pick("TRAIN_LOOKBACK_YEARS", 5)),
         schedule_time=str(pick("SCHEDULE_TIME", "16:50")),

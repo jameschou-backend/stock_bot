@@ -726,7 +726,7 @@ class WalkForwardConfig:
     # ── 基本設定 ──
     backtest_months: int = 24
     retrain_freq_months: int = 3
-    topn: int = 20
+    topn: int = 30  # Stage 10.1（2026-05-23）: 20→30 提升 Sharpe +0.18 / MDD +6pp（10y WF 驗證）
     stoploss_pct: float = -0.07
     transaction_cost_pct: float = 0.00585
     min_train_days: int = 500
@@ -2279,7 +2279,7 @@ def run_backtest(
     db_session: Session,
     backtest_months: int = 24,
     retrain_freq_months: int = 3,
-    topn: int = 20,
+    topn: int = 30,  # Stage 10.1: 20→30，提升 Sharpe / 降 MDD（10y WF 驗證）
     stoploss_pct: float = -0.07,
     transaction_cost_pct: float = 0.00585,
     min_train_days: int = 500,
