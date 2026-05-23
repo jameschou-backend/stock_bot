@@ -222,6 +222,10 @@ def main():
                         dest="recent_dd_skip_pct", metavar="PCT",
                         help="Stage 10.4 D1：ret_20 < PCT 時排除 candidate（負值啟用，"
                              "例如 -0.15 代表上月跌 15%% 不選）。0=disabled。")
+    parser.add_argument("--max-per-sector", type=int, default=0,
+                        dest="max_per_sector", metavar="N",
+                        help="Stage 10.5 D2：同產業最大持股 N 檔（0=disabled，建議 3~5）。"
+                             "DD attribution 顯示 2025-03 觀光餐旅 2 檔同時崩 -10.92%%")
 
     # ── Stage 9.1 MLflow ──
     parser.add_argument("--mlflow", action="store_true",
@@ -416,6 +420,7 @@ def main():
             use_stacking=getattr(args, "use_stacking", False),
             stacking_val_frac=getattr(args, "stacking_val_frac", 0.20),
             recent_dd_skip_pct=getattr(args, "recent_dd_skip_pct", 0.0),
+            max_per_sector=getattr(args, "max_per_sector", 0),
         )
 
         # ── Stage 9.1：寫入 mlflow metrics / artifacts ──

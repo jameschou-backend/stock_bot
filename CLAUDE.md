@@ -282,6 +282,29 @@ prefect deploy ...                            # scheduled flow
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 10.5 D2 max_per_sector 產業集中限制（2026-05-23，⚠️ NEGATIVE）
+
+DD attribution 觀察到 2025-03 觀光餐旅 2 檔（5301、4804）同時崩盤共貢獻 -10.92%。
+設計 D2：`apply_sector_constraint` 限制同產業最多 N 檔。**這次直接 10y validation**
+（不靠 60mo overfit）。
+
+**10y 雙設定對照（vs baseline topn=30）**：
+
+| Metric | Baseline | D2 sector=5 | D2 sector=3 |
+|--------|----------|-------------|-------------|
+| 累積 | +5115.80% | +4334.36% | **+2730.36%** |
+| Sharpe | 1.33 | 1.31 | **1.21** ❌ |
+| MDD | -33.00% | **-33.00%** | **-33.62%** ❌ |
+| Calmar | 1.50 | 1.42 | 1.20 |
+
+> **重大結論**：**-33% MDD 不是 sector concentration 造成**（sector=5 MDD 完全
+> 不變 -33%）。DD attribution 找到「觀光餐旅 2 檔同崩」是事實但 actionability 為零，
+> 因為 2025-03 期間大盤同跌 -6%（多產業同步下跌），sector limit 擋不住 systemic risk。
+> 強迫分散在強勢期間是純 cost（model 在 topN 強勢產業被打斷）。
+>
+> 保留 `max_per_sector` 為 opt-in flag（CLI `--max-per-sector N`），預設 0。
+> 未來若有 regime-aware 設計（大盤熊市才強制分散）可能 work，但 unconditional 不適合。
+
 #### Stage 10.4 D1 recent_dd_skip filter（2026-05-23，⚠️ NEGATIVE）
 
 Stage 10.3 DD attribution 發現 -33% MDD 的 28% 來自 5301（觀光餐旅）一檔，

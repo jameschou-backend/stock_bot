@@ -771,6 +771,9 @@ class WalkForwardConfig:
     # Stage 10.4 D1：近 20 日報酬 < threshold 的 candidate 排除
     # （0.0=disabled；< 0 啟用，例如 -0.15）。DD attribution 顯示 5301 在 -38% 後仍被選中
     recent_dd_skip_pct: float = 0.0
+    # Stage 10.5 D2：同產業最大持股 N 檔（0=disabled）。DD attribution 顯示 2025-03
+    # 觀光餐旅 2 檔同時崩 -10.92%。利用 risk.apply_sector_constraint
+    max_per_sector: int = 0
     # ── 投資組合熔斷 ──
     portfolio_circuit_breaker_pct: Optional[float] = None  # 月中累積虧損觸發全出場（如 -0.15）
     # ── Label 設定 ──
@@ -854,6 +857,9 @@ class BacktestPipeline:
         self.entry_signal_filter    = wf_config.entry_signal_filter
         # Stage 10.4 D1
         self.recent_dd_skip_pct     = wf_config.recent_dd_skip_pct
+        # Stage 10.5 D2 — 同產業 max 持股；sector_map 在 prepare() 載入
+        self.max_per_sector         = wf_config.max_per_sector
+        self.sector_map: Dict[str, str] = {}
         self.portfolio_circuit_breaker_pct = wf_config.portfolio_circuit_breaker_pct
         self.label_type             = wf_config.label_type
         self.use_lambdarank         = wf_config.use_lambdarank
@@ -1051,6 +1057,18 @@ class BacktestPipeline:
         bt_trading_dates = sorted(price_df[price_df["trading_date"] >= backtest_start]["trading_date"].unique())
         rebalance_dates = _get_rebalance_dates(bt_trading_dates, freq=self.rebalance_freq)
         print(f"  再平衡次數: {len(rebalance_dates)} (頻率: {self.rebalance_freq})")
+
+        # Stage 10.5 D2：若啟用 max_per_sector，預先載入 industry mapping
+        if self.max_per_sector > 0:
+            try:
+                from app.models import Stock as _Stk
+                _rows = self.db_session.query(_Stk.stock_id, _Stk.industry_category).all()
+                self.sector_map = {str(sid): (ind or "未分類") for sid, ind in _rows}
+                print(f"  [max_per_sector] 載入 {len(self.sector_map)} 檔 industry mapping，"
+                      f"限制每產業 ≤ {self.max_per_sector} 檔")
+            except Exception as _exc:
+                print(f"  [max_per_sector] 載入失敗（{_exc}），停用 sector constraint")
+                self.sector_map = {}
 
         # ── 將所有結果回寫至 self ──
         self.price_df = price_df
@@ -1555,6 +1573,18 @@ class BacktestPipeline:
         else:
             picks = risk.pick_topn(day_feat, effective_topn)
             _bt_candidate_pool = day_feat
+
+        # Stage 10.5 D2：套用同產業最大持股限制（max_per_sector > 0 時啟用）
+        if self.max_per_sector > 0 and self.sector_map and not picks.empty:
+            # 從 day_feat（過濾後 universe）按 sector constraint 重新挑 picks，
+            # 確保 sector 滿時能往後挑（picks 已是 topN，需要從 _filtered/day_feat 重挑）
+            _src = _filtered if entry_signal_filter and len(_filtered) >= market_filter_min_positions else day_feat
+            _src_with_score = _src if "score" in _src.columns else _src.copy()
+            picks = risk.apply_sector_constraint(
+                _src_with_score, effective_topn,
+                sector_map=self.sector_map, max_per_sector=self.max_per_sector,
+            )
+
         return picks, _bt_candidate_pool
 
     # ── Helper：突破確認進場 ──
@@ -2340,6 +2370,7 @@ def run_backtest(
     use_stacking: bool = False,
     stacking_val_frac: float = 0.20,
     recent_dd_skip_pct: float = 0.0,
+    max_per_sector: int = 0,
     wf_config: Optional["WalkForwardConfig"] = None,
 ) -> Dict:
     """執行 walk-forward 回測（向後相容 wrapper）。
@@ -2406,5 +2437,6 @@ def run_backtest(
             use_stacking=use_stacking,
             stacking_val_frac=stacking_val_frac,
             recent_dd_skip_pct=recent_dd_skip_pct,
+            max_per_sector=max_per_sector,
         )
     return BacktestPipeline(config, db_session, wf_config).run()
