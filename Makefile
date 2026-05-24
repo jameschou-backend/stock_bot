@@ -69,6 +69,15 @@ dashboard:
 dashboard-v2:
 	streamlit run app/dashboard_v2/main.py --server.port 8502
 
+daily-alert:
+	python scripts/daily_alert.py
+
+daily-alert-test:
+	python scripts/daily_alert.py --test --dry-run
+
+daily-alert-dry:
+	python scripts/daily_alert.py --dry-run
+
 trade-dashboard:
 	python app/trade_dashboard.py
 

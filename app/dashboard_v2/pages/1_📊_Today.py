@@ -19,6 +19,7 @@ from app.dashboard_v2.helpers import (
     COLOR_ACCENT, COLOR_DANGER, COLOR_SUCCESS, COLOR_GRID,
     COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY, COLOR_PANEL, PLOTLY_LAYOUT,
 )
+from app.dashboard_v2.portfolio import load_portfolio, compute_pnl, compute_picks_alignment
 
 
 apply_style()
@@ -125,6 +126,81 @@ else:
         xaxis_title="檔數", yaxis_title="",
     )
     st.plotly_chart(fig, use_container_width=True)
+
+# ── 我的持倉 (portfolio.json) ──
+st.markdown('<div class="section-header">💼 我的持倉</div>', unsafe_allow_html=True)
+portfolio = load_portfolio()
+if portfolio is None:
+    st.info(
+        "未設定 portfolio.json。複製 portfolio.example.json → portfolio.json 並編輯。\n\n"
+        "```bash\ncp portfolio.example.json portfolio.json\nvim portfolio.json\n```"
+    )
+else:
+    # 取所有持倉的最新價
+    hold_ids = tuple(str(k) for k in portfolio.get("positions", {}).keys())
+    if hold_ids:
+        hold_prices = fetch_latest_price_per_stock(engine, hold_ids)
+        result = compute_pnl(portfolio, hold_prices)
+        totals = result["totals"]
+
+        # KPI cards
+        c1, c2, c3, c4 = st.columns(4)
+        with c1:
+            render_kpi("總資產", f"${totals['total_assets']:,.0f}",
+                       flavor="success")
+        with c2:
+            render_kpi("持倉市值", f"${totals['total_market_value']:,.0f}",
+                       f"成本 ${totals['total_cost']:,.0f}")
+        with c3:
+            pnl = totals["unreal_pnl"]
+            pnl_pct = totals["unreal_pnl_pct"]
+            render_kpi(
+                "未實現損益", f"${pnl:+,.0f}",
+                f"{pnl_pct:+.2%}",
+                flavor="success" if pnl >= 0 else "danger",
+            )
+        with c4:
+            render_kpi("現金", f"${totals['cash']:,.0f}",
+                       f"持倉 {totals['n_positions']} 檔")
+
+        # 持倉 table
+        pos_df = result["positions"]
+        if not pos_df.empty:
+            pos_df["建議"] = pos_df["stock_id"].apply(
+                lambda s: "✅ 持續" if s in picks_df["stock_id"].astype(str).tolist() else "❌ 該賣"
+            )
+            display = pos_df[["stock_id", "shares", "entry_price",
+                              "current_price", "unreal_pnl", "return_pct",
+                              "entry_date", "建議"]].copy()
+            display["entry_price"] = display["entry_price"].map(lambda x: f"${x:,.2f}")
+            display["current_price"] = display["current_price"].map(
+                lambda x: f"${x:,.2f}" if pd.notna(x) else "N/A")
+            display["unreal_pnl"] = display["unreal_pnl"].map(lambda x: f"${x:+,.0f}")
+            display["return_pct"] = display["return_pct"].map(lambda x: f"{x:+.2%}")
+            st.dataframe(display, use_container_width=True, hide_index=True)
+
+            # 持倉 vs picks 對齊
+            alignment = compute_picks_alignment(portfolio, picks_df)
+            ca1, ca2, ca3 = st.columns(3)
+            with ca1:
+                render_kpi("符合今日 picks", str(len(alignment["in_picks"])),
+                           f"alignment {alignment['alignment_pct']:.0%}",
+                           flavor="success")
+            with ca2:
+                render_kpi("該賣（不在 picks）", str(len(alignment["missing"])),
+                           "下個再平衡日換出",
+                           flavor="warning" if alignment["missing"] else "default")
+            with ca3:
+                render_kpi("該買（picks 中未持有）", str(len(alignment["new_picks"])),
+                           "下個再平衡日買入",
+                           flavor="warning" if alignment["new_picks"] else "default")
+
+            if alignment["missing"]:
+                st.warning(f"**🔴 該賣**：{', '.join(alignment['missing'][:10])}{'...' if len(alignment['missing']) > 10 else ''}")
+            if alignment["new_picks"]:
+                st.info(f"**🟢 該買**：{', '.join(alignment['new_picks'][:10])}{'...' if len(alignment['new_picks']) > 10 else ''}")
+    else:
+        st.info("portfolio.json 內無 positions")
 
 # ── 操作提醒 ──
 st.markdown('<div class="section-header">📋 今日操作提醒</div>', unsafe_allow_html=True)

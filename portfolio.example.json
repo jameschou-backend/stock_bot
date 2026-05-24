@@ -1,0 +1,21 @@
+{
+  "_comment": "Portfolio 持倉檔。複製為 portfolio.json 並填入你的真實持倉。",
+  "_format": "stock_id -> { shares, entry_price, entry_date, notes }",
+  "_example_capital": 1000000,
+  "positions": {
+    "2330": {
+      "shares": 27,
+      "entry_price": 1185.00,
+      "entry_date": "2026-05-02",
+      "notes": "5/2 月初買入"
+    },
+    "2454": {
+      "shares": 30,
+      "entry_price": 1110.00,
+      "entry_date": "2026-05-02",
+      "notes": ""
+    }
+  },
+  "cash": 600000,
+  "last_updated": "2026-05-24"
+}

@@ -18,6 +18,9 @@ logs/
 artifacts/run_manifest_*.json
 .claude/
 
+# 個人持倉檔（不入 git，可能含真實財務資料）
+portfolio.json
+
 # Stage 9.1 MLflow
 mlruns/
 mlartifacts/
