@@ -490,6 +490,35 @@ class RawQuarterlyFundamental(Base):
 
 
 # ─────────────────────────────────────────────────────────────
+# Priority 9.5：個股新聞（TaiwanStockNews，Sponsor）
+#   - Stage 11.1：attention proxy（新聞量、source 多樣性）
+#   - 不需要 LLM，第一階段純看「量」變化
+# ─────────────────────────────────────────────────────────────
+class RawStockNews(Base):
+    """個股新聞（FinMind TaiwanStockNews，含 UDN/Yahoo/自由/CMoney 等多 source）。
+
+    PK 用 hash(stock_id+datetime+link) 避免長 URL 當 unique key。
+    每日 ~3900 筆 / 跨 1100+ stocks，10 年估 ~14M rows。
+    """
+    __tablename__ = "raw_stock_news"
+
+    id            = Column(BigInteger, primary_key=True, autoincrement=True)
+    stock_id      = Column(String(16), nullable=False)
+    news_datetime = Column(DateTime,   nullable=False)  # 新聞時間（含 HH:MM:SS）
+    source        = Column(String(64))                   # UDN / Yahoo / CMoney ...
+    title         = Column(String(500))                  # 中文標題
+    link          = Column(String(500))
+    title_hash    = Column(String(32))                   # MD5 用於 dedup
+    created_at    = Column(DateTime, server_default=func.now())
+
+    __table_args__ = (
+        Index("idx_raw_news_stock_dt", "stock_id", "news_datetime"),
+        Index("idx_raw_news_dt", "news_datetime"),
+        Index("idx_raw_news_dedup", "stock_id", "news_datetime", "title_hash"),
+    )
+
+
+# ─────────────────────────────────────────────────────────────
 # Priority 9：台指期貨日資料 + 三大法人期貨持倉
 #   - Stage 11.0：期貨領先指標當「市場層級訊號」（非對沖工具）
 #   - 不操作期貨，純當 feature 來源

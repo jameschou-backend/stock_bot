@@ -165,6 +165,11 @@ EXTENDED_FEATURE_COLUMNS = [
     "txf_foreign_net_chg_5d",
     "txf_dealer_net_chg_5d",
     "txf_inst_position_ratio",
+    # ── Stage 11.1 個股新聞 features（per-stock daily aggregated）──
+    "news_count_5d",
+    "news_count_change_5d",
+    "news_source_diversity_5d",
+    "news_count_change_1d",
 ]
 
 # Stage 5.4 後處理特徵（由 scripts/enrich_features_stage5_4.py 補進 features parquet）
@@ -239,6 +244,8 @@ _PRUNE_SET = {
     # Stage 11.0 期貨 features：先 prune（等 ingest 跑完 + IC 驗證後再決定回收）
     "txf_close_chg_5d", "txf_oi_chg_5d", "txf_oi_chg_20d",
     "txf_foreign_net_chg_5d", "txf_dealer_net_chg_5d", "txf_inst_position_ratio",
+    # Stage 11.1 新聞 features：先 prune（等 backfill + IC 驗證）
+    "news_count_5d", "news_count_change_5d", "news_source_diversity_5d", "news_count_change_1d",
 }
 
 # IC 衰減剪枝集（2026-04-15，近 2 年 IC 分析，10y WF 驗證後放棄）
@@ -264,6 +271,8 @@ _SPONSOR_FEATURES: set = {
     # Stage 11.0 期貨 features：來源資料不存在時保留 NaN
     "txf_close_chg_5d", "txf_oi_chg_5d", "txf_oi_chg_20d",
     "txf_foreign_net_chg_5d", "txf_dealer_net_chg_5d", "txf_inst_position_ratio",
+    # Stage 11.1 新聞 features：DB 無 raw_stock_news 時 NaN
+    "news_count_5d", "news_count_change_5d", "news_source_diversity_5d", "news_count_change_1d",
 }
 
 # SHAP 剪枝（2026-03-18，58 → 50 特徵）
@@ -1436,6 +1445,82 @@ def _compute_sector_momentum(
     return result[["stock_id", "trading_date", "sector_momentum"]]
 
 
+# Stage 11.1 個股新聞 features (per-stock, daily aggregated)
+NEWS_FEATURE_COLS = [
+    "news_count_5d",          # 近 5 日新聞篇數（attention proxy）
+    "news_count_change_5d",   # 5 日新聞數 / 20 日均量（異常關注 ratio）
+    "news_source_diversity_5d",  # 5 日 unique source 數（廣度）
+    "news_count_change_1d",   # 當日 / 5 日均量（即時刺激）
+]
+
+
+def _compute_news_features(stock_ids: list, trading_dates: list) -> pd.DataFrame:
+    """從 raw_stock_news 計算每股 × 每日的 attention features。
+
+    回傳 long format DataFrame (stock_id, trading_date, news_count_5d, ...)
+    DB 無資料時回 empty。
+    """
+    try:
+        from sqlalchemy import select
+        from app.db import get_session
+        from app.models import RawStockNews
+        if not trading_dates:
+            return pd.DataFrame()
+        min_td = min(trading_dates)
+        max_td = max(trading_dates)
+        # 多取 25 天 lookback 算 rolling
+        from datetime import datetime, timedelta as _td
+        lookback_start = min_td - _td(days=30)
+        with get_session() as s:
+            rows = s.execute(
+                select(
+                    RawStockNews.stock_id,
+                    RawStockNews.news_datetime,
+                    RawStockNews.source,
+                )
+                .where(RawStockNews.news_datetime >= datetime.combine(lookback_start, datetime.min.time()))
+                .where(RawStockNews.news_datetime <= datetime.combine(max_td, datetime.max.time()))
+            ).all()
+    except Exception as exc:
+        logger.warning("[news_features] DB query 失敗，skip: %s", exc)
+        return pd.DataFrame()
+
+    if not rows:
+        return pd.DataFrame()
+
+    nf = pd.DataFrame(rows, columns=["stock_id", "news_datetime", "source"])
+    nf["stock_id"] = nf["stock_id"].astype(str)
+    nf["date"] = pd.to_datetime(nf["news_datetime"]).dt.date
+
+    # 每天每股 aggregate：news_count, source_diversity
+    daily = nf.groupby(["stock_id", "date"]).agg(
+        news_count=("news_datetime", "count"),
+        source_diversity=("source", "nunique"),
+    ).reset_index()
+
+    # broadcast 到所有 (stock_id, trading_date)：缺日填 0
+    stocks_set = set(str(s) for s in stock_ids)
+    daily = daily[daily["stock_id"].isin(stocks_set)]
+    if daily.empty:
+        return pd.DataFrame()
+
+    out_parts = []
+    for sid, g in daily.groupby("stock_id"):
+        g = g.set_index("date").sort_index()
+        # rolling 5d / 20d
+        g["news_count_5d"] = g["news_count"].rolling(5, min_periods=1).sum()
+        g["news_count_20d_avg"] = g["news_count"].rolling(20, min_periods=5).mean()
+        g["news_count_change_5d"] = g["news_count_5d"] / (g["news_count_20d_avg"] * 5).replace(0, np.nan)
+        g["news_source_diversity_5d"] = g["source_diversity"].rolling(5, min_periods=1).sum()
+        g["news_count_change_1d"] = g["news_count"] / g["news_count_5d"].replace(0, np.nan) * 5
+        g["stock_id"] = sid
+        g = g.reset_index().rename(columns={"date": "trading_date"})
+        out_parts.append(g[["stock_id", "trading_date"] + NEWS_FEATURE_COLS])
+    if not out_parts:
+        return pd.DataFrame()
+    return pd.concat(out_parts, ignore_index=True)
+
+
 # Stage 11.0 期貨衍生 market-level features
 FUTURES_FEATURE_COLS = [
     "txf_close_chg_5d",      # TXF 收盤 5 日 % 變化（市場動能 proxy）
@@ -1632,6 +1717,23 @@ def _compute_features(
             for _fc in FUTURES_FEATURE_COLS:
                 featured[_fc] = np.nan
             logger.info(f"[PERF] futures_features: skipped (no DB data)")
+
+    # ── 個股新聞 features（Stage 11.1，per-stock，DB 無 raw_stock_news 時 NaN）──
+    if not featured.empty:
+        _t_news = time.perf_counter()
+        _uniq_sids = featured["stock_id"].astype(str).unique().tolist()
+        _uniq_tds = sorted(set(pd.to_datetime(featured["trading_date"]).dt.date.tolist()))
+        news_df = _compute_news_features(_uniq_sids, _uniq_tds)
+        if not news_df.empty:
+            news_df["trading_date"] = pd.to_datetime(news_df["trading_date"]).dt.date
+            featured["trading_date"] = pd.to_datetime(featured["trading_date"]).dt.date
+            featured = featured.merge(news_df, on=["stock_id", "trading_date"], how="left")
+            logger.info(f"[PERF] news_features: {time.perf_counter() - _t_news:.2f}s "
+                        f"({len(news_df):,} rows merged)")
+        else:
+            for _nc in NEWS_FEATURE_COLS:
+                featured[_nc] = np.nan
+            logger.info(f"[PERF] news_features: skipped (no DB data)")
 
     # ── 相對強弱排名（全市場截面，ProcessPoolExecutor 外計算）──────────────────
     if not featured.empty:
