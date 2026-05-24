@@ -282,6 +282,39 @@ prefect deploy ...                            # scheduled flow
 > foreign_buy_streak<=3 單獨使用有微幅改善但差異太小（+66pp / +2.5%），不足以改變生產配置。
 > **生產配置維持 Exp D 不變。**
 
+#### Stage 10.6 Beta-Hedge 後處理分析（2026-05-24，✅ POSITIVE 後處理 metric）
+
+DD attribution 啟示「-33% MDD 含大量 systemic beta」。設計 beta-hedge 後處理：
+`hedged_return_t = portfolio_return_t - hedge_ratio × benchmark_return_t`，不重跑
+backtest，純後處理 metric。
+
+**10y topn=30 baseline 後處理結果**：
+
+| hedge | Sharpe | MDD | Calmar | Annual | Cum |
+|-------|--------|------|--------|--------|-----|
+| 0.00 unhedged | 1.33 | -33.00% | 1.48 | +49.0% | +5115% |
+| 0.25 | 1.38 (+0.05) | -30.7% (+2.4pp) | 1.56 | +47.7% | +4673% |
+| 0.50 | **1.43** (+0.10) | **-28.3%** (+4.7pp) | 1.63 | +46.1% | +4199% |
+| 0.75 | 1.47 (+0.14) | -25.9% (+7.1pp) | 1.72 | +44.4% | +3713% |
+| 1.00 full hedge | **1.48** (+0.15) | **-23.4%** (+9.6pp) | 1.81 | +42.4% | +3231% |
+| **OLS beta (1.45) hedge** | **1.41** (+0.08) | **-19.93%** (+13.1pp) | - | - | +2398% |
+
+**關鍵 insight**：
+- 策略 OLS beta = **1.45** vs 大盤（過度 beta exposure）
+- corr = 0.69（有真實 alpha 不只是 beta）
+- alpha-only Sharpe / total Sharpe = **106%** — 真實 alpha 比表面 Sharpe 更強
+- hedge 越多 Sharpe + MDD 都改善（trade cum）
+
+**實作**（不動 production default）：
+- `skills/backtest.compute_hedged_metrics(result, hedge_ratio)` 純函式 helper
+- `scripts/run_backtest.py --hedge-ratio H` flag，計算 hedged metrics 印對照 + 寫進 JSON
+- `scripts/beta_hedge_analysis.py` 對既有 result 後處理分析（multi-hedge 對照）
+
+**Production caveat**：要真正利用此 finding 需實作 TXF 期貨對沖（margin cost、滾倉、
+contract sizing 等實務問題）。目前僅為「metric-only」分析。
+
+**第 2 個 POSITIVE 結果**（繼 [stage101 topn 20→30] 之後）。
+
 #### Stage 10.5 D2 max_per_sector 產業集中限制（2026-05-23，⚠️ NEGATIVE）
 
 DD attribution 觀察到 2025-03 觀光餐旅 2 檔（5301、4804）同時崩盤共貢獻 -10.92%。

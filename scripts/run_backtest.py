@@ -42,7 +42,7 @@ if str(ROOT) not in sys.path:
 
 from app.config import load_config
 from app.db import get_session
-from skills.backtest import run_backtest
+from skills.backtest import compute_hedged_metrics, run_backtest
 from skills.build_features import BASELINE_FEATURE_COLS, CHANGE_A_FEATURE_COLS, PRUNED_FEATURE_COLS
 from skills.mlflow_tracking import (
     DEFAULT_EXPERIMENT,
@@ -226,6 +226,11 @@ def main():
                         dest="max_per_sector", metavar="N",
                         help="Stage 10.5 D2：同產業最大持股 N 檔（0=disabled，建議 3~5）。"
                              "DD attribution 顯示 2025-03 觀光餐旅 2 檔同時崩 -10.92%%")
+    parser.add_argument("--hedge-ratio", type=float, default=0.0,
+                        dest="hedge_ratio", metavar="H",
+                        help="Stage 10.6：beta-hedge 後處理（0=disabled）。回測完算 "
+                             "hedged_return = port_ret - H × benchmark_ret，輸出 hedged metrics "
+                             "供未來期貨對沖實作評估。建議試 0.5 / 1.0 / OLS beta。")
 
     # ── Stage 9.1 MLflow ──
     parser.add_argument("--mlflow", action="store_true",
@@ -422,6 +427,20 @@ def main():
             recent_dd_skip_pct=getattr(args, "recent_dd_skip_pct", 0.0),
             max_per_sector=getattr(args, "max_per_sector", 0),
         )
+
+        # ── Stage 10.6：beta-hedge 後處理 ──
+        _hedge_ratio = getattr(args, "hedge_ratio", 0.0)
+        if _hedge_ratio > 0 and result.get("periods"):
+            _hm = compute_hedged_metrics(result, _hedge_ratio)
+            print(f"\n── Stage 10.6 Beta-Hedge (ratio={_hedge_ratio:.2f}) ──")
+            print(f"  策略 OLS beta vs 大盤 = {_hm.get('ols_beta'):.4f}, corr = {_hm.get('ols_corr'):.4f}")
+            print(f"  Hedged Sharpe:    {_hm.get('hedged_sharpe'):+.4f}")
+            print(f"  Hedged MDD:       {_hm.get('hedged_mdd'):+.4f}")
+            print(f"  Hedged Calmar:    {_hm.get('hedged_calmar'):+.4f}")
+            print(f"  Hedged Annual:    {_hm.get('hedged_annual'):+.2%}")
+            print(f"  Hedged Cum:       {_hm.get('hedged_cum'):+.2%}")
+            # 寫進 result 供 mlflow + JSON
+            result["hedge_metrics"] = _hm
 
         # ── Stage 9.1：寫入 mlflow metrics / artifacts ──
         log_backtest_result(result, mlflow_run=_mlflow_run)

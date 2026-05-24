@@ -2318,6 +2318,71 @@ class BacktestPipeline:
         }
 
 
+# ── Stage 10.6 Helper：Beta-hedge 後處理 metrics ─────────────────────────────
+def compute_hedged_metrics(result: Dict, hedge_ratio: float, rf: float = 0.015) -> Dict:
+    """對既有 backtest result 計算 beta-hedge 後的 Sharpe / MDD / Calmar。
+
+    純後處理，不改 result 本身。回傳：
+      {
+        "hedge_ratio": float,
+        "ols_beta": float,           # 估的 strategy vs benchmark beta
+        "ols_corr": float,
+        "hedged_sharpe": float,
+        "hedged_mdd": float,
+        "hedged_calmar": float,
+        "hedged_cum": float,
+        "hedged_annual": float,
+      }
+
+    Args:
+        result: run_backtest 回傳的 dict（含 periods.return / benchmark_return）
+        hedge_ratio: 對沖比例（0=disabled, 1=full hedge, 1.46=beta-neutral）
+        rf: 年化無風險利率（轉成月化扣除）
+    """
+    import numpy as _np
+    periods = result.get("periods") or []
+    port_rets = []
+    bench_rets = []
+    for p in periods:
+        r = p.get("return")
+        b = p.get("benchmark_return")
+        if r is not None and b is not None:
+            port_rets.append(float(r))
+            bench_rets.append(float(b))
+    if not port_rets:
+        return {"hedge_ratio": hedge_ratio}
+
+    port = _np.asarray(port_rets)
+    bench = _np.asarray(bench_rets)
+    # 估 beta（OLS slope formula，避免 ddof 不一致）
+    _b_dev = bench - bench.mean()
+    _denom = float((_b_dev ** 2).sum())
+    beta = float(((port - port.mean()) * _b_dev).sum() / _denom) if _denom > 0 else 1.0
+    corr = float(_np.corrcoef(port, bench)[0, 1]) if bench.std() > 0 else 0.0
+    # hedged returns
+    hedged = port - hedge_ratio * bench
+    cum = float(_np.prod(1 + hedged) - 1)
+    n = len(hedged)
+    annual = (1 + cum) ** (12.0 / n) - 1 if n > 0 else 0.0
+    rf_m = rf / 12
+    excess = hedged - rf_m
+    sharpe = float(excess.mean() / excess.std(ddof=1) * _np.sqrt(12)) if excess.std() > 0 else 0.0
+    eq = _np.cumprod(1 + hedged)
+    rolling_max = _np.maximum.accumulate(eq)
+    mdd = float(((eq / rolling_max) - 1).min())
+    calmar = annual / abs(mdd) if mdd < 0 else 0.0
+    return {
+        "hedge_ratio": float(hedge_ratio),
+        "ols_beta": beta,
+        "ols_corr": corr,
+        "hedged_sharpe": sharpe,
+        "hedged_mdd": mdd,
+        "hedged_calmar": calmar,
+        "hedged_cum": cum,
+        "hedged_annual": annual,
+    }
+
+
 # ── 向後相容 thin wrapper ───────────────────────────────────────────────────
 def run_backtest(
     config,
