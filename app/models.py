@@ -489,6 +489,63 @@ class RawQuarterlyFundamental(Base):
     __table_args__ = (Index("idx_raw_qfund_report_date", "report_date"),)
 
 
+# ─────────────────────────────────────────────────────────────
+# Priority 9：台指期貨日資料 + 三大法人期貨持倉
+#   - Stage 11.0：期貨領先指標當「市場層級訊號」（非對沖工具）
+#   - 不操作期貨，純當 feature 來源
+# ─────────────────────────────────────────────────────────────
+class RawFuturesDaily(Base):
+    """期貨日資料（OHLC + 未平倉量 + 結算價）
+
+    主要追蹤 contract_id="TX"（大台指期貨）。同 trading_date 可有多 contract
+    （月份近 / 次月 / 季月 / 半年月），預設只取近月（near-month）。
+
+    - settlement_price: 結算價（重要，未平倉部位每日 mark-to-market）
+    - open_interest:    未平倉量（張，機構部位規模指標）
+    """
+    __tablename__ = "raw_futures_daily"
+
+    contract_id      = Column(String(16), primary_key=True)  # TX / MTX / TE ...
+    trading_date     = Column(Date,       primary_key=True)
+    contract_month   = Column(String(8))   # 例如 "202606"（近月合約識別）
+    open             = Column(DECIMAL(12, 2))
+    high             = Column(DECIMAL(12, 2))
+    low              = Column(DECIMAL(12, 2))
+    close            = Column(DECIMAL(12, 2))
+    volume           = Column(BigInteger)
+    open_interest    = Column(BigInteger)
+    settlement_price = Column(DECIMAL(12, 2))
+
+    __table_args__ = (Index("idx_raw_futures_daily_date", "trading_date"),)
+
+
+class RawFuturesInst(Base):
+    """三大法人期貨持倉（多空淨額）
+
+    對應 FinMind TaiwanFuturesInstitutionalInvestors。
+    多空淨額領先大盤現貨約 5-10 個交易日（機構部位反映預期）。
+
+    - foreign_net_oi:  外資多單 - 空單未平倉差額（張），>0 看多
+    - trust_net_oi:    投信多空淨額
+    - dealer_net_oi:   自營商（含避險）多空淨額
+    """
+    __tablename__ = "raw_futures_inst"
+
+    contract_id     = Column(String(16), primary_key=True)
+    trading_date    = Column(Date,       primary_key=True)
+    foreign_long_oi = Column(BigInteger)
+    foreign_short_oi = Column(BigInteger)
+    foreign_net_oi  = Column(BigInteger)
+    trust_long_oi   = Column(BigInteger)
+    trust_short_oi  = Column(BigInteger)
+    trust_net_oi    = Column(BigInteger)
+    dealer_long_oi  = Column(BigInteger)
+    dealer_short_oi = Column(BigInteger)
+    dealer_net_oi   = Column(BigInteger)
+
+    __table_args__ = (Index("idx_raw_futures_inst_date", "trading_date"),)
+
+
 class StrategyCTrade(Base):
     """Strategy C 每日進出場稽核 log（append-only）"""
     __tablename__ = "strategy_c_trades"

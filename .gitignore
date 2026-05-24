@@ -22,3 +22,59 @@ artifacts/run_manifest_*.json
 mlruns/
 mlartifacts/
 optuna.db
+
+# Stage 10+ cleanup（大型衍生資料、log、profile）
+artifacts/features/
+artifacts/labels/
+artifacts/cache/
+artifacts/profile_report.html
+artifacts/slow_queries.jsonl
+artifacts/*.log
+artifacts/twse_finmind_diff/
+catboost_info/
+
+# 歷史單次實驗 JSON（保留 stage10_*, optuna_10y 等 reference）
+artifacts/dynliq_*.json
+artifacts/liq_*.json
+artifacts/possizing_*.json
+artifacts/rolling*.json
+artifacts/topn1*_liqw_pruned.json
+artifacts/topn2*_liqw_pruned.json
+artifacts/stable_*.json
+artifacts/volinv_*.json
+artifacts/score_tiered_*.json
+artifacts/train_liq_*.json
+artifacts/oracle_c2.json
+artifacts/baseline_expf.json
+artifacts/bt_*.json
+artifacts/backtest_*.json
+artifacts/committee_strategy_*.json
+artifacts/minpos3_*.json
+artifacts/new9feat_*.json
+artifacts/pruned_liqw.json
+artifacts/retrain1m_*.json
+artifacts/roundtable_*.json
+artifacts/multi_strategy_*.json
+artifacts/grid_search_*.json
+artifacts/ic_*.csv
+
+# review pack 歷史
+artifacts/review_pack_*.md
+artifacts/review_pack_*.txt
+artifacts/review_pack_*.json
+
+# daily signal 每日 log（保留 state 檔但忽略每日 snapshots）
+artifacts/daily_signal/2026-*.json
+artifacts/daily_signal/strategy_c_2026-*.json
+artifacts/daily_signal/strategy_d_2026-*.json
+
+# experiments / sponsor backfill / shap reports
+artifacts/experiments/
+artifacts/shap_report_*.csv
+artifacts/shap_report_*.txt
+artifacts/sponsor_backfill_*.log
+
+# 修改的 baseline files（會頻繁變動，不入版本）
+artifacts/backtest_report.html
+artifacts/feature_perf.csv
+artifacts/daily_signal/strategy_c_state.json
