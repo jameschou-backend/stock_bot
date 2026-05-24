@@ -66,6 +66,9 @@ test:
 dashboard:
 	streamlit run app/dashboard.py
 
+dashboard-v2:
+	streamlit run app/dashboard_v2/main.py --server.port 8502
+
 trade-dashboard:
 	python app/trade_dashboard.py
 
