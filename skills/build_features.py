@@ -158,6 +158,13 @@ EXTENDED_FEATURE_COLUMNS = [
     "roe_ttm",                  # 股東權益報酬率（%，Fama-French 品質因子）
     "debt_ratio_q",             # 負債比率（%，越低財務越健全）
     "operating_margin_q",       # 營業利益率（%，業務獲利能力）
+    # ── Stage 11.0 期貨衍生 market-level features（市場層級，broadcast）──
+    "txf_close_chg_5d",
+    "txf_oi_chg_5d",
+    "txf_oi_chg_20d",
+    "txf_foreign_net_chg_5d",
+    "txf_dealer_net_chg_5d",
+    "txf_inst_position_ratio",
 ]
 
 # Stage 5.4 後處理特徵（由 scripts/enrich_features_stage5_4.py 補進 features parquet）
@@ -229,6 +236,9 @@ _PRUNE_SET = {
     "per_ratio", "earnings_yield",
     "lending_balance_ratio", "lending_fee_rate",
     "roe_ttm", "debt_ratio_q", "operating_margin_q",
+    # Stage 11.0 期貨 features：先 prune（等 ingest 跑完 + IC 驗證後再決定回收）
+    "txf_close_chg_5d", "txf_oi_chg_5d", "txf_oi_chg_20d",
+    "txf_foreign_net_chg_5d", "txf_dealer_net_chg_5d", "txf_inst_position_ratio",
 }
 
 # IC 衰減剪枝集（2026-04-15，近 2 年 IC 分析，10y WF 驗證後放棄）
@@ -251,6 +261,9 @@ _SPONSOR_FEATURES: set = {
     "per_ratio", "pbr_ratio", "dividend_yield", "earnings_yield",
     "lending_balance_ratio", "lending_fee_rate",
     "roe_ttm", "debt_ratio_q", "operating_margin_q",
+    # Stage 11.0 期貨 features：來源資料不存在時保留 NaN
+    "txf_close_chg_5d", "txf_oi_chg_5d", "txf_oi_chg_20d",
+    "txf_foreign_net_chg_5d", "txf_dealer_net_chg_5d", "txf_inst_position_ratio",
 }
 
 # SHAP 剪枝（2026-03-18，58 → 50 特徵）
@@ -1423,6 +1436,97 @@ def _compute_sector_momentum(
     return result[["stock_id", "trading_date", "sector_momentum"]]
 
 
+# Stage 11.0 期貨衍生 market-level features
+FUTURES_FEATURE_COLS = [
+    "txf_close_chg_5d",      # TXF 收盤 5 日 % 變化（市場動能 proxy）
+    "txf_oi_chg_5d",         # 未平倉量 5 日 % 變化（機構參與度）
+    "txf_oi_chg_20d",        # 未平倉量 20 日 % 變化（中期建倉趨勢）
+    "txf_foreign_net_chg_5d", # 外資期貨淨倉位 5 日變化（張）
+    "txf_dealer_net_chg_5d", # 自營商期貨淨倉位 5 日變化
+    "txf_inst_position_ratio", # 三大法人多空淨額 / 總 OI（標準化方向偏度）
+]
+
+
+def _compute_futures_features() -> pd.DataFrame:
+    """Stage 11.0：從 raw_futures_daily + raw_futures_inst 計算 market-level
+    期貨衍生 features，回傳 (trading_date, txf_*) DataFrame 供 broadcast。
+
+    若 DB 兩表皆無資料，回傳 empty DataFrame（caller 應 fillna(NaN)）。
+
+    Features：見 FUTURES_FEATURE_COLS。
+    """
+    try:
+        from sqlalchemy import select
+        from app.db import get_session
+        from app.models import RawFuturesDaily, RawFuturesInst
+        with get_session() as s:
+            fd_rows = s.execute(
+                select(
+                    RawFuturesDaily.trading_date,
+                    RawFuturesDaily.close,
+                    RawFuturesDaily.open_interest,
+                )
+                .where(RawFuturesDaily.contract_id == "TX")
+                .order_by(RawFuturesDaily.trading_date)
+            ).all()
+            fi_rows = s.execute(
+                select(
+                    RawFuturesInst.trading_date,
+                    RawFuturesInst.foreign_net_oi,
+                    RawFuturesInst.trust_net_oi,
+                    RawFuturesInst.dealer_net_oi,
+                    RawFuturesInst.foreign_long_oi,
+                    RawFuturesInst.foreign_short_oi,
+                )
+                .where(RawFuturesInst.contract_id == "TX")
+                .order_by(RawFuturesInst.trading_date)
+            ).all()
+    except Exception as exc:
+        logger.warning("[futures_features] DB query 失敗，skip: %s", exc)
+        return pd.DataFrame()
+
+    if not fd_rows:
+        return pd.DataFrame()
+
+    fd = pd.DataFrame(fd_rows, columns=["trading_date", "close", "open_interest"])
+    fd["close"] = pd.to_numeric(fd["close"], errors="coerce")
+    fd["open_interest"] = pd.to_numeric(fd["open_interest"], errors="coerce")
+    fd = fd.sort_values("trading_date")
+
+    fd["txf_close_chg_5d"] = fd["close"].pct_change(5)
+    fd["txf_oi_chg_5d"] = fd["open_interest"].pct_change(5)
+    fd["txf_oi_chg_20d"] = fd["open_interest"].pct_change(20)
+
+    if fi_rows:
+        fi = pd.DataFrame(
+            fi_rows,
+            columns=["trading_date", "foreign_net_oi", "trust_net_oi", "dealer_net_oi",
+                     "foreign_long_oi", "foreign_short_oi"],
+        )
+        for c in ["foreign_net_oi", "trust_net_oi", "dealer_net_oi",
+                  "foreign_long_oi", "foreign_short_oi"]:
+            fi[c] = pd.to_numeric(fi[c], errors="coerce").fillna(0)
+        fi = fi.sort_values("trading_date")
+        fi["txf_foreign_net_chg_5d"] = fi["foreign_net_oi"].diff(5)
+        fi["txf_dealer_net_chg_5d"] = fi["dealer_net_oi"].diff(5)
+        # 標準化：三大法人合計多空淨額 / 外資總 OI（規模 normalize）
+        _total_net = fi["foreign_net_oi"] + fi["trust_net_oi"] + fi["dealer_net_oi"]
+        _total_oi = fi["foreign_long_oi"] + fi["foreign_short_oi"]
+        fi["txf_inst_position_ratio"] = _total_net / _total_oi.replace(0, np.nan)
+        fd = fd.merge(
+            fi[["trading_date", "txf_foreign_net_chg_5d", "txf_dealer_net_chg_5d",
+                "txf_inst_position_ratio"]],
+            on="trading_date", how="left",
+        )
+    else:
+        fd["txf_foreign_net_chg_5d"] = np.nan
+        fd["txf_dealer_net_chg_5d"] = np.nan
+        fd["txf_inst_position_ratio"] = np.nan
+
+    keep = ["trading_date"] + FUTURES_FEATURE_COLS
+    return fd[keep]
+
+
 def _compute_features(
     df: pd.DataFrame,
     use_adjusted_price: bool = True,
@@ -1515,6 +1619,19 @@ def _compute_features(
                              "market_volatility_20", "sector_momentum"]:
                 featured[_mkt_col] = np.nan
         logger.info(f"[PERF] market_context_features: {time.perf_counter() - _t_mkt:.2f}s")
+
+    # ── 期貨 market-level features（Stage 11.0，DB 無資料時填 NaN）──
+    if not featured.empty:
+        _t_fut = time.perf_counter()
+        fut_df = _compute_futures_features()
+        if not fut_df.empty:
+            featured = featured.merge(fut_df, on="trading_date", how="left")
+            logger.info(f"[PERF] futures_features: {time.perf_counter() - _t_fut:.2f}s "
+                        f"({len(fut_df)} TXF rows merged)")
+        else:
+            for _fc in FUTURES_FEATURE_COLS:
+                featured[_fc] = np.nan
+            logger.info(f"[PERF] futures_features: skipped (no DB data)")
 
     # ── 相對強弱排名（全市場截面，ProcessPoolExecutor 外計算）──────────────────
     if not featured.empty:
