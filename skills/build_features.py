@@ -244,8 +244,12 @@ _PRUNE_SET = {
     # Stage 11.0 期貨 features：先 prune（等 ingest 跑完 + IC 驗證後再決定回收）
     "txf_close_chg_5d", "txf_oi_chg_5d", "txf_oi_chg_20d",
     "txf_foreign_net_chg_5d", "txf_dealer_net_chg_5d", "txf_inst_position_ratio",
-    # Stage 11.1 新聞 features：先 prune（等 backfill + IC 驗證）
-    "news_count_5d", "news_count_change_5d", "news_source_diversity_5d", "news_count_change_1d",
+    # Stage 11.1 新聞 features：全部 prune
+    # IC POSITIVE (ICIR +1.33) 但 10y backtest NEGATIVE (Sharpe 1.33→1.19)
+    # 根因：high news 股 = 熱門股 = 已 priced，後續 underperform
+    # Phase 2 期待 LLM 情感方向（+1/-1）可能優於純量訊號
+    "news_count_5d", "news_source_diversity_5d",
+    "news_count_change_5d", "news_count_change_1d",
 }
 
 # IC 衰減剪枝集（2026-04-15，近 2 年 IC 分析，10y WF 驗證後放棄）
@@ -1725,11 +1729,20 @@ def _compute_features(
         _uniq_tds = sorted(set(pd.to_datetime(featured["trading_date"]).dt.date.tolist()))
         news_df = _compute_news_features(_uniq_sids, _uniq_tds)
         if not news_df.empty:
-            news_df["trading_date"] = pd.to_datetime(news_df["trading_date"]).dt.date
-            featured["trading_date"] = pd.to_datetime(featured["trading_date"]).dt.date
+            # 統一用 Timestamp（normalized to date，無時分秒）避免 type mismatch
+            news_df["trading_date"] = pd.to_datetime(news_df["trading_date"]).dt.normalize()
+            featured["trading_date"] = pd.to_datetime(featured["trading_date"]).dt.normalize()
             featured = featured.merge(news_df, on=["stock_id", "trading_date"], how="left")
+            # CRITICAL: 對 news features fillna(0)
+            # 沒 news 的 stock-date 視為「0 篇新聞」，而非「未知資料」
+            # 否則 ~95% NaN 會讓 LightGBM 完全 ignore（fillna 用 median，median=0，
+            #  但仍是稀疏 → split criterion 失效）
+            # 設計理由：raw_stock_news 5y backfill 完整，沒 row 意味該 stock 該日無新聞
+            for _nc in NEWS_FEATURE_COLS:
+                if _nc in featured.columns:
+                    featured[_nc] = featured[_nc].fillna(0)
             logger.info(f"[PERF] news_features: {time.perf_counter() - _t_news:.2f}s "
-                        f"({len(news_df):,} rows merged)")
+                        f"({len(news_df):,} rows merged, NaN→0 for {len(NEWS_FEATURE_COLS)} cols)")
         else:
             for _nc in NEWS_FEATURE_COLS:
                 featured[_nc] = np.nan
