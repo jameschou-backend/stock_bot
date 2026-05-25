@@ -1,0 +1,498 @@
+
+============================================================
+Walk-Forward Backtest
+============================================================
+  資料範圍: 2016-03-15 ~ 2026-04-21
+  回測期間: 2016-06-12 ~ 2026-04-21
+  模型重訓: 每 3 個月
+  選股數量: 10  倉位: equal
+  停損策略: fixed 0%
+  交易成本: 0.584%（來回）  進場延遲: 0 交易日
+  無風險利率: 1.5%  Benchmark含成本: True
+
+[TIMER] load_prices start | mem=0.3GB | t=0.6s
+[TIMER] load_prices done 1.1s | mem=0.9GB | t=1.7s
+[TIMER] load_all_features start (non-rolling, DuckDB) | mem=0.9GB | t=1.7s
+[TIMER] load_all_features done 5.9s | mem=1.4GB | t=7.6s
+  EMERGING 過濾：排除 367 支興櫃股
+  再平衡次數: 119 (頻率: M)
+  [2016-06-13] 模型重訓完成 (訓練筆數: 3,114) [TIMER] train_model: 1.91s  [ensemble=1/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2016-06-13 ~ 2016-07-01] 組合: +2.48%  大盤: +2.01%  持股: 10  停損: 0  淨值: 10,248  [1/119 | 記憶體: 1.5GB | 預估剩餘: 6分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:438: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  g = append(wrapped_grad(x), 0.0)
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:492: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  a_eq = vstack([con['jac'](x, *con['args'])
+  [2016-07-01 ~ 2016-08-01] 組合: +3.99%  大盤: +2.18%  持股: 10  停損: 0  淨值: 10,658  [2/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2016-08-01 ~ 2016-09-01] 組合: -3.40%  大盤: -2.75%  持股: 10  停損: 0  淨值: 10,295  [3/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2016-09-01 ~ 2016-10-03] 組合: +0.86%  大盤: +1.48%  持股: 10  停損: 0  淨值: 10,384  [4/119 | 記憶體: 1.5GB | 預估剩餘: 2分鐘]
+  [2016-10-03] 模型重訓完成 (訓練筆數: 7,864) [TIMER] train_model: 4.05s  [ensemble=2/3]
+  [2016-10-03] seasonal_filter: 月份10 topN → 5
+  [2016-10-03 ~ 2016-11-01] 組合: -1.63%  大盤: -2.97%  持股: 5  停損: 0  淨值: 10,214  [5/119 | 記憶體: 1.6GB | 預估剩餘: 4分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2016-11-01 ~ 2016-12-01] 組合: +0.10%  大盤: -2.75%  持股: 10  停損: 0  淨值: 10,224  [6/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2016-12-01 ~ 2017-01-03] 組合: -2.04%  大盤: +0.68%  持股: 10  停損: 0  淨值: 10,015  [7/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2017-01-03] 模型重訓完成 (訓練筆數: 11,104) [TIMER] train_model: 5.17s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-01-03 ~ 2017-02-02] 組合: +1.32%  大盤: +4.58%  持股: 10  停損: 0  淨值: 10,147  [8/119 | 記憶體: 1.6GB | 預估剩餘: 4分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-02-02 ~ 2017-03-01] 組合: +3.13%  大盤: +2.65%  持股: 10  停損: 0  淨值: 10,465  [9/119 | 記憶體: 1.6GB | 預估剩餘: 3分鐘]
+  [2017-03-01] seasonal_filter: 月份3 topN → 5
+  [2017-03-01 ~ 2017-04-05] 組合: +9.48%  大盤: +2.50%  持股: 5  停損: 0  淨值: 11,457  [10/119 | 記憶體: 1.3GB | 預估剩餘: 3分鐘]
+  [2017-04-05] 模型重訓完成 (訓練筆數: 14,635) [TIMER] train_model: 5.71s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-04-05 ~ 2017-05-02] 組合: -2.62%  大盤: -2.03%  持股: 10  停損: 0  淨值: 11,156  [11/119 | 記憶體: 1.5GB | 預估剩餘: 4分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-05-02 ~ 2017-06-01] 組合: -0.68%  大盤: -1.21%  持股: 10  停損: 0  淨值: 11,080  [12/119 | 記憶體: 1.5GB | 預估剩餘: 4分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-06-01 ~ 2017-07-03] 組合: +2.39%  大盤: +1.27%  持股: 10  停損: 0  淨值: 11,345  [13/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-07-03 ~ 2017-08-01] 組合: +3.40%  大盤: +5.08%  持股: 10  停損: 0  淨值: 11,731  [14/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2017-08-01] 模型重訓完成 (訓練筆數: 20,731) [TIMER] train_model: 5.42s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-08-01 ~ 2017-09-01] 組合: +0.92%  大盤: +5.47%  持股: 10  停損: 0  淨值: 11,838  [15/119 | 記憶體: 1.3GB | 預估剩餘: 4分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-09-01 ~ 2017-10-02] 組合: -1.83%  大盤: -0.95%  持股: 10  停損: 0  淨值: 11,621  [16/119 | 記憶體: 1.3GB | 預估剩餘: 4分鐘]
+  [2017-10-02] seasonal_filter: 月份10 topN → 5
+  [2017-10-02 ~ 2017-11-01] 組合: -1.10%  大盤: +1.62%  持股: 5  停損: 0  淨值: 11,493  [17/119 | 記憶體: 1.3GB | 預估剩餘: 3分鐘]
+  [2017-11-01] 模型重訓完成 (訓練筆數: 26,911) [TIMER] train_model: 2.57s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2017-11-01 ~ 2017-12-01] 組合: -3.86%  大盤: -2.15%  持股: 10  停損: 0  淨值: 11,049  [18/119 | 記憶體: 1.0GB | 預估剩餘: 3分鐘]
+  [2017-12-01 ~ 2018-01-02] 組合: -6.03%  大盤: -0.44%  持股: 10  停損: 0  淨值: 10,383  [19/119 | 記憶體: 1.1GB | 預估剩餘: 3分鐘]
+  [2018-01-02 ~ 2018-02-01] 組合: +2.87%  大盤: +3.51%  持股: 10  停損: 0  淨值: 10,682  [20/119 | 記憶體: 1.1GB | 預估剩餘: 3分鐘]
+  [2018-02-01] 模型重訓完成 (訓練筆數: 34,152) [TIMER] train_model: 5.52s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2018-02-01 ~ 2018-03-01] 組合: -8.25%  大盤: -3.88%  持股: 10  停損: 0  淨值: 9,800  [21/119 | 記憶體: 1.5GB | 預估剩餘: 4分鐘]
+  [2018-03-01] seasonal_filter: 月份3 topN → 5
+  [2018-03-01 ~ 2018-04-02] 組合: +0.47%  大盤: +1.43%  持股: 5  停損: 0  淨值: 9,847  [22/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2018-04-02 ~ 2018-05-02] 組合: -4.45%  大盤: -4.06%  持股: 10  停損: 0  淨值: 9,409  [23/119 | 記憶體: 1.4GB | 預估剩餘: 3分鐘]
+  [2018-05-02] 模型重訓完成 (訓練筆數: 40,386) [TIMER] train_model: 5.23s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2018-05-02 ~ 2018-06-01] 組合: +3.33%  大盤: +7.86%  持股: 10  停損: 0  淨值: 9,722  [24/119 | 記憶體: 1.4GB | 預估剩餘: 4分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2018-06-01 ~ 2018-07-02] 組合: +4.82%  大盤: -2.64%  持股: 10  停損: 0  淨值: 10,190  [25/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2018-07-02 ~ 2018-08-01] 組合: -2.77%  大盤: -3.51%  持股: 10  停損: 0  淨值: 9,908  [26/119 | 記憶體: 1.4GB | 預估剩餘: 3分鐘]
+  [2018-08-01] 模型重訓完成 (訓練筆數: 47,895) [TIMER] train_model: 2.83s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2018-08-01 ~ 2018-09-03] 組合: -10.09%  大盤: -8.74%  持股: 10  停損: 0  淨值: 8,908  [27/119 | 記憶體: 1.0GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2018-09-03] market_filter_tiers: 前期大盤 -8.74% < -5%，持股×0.5→5
+  [2018-09-03 ~ 2018-10-01] 組合: -12.51%  大盤: -6.10%  持股: 5  停損: 0  淨值: 7,794  [28/119 | 記憶體: 1.1GB | 預估剩餘: 3分鐘]
+  [2018-10-01] seasonal_filter: 月份10 topN → 5
+  [2018-10-01] market_filter_tiers: 前期大盤 -6.10% < -5%，持股×0.5→2
+  [2018-10-01 ~ 2018-11-01] 組合: -21.78%  大盤: -14.25%  持股: 2  停損: 0  淨值: 6,096  [29/119 | 記憶體: 1.1GB | 預估剩餘: 3分鐘]
+  [2018-11-01] 模型重訓完成 (訓練筆數: 54,767) [TIMER] train_model: 6.01s  [ensemble=3/3]
+  [2018-11-01] 大盤環境不佳 (20日中位數 -11.05%)，topN → 3
+  [2018-11-01] market_filter_tiers: 前期大盤 -14.25% < -10%，持股×0.25→1
+  [2018-11-01] min_positions: 1→2（補1檔）
+  [2018-11-01 ~ 2018-12-03] 組合: +23.29%  大盤: +9.05%  持股: 2  停損: 0  淨值: 7,516  [30/119 | 記憶體: 1.7GB | 預估剩餘: 3分鐘]
+  [2018-12-03 ~ 2019-01-02] 組合: -12.27%  大盤: -9.45%  持股: 10  停損: 0  淨值: 6,594  [31/119 | 記憶體: 1.7GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2019-01-02] market_filter_tiers: 前期大盤 -9.45% < -5%，持股×0.5→5
+  [2019-01-02 ~ 2019-02-11] 組合: +13.52%  大盤: +8.26%  持股: 5  停損: 0  淨值: 7,485  [32/119 | 記憶體: 1.2GB | 預估剩餘: 3分鐘]
+  [2019-02-11] 模型重訓完成 (訓練筆數: 61,155) [TIMER] train_model: 6.06s  [ensemble=3/3]
+  [2019-02-11 ~ 2019-03-04] 組合: +5.43%  大盤: +3.98%  持股: 10  停損: 0  淨值: 7,892  [33/119 | 記憶體: 1.2GB | 預估剩餘: 3分鐘]
+  [2019-03-04] seasonal_filter: 月份3 topN → 5
+  [2019-03-04 ~ 2019-04-01] 組合: +1.13%  大盤: +3.78%  持股: 5  停損: 0  淨值: 7,981  [34/119 | 記憶體: 1.1GB | 預估剩餘: 3分鐘]
+  [2019-04-01 ~ 2019-05-02] 組合: +3.01%  大盤: +1.41%  持股: 10  停損: 0  淨值: 8,221  [35/119 | 記憶體: 1.2GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2019-05-02 ~ 2019-06-03] 組合: -11.90%  大盤: -9.86%  持股: 10  停損: 0  淨值: 7,243  [36/119 | 記憶體: 1.3GB | 預估剩餘: 3分鐘]
+  [2019-06-03] 模型重訓完成 (訓練筆數: 68,657) [TIMER] train_model: 3.95s  [ensemble=3/3]
+  [2019-06-03] market_filter_tiers: 前期大盤 -9.86% < -5%，持股×0.5→5
+  [2019-06-03 ~ 2019-07-01] 組合: +3.80%  大盤: +8.38%  持股: 5  停損: 0  淨值: 7,518  [37/119 | 記憶體: 1.2GB | 預估剩餘: 3分鐘]
+  [2019-07-01 ~ 2019-08-01] 組合: -0.98%  大盤: -0.69%  持股: 10  停損: 0  淨值: 7,445  [38/119 | 記憶體: 1.1GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2019-08-01 ~ 2019-09-02] 組合: +6.68%  大盤: +0.54%  持股: 10  停損: 0  淨值: 7,942  [39/119 | 記憶體: 1.2GB | 預估剩餘: 3分鐘]
+  [2019-09-02] 模型重訓完成 (訓練筆數: 74,887) [TIMER] train_model: 5.76s  [ensemble=3/3]
+  [2019-09-02 ~ 2019-10-01] 組合: -1.10%  大盤: +1.22%  持股: 10  停損: 0  淨值: 7,855  [40/119 | 記憶體: 1.9GB | 預估剩餘: 3分鐘]
+  [2019-10-01] seasonal_filter: 月份10 topN → 5
+  [2019-10-01 ~ 2019-11-01] 組合: +0.54%  大盤: +5.26%  持股: 5  停損: 0  淨值: 7,897  [41/119 | 記憶體: 1.9GB | 預估剩餘: 3分鐘]
+  [2019-11-01 ~ 2019-12-02] 組合: -4.83%  大盤: -2.36%  持股: 10  停損: 0  淨值: 7,516  [42/119 | 記憶體: 1.6GB | 預估剩餘: 3分鐘]
+  [2019-12-02] 模型重訓完成 (訓練筆數: 81,912) [TIMER] train_model: 7.03s  [ensemble=3/3]
+  [2019-12-02 ~ 2020-01-02] 組合: +7.49%  大盤: +6.45%  持股: 10  停損: 0  淨值: 8,079  [43/119 | 記憶體: 1.4GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2020-01-02 ~ 2020-02-03] 組合: -9.82%  大盤: -9.13%  持股: 10  停損: 0  淨值: 7,286  [44/119 | 記憶體: 1.4GB | 預估剩餘: 3分鐘]
+  [2020-02-03] 大盤環境不佳 (20日中位數 -6.23%)，topN → 3
+  [2020-02-03] market_filter_tiers: 前期大盤 -9.13% < -5%，持股×0.5→1
+  [2020-02-03] min_positions: 1→2（補1檔）
+  [2020-02-03 ~ 2020-03-02] 組合: -8.17%  大盤: -0.28%  持股: 2  停損: 0  淨值: 6,690  [45/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2020-03-02] 模型重訓完成 (訓練筆數: 88,327) [TIMER] train_model: 4.15s  [ensemble=3/3]
+  [2020-03-02] seasonal_filter: 月份3 topN → 5
+  [2020-03-02 ~ 2020-04-01] 組合: -17.41%  大盤: -15.33%  持股: 5  停損: 0  淨值: 5,526  [46/119 | 記憶體: 1.4GB | 預估剩餘: 3分鐘]
+  [2020-04-01] 大盤環境不佳 (20日中位數 -17.52%)，topN → 3
+  [2020-04-01] market_filter_tiers: 前期大盤 -15.33% < -15%，持股×0.1→1
+  [2020-04-01] min_positions: 1→2（補1檔）
+  [2020-04-01 ~ 2020-05-04] 組合: +25.98%  大盤: +16.44%  持股: 2  停損: 0  淨值: 6,962  [47/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2020-05-04 ~ 2020-06-01] 組合: +2.37%  大盤: +6.45%  持股: 10  停損: 0  淨值: 7,126  [48/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2020-06-01] 模型重訓完成 (訓練筆數: 96,442) [TIMER] train_model: 6.77s  [ensemble=3/3]
+  [2020-06-01 ~ 2020-07-01] 組合: +10.75%  大盤: +7.20%  持股: 10  停損: 0  淨值: 7,892  [49/119 | 記憶體: 1.4GB | 預估剩餘: 3分鐘]
+  [2020-07-01 ~ 2020-08-03] 組合: +7.91%  大盤: +1.05%  持股: 10  停損: 0  淨值: 8,516  [50/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2020-08-03 ~ 2020-09-01] 組合: +6.92%  大盤: +0.14%  持股: 10  停損: 0  淨值: 9,105  [51/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2020-09-01] 模型重訓完成 (訓練筆數: 108,355) [TIMER] train_model: 7.42s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2020-09-01 ~ 2020-10-05] 組合: -5.16%  大盤: -3.08%  持股: 10  停損: 0  淨值: 8,635  [52/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2020-10-05] seasonal_filter: 月份10 topN → 5
+  [2020-10-05 ~ 2020-11-02] 組合: -19.78%  大盤: -0.90%  持股: 5  停損: 0  淨值: 6,927  [53/119 | 記憶體: 1.6GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2020-11-02 ~ 2020-12-01] 組合: +12.65%  大盤: +10.30%  持股: 10  停損: 0  淨值: 7,803  [54/119 | 記憶體: 1.7GB | 預估剩餘: 3分鐘]
+  [2020-12-01] 模型重訓完成 (訓練筆數: 119,014) [TIMER] train_model: 5.47s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2020-12-01 ~ 2021-01-04] 組合: -4.06%  大盤: +5.63%  持股: 10  停損: 0  淨值: 7,487  [55/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2021-01-04 ~ 2021-02-01] 組合: +1.75%  大盤: -4.30%  持股: 10  停損: 0  淨值: 7,618  [56/119 | 記憶體: 1.6GB | 預估剩餘: 3分鐘]
+  [2021-02-01] 大盤環境不佳 (20日中位數 -5.72%)，topN → 3
+  [2021-02-01 ~ 2021-03-02] 組合: +34.59%  大盤: +7.77%  持股: 3  停損: 0  淨值: 10,253  [57/119 | 記憶體: 1.7GB | 預估剩餘: 3分鐘]
+  [2021-03-02] 模型重訓完成 (訓練筆數: 132,234) [TIMER] train_model: 6.65s  [ensemble=3/3]
+  [2021-03-02] seasonal_filter: 月份3 topN → 5
+  [2021-03-02 ~ 2021-04-01] 組合: +11.52%  大盤: +8.07%  持股: 5  停損: 0  淨值: 11,434  [58/119 | 記憶體: 1.6GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2021-04-01 ~ 2021-05-03] 組合: +11.81%  大盤: +2.80%  持股: 10  停損: 0  淨值: 12,784  [59/119 | 記憶體: 1.6GB | 預估剩餘: 3分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2021-05-03 ~ 2021-06-01] 組合: +0.37%  大盤: -2.31%  持股: 10  停損: 0  淨值: 12,831  [60/119 | 記憶體: 1.3GB | 預估剩餘: 2分鐘]
+  [2021-06-01] 模型重訓完成 (訓練筆數: 146,673) [TIMER] train_model: 9.19s  [ensemble=3/3]
+  [2021-06-01 ~ 2021-07-01] 組合: +35.16%  大盤: +9.33%  持股: 10  停損: 0  淨值: 17,343  [61/119 | 記憶體: 1.5GB | 預估剩餘: 3分鐘]
+  [2021-07-01 ~ 2021-08-02] 組合: +0.74%  大盤: +0.84%  持股: 10  停損: 0  淨值: 17,471  [62/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2021-08-02 ~ 2021-09-01] 組合: -3.18%  大盤: -4.23%  持股: 10  停損: 0  淨值: 16,914  [63/119 | 記憶體: 1.7GB | 預估剩餘: 2分鐘]
+  [2021-09-01] 模型重訓完成 (訓練筆數: 165,513) [TIMER] train_model: 5.22s  [ensemble=3/3]
+  [2021-09-01] 大盤環境不佳 (20日中位數 -4.07%)，topN → 3
+  [2021-09-01 ~ 2021-10-01] 組合: -11.26%  大盤: -10.52%  持股: 3  停損: 0  淨值: 15,009  [64/119 | 記憶體: 1.4GB | 預估剩餘: 2分鐘]
+  [2021-10-01] seasonal_filter: 月份10 topN → 5
+  [2021-10-01] market_filter_tiers: 前期大盤 -10.52% < -10%，持股×0.25→1
+  [2021-10-01] min_positions: 1→2（補1檔）
+  [2021-10-01 ~ 2021-11-01] 組合: +4.33%  大盤: +9.11%  持股: 2  停損: 0  淨值: 15,659  [65/119 | 記憶體: 1.5GB | 預估剩餘: 2分鐘]
+  [2021-11-01 ~ 2021-12-01] 組合: +12.93%  大盤: +4.11%  持股: 10  停損: 0  淨值: 17,683  [66/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2021-12-01] 模型重訓完成 (訓練筆數: 179,355) [TIMER] train_model: 7.11s  [ensemble=3/3]
+  [2021-12-01 ~ 2022-01-03] 組合: +2.32%  大盤: +2.32%  持股: 10  停損: 0  淨值: 18,094  [67/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2022-01-03 ~ 2022-02-07] 組合: -5.40%  大盤: -9.54%  持股: 10  停損: 0  淨值: 17,118  [68/119 | 記憶體: 1.7GB | 預估剩餘: 2分鐘]
+  [2022-02-07] market_filter_tiers: 前期大盤 -9.54% < -5%，持股×0.5→5
+  [2022-02-07 ~ 2022-03-01] 組合: -2.13%  大盤: +1.22%  持股: 5  停損: 0  淨值: 16,753  [69/119 | 記憶體: 1.8GB | 預估剩餘: 2分鐘]
+  [2022-03-01] 模型重訓完成 (訓練筆數: 192,745) [TIMER] train_model: 9.12s  [ensemble=3/3]
+  [2022-03-01] seasonal_filter: 月份3 topN → 5
+  [2022-03-01 ~ 2022-04-01] 組合: -9.02%  大盤: -0.43%  持股: 5  停損: 0  淨值: 15,241  [70/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2022-04-01 ~ 2022-05-03] 組合: -15.01%  大盤: -10.22%  持股: 10  停損: 0  淨值: 12,954  [71/119 | 記憶體: 1.7GB | 預估剩餘: 2分鐘]
+  [2022-05-03] 大盤環境不佳 (20日中位數 -4.62%)，topN → 3
+  [2022-05-03] market_filter_tiers: 前期大盤 -10.22% < -10%，持股×0.25→1
+  [2022-05-03] min_positions: 1→2（補1檔）
+  [2022-05-03 ~ 2022-06-01] 組合: +3.76%  大盤: +1.14%  持股: 2  停損: 0  淨值: 13,442  [72/119 | 記憶體: 1.7GB | 預估剩餘: 2分鐘]
+  [2022-06-01] 模型重訓完成 (訓練筆數: 205,148) [TIMER] train_model: 4.72s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2022-06-01 ~ 2022-07-01] 組合: -9.53%  大盤: -18.78%  持股: 10  停損: 0  淨值: 12,161  [73/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2022-07-01] 大盤環境不佳 (20日中位數 -8.42%)，topN → 3
+  [2022-07-01] market_filter_tiers: 前期大盤 -18.78% < -15%，持股×0.1→1
+  [2022-07-01] min_positions: 1→2（補1檔）
+  [2022-07-01 ~ 2022-08-01] 組合: +10.42%  大盤: +4.65%  持股: 2  停損: 0  淨值: 13,428  [74/119 | 記憶體: 1.4GB | 預估剩餘: 2分鐘]
+  [2022-08-01 ~ 2022-09-01] 組合: +9.02%  大盤: +2.21%  持股: 10  停損: 0  淨值: 14,640  [75/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2022-09-01] 模型重訓完成 (訓練筆數: 217,116) [TIMER] train_model: 7.57s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2022-09-01 ~ 2022-10-03] 組合: -23.58%  大盤: -13.24%  持股: 10  停損: 0  淨值: 11,187  [76/119 | 記憶體: 1.6GB | 預估剩餘: 2分鐘]
+  [2022-10-03] 大盤環境不佳 (20日中位數 -8.12%)，topN → 3
+  [2022-10-03] market_filter_tiers: 前期大盤 -13.24% < -10%，持股×0.25→1
+  [2022-10-03] min_positions: 1→2（補1檔）
+  [2022-10-03 ~ 2022-11-01] 組合: -14.55%  大盤: -4.37%  持股: 2  停損: 0  淨值: 9,560  [77/119 | 記憶體: 1.8GB | 預估剩餘: 2分鐘]
+  [2022-11-01 ~ 2022-12-01] 組合: +17.25%  大盤: +17.09%  持股: 10  停損: 0  淨值: 11,210  [78/119 | 記憶體: 2.0GB | 預估剩餘: 2分鐘]
+  [2022-12-01] 模型重訓完成 (訓練筆數: 227,652) [TIMER] train_model: 8.60s  [ensemble=3/3]
+  [2022-12-01 ~ 2023-01-03] 組合: -8.01%  大盤: -5.95%  持股: 10  停損: 0  淨值: 10,311  [79/119 | 記憶體: 1.8GB | 預估剩餘: 2分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2023-01-03] market_filter_tiers: 前期大盤 -5.95% < -5%，持股×0.5→5
+  [2023-01-03 ~ 2023-02-01] 組合: +7.77%  大盤: +6.33%  持股: 5  停損: 0  淨值: 11,113  [80/119 | 記憶體: 1.9GB | 預估剩餘: 2分鐘]
+  [2023-02-01 ~ 2023-03-01] 組合: +1.10%  大盤: +4.82%  持股: 10  停損: 0  淨值: 11,235  [81/119 | 記憶體: 2.1GB | 預估剩餘: 2分鐘]
+  [2023-03-01] 模型重訓完成 (訓練筆數: 237,368) [TIMER] train_model: 5.29s  [ensemble=3/3]
+  [2023-03-01] seasonal_filter: 月份3 topN → 5
+  [2023-03-01 ~ 2023-04-06] 組合: -1.10%  大盤: +2.53%  持股: 5  停損: 0  淨值: 11,111  [82/119 | 記憶體: 1.9GB | 預估剩餘: 2分鐘]
+  [2023-04-06 ~ 2023-05-02] 組合: -0.93%  大盤: +0.28%  持股: 10  停損: 0  淨值: 11,008  [83/119 | 記憶體: 1.5GB | 預估剩餘: 2分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2023-05-02 ~ 2023-06-01] 組合: -5.05%  大盤: +3.45%  持股: 10  停損: 0  淨值: 10,452  [84/119 | 記憶體: 1.7GB | 預估剩餘: 1分鐘]
+  [2023-06-01] 模型重訓完成 (訓練筆數: 249,913) [TIMER] train_model: 8.26s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2023-06-01 ~ 2023-07-03] 組合: +15.32%  大盤: +5.84%  持股: 10  停損: 0  淨值: 12,053  [85/119 | 記憶體: 1.8GB | 預估剩餘: 2分鐘]
+  [2023-07-03 ~ 2023-08-01] 組合: -2.37%  大盤: +0.24%  持股: 10  停損: 0  淨值: 11,767  [86/119 | 記憶體: 2.0GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2023-08-01 ~ 2023-09-01] 組合: -6.95%  大盤: -4.07%  持股: 10  停損: 0  淨值: 10,950  [87/119 | 記憶體: 2.1GB | 預估剩餘: 1分鐘]
+  [2023-09-01] 模型重訓完成 (訓練筆數: 265,019) [TIMER] train_model: 4.51s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2023-09-01 ~ 2023-10-02] 組合: +6.88%  大盤: +0.88%  持股: 10  停損: 0  淨值: 11,703  [88/119 | 記憶體: 1.6GB | 預估剩餘: 1分鐘]
+  [2023-10-02] seasonal_filter: 月份10 topN → 5
+  [2023-10-02 ~ 2023-11-01] 組合: -6.84%  大盤: -5.76%  持股: 5  停損: 0  淨值: 10,902  [89/119 | 記憶體: 1.3GB | 預估剩餘: 1分鐘]
+  [2023-11-01] market_filter_tiers: 前期大盤 -5.76% < -5%，持股×0.5→5
+  [2023-11-01 ~ 2023-12-01] 組合: +16.83%  大盤: +11.94%  持股: 5  停損: 0  淨值: 12,737  [90/119 | 記憶體: 1.4GB | 預估剩餘: 1分鐘]
+  [2023-12-01] 模型重訓完成 (訓練筆數: 277,795) [TIMER] train_model: 9.23s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2023-12-01 ~ 2024-01-02] 組合: -5.55%  大盤: -0.11%  持股: 10  停損: 0  淨值: 12,030  [91/119 | 記憶體: 1.6GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-01-02 ~ 2024-02-01] 組合: +2.53%  大盤: +1.76%  持股: 10  停損: 0  淨值: 12,335  [92/119 | 記憶體: 1.7GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-02-01 ~ 2024-03-01] 組合: +5.85%  大盤: +6.92%  持股: 10  停損: 0  淨值: 13,057  [93/119 | 記憶體: 1.9GB | 預估剩餘: 1分鐘]
+  [2024-03-01] 模型重訓完成 (訓練筆數: 291,558) [TIMER] train_model: 6.99s  [ensemble=3/3]
+  [2024-03-01] seasonal_filter: 月份3 topN → 5
+  [2024-03-01 ~ 2024-04-01] 組合: +2.74%  大盤: +0.19%  持股: 5  停損: 0  淨值: 13,415  [94/119 | 記憶體: 1.9GB | 預估剩餘: 1分鐘]
+  [2024-04-01 ~ 2024-05-02] 組合: -1.12%  大盤: -1.52%  持股: 10  停損: 0  淨值: 13,265  [95/119 | 記憶體: 2.1GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-05-02 ~ 2024-06-03] 組合: +5.00%  大盤: +4.48%  持股: 10  停損: 0  淨值: 13,929  [96/119 | 記憶體: 2.1GB | 預估剩餘: 1分鐘]
+  [2024-06-03] 模型重訓完成 (訓練筆數: 307,992) [TIMER] train_model: 6.79s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-06-03 ~ 2024-07-01] 組合: +4.51%  大盤: +1.96%  持股: 10  停損: 0  淨值: 14,557  [97/119 | 記憶體: 1.9GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-07-01 ~ 2024-08-01] 組合: -1.88%  大盤: -2.88%  持股: 10  停損: 0  淨值: 14,284  [98/119 | 記憶體: 1.7GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-08-01 ~ 2024-09-02] 組合: -4.86%  大盤: -0.52%  持股: 10  停損: 0  淨值: 13,589  [99/119 | 記憶體: 1.3GB | 預估剩餘: 1分鐘]
+  [2024-09-02] 模型重訓完成 (訓練筆數: 328,201) [TIMER] train_model: 9.30s  [ensemble=3/3]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2024-09-02 ~ 2024-10-01] 組合: -8.74%  大盤: -2.54%  持股: 10  停損: 0  淨值: 12,401  [100/119 | 記憶體: 1.9GB | 預估剩餘: 1分鐘]
+  [2024-10-01] seasonal_filter: 月份10 topN → 5
+  [2024-10-01 ~ 2024-11-01] 組合: +2.42%  大盤: -2.49%  持股: 5  停損: 0  淨值: 12,702  [101/119 | 記憶體: 2.2GB | 預估剩餘: 1分鐘]
+  [2024-11-01 ~ 2024-12-02] 組合: +0.17%  大盤: -3.86%  持股: 10  停損: 0  淨值: 12,724  [102/119 | 記憶體: 2.4GB | 預估剩餘: 1分鐘]
+  [2024-12-02] 模型重訓完成 (訓練筆數: 344,425) [TIMER] train_model: 4.94s  [ensemble=3/3]
+  [2024-12-02 ~ 2025-01-02] 組合: +0.97%  大盤: -1.24%  持股: 10  停損: 0  淨值: 12,847  [103/119 | 記憶體: 1.4GB | 預估剩餘: 1分鐘]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2025-01-02 ~ 2025-02-03] 組合: -2.92%  大盤: -4.46%  持股: 10  停損: 0  淨值: 12,472  [104/119 | 記憶體: 1.4GB | 預估剩餘: 57秒]
+  [2025-02-03 ~ 2025-03-03] 組合: +1.49%  大盤: +3.35%  持股: 10  停損: 0  淨值: 12,658  [105/119 | 記憶體: 1.3GB | 預估剩餘: 52秒]
+  [2025-03-03] 模型重訓完成 (訓練筆數: 358,795) [TIMER] train_model: 10.12s  [ensemble=3/3]
+  [2025-03-03] seasonal_filter: 月份3 topN → 5
+  [2025-03-03 ~ 2025-04-01] 組合: -16.62%  大盤: -10.21%  持股: 5  停損: 0  淨值: 10,554  [106/119 | 記憶體: 2.1GB | 預估剩餘: 50秒]
+  [2025-04-01] 大盤環境不佳 (20日中位數 -6.97%)，topN → 3
+  [2025-04-01] market_filter_tiers: 前期大盤 -10.21% < -10%，持股×0.25→1
+  [2025-04-01] min_positions: 1→2（補1檔）
+  [2025-04-01 ~ 2025-05-02] 組合: -5.25%  大盤: -4.77%  持股: 2  停損: 0  淨值: 10,000  [107/119 | 記憶體: 1.9GB | 預估剩餘: 46秒]
+  [2025-05-02] 大盤環境不佳 (20日中位數 -6.11%)，topN → 3
+  [2025-05-02 ~ 2025-06-02] 組合: +0.90%  大盤: +0.87%  持股: 3  停損: 0  淨值: 10,090  [108/119 | 記憶體: 1.9GB | 預估剩餘: 42秒]
+  [2025-06-02] 模型重訓完成 (訓練筆數: 373,310) [TIMER] train_model: 8.04s  [ensemble=3/3]
+  [2025-06-02 ~ 2025-07-01] 組合: +9.62%  大盤: +4.51%  持股: 10  停損: 0  淨值: 11,060  [109/119 | 記憶體: 1.9GB | 預估剩餘: 39秒]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2025-07-01 ~ 2025-08-01] 組合: +3.20%  大盤: +2.00%  持股: 10  停損: 0  淨值: 11,414  [110/119 | 記憶體: 2.0GB | 預估剩餘: 35秒]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2025-08-01 ~ 2025-09-01] 組合: +19.93%  大盤: +7.19%  持股: 10  停損: 0  淨值: 13,689  [111/119 | 記憶體: 2.1GB | 預估剩餘: 31秒]
+  [2025-09-01] 模型重訓完成 (訓練筆數: 388,672) [TIMER] train_model: 7.71s  [ensemble=3/3]
+  [2025-09-01 ~ 2025-10-01] 組合: -1.52%  大盤: +0.88%  持股: 10  停損: 0  淨值: 13,481  [112/119 | 記憶體: 2.0GB | 預估剩餘: 28秒]
+  [2025-10-01] seasonal_filter: 月份10 topN → 5
+  [2025-10-01 ~ 2025-11-03] 組合: -2.79%  大盤: +4.32%  持股: 5  停損: 0  淨值: 13,105  [113/119 | 記憶體: 1.8GB | 預估剩餘: 23秒]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2025-11-03 ~ 2025-12-01] 組合: -3.14%  大盤: -1.99%  持股: 10  停損: 0  淨值: 12,694  [114/119 | 記憶體: 1.8GB | 預估剩餘: 19秒]
+  [2025-12-01] 模型重訓完成 (訓練筆數: 405,667) [TIMER] train_model: 13.43s  [ensemble=3/3]
+  [2025-12-01 ~ 2026-01-02] 組合: +22.89%  大盤: +8.00%  持股: 10  停損: 0  淨值: 15,599  [115/119 | 記憶體: 2.1GB | 預估剩餘: 16秒]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2026-01-02 ~ 2026-02-02] 組合: +5.87%  大盤: +5.27%  持股: 10  停損: 0  淨值: 16,515  [116/119 | 記憶體: 1.7GB | 預估剩餘: 12秒]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2026-02-02 ~ 2026-03-02] 組合: +9.24%  大盤: +11.47%  持股: 10  停損: 0  淨值: 18,041  [117/119 | 記憶體: 1.6GB | 預估剩餘: 8秒]
+  [2026-03-02] 模型重訓完成 (訓練筆數: 422,263) [TIMER] train_model: 8.85s  [ensemble=3/3]
+  [2026-03-02] seasonal_filter: 月份3 topN → 5
+  [2026-03-02 ~ 2026-04-01] 組合: +3.63%  大盤: -1.81%  持股: 5  停損: 0  淨值: 18,696  [118/119 | 記憶體: 1.1GB | 預估剩餘: 4秒]
+/Users/james.chou/.pyenv/versions/3.10.16/lib/python3.10/site-packages/scipy/optimize/_slsqp_py.py:434: RuntimeWarning: Values in x were outside bounds during a minimize step, clipping to bounds
+  fx = wrapped_fun(x)
+  [2026-04-01 ~ 2026-04-21] 組合: +26.91%  大盤: +21.36%  持股: 10  停損: 0  淨值: 23,727  [119/119 | 記憶體: 1.3GB | 預估剩餘: 0秒]
+
+────────────────────────────────────────────────────────────
+[TIMER] 效能瓶頸報告
+────────────────────────────────────────────────────────────
+  步驟                              次數       總秒      平均秒
+  ------------------------------------------------------
+  load_prices                      1     1.06    1.063
+  load_features                    1     5.91    5.908
+  load_labels                      1     0.00    0.000
+  train_model                     39   252.65    6.478
+  predict                        119     2.25    0.019
+  breakthrough_map                 0     0.00    0.000
+  simulate_period                119    40.06    0.337
+  apply_stoploss                 119     0.85    0.007
+  其他（overhead）                     —   195.19
+  總 loop 時間                        —   497.13
+────────────────────────────────────────────────────────────
+
+
+============================================================
+回測結果摘要
+============================================================
+  回測期間: 2016-06-13 ~ 2026-04-21
+  再平衡次數: 119  總交易次數: 982
+
+  指標                               組合           大盤
+  ----------------------------------------------
+  累積報酬                     137.27%      88.61%
+  年化報酬                       9.16%       6.65%
+  超額報酬                      48.66%
+  最大回撤                     -53.32%
+  Sharpe Ratio (rf=1.5%)        0.38
+  Calmar Ratio                0.17
+  勝率                        46.95%
+  盈虧比                         1.43
+  停損觸發次數                         0
+
+  月度報酬:
+    2016-06  +  2.48%  (大盤  +2.01%)  ↑ ████
+    2016-07  +  3.99%  (大盤  +2.18%)  ↑ ███████
+    2016-08   -3.40%  (大盤  -2.75%)  ↓ ██████
+    2016-09  +  0.86%  (大盤  +1.48%)  ↑ █
+    2016-10   -1.63%  (大盤  -2.97%)  ↓ ███
+    2016-11  +  0.10%  (大盤  -2.75%)  ↑ █
+    2016-12   -2.04%  (大盤  +0.68%)  ↓ ████
+    2017-01  +  1.32%  (大盤  +4.58%)  ↑ ██
+    2017-02  +  3.13%  (大盤  +2.65%)  ↑ ██████
+    2017-03  +  9.48%  (大盤  +2.50%)  ↑ ██████████████████
+    2017-04   -2.62%  (大盤  -2.03%)  ↓ █████
+    2017-05   -0.68%  (大盤  -1.21%)  ↓ █
+    2017-06  +  2.39%  (大盤  +1.27%)  ↑ ████
+    2017-07  +  3.40%  (大盤  +5.08%)  ↑ ██████
+    2017-08  +  0.92%  (大盤  +5.47%)  ↑ █
+    2017-09   -1.83%  (大盤  -0.95%)  ↓ ███
+    2017-10   -1.10%  (大盤  +1.62%)  ↓ ██
+    2017-11   -3.86%  (大盤  -2.15%)  ↓ ███████
+    2017-12   -6.03%  (大盤  -0.44%)  ↓ ████████████
+    2018-01  +  2.87%  (大盤  +3.51%)  ↑ █████
+    2018-02   -8.25%  (大盤  -3.88%)  ↓ ████████████████
+    2018-03  +  0.47%  (大盤  +1.43%)  ↑ █
+    2018-04   -4.45%  (大盤  -4.06%)  ↓ ████████
+    2018-05  +  3.33%  (大盤  +7.86%)  ↑ ██████
+    2018-06  +  4.82%  (大盤  -2.64%)  ↑ █████████
+    2018-07   -2.77%  (大盤  -3.51%)  ↓ █████
+    2018-08  -10.09%  (大盤  -8.74%)  ↓ ████████████████████
+    2018-09  -12.51%  (大盤  -6.10%)  ↓ █████████████████████████
+    2018-10  -21.78%  (大盤 -14.25%)  ↓ ███████████████████████████████████████████
+    2018-11  + 23.29%  (大盤  +9.05%)  ↑ ██████████████████████████████████████████████
+    2018-12  -12.27%  (大盤  -9.45%)  ↓ ████████████████████████
+    2019-01  + 13.52%  (大盤  +8.26%)  ↑ ███████████████████████████
+    2019-02  +  5.43%  (大盤  +3.98%)  ↑ ██████████
+    2019-03  +  1.13%  (大盤  +3.78%)  ↑ ██
+    2019-04  +  3.01%  (大盤  +1.41%)  ↑ ██████
+    2019-05  -11.90%  (大盤  -9.86%)  ↓ ███████████████████████
+    2019-06  +  3.80%  (大盤  +8.38%)  ↑ ███████
+    2019-07   -0.98%  (大盤  -0.69%)  ↓ █
+    2019-08  +  6.68%  (大盤  +0.54%)  ↑ █████████████
+    2019-09   -1.10%  (大盤  +1.22%)  ↓ ██
+    2019-10  +  0.54%  (大盤  +5.26%)  ↑ █
+    2019-11   -4.83%  (大盤  -2.36%)  ↓ █████████
+    2019-12  +  7.49%  (大盤  +6.45%)  ↑ ██████████████
+    2020-01   -9.82%  (大盤  -9.13%)  ↓ ███████████████████
+    2020-02   -8.17%  (大盤  -0.28%)  ↓ ████████████████
+    2020-03  -17.41%  (大盤 -15.33%)  ↓ ██████████████████████████████████
+    2020-04  + 25.98%  (大盤 +16.44%)  ↑ ███████████████████████████████████████████████████
+    2020-05  +  2.37%  (大盤  +6.45%)  ↑ ████
+    2020-06  + 10.75%  (大盤  +7.20%)  ↑ █████████████████████
+    2020-07  +  7.91%  (大盤  +1.05%)  ↑ ███████████████
+    2020-08  +  6.92%  (大盤  +0.14%)  ↑ █████████████
+    2020-09   -5.16%  (大盤  -3.08%)  ↓ ██████████
+    2020-10  -19.78%  (大盤  -0.90%)  ↓ ███████████████████████████████████████
+    2020-11  + 12.65%  (大盤 +10.30%)  ↑ █████████████████████████
+    2020-12   -4.06%  (大盤  +5.63%)  ↓ ████████
+    2021-01  +  1.75%  (大盤  -4.30%)  ↑ ███
+    2021-02  + 34.59%  (大盤  +7.77%)  ↑ █████████████████████████████████████████████████████████████████████
+    2021-03  + 11.52%  (大盤  +8.07%)  ↑ ███████████████████████
+    2021-04  + 11.81%  (大盤  +2.80%)  ↑ ███████████████████████
+    2021-05  +  0.37%  (大盤  -2.31%)  ↑ █
+    2021-06  + 35.16%  (大盤  +9.33%)  ↑ ██████████████████████████████████████████████████████████████████████
+    2021-07  +  0.74%  (大盤  +0.84%)  ↑ █
+    2021-08   -3.18%  (大盤  -4.23%)  ↓ ██████
+    2021-09  -11.26%  (大盤 -10.52%)  ↓ ██████████████████████
+    2021-10  +  4.33%  (大盤  +9.11%)  ↑ ████████
+    2021-11  + 12.93%  (大盤  +4.11%)  ↑ █████████████████████████
+    2021-12  +  2.32%  (大盤  +2.32%)  ↑ ████
+    2022-01   -5.40%  (大盤  -9.54%)  ↓ ██████████
+    2022-02   -2.13%  (大盤  +1.22%)  ↓ ████
+    2022-03   -9.02%  (大盤  -0.43%)  ↓ ██████████████████
+    2022-04  -15.01%  (大盤 -10.22%)  ↓ ██████████████████████████████
+    2022-05  +  3.76%  (大盤  +1.14%)  ↑ ███████
+    2022-06   -9.53%  (大盤 -18.78%)  ↓ ███████████████████
+    2022-07  + 10.42%  (大盤  +4.65%)  ↑ ████████████████████
+    2022-08  +  9.02%  (大盤  +2.21%)  ↑ ██████████████████
+    2022-09  -23.58%  (大盤 -13.24%)  ↓ ███████████████████████████████████████████████
+    2022-10  -14.55%  (大盤  -4.37%)  ↓ █████████████████████████████
+    2022-11  + 17.25%  (大盤 +17.09%)  ↑ ██████████████████████████████████
+    2022-12   -8.01%  (大盤  -5.95%)  ↓ ████████████████
+    2023-01  +  7.77%  (大盤  +6.33%)  ↑ ███████████████
+    2023-02  +  1.10%  (大盤  +4.82%)  ↑ ██
+    2023-03   -1.10%  (大盤  +2.53%)  ↓ ██
+    2023-04   -0.93%  (大盤  +0.28%)  ↓ █
+    2023-05   -5.05%  (大盤  +3.45%)  ↓ ██████████
+    2023-06  + 15.32%  (大盤  +5.84%)  ↑ ██████████████████████████████
+    2023-07   -2.37%  (大盤  +0.24%)  ↓ ████
+    2023-08   -6.95%  (大盤  -4.07%)  ↓ █████████████
+    2023-09  +  6.88%  (大盤  +0.88%)  ↑ █████████████
+    2023-10   -6.84%  (大盤  -5.76%)  ↓ █████████████
+    2023-11  + 16.83%  (大盤 +11.94%)  ↑ █████████████████████████████████
+    2023-12   -5.55%  (大盤  -0.11%)  ↓ ███████████
+    2024-01  +  2.53%  (大盤  +1.76%)  ↑ █████
+    2024-02  +  5.85%  (大盤  +6.92%)  ↑ ███████████
+    2024-03  +  2.74%  (大盤  +0.19%)  ↑ █████
+    2024-04   -1.12%  (大盤  -1.52%)  ↓ ██
+    2024-05  +  5.00%  (大盤  +4.48%)  ↑ ██████████
+    2024-06  +  4.51%  (大盤  +1.96%)  ↑ █████████
+    2024-07   -1.88%  (大盤  -2.88%)  ↓ ███
+    2024-08   -4.86%  (大盤  -0.52%)  ↓ █████████
+    2024-09   -8.74%  (大盤  -2.54%)  ↓ █████████████████
+    2024-10  +  2.42%  (大盤  -2.49%)  ↑ ████
+    2024-11  +  0.17%  (大盤  -3.86%)  ↑ █
+    2024-12  +  0.97%  (大盤  -1.24%)  ↑ █
+    2025-01   -2.92%  (大盤  -4.46%)  ↓ █████
+    2025-02  +  1.49%  (大盤  +3.35%)  ↑ ██
+    2025-03  -16.62%  (大盤 -10.21%)  ↓ █████████████████████████████████
+    2025-04   -5.25%  (大盤  -4.77%)  ↓ ██████████
+    2025-05  +  0.90%  (大盤  +0.87%)  ↑ █
+    2025-06  +  9.62%  (大盤  +4.51%)  ↑ ███████████████████
+    2025-07  +  3.20%  (大盤  +2.00%)  ↑ ██████
+    2025-08  + 19.93%  (大盤  +7.19%)  ↑ ███████████████████████████████████████
+    2025-09   -1.52%  (大盤  +0.88%)  ↓ ███
+    2025-10   -2.79%  (大盤  +4.32%)  ↓ █████
+    2025-11   -3.14%  (大盤  -1.99%)  ↓ ██████
+    2025-12  + 22.89%  (大盤  +8.00%)  ↑ █████████████████████████████████████████████
+    2026-01  +  5.87%  (大盤  +5.27%)  ↑ ███████████
+    2026-02  +  9.24%  (大盤 +11.47%)  ↑ ██████████████████
+    2026-03  +  3.63%  (大盤  -1.81%)  ↑ ███████
+    2026-04  + 26.91%  (大盤 +21.36%)  ↑ █████████████████████████████████████████████████████
+============================================================
+
+[quantstats] 績效報告已輸出: /Users/james.chou/JamesProject/stock_bot/artifacts/backtest_report.html  (periods_per_year=12)
+
+結果已儲存: artifacts/optuna_10y/trial8.json

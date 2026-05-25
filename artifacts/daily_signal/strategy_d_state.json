@@ -1,0 +1,33 @@
+{
+  "positions": {
+    "7734": {
+      "entry_date": "2026-05-06",
+      "entry_score": 0.100536,
+      "entry_price": 3885.0,
+      "peak_price": 3885.0,
+      "days_held": 10
+    },
+    "4991": {
+      "entry_date": "2026-05-20",
+      "entry_score": 0.108774,
+      "entry_price": 700.0,
+      "peak_price": 700.0,
+      "days_held": 0
+    },
+    "6274": {
+      "entry_date": "2026-05-20",
+      "entry_score": 0.097232,
+      "entry_price": 1205.0,
+      "peak_price": 1205.0,
+      "days_held": 0
+    },
+    "8358": {
+      "entry_date": "2026-05-20",
+      "entry_score": 0.092123,
+      "entry_price": 460.0,
+      "peak_price": 460.0,
+      "days_held": 0
+    }
+  },
+  "last_run_date": "2026-05-20"
+}
