@@ -94,27 +94,51 @@ def run(config, session: Session, days_back: Optional[int] = None) -> dict:
             finish_job(session, job_id, "success", logs={"rows": 0, "skipped": "up-to-date"})
             return {"rows": 0, "status": "up-to-date"}
 
-        # 分 chunks: 7 天 1 chunk
+        # FinMind 限制：TaiwanStockNews 每次只能 1 天（end_date 不能傳）
+        # → per-day query，每 call 間 sleep 2s 避免 rate limit 降級
+        # 若遇 "Your level is free" → sleep 60s 重試 1 次
+        import time as _time
         total = 0
         cur = start_date
+        n_days = 0
+        n_skipped = 0
+        consecutive_fails = 0
         while cur <= end_date:
-            chunk_end = min(cur + timedelta(days=7), end_date)
-            try:
-                df = fetch_dataset(
-                    DATASET,
-                    start_date=cur.isoformat(),
-                    end_date=chunk_end.isoformat(),
-                )
-                if df.empty:
-                    cur = chunk_end + timedelta(days=1)
-                    continue
-                norm = _normalize(df)
-                n = _upsert(session, norm)
-                total += n
-                logger.info("[ingest_stock_news] %s ~ %s: %d 筆", cur, chunk_end, n)
-            except Exception as exc:
-                logger.warning("[ingest_stock_news] chunk %s ~ %s 失敗: %s", cur, chunk_end, exc)
-            cur = chunk_end + timedelta(days=1)
+            retry = False
+            for attempt in range(2):
+                try:
+                    df = fetch_dataset(DATASET, start_date=cur,
+                                        token=config.finmind_token)
+                    if df.empty:
+                        n_skipped += 1
+                    else:
+                        norm = _normalize(df)
+                        n = _upsert(session, norm)
+                        total += n
+                        n_days += 1
+                        if n_days % 10 == 0:
+                            logger.info("[ingest_stock_news] %s: cumulative %d days, %d rows",
+                                        cur, n_days, total)
+                    consecutive_fails = 0
+                    break
+                except Exception as exc:
+                    exc_msg = str(exc)
+                    if "your level is free" in exc_msg.lower() and attempt == 0:
+                        logger.warning("[ingest_stock_news] day %s rate-limited, sleep 60s & retry", cur)
+                        _time.sleep(60)
+                        retry = True
+                        continue
+                    logger.warning("[ingest_stock_news] day %s 失敗: %s", cur, exc_msg[:120])
+                    consecutive_fails += 1
+                    if consecutive_fails >= 5:
+                        logger.error("[ingest_stock_news] 連續 5 天失敗，abort")
+                        finish_job(session, job_id, "failed",
+                                   error_text="connect/quota 連續失敗",
+                                   logs={"rows": int(total), "days_done": n_days})
+                        return {"rows": int(total)}
+                    break
+            cur = cur + timedelta(days=1)
+            _time.sleep(2.0)  # 較長 sleep 避免 rate limit 降級
 
         finish_job(session, job_id, "success", logs={"rows": int(total)})
         return {"rows": int(total)}
