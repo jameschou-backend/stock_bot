@@ -77,12 +77,49 @@ else:
     st.sidebar.caption(f"每檔配額: ${capital_per_stock:,.0f}")
     st.sidebar.caption(f"基於 {len(picks_df)} 檔等權")
 
+    # 「不追高」filter 設定
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("**🚫 不追高 filter**（手動 skip 用）")
+    max_ret_5 = st.sidebar.slider("近 5 日漲幅 < %", -50, 50, 50, step=5,
+                                   help="超過此漲幅標註 ⚠️ 過熱，建議 skip") / 100
+    max_ret_20 = st.sidebar.slider("近 20 日漲幅 < %", -50, 100, 100, step=5,
+                                    help="超過此漲幅標註 ⚠️ 過熱，建議 skip") / 100
+
+    # 取持倉股近 5/20 日報酬（從 features 表）
+    from sqlalchemy import text as _sqlt
+    _sids = tuple(str(s) for s in picks_df["stock_id"].astype(str).tolist())
+    if _sids:
+        _q = _sqlt(f"""
+            SELECT stock_id, features_json FROM features
+            WHERE stock_id IN ({','.join([f"'{s}'" for s in _sids])})
+              AND (stock_id, trading_date) IN (
+                SELECT stock_id, MAX(trading_date) FROM features
+                WHERE stock_id IN ({','.join([f"'{s}'" for s in _sids])})
+                GROUP BY stock_id
+              )
+        """)
+        _rs = engine.connect().execute(_q).fetchall()
+        _ret_map = {}
+        for sid, fj in _rs:
+            import json as _json
+            d = _json.loads(fj) if isinstance(fj, str) else fj
+            _ret_map[str(sid)] = (d.get("ret_5"), d.get("ret_20"))
+    else:
+        _ret_map = {}
+
     rows = []
     for _, p in picks_df.iterrows():
         sid = str(p["stock_id"])
         px = price_map.get(sid)
         shares = int(capital_per_stock / px / 1000) * 1000 if px else 0
         actual_cost = shares * px if px else 0
+        ret_5, ret_20 = _ret_map.get(sid, (None, None))
+        # 「過熱」flag
+        flag = ""
+        if ret_5 is not None and ret_5 > max_ret_5:
+            flag = "⚠️ 過熱(5d)"
+        elif ret_20 is not None and ret_20 > max_ret_20:
+            flag = "⚠️ 過熱(20d)"
         rows.append({
             "排名": "",
             "代碼": sid,
@@ -90,8 +127,11 @@ else:
             "產業": p.get("industry_category") or "",
             "Score": f"{p['score']:.4f}",
             "現價": f"${px:,.2f}" if px else "N/A",
+            "5d漲": f"{ret_5:+.1%}" if ret_5 is not None else "—",
+            "20d漲": f"{ret_20:+.1%}" if ret_20 is not None else "—",
             "建議股數": f"{shares:,}" if shares else "N/A",
             "金額": f"${actual_cost:,.0f}" if actual_cost else "N/A",
+            "Flag": flag,
         })
     out_df = pd.DataFrame(rows)
     out_df.index = range(1, len(out_df) + 1)
@@ -100,7 +140,7 @@ else:
     st.dataframe(
         out_df,
         use_container_width=True,
-        height=600,
+        height=700,
         column_config={
             "排名": st.column_config.NumberColumn(width="small"),
             "代碼": st.column_config.TextColumn(width="small"),
@@ -108,6 +148,10 @@ else:
             "產業": st.column_config.TextColumn(width="medium"),
         },
     )
+    # 統計過熱檔數
+    n_hot = sum(1 for r in rows if r["Flag"])
+    if n_hot > 0:
+        st.warning(f"⚠️ {n_hot}/{len(rows)} 檔被標註過熱（你可手動 skip 或接受 model 判斷）")
 
     # ── 產業分布 ──
     st.markdown('<div class="section-header">🏭 產業分布</div>', unsafe_allow_html=True)
@@ -166,17 +210,30 @@ else:
         # 持倉 table
         pos_df = result["positions"]
         if not pos_df.empty:
-            pos_df["建議"] = pos_df["stock_id"].apply(
-                lambda s: "✅ 持續" if s in picks_df["stock_id"].astype(str).tolist() else "❌ 該賣"
-            )
+            today_picks_set = set(picks_df["stock_id"].astype(str).tolist())
+            def _suggest(row):
+                in_picks = row["stock_id"] in today_picks_set
+                days = row.get("holding_days", 0)
+                if days >= 28:
+                    if in_picks:
+                        return "🔄 到期 + 仍在 picks → 續持"
+                    return "🔄 到期 + 不在 picks → 換股"
+                if days >= 23:
+                    return f"⏰ 接近換股 ({days}d)"
+                if in_picks:
+                    return f"✅ 持有中 ({days}d)"
+                return f"⚠️ 不在 picks 但未到期 ({days}d)"
+            pos_df["建議"] = pos_df.apply(_suggest, axis=1)
+
             display = pos_df[["stock_id", "shares", "entry_price",
                               "current_price", "unreal_pnl", "return_pct",
-                              "entry_date", "建議"]].copy()
+                              "entry_date", "holding_days", "建議"]].copy()
             display["entry_price"] = display["entry_price"].map(lambda x: f"${x:,.2f}")
             display["current_price"] = display["current_price"].map(
                 lambda x: f"${x:,.2f}" if pd.notna(x) else "N/A")
             display["unreal_pnl"] = display["unreal_pnl"].map(lambda x: f"${x:+,.0f}")
             display["return_pct"] = display["return_pct"].map(lambda x: f"{x:+.2%}")
+            display = display.rename(columns={"holding_days": "持有天"})
             st.dataframe(display, use_container_width=True, hide_index=True)
 
             # 持倉 vs picks 對齊

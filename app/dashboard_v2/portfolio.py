@@ -1,8 +1,8 @@
-"""Portfolio tracking helper：讀 portfolio.json + 計算實時 P&L。"""
+"""Portfolio tracking helper：讀 portfolio.json + 計算實時 P&L + 持有期換股提醒。"""
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Optional
 
@@ -10,6 +10,10 @@ import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 PORTFOLIO_PATH = PROJECT_ROOT / "portfolio.json"
+
+# 策略本質：持有 20 個交易日 (~ 1 個月)
+HOLD_TARGET_TRADING_DAYS = 20
+HOLD_TARGET_CALENDAR_DAYS = 28  # 緩衝（含週末，~4 calendar weeks）
 
 
 def load_portfolio() -> Optional[dict]:
@@ -37,6 +41,7 @@ def compute_pnl(portfolio: dict, price_map: dict) -> dict:
     rows = []
     total_cost = 0.0
     total_value = 0.0
+    today = date.today()
     for sid, info in positions.items():
         shares = int(info["shares"])
         entry = float(info["entry_price"])
@@ -52,6 +57,25 @@ def compute_pnl(portfolio: dict, price_map: dict) -> dict:
             ret_pct = unreal_pnl / cost if cost > 0 else 0
         total_cost += cost
         total_value += mkt_val
+
+        # 持有期計算（calendar days，approx trading_days = calendar_days × 0.72）
+        entry_dt_str = info.get("entry_date", "")
+        holding_days = 0
+        hold_status = "—"
+        if entry_dt_str:
+            try:
+                entry_dt = datetime.strptime(entry_dt_str, "%Y-%m-%d").date()
+                holding_days = (today - entry_dt).days
+                if holding_days >= HOLD_TARGET_CALENDAR_DAYS:
+                    hold_status = "🔄 到期可換股"
+                elif holding_days >= HOLD_TARGET_CALENDAR_DAYS - 5:
+                    hold_status = f"⏰ 接近換股期 ({holding_days}d)"
+                else:
+                    days_left = HOLD_TARGET_CALENDAR_DAYS - holding_days
+                    hold_status = f"⏳ 持有 {holding_days}d (剩 ~{days_left}d)"
+            except Exception:
+                hold_status = entry_dt_str
+
         rows.append({
             "stock_id": sid,
             "shares": shares,
@@ -61,7 +85,9 @@ def compute_pnl(portfolio: dict, price_map: dict) -> dict:
             "market_value": mkt_val,
             "unreal_pnl": unreal_pnl,
             "return_pct": ret_pct,
-            "entry_date": info.get("entry_date", ""),
+            "entry_date": entry_dt_str,
+            "holding_days": holding_days,
+            "hold_status": hold_status,
         })
 
     pos_df = pd.DataFrame(rows)
