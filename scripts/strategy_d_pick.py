@@ -68,6 +68,7 @@ MAX_BREAKTHROUGH_DIST  = 0.30  # 新買進距突破上限（>30% 的股不進場
 RETRAIN_MONTHS         = 36    # 訓練資料回看月數（3 年）
 RETRAIN_FREQ_DAYS      = 30    # 每隔幾天重訓一次
 MIN_AVG_TURNOVER_BILL  = 1.0   # 流動性門檻：20日平均日成交金額（億元），0=不過濾
+MAX_STOCK_PRICE        = 0.0   # 個股最高股價過濾（0=不過濾）；100萬/4檔=25萬，買 1 張需 <250 元
 USE_EXCESS_LABEL       = True  # 超額報酬 label：future_ret_h -= 同日截面均值
 
 _META_COLS = {"stock_id", "trading_date", "future_ret_h"}
@@ -334,6 +335,13 @@ def run_pick(
         _before_liq = len(tf_today)
         tf_today = tf_today[tf_today["stock_id"].isin(_liquid_sids)].reset_index(drop=True)
         print(f"  流動性過濾 (>={MIN_AVG_TURNOVER_BILL:.0f}億): {_before_liq} → {len(tf_today)} 支")
+
+    # 個股最高股價過濾：避免高價股無法買整張（100萬/4檔=25萬，1 張需 < MAX_STOCK_PRICE）
+    if MAX_STOCK_PRICE > 0:
+        _before_price = len(tf_today)
+        _affordable_sids = {sid for sid, px in price_map.items() if px <= MAX_STOCK_PRICE}
+        tf_today = tf_today[tf_today["stock_id"].isin(_affordable_sids)].reset_index(drop=True)
+        print(f"  股價過濾 (<=${MAX_STOCK_PRICE:.0f}): {_before_price} → {len(tf_today)} 支")
 
     if tf_today.empty:
         print(f"❌ {today} 無有效股票特徵")
@@ -614,7 +622,7 @@ def _print_result(r: Dict) -> None:
 # CLI
 # ─────────────────────────────────────────────
 def main() -> None:
-    global MIN_AVG_TURNOVER_BILL
+    global MIN_AVG_TURNOVER_BILL, MAX_STOCK_PRICE
     parser = argparse.ArgumentParser(description="Strategy D 每日選股（label=5d + trailing stop -25%）")
     parser.add_argument("--date", type=lambda s: date.fromisoformat(s), default=date.today())
     parser.add_argument("--capital", type=int, default=1_000_000)
@@ -622,8 +630,12 @@ def main() -> None:
     parser.add_argument("--min-avg-turnover", type=float, default=MIN_AVG_TURNOVER_BILL,
                         dest="min_avg_turnover",
                         help=f"流動性門檻（億元），0=不過濾（預設 {MIN_AVG_TURNOVER_BILL}）")
+    parser.add_argument("--max-price", type=float, default=MAX_STOCK_PRICE,
+                        dest="max_price",
+                        help="個股最高股價（0=不過濾）；100萬/4檔=25萬 → 建議 250")
     args = parser.parse_args()
     MIN_AVG_TURNOVER_BILL = args.min_avg_turnover
+    MAX_STOCK_PRICE = args.max_price
 
     result = run_pick(args.date, args.capital, args.reset_state)
     _print_result(result)
