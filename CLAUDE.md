@@ -20,7 +20,10 @@
 
 台股波段 ML 選股系統。使用 LightGBM 以 20 日 forward return 為 label，每月再平衡選股（topN 等權），
 配合漸進式大盤過濾、季節性降倉，實現超越大盤的長期報酬。
-現行 10y walk-forward 結果：累積 **+5115%**、Sharpe **1.33**、MDD **-33%**（2026-05-23 Stage 10.1，topn 20→30 + 流動性加權 + SHAP剪枝 48特徵）。
+現行 10y walk-forward 結果：累積 **+5115%**、Sharpe **1.33**、MDD **-33%**（2026-05-23 Stage 10.1 快照，topn 20→30 + 流動性加權 + SHAP 剪枝）。
+
+> ⚠️ **績效數字不可逐位重現**：adj_close 隨除權息回溯調整持續漂移，memory 記錄區間 +5115%（2026-05-23）~ +1444%（2026-04-23），依時間點與特徵集而異，重跑以實際輸出為準。當前 **FEATURE_COLUMNS=87、PRUNED_FEATURE_COLS=58**（`tests/test_production_invariants.py` 鎖定）。
+> ⚠️ **已知回測偏差（2026-06 審計）**：raw_prices 缺 2016–2021 下市股（survivorship bias，日月光/矽品/樂陞等 0 rows）；回測以 T 日收盤價成交 T 盤後才公布的籌碼特徵（point-in-time 違反）；`label_horizon_buffer` 用日曆天未完全覆蓋 20 交易日 horizon（殘餘 ~6 交易日洩漏）。**絕對績效偏高估，作實盤資金配置前需先處理。**
 
 ## 持久記憶系統
 
@@ -190,7 +193,7 @@ prefect deploy ...                            # scheduled flow
 | `enable_slippage` | `False` | 不啟用滑價模型 |
 | `time_weighting` | `False` | 等權樣本 |
 | `liquidity_weighting` | `True`（`--liq-weighted`） | 流動性加權訓練：sample_weight ∝ log(1+amt_20）|
-| `feature_columns` | `PRUNED_FEATURE_COLS`（`--pruned-features`）| SHAP 剪枝：56→48 特徵（移除 8 個 shap<0.2% 特徵）|
+| `feature_columns` | `PRUNED_FEATURE_COLS`（`--pruned-features`）| SHAP 剪枝：FEATURE_COLUMNS 87 → PRUNED 58 特徵（含後續新增 PER/fracdiff/news 等）|
 | `enable_complex_filter` | `False` | 不啟用 RSI/熊市/200MA 等複雜過濾 |
 | `enable_seasonal_filter` | `True` | 啟用季節性降倉（3/10月 topN×0.5，floor=5）|
 | `market_filter_tiers` | `[(-0.05,0.5),(-0.10,0.25),(-0.15,0.10)]` | 漸進式大盤過濾 |

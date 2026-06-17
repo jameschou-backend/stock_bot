@@ -193,7 +193,7 @@ def load_config() -> AppConfig:
         train_lookback_years=int(pick("TRAIN_LOOKBACK_YEARS", 5)),
         schedule_time=str(pick("SCHEDULE_TIME", "16:50")),
         tz=str(pick("TZ", "Asia/Taipei")),
-        api_host=str(pick("API_HOST", "0.0.0.0")),
+        api_host=str(pick("API_HOST", "127.0.0.1")),  # 預設綁本機，避免 LAN 暴露；需對外才顯式設 API_HOST=0.0.0.0
         api_port=int(pick("API_PORT", 8000)),
         force_train=str(pick("FORCE_TRAIN", "0")) in {"1", "true", "True"},
         force_recompute_days=int(pick("FORCE_RECOMPUTE_DAYS", 0)),
