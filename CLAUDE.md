@@ -20,7 +20,7 @@
 
 台股波段 ML 選股系統。使用 LightGBM 以 20 日 forward return 為 label，每月再平衡選股（topN 等權），
 配合漸進式大盤過濾、季節性降倉，實現超越大盤的長期報酬。
-現行 10y walk-forward 結果：累積 **+5115%**、Sharpe **1.33**、MDD **-33%**（2026-05-23 Stage 10.1 快照，topn 20→30 + 流動性加權 + SHAP 剪枝）。
+現行 10y walk-forward 結果（buffer 交易日制去偏後，2026-06-17 快照）：累積 **+1141%**、Sharpe **0.99**、MDD **-34%**（topn 30 + 流動性加權 + SHAP 剪枝 + buffer 交易日制）。
 
 > ⚠️ **績效數字不可逐位重現**：adj_close 隨除權息回溯調整持續漂移，memory 記錄區間 +5115%（2026-05-23）~ +1444%（2026-04-23），依時間點與特徵集而異，重跑以實際輸出為準。當前 **FEATURE_COLUMNS=87、PRUNED_FEATURE_COLS=58**（`tests/test_production_invariants.py` 鎖定）。
 > ⚠️ **已知回測偏差（2026-06 審計）**：raw_prices 缺 2016–2021 下市股（survivorship bias，日月光/矽品/樂陞等 0 rows）；回測以 T 日收盤價成交 T 盤後才公布的籌碼特徵（point-in-time 違反）；`label_horizon_buffer` 用日曆天未完全覆蓋 20 交易日 horizon（殘餘 ~6 交易日洩漏）。**絕對績效偏高估，作實盤資金配置前需先處理。**
@@ -212,23 +212,27 @@ prefect deploy ...                            # scheduled flow
 > **`label_horizon_buffer` 說明（2026-03-13 修正）**：
 > 標籤定義為 `future_ret_h = close_{T+20} / close_T - 1`（20 交易日 forward return）。
 > 當 `buffer=0` 時，訓練截止 `rb_date` 前 20 個交易日的樣本，其標籤涉及測試期收盤價 → **訓練標籤前向洩漏**。
-> 改為 `buffer=20`（日曆天，≈14 個交易日）後，訓練截止日往前移，消除最嚴重的洩漏區間。
-> `train_ranker.py` 的 `LABEL_HORIZON_BUFFER_DAYS` 同步改為 20（從 7）。
+> **2026-06-17 修正為「交易日制」**：cutoff 取 rb_date 前第 20 個「交易日」。先前用 20 日曆天
+> （≈14 交易日）蓋不住 20 交易日 horizon，殘餘 ~6 交易日洩漏。`backtest.py` 用全交易日序列
+> searchsorted、`train_ranker.py` 用 `Label.trading_date` distinct 取第 20 個交易日。buffer 值仍 20，語義由日曆天→交易日。
 
 > **`enable_seasonal_filter` 說明**：2026-03-11 新增（commit b5974be），
 > 對應 `daily_pick.py` 在 3/10 月永遠啟用季節性降倉的行為，解決 production ≠ backtest 不一致。
 > `run_backtest.py` CLI 加 `--seasonal-filter` 旗標啟用。
 
-> **現行 10y walk-forward 結果（Stage 10.1，2026-05-23，topn=30）**：
-> 累積 **+5115.80%**、大盤 **+75.68%**、超額 **+5040.12%**、MDD **-33.00%**、
-> Sharpe **+1.33**、Calmar **+1.50**、年化 **+49.38%**
-> 勝率 47.23%、交易次數 3028（topn=20 為 2019）
-> 配置：topn=30 + 無停損 + 漸進大盤過濾 + 最少 2 檔 + 流動性加權 + SHAP剪枝
+> **現行 10y walk-forward 結果（buffer 交易日制去偏後，2026-06-17，topn=30）**：
+> 累積 **+1140.68%**、大盤 **+67.56%**、超額 **+1073.12%**、MDD **-34.46%**、
+> Sharpe **0.994**、Calmar **0.845**、年化 **+29.11%**
+> 勝率 45.38%、交易次數 3028、期間 2016-07-06 ~ 2026-05-15
+> 配置：topn=30 + 無停損 + 漸進大盤過濾 + 最少 2 檔 + 流動性加權 + SHAP剪枝 + buffer 交易日制
 >
-> vs topn=20 baseline 改進：Sharpe +0.18, MDD +6.15pp, cum +1644pp, Calmar +0.38
+> ⚠️ 與舊 headline +5115%（2026-05-23, buffer 日曆天）**不可直接比較**：落差混雜
+> (1) buffer 交易日制消除殘餘洩漏 (2) adj_close 一個月回溯漂移 (3) 資料延伸至 2026-05
+> （含 2025-03~05 連跌 -9.7/-14.8/-11.3%）。Sharpe 0.99 與 2026-04-23 快照 0.949 同級。
+> **survivorship bias（缺下市股）尚未回補，絕對績效仍偏高估。**
 >
-> **舊基準（topn=20，2026-03-18 快照，已過時）**：
-> 累積 +3351.49%、Sharpe +1.104、MDD -27.31%、Calmar +1.583
+> **舊基準（Stage 10.1，2026-05-23, buffer 日曆天，含殘餘洩漏，已過時）**：
+> 累積 +5115.80%、Sharpe +1.33、MDD -33.00%、Calmar +1.50
 >
 > 逐年報酬（現行基準，2026-03-18）：
 > | 年份 | 策略 | 大盤 | 超額 |
