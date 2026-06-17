@@ -208,3 +208,46 @@ def cross_section_normalize(
 
     out = out.groupby(date_col, group_keys=False).apply(_normalize_group)
     return out
+
+
+# ── 新聞時戳 → 交易日對齊（消除同日 lookahead）──────────────────────────────
+
+def align_news_to_trading_day(
+    news_datetime,
+    trading_days,
+    *,
+    close_hour: int = 13,
+    close_minute: int = 30,
+) -> pd.Series:
+    """把新聞時戳對齊到「可交易的下一個交易日」，消除同日 lookahead。
+
+    台股 13:30 收盤；以「T 日收盤起算 forward return」為基準，T 日收盤後
+    （time >= close_hour:close_minute）發布的新聞、以及週末/假日新聞，在 T 日收盤時
+    尚不可知。因此先把收盤後新聞推到次一日曆日，再 map 到 >= 該日曆日的最早交易日。
+    盤中（< 13:30）新聞歸當日交易日（收盤時已知，非 lookahead）。
+
+    Args:
+        news_datetime: 新聞時戳（可轉 datetime 的 Series/list）。
+        trading_days: 交易日序列（date / datetime）。
+    Returns:
+        對齊後的 trading_date（python date）Series，與輸入同長度同順序（index 0..N-1）；
+        對齊不到（超出 trading_days 最大值，例如最新新聞下個交易日尚未到）者為 NaT。
+    """
+    s = pd.to_datetime(pd.Series(list(news_datetime)).reset_index(drop=True))
+    if s.empty:
+        return s
+    td_sorted = np.array(
+        sorted({np.datetime64(pd.Timestamp(d), "D") for d in trading_days}),
+        dtype="datetime64[D]",
+    )
+    if td_sorted.size == 0:
+        return pd.Series([pd.NaT] * len(s))
+    after_close = (s.dt.hour * 60 + s.dt.minute) >= (close_hour * 60 + close_minute)
+    eff_cal = s.dt.normalize() + pd.to_timedelta(after_close.astype(int), unit="D")
+    eff_d = eff_cal.values.astype("datetime64[D]")
+    idx = np.searchsorted(td_sorted, eff_d, side="left")
+    out = [
+        (td_sorted[i].astype("datetime64[D]").item() if i < td_sorted.size else pd.NaT)
+        for i in idx
+    ]
+    return pd.Series(out)

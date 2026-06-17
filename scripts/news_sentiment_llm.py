@@ -96,7 +96,7 @@ def call_llm(client, batch_news, dry_run=False):
 
     resp = client.messages.create(
         model=MODEL,
-        max_tokens=2000,
+        max_tokens=4000,  # 50 筆 × ~25 tokens 貼 2000 上限易截斷 → 提高避免回覆被切
         messages=[{"role": "user", "content": prompt}],
     )
     text = resp.content[0].text.strip()
@@ -179,16 +179,31 @@ def main():
         try:
             sentiments = call_llm(client, batch_news, dry_run=args.dry_run)
             records = []
-            for i, s in enumerate(sentiments):
-                if i >= len(batch_news):
-                    break
-                news = batch_news[i]
+            _seen_ids: set = set()
+            for s in sentiments:
+                # 用 LLM 回傳的 id（1-based batch 序號，見 call_llm 的 news_list 編號）對齊，
+                # 而非位置 enumerate——LLM 可能跳項/亂序/省略，位置對齊會把 sentiment
+                # 靜默寫到錯的 news_id，污染下游 IC。
+                _sid = s.get("id")
+                if not isinstance(_sid, int) or _sid < 1 or _sid > len(batch_news):
+                    logger.warning(f"  batch {batch_idx}: 跳過無效 id={_sid!r}")
+                    continue
+                if _sid in _seen_ids:
+                    logger.warning(f"  batch {batch_idx}: 重複 id={_sid}，跳過")
+                    continue
+                _seen_ids.add(_sid)
+                news = batch_news[_sid - 1]
                 records.append({
                     "news_id": news.id,
                     "sentiment": int(s.get("sentiment", 0)),
                     "confidence": float(s.get("confidence", 0.5)),
                     "model": MODEL,
                 })
+            if len(_seen_ids) < len(batch_news):
+                logger.warning(
+                    f"  batch {batch_idx}: LLM 僅回 {len(_seen_ids)}/{len(batch_news)} 筆有效，"
+                    "缺漏者保持 pending（下次重跑補上）"
+                )
             if not args.dry_run:
                 n_written = write_sentiment(records)
                 total_written += n_written

@@ -23,6 +23,7 @@ from sqlalchemy import select
 
 from app.db import get_session
 from app.models import Label, RawStockNews
+from skills.feature_utils import align_news_to_trading_day
 
 
 def load_news(start_date, end_date):
@@ -51,11 +52,20 @@ def load_labels(start_date, end_date):
     return df
 
 
-def compute_news_features(news_df: pd.DataFrame) -> pd.DataFrame:
-    """per-stock per-day → 4 features."""
+def compute_news_features(news_df: pd.DataFrame, trading_days=None) -> pd.DataFrame:
+    """per-stock per-day → 4 features。
+
+    trading_days 提供時，新聞以 align_news_to_trading_day 對齊到「次一可交易日」
+    （消除盤後 >=13:30 / 週末新聞的同日 lookahead，與 build_features 一致）；
+    否則 fallback 用日曆日（僅向後相容）。
+    """
     news_df = news_df.copy()
     news_df["stock_id"] = news_df["stock_id"].astype(str)
-    news_df["date"] = pd.to_datetime(news_df["news_datetime"]).dt.date
+    if trading_days is not None and len(news_df) > 0:
+        news_df["date"] = align_news_to_trading_day(news_df["news_datetime"], trading_days).values
+        news_df = news_df.dropna(subset=["date"])
+    else:
+        news_df["date"] = pd.to_datetime(news_df["news_datetime"]).dt.date
 
     daily = news_df.groupby(["stock_id", "date"]).agg(
         news_count=("news_datetime", "count"),
@@ -135,7 +145,7 @@ def main():
     print(f"  總筆數: {len(label_df):,}")
 
     print("\n[3/3] 計算 features + IC ...")
-    feat_df = compute_news_features(news_df)
+    feat_df = compute_news_features(news_df, label_df["trading_date"].tolist())
     # 排除 lookback warmup
     eval_start = end - timedelta(days=args.months * 30)
     feat_df_eval = feat_df[pd.to_datetime(feat_df["trading_date"]).dt.date >= eval_start]

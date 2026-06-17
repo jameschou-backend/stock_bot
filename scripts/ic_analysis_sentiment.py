@@ -26,24 +26,31 @@ from scipy import stats
 from sqlalchemy import text
 
 from app.db import get_session
+from skills.feature_utils import align_news_to_trading_day
 
 
 def load_sentiment_with_labels():
+    # 不在 SQL 用 DATE(news_datetime) 對齊 label（那會把盤後新聞當同日 → lookahead，
+    # 因 future_ret_h 從該交易日「收盤」起算）。改載入原始時戳，於 Python 用
+    # align_news_to_trading_day 對齊到「次一可交易日」，future_ret_h 在 cross_section_ic 才 merge。
     with get_session() as s:
         rows = s.execute(text("""
-            SELECT n.stock_id, n.news_datetime, ns.sentiment_score, ns.confidence,
-                   l.future_ret_h
+            SELECT n.stock_id, n.news_datetime, ns.sentiment_score, ns.confidence
             FROM news_sentiment ns
             JOIN raw_stock_news n ON n.id = ns.news_id
-            LEFT JOIN labels l ON l.stock_id = n.stock_id
-                AND l.trading_date = DATE(n.news_datetime)
             WHERE ns.sentiment_score IS NOT NULL
         """)).fetchall()
+        td_rows = s.execute(text("SELECT DISTINCT trading_date FROM labels")).fetchall()
     df = pd.DataFrame(rows, columns=[
-        "stock_id", "news_datetime", "sentiment", "confidence", "future_ret_h"
+        "stock_id", "news_datetime", "sentiment", "confidence"
     ])
-    df["news_date"] = pd.to_datetime(df["news_datetime"]).dt.date
-    df["future_ret_h"] = pd.to_numeric(df["future_ret_h"], errors="coerce")
+    if df.empty:
+        df["news_date"] = pd.Series(dtype="object")
+        return df
+    _trading_days = [r[0] for r in td_rows]
+    # 盤後（>=13:30）/ 週末新聞歸次一交易日，消除同日 lookahead
+    df["news_date"] = align_news_to_trading_day(df["news_datetime"], _trading_days).values
+    df = df.dropna(subset=["news_date"])
     return df
 
 

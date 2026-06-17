@@ -1494,24 +1494,52 @@ def _compute_news_features(stock_ids: list, trading_dates: list) -> pd.DataFrame
 
     nf = pd.DataFrame(rows, columns=["stock_id", "news_datetime", "source"])
     nf["stock_id"] = nf["stock_id"].astype(str)
-    nf["date"] = pd.to_datetime(nf["news_datetime"]).dt.date
 
-    # 每天每股 aggregate：news_count, source_diversity
+    stocks_set = set(str(s) for s in stock_ids)
+    nf = nf[nf["stock_id"].isin(stocks_set)]
+    if nf.empty:
+        return pd.DataFrame()
+
+    # ── 取得完整交易日曆（含 lookback）──
+    # caller 傳入的 trading_dates 僅含「要算的日期」（增量模式不含 lookback），不足以做
+    # 交易日對齊與 rolling。改從 raw_prices 取 [lookback_start, max_td] 的完整交易日序列。
+    from skills.feature_utils import align_news_to_trading_day
+    try:
+        with get_session() as s:
+            _cal_rows = s.execute(
+                select(RawPrice.trading_date)
+                .where(RawPrice.trading_date >= lookback_start)
+                .where(RawPrice.trading_date <= max_td)
+                .distinct()
+            ).all()
+        full_tds = sorted({r[0] for r in _cal_rows})
+    except Exception as exc:
+        logger.warning("[news_features] 交易日曆 query 失敗，skip: %s", exc)
+        return pd.DataFrame()
+    if not full_tds:
+        return pd.DataFrame()
+
+    # ── 對齊到交易日（消除 lookahead：盤後（>=13:30）/ 週末新聞歸次一交易日）──
+    nf = nf.reset_index(drop=True)
+    nf["date"] = align_news_to_trading_day(nf["news_datetime"], full_tds).values
+    nf = nf.dropna(subset=["date"])
+    if nf.empty:
+        return pd.DataFrame()
+
+    # 每交易日每股 aggregate：news_count, source_diversity
     daily = nf.groupby(["stock_id", "date"]).agg(
         news_count=("news_datetime", "count"),
         source_diversity=("source", "nunique"),
     ).reset_index()
 
-    # broadcast 到所有 (stock_id, trading_date)：缺日填 0
-    stocks_set = set(str(s) for s in stock_ids)
-    daily = daily[daily["stock_id"].isin(stocks_set)]
-    if daily.empty:
-        return pd.DataFrame()
-
+    # reindex 到完整交易日序列（缺日填 0）→ rolling 為「交易日窗口」而非「最近 N 個有新聞的日子」
+    _trading_set = set(trading_dates)
+    _full_idx = pd.Index(full_tds, name="date")
     out_parts = []
     for sid, g in daily.groupby("stock_id"):
-        g = g.set_index("date").sort_index()
-        # rolling 5d / 20d
+        g = g.set_index("date").reindex(_full_idx)
+        g["news_count"] = g["news_count"].fillna(0.0)
+        g["source_diversity"] = g["source_diversity"].fillna(0.0)
         g["news_count_5d"] = g["news_count"].rolling(5, min_periods=1).sum()
         g["news_count_20d_avg"] = g["news_count"].rolling(20, min_periods=5).mean()
         g["news_count_change_5d"] = g["news_count_5d"] / (g["news_count_20d_avg"] * 5).replace(0, np.nan)
@@ -1519,6 +1547,8 @@ def _compute_news_features(stock_ids: list, trading_dates: list) -> pd.DataFrame
         g["news_count_change_1d"] = g["news_count"] / g["news_count_5d"].replace(0, np.nan) * 5
         g["stock_id"] = sid
         g = g.reset_index().rename(columns={"date": "trading_date"})
+        # 只輸出 caller 要算的日期（lookback rows 僅供 rolling 暖機，算完丟棄）
+        g = g[g["trading_date"].isin(_trading_set)]
         out_parts.append(g[["stock_id", "trading_date"] + NEWS_FEATURE_COLS])
     if not out_parts:
         return pd.DataFrame()
