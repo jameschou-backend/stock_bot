@@ -1114,7 +1114,16 @@ class BacktestPipeline:
         use_lambdarank         = self.use_lambdarank
         fast_mode              = self.fast_mode
 
-        label_cutoff = rb_date - timedelta(days=label_horizon_buffer)
+        # 交易日制 cutoff：取 rb_date 前第 label_horizon_buffer 個「交易日」，確保訓練樣本 T 的
+        # label（close[T + 20 交易日]）不看到 rb_date 當日及之後的價格。先前用日曆天
+        # （timedelta days）蓋不住 20 交易日（≈28-29 日曆天）的 horizon，殘餘 ~6 交易日洩漏。
+        _all_tds = np.sort(pd.to_datetime(pd.unique(feat_df["trading_date"])).values)
+        _rb_pos = int(np.searchsorted(_all_tds, np.datetime64(pd.Timestamp(rb_date)), side="left"))
+        _cut_idx = _rb_pos - label_horizon_buffer
+        if _cut_idx > 0:
+            label_cutoff = pd.Timestamp(_all_tds[_cut_idx]).date()
+        else:
+            label_cutoff = rb_date - timedelta(days=label_horizon_buffer)  # 交易日不足時保守 fallback
         train_feat = feat_df[feat_df["trading_date"] < rb_date]
         train_label = label_df[label_df["trading_date"] < label_cutoff]
         if train_lookback_days:

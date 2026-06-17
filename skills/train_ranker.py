@@ -154,10 +154,19 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        # 訓練標籤截止日往前預留 20 天（= label horizon），
-        # 確保訓練集最後一筆 label 的未來報酬期間（T+20）不超出訓練截止日，消除標籤前向洩漏。
+        # 交易日制 buffer：取最後一個 label 日往前第 20 個「交易日」作為訓練截止，確保訓練集
+        # 最後一筆 label（close[T + 20 交易日]）不超出資料末端。先前用日曆天蓋不住 20 交易日
+        # （≈28-29 日曆天）的 horizon → 殘餘前向洩漏（與 backtest.py 同步修正）。
+        # 註：值仍 20，但語義從「日曆天」改為「交易日」（下方以 _all_tds 索引計算）。
         LABEL_HORIZON_BUFFER_DAYS = 20
-        train_end = max_label_date - timedelta(days=LABEL_HORIZON_BUFFER_DAYS)
+        _td_rows = (
+            db_session.query(Label.trading_date).distinct().order_by(Label.trading_date).all()
+        )
+        _all_tds = [r[0] for r in _td_rows]
+        if len(_all_tds) > LABEL_HORIZON_BUFFER_DAYS:
+            train_end = _all_tds[-(LABEL_HORIZON_BUFFER_DAYS + 1)]
+        else:
+            train_end = max_label_date - timedelta(days=LABEL_HORIZON_BUFFER_DAYS)  # 交易日不足 fallback
         train_start = train_end - timedelta(days=365 * config.train_lookback_years)
         val_start = (pd.Timestamp(train_end) - pd.DateOffset(months=6)).date()
 
