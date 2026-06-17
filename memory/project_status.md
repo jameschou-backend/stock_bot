@@ -1,6 +1,55 @@
 # 專案現況
 
-> 最後更新：2026-04-23（session 15）
+> 最後更新：2026-06-17（session：/sc:analyze 審計後修復）
+
+---
+
+## 2026-06-17 Session：審計後修復（11 項，Phase 1-4）
+
+透過 /sc:analyze 四面向並行審計（資料洩漏/回測偏差、Strategy D 新碼、安全、架構）後修復。
+
+**Phase 1 Quick wins（commit 6ab53b7）**
+- 持倉檔 strategy_d_state.json / portfolio.json 脫離 git 追蹤；.gitignore 補 *.bak_* / d_replay/
+- API host 預設 0.0.0.0→127.0.0.1（消 LAN 無認證暴露）
+- conftest autouse fixture 清 INGEST_*_SOURCE → 修 make test 紅燈（3 failed→全綠）
+- CLAUDE.md 特徵數校正 48→87/58；新增 tests/test_production_invariants.py（鎖配置）
+- daily_run.sh 入版控 + 修「D pick 失敗仍推昨日舊訊號」bug + curl URL-encode
+
+**Phase 2 Strategy D 生產 bug（commit eda88b6）**
+- **C/D filter 位置 bug**：max_price(250)/流動性過濾誤砍打分宇宙，持倉漲破 250 或流動性下降
+  被誤判 "Rank Drop" 強制賣出。修為「排名用全宇宙、過濾只套進場候選」，對齊 backtest_rotation.py
+- skills/io_utils.py 原子寫入（temp+fsync+os.replace）+ safe_read_json；C/D state + telegram portfolio 改用
+
+**Phase 3 News/Sentiment 洩漏（commit e1ac981）**
+- 同日 lookahead：13:30 後/週末新聞改歸次一交易日（skills/feature_utils.align_news_to_trading_day）
+- build_features news rolling 改交易日 reindex（原 row-based 可橫跨數月）
+- news_sentiment_llm 改用 LLM 回傳 id 對齊（原 enumerate 位置對齊會錯位污染）
+- ic_analysis_sentiment / ic_analysis_news 同步去 lookahead
+
+**Phase 4 去偏 + 資料（commit 0b8b16a, 70dd923, 6501688）**
+- label_horizon_buffer 改交易日制（消殘餘 ~6 交易日洩漏）：backtest.py searchsorted + train_ranker.py
+- 新增 backfill_delisted_prices.py（修 survivorship）。診斷實證缺口：2016 缺 199 檔遞減到 2023 缺 30 檔
+
+### 新基準（buffer 交易日制，2026-06-17）
+| 指標 | 值 |
+|------|-----|
+| 累積 | +1140.68% |
+| Sharpe | 0.994 |
+| MDD | -34.46% |
+| Calmar | 0.845 |
+| 年化 | +29.11% |
+| 期間 | 2016-07-06 ~ 2026-05-15 |
+| 交易 | 3028 |
+
+⚠️ 與舊 +5115%（2026-05-23）不可直接比（混 buffer 去偏 + adj_close 漂移 + 資料延伸至 2026-05，
+含 2025-03~05 連跌）。Sharpe 0.99 ≈ 2026-04-23 快照 0.949。survivorship 未修，絕對績效仍偏高估。
+
+### 待執行（需 DB + 時間；FinMind sponsor 6/24 到期前完成回補）
+1. `python scripts/backfill_delisted_prices.py --start 2016-01-01 --end 2021-12-31`（分年回補下市股）
+2. `FORCE_RECOMPUTE_DAYS=3650` 全量重建 features/labels（套用新 news 交易日對齊）
+3. 重跑 10y 回測基準（survivorship 修正後的真實數字）
+4. 重跑 news/sentiment IC（lookahead 修正後）確認訊號是否仍存在，再決定是否進模型
+5. （可選）entry_delay_days=1 重建基準（T+1 成交，消除 point-in-time gap）
 
 ---
 

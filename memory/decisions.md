@@ -1,6 +1,43 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-04-23（session 16）
+> 最後更新：2026-06-17（/sc:analyze 審計後修復）
+
+---
+
+## 2026-06-17：/sc:analyze 審計後修復（資料洩漏 / 回測偏差 / 安全 / 架構）
+
+### buffer 交易日制（去殘餘洩漏）— 重跑基準
+label horizon=20 交易日（≈28-29 日曆天），但 cutoff 原用 `timedelta(days=20)` 日曆天，殘餘
+~6 交易日洩漏（訓練偷看測試期第一週）。改交易日制：backtest.py 用全交易日序列 searchsorted、
+train_ranker.py 取 `Label.trading_date` distinct 第 20 個。
+
+| 配置 | 累積 | Sharpe | MDD | 期間 |
+|------|------|--------|-----|------|
+| buffer 日曆天（舊 headline 2026-05-23）| +5115% | 1.33 | -33.0% | ~2026-04 |
+| **buffer 交易日制（2026-06-17）** | **+1140.68%** | **0.994** | **-34.46%** | 2016-07-06~2026-05-15 |
+
+⚠️ 落差不可純歸因 buffer：混 (1) 去洩漏 (2) adj_close 一個月漂移 (3) 資料延伸（含 2025 連跌）。
+Sharpe 0.99 ≈ 2026-04-23 快照 0.949 → 符合「去洩漏使累積降、風險調整後維持」預期。
+
+### Strategy D filter 位置 bug（每日生產線上，直接影響真金訊號）
+`--max-price 250` / 流動性過濾誤砍打分宇宙 → 持倉漲破 250 或流動性下降被誤判 "Rank Drop"
+強制賣出，且此行為從未被回測驗證。修為「排名（above_threshold）用全宇宙、過濾只套進場候選」，
+對齊 backtest_rotation.py。C/D 同步修（複製貼上孿生 bug）。
+
+### News/Sentiment 洩漏（Stage 11 IC 結論受影響）
+- 同日 lookahead：13:30 後 / 週末新聞歸次一交易日（`align_news_to_trading_day` helper）
+- rolling 改交易日 reindex（原 row-based 可橫跨數月）
+- LLM sentiment 改用回傳 id 對齊（原 enumerate 位置對齊會錯位污染）
+- **結論**：news/sentiment 的 IC（ICIR 1.33 等）需在 lookahead 修正後重跑才可信，再決定是否進模型
+
+### survivorship bias（新增 backfill_delisted_prices.py）
+raw_prices 以今日現存清單回補，缺 2016-2021 下市股。診斷實證缺口（四碼普通股）：
+2016 缺 199 檔遞減到 2023 缺 30 檔（典型 survivorship）。回補腳本用 FinMind 按日期 bulk
+全市場（data_id=None 含下市股）。待 FinMind 6/24 到期前執行 + 全量重建 + 重跑基準。
+
+### 安全 / 衛生
+持倉檔脫離 git 追蹤；API 綁本機 127.0.0.1；state/portfolio 原子寫入（io_utils）；
+make test 回綠（conftest 清 INGEST_*_SOURCE env 滲漏）；新增 test_production_invariants 鎖配置。
 
 ---
 
