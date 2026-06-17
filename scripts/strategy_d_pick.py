@@ -48,6 +48,7 @@ except ImportError:
 from app.db import get_session
 from app.models import Stock, StrategyCTrade
 from skills import data_store
+from skills.io_utils import atomic_write_json, safe_read_json
 from skills.build_features import _PRUNE_SET as _BF_PRUNE_SET
 # cross_section_normalize 已移除：backtest 未使用此正規化，保留會造成 production ≠ backtest
 
@@ -110,14 +111,13 @@ def _prep_fmat(df: pd.DataFrame, feat_cols: List[str]) -> pd.DataFrame:
 # 狀態檔
 # ─────────────────────────────────────────────
 def _load_state() -> Dict:
-    if STATE_FILE.exists():
-        return json.loads(STATE_FILE.read_text(encoding="utf-8"))
-    return {"positions": {}, "last_run_date": None}
+    # 原子讀取：不存在→全新開始；損毀→試 .bak，全失敗則 raise（不靜默回空 state 而誤判無持倉）
+    return safe_read_json(STATE_FILE, default={"positions": {}, "last_run_date": None})
 
 
 def _save_state(state: Dict) -> None:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+    # 原子寫入：避免 launchd 在睡眠/關機邊界 kill process 造成 state 檔截斷損毀
+    atomic_write_json(STATE_FILE, state)
 
 
 # ─────────────────────────────────────────────
@@ -311,7 +311,12 @@ def run_pick(
     model = _train_model(fmat_train.values, y_train)
     print(f"{time.time()-t0:.1f}s")
 
-    # ── 對今日打分 ──
+    # ── 對今日打分（全宇宙）──
+    # ⚠️ 排名（score_cutoff / above_threshold / top_n_pool）必須在「全宇宙」上計算，
+    # 與 backtest_rotation.py 一致（回測在未經流動性過濾的 tf_today 上算 above_threshold，
+    # 流動性僅過濾進場候選；回測無 max_price 概念）。先前版本把流動性/股價過濾砍在 tf_today
+    # 上游再算 quantile，導致持倉股漲破股價上限或流動性下降時被誤判 "Rank Drop" 賣出——
+    # max_price 的目的是「買得起整張」，持有中無需再買，不應觸發出場。
     tf_today = feat_df[feat_df["trading_date"] == today].copy()
     tf_today  = tf_today[tf_today["stock_id"].str.fullmatch(r"\d{4}")].reset_index(drop=True)
     tf_today  = tf_today[~tf_today["stock_id"].isin(_emerging_ids)].reset_index(drop=True)
@@ -321,7 +326,13 @@ def run_pick(
     price_map = {str(r["stock_id"]): float(r["close"]) for _, r in tp.iterrows() if float(r["close"] or 0) > 0}
     tf_today  = tf_today[tf_today["stock_id"].isin(price_map)].reset_index(drop=True)
 
-    # 流動性過濾：保留 20 日平均日成交金額 >= MIN_AVG_TURNOVER_BILL 億的股票
+    if tf_today.empty:
+        print(f"❌ {today} 無有效股票特徵")
+        sys.exit(1)
+
+    # ── 進場過濾集合（僅限制「新買進候選」，不砍排名宇宙、不影響持倉出場判斷）──
+    # 流動性：20 日平均日成交金額 >= MIN_AVG_TURNOVER_BILL 億
+    _liquid_sids: Optional[set] = None
     if MIN_AVG_TURNOVER_BILL > 0 and not price_df.empty:
         _pv = price_df[["stock_id", "trading_date", "close", "volume"]].copy()
         _pv = _pv.sort_values(["stock_id", "trading_date"])
@@ -332,20 +343,11 @@ def run_pick(
         _threshold = MIN_AVG_TURNOVER_BILL * 1e8
         _today_liq = _pv[_pv["trading_date"] == today]
         _liquid_sids = set(_today_liq[_today_liq["_avg_tv20"] >= _threshold]["stock_id"].astype(str).tolist())
-        _before_liq = len(tf_today)
-        tf_today = tf_today[tf_today["stock_id"].isin(_liquid_sids)].reset_index(drop=True)
-        print(f"  流動性過濾 (>={MIN_AVG_TURNOVER_BILL:.0f}億): {_before_liq} → {len(tf_today)} 支")
 
-    # 個股最高股價過濾：避免高價股無法買整張（100萬/4檔=25萬，1 張需 < MAX_STOCK_PRICE）
+    # 個股最高股價：避免高價股無法買整張（100萬/4檔=25萬，1 張需 < MAX_STOCK_PRICE）
+    _affordable_sids: Optional[set] = None
     if MAX_STOCK_PRICE > 0:
-        _before_price = len(tf_today)
         _affordable_sids = {sid for sid, px in price_map.items() if px <= MAX_STOCK_PRICE}
-        tf_today = tf_today[tf_today["stock_id"].isin(_affordable_sids)].reset_index(drop=True)
-        print(f"  股價過濾 (<=${MAX_STOCK_PRICE:.0f}): {_before_price} → {len(tf_today)} 支")
-
-    if tf_today.empty:
-        print(f"❌ {today} 無有效股票特徵")
-        sys.exit(1)
 
     fmat_today = _prep_fmat(
         tf_today.drop(columns=["stock_id", "trading_date"], errors="ignore"),
@@ -353,7 +355,7 @@ def run_pick(
     )
     tf_today["score"] = model.predict(fmat_today.values)
 
-    # Rank threshold：top 20%
+    # Rank threshold：top 20%（全宇宙，與 backtest_rotation.py 一致）
     score_cutoff = float(tf_today["score"].quantile(1.0 - RANK_THRESHOLD))
     above_threshold = set(tf_today[tf_today["score"] >= score_cutoff]["stock_id"].tolist())
     top_n_pool      = set(tf_today.nlargest(TOP_ENTRY_N, "score")["stock_id"].tolist())
@@ -419,11 +421,23 @@ def run_pick(
     except Exception:
         bt_status = {}
 
-    # ── 進場判斷 ──
+    # ── 進場判斷（流動性/股價過濾僅在此進場候選階段套用，與 backtest_rotation.py 一致）──
     held_sids = {p["stock_id"] for p in hold_list}
+    _entry_pool = top_n_pool - held_sids - exits_done
+    _pool_before = len(_entry_pool)
+    if _liquid_sids is not None:
+        _entry_pool = _entry_pool & _liquid_sids
+    if _affordable_sids is not None:
+        _entry_pool = _entry_pool & _affordable_sids
+    if _liquid_sids is not None or _affordable_sids is not None:
+        print(
+            f"  進場過濾: top{TOP_ENTRY_N} 候選 {_pool_before} → {len(_entry_pool)} 支可買"
+            f"（流動性{'≥%.0f億' % MIN_AVG_TURNOVER_BILL if _liquid_sids is not None else 'off'}"
+            f"／股價{'≤$%.0f' % MAX_STOCK_PRICE if _affordable_sids is not None else 'off'}）"
+        )
     buy_list  = []
     candidates = (
-        tf_today[tf_today["stock_id"].isin(top_n_pool - held_sids - exits_done)]
+        tf_today[tf_today["stock_id"].isin(_entry_pool)]
         .sort_values("score", ascending=False)
     )
     for _, row in candidates.iterrows():

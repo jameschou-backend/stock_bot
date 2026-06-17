@@ -38,6 +38,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from app.config import load_config
+from skills.io_utils import atomic_write_json, safe_read_json
 
 # ─────────────────────────────────────────────
 # 路徑常數
@@ -292,16 +293,13 @@ def _format_push_message(sig: Dict) -> str:
 # Portfolio 管理
 # ─────────────────────────────────────────────
 def _load_portfolio() -> Dict:
-    if PORTFOLIO_FILE.exists():
-        return json.loads(PORTFOLIO_FILE.read_text(encoding="utf-8"))
-    return {"positions": []}
+    # 原子讀取：損毀時試 .bak，全失敗 raise（不靜默回空持倉而誤判使用者無部位）
+    return safe_read_json(PORTFOLIO_FILE, default={"positions": []})
 
 
 def _save_portfolio(pf: Dict) -> None:
-    SIGNAL_DIR.mkdir(parents=True, exist_ok=True)
-    PORTFOLIO_FILE.write_text(
-        json.dumps(pf, ensure_ascii=False, indent=2), encoding="utf-8"
-    )
+    # 原子寫入：/buy /sell 寫入真實持倉，避免中途中斷造成損毀
+    atomic_write_json(PORTFOLIO_FILE, pf)
 
 
 def _format_portfolio() -> str:
