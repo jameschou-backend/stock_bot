@@ -42,6 +42,7 @@ from app.db import get_session
 from app.models import Stock, StrategyCTrade
 from skills import data_store
 from skills.io_utils import atomic_write_json, safe_read_json
+from skills.model_params import LGBM_BASE_PARAMS
 from skills.build_features import _PRUNE_SET as _BF_PRUNE_SET
 # cross_section_normalize 已移除：backtest 未使用此正規化，保留會造成 production ≠ backtest
 
@@ -87,21 +88,11 @@ def _train_model(
     """
     if _HAS_LGBM and groups is not None:
         # ── LambdaRank：直接優化排序 ──
-        m = lgb.LGBMRanker(
-            n_estimators=500, learning_rate=0.05, max_depth=6,
-            num_leaves=31, subsample=0.8, colsample_bytree=0.8,
-            reg_alpha=0.1, reg_lambda=0.1, min_child_samples=20,
-            random_state=42, n_jobs=-1, verbose=-1,
-        )
+        m = lgb.LGBMRanker(**LGBM_BASE_PARAMS, min_child_samples=20)
         m.fit(X, y, group=groups)
     elif _HAS_LGBM:
         # ── MSE 回歸（搭配 rank label 使用）──
-        m = lgb.LGBMRegressor(
-            n_estimators=500, learning_rate=0.05, max_depth=6,
-            num_leaves=31, subsample=0.8, colsample_bytree=0.8,
-            reg_alpha=0.1, reg_lambda=0.1, min_child_samples=50,
-            random_state=42, n_jobs=-1, verbose=-1,
-        )
+        m = lgb.LGBMRegressor(**LGBM_BASE_PARAMS, min_child_samples=50)
         m.fit(X, y)
     else:
         from sklearn.ensemble import GradientBoostingRegressor
