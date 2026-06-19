@@ -27,7 +27,7 @@ import json
 import os
 import sys
 import time
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -214,7 +214,10 @@ def _format_push_message(sig: Dict) -> str:
 
     # 解析日期
     try:
-        exec_label = f"（{date.fromisoformat(d).month}/{date.fromisoformat(d).day + 1} 執行）"
+        _exec_dt = date.fromisoformat(d) + timedelta(days=1)
+        while _exec_dt.weekday() >= 5:  # 跳週末，避免顯示非交易日（含修掉月底 6/31 越界）
+            _exec_dt += timedelta(days=1)
+        exec_label = f"（{_exec_dt.month}/{_exec_dt.day} 執行）"
     except Exception:
         exec_label = ""
 

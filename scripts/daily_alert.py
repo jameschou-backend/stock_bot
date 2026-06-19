@@ -85,11 +85,15 @@ def check_today_is_rebalance_day(engine) -> tuple[bool, int]:
     first_of_month = [d for d in tds if d.month == today.month and d.year == today.year]
     is_rebalance = bool(first_of_month) and today == first_of_month[0]
 
-    # 距下次 rebalance（下月第 1 個 trading_date）天數
-    next_month = today.replace(day=28) + timedelta(days=4)
-    next_month = next_month.replace(day=1)
-    next_first = [d for d in tds if d.year == next_month.year and d.month == next_month.month]
-    days_to_next = (next_first[0] - today).days if next_first else -1
+    # 距下次 rebalance（下月第 1 個交易日）天數。
+    # tds 來自 raw_prices（僅過去交易日），下月交易日不存在其中 → 原寫法 next_first 恆空、
+    # days_to_next 恆 -1（提醒永不觸發）。改以 weekday heuristic 推下月第一個工作日
+    # （跳週末；國定假日未計，為近似，與 ingest_trading_calendar 同思路）。
+    next_month = (today.replace(day=28) + timedelta(days=4)).replace(day=1)
+    _nd = next_month
+    while _nd.weekday() >= 5:  # 5=Sat, 6=Sun
+        _nd += timedelta(days=1)
+    days_to_next = (_nd - today).days
 
     return is_rebalance, days_to_next
 
