@@ -632,9 +632,12 @@ def main() -> None:
         return
 
     # ── 監聽模式 ──
-    print(f"🤖 Bot 啟動，監聽指令中... (Ctrl+C 停止)")
+    # fail-closed：listen 會處理 /buy /sell 等操作真實持倉的指令，CHAT_ID 是唯一授權邊界。
+    # 未設則拒絕啟動（而非降級成接受任意聊天室），避免任何知道 bot @username 的人下指令。
     if not chat_id:
-        print("⚠️  TELEGRAM_CHAT_ID 未設定，將接受任意聊天室的指令")
+        print("❌ TELEGRAM_CHAT_ID 未設定，listen 模式拒絕啟動（避免接受任意聊天室指令）")
+        sys.exit(1)
+    print(f"🤖 Bot 啟動，監聽指令中... (Ctrl+C 停止)")
 
     while True:
         updates = bot.get_updates()
