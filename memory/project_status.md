@@ -1,6 +1,33 @@
 # 專案現況
 
-> 最後更新：2026-06-17（session：/sc:analyze 審計後修復）
+> 最後更新：2026-06-20（session：/sc:task 後續優化）
+
+---
+
+## 2026-06-20 Session：/sc:task 後續優化
+
+審計剩餘項派工（接續 2026-06-17 Phase 1-4）。
+
+**已完成（commit c787e9a → befae48）**
+- 4 個明確 bug：daily_alert 死功能（提醒永不觸發）、telegram「6/31 執行」、
+  limit_down Sharpe 公式方向錯、breakout benchmark 跨股 pct_change
+- LGBM 超參數三處統一：新增 skills/model_params.py 的 LGBM_BASE_PARAMS，
+  C/D pick + backtest_rotation 三處引用（byte-identical，改超參數不再回測≠生產）
+- 刪 15 個確認死碼（零引用 + 2+ 月未動，git 可找回）
+- telegram listen CHAT_ID fail-closed（原 fail-open 接受任意聊天室操作 portfolio）
+
+**關鍵決策**
+- backtest_rotation.py 未 commit 的 regime_trailing/profit_ratchet/regime_exposure
+  實驗 diff **已捨棄**（前兩者 memory 驗證 NEGATIVE、後者實作有 H-1/M-9 bug 且
+  「大盤 regime 調曝險」方向歷史全 NEGATIVE）。未來不必重做這方向。
+- **H-2（rotation 停牌股以進場價零損失出場）延後到下市股回補後做**：survivorship
+  修正前 DB 幾乎無停牌股，H-2 不觸發、無法驗證；回補後才有實際影響且能驗證。
+
+**仍待使用者決策/執行**
+1. 下市股回補（backfill_delisted_prices.py，FinMind 6/24 前）→ 全量重建 → 重跑基準
+2. H-2 停牌股出場修復（綁回補後一起）
+3. C 類需重跑驗證：rotation mark-to-market、entry_delay=1、adj_close 還原
+4. C/D 完整抽 rotation_pick_engine（87% 重複，高風險大重構，建議先補 C/D 測試）
 
 ---
 
