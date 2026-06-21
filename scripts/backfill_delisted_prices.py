@@ -28,7 +28,7 @@ import sys
 from datetime import date, datetime
 from pathlib import Path
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.dialects.mysql import insert
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -37,7 +37,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from app.config import load_config
 from app.db import get_session
-from app.finmind import date_chunks, fetch_dataset
+from app.finmind import fetch_dataset
 from app.models import RawPrice
 from skills.ingest_prices import _normalize_prices
 
@@ -83,14 +83,36 @@ def diagnose(config, probe_dates) -> None:
           "回補後早年 universe / label / benchmark 才完整。")
 
 
-def backfill(config, start: date, end: date, chunk_days: int) -> None:
-    print(f"回補全市場 {start} ~ {end}（chunk={chunk_days}d，data_id=None 含下市股）...")
+def backfill(config, start: date, end: date, chunk_days: int = 1) -> None:
+    # FinMind 全市場（data_id=None）多日區間會空回（資料量太大），必須「逐交易日」抓。
+    # 交易日清單取自既有 raw_prices（現存股的交易日 = 全市場交易日，下市股也在這些日交易），
+    # 順帶自動跳過非交易日，不浪費 API call。chunk_days 參數保留向後相容但已不使用。
+    try:
+        with get_session() as session:
+            td_rows = session.execute(
+                select(RawPrice.trading_date)
+                .where(RawPrice.trading_date >= start)
+                .where(RawPrice.trading_date <= end)
+                .distinct()
+            ).all()
+    except Exception as exc:
+        print(f"❌ 無法連線 DB（MySQL 127.0.0.1:3307 是否啟動？docker container poyue.mysql）：{exc}")
+        sys.exit(1)
+    trading_days = sorted({r[0] for r in td_rows})
+    if not trading_days:
+        with get_session() as session:
+            _mn = session.execute(select(func.min(RawPrice.trading_date))).scalar()
+            _mx = session.execute(select(func.max(RawPrice.trading_date))).scalar()
+        print(f"❌ raw_prices 在 {start}~{end} 無交易日。實際資料範圍 {_mn}~{_mx}，請改用此範圍內的日期。")
+        return
+    print(f"回補全市場 {start} ~ {end}：逐交易日抓（{len(trading_days)} 個交易日，data_id=None 含下市股）...")
     total = 0
+    skipped = 0
     with get_session() as session:
-        for sub_start, sub_end in date_chunks(start, end, chunk_days=chunk_days):
+        for i, d in enumerate(trading_days, 1):
             try:
                 df = fetch_dataset(
-                    "TaiwanStockPrice", sub_start, sub_end, data_id=None,
+                    "TaiwanStockPrice", d, d, data_id=None,
                     token=config.finmind_token,
                     requests_per_hour=config.finmind_requests_per_hour,
                     max_retries=config.finmind_retry_max,
@@ -98,10 +120,11 @@ def backfill(config, start: date, end: date, chunk_days: int) -> None:
                     timeout=120,
                 )
             except Exception as exc:
-                print(f"  [{sub_start}~{sub_end}] fetch 失敗，跳過: {exc}")
+                print(f"  [{d}] fetch 失敗，跳過: {exc}")
+                skipped += 1
                 continue
             if df.empty:
-                print(f"  [{sub_start}~{sub_end}] 空回（chunk 可能太大，試調小 --chunk-days）")
+                skipped += 1
                 continue
             df = _normalize_prices(df)
             # 只回補四碼普通股（排除 ETF/權證/ETN），對齊生產 universe，避免灌入數萬權證
@@ -118,9 +141,10 @@ def backfill(config, start: date, end: date, chunk_days: int) -> None:
             session.execute(stmt)
             session.commit()
             total += len(records)
-            print(f"  [{sub_start}~{sub_end}] upsert {len(records):,} 列（累計 {total:,}）")
-    print(f"\n完成：upsert {total:,} 列。")
-    print("下一步：(1) FORCE_RECOMPUTE_DAYS=3650 全量重建 features/labels")
+            if i % 50 == 0 or i == len(trading_days):
+                print(f"  [{d}] {i}/{len(trading_days)} 累計 upsert {total:,} 列")
+    print(f"\n完成：upsert {total:,} 列（{len(trading_days)} 交易日，{skipped} 日空回/失敗）。")
+    print("下一步：(1) make rebuild-features 全量重建 features/labels")
     print("        (2) 重跑 10y 回測基準，更新 CLAUDE.md / memory 數字")
 
 
