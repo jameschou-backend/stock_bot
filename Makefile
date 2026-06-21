@@ -139,7 +139,9 @@ rebuild-features:
 	@echo "按 Ctrl+C 取消，或 Enter 繼續"
 	@read _confirm
 	python -c "from app.db import get_session; from app.models import Feature, Label, ModelVersion, Pick; s = get_session().__enter__(); [s.execute(t.__table__.delete()) for t in [Pick, ModelVersion, Label, Feature]]; s.commit(); print('已清空 4 張表')"
-	python scripts/run_daily.py --skip-ingest
+	rm -f artifacts/features/features_*.parquet
+	@echo "已清空 Parquet feature store（否則 build_features 讀 Parquet max 認為已最新 → MySQL 永遠空）"
+	FORCE_RECOMPUTE_DAYS=3650 python scripts/run_daily.py --skip-ingest
 
 # === 歷史資料回補 ===
 
