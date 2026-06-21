@@ -788,7 +788,7 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             RawPrice.volume,
         )
         .where(RawPrice.trading_date.between(start_date, end_date))
-        .order_by(RawPrice.stock_id, RawPrice.trading_date)
+        # 不在 SQL ORDER BY（會觸發 MySQL filesort 排序數百萬列）；改在 _fetch_data return 前 pandas 統一排序
     )
     price_df = pd.read_sql(price_stmt, session.get_bind())
     elapsed = time.perf_counter() - t0
@@ -817,7 +817,6 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             RawInstitutional.dealer_net,
         )
         .where(RawInstitutional.trading_date.between(start_date, end_date))
-        .order_by(RawInstitutional.stock_id, RawInstitutional.trading_date)
     )
     inst_df = pd.read_sql(inst_stmt, session.get_bind())
     elapsed = time.perf_counter() - t0
@@ -846,7 +845,6 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             RawMarginShort.short_sale_balance,
         )
         .where(RawMarginShort.trading_date.between(start_date, end_date))
-        .order_by(RawMarginShort.stock_id, RawMarginShort.trading_date)
     )
     margin_df = pd.read_sql(margin_stmt, session.get_bind())
     elapsed = time.perf_counter() - t0
@@ -872,7 +870,6 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
                 PriceAdjustFactor.adj_factor,
             )
             .where(PriceAdjustFactor.trading_date.between(start_date, end_date))
-            .order_by(PriceAdjustFactor.stock_id, PriceAdjustFactor.trading_date)
         )
         factor_df = pd.read_sql(factor_stmt, session.get_bind())
     except Exception:
@@ -928,7 +925,6 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             RawFundamental.revenue_yoy,
         )
         .where(RawFundamental.trading_date.between(start_date - timedelta(days=370), end_date))
-        .order_by(RawFundamental.stock_id, RawFundamental.trading_date)
     )
     fund_df = pd.read_sql(fund_stmt, session.get_bind())
     elapsed_fetch = time.perf_counter() - t0
@@ -1344,6 +1340,10 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     elapsed_merge = time.perf_counter() - t0
     logger.info(f"[PERF] merge_quarterly_fundamental: {elapsed_merge:.2f}s（per-stock merge_asof）")
 
+    # filesort 消除：上方各大表查詢已移除多餘的 SQL ORDER BY（pd.merge 不需 DB 排序，
+    # 否則 optimizer 走 trading_date index range + filesort 排序數百萬列）。在此統一以
+    # pandas 排序一次，保證 (stock_id, trading_date) 順序（後續 per-stock 特徵計算依賴）。
+    price_df = price_df.sort_values(["stock_id", "trading_date"]).reset_index(drop=True)
     return price_df
 
 
