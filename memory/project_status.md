@@ -1,6 +1,36 @@
 # 專案現況
 
-> 最後更新：2026-06-20（session：/sc:task 後續優化）
+> 最後更新：2026-06-22（survivorship 去偏基準 + filesort 優化）
+
+---
+
+## 2026-06-22：survivorship 去偏基準（第一個真正乾淨的基準）
+
+回補 2016-2021 下市股（~5.13M 列）+ 全量重建 features/labels + 重跑 10y Strategy A。
+
+| 指標 | 無下市股(6/17) | **含下市股(6/22)** |
+|------|---------------|-------------------|
+| 累積 | +1140.68% | **+1507.78%** |
+| Sharpe | 0.994 | **1.06** |
+| MDD | -34.46% | **-31.78%** |
+| Calmar | 0.845 | **1.02** |
+| 年化 | +29.11% | **+32.56%** |
+| 期間 | — | 2016-07-11 ~ 2026-05-19 |
+
+**關鍵發現：survivorship 修正後績效反升而非下降**（三項全改善）。原因：台股下市以
+併購溢價為主（非破產，下市前往往上漲）+ clip -50% 限制地雷股 + 模型籌碼特徵迴避惡化股。
+→ **增強「alpha 非 survivorship 假象」的可信度**——把最大回測偏差修掉後策略沒崩反穩。
+
+**踩坑記錄**：
+- `make rebuild-features` 只 DELETE MySQL features 沒清 Parquet → build_features 讀 Parquet
+  max 認為已最新 → MySQL 永遠空 → 回測報「features 空」。已修（Makefile 加 rm Parquet + FORCE_RECOMPUTE）。
+- backfill_delisted_prices 原用多日 chunk 全市場會空回，改逐交易日（用 raw_prices distinct date 定位）。
+- _fetch_data 多餘 SQL ORDER BY 觸發 filesort 排 270 萬列 → 移除（pandas 後續本就排序），
+  EXPLAIN 確認 filesort 消失。**index 無需新增（PK (stock_id,trading_date) 已理想）**。
+
+**殘餘偏差（待修）**：T 日收盤成交盤後籌碼（point-in-time）、adj_close 全 1.0 未還原。
+
+**下一步**：vol-target（已驗證 POSITIVE +0.078 Sharpe，純打開）在此乾淨基準上驗證。
 
 ---
 
