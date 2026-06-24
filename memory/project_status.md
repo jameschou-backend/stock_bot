@@ -1,6 +1,41 @@
 # 專案現況
 
-> 最後更新：2026-06-22（survivorship 去偏基準 + filesort 優化）
+> 最後更新：2026-06-24（sponsor 到期日搶抓還原股價）
+
+---
+
+## 2026-06-24：搶抓 FinMind sponsor 還原股價（到期日當天）⭐
+
+FinMind sponsor 2026-06-24 到期（6000/hr）。趁到期前抓下 sponsor 專屬的
+**TaiwanStockPriceAdj（還原股價）**——這是修正 `adj_close=1.0`（近期查到「所有回測絕對
+數字不可信」的根源）唯一缺的資料源，TWSE/TPEx 免費版沒有，過了今天拿不回來。
+
+- 工具：`scripts/backfill_adj_prices.py`（一檔一 call、每 100 檔 checkpoint、可續跑、四碼過濾）
+- 成果：**2450 檔 / 5,092,358 列 / 2016-01-04~2026-06-23**，存 `artifacts/adj_prices/adj_prices_10y.parquet`
+- 抽查 2330：adj 2024-01-02=570.36（raw 593）、2020=298.58（raw 339）、2016=105.27 → 還原正確（回越早差越大）
+- 2610 四碼中 2450 有 adj，160 無（多為 FinMind 不提供 adj 的下市股）
+
+**下一步（無死線，今天/改天皆可）**：把還原股價接進 build_features/回測價格 →
+跑出**第一個真正誠實的絕對基準**（修掉 adj_close 偏差）。註：raw_prices 仍是未還原，
+接法是回測/特徵的價格改讀 adj parquet（或新增 raw_prices_adj 表）。
+
+---
+
+## 2026-06-22（晚）：vol-target 重驗 ❌ + 回測可重現性危害 ⚠️（最重要）
+
+vol-target（記憶宣稱 +0.078 Sharpe）在乾淨基準上重驗 → **同資料只 +0.02 Sharpe、MDD 零改善，不採用**。
+機制：台股小型動能股天生波動 40-60% >> target，scaler 幾乎永遠 <1 → 長期抱現金（60/119 期降倉），
+target 30%→50% 都救不了，結構性無效。
+
+**真正大發現**：**同一條指令跑出 Sharpe 1.035 或 0.805**——data_store parquet cache 是 lazy
+（max_date 比對才重建），早上 10:00 pipeline 更新 DB 後 cache 沒同步，傍晚第一次回測觸發重建，
+rep1 橫跨重建讀舊快照（1.035/-31.78% ≈ 文件 +1508%），cache 穩定後 rep2/3/4 讀新快照得 0.805/-44.26%
+（三者 bit-identical）。比對證實 **118/119 歷史期全變**（連 2016 都變）→ 一次例行更新使 10y Sharpe
+擺動 0.23、MDD 12.5pp。**含意：歷史上 |ΔSharpe|<0.2 的結論多半無法被證偽（vol-target/stacking/
+LambdaRank/6 新特徵/rs_rank…）。訓練本身是決定性的（rep2/3/4 相同），先前 n_jobs 非決定性是誤報。**
+
+詳見 decisions.md 同日條目。**待辦**：①實驗前凍結資料快照 ②overlay 改「固定預測只切 overlay」測法
+③查 daily 重算為何改寫歷史 ④重建可信基準（0.805 vs 文件 1.06 落差需釐清）⑤線上模型今早已用 0.805 那份資料重訓。
 
 ---
 

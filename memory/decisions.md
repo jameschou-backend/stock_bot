@@ -1,6 +1,92 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-06-17（/sc:analyze 審計後修復）
+> 最後更新：2026-06-22（vol-target 重驗 NEGATIVE + 回測可重現性危害）
+
+---
+
+## 2026-06-22：vol-target 重驗（❌ NEGATIVE/邊際）+ 發現回測可重現性危害 ⚠️
+
+在乾淨基準上重驗 Stage 7.2 vol-target（記憶宣稱 +0.078 Sharpe / +4.29pp MDD），
+過程意外揭露一個**比 vol-target 本身嚴重得多的方法論問題**。
+
+### vol-target 判定：❌ 邊際，不採用
+同一份穩定 cache（05-20）比較，baseline vs vol-target：
+
+| 設定 | Sharpe | ΔSharpe | MDD | cum |
+|------|-------:|-------:|----:|----:|
+| baseline (rep2/3/4) | 0.805 | — | -44.26% | +821% |
+| vol-target 0.30 | 0.822 | +0.017 | -44.64% | +665% |
+| vol-target 0.40 | 0.830 | +0.025 | -44.26% | +813% |
+| vol-target 0.50 | 0.819 | +0.014 | -44.26% | +831% |
+
+只 +0.02 Sharpe、MDD 零改善，遠不及宣稱的 +0.078。**機制**：vol-target =
+`scaler=min(1, target/realized_vol)`。台股小型動能股天生年化波動 40-60%，遠高於
+target，故 scaler 幾乎永遠 <1 → 長期被迫抱現金（119 期 60 期降倉）。把 target 從
+30%→50%（理應少降倉）三組卻幾乎一樣爛 → **對本策略結構性無效，非調參能救**。不進生產。
+
+### ⚠️ 回測可重現性危害（真正的大發現）
+**同一條指令跑出 Sharpe 1.035 或 0.805**，因 data_store parquet cache 狀態不同：
+- 早上 10:00 daily pipeline 更新 DB + 重算 features，但 cache 是 lazy（max_date 比對才重建）
+- 傍晚第一次回測觸發 cache 重建（prices 18:02 → features/labels 18:11）
+- rep1（18:03-18:16）**橫跨重建**讀到舊（05-19）快照 → 1.035/-31.78%（≈ 文件 +1508% 基準）
+- cache 穩定後 vt 全部 + rep2/3/4 讀新（05-20）→ 0.805/-44.26%，且 **rep2=rep3=rep4 bit-identical**
+- 比對 rep1 vs rep2：**118/119 歷史期報酬與選股全不同**（連 2016 都變）→ 整段歷史隨資料/特徵重算改寫，非「多一天」
+
+**結論**：一次例行資料更新使 10y 基準 Sharpe 擺動 **0.23**、MDD **12.5pp**，遠超 adj_close
+小幅漂移。配合 Stage 2 DSR（真實 alpha 未明確勝噪音），**歷史上 |ΔSharpe|<0.2 的採用/不採用
+結論（vol-target、stacking +7.1%、LambdaRank +0.01、6 新特徵 +0.002、rs_rank 中性…）多半無法被證偽**。
+
+### 兩個收回的先前判斷
+- ❌ 收回「vol-target -0.213 強烈 NEGATIVE」：rep1(舊快照) vs vt(新快照) 資料錯配假象
+- ❌ 收回「LightGBM n_jobs 多執行緒非決定性汙染實驗」：rep2/3/4 bit-identical → **訓練是決定性的**
+
+### 行動清單（待辦）
+1. **實驗前凍結資料快照**：把 raw_prices/features/labels 固定為 versioned parquet，所有對照臂跑同一份
+2. **overlay 類（vol-target/beta-hedge/部位縮放）測法改為「訓練一次、固定預測、只切 overlay」**，
+   而非各跑一次完整重訓回測（backtest_vol_target_quick.py 與 run_backtest 兩臂都各自重訓 → 混入資料/快照差）
+3. **查清楚為何 daily feature/price 重算會改寫歷史**（adj factor 重算？build_features 回歸？）——
+   若歷史不該變就是 bug；若是 adj 漂移，幅度達 0.2 Sharpe 非「cosmetic」需正式記錄
+4. **重建可信基準**：現穩定 cache 為 0.805/-44.26%，與文件 +1508%/1.06/-31.78% 落差大，文件 headline 可能不可重現
+5. **生產警示**：今早 train_ranker(10:08) 已用 0.805 那份資料重訓 → 線上模型其實在較差資料上，非文件基準
+
+實驗檔：artifacts/experiments/20260622_18*-19*_{baseline,voltarget_0.30/0.40/0.50,baseline_rep2/3/4}_clean_0622.json
+
+### 追查：0.805 vs 文件 1.06 漂移的根因（下市股未調整假跌）⚠️ 資料品質 bug
+查證現行可信基準（rep2/3/4 = 0.805/-44.26%）為何低於文件 +1508%/1.06：
+
+- raw_prices 有 **224 檔四碼下市股**（密集 2016:43/2017:30/2018:24/2019:26），survivorship 回補加入
+- **資料品質實證**：下市股 **13.12%** 交易日單日 >±10.5%（台股限 ±10% → 物理不可能），存活股僅 2.57%（5x）；
+  單日 ≤-30% 下市股 5.9% vs 存活 1.15%。實際序列：6551 一天 10.31→5.01(-51%)、2720 一天 6.6→1.8。
+  成因：減資/停牌復牌/雞蛋水餃股 tick 粒度，在 `adj_close 全 1.0 未還原` 下被回測誤當真實 -50% 虧損
+- 歸因：rep2 下市股被選 107 筆，平均 **-3.6%**（存活 +2.2%），2017 年拖到 -9.7%；
+  加上 universe 變大改寫截面特徵（連存活股選股都變，118/119 期）→ 2017-2019 變弱 → 0.805
+- MDD 窗口 2017-04→2020-04（COVID 底），與 vol-target 同段
+
+**判定：兩個數字都不乾淨**。+1508%/1.06 = survivorship 偏誤或橫跨 cache 舊快照（太樂觀）；
+0.805 = 含下市股但未調整減資假跌（太悲觀）。**記憶「survivorship +1141%→+1508% 反升」本身高度可疑**
+（極可能是同一 cache 可重現性 bug 比了不一致快照）。真實基準需先**還原 adj_close（公司行動調整）**才能定論
+——這正是早列為最大殘餘偏差的項，下市股回補讓它真正咬人。
+
+### cap 實驗結果（⚠️ 推翻「假跌 artifact 壓低」假設）
+新增 `--cap-daily-return`（backtest.py，對稱 winsorize 持有期每日報酬；+ tests 4 項）。凍結同 cache 同選股：
+
+| arm | Sharpe | MDD | 累積 |
+|-----|-------:|----:|----:|
+| baseline 無 cap | 0.805 | -44.26% | +821% |
+| 對稱 ±10% cap | 0.714 | -50.22% | +578% |
+| 只削下行 -10% | 數學失效(inf) | — | — |
+
+- 對稱 cap → **更差**：若 0.805 被假跌壓低，中和後應回升；實際更差，因 cap 也削掉策略真正賺的大漲單日。
+- 只削下行 → **inf**：保留上行只 floor 下行 → 波動股複利出虛假爆量 → 非對稱 cap 本身無效（已移除該能力，僅留對稱）。
+- **結論：1.06→0.805 不是可修的假跌 artifact**。主因＝加 224 檔下市股 → universe 變大 → 截面特徵全變 →
+  連存活股選股都變（118/119 期），2017-2019 選到較差股（正當資料版本效應）+ 下市股小幅直接拖累（107 筆均 -3.6%）。
+- **0.805 比較 survivorship-誠實但仍帶未還原減資價（cap 清不掉）；1.06 是修正前舊快照（偏樂觀）。
+  記憶「survivorship +1141%→+1508% 反升」被現行凍結結果打臉，極可能也是 cache 可重現性 bug confound。**
+- 真修法仍是還原 adj_close；cap 不是替代品。**目前無乾淨絕對 Sharpe（~0.7-1.0 不確定性大），只有同 cache 相對 Δ 可信。**
+- 副產品洞察：對稱 cap 變差揭露**策略報酬高度依賴抓到大漲單日**，小型/下市股執行性存疑（比 survivorship 更值得擔心）。
+
+程式：data_store `DATA_STORE_FREEZE` 凍結開關 + backtest `cap_daily_return_pct`（CLI `--cap-daily-return`）+
+進度條 inf 防護；tests/test_data_store_freeze.py（11）+ tests/test_backtest_cap_daily.py（4）。make test 479 passed。
 
 ---
 
