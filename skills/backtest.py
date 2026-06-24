@@ -202,6 +202,27 @@ def _load_prices(
     return price_df
 
 
+def _overlay_adj_prices(price_df: pd.DataFrame, adj_path: str) -> pd.DataFrame:
+    """用還原股價 parquet 覆蓋 price_df 的 OHLC（(stock_id, trading_date) 對齊）。
+
+    誠實基準實驗用：修正 adj_close=1.0（除權息未還原）。有 adj 的覆蓋，無 adj 的
+    （如部分下市股）保留原值；volume 保留 raw（實際成交股數，不動流動性語義）。
+    """
+    adj = pd.read_parquet(adj_path)
+    adj["stock_id"] = adj["stock_id"].astype(str)
+    adj["_td"] = pd.to_datetime(adj["trading_date"]).dt.normalize()
+    pf = price_df.copy()
+    pf["stock_id"] = pf["stock_id"].astype(str)
+    pf["_td"] = pd.to_datetime(pf["trading_date"]).dt.normalize()
+    cols = [c for c in ("open", "high", "low", "close") if c in adj.columns]
+    merged = pf.merge(adj[["stock_id", "_td"] + cols], on=["stock_id", "_td"],
+                      how="left", suffixes=("", "_adj"))
+    for c in cols:
+        merged[c] = pd.to_numeric(merged[c + "_adj"], errors="coerce").fillna(merged[c])
+        merged = merged.drop(columns=[c + "_adj"])
+    return merged.drop(columns=["_td"])
+
+
 def _load_features_labels(
     db_session: Session,
     start_date: date,
@@ -1030,6 +1051,15 @@ class BacktestPipeline:
 
         if price_df.empty:
             raise ValueError("資料不足，無法進行回測")
+
+        # ── 還原股價 overlay（誠實基準實驗，env-gated，預設關閉）──
+        # 設 BACKTEST_ADJ_PRICE_PARQUET 時，OHLC 換成還原價（修 adj_close=1.0）。
+        # features 仍來自（未還原的）cache → 選股不變，只把報酬/benchmark 量測換成還原。
+        _adj_path = os.getenv("BACKTEST_ADJ_PRICE_PARQUET")
+        if _adj_path:
+            _n_before = len(price_df)
+            price_df = _overlay_adj_prices(price_df, _adj_path)
+            _log(f"adj-price overlay 套用：{_adj_path}（{_n_before} 列）")
 
         # ── 預熱 features/labels 快取（若尚未建立或已失效）──
         # _ensure() 在 get_features/get_labels 內自動呼叫；
