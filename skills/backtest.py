@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import collections
 import gc
+import math
 import os
 import time
 from dataclasses import dataclass as _module_dataclass
@@ -492,9 +493,17 @@ def _calc_stock_return(
     transaction_cost_pct: float,
     slippage_pct: float,
     clip_loss_pct: float,
+    gross_ret_override: Optional[float] = None,
 ) -> float:
-    """計算單筆股票報酬（扣除交易成本與滑價，並套用 clip 防止退市股拖垮組合）。"""
-    ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
+    """計算單筆股票報酬（扣除交易成本與滑價，並套用 clip 防止退市股拖垮組合）。
+
+    gross_ret_override：若提供（cap-daily-return 診斷用），以此取代 exit/entry-1 作為
+    持有期毛報酬（已對單日報酬做 ±cap winsorize），用來中和未還原的減資/停牌假跳動。
+    """
+    if gross_ret_override is not None:
+        ret = gross_ret_override - transaction_cost_pct - slippage_pct
+    else:
+        ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
     return max(ret, clip_loss_pct)
 
 
@@ -516,6 +525,7 @@ def _simulate_period(
     per_stock_stoploss_override: Optional[Dict[str, float]] = None,
     tiered_slippage_map: Optional[Dict[str, float]] = None,  # 預計算的分級滑價（來回），優先於 ATR 模型
     portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷：月中等權報酬跌破此值時全出場
+    cap_daily_return_pct: float = 0.0,  # 診斷：>0 時把持有期每日報酬 winsorize 到 ±cap（中和未還原減資/停牌假跳動）
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -640,6 +650,31 @@ def _simulate_period(
         enable_slippage, tiered_slippage_map,
     )
 
+    # ── 診斷：cap-daily-return ──
+    # cap_daily_return_pct > 0 時，預先計算每股「單日 winsorize 到 ±cap」的持有期毛報酬，
+    # 用來中和未還原的減資/停牌假跳動（單日 >±10% 物理不可能的 close-to-close 跳空）。
+    # 真實連續跌停序列（每日 -10%）不受影響，只削掉單日超限的假動作。
+    # cap_daily_return_pct > 0：對稱 winsorize 持有期每日報酬到 ±cap（=台股 ±10% 限制語義）。
+    # 註：只削下行/只削上行的「非對稱 cap」在數學上不健全（保留另一側 → 複利偏差，
+    # 波動股會發散到 inf），故僅支援對稱。
+    _capped_gross_map: Dict[str, float] = {}
+    if cap_daily_return_pct > 0 and not stoploss_result.empty:
+        _cap = float(cap_daily_return_pct)
+        _pp = period_prices[["stock_id", "trading_date", "close"]].copy()
+        _pp["stock_id"] = _pp["stock_id"].astype(str)
+        _pp["close"] = pd.to_numeric(_pp["close"], errors="coerce")
+        _exit_by_sid = {str(r["stock_id"]): r["exit_date"] for _, r in stoploss_result.iterrows()}
+        for _sid, _g in _pp.groupby("stock_id"):
+            _ex = _exit_by_sid.get(_sid)
+            if _ex is None:
+                continue
+            _s = _g[(_g["trading_date"] >= actual_entry_date) & (_g["trading_date"] <= _ex)]
+            _s = _s.sort_values("trading_date")["close"].dropna()
+            if len(_s) < 2:
+                continue
+            _dr = _s.pct_change().dropna().clip(-_cap, _cap)
+            _capped_gross_map[_sid] = float((1.0 + _dr).prod() - 1.0)
+
     stoploss_count = 0
     stock_returns: Dict[str, float] = {}
     trades_log = []
@@ -655,6 +690,7 @@ def _simulate_period(
                 ret = _calc_stock_return(
                     entry_px, exit_px, transaction_cost_pct,
                     slippage_map.get(sid, 0.0), clip_loss_pct,
+                    gross_ret_override=_capped_gross_map.get(sid) if cap_daily_return_pct > 0 else None,
                 )
                 stock_returns[sid] = ret
 
@@ -750,6 +786,7 @@ class WalkForwardConfig:
     enable_tiered_slippage: bool = False
     fast_mode: bool = False
     clip_loss_pct: float = -0.50
+    cap_daily_return_pct: float = 0.0  # 診斷：>0 winsorize 持有期每日報酬到 ±cap（中和減資/停牌假跳動）
 
     # ── 特徵與訓練設定 ──
     feature_columns: Optional[List[str]] = None
@@ -841,6 +878,7 @@ class BacktestPipeline:
         self.enable_tiered_slippage = wf_config.enable_tiered_slippage
         self.fast_mode              = wf_config.fast_mode
         self.clip_loss_pct          = wf_config.clip_loss_pct
+        self.cap_daily_return_pct   = wf_config.cap_daily_return_pct
         self.feature_columns        = wf_config.feature_columns
         self.time_weighting         = wf_config.time_weighting
         self.liquidity_weighting    = wf_config.liquidity_weighting
@@ -1827,6 +1865,7 @@ class BacktestPipeline:
         enable_slippage        = self.enable_slippage
         enable_tiered_slippage = self.enable_tiered_slippage
         clip_loss_pct          = self.clip_loss_pct
+        cap_daily_return_pct   = self.cap_daily_return_pct
         atr_dynamic_stoploss   = self.atr_dynamic_stoploss
         market_filter_min_positions = self.market_filter_min_positions
         ensemble_n_checkpoints = self.ensemble_n_checkpoints
@@ -2069,6 +2108,7 @@ class BacktestPipeline:
                     per_stock_stoploss_override=_per_stock_sl,
                     tiered_slippage_map=_tiered_slip_map,
                     portfolio_circuit_breaker_pct=_wf_cb,
+                    cap_daily_return_pct=cap_daily_return_pct,
                 )
                 _dt = time.time() - _t
                 _timer_simulate += _dt
@@ -2270,7 +2310,8 @@ class BacktestPipeline:
         for p in period_results:
             ret = p["return"]
             bm = p["benchmark_return"]
-            bar = "█" * max(1, int(abs(ret) * 200))
+            _bar_n = abs(ret) * 200 if math.isfinite(ret) else 0  # 防護：非有限值不轉 int（避免 OverflowError）
+            bar = "█" * max(1, min(int(_bar_n), 200))
             sign = "+" if ret >= 0 else ""
             color_bar = f"{'↑' if ret >= 0 else '↓'} {bar}"
             print(f"    {p['rebalance_date'][:7]}  {sign}{ret:>7.2%}  (大盤 {bm:>+7.2%})  {color_bar}")
@@ -2425,6 +2466,7 @@ def run_backtest(
     enable_seasonal_filter: bool = False,
     topn_floor: int = 0,
     clip_loss_pct: float = -0.50,
+    cap_daily_return_pct: float = 0.0,
     enable_breakthrough_entry: bool = False,
     breakthrough_max_wait: int = 10,
     momentum_penalty_cols: Optional[Dict[str, float]] = None,
@@ -2487,6 +2529,7 @@ def run_backtest(
             enable_tiered_slippage=enable_tiered_slippage,
             fast_mode=fast_mode,
             clip_loss_pct=clip_loss_pct,
+            cap_daily_return_pct=cap_daily_return_pct,
             feature_columns=feature_columns,
             time_weighting=time_weighting,
             liquidity_weighting=liquidity_weighting,

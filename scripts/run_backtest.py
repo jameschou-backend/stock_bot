@@ -188,6 +188,10 @@ def main():
                         help="訓練視窗長度（日，如 1825=5年滾動窗）；預設 None=使用全部歷史")
     parser.add_argument("--no-clip", action="store_true",
                         help="停用單筆損失 clip -50%%（診斷用，傳入 clip_loss_pct=-1.01）")
+    parser.add_argument("--cap-daily-return", type=float, default=0.0,
+                        dest="cap_daily_return_pct",
+                        help="診斷：把持有期每日報酬對稱 winsorize 到 ±此值（如 0.10=±10%%，"
+                             "=台股漲跌限語義），中和未還原減資/停牌假跳動。預設 0=停用")
     parser.add_argument("--portfolio-circuit-breaker", type=float, default=None,
                         dest="portfolio_circuit_breaker_pct",
                         help="投資組合熔斷：月中等權累積報酬跌破此值時全出場（如 0.15 = -15%%）。"
@@ -400,6 +404,7 @@ def main():
             rebalance_freq=rebalance_freq,
             train_lookback_days=args.train_lookback_days,
             clip_loss_pct=clip_loss_pct,
+            cap_daily_return_pct=args.cap_daily_return_pct,
             enable_breakthrough_entry=args.enable_breakthrough_entry,
             breakthrough_max_wait=args.breakthrough_max_wait,
             momentum_penalty_cols=momentum_penalty_cols,
