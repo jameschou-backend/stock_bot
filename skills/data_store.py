@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import gc
 import logging
+import os
 import time
 from datetime import date
 from pathlib import Path
@@ -208,6 +209,21 @@ def _ensure(db_session: Session) -> None:
     """
     from sqlalchemy import text as _text
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+    # ── 凍結模式（實驗可重現性）──
+    # 設 DATA_STORE_FREEZE=1 時，只用既有 cache、絕不重建，確保對照實驗期間
+    # （即使 daily pipeline / cron 併發更新 DB）cache 不變、結果可重現。
+    # 背景：2026-06-22 發現 rep1 因橫跨 cache 重建讀到舊快照，與其餘 run 差 0.23 Sharpe。
+    # 不做 silent fallback：cache 缺檔時明確報錯，要求先建 cache 或解除凍結。
+    if os.getenv("DATA_STORE_FREEZE", "").strip().lower() in ("1", "true", "yes", "on"):
+        _missing = [str(p) for p in (PRICES_PARQUET, FEATURES_PARQUET, LABELS_PARQUET) if not p.exists()]
+        if _missing:
+            raise RuntimeError(
+                f"DATA_STORE_FREEZE 啟用但 cache 不存在: {_missing}；"
+                "請先在未凍結狀態跑一次建立 cache，或解除 DATA_STORE_FREEZE。"
+            )
+        logger.info("[data_store] DATA_STORE_FREEZE 啟用：使用既有 cache，跳過 staleness 檢查與重建")
+        return
 
     # ── Prices ──
     _cache_px = _parquet_max_date(PRICES_PARQUET)
