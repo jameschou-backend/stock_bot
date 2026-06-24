@@ -87,3 +87,6 @@ artifacts/sponsor_backfill_*.log
 artifacts/backtest_report.html
 artifacts/feature_perf.csv
 artifacts/daily_signal/strategy_c_state.json
+
+# 還原股價 backfill（大型資料，2026-06-24 sponsor 抓取）
+artifacts/adj_prices/
