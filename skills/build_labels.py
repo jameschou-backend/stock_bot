@@ -10,7 +10,7 @@ from sqlalchemy.dialects.mysql import insert
 from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
-from app.models import Label, RawPrice
+from app.models import Label, PriceAdjustFactor, RawPrice
 
 
 def _compute_labels(df: pd.DataFrame, horizon: int) -> pd.DataFrame:
@@ -203,6 +203,29 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         if df.empty:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
+
+        # ── 還原 close（與 build_features 一致：adj_close = close × adj_factor）──
+        # label = 還原後 forward return，避免配息股因除權息跌價被誤標「未來差」。
+        # factor 缺（無 adj 的下市股 / sponsor 過期後新日期）則 1.0 = 未還原。
+        if bool(getattr(config, "use_adjusted_price", True)):
+            try:
+                f_stmt = (
+                    select(PriceAdjustFactor.stock_id, PriceAdjustFactor.trading_date,
+                           PriceAdjustFactor.adj_factor)
+                    .where(PriceAdjustFactor.trading_date.between(target_start, max_price_date))
+                )
+                fdf = pd.read_sql(f_stmt, db_session.get_bind())
+            except Exception:
+                fdf = pd.DataFrame()
+            if not fdf.empty:
+                fdf["stock_id"] = fdf["stock_id"].astype(str)
+                fdf["trading_date"] = pd.to_datetime(fdf["trading_date"])
+                fdf["adj_factor"] = pd.to_numeric(fdf["adj_factor"], errors="coerce")
+                df["stock_id"] = df["stock_id"].astype(str)
+                df["trading_date"] = pd.to_datetime(df["trading_date"])
+                df = df.merge(fdf, on=["stock_id", "trading_date"], how="left")
+                df["close"] = pd.to_numeric(df["close"], errors="coerce") * df["adj_factor"].fillna(1.0)
+                df = df.drop(columns=["adj_factor"])
 
         df = _compute_labels(df, horizon)
         df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["future_ret_h"])
