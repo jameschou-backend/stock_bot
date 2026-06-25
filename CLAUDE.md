@@ -20,10 +20,13 @@
 
 台股波段 ML 選股系統。使用 LightGBM 以 20 日 forward return 為 label，每月再平衡選股（topN 等權），
 配合漸進式大盤過濾、季節性降倉，實現超越大盤的長期報酬。
-現行 10y walk-forward 結果（buffer 交易日制 + 含下市股去偏後，2026-06-22 快照）：累積 **+1508%**、Sharpe **1.06**、MDD **-32%**（topn 30 + 流動性加權 + SHAP 剪枝 + buffer 交易日制 + survivorship 修正）。
+**誠實基準（2026-06-24，股息還原後，生產路徑）**：Sharpe **0.99**、MDD **-31%**、累積 **+1321%**、
+超額 **+1223%**（對「含息」大盤 +98%）、年化 **+31%**（topn 30 + 流動性加權 + SHAP 剪枝 + 還原股價）。
 
-> ⚠️ **績效數字不可逐位重現**：adj_close 隨除權息回溯調整持續漂移，memory 記錄區間 +5115%（2026-05-23）~ +1444%（2026-04-23），依時間點與特徵集而異，重跑以實際輸出為準。當前 **FEATURE_COLUMNS=87、PRUNED_FEATURE_COLS=58**（`tests/test_production_invariants.py` 鎖定）。
-> **已知回測偏差（2026-06 審計，修正進度）**：✅ **survivorship 已修**（2026-06-22 回補 2016-2021 下市股 ~5.13M 列，績效 +1141%→+1508% **反升**——台股下市以併購溢價為主非破產 + clip -50% + 模型迴避惡化股，增強 alpha 非假象的可信度）；✅ **label_horizon_buffer 已改交易日制**。⏳ 待修：回測以 T 日收盤價成交 T 盤後才公布的籌碼特徵（point-in-time 違反，絕對績效仍略高估）、adj_close 全 1.0（除權息未還原）。
+> ⚠️ **舊 headline（+1508%/+5115%/Sharpe 1.06…）已退役**：那些是 adj_close 未還原（除權息漂移）+ 大盤未計息（被低估 ~1.9%/yr → 虛增超額）下的數字，不可信。
+> **2026-06-24 已修 adj_close**：sponsor 到期前抓 FinMind 還原股價（`artifacts/adj_prices/adj_prices_10y.parquet`，2450 檔/5.09M 列）→ 反推 adj_factor 填 `price_adjust_factors`（原全 1.0）→ build_features/build_labels 用還原 close → 全量重建 + 重訓。**線上 features/labels/模型全是還原版。** 關鍵發現：還原 label 後 Sharpe/MDD 反而更好（未還原 label 把配息股誤標「未來差」，模型學錯）。
+> ⚠️ **post-sponsor 限制**：adj 只到 2026-06-23 快照（sponsor 過期不能更新）→ 新交易日 factor=1.0（未還原），影響小但需留意。
+> **殘餘偏差**：point-in-time（T 日成交盤後籌碼）、160 檔無 adj 下市股仍未還原、DSR 多重檢定 → 0.99 仍偏樂觀端。當前 **FEATURE_COLUMNS=87、PRUNED_FEATURE_COLS=58**（`tests/test_production_invariants.py` 鎖定）。
 
 ## 持久記憶系統
 
