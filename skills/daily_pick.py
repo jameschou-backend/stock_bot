@@ -513,7 +513,9 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 df_raw = _feat_raw
                 _parquet_feat_ok = True
             except Exception as _exc:
-                pass  # fallback to MySQL
+                # fallback MySQL 必須留痕：兩存儲一旦分岔，事後要能追查當天用了哪個來源
+                logger.warning("[daily_pick] FeatureStore 讀取失敗，fallback MySQL：%s", _exc)
+                coverage_stats["feature_source_fallback_error"] = str(_exc)
 
         if not _parquet_feat_ok:
             if not valid_stocks:
@@ -532,6 +534,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     .order_by(Feature.stock_id, Feature.trading_date)
                 )
             df_raw = pd.read_sql(stmt, db_session.get_bind())
+
+        coverage_stats["feature_source"] = "parquet" if _parquet_feat_ok else "mysql"
 
         # reset_index 確保 df 與 feature_df（建構時 reset_index）共用相同的 RangeIndex 標籤：
         # Parquet 路徑經 universe isin 過濾後 index 有缺口，不 reset 會與 feature_df 錯位

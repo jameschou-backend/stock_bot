@@ -696,7 +696,10 @@ def _apply_group_impl(
         _lhp = pd.to_numeric(group["large_holder_pct_raw"], errors="coerce")
         group["large_holder_pct"] = _lhp
         # 4 週 ≈ 28 天；持股分級每週一筆，向前 4 筆即為 4 週前的值
-        group["large_holder_chg_4w"] = _lhp - _lhp.shift(4)
+        # 週資料已被 merge_asof 前向填充成「每日」列，4 週 ≈ 20 個交易日。
+        # 舊版 shift(4) 實際是 4 個交易日（<1 週），多數日子差值為 0，
+        # 與特徵名稱語義不符（2026-07-03 健檢 P2-2）。
+        group["large_holder_chg_4w"] = _lhp - _lhp.shift(20)
     else:
         group["large_holder_pct"] = np.nan
         group["large_holder_chg_4w"] = np.nan
@@ -1282,13 +1285,17 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         fg_df["trading_date"] = pd.to_datetime(fg_df["trading_date"], errors="coerce")
         fg_df["score"] = pd.to_numeric(fg_df["score"], errors="coerce")
         fg_df = fg_df.rename(columns={"score": "fear_greed_score_raw"})
-        # 使用 merge_asof 填補缺日（週末/假日）
+        # 使用 merge_asof 填補缺日（週末/假日）。
+        # allow_exact_matches=False：CNN Fear&Greed 日期 D 的值在美股盤中/收盤
+        # （台灣時間 D 日 21:30 之後）才成形，台股 D 日 13:30 收盤時不可得，
+        # 同日 join 是時區 lookahead（2026-07-03 健檢 P2-3）→ 只允許取 D-1 之前的值。
         price_df = price_df.sort_values("trading_date")
         price_df = pd.merge_asof(
             price_df,
             fg_df.sort_values("trading_date")[["trading_date", "fear_greed_score_raw"]],
             on="trading_date",
             direction="backward",
+            allow_exact_matches=False,
         )
 
     # ── 本益比/殖利率/本淨比（PER，Sponsor，每日）──
@@ -1989,8 +1996,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})
             return {"rows": 0, **logs}
 
-        # 往前多拉 250 天以確保 200 日均線可計算（新增 market_above_200ma 特徵）
-        calc_start = target_start - timedelta(days=250)
+        # 往前多拉 330「日曆天」以確保 200「交易日」均線可計算（market_above_200ma）。
+        # 250 日曆天 ≈ 165-172 交易日 < 200：rolling(200, min_periods=40) 靜默降級成
+        # ~170 日均線 → 同一日期在增量建置與全量重建下值不同（train/serve skew，
+        # 2026-07-03 健檢 P2-1）。330 日曆天 ≈ 218-225 交易日 > 200。
+        calc_start = target_start - timedelta(days=330)
 
         t_fetch = time.perf_counter()
         merged = _fetch_data(db_session, calc_start, max_price_date)
@@ -2104,8 +2114,14 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             )
             del _parquet_df
         except Exception as _exc:  # pragma: no cover
-            # Parquet 寫入失敗不中斷主流程（MySQL 仍完整保留），僅記錄 warning
-            logger.warning(f"[build_features] FeatureStore.write 失敗（不影響 MySQL）：{_exc}")
+            # 2026-07-03 健檢：Parquet 寫失敗必須 hard-fail（原本吞成 warning）。
+            # 增量建置以 Parquet max_date 判斷起點、daily_pick/train_ranker Parquet-first
+            # 讀取——寫失敗後系統帶著 MySQL/Parquet 分岔狀態繼續跑，生產選股會用舊特徵
+            # （silent fallback，違反專案規範）。MySQL 已 commit 的部分是超集，
+            # 修好 Parquet 問題後重跑 build_features 即自動收斂。
+            raise RuntimeError(
+                f"FeatureStore.write 失敗，MySQL/Parquet 將分岔（生產讀 Parquet）：{_exc}"
+            ) from _exc
 
         # ── 輸出 feature_perf.csv ──
         if perf_records:
