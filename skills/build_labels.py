@@ -204,9 +204,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}
 
-        # ── 還原 close（與 build_features 一致：adj_close = close × adj_factor）──
+        # ── 還原 close（與 build_features 一致：委派 apply_adj_factors）──
         # label = 還原後 forward return，避免配息股因除權息跌價被誤標「未來差」。
-        # factor 缺（無 adj 的下市股 / sponsor 過期後新日期）則 1.0 = 未還原。
+        # factor 缺日 per-stock ffill/bfill（直接 fillna(1.0) 會在 factor<1 區段
+        # 中間製造單日假跳動，污染 T 或 T+20 落在缺日的所有 label）；
+        # 整檔無 factor（無 adj 的下市股）才回退 1.0 = 未還原。
         if bool(getattr(config, "use_adjusted_price", True)):
             try:
                 f_stmt = (
@@ -218,14 +220,12 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             except Exception:
                 fdf = pd.DataFrame()
             if not fdf.empty:
-                fdf["stock_id"] = fdf["stock_id"].astype(str)
-                fdf["trading_date"] = pd.to_datetime(fdf["trading_date"])
-                fdf["adj_factor"] = pd.to_numeric(fdf["adj_factor"], errors="coerce")
+                from skills.build_features import apply_adj_factors
+
                 df["stock_id"] = df["stock_id"].astype(str)
-                df["trading_date"] = pd.to_datetime(df["trading_date"])
-                df = df.merge(fdf, on=["stock_id", "trading_date"], how="left")
-                df["close"] = pd.to_numeric(df["close"], errors="coerce") * df["adj_factor"].fillna(1.0)
-                df = df.drop(columns=["adj_factor"])
+                df = apply_adj_factors(df, fdf)
+                df["close"] = df["adj_close"]
+                df = df.drop(columns=["adj_factor", "factor_missing", "adj_close"])
 
         df = _compute_labels(df, horizon)
         df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["future_ret_h"])

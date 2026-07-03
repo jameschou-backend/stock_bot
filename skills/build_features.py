@@ -306,6 +306,46 @@ def log_system_resources(stage: str) -> None:
 
 # ── Module-level 單股特徵計算（供 ProcessPoolExecutor pickle）────
 
+def apply_adj_factors(df: pd.DataFrame, factor_df: pd.DataFrame | None) -> pd.DataFrame:
+    """把 adj_factor 併入價格表並產生還原價欄位（build_features / build_labels 共用）。
+
+    factor 缺日處理：factor 只在除權息/減資日跳變，因此
+    - 內部缺日：per-stock ffill 沿用前值（直接 fillna(1.0) 會在 factor<1 區段中間
+      製造 ±(1/f-1) 的單日假跳動，同時污染特徵與 label）
+    - leading gap（最早 raw 日早於最早 factor 日）：bfill 用最早已知 factor
+    - trailing gap（factor 快照之後的新交易日）：ffill 沿用最後 factor，
+      序列保持連續（回退 1.0 會在快照日隔天製造假跳）
+    - 整檔無 factor（無 adj 的下市股）：1.0（未還原）
+
+    產出欄位：adj_factor / factor_missing / adj_close；df 含 open/high/low 時
+    另產 adj_open / adj_high / adj_low——OHLC 必須全還原，只還原 close 會使
+    ATR/KD/CCI/CMF/trend_persistence 等混價特徵在歷史段失真。
+    """
+    df = df.copy()
+    df["trading_date"] = pd.to_datetime(df["trading_date"], errors="coerce")
+    if factor_df is None or factor_df.empty:
+        df["adj_factor"] = 1.0
+        df["factor_missing"] = 1
+    else:
+        fdf = factor_df.copy()
+        fdf["stock_id"] = fdf["stock_id"].astype(str)
+        fdf["trading_date"] = pd.to_datetime(fdf["trading_date"], errors="coerce")
+        fdf["adj_factor"] = pd.to_numeric(fdf["adj_factor"], errors="coerce")
+        df["stock_id"] = df["stock_id"].astype(str)
+        df = df.merge(fdf, on=["stock_id", "trading_date"], how="left")
+        df["factor_missing"] = df["adj_factor"].isna().astype(int)
+        df = df.sort_values(["stock_id", "trading_date"])
+        df["adj_factor"] = df.groupby("stock_id", sort=False)["adj_factor"].ffill()
+        df["adj_factor"] = df.groupby("stock_id", sort=False)["adj_factor"].bfill()
+        df["adj_factor"] = df["adj_factor"].fillna(1.0)
+
+    df["adj_close"] = pd.to_numeric(df["close"], errors="coerce") * df["adj_factor"]
+    for _c in ("open", "high", "low"):
+        if _c in df.columns:
+            df[f"adj_{_c}"] = pd.to_numeric(df[_c], errors="coerce") * df["adj_factor"]
+    return df
+
+
 def _apply_group_impl(
     group: pd.DataFrame,
     use_adjusted_price: bool = True,
@@ -320,11 +360,15 @@ def _apply_group_impl(
     timing: Dict[str, float] = {}
 
     group = group.sort_values("trading_date").copy()
-    close = group["adj_close"] if use_adjusted_price and "adj_close" in group.columns else group["close"]
+    _use_adj = use_adjusted_price and "adj_close" in group.columns
+    close = group["adj_close"] if _use_adj else group["close"]
     raw_close = group["close"]
     volume = group["volume"]
-    high = group["high"]
-    low = group["low"]
+    # OHLC 必須與 close 同口徑：close 用還原價而 high/low/open 用原始價時，
+    # ATR/KD/CCI/CMF/trend_persistence 在 factor<1 的歷史段會產生物理不可能的值
+    high = group["adj_high"] if _use_adj and "adj_high" in group.columns else group["high"]
+    low = group["adj_low"] if _use_adj and "adj_low" in group.columns else group["low"]
+    open_px = group["adj_open"] if _use_adj and "adj_open" in group.columns else group["open"]
 
     # ── 動能 ──
     t0 = _t()
@@ -466,7 +510,7 @@ def _apply_group_impl(
     timing["ma_alignment"] = _t() - t0
 
     t0 = _t()
-    group["trend_persistence"] = (close > group["open"]).astype(int).rolling(20).mean()
+    group["trend_persistence"] = (close > open_px).astype(int).rolling(20).mean()
     timing["trend_persistence"] = _t() - t0
 
     # ── 布林帶位置百分位（0=下軌，1=上軌）──
@@ -877,18 +921,8 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
     elapsed = time.perf_counter() - t0
     logger.info(f"[PERF] fetch_adj_factor: {elapsed:.2f}s（{len(factor_df):,}列）")
 
-    if factor_df.empty:
-        price_df["adj_factor"] = 1.0
-        price_df["factor_missing"] = 1
-    else:
-        factor_df["stock_id"] = factor_df["stock_id"].astype(str)
-        factor_df["trading_date"] = pd.to_datetime(factor_df["trading_date"], errors="coerce")
-        factor_df["adj_factor"] = pd.to_numeric(factor_df["adj_factor"], errors="coerce")
-        price_df = price_df.merge(factor_df, on=["stock_id", "trading_date"], how="left")
-        price_df["factor_missing"] = price_df["adj_factor"].isna().astype(int)
-        price_df["adj_factor"] = price_df["adj_factor"].fillna(1.0)
-
-    price_df["adj_close"] = pd.to_numeric(price_df["close"], errors="coerce") * price_df["adj_factor"]
+    # 缺日 ffill/bfill + OHLC 全還原（apply_adj_factors docstring 詳述語義）
+    price_df = apply_adj_factors(price_df, factor_df)
 
     # ── 股票主檔（產業） ──
     t0 = time.perf_counter()
