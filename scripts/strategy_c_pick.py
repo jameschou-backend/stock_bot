@@ -38,12 +38,15 @@ except ImportError:
     from sklearn.ensemble import GradientBoostingRegressor
     _HAS_LGBM = False
 
+from sqlalchemy import select
+
 from app.db import get_session
-from app.models import Stock, StrategyCTrade
+from app.models import PriceAdjustFactor, Stock, StrategyCTrade
 from skills import data_store
 from skills.io_utils import atomic_write_json, safe_read_json
 from skills.model_params import LGBM_BASE_PARAMS
 from skills.build_features import _PRUNE_SET as _BF_PRUNE_SET
+from skills.build_features import apply_adj_factors
 # cross_section_normalize 已移除：backtest 未使用此正規化，保留會造成 production ≠ backtest
 
 # ─────────────────────────────────────────────
@@ -242,6 +245,23 @@ def run_pick(
             price_df[col] = pd.to_numeric(price_df[col], errors="coerce")
         print(f"  Prices: {len(price_df):,} rows ({time.time()-t0:.1f}s)")
 
+        # ── P1-3（2026-07-03）：讀還原因子產 adj_close，供 label 訓練使用 ──
+        # 配息股除權息跌價會把 raw close forward return 誤標「未來差」（主 pipeline
+        # 已修，這條線同步跟上）。price_map／展示欄位仍用 raw close（實際下單價）。
+        # factor 表為空（測試環境）時 apply_adj_factors 回退 1.0，行為不變。
+        _frows = session.execute(
+            select(PriceAdjustFactor.stock_id, PriceAdjustFactor.trading_date,
+                   PriceAdjustFactor.adj_factor)
+            .where(PriceAdjustFactor.trading_date.between(data_start, data_end))
+        ).all()
+        _factor_df = (
+            pd.DataFrame(_frows, columns=["stock_id", "trading_date", "adj_factor"])
+            if _frows else None
+        )
+        price_df = apply_adj_factors(price_df, _factor_df)
+        price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
+        print(f"  Adj factors: {len(_frows):,} rows（缺 factor 回退 1.0 未還原）")
+
         t0 = time.time()
         feat_df = data_store.get_features(session, data_start, data_end)
         feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
@@ -269,9 +289,9 @@ def run_pick(
         print(f"⚠️  {today} 無特徵資料，使用最近有效日期：{fallback}")
         today = fallback
 
-    # ── 計算 10 日 forward return label ──
+    # ── 計算 10 日 forward return label（P1-3：用還原價 adj_close，含息口徑）──
     t0 = time.time()
-    _pp   = price_df.pivot_table(index="trading_date", columns="stock_id", values="close", aggfunc="last").sort_index()
+    _pp   = price_df.pivot_table(index="trading_date", columns="stock_id", values="adj_close", aggfunc="last").sort_index()
     _fret = _pp.shift(-TRAIN_LABEL_HORIZON) / _pp - 1
     label_df = (
         _fret.reset_index()

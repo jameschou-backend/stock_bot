@@ -13,6 +13,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import bisect
 import json
 import sys
 import time
@@ -31,7 +32,13 @@ if str(ROOT) not in sys.path:
 from app.config import load_config
 from app.db import get_session
 from skills import data_store
+from skills.build_features import apply_adj_factors
 from skills.model_params import LGBM_BASE_PARAMS
+
+# 預設來回交易成本（含稅費）：券商手續費 0.1425%×2 + 證交稅 0.3% ≈ 0.585%。
+# 2026-07-03（P2-7b）：舊預設 0.003 僅真實成本一半，忘記帶 --transaction-cost 時
+# 會低估近半成本，改為與生產 CLI 一致的 0.00585。
+DEFAULT_TRANSACTION_COST = 0.00585
 
 try:
     import lightgbm as lgb
@@ -65,17 +72,73 @@ def _train_model(train_X, train_y, sample_weight=None, fast_mode=False, groups=N
     return model
 
 
+def compute_trading_day_cutoff(
+    all_trading_dates: List[date],
+    ref_date: date,
+    buffer_days: int,
+) -> date:
+    """交易日制訓練標籤 cutoff（與 skills/backtest.py 2026-06-17 修正同語義）。
+
+    取 ref_date 前第 buffer_days 個「交易日」作為 cutoff，訓練標籤需
+    `trading_date < cutoff`，確保樣本 T 的 label（close[T + horizon 交易日]）
+    不看到 ref_date 當日及之後的價格。
+
+    2026-07-03（P1-2）修正前用日曆天（ref_date - timedelta(days=buffer)）：
+    20 日曆天 ≈ 14 交易日，蓋不住 20 交易日的 label horizon，
+    殘餘 ~6 交易日訓練標籤前向洩漏。
+
+    all_trading_dates: 已排序的全體 distinct 交易日序列（date 物件，升冪）
+    ref_date:          今日 / 訓練截止日（不必在序列內）
+    buffer_days:       往前退的交易日數
+    交易日不足時回退日曆天（保守 fallback，與主回測 skills/backtest.py 一致）。
+    """
+    if buffer_days <= 0:
+        return ref_date
+    pos = bisect.bisect_left(all_trading_dates, ref_date)
+    cut_idx = pos - buffer_days
+    if cut_idx > 0:
+        return all_trading_dates[cut_idx]
+    return ref_date - timedelta(days=buffer_days)
+
+
+def _load_adj_factor_df(db_session, start_date: date, end_date: date) -> Optional[pd.DataFrame]:
+    """讀取 `price_adjust_factors` 還原因子表（P1-3）。
+
+    回傳 columns=[stock_id, trading_date, adj_factor] 的 DataFrame；
+    表為空（如測試環境）時回傳 None，apply_adj_factors 對 None 自動回退
+    adj_factor=1.0（行為不變、adj_close == close）。
+    """
+    from sqlalchemy import select
+
+    from app.models import PriceAdjustFactor
+
+    rows = db_session.execute(
+        select(
+            PriceAdjustFactor.stock_id,
+            PriceAdjustFactor.trading_date,
+            PriceAdjustFactor.adj_factor,
+        ).where(PriceAdjustFactor.trading_date.between(start_date, end_date))
+    ).all()
+    if not rows:
+        return None
+    return pd.DataFrame(rows, columns=["stock_id", "trading_date", "adj_factor"])
+
+
 class Position:
     __slots__ = ("stock_id", "entry_date", "entry_price", "score", "days_held",
                  "foreign_sell_streak", "peak_price", "ma_below_streak",
                  "foreign_weak_streak", "foreign_consec_break_streak", "entry_amt_20",
-                 "weight")
+                 "weight", "entry_price_raw")
 
     def __init__(self, stock_id: str, entry_date: date, entry_price: float, score: float,
-                 entry_amt_20: float = 0.0, weight: float = 0.0):
+                 entry_amt_20: float = 0.0, weight: float = 0.0,
+                 entry_price_raw: Optional[float] = None):
         self.stock_id = stock_id
         self.entry_date = entry_date
+        # entry_price：還原價（adj_close），P&L／停損／追蹤停損口徑
+        # entry_price_raw：原始收盤價（實際下單價），僅展示用
         self.entry_price = entry_price
+        self.entry_price_raw = entry_price_raw if entry_price_raw is not None else entry_price
         self.score = score
         self.days_held = 0
         self.foreign_sell_streak = 0         # 舊版相容（rank mode 用）
@@ -226,11 +289,13 @@ def _precompute_vol_map(
     """
     if price_df.empty:
         return {}
-    df = price_df[["stock_id", "trading_date", "close"]].copy()
-    df["close"] = pd.to_numeric(df["close"], errors="coerce")
-    df = df.dropna(subset=["close"])
+    # 報酬計算優先用還原價（adj_close），避免除息日假跌污染市場波動率
+    _px_col = "adj_close" if "adj_close" in price_df.columns else "close"
+    df = price_df[["stock_id", "trading_date", _px_col]].copy()
+    df[_px_col] = pd.to_numeric(df[_px_col], errors="coerce")
+    df = df.dropna(subset=[_px_col])
     df = df.sort_values(["stock_id", "trading_date"])
-    df["ret"] = df.groupby("stock_id")["close"].pct_change()
+    df["ret"] = df.groupby("stock_id")[_px_col].pct_change()
     # 每日等權市場報酬
     daily_mkt = df.groupby("trading_date")["ret"].mean()
     # 滾動 lookback 交易日標準差，年化
@@ -253,8 +318,8 @@ def run_rotation(
     max_hold_days: int = 30,
     top_entry_n: int = 10,
     retrain_freq_months: int = 3,
-    label_horizon_buffer: int = 20,
-    transaction_cost_pct: float = 0.003,
+    label_horizon_buffer: int = 20,   # 訓練標籤 buffer（「交易日」數，P1-2 修正前誤為日曆天）
+    transaction_cost_pct: float = DEFAULT_TRANSACTION_COST,  # 來回成本（含稅費），台股真實約 0.585%
     fast_mode: bool = False,
     market_filter_tiers: Optional[List[tuple]] = None,
     min_hold_days: int = 0,
@@ -400,6 +465,19 @@ def run_rotation(
         price_df[col] = pd.to_numeric(price_df[col], errors="coerce")
     print(f"  Prices: {len(price_df):,} rows ({time.time()-t0:.1f}s)")
 
+    # ── P1-3（2026-07-03）：套用還原因子產 adj_close ──
+    # label 訓練與模擬報酬（P&L）一律用 adj_close（含息口徑，與主 pipeline 一致），
+    # 避免配息股因除權息跌價被誤標「未來差」／持有期跨除息日漏掉配息報酬。
+    # raw close 保留：流動性（成交值 close×volume 為實際金額）與展示欄位仍用原始價。
+    # factor 表為空（測試環境）時 apply_adj_factors 回退 1.0，行為不變。
+    t0 = time.time()
+    _factor_df = _load_adj_factor_df(db_session, data_start, data_end)
+    price_df = apply_adj_factors(price_df, _factor_df)
+    price_df["trading_date"] = pd.to_datetime(price_df["trading_date"]).dt.date
+    _n_factor = len(_factor_df) if _factor_df is not None else 0
+    _n_adjusted = int((price_df["adj_factor"] != 1.0).sum())
+    print(f"  Adj factors: {_n_factor:,} rows，{_n_adjusted:,} 價格列已還原 ({time.time()-t0:.1f}s)")
+
     t0 = time.time()
     feat_df = data_store.get_features(db_session, data_start, data_end)
     feat_df["trading_date"] = pd.to_datetime(feat_df["trading_date"]).dt.date
@@ -491,7 +569,8 @@ def run_rotation(
 
     if train_label_horizon != 20:
         print(f"  Computing {train_label_horizon}-day forward return labels from prices...", flush=True)
-        _pp = price_df.pivot_table(index="trading_date", columns="stock_id", values="close", aggfunc="last")
+        # P1-3：label 用還原價 adj_close 計算（含息口徑，與 DB Labels / 主 pipeline 一致）
+        _pp = price_df.pivot_table(index="trading_date", columns="stock_id", values="adj_close", aggfunc="last")
         _pp = _pp.sort_index()
         _fret = _pp.shift(-train_label_horizon) / _pp - 1
         _alt = (
@@ -502,11 +581,12 @@ def run_rotation(
         _alt["trading_date"] = pd.to_datetime(_alt["trading_date"]).dt.date
         _alt["stock_id"] = _alt["stock_id"].astype(str)
         label_df_train = _alt
-        _eff_buffer = label_horizon_buffer  # 保持與主程序一致（預設 20 日曆天）
+        # 保持與主程序一致：buffer 為「交易日」數（見 compute_trading_day_cutoff，P1-2）
+        _eff_buffer = label_horizon_buffer
         print(f"  Alt labels: {len(label_df_train):,} rows (horizon={train_label_horizon}d)")
     else:
         label_df_train = label_df
-        _eff_buffer = label_horizon_buffer
+        _eff_buffer = label_horizon_buffer  # 交易日制 buffer（P1-2）
 
     # ── 超額報酬 label：future_ret_h - 等權市場報酬 ──
     if use_excess_label:
@@ -571,14 +651,16 @@ def run_rotation(
     _fixed_window_mode = fixed_train_end is not None
     if _fixed_window_mode:
         _fw_start = fixed_train_start or data_start
-        _fw_label_cutoff = fixed_train_end - timedelta(days=_eff_buffer)
+        # P1-2：cutoff 改交易日制（取 fixed_train_end 前第 _eff_buffer 個交易日，
+        # 標籤取 < cutoff 嚴格不等，與主回測 skills/backtest.py 同語義）
+        _fw_label_cutoff = compute_trading_day_cutoff(all_dates, fixed_train_end, _eff_buffer)
         tf_fw = feat_df[
             (feat_df["trading_date"] >= _fw_start) &
             (feat_df["trading_date"] <= fixed_train_end)
         ]
         tl_fw = label_df_train[
             (label_df_train["trading_date"] >= _fw_start) &
-            (label_df_train["trading_date"] <= _fw_label_cutoff)
+            (label_df_train["trading_date"] < _fw_label_cutoff)
         ]
         if not tf_fw.empty and not tl_fw.empty:
             _merged_fw = tf_fw.merge(tl_fw, on=["stock_id", "trading_date"], how="inner")
@@ -608,7 +690,10 @@ def run_rotation(
             (last_train_date and today - last_train_date >= retrain_interval)
         )
         if need_retrain:
-            train_cutoff = today - timedelta(days=_eff_buffer)
+            # P1-2：cutoff 改交易日制——取 today 前第 _eff_buffer 個「交易日」，
+            # 舊寫法「today 減 _eff_buffer 日曆天」（20 日曆天 ≈ 14 交易日）
+            # 蓋不住 20 交易日 label horizon，殘餘 ~6 交易日訓練標籤洩漏
+            train_cutoff = compute_trading_day_cutoff(all_dates, today, _eff_buffer)
             tf = feat_df[feat_df["trading_date"] < today]
             tl = label_df_train[label_df_train["trading_date"] < train_cutoff]
             if not tf.empty and not tl.empty:
@@ -660,10 +745,19 @@ def run_rotation(
             continue
 
         # ── Today's prices ──
+        # price_map：還原價（adj_close），P&L／停損／MA 比較口徑（特徵表已是還原版，口徑一致）
+        # raw_price_map：原始收盤價（實際下單價），僅供 trades_log 展示欄位
         tp = price_df[price_df["trading_date"] == today]
         if tp.empty:
             continue
-        price_map = {str(r["stock_id"]): float(r["close"]) for _, r in tp.iterrows() if float(r["close"]) > 0}
+        price_map: Dict[str, float] = {}
+        raw_price_map: Dict[str, float] = {}
+        for _, r in tp.iterrows():
+            _adj_px = float(r["adj_close"]) if pd.notna(r["adj_close"]) else 0.0
+            if _adj_px > 0:
+                _sid_px = str(r["stock_id"])
+                price_map[_sid_px] = _adj_px
+                raw_price_map[_sid_px] = float(r["close"]) if pd.notna(r["close"]) else 0.0
 
         # ── Score all stocks ──
         tf_today = feat_df[feat_df["trading_date"] == today].copy()
@@ -737,8 +831,9 @@ def run_rotation(
                 _pm_start = _prev_m.replace(day=1)
                 _pm_p = price_df[(price_df["trading_date"] >= _pm_start) & (price_df["trading_date"] <= _prev_m)]
                 if not _pm_p.empty:
-                    _f = _pm_p.groupby("stock_id")["close"].first()
-                    _l = _pm_p.groupby("stock_id")["close"].last()
+                    # 市場濾網基準用還原價報酬，避免除息月被系統性誤判空頭
+                    _f = _pm_p.groupby("stock_id")["adj_close"].first()
+                    _l = _pm_p.groupby("stock_id")["adj_close"].last()
                     _v = _f.index.intersection(_l.index)
                     _v = _v[(_f[_v] > 0) & (_l[_v] > 0)]
                     _monthly_bm_cache[_pm_ym] = float((_l[_v] / _f[_v] - 1).mean()) if len(_v) > 0 else 0.0
@@ -904,6 +999,7 @@ def run_rotation(
                     exit_reason = "Market Filter Reduce"
 
             if exit_reason:
+                # P&L 用還原價（adj_close，含息口徑）；exit_px 為還原價
                 exit_px = price_map.get(sid, pos.entry_price)
                 # 實際成本 = 交易成本 + 滑價（進出各計一次）
                 _slip = (
@@ -916,8 +1012,13 @@ def run_rotation(
                 weight = pos.weight if dynamic_position_sizing else 1.0 / max_positions
                 trades_log.append({
                     "stock_id": sid, "entry_date": str(pos.entry_date),
-                    "exit_date": str(today), "entry_price": pos.entry_price,
-                    "exit_price": exit_px, "realized_pnl_pct": ret,
+                    "exit_date": str(today),
+                    # entry_price / exit_price：原始收盤價（實際下單價，展示用）
+                    "entry_price": pos.entry_price_raw,
+                    "exit_price": raw_price_map.get(sid, pos.entry_price_raw),
+                    # *_adj：還原價（realized_pnl_pct 的計算口徑）
+                    "entry_price_adj": pos.entry_price, "exit_price_adj": exit_px,
+                    "realized_pnl_pct": ret,
                     "stoploss_triggered": False, "exit_reason": exit_reason,
                     "score": pos.score, "days_held": pos.days_held,
                     "entry_amt_20": pos.entry_amt_20, "weight": weight,
@@ -980,6 +1081,7 @@ def run_rotation(
                         stock_id=_sid, entry_date=today,
                         entry_price=price_map[_sid], score=float(cand["score"]),
                         entry_amt_20=_entry_amt20, weight=_w,
+                        entry_price_raw=raw_price_map.get(_sid, price_map[_sid]),
                     )
 
         equity_curve.append({"date": str(today), "equity": equity})
@@ -991,7 +1093,10 @@ def run_rotation(
 
     # ── Close remaining ──
     last_date = bt_dates[-1] if bt_dates else data_end
-    lp = {str(r["stock_id"]): float(r["close"]) for _, r in price_df[price_df["trading_date"] == last_date].iterrows()}
+    _lp_df = price_df[price_df["trading_date"] == last_date]
+    # P&L 用還原價；raw 僅展示
+    lp = {str(r["stock_id"]): float(r["adj_close"]) for _, r in _lp_df.iterrows() if pd.notna(r["adj_close"])}
+    lp_raw = {str(r["stock_id"]): float(r["close"]) for _, r in _lp_df.iterrows() if pd.notna(r["close"])}
     for sid in list(positions.keys()):
         pos = positions[sid]
         exit_px = lp.get(sid, pos.entry_price)
@@ -1005,8 +1110,13 @@ def run_rotation(
         _w_eob = pos.weight if dynamic_position_sizing else 1.0 / max_positions
         trades_log.append({
             "stock_id": sid, "entry_date": str(pos.entry_date),
-            "exit_date": str(last_date), "entry_price": pos.entry_price,
-            "exit_price": exit_px, "realized_pnl_pct": ret,
+            "exit_date": str(last_date),
+            # entry_price / exit_price：原始收盤價（實際下單價，展示用）
+            "entry_price": pos.entry_price_raw,
+            "exit_price": lp_raw.get(sid, pos.entry_price_raw),
+            # *_adj：還原價（realized_pnl_pct 的計算口徑）
+            "entry_price_adj": pos.entry_price, "exit_price_adj": exit_px,
+            "realized_pnl_pct": ret,
             "stoploss_triggered": False, "exit_reason": "End of Backtest",
             "score": pos.score, "days_held": pos.days_held,
             "entry_amt_20": pos.entry_amt_20, "weight": _w_eob,
@@ -1198,8 +1308,9 @@ def main():
                         help="守門員：pe_ratio 上限（預設 300）")
     parser.add_argument("--train-label-horizon", type=int, default=20,
                         help="訓練用 label horizon（天），預設 20，可改 5/10 測試尺度匹配")
-    parser.add_argument("--transaction-cost", type=float, default=0.003,
-                        help="每筆交易成本（預設 0.003=0.3%%，台股真實約 0.00585=0.585%%）")
+    parser.add_argument("--transaction-cost", type=float, default=DEFAULT_TRANSACTION_COST,
+                        help="每筆來回成本（含稅費）。預設 0.00585=0.585%%"
+                             "（券商手續費 0.1425%%×2 + 證交稅 0.3%%，台股真實來回成本）")
     parser.add_argument("--max-hold", type=int, default=None)
     parser.add_argument("--min-hold", type=int, default=0,
                         help="最小持倉天數保護（預設 0=停用）")
