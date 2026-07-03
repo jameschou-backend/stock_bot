@@ -56,8 +56,24 @@ data_store 全量重建稅（也是可重現性事故機制根源）、build_fea
 資料面：`price_adjust_factors` 重灌 5,041,269 列（缺日展開 123,235 列）；clip 觸及 14 檔/16,562 列
 （8422/4763/5278/3095/3086…）存 `artifacts/adj_prices/adj_factor_clip_touched.json`，基準 v2 時評估排除。
 
-待完成：效能修正（agent 進行中，要求 byte-identical）→ **Wave 4 全量重建 features/labels + 重訓 +
-`--production-baseline` 10y 回測 → 立基準 v2**（P0-2 修復後數字必變，方向未知）。
+✅ **全部完成（13 commit，測試 479→565 passed）**。效能波（`7343ed3`，byte-identical 驗證）+
+P2 語義修（`4d9ab38`：lookback 330、large_holder 20d、fear_greed 去 lookahead、雙寫 hard-fail）。
+
+### 基準 v2（2026-07-03 晚，現行 headline）
+
+主臂（`--production-baseline`，0.5 億門檻，含息 overlay）：**Sharpe 0.647 / MDD -37.1% / 累積 +431% /
+超額 +321%（大盤含息+同門檻 +110%）/ 年化 +18.5%**，2016-07-26~2026-06-04，120 期。
+歸因臂（同快照無門檻）：0.854 / -43.4% / +970%。兩臂差 = 門檻真實代價（微型股 alpha；
+2023 門檻臂超額 **-19.4%**）。JSON：`backtest_20260703_204141/205404.json`（含 data_snapshot）。
+CLAUDE.md + docs/strategy.md 已同步。生產指令改 `--production-baseline` + `BACKTEST_ADJ_PRICE_PARQUET`。
+
+**線上狀態**：features/labels/模型/選股全部是修復後版本（P0-1 index 修復後的 pick 從下個交易日開始有效）。
+備份：`artifacts/features.bak_preohlc/`（修復前特徵，確認穩定後可刪）。
+
+**未做清單（有意延後）**：rotation_pick_engine 抽取、backtest.run() 拆分、P2-5 停牌 buffer、
+P2-8 benchmark 月中下市股、Sharpe ddof、build_features compute 向量化、trading_calendar、
+corporate_actions、git history 持倉清除（**需使用者決定** force-push 例外）、
+live vs backtest 每月對帳機制（建議下個 session，防 P0-1 型 bug 長效保險）。
 
 ---
 
