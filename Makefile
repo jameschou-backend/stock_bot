@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c api test dashboard trade-dashboard ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backtest backtest-long rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors
+.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c daily-d api test dashboard dashboard-v2 trade-dashboard bot ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backfill-margin backtest backtest-long bt-rank-compare rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index daily-alert daily-alert-dry daily-alert-test eval-signal eval-signal-d backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors
 
 migrate:
 	python scripts/migrate.py
@@ -89,8 +89,16 @@ cron-daily:
 
 # 一鍵把 cron_daily.sh 安裝到 crontab，工作日 17:30 跑。
 # 重複執行不會 duplicate（先 grep 篩掉舊條目）。
+# ⚠️ 唯一正式排程入口是 launchd（com.jameschou.stockbot.daily → scripts/daily_run.sh，18:00）。
+#    cron 與 launchd 並存會同日雙跑 pipeline（17:30/18:00 寫入競態），
+#    故偵測到 launchd plist 已安裝時拒絕安裝 cron。
 schedule-install:
-	@PROJECT_DIR=$$(pwd); \
+	@if [ -f "$$HOME/Library/LaunchAgents/com.jameschou.stockbot.daily.plist" ]; then \
+	  echo "✗ launchd 排程（com.jameschou.stockbot.daily → daily_run.sh 18:00）已安裝；"; \
+	  echo "  cron 與 launchd 並存會同日雙跑 pipeline。若確要改用 cron，請先移除 launchd plist。"; \
+	  exit 1; \
+	fi; \
+	PROJECT_DIR=$$(pwd); \
 	ENTRY="30 17 * * 1-5 cd $$PROJECT_DIR && bash scripts/cron_daily.sh"; \
 	CURRENT=$$(crontab -l 2>/dev/null | grep -v "stock_bot.*cron_daily.sh" || true); \
 	{ if [ -n "$$CURRENT" ]; then echo "$$CURRENT"; fi; echo "$$ENTRY"; } | crontab -; \
