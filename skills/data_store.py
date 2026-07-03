@@ -198,14 +198,61 @@ def _build_labels(db_session: Session) -> None:
     )
 
 
+def _parquet_row_count(path: Path) -> Optional[int]:
+    """讀 parquet 列數（DuckDB metadata，不掃資料）。"""
+    if not path.exists():
+        return None
+    try:
+        con = duckdb.connect()
+        n = con.execute("SELECT count(*) FROM read_parquet(?)", [str(path)]).fetchone()[0]
+        con.close()
+        return int(n) if n is not None else None
+    except Exception:
+        return None
+
+
+# process 級 memoization：同一個 process 內每種 cache 只檢查/重建一次。
+# 背景（2026-07-03 健檢 P1-4）：rolling 回測逐 fold 呼叫 get_*，若 pipeline
+# 併發更新 DB，同一個 run 的前後 fold 可能讀到兩個不同快照（比 2026-06-22
+# 記錄的「兩臂不同快照」更糟）。首次檢查後鎖定，run 內保證單一快照。
+_ENSURED_KINDS: set = set()
+
+
+def reset_ensure_memo() -> None:
+    """清除 process 級 staleness memoization（測試/長駐 process 換日用）。"""
+    _ENSURED_KINDS.clear()
+
+
+def snapshot_info() -> dict:
+    """回傳目前三個 cache 的快照身分（max_date + 列數）。
+
+    實驗記錄用：把此 dict 寫進回測結果 JSON，跨 run 比對即可確認兩臂
+    是否使用同一份資料快照（2026-06-22 可重現性危害的防護之一）。
+    """
+    info: dict = {}
+    for kind, path in (
+        ("prices", PRICES_PARQUET),
+        ("features", FEATURES_PARQUET),
+        ("labels", LABELS_PARQUET),
+    ):
+        info[kind] = {
+            "max_date": _parquet_max_date(path),
+            "rows": _parquet_row_count(path),
+        }
+    return info
+
+
 def _ensure(db_session: Session) -> None:
     """確保三個 parquet 存在且資料日期與來源一致，否則重建。
 
-    比對邏輯：
-      - prices / labels：比對 cache max_date vs DB max(trading_date)
-      - features：比對 cache max_date vs FeatureStore max_date（年份 Parquet）
-    只要來源有新資料（source_max > cache_max），就觸發重建，
-    不依賴檔案時間——pipeline 跑完後 daily-c 立即拿到最新資料。
+    比對邏輯（stale 任一成立即重建）：
+      - cache 不存在
+      - cache max_date < 來源 max_date（有新交易日）
+      - cache 列數 != 來源列數（**歷史內容重建**：force_recompute、下市股回補、
+        adj factor 重灌後全量重建等，max_date 不變但內容已換——只比 max_date
+        會默默供應舊快照，2026-07-03 健檢 P1-4）
+    prices / labels 來源 = MySQL 全表；features 來源 = FeatureStore（年份 Parquet）。
+    同一 process 內每種 cache 只檢查一次（_ENSURED_KINDS），保證 run 內單一快照。
     """
     from sqlalchemy import text as _text
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
@@ -225,49 +272,58 @@ def _ensure(db_session: Session) -> None:
         logger.info("[data_store] DATA_STORE_FREEZE 啟用：使用既有 cache，跳過 staleness 檢查與重建")
         return
 
+    def _is_stale(kind: str, path: Path, src_max: Optional[str], src_rows: Optional[int]) -> bool:
+        cache_max = _parquet_max_date(path)
+        if not cache_max:
+            return True
+        if src_max and cache_max < src_max:
+            logger.info("[data_store] %s cache stale (max %s < %s), rebuilding …", kind, cache_max, src_max)
+            return True
+        if src_rows is not None:
+            cache_rows = _parquet_row_count(path)
+            if cache_rows is not None and cache_rows != src_rows:
+                logger.info(
+                    "[data_store] %s cache stale (rows %s != source %s — 歷史內容已重建), rebuilding …",
+                    kind, f"{cache_rows:,}", f"{src_rows:,}",
+                )
+                return True
+        return False
+
     # ── Prices ──
-    _cache_px = _parquet_max_date(PRICES_PARQUET)
-    try:
-        _src_px = str(db_session.execute(_text("SELECT max(trading_date) FROM raw_prices")).scalar() or "")
-    except Exception:
-        _src_px = None
-    if not _cache_px or (_src_px and _cache_px < _src_px):
-        if _cache_px and _src_px:
-            logger.info(
-                "[data_store] prices cache stale (%s < %s), rebuilding …",
-                _cache_px, _src_px,
-            )
-        _build_prices(db_session)
+    if "prices" not in _ENSURED_KINDS:
+        try:
+            _src_px = str(db_session.execute(_text("SELECT max(trading_date) FROM raw_prices")).scalar() or "")
+            _src_px_rows = int(db_session.execute(_text("SELECT count(*) FROM raw_prices")).scalar() or 0)
+        except Exception:
+            _src_px, _src_px_rows = None, None
+        if _is_stale("prices", PRICES_PARQUET, _src_px, _src_px_rows):
+            _build_prices(db_session)
+        _ENSURED_KINDS.add("prices")
 
     # ── Features ──
-    _cache_feat = _parquet_max_date(FEATURES_PARQUET)
-    try:
-        from skills.feature_store import FeatureStore as _FS
-        _src_feat_raw = _FS().get_max_date()
-        _src_feat = str(_src_feat_raw) if _src_feat_raw is not None else None
-    except Exception:
-        _src_feat = None
-    if not _cache_feat or (_src_feat and _cache_feat < _src_feat):
-        if _cache_feat and _src_feat:
-            logger.info(
-                "[data_store] features cache stale (%s < %s), rebuilding …",
-                _cache_feat, _src_feat,
-            )
-        _build_features(db_session)
+    if "features" not in _ENSURED_KINDS:
+        try:
+            from skills.feature_store import FeatureStore as _FS
+            _fs = _FS()
+            _src_feat_raw = _fs.get_max_date()
+            _src_feat = str(_src_feat_raw) if _src_feat_raw is not None else None
+            _src_feat_rows = _fs.row_count()
+        except Exception:
+            _src_feat, _src_feat_rows = None, None
+        if _is_stale("features", FEATURES_PARQUET, _src_feat, _src_feat_rows):
+            _build_features(db_session)
+        _ENSURED_KINDS.add("features")
 
     # ── Labels ──
-    _cache_lbl = _parquet_max_date(LABELS_PARQUET)
-    try:
-        _src_lbl = str(db_session.execute(_text("SELECT max(trading_date) FROM labels")).scalar() or "")
-    except Exception:
-        _src_lbl = None
-    if not _cache_lbl or (_src_lbl and _cache_lbl < _src_lbl):
-        if _cache_lbl and _src_lbl:
-            logger.info(
-                "[data_store] labels cache stale (%s < %s), rebuilding …",
-                _cache_lbl, _src_lbl,
-            )
-        _build_labels(db_session)
+    if "labels" not in _ENSURED_KINDS:
+        try:
+            _src_lbl = str(db_session.execute(_text("SELECT max(trading_date) FROM labels")).scalar() or "")
+            _src_lbl_rows = int(db_session.execute(_text("SELECT count(*) FROM labels")).scalar() or 0)
+        except Exception:
+            _src_lbl, _src_lbl_rows = None, None
+        if _is_stale("labels", LABELS_PARQUET, _src_lbl, _src_lbl_rows):
+            _build_labels(db_session)
+        _ENSURED_KINDS.add("labels")
 
 
 # ── DuckDB 謂語下推查詢 ───────────────────────────────────────────────────────

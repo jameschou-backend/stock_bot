@@ -164,6 +164,24 @@ class FeatureStore:
 
     # ── get_max_date ──────────────────────────────────────────────────────────
 
+    def row_count(self) -> Optional[int]:
+        """全年份檔案總列數（DuckDB parquet metadata，不掃資料）。
+
+        data_store 用來偵測「max_date 不變但歷史內容已重建」的 staleness。
+        """
+        paths = self._all_year_paths()
+        if not paths:
+            return None
+        con = duckdb.connect()
+        try:
+            result = con.execute(
+                "SELECT count(*) FROM read_parquet(?, union_by_name=true)",
+                [[str(p) for p in paths]],
+            ).fetchone()
+        finally:
+            con.close()
+        return int(result[0]) if result and result[0] is not None else None
+
     def get_max_date(self) -> Optional[date]:
         """Return the latest trading_date across all year files, or None if no files."""
         paths = self._all_year_paths()
