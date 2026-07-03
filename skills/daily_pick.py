@@ -145,7 +145,9 @@ def _choose_pick_date(
         if eligible.empty:
             continue
 
-        date_features = date_features.merge(eligible[["stock_id"]], on="stock_id", how="inner")
+        # 用 isin 過濾（不可用 merge：merge 會重置 index，導致回傳的 chosen_df.index
+        # 與呼叫端 feature_df 的列錯位 → 模型用「別檔股票、別的日期」的特徵打分）
+        date_features = date_features[date_features["stock_id"].isin(eligible["stock_id"])]
         valid_count = len(date_features)
         meta = {
             "candidate_count_before_liquidity": pre_liquidity_count,
@@ -531,7 +533,9 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 )
             df_raw = pd.read_sql(stmt, db_session.get_bind())
 
-        df = df_raw
+        # reset_index 確保 df 與 feature_df（建構時 reset_index）共用相同的 RangeIndex 標籤：
+        # Parquet 路徑經 universe isin 過濾後 index 有缺口，不 reset 會與 feature_df 錯位
+        df = df_raw.reset_index(drop=True)
         coverage_stats["total_feature_rows"] = len(df)
         coverage_stats["unique_stocks_with_features"] = (
             df["stock_id"].nunique() if not df.empty else 0
