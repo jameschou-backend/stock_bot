@@ -25,7 +25,7 @@ import gc
 import logging
 import os
 import time
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import List, Optional
 
@@ -95,7 +95,117 @@ def _parse_and_schema_filter(raw_feat_df: pd.DataFrame) -> pd.DataFrame:
 
 
 # ── 快取建立 ──────────────────────────────────────────────────────────────────
-def _build_prices(db_session: Session) -> None:
+# 增量重建（2026-07-03 健檢效能審計發現 5）：
+# 舊行為：來源多一個交易日就整份從 MySQL 重拉 5M 列重寫 parquet（分鐘級）。
+# 這也是 2026-06-22「可重現性危害」的機制根源之一：重建窗口長，跨 run 撞上
+# 重建的機率高。新行為：若來源相對 cache「只是 append 了新交易日」
+# （cache_max < src_max 且 src_rows == cache_rows + 新日期列數），
+# 只拉 trading_date > cache_max 的增量、append 回 parquet（秒級）。
+# 任何不符（歷史列數變動、schema 變動、競態）→ 一律 fallback 全量重建，
+# 產出內容與全量重建 byte-identical（cache 本身已按 (trading_date, stock_id)
+# 排序，增量日期嚴格大於 cache_max，append 後全域排序不變）。
+
+
+def _source_count_after(db_session: Session, table: str, cache_max: str) -> Optional[int]:
+    """來源資料表中 trading_date > cache_max 的列數（索引範圍掃描，便宜）。"""
+    from sqlalchemy import text as _text
+    try:
+        return int(
+            db_session.execute(
+                _text(f"SELECT count(*) FROM {table} WHERE trading_date > :d"),  # noqa: S608 — table 為內部常數
+                {"d": cache_max},
+            ).scalar()
+            or 0
+        )
+    except Exception:
+        return None
+
+
+def _incremental_precheck(
+    kind: str,
+    path: Path,
+    src_max: Optional[str],
+    src_rows: Optional[int],
+    count_after_fn,
+) -> Optional[str]:
+    """增量條件檢查。符合回傳 cache_max（str），不符回傳 None（走全量）。
+
+    條件：cache 存在、來源只多了新日期（cache_max < src_max）、
+    且列數差恰等於新日期列數（count_after_fn(cache_max) 查來源，歷史內容未動）。
+    """
+    if not src_max or src_rows is None:
+        return None
+    cache_max = _parquet_max_date(path)
+    cache_rows = _parquet_row_count(path)
+    if not cache_max or cache_rows is None or cache_max >= src_max:
+        return None
+    inc_rows = count_after_fn(cache_max)
+    if inc_rows is None:
+        return None
+    if not (inc_rows > 0 and cache_rows + inc_rows == src_rows):
+        logger.info(
+            "[data_store] %s 增量條件不符（cache %s + inc %s != src %s）→ 全量重建",
+            kind, f"{cache_rows:,}", inc_rows, f"{src_rows:,}",
+        )
+        return None
+    return cache_max
+
+
+def _append_to_parquet(kind: str, path: Path, inc_df: pd.DataFrame, t0: float) -> bool:
+    """把增量列 append 到既有 parquet（欄位不一致時回傳 False → 呼叫端走全量）。"""
+    old = pd.read_parquet(path)
+    if list(old.columns) != list(inc_df.columns):
+        logger.info("[data_store] %s 增量欄位與 cache 不一致 → 全量重建", kind)
+        return False
+    combined = pd.concat([old, inc_df], ignore_index=True)
+    combined.to_parquet(path, index=False)
+    logger.info(
+        "[data_store] %s incremental append: +%s rows -> %s total (%.1fs) -> %s",
+        kind, f"{len(inc_df):,}", f"{len(combined):,}", time.time() - t0, path.name,
+    )
+    return True
+
+
+def _try_incremental_prices(
+    db_session: Session, src_max: Optional[str], src_rows: Optional[int]
+) -> bool:
+    """嘗試增量更新 prices.parquet；成功回傳 True，任何不符回傳 False（走全量）。"""
+    t0 = time.time()
+    try:
+        cache_max = _incremental_precheck(
+            "prices", PRICES_PARQUET, src_max, src_rows,
+            lambda cm: _source_count_after(db_session, "raw_prices", cm),
+        )
+        if cache_max is None:
+            return False
+        stmt = (
+            select(
+                RawPrice.stock_id, RawPrice.trading_date,
+                RawPrice.open, RawPrice.high, RawPrice.low,
+                RawPrice.close, RawPrice.volume,
+            )
+            .where(RawPrice.trading_date > date.fromisoformat(cache_max))
+            .order_by(RawPrice.trading_date, RawPrice.stock_id)
+        )
+        inc = pd.read_sql(stmt, db_session.get_bind())
+        # 競態防護：讀到的列數與 precheck 不一致（期間資料又變了）→ 走全量
+        if len(inc) == 0 or int(src_rows) != (_parquet_row_count(PRICES_PARQUET) or 0) + len(inc):
+            return False
+        for col in ("open", "high", "low", "close", "volume"):
+            inc[col] = pd.to_numeric(inc[col], errors="coerce")
+        return _append_to_parquet("prices", PRICES_PARQUET, inc, t0)
+    except Exception as exc:
+        logger.warning("[data_store] prices 增量更新失敗（%s）→ 全量重建", exc)
+        return False
+
+
+def _build_prices(
+    db_session: Session,
+    src_max: Optional[str] = None,
+    src_rows: Optional[int] = None,
+) -> None:
+    if _try_incremental_prices(db_session, src_max, src_rows):
+        return
     logger.info("[data_store] building prices.parquet (full history) …")
     t0 = time.time()
     stmt = (
@@ -116,13 +226,61 @@ def _build_prices(db_session: Session) -> None:
     )
 
 
-def _build_features(db_session: Session) -> None:
+def _try_incremental_features(src_max: Optional[str], src_rows: Optional[int]) -> bool:
+    """嘗試從 FeatureStore 只讀新日期年份檔的增量 append 到 features.parquet。
+
+    成功回傳 True；條件不符（含 schema 演進、歷史列數變動）回傳 False → 全量重建。
+    來源 = FeatureStore（年份 Parquet），fs.read 只掃增量日期所屬年份檔。
+    """
+    t0 = time.time()
+    try:
+        from skills.feature_store import FeatureStore
+        _fs = FeatureStore()
+
+        def _fs_count_after(cm: str) -> Optional[int]:
+            _mx = _fs.get_max_date()
+            if _mx is None:
+                return None
+            inc_df = _fs.read(date.fromisoformat(cm) + timedelta(days=1), _mx)
+            # 回傳列數；DataFrame 暫存供主流程複用（避免讀兩次年份檔）
+            _fs_count_after.cached_inc = inc_df  # type: ignore[attr-defined]
+            return len(inc_df)
+
+        cache_max = _incremental_precheck(
+            "features", FEATURES_PARQUET, src_max, src_rows, _fs_count_after,
+        )
+        if cache_max is None:
+            return False
+        inc = getattr(_fs_count_after, "cached_inc")
+        if inc.empty:
+            return False
+        # 與全量重建相同的後處理：date 型別、float32、(trading_date, stock_id) 排序
+        inc = inc.copy()
+        inc["trading_date"] = pd.to_datetime(inc["trading_date"]).dt.date
+        num_cols = [c for c in inc.columns if c not in ("stock_id", "trading_date")]
+        if num_cols:
+            inc[num_cols] = inc[num_cols].astype("float32")
+        inc = inc.sort_values(["trading_date", "stock_id"]).reset_index(drop=True)
+        return _append_to_parquet("features", FEATURES_PARQUET, inc, t0)
+    except Exception as exc:
+        logger.warning("[data_store] features 增量更新失敗（%s）→ 全量重建", exc)
+        return False
+
+
+def _build_features(
+    db_session: Session,
+    src_max: Optional[str] = None,
+    src_rows: Optional[int] = None,
+) -> None:
     """Build the flat features cache.
 
     優先從 FeatureStore（年份 Parquet）讀取已解析資料，
     大幅省去 JSON 解析開銷（4M 行 × 62 特徵 ≈ 節省 60-90s）。
     若 FeatureStore 無資料（首次使用前），fallback 至 MySQL。
+    來源只是 append 新日期時走增量（_try_incremental_features）。
     """
+    if _try_incremental_features(src_max, src_rows):
+        return
     logger.info("[data_store] building features.parquet …")
     t0 = time.time()
 
@@ -182,7 +340,41 @@ def _build_features(db_session: Session) -> None:
     )
 
 
-def _build_labels(db_session: Session) -> None:
+def _try_incremental_labels(
+    db_session: Session, src_max: Optional[str], src_rows: Optional[int]
+) -> bool:
+    """嘗試增量更新 labels.parquet；成功回傳 True，任何不符回傳 False（走全量）。"""
+    t0 = time.time()
+    try:
+        cache_max = _incremental_precheck(
+            "labels", LABELS_PARQUET, src_max, src_rows,
+            lambda cm: _source_count_after(db_session, "labels", cm),
+        )
+        if cache_max is None:
+            return False
+        stmt = (
+            select(Label.stock_id, Label.trading_date, Label.future_ret_h)
+            .where(Label.trading_date > date.fromisoformat(cache_max))
+            .order_by(Label.trading_date, Label.stock_id)
+        )
+        inc = pd.read_sql(stmt, db_session.get_bind())
+        # 競態防護：讀到的列數與 precheck 不一致（期間資料又變了）→ 走全量
+        if len(inc) == 0 or int(src_rows) != (_parquet_row_count(LABELS_PARQUET) or 0) + len(inc):
+            return False
+        inc["trading_date"] = pd.to_datetime(inc["trading_date"]).dt.date
+        return _append_to_parquet("labels", LABELS_PARQUET, inc, t0)
+    except Exception as exc:
+        logger.warning("[data_store] labels 增量更新失敗（%s）→ 全量重建", exc)
+        return False
+
+
+def _build_labels(
+    db_session: Session,
+    src_max: Optional[str] = None,
+    src_rows: Optional[int] = None,
+) -> None:
+    if _try_incremental_labels(db_session, src_max, src_rows):
+        return
     logger.info("[data_store] building labels.parquet (full history) …")
     t0 = time.time()
     stmt = (
@@ -297,7 +489,7 @@ def _ensure(db_session: Session) -> None:
         except Exception:
             _src_px, _src_px_rows = None, None
         if _is_stale("prices", PRICES_PARQUET, _src_px, _src_px_rows):
-            _build_prices(db_session)
+            _build_prices(db_session, src_max=_src_px, src_rows=_src_px_rows)
         _ENSURED_KINDS.add("prices")
 
     # ── Features ──
@@ -311,7 +503,7 @@ def _ensure(db_session: Session) -> None:
         except Exception:
             _src_feat, _src_feat_rows = None, None
         if _is_stale("features", FEATURES_PARQUET, _src_feat, _src_feat_rows):
-            _build_features(db_session)
+            _build_features(db_session, src_max=_src_feat, src_rows=_src_feat_rows)
         _ENSURED_KINDS.add("features")
 
     # ── Labels ──
@@ -322,7 +514,7 @@ def _ensure(db_session: Session) -> None:
         except Exception:
             _src_lbl, _src_lbl_rows = None, None
         if _is_stale("labels", LABELS_PARQUET, _src_lbl, _src_lbl_rows):
-            _build_labels(db_session)
+            _build_labels(db_session, src_max=_src_lbl, src_rows=_src_lbl_rows)
         _ENSURED_KINDS.add("labels")
 
 

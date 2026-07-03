@@ -271,19 +271,27 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 )
                 _price_df["trading_date"] = pd.to_datetime(_price_df["trading_date"]).dt.date
                 _eligible = _price_df[_price_df["_avg_tv20"] >= _threshold]
-                _eligible_set = set(zip(_eligible["trading_date"].values, _eligible["stock_id"].values))
                 _before = len(df)
-                _liq_ok = np.array([
-                    (td, str(sid)) in _eligible_set
-                    for sid, td in zip(df["stock_id"].values, df["trading_date"].values)
-                ])
+                # 向量化成員判定（2026-07-03 健檢效能審計發現 9）：
+                # 等價於原 `[(td, str(sid)) in eligible_set for ...]` Python 迴圈——
+                # 右表 (stock_id, _td64) 唯一，left merge 保序保列數，比對同一組 pair。
+                _pairs = _eligible[["stock_id", "trading_date"]].drop_duplicates().copy()
+                _pairs["stock_id"] = _pairs["stock_id"].astype(str)
+                _pairs["_td64"] = pd.to_datetime(_pairs["trading_date"])
+                _pairs = _pairs[["stock_id", "_td64"]]
+                _pairs["_liq_ok"] = True
+                _probe = pd.DataFrame({
+                    "stock_id": df["stock_id"].astype(str).values,
+                    "_td64": pd.to_datetime(df["trading_date"]).values,
+                })
+                _liq_ok = _probe.merge(_pairs, on=["stock_id", "_td64"], how="left")["_liq_ok"].notna().to_numpy()
                 df = df[_liq_ok].copy()
                 df = df.reset_index(drop=True)
                 logger.info(
                     "[train_ranker] 流動性過濾 (>=%.0f億): %s -> %s 筆",
                     min_avg_turnover, f"{_before:,}", f"{len(df):,}",
                 )
-                del _price_df, _eligible, _eligible_set
+                del _price_df, _eligible, _pairs, _probe
 
         # ── 特徵矩陣：Parquet 路徑已預解析，MySQL 路徑需 JSON parse ──
         if _used_parquet:

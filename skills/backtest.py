@@ -329,6 +329,75 @@ def _get_rebalance_dates(trading_dates: List[date], freq: str = "W") -> List[dat
     return rebalance
 
 
+class _DateRangeIndex:
+    """日期欄的 O(log n) 範圍定位索引（2026-07-03 健檢效能審計發現 1）。
+
+    背景：price_df / feat_df 的 trading_date 為 object dtype（date 物件），
+    每期 `df[df["trading_date"] == rb_date]` 之類的 boolean mask 是 5M 列的
+    Python 物件全表掃描。本索引以 datetime64[ns] 副本 + stable argsort 定位，
+    `positions()` 回傳的 row positions 經 np.sort 還原「原始列序」——
+    與 boolean mask 選出的列/順序**完全一致**（含順序），行為零改變。
+    不改動原 DataFrame 的 dtype 與列序（避免 date/datetime64 邊界 off-by-one）。
+    """
+
+    def __init__(self, date_series: pd.Series) -> None:
+        self._td64 = pd.to_datetime(date_series).values  # datetime64[ns]，原列序
+        self._order = np.argsort(self._td64, kind="stable")
+        self._sorted = self._td64[self._order]
+
+    @staticmethod
+    def _ts(d) -> np.datetime64:
+        return np.datetime64(pd.Timestamp(d))
+
+    def positions(self, start=None, end_incl=None, end_excl=None) -> np.ndarray:
+        """回傳 [start, end] 範圍內的原始 row positions（升冪 = 原列序）。"""
+        lo = 0 if start is None else int(np.searchsorted(self._sorted, self._ts(start), side="left"))
+        if end_incl is not None:
+            hi = int(np.searchsorted(self._sorted, self._ts(end_incl), side="right"))
+        elif end_excl is not None:
+            hi = int(np.searchsorted(self._sorted, self._ts(end_excl), side="left"))
+        else:
+            hi = len(self._sorted)
+        return np.sort(self._order[lo:hi])
+
+    def eq_positions(self, d) -> np.ndarray:
+        """回傳 trading_date == d 的原始 row positions（原列序）。"""
+        return self.positions(start=d, end_incl=d)
+
+
+def _liquidity_pairs_frame(liquidity_eligible_map: Dict[date, set]) -> pd.DataFrame:
+    """把 {date: {stock_id,…}} 攤平成 (stock_id, _td64) 唯一 pair 表（向量化過濾用）。"""
+    _sids: List[str] = []
+    _tds: List[date] = []
+    for _td, _sset in liquidity_eligible_map.items():
+        _sids.extend(_sset)
+        _tds.extend([_td] * len(_sset))
+    pairs = pd.DataFrame({
+        "stock_id": pd.array(_sids, dtype=object),
+        "_td64": pd.to_datetime(_tds),
+    })
+    pairs["_liq_ok"] = True
+    return pairs
+
+
+def _liquidity_ok_mask(
+    sids: pd.Series,
+    tds: pd.Series,
+    liq_pairs: pd.DataFrame,
+) -> np.ndarray:
+    """向量化等價於 `[str(sid) in map.get(td, set()) for sid, td in zip(...)]`。
+
+    2026-07-03 健檢效能審計發現 9：原 Python 迴圈每次重訓掃 ~4M 列（秒級）。
+    left merge（右表 (stock_id, _td64) 唯一）保序保列數，成員判定與逐列迴圈一致。
+    """
+    probe = pd.DataFrame({
+        "stock_id": sids.astype(str).values,
+        "_td64": pd.to_datetime(tds).values,
+    })
+    merged = probe.merge(liq_pairs, on=["stock_id", "_td64"], how="left")
+    return merged["_liq_ok"].notna().to_numpy()
+
+
 def _precompute_liquidity_eligible_map(
     price_df: pd.DataFrame,
     min_avg_turnover: float,
@@ -555,6 +624,7 @@ def _simulate_period(
     tiered_slippage_map: Optional[Dict[str, float]] = None,  # 預計算的分級滑價（來回），優先於 ATR 模型
     portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷：月中等權報酬跌破此值時全出場
     cap_daily_return_pct: float = 0.0,  # 診斷：>0 時把持有期每日報酬 winsorize 到 ±cap（中和未還原減資/停牌假跳動）
+    stock_row_index: Optional[Dict[str, np.ndarray]] = None,  # 效能：stock_id → price_df row positions（發現 3；None 走原 boolean mask）
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -591,11 +661,28 @@ def _simulate_period(
         if _ps_starts:
             _price_start = min(_ps_starts)
 
-    period_prices = price_df[
-        (price_df["stock_id"].isin(stock_ids)) &
-        (price_df["trading_date"] >= _price_start) &
-        (price_df["trading_date"] <= exit_date)
-    ].copy()
+    if stock_row_index is not None:
+        # 效能（發現 3）：以預建 stock→rows 索引直取 picks 的列，再過濾日期。
+        # np.sort 還原原始列序 → 與 boolean mask 全表掃描選出的列/順序完全一致。
+        _arrs = [
+            stock_row_index[_s]
+            for _s in dict.fromkeys(str(s) for s in stock_ids)
+            if _s in stock_row_index
+        ]
+        if _arrs:
+            _sub = price_df.iloc[np.sort(np.concatenate(_arrs))]
+            period_prices = _sub[
+                (_sub["trading_date"] >= _price_start) &
+                (_sub["trading_date"] <= exit_date)
+            ].copy()
+        else:
+            period_prices = price_df.iloc[0:0].copy()
+    else:
+        period_prices = price_df[
+            (price_df["stock_id"].isin(stock_ids)) &
+            (price_df["trading_date"] >= _price_start) &
+            (price_df["trading_date"] <= exit_date)
+        ].copy()
 
     if period_prices.empty:
         return {"return": 0.0, "trades": 0, "stoploss_triggered": 0, "_stoploss_time": 0.0}
@@ -977,6 +1064,19 @@ class BacktestPipeline:
         self._count_apply_stoploss = 0
         self._count_simulate = 0
 
+        # ── P0 效能索引（prepare() 填入；直接呼叫 helper 的測試/舊碼走 None fallback）──
+        self._price_date_index: Optional[_DateRangeIndex] = None
+        self._price_rows_by_sid: Optional[Dict[str, np.ndarray]] = None
+        self._bm_close_pivot: Optional[pd.DataFrame] = None
+        self._bm_col_str: Optional[pd.Index] = None
+        self._liq_pairs_df: Optional[pd.DataFrame] = None
+        self._train_merged: Optional[pd.DataFrame] = None
+        self._train_md_index: Optional["_DateRangeIndex"] = None
+        self._train_liq_mask: Optional[np.ndarray] = None
+        self._feat_all_td64_sorted: Optional[np.ndarray] = None
+        self._label_all_td64_sorted: Optional[np.ndarray] = None
+        self._feat_date_index: Optional["_DateRangeIndex"] = None
+
         # ── run() 中累積的訓練 / 模型狀態 ──
         self._use_rolling_window: bool = self.train_lookback_days is not None
         self.current_model = None
@@ -1146,6 +1246,57 @@ class BacktestPipeline:
                 print(f"  [max_per_sector] 載入失敗（{_exc}），停用 sector constraint")
                 self.sector_map = {}
 
+        # ── P0 效能預建索引（2026-07-03 健檢效能審計發現 1/2/3/4/9）──
+        # 全部為「定位/預計算」結構，不改變 price_df / feat_df / label_df 的
+        # dtype 與列序；各使用點與原 boolean mask / 逐期重算路徑逐列等價。
+        _t = time.time()
+        # 發現 1：price/feat 日期定位索引（消 object dtype 全表掃）
+        self._price_date_index = _DateRangeIndex(price_df["trading_date"])
+        # 發現 3：stock_id → price_df row positions（_simulate_period / position weights 用）
+        self._price_rows_by_sid = {
+            str(k): v for k, v in price_df.groupby("stock_id").indices.items()
+        }
+        # 發現 4：benchmark 用 close 的 date×stock pivot（每期兩列 lookup 取代全表掃+pivot）
+        self._bm_close_pivot = price_df.pivot_table(
+            index="trading_date", columns="stock_id", values="close"
+        )
+        self._bm_col_str = pd.Index([str(c) for c in self._bm_close_pivot.columns])
+        # 發現 9：流動性 (stock_id, date) pair 表（向量化過濾）
+        self._liq_pairs_df = (
+            _liquidity_pairs_frame(liquidity_eligible_map) if liquidity_eligible_map else None
+        )
+        # 發現 2：非滾動模式 features+labels 先 merge 一次、常駐 + 日期索引；
+        # 每次重訓以 searchsorted 切片取代全量 boolean 掃描 + 全量 merge。
+        # （滾動視窗模式 feat_df 逐 fold 換載，維持原逐次 merge 路徑）
+        self._train_merged: Optional[pd.DataFrame] = None
+        self._train_md_index: Optional[_DateRangeIndex] = None
+        self._train_liq_mask: Optional[np.ndarray] = None
+        self._feat_all_td64_sorted: Optional[np.ndarray] = None
+        self._label_all_td64_sorted: Optional[np.ndarray] = None
+        self._feat_date_index: Optional[_DateRangeIndex] = None
+        if not self._use_rolling_window and not feat_df.empty and not label_df.empty:
+            self._feat_date_index = _DateRangeIndex(feat_df["trading_date"])
+            self._feat_all_td64_sorted = np.sort(
+                pd.to_datetime(pd.unique(feat_df["trading_date"])).values
+            )
+            self._label_all_td64_sorted = np.sort(
+                pd.to_datetime(pd.unique(label_df["trading_date"])).values
+            )
+            self._train_merged = feat_df.merge(
+                label_df, on=["stock_id", "trading_date"], how="inner"
+            )
+            self._train_md_index = _DateRangeIndex(self._train_merged["trading_date"])
+            if self.min_avg_turnover > 0 and self._liq_pairs_df is not None:
+                # 全表流動性 mask 只算一次；每次重訓取切片（發現 9）
+                self._train_liq_mask = _liquidity_ok_mask(
+                    self._train_merged["stock_id"],
+                    self._train_merged["trading_date"],
+                    self._liq_pairs_df,
+                )
+                # pair 表僅滾動路徑的逐次過濾需要；已有全表 mask 即可釋放（~0.5GB）
+                self._liq_pairs_df = None
+        _log(f"precompute_indexes done {time.time()-_t:.1f}s")
+
         # ── 將所有結果回寫至 self ──
         self.price_df = price_df
         self.feat_df = feat_df
@@ -1193,35 +1344,73 @@ class BacktestPipeline:
         # 交易日制 cutoff：取 rb_date 前第 label_horizon_buffer 個「交易日」，確保訓練樣本 T 的
         # label（close[T + 20 交易日]）不看到 rb_date 當日及之後的價格。先前用日曆天
         # （timedelta days）蓋不住 20 交易日（≈28-29 日曆天）的 horizon，殘餘 ~6 交易日洩漏。
-        _all_tds = np.sort(pd.to_datetime(pd.unique(feat_df["trading_date"])).values)
+        # 效能（發現 2）：非滾動模式的 feat 全交易日序列在 prepare() 已預算，免每次重訓
+        # 重掃 4M 列 unique；滾動模式 feat_df 逐 fold 換載，維持原地計算。
+        if self._feat_all_td64_sorted is not None:
+            _all_tds = self._feat_all_td64_sorted
+        else:
+            _all_tds = np.sort(pd.to_datetime(pd.unique(feat_df["trading_date"])).values)
         _rb_pos = int(np.searchsorted(_all_tds, np.datetime64(pd.Timestamp(rb_date)), side="left"))
         _cut_idx = _rb_pos - label_horizon_buffer
         if _cut_idx > 0:
             label_cutoff = pd.Timestamp(_all_tds[_cut_idx]).date()
         else:
             label_cutoff = rb_date - timedelta(days=label_horizon_buffer)  # 交易日不足時保守 fallback
-        train_feat = feat_df[feat_df["trading_date"] < rb_date]
-        train_label = label_df[label_df["trading_date"] < label_cutoff]
-        if train_lookback_days:
-            train_start = rb_date - timedelta(days=train_lookback_days)
-            train_feat = train_feat[train_feat["trading_date"] >= train_start]
-            train_label = train_label[train_label["trading_date"] >= train_start]
 
-        if train_feat.empty or train_label.empty:
-            print(f"  [{rb_date}] 訓練資料不足，跳過")
-            return None
+        if self._train_merged is not None and not train_lookback_days:
+            # ── 發現 2：預先 merge 的常駐訓練表 + searchsorted 切片 ──
+            # 舊路徑 = filter(feat, td<rb) inner-merge filter(label, td<cutoff)；
+            # inner merge 的 join key td 同值 → 等價於 merged_all[td < min(rb, cutoff)]，
+            # 且 pandas inner merge 保左表列序 → 切片列序與舊路徑完全一致。
+            # 空集檢查與舊路徑逐一等價（feat 側 / label 側分開判定，訊息相同）。
+            _rb_ts = np.datetime64(pd.Timestamp(rb_date))
+            _cut_ts = np.datetime64(pd.Timestamp(label_cutoff))
+            _feat_nonempty = _all_tds.size > 0 and _all_tds[0] < _rb_ts
+            _lbl_tds = self._label_all_td64_sorted
+            _label_nonempty = _lbl_tds is not None and _lbl_tds.size > 0 and _lbl_tds[0] < _cut_ts
+            if not (_feat_nonempty and _label_nonempty):
+                print(f"  [{rb_date}] 訓練資料不足，跳過")
+                return None
+            _pos = self._train_md_index.positions(end_excl=min(_rb_ts, _cut_ts))
+            merged = self._train_merged.iloc[_pos]
 
-        merged = train_feat.merge(train_label, on=["stock_id", "trading_date"], how="inner")
+            # 訓練資料流動性過濾（與評分階段保持一致）——
+            # 發現 9：全表 mask 已在 prepare() 一次算好，此處取對應切片
+            if min_avg_turnover > 0 and liquidity_eligible_map:
+                if self._train_liq_mask is not None:
+                    _liq_ok = self._train_liq_mask[_pos]
+                else:
+                    _liq_ok = _liquidity_ok_mask(
+                        merged["stock_id"], merged["trading_date"],
+                        self._liq_pairs_df
+                        if self._liq_pairs_df is not None
+                        else _liquidity_pairs_frame(liquidity_eligible_map),
+                    )
+                merged = merged[_liq_ok]
+        else:
+            # ── 滾動視窗（或未 prepare 索引）：原路徑 ──
+            train_feat = feat_df[feat_df["trading_date"] < rb_date]
+            train_label = label_df[label_df["trading_date"] < label_cutoff]
+            if train_lookback_days:
+                train_start = rb_date - timedelta(days=train_lookback_days)
+                train_feat = train_feat[train_feat["trading_date"] >= train_start]
+                train_label = train_label[train_label["trading_date"] >= train_start]
 
-        # 訓練資料流動性過濾（與評分階段保持一致）
-        if min_avg_turnover > 0 and liquidity_eligible_map:
-            _train_tds = pd.to_datetime(merged["trading_date"]).dt.date.values
-            _train_sids = merged["stock_id"].astype(str).values
-            _liq_ok = np.array([
-                str(sid) in liquidity_eligible_map.get(td, set())
-                for sid, td in zip(_train_sids, _train_tds)
-            ])
-            merged = merged[_liq_ok]
+            if train_feat.empty or train_label.empty:
+                print(f"  [{rb_date}] 訓練資料不足，跳過")
+                return None
+
+            merged = train_feat.merge(train_label, on=["stock_id", "trading_date"], how="inner")
+
+            # 訓練資料流動性過濾（與評分階段保持一致）——發現 9：向量化 pair merge
+            if min_avg_turnover > 0 and liquidity_eligible_map:
+                _liq_ok = _liquidity_ok_mask(
+                    merged["stock_id"], merged["trading_date"],
+                    self._liq_pairs_df
+                    if self._liq_pairs_df is not None
+                    else _liquidity_pairs_frame(liquidity_eligible_map),
+                )
+                merged = merged[_liq_ok]
 
         if len(merged) < min_train_days:
             print(f"  [{rb_date}] 訓練資料 {len(merged)} 筆 < {min_train_days}，跳過")
@@ -1235,11 +1424,15 @@ class BacktestPipeline:
             _avail_fc = [c for c in feature_columns if c in fmat.columns]
             fmat = fmat[_avail_fc]
         fmat = fmat.replace([np.inf, -np.inf], np.nan)
-        for col in fmat.columns:
-            if fmat[col].isna().all():
-                fmat[col] = 0
-            else:
-                fmat[col] = fmat[col].fillna(fmat[col].median())
+        # 發現 2：median 填補向量化。語義與逐欄迴圈完全一致——
+        # 仍是「該期訓練窗內逐欄 median」；全 NaN 欄與舊版相同填 int 0
+        # （舊版 `fmat[col] = 0` 使該欄變 int64，混欄 .values 升 float64，
+        #  必須保留此 dtype 行為，否則 LightGBM 輸入矩陣 dtype 改變）。
+        _allnan_cols = fmat.columns[fmat.isna().all(axis=0)]
+        _med = fmat.median().dropna()  # 全 NaN 欄 median=NaN → 排除，交由下方補 0
+        fmat = fmat.fillna(_med)
+        for col in _allnan_cols:
+            fmat[col] = 0
 
         valid = fmat.notna().all(axis=1)
         fmat = fmat.loc[valid]
@@ -1754,8 +1947,22 @@ class BacktestPipeline:
         picks: pd.DataFrame,
         rb_date: date,
     ) -> pd.DataFrame:
-        """根據 position_sizing / position_sizing_method 計算倉位權重。"""
-        period_price_slice = self.price_df[self.price_df["trading_date"] <= rb_date]
+        """根據 position_sizing / position_sizing_method 計算倉位權重。
+
+        效能（發現 4）：原每期先做全表 `trading_date <= rb_date` 切片（5M 列
+        object 掃描）再 isin(picks)。改為先用 stock 定位索引取 picks 的列，
+        再過濾日期——選出的列/順序與原路徑完全一致（boolean mask 保原列序，
+        index 路徑 np.sort(positions) 亦還原原列序），pivot_table 結果 identical。
+        全表日期切片改為 lazy（僅 vol_inverse / fallback 需要時才算）。
+        """
+
+        def _full_slice_leq() -> pd.DataFrame:
+            # 與原 `self.price_df[self.price_df["trading_date"] <= rb_date]` 等價
+            if self._price_date_index is not None:
+                _pos = self._price_date_index.positions(end_incl=rb_date)
+                return self.price_df.iloc[_pos]
+            return self.price_df[self.price_df["trading_date"] <= rb_date]
+
         # position_sizing_method 優先（支援 mean_variance / risk_parity）
         _ps_method = self.position_sizing_method if self.position_sizing_method != "vol_inverse" else self.position_sizing
         if _ps_method in ("mean_variance", "risk_parity"):
@@ -1763,9 +1970,20 @@ class BacktestPipeline:
                 from skills import position_sizing as _pos_mod
                 _pick_sids = picks["stock_id"].astype(str).tolist()
                 # 只傳 picks 股票的價格（避免全市場股票含 0/inf 資料干擾協方差估計）
-                _picks_prices = period_price_slice[
-                    period_price_slice["stock_id"].isin(_pick_sids)
-                ]
+                if self._price_rows_by_sid is not None:
+                    _arrs = [
+                        self._price_rows_by_sid[_s]
+                        for _s in dict.fromkeys(_pick_sids)
+                        if _s in self._price_rows_by_sid
+                    ]
+                    if _arrs:
+                        _sub = self.price_df.iloc[np.sort(np.concatenate(_arrs))]
+                        _picks_prices = _sub[_sub["trading_date"] <= rb_date]
+                    else:
+                        _picks_prices = self.price_df.iloc[0:0]
+                else:
+                    _pps = _full_slice_leq()
+                    _picks_prices = _pps[_pps["stock_id"].isin(_pick_sids)]
                 _price_pivot = (
                     _picks_prices.pivot_table(
                         index="trading_date", columns="stock_id", values="close"
@@ -1781,13 +1999,13 @@ class BacktestPipeline:
                 print(f"  [{rb_date}] position_sizing {_ps_method} 失敗（{_ps_exc}），fallback vol_inverse")
                 pos_weights = risk.compute_position_weights(
                     picks, method="vol_inverse",
-                    price_df=period_price_slice,
+                    price_df=_full_slice_leq(),
                     atr_period=self.atr_period,
                 )
         else:
             pos_weights = risk.compute_position_weights(
                 picks, method=self.position_sizing,
-                price_df=period_price_slice if self.position_sizing == "vol_inverse" else None,
+                price_df=_full_slice_leq() if self.position_sizing == "vol_inverse" else None,
                 atr_period=self.atr_period,
             )
         return pos_weights
@@ -1861,11 +2079,35 @@ class BacktestPipeline:
         rb_date: date,
         exit_date: date,
     ) -> float:
-        """計算大盤等權基準報酬（套用相同流動性門檻、不設停損、無滑價）。"""
+        """計算大盤等權基準報酬（套用相同流動性門檻、不設停損、無滑價）。
+
+        效能（發現 4）：prepare() 已建一次 close 的 date×stock pivot，
+        每期只需兩列 lookup。逐股集合／排序／均值運算順序與原「每期全表掃描
+        + 小 pivot」逐位元一致（兩者最終都在「排序後的 stock_id」序列上取 mean；
+        『在 rb 日有列』⟺『pivot cell 非 NaN ∨ close 為 NaN 而兩路徑皆剔除』）。
+        未 prepare（單元測試直接呼叫）時走原全表掃描路徑。
+        """
         price_df = self.price_df
         min_avg_turnover = self.min_avg_turnover
         liquidity_eligible_map = self.liquidity_eligible_map
         benchmark_tc = self.benchmark_tc
+
+        _pivot = self._bm_close_pivot
+        if _pivot is not None and rb_date in _pivot.index and exit_date in _pivot.index:
+            row_rb = _pivot.loc[rb_date]
+            row_ex = _pivot.loc[exit_date]
+            valid = row_rb.notna() & row_ex.notna()
+            if min_avg_turnover > 0 and liquidity_eligible_map:
+                eligible_set = liquidity_eligible_map.get(rb_date, set())
+                valid &= pd.Series(
+                    self._bm_col_str.isin(eligible_set), index=_pivot.columns
+                )
+            valid &= (row_rb > 0) & (row_ex > 0)  # Bug-2 fix 等價：排除 0 價
+            if not valid.any():
+                return 0.0
+            _raw_bm_ret = row_ex[valid] / row_rb[valid] - 1 - benchmark_tc
+            _raw_bm_ret = _raw_bm_ret.replace([np.inf, -np.inf], np.nan).dropna()
+            return float(_raw_bm_ret.mean()) if not _raw_bm_ret.empty else 0.0
 
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
         if min_avg_turnover > 0 and liquidity_eligible_map:
@@ -2049,7 +2291,14 @@ class BacktestPipeline:
                 continue
 
             # ── 對當日股票評分 ──
-            day_feat = feat_df[feat_df["trading_date"] == rb_date].copy()
+            # 效能（發現 1）：非滾動模式用預建日期索引 O(log n) 定位當日列，
+            # 取代 4M+ 列 object dtype 全表掃描；選出的列/順序與 boolean mask 一致。
+            def _feat_rows_on(_d):
+                if self._feat_date_index is not None and not _use_rolling_window:
+                    return feat_df.iloc[self._feat_date_index.eq_positions(_d)].copy()
+                return feat_df[feat_df["trading_date"] == _d].copy()
+
+            day_feat = _feat_rows_on(rb_date)
             day_feat = day_feat[day_feat["stock_id"].str.fullmatch(r"\d{4}")]
             if _emerging_ids:
                 day_feat = day_feat[~day_feat["stock_id"].isin(_emerging_ids)]
@@ -2057,7 +2306,7 @@ class BacktestPipeline:
             if day_feat.empty:
                 for fallback in range(1, 6):
                     fb_date = rb_date - timedelta(days=fallback)
-                    day_feat = feat_df[feat_df["trading_date"] == fb_date].copy()
+                    day_feat = _feat_rows_on(fb_date)
                     day_feat = day_feat[day_feat["stock_id"].str.fullmatch(r"\d{4}")]
                     if _emerging_ids:
                         day_feat = day_feat[~day_feat["stock_id"].isin(_emerging_ids)]
@@ -2168,6 +2417,7 @@ class BacktestPipeline:
                     tiered_slippage_map=_tiered_slip_map,
                     portfolio_circuit_breaker_pct=_wf_cb,
                     cap_daily_return_pct=cap_daily_return_pct,
+                    stock_row_index=self._price_rows_by_sid,  # 發現 3：picks 列直取索引
                 )
                 _dt = time.time() - _t
                 _timer_simulate += _dt

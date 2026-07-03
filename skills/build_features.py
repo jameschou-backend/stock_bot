@@ -817,28 +817,87 @@ def _compute_chunk(args: tuple) -> tuple:
     return pd.concat(results, ignore_index=True) if results else pd.DataFrame(), agg_timing
 
 
+def _fetch_prices_from_cache(
+    session: Session, start_date: date, end_date: date
+) -> Optional[pd.DataFrame]:
+    """嘗試從本地 parquet cache（artifacts/cache/prices.parquet）讀取價格窗口。
+
+    2026-07-03 健檢效能審計發現 6：每日增量 build_features 的價格查詢是最大宗
+    （實測 MySQL ~115s）。cache 由 data_store 維護、與 MySQL 同源，用 DuckDB
+    謂語下推讀日期窗口只需數秒。
+
+    安全條件（任一不符 → 回傳 None，呼叫端 fallback MySQL，絕不能拿舊資料）：
+      1. parquet 存在且 max_date >= end_date
+         （pipeline 順序 ingest_prices→build_features，parquet 可能落後 MySQL 一天）
+      2. 窗口內列數與 MySQL 完全一致
+         （防 max_date 夠新但中段歷史被回補的靜默不一致；COUNT 走索引，毫秒級）
+    """
+    try:
+        from skills import data_store as _ds
+        if not _ds.PRICES_PARQUET.exists():
+            return None
+        cache_max = _ds._parquet_max_date(_ds.PRICES_PARQUET)
+        if not cache_max or cache_max < str(end_date):
+            logger.info(
+                "[PERF] fetch_prices: parquet cache max=%s < end_date=%s → fallback MySQL",
+                cache_max, end_date,
+            )
+            return None
+        df = _ds._duck_query(_ds.PRICES_PARQUET, start_date, end_date)
+        if df.empty:
+            return None
+        # 列數守門：與 MySQL 同窗口列數必須一致（索引範圍 COUNT，遠比拉整批便宜）
+        from sqlalchemy import text as _text
+        src_n = int(
+            session.execute(
+                _text("SELECT count(*) FROM raw_prices WHERE trading_date BETWEEN :s AND :e"),
+                {"s": str(start_date), "e": str(end_date)},
+            ).scalar()
+            or 0
+        )
+        if src_n != len(df):
+            logger.info(
+                "[PERF] fetch_prices: parquet 窗口列數 %s != MySQL %s → fallback MySQL",
+                f"{len(df):,}", f"{src_n:,}",
+            )
+            return None
+        return df
+    except Exception as _exc:
+        logger.warning("[PERF] fetch_prices: parquet cache 讀取失敗（%s）→ fallback MySQL", _exc)
+        return None
+
+
 def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFrame:
     """讀取 raw_prices + raw_institutional + raw_margin_short 並合併"""
     # ── 價格 ──
+    # 優先走本地 parquet cache（發現 6）；條件不符 fallback MySQL（行為不變）。
+    # 註：_fetch_data 末端有 (stock_id, trading_date) 全域排序且 key 唯一，
+    # 兩來源列序差異不影響任何產出值。
     t0 = time.perf_counter()
-    price_stmt = (
-        select(
-            RawPrice.stock_id,
-            RawPrice.trading_date,
-            RawPrice.open,
-            RawPrice.high,
-            RawPrice.low,
-            RawPrice.close,
-            RawPrice.volume,
+    price_df = _fetch_prices_from_cache(session, start_date, end_date)
+    _price_source = "parquet_cache"
+    if price_df is None:
+        _price_source = "mysql"
+        price_stmt = (
+            select(
+                RawPrice.stock_id,
+                RawPrice.trading_date,
+                RawPrice.open,
+                RawPrice.high,
+                RawPrice.low,
+                RawPrice.close,
+                RawPrice.volume,
+            )
+            .where(RawPrice.trading_date.between(start_date, end_date))
+            # 不在 SQL ORDER BY（會觸發 MySQL filesort 排序數百萬列）；改在 _fetch_data return 前 pandas 統一排序
         )
-        .where(RawPrice.trading_date.between(start_date, end_date))
-        # 不在 SQL ORDER BY（會觸發 MySQL filesort 排序數百萬列）；改在 _fetch_data return 前 pandas 統一排序
-    )
-    price_df = pd.read_sql(price_stmt, session.get_bind())
+        price_df = pd.read_sql(price_stmt, session.get_bind())
     elapsed = time.perf_counter() - t0
     n_stocks = price_df["stock_id"].nunique() if not price_df.empty else 0
     n_days = price_df["trading_date"].nunique() if not price_df.empty else 0
-    logger.info(f"[PERF] fetch_prices: {elapsed:.2f}s（{n_stocks}檔 × {n_days}天，{len(price_df):,}列）")
+    logger.info(
+        f"[PERF] fetch_prices: {elapsed:.2f}s（{n_stocks}檔 × {n_days}天，{len(price_df):,}列，來源={_price_source}）"
+    )
 
     if price_df.empty:
         return price_df
