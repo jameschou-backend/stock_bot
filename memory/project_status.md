@@ -35,6 +35,30 @@ data_store 全量重建稅（也是可重現性事故機制根源）、build_fea
 **修復順序**：①P0-1 止血+安全小包 → ②P0-2+factor ffill+cache freeze 一波全量重建立基準 v2
 → ③回測=部署對齊+補測試 → ④效能+scripts 歸檔 40 個 → ⑤C/D 線修正。
 
+### 修復進度（同日，「全部修正」派工）
+
+已完成並推 main（Wave 0-3，9 個 commit，測試 496→550 passed）：
+- `e26dede` **P0-1 修復**：daily_pick merge→isin 保留 index + df reset_index 對齊 + 回歸測試（舊碼正確失敗）
+- `b5ed7f1` **P0-2+P1-1 修復**：共用 `apply_adj_factors()`（per-stock ffill/bfill 缺日、OHLC 全還原
+  adj_open/high/low），_apply_group_impl 綁 adj OHLC，build_labels 同 helper；populate 展開缺日+clip 清單
+- `cfdbb2a` 安全包 7 項（遮罩 regex、/strategy_runs 假超時、token 遮蔽、TrustedHost、bot 驗證、gitignore 年份、.env 600）
+- `13c20ea` **P1-4 修復**：data_store row-count staleness（歷史重建會失效 cache）+ process 級快照鎖定
+  （run 內單一快照）+ `snapshot_info()`；FeatureStore.row_count()
+- `7dbb9a1` 歸檔 46 個零引用腳本（scripts/archive/+README）、.PHONY 補齊、schedule-install launchd 防雙跑、
+  DROP 重複索引 ix_features_trading_date
+- `c475b78` **P1-2+P1-3 修復**：rotation cutoff 交易日制（compute_trading_day_cutoff）、C/D label+模擬 P&L
+  改 adj_close（進出場展示價保留 raw）、rotation 成本預設 0.003→0.00585
+- `b6e0330` **P1-5+配置漂移修復**：RANKER_PROD_PARAMS 統一 backtest/train_ranker（500 樹無 ES）、
+  train_ranker 預設 PRUNED 58 特徵+流動性加權、P2-4 median 只用 train 段、`--production-baseline` preset、
+  成本 ×4.1 顯式化（有效值 0.0058425 測試鎖定）、seasonal_topn_floor config 統一、40 個關鍵測試
+- `ec0901a` 部署模型全窗重訓（holdout 模型只做 val 指標，消除「少學最近 6 個月」）
+
+資料面：`price_adjust_factors` 重灌 5,041,269 列（缺日展開 123,235 列）；clip 觸及 14 檔/16,562 列
+（8422/4763/5278/3095/3086…）存 `artifacts/adj_prices/adj_factor_clip_touched.json`，基準 v2 時評估排除。
+
+待完成：效能修正（agent 進行中，要求 byte-identical）→ **Wave 4 全量重建 features/labels + 重訓 +
+`--production-baseline` 10y 回測 → 立基準 v2**（P0-2 修復後數字必變，方向未知）。
+
 ---
 
 ## 2026-06-24：搶抓 FinMind sponsor 還原股價（到期日當天）⭐
