@@ -19,12 +19,15 @@
 環境變數（.env）：
   TELEGRAM_BOT_TOKEN=
   TELEGRAM_CHAT_ID=
+  TELEGRAM_USER_ID=   （選填）額外比對發訊者 user id，未設定時只比 chat id
 """
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
+import re
 import sys
 import time
 from datetime import date, datetime, timedelta
@@ -61,6 +64,13 @@ class TelegramBot:
     def _url(self, method: str) -> str:
         return self.BASE.format(token=self.token, method=method)
 
+    def _sanitize(self, msg: object) -> str:
+        """遮罩訊息中的 bot token（連線例外的 URL 會含完整 token，不可進 log）。"""
+        text = str(msg)
+        if self.token and self.token != "DRYRUN":
+            text = text.replace(self.token, "[TOKEN]")
+        return text
+
     def send(self, text: str, chat_id: str | None = None) -> bool:
         """發送訊息。dry_run 時只印出。"""
         if self.dry_run:
@@ -80,11 +90,11 @@ class TelegramBot:
                 timeout=15,
             )
             if not resp.ok:
-                print(f"[Telegram] 發送失敗：{resp.status_code} {resp.text[:200]}")
+                print(f"[Telegram] 發送失敗：{resp.status_code} {self._sanitize(resp.text[:200])}")
                 return False
             return True
         except Exception as e:
-            print(f"[Telegram] 連線錯誤：{e}")
+            print(f"[Telegram] 連線錯誤：{self._sanitize(e)}")
             return False
 
     def get_updates(self) -> List[Dict]:
@@ -102,7 +112,7 @@ class TelegramBot:
                 self._offset = updates[-1]["update_id"] + 1
             return updates
         except Exception as e:
-            print(f"[Telegram] getUpdates 錯誤：{e}")
+            print(f"[Telegram] getUpdates 錯誤：{self._sanitize(e)}")
             time.sleep(5)
             return []
 
@@ -179,7 +189,7 @@ def _format_push_message(sig: Dict) -> str:
 
     for pos in held:
         sid        = pos["stock_id"]
-        name       = pos.get("stock_name", sid)
+        name       = html.escape(str(pos.get("stock_name", sid)))  # 進 HTML parse_mode 前 escape
         entry_px   = float(pos["entry_price"])
         shares     = int(pos["shares"])
         entry_date = pos.get("entry_date", "?")
@@ -270,7 +280,7 @@ def _format_push_message(sig: Dict) -> str:
                     bt_label = "突破 ✅"
                 vol = h.get("vol_ratio", 0)
                 lines.append(
-                    f"  {h['stock_id']} {h['name']}｜{bt_label}｜"
+                    f"  {h['stock_id']} {html.escape(str(h['name']))}｜{bt_label}｜"
                     f"量比 {vol:.1f}x｜分數 {h['score_today']:.4f}"
                 )
             lines.append("")
@@ -282,7 +292,7 @@ def _format_push_message(sig: Dict) -> str:
                 pct    = h.get("pct_to_price_bt", 0) * 100
                 vol    = h.get("vol_ratio", 0)
                 lines.append(
-                    f"  {h['stock_id']} {h['name']}｜"
+                    f"  {h['stock_id']} {html.escape(str(h['name']))}｜"
                     f"突破點 >{bt_px:.0f} 且量>均×1.5｜"
                     f"距突破 {pct:+.1f}%｜分數 {h['score_today']:.4f}"
                 )
@@ -290,6 +300,21 @@ def _format_push_message(sig: Dict) -> str:
         lines.append("（目前無持倉，請用 /buy 代號 價格 股數 記錄買進後，明日起會顯示持倉狀態）")
 
     return "\n".join(lines)
+
+
+# ─────────────────────────────────────────────
+# 輸入驗證
+# ─────────────────────────────────────────────
+def _validate_stock_id(raw: str) -> Optional[str]:
+    """驗證使用者輸入的股票代號：只允許四碼台股（與 risk/build_features 一致）。
+
+    不合法回 None（呼叫端回覆錯誤訊息）。避免任意字串進入 DB 查詢 /
+    portfolio.json / HTML 回顯。
+    """
+    sid = raw.strip()
+    if re.fullmatch(r"\d{4}", sid):
+        return sid
+    return None
 
 
 # ─────────────────────────────────────────────
@@ -321,7 +346,7 @@ def _format_portfolio() -> str:
 
     for pos in positions:
         sid        = pos["stock_id"]
-        name       = pos.get("stock_name", sid)
+        name       = html.escape(str(pos.get("stock_name", sid)))  # 進 HTML parse_mode 前 escape
         entry_px   = float(pos["entry_price"])
         shares     = int(pos["shares"])
         entry_date = pos.get("entry_date", "?")
@@ -354,7 +379,9 @@ def _cmd_buy(args: List[str]) -> str:
     """處理 /buy 2330 855 1000"""
     if len(args) < 3:
         return "❌ 格式錯誤\n用法：/buy 代號 價格 股數\n例：/buy 2330 855 1000"
-    stock_id = args[0].strip()
+    stock_id = _validate_stock_id(args[0])
+    if stock_id is None:
+        return "❌ 股票代號格式錯誤（只接受四碼台股，例：2330）"
     try:
         price  = float(args[1])
         shares = int(args[2])
@@ -397,9 +424,10 @@ def _cmd_buy(args: List[str]) -> str:
 
     _save_portfolio(pf)
     cost = price * shares
+    # 股名來自 DB / 外部資料，回顯到 HTML parse_mode 前必須 escape
     return (
         f"✅ {action_msg}\n"
-        f"{stock_id} {name}｜${price:.1f} × {shares:,} 股\n"
+        f"{stock_id} {html.escape(name)}｜${price:.1f} × {shares:,} 股\n"
         f"金額：${cost:,.0f}"
     )
 
@@ -408,7 +436,9 @@ def _cmd_sell(args: List[str]) -> str:
     """處理 /sell 2330 900"""
     if len(args) < 2:
         return "❌ 格式錯誤\n用法：/sell 代號 價格\n例：/sell 2330 900"
-    stock_id = args[0].strip()
+    stock_id = _validate_stock_id(args[0])
+    if stock_id is None:
+        return "❌ 股票代號格式錯誤（只接受四碼台股，例：2330）"
     try:
         sell_price = float(args[1])
     except ValueError:
@@ -429,9 +459,10 @@ def _cmd_sell(args: List[str]) -> str:
     _save_portfolio(pf)
 
     sign = "🟢" if pnl_pct >= 0 else "🔴"
+    # 股名來自 portfolio.json（源自 DB），回顯到 HTML parse_mode 前必須 escape
     return (
         f"{sign} 賣出成功\n"
-        f"{stock_id} {name}\n"
+        f"{stock_id} {html.escape(name)}\n"
         f"成本 ${entry_px:.1f} → 賣出 ${sell_price:.1f}｜{shares:,} 股\n"
         f"損益：{pnl_pct:+.1f}%（${pnl_amt:+,.0f}）"
     )
@@ -450,7 +481,9 @@ def _cmd_why(args: List[str]) -> str:
     if not args:
         return "❌ 請提供股票代號\n用法：/why 2330"
 
-    stock_id = args[0].strip()
+    stock_id = _validate_stock_id(args[0])
+    if stock_id is None:
+        return "❌ 股票代號格式錯誤（只接受四碼台股，例：/why 2330）"
 
     try:
         from skills.feature_store import FeatureStore
@@ -606,6 +639,10 @@ def main() -> None:
     load_config()
     token   = os.environ.get("TELEGRAM_BOT_TOKEN", "")
     chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+    # 選填的第二層授權：除了 chat id 外同時比對發訊者 user id。
+    # 未設定時退回只比 chat id（向後相容）。群組 chat 中任何成員都共享 chat id，
+    # 設定 TELEGRAM_USER_ID 可防止群組其他成員操作 /buy /sell。
+    user_id = os.environ.get("TELEGRAM_USER_ID", "")
 
     if not token and not args.dry_run:
         print("❌ 請在 .env 設定 TELEGRAM_BOT_TOKEN")
@@ -653,6 +690,13 @@ def main() -> None:
             if chat_id and from_id != str(chat_id):
                 print(f"[ignore] 非授權 chat_id={from_id} ({user}): {text[:40]}")
                 continue
+
+            # 若設定了 TELEGRAM_USER_ID，額外比對發訊者 user id（防群組內其他成員下指令）
+            if user_id:
+                from_user_id = str((msg.get("from") or {}).get("id", ""))
+                if from_user_id != str(user_id):
+                    print(f"[ignore] 非授權 user_id={from_user_id} ({user}): {text[:40]}")
+                    continue
 
             print(f"[cmd] {user}: {text[:60]}")
             _dispatch(bot, text, from_id)

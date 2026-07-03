@@ -5,8 +5,11 @@ WebSocket 即時效能監控（/ws/metrics）等。
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 from datetime import date
 import json
+import os
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -15,6 +18,7 @@ from typing import List, Optional
 import psutil
 from fastapi import FastAPI, HTTPException, Path as FastAPIPath, Query, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from sqlalchemy import func, text as sql_text
 
 from app.config import load_config
@@ -68,6 +72,13 @@ app.add_middleware(
     allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
+)
+
+# Host header 白名單：API 僅供本機使用，拒絕任意 Host header（防 DNS rebinding）。
+# "testserver" 為 FastAPI TestClient 預設 host，測試環境必須保留。
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=["127.0.0.1", "localhost", "testserver"],
 )
 
 # 四碼台股 stock_id 約束（與 risk/build_features 一致）
@@ -248,19 +259,38 @@ def create_strategy_config(payload: StrategyConfigIn):
 
 
 _BACKTEST_TIMEOUT_SECONDS: float = float(
-    __import__("os").environ.get("BACKTEST_API_TIMEOUT", "120")
+    os.environ.get("BACKTEST_API_TIMEOUT", "120")
 )
+
+# 共用 executor（module 層級，不隨請求建立/關閉）。
+# 舊寫法在請求內 `with ThreadPoolExecutor(...)`：timeout 觸發後離開 with 區塊時
+# executor.shutdown(wait=True) 會「同步」阻塞整個 event loop 直到回測跑完 → 假超時 + 全 API 凍結。
+_BACKTEST_EXECUTOR = concurrent.futures.ThreadPoolExecutor(
+    max_workers=1, thread_name_prefix="strategy-backtest"
+)
+
+
+class _BacktestCancelled(Exception):
+    """回測在 API timeout 後被取消：提前退出、rollback，結果不寫入 DB。"""
 
 
 @app.post("/strategy_runs", response_model=StrategyRunOut)
 async def run_strategy_backtest(payload: StrategyRunIn):
-    """執行策略回測。限制最長執行時間（預設 120 秒，可用 BACKTEST_API_TIMEOUT 環境變數調整）。"""
-    import concurrent.futures
+    """執行策略回測。限制最長執行時間（預設 120 秒，可用 BACKTEST_API_TIMEOUT 環境變數調整）。
 
+    timeout 觸發時立即回 504，並以 cancellation flag 通知 worker thread
+    在下一個檢查點提前 rollback 退出（逾時的 run 不會 commit 進 DB）。
+    """
     loop = asyncio.get_event_loop()
+    cancel_event = threading.Event()
+
+    def _check_cancelled() -> None:
+        if cancel_event.is_set():
+            raise _BacktestCancelled("backtest cancelled after API timeout")
 
     def _sync_run() -> StrategyRunOut:
         register_defaults()
+        _check_cancelled()
         with get_session() as session:
             config_row = (
                 session.query(StrategyConfig)
@@ -274,6 +304,7 @@ async def run_strategy_backtest(payload: StrategyRunIn):
             start_date = payload.start_date
             end_date = payload.end_date
             raw = load_price_df(start_date, end_date)
+            _check_cancelled()
             df = compute_indicators(raw)
             regime = detect_regime(df, config)
             weights = resolve_weights(regime, config, config_row.config_json or {})
@@ -306,7 +337,10 @@ async def run_strategy_backtest(payload: StrategyRunIn):
                 max_pyramiding_level=payload.max_pyramiding_level if payload.max_pyramiding_level is not None else 1,
             )
             engine = BacktestEngine(bt_cfg)
+            _check_cancelled()
             result = engine.run(df, allocations)
+            # commit 前最後檢查：逾時的回測即使跑完也不寫入（raise → get_session rollback）
+            _check_cancelled()
 
             equity_curve = result["equity_curve"]
             final_equity = equity_curve[-1]["equity"] if equity_curve else bt_cfg.initial_capital
@@ -368,16 +402,21 @@ async def run_strategy_backtest(payload: StrategyRunIn):
             session.commit()
             return StrategyRunOut.model_validate(run_row)
 
-    # 使用 asyncio.wait_for 限制總執行時間，防止長時間回測卡死伺服器
+    # 使用 asyncio.wait_for 限制總執行時間，防止長時間回測卡死伺服器。
+    # executor 為 module 層級共享，timeout 後不 shutdown（不阻塞 event loop）。
+    future = loop.run_in_executor(_BACKTEST_EXECUTOR, _sync_run)
     try:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            future = loop.run_in_executor(executor, _sync_run)
-            return await asyncio.wait_for(future, timeout=_BACKTEST_TIMEOUT_SECONDS)
+        return await asyncio.wait_for(future, timeout=_BACKTEST_TIMEOUT_SECONDS)
     except asyncio.TimeoutError:
+        # 通知 worker thread 在下一個檢查點提前 rollback 退出；504 立即回傳，不等回測結束。
+        cancel_event.set()
         raise HTTPException(
             status_code=504,
             detail=f"回測執行超時（>{_BACKTEST_TIMEOUT_SECONDS:.0f}s），請縮短回測期間或增加 BACKTEST_API_TIMEOUT 設定。",
         )
+    except _BacktestCancelled:
+        # 理論上不會到這（flag 只在 timeout 後 set），保險處理
+        raise HTTPException(status_code=504, detail="回測已被取消")
 
 
 @app.get("/strategy_runs/{run_id}", response_model=StrategyRunOut)

@@ -72,10 +72,9 @@ artifacts/review_pack_*.md
 artifacts/review_pack_*.txt
 artifacts/review_pack_*.json
 
-# daily signal 每日 snapshots（state/portfolio 檔已在上方持倉區塊忽略）
-artifacts/daily_signal/2026-*.json
-artifacts/daily_signal/strategy_c_2026-*.json
-artifacts/daily_signal/strategy_d_2026-*.json
+# daily signal 每日 snapshots（不受年份限制，避免年份 rollover 後洩漏持倉訊號；
+# state/portfolio 檔已在上方持倉區塊忽略）
+artifacts/daily_signal/*.json
 
 # experiments / sponsor backfill / shap reports
 artifacts/experiments/

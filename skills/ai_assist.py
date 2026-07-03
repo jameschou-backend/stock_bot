@@ -38,12 +38,17 @@ def _mask_secrets(text: str, config: AppConfig) -> str:
     for secret in secrets:
         if secret:
             text = text.replace(secret, "[REDACTED]")
-    text = re.sub(r"(OPENAI_API_KEY|DB_PASSWORD|FINMIND_TOKEN)\s*=\s*\\S+", r"\\1=[REDACTED]", text)
+    # 注意：\S+ 必須是單反斜線（raw string 中 \\S 是字面「反斜線+S」，會導致零遮罩）
+    text = re.sub(
+        r"(OPENAI_API_KEY|DB_PASSWORD|FINMIND_TOKEN|TELEGRAM_BOT_TOKEN|TELEGRAM_CHAT_ID)\s*=\s*\S+",
+        r"\1=[REDACTED]",
+        text,
+    )
     return text
 
 
 def _extract_trace_files(error_text: str) -> List[Tuple[Path, Optional[int]]]:
-    matches = re.findall(r'File "([^"]+)", line (\\d+)', error_text)
+    matches = re.findall(r'File "([^"]+)", line (\d+)', error_text)
     files: List[Tuple[Path, Optional[int]]] = []
     for path_str, line_str in matches:
         path = Path(path_str)
@@ -86,7 +91,7 @@ def _collect_file_snippets(
         content = _read_snippet(path, None, min(remaining, 20))
         if not content:
             continue
-        snippets.append(f"### {path}\\n```\\n" + "\\n".join(content) + "\\n```")
+        snippets.append(f"### {path}\n```\n" + "\n".join(content) + "\n```")
         remaining -= len(content)
 
     for path, line_no in _extract_trace_files(error_text):
@@ -98,7 +103,7 @@ def _collect_file_snippets(
         if not content:
             continue
         header = f"### {path} (line {line_no})"
-        snippets.append(header + "\\n```\\n" + "\\n".join(content) + "\\n```")
+        snippets.append(header + "\n```\n" + "\n".join(content) + "\n```")
         remaining -= len(content)
 
     return snippets
@@ -113,22 +118,22 @@ def _build_prompt(context: PromptContext) -> str:
         context.error_text.strip(),
         "",
         "# 最後 N 行 logs",
-        "\\n".join(context.logs) if context.logs else "（無）",
+        "\n".join(context.logs) if context.logs else "（無）",
         "",
         "# 環境",
-        "\\n".join(f"- {k}: {v}" for k, v in context.environment.items()),
+        "\n".join(f"- {k}: {v}" for k, v in context.environment.items()),
         "",
         "# 已嘗試的修復",
-        "\\n".join(f"- {item}" for item in context.attempted_fixes) if context.attempted_fixes else "- 無",
+        "\n".join(f"- {item}" for item in context.attempted_fixes) if context.attempted_fixes else "- 無",
         "",
         "# 相關檔案片段",
-        "\\n\\n".join(context.file_snippets) if context.file_snippets else "（無）",
+        "\n\n".join(context.file_snippets) if context.file_snippets else "（無）",
         "",
         "# 問題",
         "請給最小修改的修復建議，並附上具體 patch（或檔案/函式級指引），",
         "同時列出可執行的 TODO 清單。",
     ]
-    return "\\n".join(sections).strip() + "\\n"
+    return "\n".join(sections).strip() + "\n"
 
 
 def _truncate_lines(lines: Iterable[str], max_lines: int) -> List[str]:
