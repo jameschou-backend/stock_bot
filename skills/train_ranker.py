@@ -383,6 +383,18 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             topk_list=eval_topk_list,
         )
 
+        # ── 兩段式訓練：holdout 模型只做上方評估指標，正式部署模型用全部資料重訓 ──
+        # 回測每期訓練到 cutoff 為止（無 holdout）；若部署模型也扣掉最近 6 個月，
+        # 會系統性少學最新 regime，與回測驗證的行為不一致（2026-07-03 對齊尾項）。
+        full_sample_weight = None
+        if bool(getattr(config, "train_liq_weighting", True)) and _amt20_raw is not None:
+            full_sample_weight = _liquidity_sample_weight(_amt20_raw)
+        model, engine = _build_model(
+            feature_matrix.values,
+            df["future_ret_h"].astype(float).values,
+            sample_weight=full_sample_weight,
+        )
+
         # ── 特徵重要度（LightGBM 原生支援）──
         importance = {}
         if _HAS_LGBM and hasattr(model, "feature_importances_"):
@@ -394,6 +406,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             **metrics_core,
             "train_rows": int(train_X.shape[0]),
             "val_rows": int(val_X.shape[0]),
+            # 正式模型 = 全資料重訓（holdout 模型僅產出上方 val 指標）
+            "final_train_rows": int(feature_matrix.shape[0]),
             "engine": engine,
             "feature_count": len(feature_names),
             # P1-5 對齊資訊（追溯部署模型與回測配置是否一致）
