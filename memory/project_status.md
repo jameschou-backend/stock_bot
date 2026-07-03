@@ -1,6 +1,39 @@
 # 專案現況
 
-> 最後更新：2026-06-24（sponsor 到期日搶抓還原股價）
+> 最後更新：2026-07-03（全面健檢：發現生產選股 index 錯位 P0）
+
+---
+
+## 2026-07-03：全面健檢（4 agent 並行審計）⚠️ 兩個 P0
+
+完整報告：`artifacts/review_pack_health_check_20260703.md`。基線 make test 479 passed 全綠。
+
+**P0-1 生產選股 index 錯位（已人工驗證 + DB 列級實證）**：`daily_pick.py:148` merge 重置 index，
+`:673-675` 用位置 index 對齊 feature_df（11 天×全市場矩陣）→ **自 2026-02-13（commit bd12bd9）起
+所有生產 picks 用「別檔股票、別的日期」的特徵打分**（實證：7/2 pick 8071 的 manifest 特徵值
+精確命中 2059 在 6/17 的列；抽驗 5 檔全 MISMATCH；multi_agent 路徑同受害）。
+live-tracking 自 2 月中起無效。修法：isin mask 保留 index / key join + invariant 測試。
+
+**P0-2 adj_close 與未還原 OHLC 混用**：`build_features.py:323-327` 只有 close 用 adj，
+open/high/low 是 raw → ATR/KD/CCI/CMF/trend_persistence 歷史段物理不可能
+（2016 atr_14_pct 中位數 42.8%、kd_d 均值 -281），失真隨時間遞減 = 日期 proxy。
+`atr_inv` 在 CORE、`trend_persistence_inv` 在 PRUNED。**「誠實基準 0.99」建立在損壞特徵上**，
+修完需再全量重建+重訓+重立基準。
+
+**P1 重點**：factor 內部缺日 10.7 萬列 fillna(1.0) 假跳動（populate 應 ffill）；
+rotation buffer 仍是日曆天（C/D 線殘餘 ~6 交易日洩漏）；C/D label 仍用 raw close；
+cache staleness 只比 max_date（歷史重建不失效 cache，可重現性根因更廣）；
+部署模型≠回測模型（87/800/ES vs 58/500/liq-weighted）；MySQL/Parquet 雙寫非原子且靜默 fallback；
+transaction_cost 三處預設不一致 + ×4.1 猜單位；三個每日排程入口並存。
+
+**安全**：無 Critical/High。ai_assist 遮罩 regex 實際壞掉（雙反斜線）、/strategy_runs 假超時凍結
+全 API、.gitignore 2026-* 年份 rollover、git history 含真實持倉（repo 需 private）。
+
+**效能**（量級級別）：trading_date object dtype 全表掃描、每次重訓全量 merge/copy、
+data_store 全量重建稅（也是可重現性事故機制根源）、build_features 每日 MySQL 拉 250 天（fetch 115s）。
+
+**修復順序**：①P0-1 止血+安全小包 → ②P0-2+factor ffill+cache freeze 一波全量重建立基準 v2
+→ ③回測=部署對齊+補測試 → ④效能+scripts 歸檔 40 個 → ⑤C/D 線修正。
 
 ---
 

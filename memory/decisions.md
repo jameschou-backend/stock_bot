@@ -1,6 +1,23 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-06-22（vol-target 重驗 NEGATIVE + 回測可重現性危害）
+> 最後更新：2026-07-03（全面健檢：生產 index 錯位 P0 + adj OHLC 混用 P0）
+
+---
+
+## 2026-07-03：全面健檢發現（影響歷史結論的兩個 P0）
+
+詳見 `artifacts/review_pack_health_check_20260703.md` 與 project_status.md 同日條目。對歷史結論的影響：
+
+1. **2026-02-13 之後的所有 live picks 不反映模型能力**（daily_pick index 錯位，分數來自錯誤股票
+   的特徵）→ 任何「線上表現 vs 回測」的觀察自 2/13 起作廢；修復後才能開始累積有效 live track record。
+2. **「誠實基準 Sharpe 0.99（2026-06-24）」需再修正**：OHLC 混用使 ATR/KD/CCI/CMF/trend_persistence
+   歷史段損壞 + factor 內部缺日假跳動。方向未知（上次修 label 還原後反而變好），修完全量重建後
+   立基準 v2 才可信。
+3. **C/D 研究線全部結論再降級**：rotation buffer 仍日曆天（殘餘 ~6 交易日洩漏）+ label 用 raw close
+   → C/D 的 Sharpe 1.4+ 系列數字偏樂觀程度高於先前認知。
+4. **可重現性危害根因擴大**：除已知 cache 兩臂問題外，max-date-only staleness 使「歷史內容重建」
+   完全不失效 cache；market_above_200ma 增量(250 日曆天不足 200 交易日)與全量值不同 → features
+   本身 path-dependent。凍結快照制度（回測預設 FREEZE + content hash）列為基準 v2 前置條件。
 
 ---
 
