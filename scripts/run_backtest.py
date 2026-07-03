@@ -42,6 +42,7 @@ if str(ROOT) not in sys.path:
 
 from app.config import load_config
 from app.db import get_session
+from skills import data_store
 from skills.backtest import compute_hedged_metrics, run_backtest
 from skills.build_features import BASELINE_FEATURE_COLS, CHANGE_A_FEATURE_COLS, PRUNED_FEATURE_COLS
 from skills.mlflow_tracking import (
@@ -50,6 +51,51 @@ from skills.mlflow_tracking import (
     log_params,
     start_mlflow_run,
 )
+
+
+def production_baseline_overrides() -> dict:
+    """生產基準配置 preset（--production-baseline 一鍵套用）。
+
+    對應 CLAUDE.md「生產 CLI 指令」+ 生產 universe 流動性門檻，消除手打旗標漂移：
+        --topn 30 --seasonal-filter --no-stoploss
+        --market-filter-tiers="-0.05:0.5,-0.10:0.25,-0.15:0.10" --market-filter-min-pos 2
+        --liq-weighted --pruned-features --min-avg-turnover 0.5
+
+    內容由 tests/test_production_invariants.py 鎖定；變更生產配置須同步改測試 + CLAUDE.md。
+    CLI 顯式旗標優先於本 preset（見 main() 內套用邏輯）。
+    """
+    return {
+        "topn": 30,
+        "enable_seasonal_filter": True,
+        "no_stoploss": True,
+        "market_filter_tiers": "-0.05:0.5,-0.10:0.25,-0.15:0.10",
+        "market_filter_min_positions": 2,
+        "liquidity_weighting": True,
+        "pruned_features": True,
+        "min_avg_turnover": 0.5,  # 億元；對齊生產 daily_pick universe 門檻（config.min_avg_turnover）
+    }
+
+
+def resolve_round_trip_cost(cli_cost, config) -> tuple:
+    """解析「來回」交易成本（P2-7a：消除 <0.005 猜單位 silent fallback）。
+
+    優先序：
+      1. CLI --transaction-cost / --cost（來回，語義照舊）
+      2. config.transaction_cost_round_trip（來回，顯式設定）
+      3. config.transaction_cost_pct × 4.1（單邊→來回顯式換算：
+         買 0.1425% + 賣 0.1425% + 證交稅 0.3% ≈ 單邊 × 4.1）
+
+    Returns:
+        (round_trip_cost, source_tag)
+    """
+    if cli_cost is not None:
+        return float(cli_cost), "cli"
+    _rt = getattr(config, "transaction_cost_round_trip", None)
+    if _rt is not None:
+        return float(_rt), "config.transaction_cost_round_trip"
+    _one_way = float(config.transaction_cost_pct)
+    _round_trip = _one_way * 4.1
+    return _round_trip, "config.transaction_cost_pct*4.1"
 
 
 def main():
@@ -62,7 +108,13 @@ def main():
     parser.add_argument("--months", type=int, default=24, help="回測月數 (預設 24)")
     parser.add_argument("--retrain-freq", type=int, default=3, help="模型重訓頻率（月，預設 3）")
     parser.add_argument("--topn", type=int, default=None, help="每期選股數量 (預設使用 config)")
-    parser.add_argument("--cost", type=float, default=None, help="來回交易成本 (如 0.00585)")
+    parser.add_argument("--cost", "--transaction-cost", type=float, default=None,
+                        dest="cost", help="來回交易成本 (如 0.00585)")
+    parser.add_argument("--production-baseline", action="store_true",
+                        dest="production_baseline",
+                        help="一鍵套用生產基準配置（topn=30、seasonal-filter、no-stoploss、"
+                             "market-filter-tiers、min-pos=2、liq-weighted、pruned-features、"
+                             "min-avg-turnover=0.5）。CLI 顯式旗標優先於 preset。")
 
     # ── 出場策略 ──
     stop_group = parser.add_mutually_exclusive_group()
@@ -267,12 +319,36 @@ def main():
     args = parser.parse_args()
     config = load_config()
 
+    # ── --production-baseline preset：一鍵套用生產配置 ──
+    # CLI 顯式旗標優先：僅在該參數仍為 argparse 預設值時才由 preset 覆蓋。
+    # 限制：store_true 旗標（seasonal/liq-weighted/pruned）preset 只會「開啟」不會關閉；
+    # 與 parser 預設值相同的顯式輸入（如 --market-filter-min-pos 1）無法與預設區分，會被 preset 覆蓋。
+    if getattr(args, "production_baseline", False):
+        _pb = production_baseline_overrides()
+        if args.topn is None:
+            args.topn = _pb["topn"]
+        args.enable_seasonal_filter = args.enable_seasonal_filter or _pb["enable_seasonal_filter"]
+        # 停損：使用者未顯式指定任何停損旗標時才套 no-stoploss
+        if args.stoploss is None and not args.no_stoploss and args.atr_stoploss_multiplier is None:
+            args.no_stoploss = _pb["no_stoploss"]
+        if args.market_filter_tiers is None:
+            args.market_filter_tiers = _pb["market_filter_tiers"]
+        if args.market_filter_min_positions == parser.get_default("market_filter_min_positions"):
+            args.market_filter_min_positions = _pb["market_filter_min_positions"]
+        args.liquidity_weighting = args.liquidity_weighting or _pb["liquidity_weighting"]
+        args.pruned_features = args.pruned_features or _pb["pruned_features"]
+        if args.min_avg_turnover == parser.get_default("min_avg_turnover"):
+            args.min_avg_turnover = _pb["min_avg_turnover"]
+        print(f"[production-baseline] 套用生產基準 preset: {_pb}")
+
     # ── 解析參數（優先命令列，其次 config.yaml）──
     topn = args.topn or config.topn
-    cost = args.cost if args.cost is not None else (
-        config.transaction_cost_pct * 4.1  # 單邊→來回（0.1425%×2 + 0.3%稅）
-        if config.transaction_cost_pct < 0.005 else config.transaction_cost_pct
-    )
+    # P2-7a：來回成本顯式解析（CLI > config.transaction_cost_round_trip > 單邊 ×4.1）
+    cost, _cost_source = resolve_round_trip_cost(args.cost, config)
+    if _cost_source == "config.transaction_cost_pct*4.1":
+        print(f"[cost] 單邊 {config.transaction_cost_pct:.6f} → 來回 {cost:.6f}（×4.1 稅費倍率）")
+    else:
+        print(f"[cost] 來回 {cost:.6f}（來源: {_cost_source}）")
 
     if args.no_stoploss:
         stoploss = 0.0
@@ -378,6 +454,17 @@ def main():
                 if not k.startswith("mlflow_") and k not in ("output",)
             }
             log_params(_cli_params, mlflow_run=_mlflow_run)
+
+        # ── 資料快照身分（實驗可重現性記錄，2026-06-22 危害防護）──
+        # 回測資料一律經 skills.data_store parquet cache 載入（backtest.prepare 內）；
+        # 開跑前先記一次，跑完再記一次——若兩者不同代表 cache 在本次 run 中被重建，
+        # 正是「同指令跑出 Sharpe 1.035 / 0.805」事故的機制，必須留痕。
+        try:
+            _snap_pre = data_store.snapshot_info()
+        except Exception as _snap_exc:  # snapshot 失敗不阻斷回測
+            _snap_pre = {"error": str(_snap_exc)}
+        print(f"[snapshot] pre-run data snapshot: {json.dumps(_snap_pre, ensure_ascii=False, default=str)}")
+
         result = run_backtest(
             config=config,
             db_session=session,
@@ -432,6 +519,23 @@ def main():
             recent_dd_skip_pct=getattr(args, "recent_dd_skip_pct", 0.0),
             max_per_sector=getattr(args, "max_per_sector", 0),
         )
+
+        # ── 資料快照（run 後）寫入結果 JSON ──
+        try:
+            _snap_post = data_store.snapshot_info()
+        except Exception as _snap_exc:
+            _snap_post = {"error": str(_snap_exc)}
+        result["data_snapshot"] = {
+            # BacktestPipeline.prepare() 一律經 skills.data_store parquet cache 載入
+            "data_source": "data_store_parquet",
+            "pre_run": _snap_pre,
+            "post_run": _snap_post,
+            "cache_rebuilt_during_run": _snap_pre != _snap_post,
+        }
+        print(f"[snapshot] post-run data snapshot: {json.dumps(_snap_post, ensure_ascii=False, default=str)}")
+        if _snap_pre != _snap_post:
+            print("[snapshot] ⚠️ 資料快照在本次 run 期間改變（cache 重建）——"
+                  "本結果與同指令其他 run 不可直接比較（可重現性危害）")
 
         # ── Stage 10.6：beta-hedge 後處理 ──
         _hedge_ratio = getattr(args, "hedge_ratio", 0.0)

@@ -37,6 +37,7 @@ from sqlalchemy.orm import Session
 
 from app.models import Feature, Label, RawPrice, Stock
 from skills import data_store, risk
+from skills.model_params import RANKER_PROD_PARAMS
 from skills.breakthrough import (
     precompute_stats as _precompute_breakthrough_stats,
     compute_breakthrough_map as _compute_breakthrough_map,
@@ -100,6 +101,24 @@ def _parse_features(series: pd.Series) -> pd.DataFrame:
     return _parse_features_json_shared(series)
 
 
+def select_market_filter_tier(
+    prev_bm_return: float,
+    tiers: List[tuple],
+) -> Tuple[Optional[float], float]:
+    """漸進式大盤過濾的 tier 選擇（純函數，抽出供行為鎖定測試）。
+
+    tiers 由淺到深排序（如 [(-0.05, 0.5), (-0.10, 0.25), (-0.15, 0.10)]），
+    從最深的 tier 往淺找第一個 `prev_bm_return < threshold` 匹配者。
+
+    Returns:
+        (matched_threshold, multiplier)；無匹配時 (None, 1.0)（不降倉）。
+    """
+    for _thr, _mult in reversed(list(tiers)):
+        if prev_bm_return < _thr:
+            return float(_thr), float(_mult)
+    return None, 1.0
+
+
 def _train_model(
     train_X: np.ndarray,
     train_y: np.ndarray,
@@ -136,20 +155,9 @@ def _train_model(
             model.fit(train_X, train_y, group=train_groups, sample_weight=sample_weight)
         else:
             # Regression 模式（現行預設）
-            model = lgb.LGBMRegressor(
-                n_estimators=n_est,
-                learning_rate=0.05,
-                max_depth=6,
-                num_leaves=31,
-                subsample=0.8,
-                colsample_bytree=0.8,
-                reg_alpha=0.1,
-                reg_lambda=0.1,
-                min_child_samples=50,
-                random_state=42,
-                n_jobs=-1,
-                verbose=-1,
-            )
+            # P1-5 回測=部署對齊：與 train_ranker._build_model 共用 RANKER_PROD_PARAMS
+            # （skills/model_params.py），改參數只能改常數，不可在兩處各寫一份。
+            model = lgb.LGBMRegressor(**{**RANKER_PROD_PARAMS, "n_estimators": n_est})
             model.fit(train_X, train_y, sample_weight=sample_weight)
     else:
         n_est_gbr = 100 if fast_mode else 300
@@ -1459,15 +1467,20 @@ class BacktestPipeline:
             # ── 季節性降倉（弱勢月份）──
             _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
             _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+            # 此處 topn_floor=1 是「刻意」：complex_filter 路徑的實際下限統一由下方
+            # 「topN 絕對下限保護」執行（極端空頭 3 檔，一般 config.seasonal_topn_floor），
+            # 與 daily_pick.py 的 _dp_min_topn（3 if extreme_bear else 5）邏輯一致。
+            # 季節性縮減本身不各自設 floor，避免兩層 floor 語義打架。
             effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
                 effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=1
             )
             if _reduced:
                 print(f"  [{rb_date}] 弱勢月份 {rb_date.month}月（complex_filter），topN → {effective_topn}")
 
-            # ── topN 絕對下限保護 ──
+            # ── topN 絕對下限保護（一般下限讀 config.seasonal_topn_floor，預設 5）──
             _extreme_bear = weekly_drop is not None and weekly_drop < -0.10
-            _min_topn = 3 if _extreme_bear else 5
+            _s_floor = int(getattr(config, "seasonal_topn_floor", 5))
+            _min_topn = 3 if _extreme_bear else _s_floor
             if effective_topn < _min_topn:
                 print(f"  [{rb_date}] [topN-floor] {effective_topn}→{_min_topn} (min_topn={_min_topn})")
                 effective_topn = _min_topn
@@ -1520,11 +1533,14 @@ class BacktestPipeline:
                 print(f"  [{rb_date}] 大盤環境不佳 (20日中位數 {median_ret:.2%})，topN → {effective_topn}")
 
         # ── 獨立季節性降倉（enable_complex_filter=False 時也可啟用，對應 daily_pick 行為）──
+        # 生產 CLI（--seasonal-filter，enable_complex_filter=False）走的是「這條」路徑；
+        # floor 統一讀 config.seasonal_topn_floor（預設 5，與 daily_pick 一般情況一致）。
         if not enable_complex_filter and enable_seasonal_filter:
             _s_weak = tuple(getattr(config, "seasonal_weak_months", (3, 10)))
             _s_mult = float(getattr(config, "seasonal_topn_multiplier", 0.5))
+            _s_floor = int(getattr(config, "seasonal_topn_floor", 5))
             effective_topn, _reduced = risk.apply_seasonal_topn_reduction(
-                effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=5
+                effective_topn, rb_date.month, weak_months=_s_weak, multiplier=_s_mult, topn_floor=_s_floor
             )
             if _reduced:
                 print(f"  [{rb_date}] seasonal_filter: 月份{rb_date.month} topN → {effective_topn}")
@@ -1790,20 +1806,17 @@ class BacktestPipeline:
         if len(period_results) > 0 and (self.market_filter or self.market_filter_tiers):
             _prev_bm = period_results[-1].get("benchmark_return", 0.0)
             if self.market_filter_tiers:
-                # 漸進式：按 tiers 從深到淺匹配（tiers 須由淺到深排序）
-                _applied = False
-                for _thr, _mult in reversed(self.market_filter_tiers):
-                    if _prev_bm < _thr:
-                        _mf_multiplier = _mult
-                        _mf_new = max(1, int(effective_topn * _mult))
-                        if _mult <= 0:
-                            _market_filter_skip = True
-                            print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，本期持現金")
-                        elif _mf_new < len(picks):
-                            picks = picks.head(_mf_new)
-                            print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，持股×{_mult}→{_mf_new}")
-                        _applied = True
-                        break
+                # 漸進式：tier 選擇委派給 select_market_filter_tier 純函數（行為鎖定測試用）
+                _thr, _mult = select_market_filter_tier(_prev_bm, self.market_filter_tiers)
+                if _thr is not None:
+                    _mf_multiplier = _mult
+                    _mf_new = max(1, int(effective_topn * _mult))
+                    if _mult <= 0:
+                        _market_filter_skip = True
+                        print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，本期持現金")
+                    elif _mf_new < len(picks):
+                        picks = picks.head(_mf_new)
+                        print(f"  [{rb_date}] market_filter_tiers: 前期大盤 {_prev_bm:+.2%} < {_thr:.0%}，持股×{_mult}→{_mf_new}")
             elif self.market_filter:
                 # 原始二階段過濾
                 if _prev_bm < -0.10:
@@ -1817,6 +1830,30 @@ class BacktestPipeline:
                         picks = picks.head(_mf_new)
                         print(f"  [{rb_date}] market_filter: 前期大盤 {_prev_bm:+.2%} < -5%，持股減半→{_mf_new}")
         return picks, _market_filter_skip, _mf_multiplier
+
+    # ── Helper：market_filter 後最低持股數保護（抽出供行為鎖定測試）──
+    def _apply_min_positions(
+        self,
+        picks: pd.DataFrame,
+        day_feat: pd.DataFrame,
+        rb_date: date,
+        market_filter_skip: bool,
+    ) -> pd.DataFrame:
+        """market_filter_min_positions 下限：持股不足時從 day_feat 依 score 補位。
+
+        行為與原 run() 內嵌版本 byte-identical：skip（持現金）期不補位。
+        """
+        market_filter_min_positions = self.market_filter_min_positions
+        if market_filter_skip or market_filter_min_positions <= 1 or len(picks) >= market_filter_min_positions:
+            return picks
+        _need = market_filter_min_positions - len(picks)
+        _existing_sids = set(picks["stock_id"].astype(str).tolist())
+        _candidates = day_feat[~day_feat["stock_id"].astype(str).isin(_existing_sids)].sort_values("score", ascending=False)
+        _backfill = _candidates.head(_need)
+        if not _backfill.empty:
+            picks = pd.concat([picks, _backfill[picks.columns]], ignore_index=True)
+            print(f"  [{rb_date}] min_positions: {len(picks)-len(_backfill)}→{len(picks)}（補{len(_backfill)}檔）")
+        return picks
 
     # ── Helper：大盤等權基準（向量化）──
     def _compute_benchmark_return(
@@ -1897,7 +1934,6 @@ class BacktestPipeline:
         clip_loss_pct          = self.clip_loss_pct
         cap_daily_return_pct   = self.cap_daily_return_pct
         atr_dynamic_stoploss   = self.atr_dynamic_stoploss
-        market_filter_min_positions = self.market_filter_min_positions
         ensemble_n_checkpoints = self.ensemble_n_checkpoints
         _use_rolling_window    = self._use_rolling_window
         _wf_cb                 = self.portfolio_circuit_breaker_pct
@@ -2075,15 +2111,8 @@ class BacktestPipeline:
                 picks, period_results, rb_date, effective_topn,
             )
 
-            # ── 最低持股數保護（market_filter_min_positions）──
-            if not _market_filter_skip and market_filter_min_positions > 1 and len(picks) < market_filter_min_positions:
-                _need = market_filter_min_positions - len(picks)
-                _existing_sids = set(picks["stock_id"].astype(str).tolist())
-                _candidates = day_feat[~day_feat["stock_id"].astype(str).isin(_existing_sids)].sort_values("score", ascending=False)
-                _backfill = _candidates.head(_need)
-                if not _backfill.empty:
-                    picks = pd.concat([picks, _backfill[picks.columns]], ignore_index=True)
-                    print(f"  [{rb_date}] min_positions: {len(picks)-len(_backfill)}→{len(picks)}（補{len(_backfill)}檔）")
+            # ── 最低持股數保護（market_filter_min_positions，抽至 helper 供測試）──
+            picks = self._apply_min_positions(picks, day_feat, rb_date, _market_filter_skip)
 
             if _market_filter_skip:
                 # 全現金：0% 報酬

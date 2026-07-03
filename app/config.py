@@ -113,6 +113,18 @@ class AppConfig:
     selection_mode: str = "model"
     multi_agent_topn: int = 20
     multi_agent_weights: dict = None
+    # ── 回測=部署對齊（2026-07-03 P1-5）──
+    # train_ranker 預設用 PRUNED_FEATURE_COLS（58 特徵），與生產回測 CLI `--pruned-features` 一致
+    train_use_pruned_features: bool = True
+    # train_ranker 流動性加權訓練 sample_weight ∝ log(1+amt_20)，與生產回測 CLI `--liq-weighted` 一致
+    train_liq_weighting: bool = True
+    # ── 交易成本（P2-7a：消除 ×4.1 猜單位 silent fallback）──
+    # 「來回」交易成本顯式設定；None = 未設定，run_backtest 以 transaction_cost_pct × 4.1 顯式換算。
+    # 注意：transaction_cost_pct 維持「單邊」語義不變。
+    transaction_cost_round_trip: float | None = None
+    # ── 季節性降倉 topN 下限 ──
+    # 統一 backtest.py 兩處 apply_seasonal_topn_reduction 呼叫點與 daily_pick 一般情況（floor=5）
+    seasonal_topn_floor: int = 5
 
     @property
     def db_url(self) -> str:
@@ -261,4 +273,12 @@ def load_config() -> AppConfig:
         enable_overheat_filter=str(pick("ENABLE_OVERHEAT_FILTER", "false")).lower() in {"1", "true"},
         overheat_rsi_threshold=float(pick("OVERHEAT_RSI_THRESHOLD", 75.0)),
         enable_breakthrough_entry=str(pick("ENABLE_BREAKTHROUGH_ENTRY", "true")).lower() in {"1", "true"},
+        train_use_pruned_features=str(pick("TRAIN_USE_PRUNED_FEATURES", "true")).lower() in {"1", "true"},
+        train_liq_weighting=str(pick("TRAIN_LIQ_WEIGHTING", "true")).lower() in {"1", "true"},
+        transaction_cost_round_trip=(
+            float(pick("TRANSACTION_COST_ROUND_TRIP", "nan"))
+            if pick("TRANSACTION_COST_ROUND_TRIP", None) not in {None, "null", "None", ""}
+            else None
+        ),
+        seasonal_topn_floor=int(pick("SEASONAL_TOPN_FLOOR", 5)),
     )

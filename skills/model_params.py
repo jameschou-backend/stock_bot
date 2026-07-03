@@ -23,3 +23,12 @@ LGBM_BASE_PARAMS: dict = dict(
     n_jobs=-1,
     verbose=-1,
 )
+
+# ── 生產排名模型共用超參數（2026-07-03 P1-5：回測=部署對齊）──
+# skills/backtest.py `_train_model`（regression 路徑）與 skills/train_ranker.py `_build_model`
+# 必須引用同一組參數，否則「部署模型 ≠ 回測驗證過的模型」。
+# 以 backtest 現行（被 10y walk-forward 驗證過）的參數為準：
+#   500 樹、無 early stopping、min_child_samples=50（Regressor 用 50，與 LGBM_BASE_PARAMS 註解一致）。
+# train_ranker 舊行為（800 樹 + early_stopping(50)）已向回測收斂。
+# 注意：本常數為「新增」，LGBM_BASE_PARAMS 既有值不可更動（C/D pick / rotation 仍引用）。
+RANKER_PROD_PARAMS: dict = {**LGBM_BASE_PARAMS, "min_child_samples": 50}
