@@ -91,6 +91,16 @@ else
     echo "!!! TG push FAILED" | tee -a "$LOG"
 fi
 
+# 4) Live 特徵一致性哨兵（P0-1 型錯位偵測：picks 特徵值必須 == features 表）
+#    失敗不中斷（訊號已推播），但立即 TG 告警——這類 bug 曾潛伏五個月
+echo ">>> [4/4] pick sanity sentinel" | tee -a "$LOG"
+if $PYTHON scripts/reconcile_live_vs_backtest.py --sanity >> "$LOG" 2>&1; then
+    echo ">>> sanity OK" | tee -a "$LOG"
+else
+    echo "!!! sanity MISMATCH" | tee -a "$LOG"
+    tg_send "🚨 Stock_bot pick 特徵錯位（P0-1 型）$(date '+%F %H:%M')！今日訊號分數不可信，請檢查 $LOG"
+fi
+
 echo "==== $(date) END ====" | tee -a "$LOG"
 
 # 清掉 30 天前 logs
