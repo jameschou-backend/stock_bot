@@ -31,7 +31,7 @@ from sqlalchemy.orm import Session
 
 from app.job_utils import finish_job, start_job
 from app.market_calendar import calculate_lag_trading_days, get_latest_trading_day, get_recent_trading_days
-from app.models import Pick, RawInstitutional, RawMarginShort, RawPrice
+from app.models import Pick, PriceAdjustFactor, RawInstitutional, RawMarginShort, RawPrice
 
 
 # ---------- 常數設定（預設值，可被 config 覆蓋）----------
@@ -368,6 +368,13 @@ def check_data_quality(session: Session, config) -> QualityReport:
     issues.extend(ct_issues)
     metrics.update(ct_metrics)
 
+    # === 4.5 adj factor 新鮮度 ===
+    adj_issues, adj_metrics = _check_adj_factor_freshness(
+        session, max_lag_days=int(getattr(config, "dq_adj_factor_max_lag_days", 7))
+    )
+    issues.extend(adj_issues)
+    metrics.update(adj_metrics)
+
     # === 5. 計算整體指標 ===
     metrics["total_issues"] = len(issues)
     metrics["error_count"] = len([i for i in issues if i.severity == "error"])
@@ -459,6 +466,48 @@ def _check_price_spikes(
     except Exception as exc:
         metrics["price_spike_check_error"] = str(exc)
 
+    return issues, metrics
+
+
+def _check_adj_factor_freshness(
+    session: Session,
+    max_lag_days: int = 7,
+) -> Tuple[List[QualityIssue], Dict[str, object]]:
+    """adj factor 新鮮度：price_adjust_factors 最新日落後 raw_prices 最新日超過 N 天。
+
+    背景：FinMind adj 快照凍結於 2026-06-23（sponsor 過期），除息旺季新事件未調整
+    會讓 daily 重訓逐步學到髒 label。目前 daily pipeline 會替新交易日補 trailing
+    factor（=1.0），此檢查在「補值流程斷掉」時提醒。Phase 1 官方 factor 引擎
+    （skills/official_adj_factors.py）尚未切換生產，故僅記 warning 不 fail；
+    切換後應改為 error。
+
+    Returns:
+        (issues, metrics)
+    """
+    issues: List[QualityIssue] = []
+    metrics: Dict[str, object] = {}
+    try:
+        adj_max = session.query(func.max(PriceAdjustFactor.trading_date)).scalar()
+        price_max = session.query(func.max(RawPrice.trading_date)).scalar()
+        metrics["adj_factor_max_date"] = adj_max.isoformat() if adj_max else None
+        if adj_max is None or price_max is None:
+            # 空表（fresh install / 測試環境）不視為新鮮度問題
+            return issues, metrics
+
+        lag_days = max((price_max - adj_max).days, 0)
+        metrics["adj_factor_lag_vs_prices_days"] = lag_days
+        if lag_days > max_lag_days:
+            issues.append(QualityIssue(
+                category="adj_factor_stale",
+                message=(
+                    f"price_adjust_factors 最新日 {adj_max.isoformat()} 落後 raw_prices "
+                    f"{price_max.isoformat()} 達 {lag_days} 天 (上限 {max_lag_days})；"
+                    f"新除權息事件未調整會污染特徵/label（見 skills/official_adj_factors.py）"
+                ),
+                severity="warning",  # Phase 1：官方 factor 引擎切換生產後改 error
+            ))
+    except Exception as exc:
+        metrics["adj_factor_freshness_check_error"] = str(exc)
     return issues, metrics
 
 
