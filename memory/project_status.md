@@ -1,6 +1,35 @@
 # 專案現況
 
-> 最後更新：2026-07-03（全面健檢：發現生產選股 index 錯位 P0）
+> 最後更新：2026-07-10（系統總體檢報告：功能缺口/缺陷/替代邏輯/路線圖/資金配置）
+
+---
+
+## 2026-07-10：系統總體檢報告（9-agent workflow + 3 道對抗審查）
+
+完整報告：`artifacts/quant_system_gap_analysis_20260710.md`。核心結論：
+
+**壓倒一切的裂縫**：被驗證的（A，Sharpe 0.647）買不起也沒在跑；被交易的（D，daily_run.sh 每日推播）
+**2026-07-03 修復後從未重驗**——docstring 還掛著損壞特徵時代的 +976,990%/1.925。
+
+**新發現的高嚴重度缺陷**：
+- 【已驗證】benchmark 每月被扣全額來回成本（backtest.py:1316,2108）→ 主臂「超額 +321%」誠實口徑
+  剩約 **+105~135pp（年化 +2.6pp）**；headline 需再修
+- entry_delay=0 + T 日盤後籌碼 = 買在資訊上不可能的價格（**無條件改 delay=1 為 headline 口徑**，
+  對照只為歸因、須同快照配對）
+- 個人口徑臂不存在（100 萬/30 檔=3.3 萬/檔，>33 元買不起一張）；「+539pp 微型股 alpha」是
+  未 audit 上界（該 segment 資料最爛：無 adj 下市股+TPEx factor 缺+clip 集中）
+- meta-overfitting 三規則：讀 2023-2026 計 trials_count 進 DSR；生產觸碰打 paper NAV 版本標記；
+  **live 24 個月 t-stat≈0.9，無法證明 alpha**，只能驗執行品質與災難失效
+
+**90 天單線程路線圖**：①D 重驗（判準預登記）+訊號價 paper NAV+月營收公告日 forward 爬蟲
+→ ②ex-date 止血+adj factor 自算（TWSE+TPEx+減資，誠實工期 3-4 週獨佔）+benchmark 修正+
+bootstrap/DSR 接進回測 → ③sanity gate+處置股 live filter+2023-24 診斷（判定規則先寫死）。
+90 天後：personal-baseline 第三臂（門檻機械推導不掃描、滑價敏感度區間）、PEAD 事件臂
+（deadline 口徑下界）、殘差動能（先過 cs-norm 機制區分論證）。
+**明確不做**：Barra/優化器/框架遷移/live A/B/tranche 化/隔日沖分點/F-Score（backlog）。
+
+**資金配置建議（階段一）**：真金 ≤20-30 萬跟訊號、70-80 萬 0050/現金，直到 D 重驗與
+adj factor 完工——現在最大的風險敞口是模型風險不是市場風險。
 
 ---
 
