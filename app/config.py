@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import sys
 from dataclasses import dataclass
 import json
 from pathlib import Path
@@ -79,7 +80,9 @@ class AppConfig:
     # 回測進階設定
     backtest_entry_delay_days: int = 1
     backtest_risk_free_rate: float = 0.015
-    backtest_benchmark_with_cost: bool = True
+    # backtest_benchmark_with_cost 已退役（2026-07-10 缺陷 3 修復）：benchmark 預設
+    # zero_cost，敏感度分析改用 CLI --benchmark-tc。欄位刪除，env 顯式設定會在
+    # load_config 印告警（見 _warn_retired_keys），避免 silent no-op。
     backtest_position_sizing: str = "vol_inverse"
     backtest_trailing_stop_pct: float = -0.12
     backtest_atr_stoploss_multiplier: float = None
@@ -87,6 +90,8 @@ class AppConfig:
     # 過熱過濾器
     enable_overheat_filter: bool = False
     overheat_rsi_threshold: float = 75.0
+    # 處置股 live-only 過濾（daily_pick 執行衛生；官方名單異常時可經 env 關閉止血）
+    enable_disposition_filter: bool = True
     # 突破確認進場（F+ 策略，生產選股標記用）
     enable_breakthrough_entry: bool = True  # 是否標記今日突破狀態並輸出三清單
     # API Rate Limiting
@@ -107,6 +112,7 @@ class AppConfig:
     dq_coverage_ratio_margin: float = 0.5  # raw_margin_short 覆蓋率門檻
     dq_max_lag_trading_days: int = 1  # 允許最大落後交易日數
     dq_max_stale_calendar_days: int = 5  # 允許最大落後日曆天數
+    dq_adj_factor_max_lag_days: int = 7  # adj factor 落後 raw_prices 天數上限（新鮮度守望）
     eval_topk_list: Tuple[int, ...] = (10, 20)
     dashboard_show_ml: bool = False
     data_quality_mode: str = "strict"
@@ -172,11 +178,29 @@ def _parse_eval_topk_list(raw_value: Any) -> Tuple[int, ...]:
     return tuple(values) if values else (10, 20)
 
 
+# 已退役的 config key → 告警訊息（顯式設定被忽略時不可 silent no-op）
+_RETIRED_KEYS: Dict[str, str] = {
+    "BACKTEST_BENCHMARK_WITH_COST": (
+        "已退役（2026-07-10 缺陷 3 修復）：benchmark 預設 zero_cost，此設定不再被讀取。"
+        "敏感度分析請改用 scripts/run_backtest.py --benchmark-tc；"
+        "重現舊口徑請直呼 WalkForwardConfig(benchmark_with_cost=True)。"
+    ),
+}
+
+
+def _warn_retired_keys(base: Dict[str, Any]) -> None:
+    """顯式設定了已退役 key（env 或 config.yaml）→ 印告警，不可靜默忽略。"""
+    for key, msg in _RETIRED_KEYS.items():
+        if _get_env(key) is not None or key in base:
+            print(f"[config][WARN] {key} {msg}", file=sys.stderr)
+
+
 def load_config() -> AppConfig:
     if load_dotenv is not None:
         load_dotenv(ENV_PATH, override=False)
 
     base = _read_yaml(CONFIG_PATH)
+    _warn_retired_keys(base)
 
     def pick(key: str, default: Any) -> Any:
         env_val = _get_env(key)
@@ -254,6 +278,7 @@ def load_config() -> AppConfig:
         dq_coverage_ratio_margin=float(pick("DQ_COVERAGE_RATIO_MARGIN", 0.5)),
         dq_max_lag_trading_days=int(pick("DQ_MAX_LAG_TRADING_DAYS", 1)),
         dq_max_stale_calendar_days=int(pick("DQ_MAX_STALE_CALENDAR_DAYS", 5)),
+        dq_adj_factor_max_lag_days=int(pick("DQ_ADJ_FACTOR_MAX_LAG_DAYS", 7)),
         eval_topk_list=_parse_eval_topk_list(pick("EVAL_TOPK_LIST", "10,20")),
         dashboard_show_ml=str(pick("DASHBOARD_SHOW_ML", "0")).lower() in {"1", "true"},
         data_quality_mode=str(pick("DATA_QUALITY_MODE", "strict")).lower(),
@@ -265,13 +290,13 @@ def load_config() -> AppConfig:
         ),
         backtest_entry_delay_days=int(pick("BACKTEST_ENTRY_DELAY_DAYS", 1)),
         backtest_risk_free_rate=float(pick("BACKTEST_RISK_FREE_RATE", 0.015)),
-        backtest_benchmark_with_cost=str(pick("BACKTEST_BENCHMARK_WITH_COST", "true")).lower() in {"1", "true"},
         backtest_position_sizing=str(pick("BACKTEST_POSITION_SIZING", "equal")).lower(),
         backtest_trailing_stop_pct=float(pick("BACKTEST_TRAILING_STOP_PCT", "nan")) if pick("BACKTEST_TRAILING_STOP_PCT", None) not in {None, "null", "None", ""} else None,
         backtest_atr_stoploss_multiplier=float(pick("BACKTEST_ATR_STOPLOSS_MULTIPLIER", "nan")) if pick("BACKTEST_ATR_STOPLOSS_MULTIPLIER", None) not in {None, "null", "None", ""} else None,
         backtest_atr_period=int(pick("BACKTEST_ATR_PERIOD", 14)),
         enable_overheat_filter=str(pick("ENABLE_OVERHEAT_FILTER", "false")).lower() in {"1", "true"},
         overheat_rsi_threshold=float(pick("OVERHEAT_RSI_THRESHOLD", 75.0)),
+        enable_disposition_filter=str(pick("ENABLE_DISPOSITION_FILTER", "true")).lower() in {"1", "true"},
         enable_breakthrough_entry=str(pick("ENABLE_BREAKTHROUGH_ENTRY", "true")).lower() in {"1", "true"},
         train_use_pruned_features=str(pick("TRAIN_USE_PRUNED_FEATURES", "true")).lower() in {"1", "true"},
         train_liq_weighting=str(pick("TRAIN_LIQ_WEIGHTING", "true")).lower() in {"1", "true"},

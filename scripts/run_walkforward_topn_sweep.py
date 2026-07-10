@@ -17,6 +17,7 @@ from app.config import load_config
 from app.db import get_session
 from app.models import Feature, Label
 from skills.backtest import run_backtest
+from skills.trial_registry import record_backtest_trial
 
 
 def _year_windows(start_date: date, end_date: date, train_years: int = 5, test_years: int = 1) -> list[tuple[date, date]]:
@@ -92,6 +93,11 @@ def main() -> None:
                     position_sizing="vol_inverse",
                     rebalance_freq="W",
                     min_avg_turnover=0.5,
+                )
+                # 統計紀律：sweep 每個 (topn, window) 評估都進 trial registry
+                record_backtest_trial(
+                    result, months=args.test_years * 12, source="walkforward_topn_sweep",
+                    params={"topn": topn, "test_start": test_start.isoformat()},
                 )
                 s = result.get("summary", {})
                 rows.append(

@@ -267,12 +267,18 @@ def update_taiex_tr_cache(
         .reset_index(drop=True)
     )
 
-    # 原子寫入：tmp + os.replace，避免中斷留下半寫 parquet
+    # 原子寫入：tmp + os.replace，避免中斷留下半寫 parquet。
+    # tmp 檔帶 pid 後綴（同 scripts/crawl_revenue_announcements.py 慣例）：
+    # 兩個 run_backtest 並行（主臂/歸因臂對照）時固定 tmp 檔名會互踩——
+    # 後開者 truncate 先開者正在寫的檔，可能把半寫 parquet 昇級成正式快取。
     path = Path(cache_path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp_path = path.with_suffix(".parquet.tmp")
-    merged.to_parquet(tmp_path, index=False)
-    os.replace(tmp_path, path)
+    tmp_path = path.with_name(f"{path.name}.tmp.{os.getpid()}")
+    try:
+        merged.to_parquet(tmp_path, index=False)
+        os.replace(tmp_path, path)
+    finally:
+        tmp_path.unlink(missing_ok=True)
     return merged
 
 

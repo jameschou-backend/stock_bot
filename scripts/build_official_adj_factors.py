@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -96,12 +97,28 @@ def _fetch_chunk_validated(client: OfficialAdjClient, fetcher_attr: str, parser,
     raise SystemExit(f"chunk 抓取失敗（{fetcher_attr} {c_start}~{c_end}）：{last_exc}")
 
 
+def _write_checkpoint_atomic(ckpt: Path, payload) -> None:
+    """checkpoint 原子寫入（temp + os.replace）。
+
+    直接 write_text 在程序中斷/磁碟滿時會留下截斷 JSON，之後每次 resume 都
+    parse 失敗；tmp 檔帶 pid 後綴避免並行執行互踩。
+    """
+    tmp = ckpt.with_name(f"{ckpt.name}.tmp.{os.getpid()}")
+    try:
+        tmp.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+        os.replace(tmp, ckpt)
+    finally:
+        tmp.unlink(missing_ok=True)
+
+
 def fetch_all_events(client: OfficialAdjClient, start: date, end: date,
                      ckpt_dir: Path, resume: bool) -> pd.DataFrame:
     """四個來源 × chunk 抓取（含 checkpoint 續跑）→ 事件 DataFrame。
 
-    checkpoint 只在 parse 驗證通過後寫入；resume 時若舊 checkpoint parse 失敗
-    （例如先前版本存了暫時性錯誤 payload）會自動重抓。
+    checkpoint 只在 parse 驗證通過後「原子」寫入（temp + os.replace）；
+    resume 時若舊 checkpoint 損壞（截斷 JSON → JSONDecodeError/ValueError）
+    或 parse 失敗（先前版本存了暫時性錯誤 payload → TWSEError）會自動重抓，
+    不需人工刪檔。
     """
     from app.twse_client import TWSEError
     ckpt_dir.mkdir(parents=True, exist_ok=True)
@@ -114,12 +131,15 @@ def fetch_all_events(client: OfficialAdjClient, start: date, end: date,
             if resume and ckpt.exists():
                 try:
                     events = parser(json.loads(ckpt.read_text(encoding="utf-8")))
-                except TWSEError:
-                    print(f"  ⚠ checkpoint {ckpt.name} 內容無效，重抓", flush=True)
+                except (TWSEError, json.JSONDecodeError, ValueError) as exc:
+                    # json.JSONDecodeError 是 ValueError 子類；一併捕 ValueError
+                    # 涵蓋其他損壞形態（如非 UTF-8 殘骸）——損壞即重抓，不 crash
+                    print(f"  ⚠ checkpoint {ckpt.name} 內容無效（{type(exc).__name__}: {exc}），重抓",
+                          flush=True)
             if events is None:
                 payload, events = _fetch_chunk_validated(client, fetcher_attr, parser,
                                                          c_start, c_end)
-                ckpt.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+                _write_checkpoint_atomic(ckpt, payload)
                 src = "http"
             all_events.extend(events)
             print(f"  {kind} {c_start} ~ {c_end}: {len(events)} events ({src})", flush=True)

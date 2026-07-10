@@ -157,13 +157,15 @@ def _make_benchmark_pipeline(min_avg_turnover: float) -> BacktestPipeline:
 def test_benchmark_applies_same_liquidity_threshold_as_strategy():
     """benchmark universe 套用與策略相同的流動性門檻（不流動股不進大盤基準）。"""
     pipe = _make_benchmark_pipeline(min_avg_turnover=0.5)
-    bm = pipe._compute_benchmark_return(date(2024, 1, 2), date(2024, 1, 31))
+    bm, raw = pipe._compute_benchmark_return(date(2024, 1, 2), date(2024, 1, 31))
     # 只含 1101(+10%) 與 1102(-10%) → 等權均值 0；若誤含 1103(+200%) 會變 +66.67%
     assert bm == pytest.approx(0.0, abs=1e-12)
+    assert raw == pytest.approx(0.0, abs=1e-12)
 
 
 def test_benchmark_without_liquidity_filter_includes_all():
     """門檻=0 時 benchmark 不過濾（對照組，確認上面測試差異來自流動性門檻）。"""
     pipe = _make_benchmark_pipeline(min_avg_turnover=0.0)
-    bm = pipe._compute_benchmark_return(date(2024, 1, 2), date(2024, 1, 31))
+    bm, raw = pipe._compute_benchmark_return(date(2024, 1, 2), date(2024, 1, 31))
     assert bm == pytest.approx((0.10 - 0.10 + 2.0) / 3)
+    assert raw == pytest.approx((0.10 - 0.10 + 2.0) / 3)  # tc=0 → 兩口徑相等

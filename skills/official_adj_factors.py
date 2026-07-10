@@ -187,11 +187,22 @@ _EMPTY_STAT_MARKERS = ("沒有符合條件", "查無資料")
 
 
 def _stat_ok(payload: Any, name: str) -> bool:
+    """TWSE payload 有效性判定：必須有 stat=OK 或明確「查無資料」才算有效。
+
+    無 stat 鍵的 dict（error object / CDN 異常 / schema 變更）不可放行——
+    放行會讓 parser 靜默回 0 事件並被 checkpoint 固化，整月除權息事件永久漏抓。
+    """
     if not isinstance(payload, dict):
         raise TWSEError(f"expected dict for {name}, got {type(payload).__name__}")
     stat = payload.get("stat")
-    if stat and stat != "OK":
-        if any(m in stat for m in _EMPTY_STAT_MARKERS):
+    if stat is None:
+        raise TWSEError(
+            f"{name} payload 無 stat 鍵（keys={sorted(map(str, payload))[:8]}），"
+            "無法確認有效性（需重試，不可當空結果）"
+        )
+    stat_s = str(stat)
+    if stat_s != "OK":
+        if any(m in stat_s for m in _EMPTY_STAT_MARKERS):
             logger.info("[official_adj] %s stat=%s（視為空結果）", name, stat)
             return False
         raise TWSEError(f"{name} 回傳暫時性錯誤 stat={stat!r}（需重試，不可當空結果）")
@@ -268,10 +279,33 @@ def parse_twse_capital_reduction(payload: Any) -> List[AdjEvent]:
 
 
 def _tpex_tables_rows(payload: Any, name: str) -> List[list]:
+    """TPEx payload 取列（含 schema 驗證）。
+
+    TPEx www 正常回應為 ``{"date": ..., "tables": [...], "stat": "ok"}``；
+    HTTP 200 的 JSON error object（無 tables 鍵）或 schema 變更若靜默當 0 事件，
+    會被 checkpoint 固化 → 整月除權息事件永久漏抓——必須 raise 讓上游重試。
+    """
     if not isinstance(payload, dict):
         raise TWSEError(f"expected dict for {name}, got {type(payload).__name__}")
+    stat = payload.get("stat")
+    if stat is not None and str(stat).strip().lower() != "ok":
+        stat_s = str(stat)
+        if any(m in stat_s for m in _EMPTY_STAT_MARKERS):
+            logger.info("[official_adj] %s stat=%s（視為空結果）", name, stat)
+            return []
+        raise TWSEError(f"{name} 回傳非 ok stat={stat!r}（需重試，不可當空結果）")
+    if "tables" not in payload:
+        raise TWSEError(
+            f"{name} payload 無 tables 鍵（keys={sorted(map(str, payload))[:8]}），"
+            "非預期 schema / error object（需重試，不可當空結果）"
+        )
+    tables = payload["tables"] or []
+    if not isinstance(tables, list):
+        raise TWSEError(f"{name} tables 非 list（{type(tables).__name__}），非預期 schema")
     rows: List[list] = []
-    for table in payload.get("tables") or []:
+    for table in tables:
+        if not isinstance(table, dict):
+            raise TWSEError(f"{name} tables 元素非 dict（{type(table).__name__}），非預期 schema")
         rows.extend(table.get("data") or [])
     return rows
 

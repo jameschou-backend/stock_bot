@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -59,15 +60,16 @@ from skills.statistics import (
 )
 
 # ── 統計紀律工具化（2026-07-10，總體檢缺陷 6 規則 1）──────────────────────────
-# trial registry：每次 run_backtest 完成 append 一行，供 DSR n_trials 累計。
-TRIAL_REGISTRY_PATH = ROOT / "artifacts" / "experiments" / "trial_registry.jsonl"
-
-# 歷史實驗基數（honest_baseline 慣例：DSR 的 n_trials 寧可高估讓折扣偏嚴）。
-# registry 自 2026-07-10 才開始記錄；在此之前 docs/experiments_history.md 與
-# memory/decisions.md 已記錄 Stage 6.1~10.6、Experiment A~F、Optuna 兩輪（30+ trials）、
-# 圓桌 filter group、vol-target/topn sweep 等歷史實驗，合計約 80 個候選配置，
-# 全數屬同一 selection process，須計入 multiple-testing 折扣。
-HISTORICAL_TRIALS_BASE = 80
+# trial registry 實作移至 skills.trial_registry（單一真相源）：除本 CLI 外，
+# optuna_search / run_grid_backtest / run_walkforward* 等多 trial 工具在每次
+# run_backtest 評估後也 append——「每跑一次回測都算一次 trial」的宣稱語義才成立。
+# 此處 re-export 供既有測試 / 呼叫端向後相容。
+from skills.trial_registry import (  # noqa: E402
+    HISTORICAL_TRIALS_BASE,
+    TRIAL_REGISTRY_PATH,
+    append_trial_registry,
+    registry_trial_count,
+)
 
 # bootstrap CI 固定參數（缺陷 6 規則 1：月報酬 paired block-bootstrap，block~6、1000 次）
 BOOTSTRAP_BLOCK_SIZE = 6
@@ -132,28 +134,6 @@ def resolve_round_trip_cost(cli_cost, config) -> tuple:
 # ──────────────────────────────────────────────
 # 統計紀律：trial registry + bootstrap CI + DSR
 # ──────────────────────────────────────────────
-
-def append_trial_registry(record: dict, registry_path=None) -> int:
-    """append 一行 JSONL 到 trial registry，回傳 append 後總行數。
-
-    registry 是 DSR n_trials 的資料源：每跑一次回測（不論結果好壞）都算一次
-    trial——只記「採用的」會低估 selection bias。
-    """
-    path = Path(registry_path) if registry_path else TRIAL_REGISTRY_PATH
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
-    return registry_trial_count(path)
-
-
-def registry_trial_count(registry_path=None) -> int:
-    """registry 現有行數（不存在 = 0）。"""
-    path = Path(registry_path) if registry_path else TRIAL_REGISTRY_PATH
-    if not path.exists():
-        return 0
-    with open(path, "r", encoding="utf-8") as f:
-        return sum(1 for line in f if line.strip())
-
 
 def compute_statistics_block(result: dict, n_trials: int, risk_free_rate: float) -> dict | None:
     """從回測 result 計算統計紀律區塊（bootstrap Sharpe CI + DSR p-value）。
@@ -291,7 +271,9 @@ def main():
                         dest="benchmark_tc",
                         help="敏感度分析：benchmark 每期扣減成本（來回口徑，如 0.0058425）。"
                              "預設 0 = zero_cost（buy-and-hold 近似）。注意：>0 等同假設 "
-                             "benchmark 每期 100%% 周轉，僅供敏感度對照，不可作 headline")
+                             "benchmark 每期 100%% 周轉，僅供敏感度對照，不可作 headline。"
+                             "僅影響報表的 benchmark_return/超額；market_filter_tiers 降倉"
+                             "訊號讀零成本 market_return_raw，策略臂持倉決策不受本旗標影響")
 
     # ── 10y 逐步優化實驗參數 ──
     parser.add_argument("--baseline", action="store_true",
@@ -505,6 +487,8 @@ def main():
     # 預設 zero_cost（buy-and-hold 近似）；--benchmark-tc X 顯式指定每期扣減值供敏感度分析。
     # 舊 config.backtest_benchmark_with_cost / --no-benchmark-cost 路徑退役（不再假設
     # benchmark 每月 100% 周轉——該假設 120 期複利拖累 ×0.495，虛增超額約 +190pp）。
+    # 口徑/訊號解耦：benchmark_tc 只動報表 benchmark_return；market_filter_tiers 一律讀
+    # 零成本 market_return_raw（skills/backtest.py），敏感度分析不會改變策略臂持倉決策。
     if args.no_benchmark_cost:
         print("[benchmark] --no-benchmark-cost 已 DEPRECATED（零成本已是預設，旗標為 no-op）")
     benchmark_tc_pct = float(args.benchmark_tc)
@@ -699,6 +683,7 @@ def main():
                 _reg_record = {
                     "timestamp": datetime.now().isoformat(timespec="seconds"),
                     "command": " ".join(str(a) for a in sys.argv),
+                    "source": "run_backtest_cli",
                     "sharpe": _summary.get("sharpe_ratio"),
                     "months": args.months,
                     "data_snapshot_summary": _snap_post,
@@ -731,12 +716,27 @@ def main():
                 result["summary"]["statistics"] = None
 
             # ── TR 指數對照臂（機會成本；fetch 失敗 → null，不阻斷）──
-            try:
-                from skills.taiex_tr import compute_vs_taiex_tr
-                _vs_tr = compute_vs_taiex_tr(result.get("equity_curve") or [])
-            except Exception as _tr_exc:
-                print(f"[taiex_tr] vs_taiex_tr 失敗（欄位為 null）: {_tr_exc}")
+            # 口徑前提（skills/taiex_tr.py docstring）：策略側必須是含息 P&L
+            # （BACKTEST_ADJ_PRICE_PARQUET 還原價 overlay）。未設定時策略側少掉
+            # 全部股息（台股約年化 3-4pp）卻與含息 TR 指數相減 → 混合口徑，
+            # 系統性低估策略——直接設 null 拒算，不產生看似可比的假數字。
+            _adj_parquet_env = os.getenv("BACKTEST_ADJ_PRICE_PARQUET")
+            if not _adj_parquet_env:
+                print("[taiex_tr] vs_taiex_tr = null：未設 BACKTEST_ADJ_PRICE_PARQUET，"
+                      "策略 P&L 為 raw close（不含息），與含息 TR 指數混合口徑不可比；"
+                      "要啟用對照請帶 BACKTEST_ADJ_PRICE_PARQUET=artifacts/adj_prices/adj_prices_10y.parquet")
                 _vs_tr = None
+            else:
+                try:
+                    from skills.taiex_tr import compute_vs_taiex_tr
+                    _vs_tr = compute_vs_taiex_tr(result.get("equity_curve") or [])
+                    if _vs_tr:
+                        # 口徑標記：事後讀 JSON 的人可直接確認兩側皆含息
+                        _vs_tr["pnl_convention"] = "adjusted_close_total_return"
+                        _vs_tr["adj_price_parquet"] = _adj_parquet_env
+                except Exception as _tr_exc:
+                    print(f"[taiex_tr] vs_taiex_tr 失敗（欄位為 null）: {_tr_exc}")
+                    _vs_tr = None
             result["summary"]["vs_taiex_tr"] = _vs_tr
             if _vs_tr:
                 print(f"\n── vs 發行量加權股價報酬指數（TAIEX TR，含息機會成本）──")
@@ -746,7 +746,8 @@ def main():
                 print(f"  （窗口 {_vs_tr['window']['start']} ~ {_vs_tr['window']['end']}，"
                       f"TR 取值 {_vs_tr['window']['tr_start_date']} ~ {_vs_tr['window']['tr_end_date']}）")
             else:
-                print("[taiex_tr] vs_taiex_tr = null（fetch 失敗或快取不涵蓋回測窗）")
+                print("[taiex_tr] vs_taiex_tr = null（未設 BACKTEST_ADJ_PRICE_PARQUET / "
+                      "fetch 失敗 / 快取不涵蓋回測窗——原因見上方訊息）")
 
         # ── Stage 10.6：beta-hedge 後處理 ──
         _hedge_ratio = getattr(args, "hedge_ratio", 0.0)

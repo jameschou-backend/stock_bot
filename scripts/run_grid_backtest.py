@@ -15,6 +15,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from app.config import load_config
 from app.db import get_session
 from skills.backtest import run_backtest
+from skills.trial_registry import record_backtest_trial
 
 
 def _resolve_round_trip_cost(raw_cost: float) -> float:
@@ -56,6 +57,12 @@ def main() -> None:
                 retrain_freq_months=3,
                 min_train_days=500,
                 min_avg_turnover=min_turnover,
+            )
+            # 統計紀律：grid 每個格點都是一次 selection candidate → 進 trial registry
+            record_backtest_trial(
+                result, months=args.months, source="grid_backtest",
+                params={"topn": topn, "stoploss_pct": stoploss,
+                        "min_avg_turnover": min_turnover},
             )
             summary = result.get("summary", {})
             rows.append(

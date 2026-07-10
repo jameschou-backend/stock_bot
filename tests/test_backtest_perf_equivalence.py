@@ -131,10 +131,10 @@ def test_benchmark_pivot_path_zero_price_and_missing(rng):
     pipe_new._bm_close_pivot = df.pivot_table(index="trading_date", columns="stock_id", values="close")
     pipe_new._bm_col_str = pd.Index([str(c) for c in pipe_new._bm_close_pivot.columns])
     assert pipe_new._compute_benchmark_return(rb, ex) == pipe_old._compute_benchmark_return(rb, ex)
-    # 不存在的日期 → 兩路徑皆 0.0
+    # 不存在的日期 → 兩路徑皆 (0.0, 0.0)（報表口徑, 零成本 raw）
     ghost = date(2030, 1, 1)
-    assert pipe_new._compute_benchmark_return(ghost, ex) == 0.0
-    assert pipe_old._compute_benchmark_return(ghost, ex) == 0.0
+    assert pipe_new._compute_benchmark_return(ghost, ex) == (0.0, 0.0)
+    assert pipe_old._compute_benchmark_return(ghost, ex) == (0.0, 0.0)
 
 
 def test_simulate_period_stock_index_equals_mask_path(rng):

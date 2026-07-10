@@ -20,6 +20,12 @@
    記錄（缺就缺），不在本檔範圍。
 3. 停牌／缺價日沿用最後收盤價 mark-to-market；下市股會停在最後一筆價
    （此偏差方向為高估，但月頻換股下暴露 ≤1 個月）。
+4. **fallback 時間戳偏差**：daily_pick 的 fallback 機制（fallback_days 預設 10）
+   會把 pick_date 蓋成比實際執行日早最多 10 個交易日的特徵日——該情況下本 NAV
+   宣稱的進場時點早於訊號實際存在時點（方向為樂觀）。凡月首 pick 日帶
+   fallback_days > 0，該再平衡行 notes 會標注 ``⚠fallback`` 並印警告
+   （讀 picks.reason_json._selection_meta.fallback_days；舊 picks 無此欄位則
+   無法判定、不標注）。
 
 版本標記（總體檢缺陷 6 規則 2）：
 
@@ -34,8 +40,14 @@
   日期早於檔案最後一行者原樣保留（含其當時寫入的 config_version / notes）；
   檔案最後一行當日及其後的日期以本次計算覆蓋／追加。
   → 同日重跑＝覆蓋當日行；漏跑數日＝下次執行自動補齊。
+- **config_version 一律 first-write**：檔案最後一行被本次重放覆蓋時，nav/notes
+  用新值（同日重跑語意），但 config_version 保留該行首次寫入的值——該行的持倉
+  是舊配置產生的，bump ``PAPER_NAV_CONFIG_VERSION`` 不得回溯改標配置段界。
 - 若重放值與凍結行漂移（相對差 > 1e-6），代表上游 DB 被回溯修改：印警告、
   保留凍結值（forward 紀錄以first-write為準）。
+- **--start 鎖定**：nav.jsonl 已存在時，本次重放的錨定行（第一行）日期必須與
+  檔案第一行一致，否則直接報錯拒跑——不同 --start 會以新起點重新錨定 nav=1.0，
+  靜默寫入等於把 forward 紀錄拼接成兩個 NAV 基底。要改起算日請刪檔重建。
 
 預設起算日 2026-07-03：健檢修復日。此前 picks 有 P0-1 index 錯位（2/13 起
 picks 用別檔股票的特徵打分），不可入 forward 紀錄。
@@ -97,6 +109,7 @@ def compute_nav_series(
     prices: pd.DataFrame,
     start: date,
     config_version: str,
+    fallback_by_date: Dict[date, int] | None = None,
 ) -> List[dict]:
     """重放訊號價 paper NAV 序列（確定性純函式）。
 
@@ -105,6 +118,10 @@ def compute_nav_series(
         prices: columns [trading_date(date), stock_id(str), close(float)]，raw 收盤價（未還原）。
         start: 重放起算日（含）；取第一個 >= start 的月度再平衡日為 NAV=1.0 錨點。
         config_version: 寫入每行的配置版本標記。
+        fallback_by_date: pick_date → daily_pick 當次的 fallback_days（自
+            reason_json._selection_meta 讀出）。> 0 表示該 pick_date 是回退的
+            特徵日、早於實際執行日——再平衡行 notes 標注 ``⚠fallback``
+            （誠實聲明 4：時間戳偏樂觀）。None/缺鍵 = 無法判定，不標注。
 
     Returns:
         每交易日一行 [{date, nav, holdings_n, config_version, notes}, ...]，按日期排序。
@@ -181,6 +198,14 @@ def compute_nav_series(
                     notes.append(f"進場略過無價:{','.join(skipped)}")
             else:
                 notes.append(f"rebalance失敗:picks@{pick_day.isoformat()}全數無價,沿用舊倉")
+            # 誠實聲明 4：pick_date 為 fallback 回退的特徵日 → 進場時間戳早於
+            # 訊號實際存在時點（偏樂觀），明文標注
+            _fd = int((fallback_by_date or {}).get(pick_day) or 0)
+            if _fd > 0:
+                notes.append(
+                    f"⚠fallback:訊號日{pick_day.isoformat()}為回退{_fd}個交易日的特徵日,"
+                    "實際執行晚於此時間戳(偏樂觀)"
+                )
 
         rows.append(
             {
@@ -200,6 +225,9 @@ def merge_rows(existing: List[dict], new_rows: List[dict]) -> Tuple[List[dict], 
 
     - 日期 < 既有檔最後一行者：原樣保留（含 first-write 的 config_version / notes）。
     - 日期 >= 既有檔最後一行者：以本次重放覆蓋／追加。
+      **例外**：被覆蓋的既有行（= cutoff 當日行）config_version 保留 first-write
+      值——該行的持倉/NAV 是當時配置產生的，bump PAPER_NAV_CONFIG_VERSION 後
+      首次執行不得把前一交易日誤標成新版本（配置切段以 first-write 為準）。
     - 凍結行 vs 重放值相對差 > DRIFT_RTOL → 產生警告（上游 DB 被回溯修改的訊號），
       但仍保留凍結值。
 
@@ -227,6 +255,12 @@ def merge_rows(existing: List[dict], new_rows: List[dict]) -> Tuple[List[dict], 
                         f"[drift] {row['date']}: 凍結 nav={old_nav} vs 重放 nav={new_nav}"
                         "（上游 DB 疑被回溯修改；保留凍結值）"
                     )
+        else:
+            # cutoff 當日行被本次重放覆蓋：nav/notes 用新值（同日重跑語意），
+            # 但 config_version 維持 first-write（版本標籤不可回溯改寫）
+            _old_cv = row.get("config_version")
+            if _old_cv is not None and merged[row["date"]].get("config_version") != _old_cv:
+                merged[row["date"]] = {**merged[row["date"]], "config_version": _old_cv}
 
     return [merged[d] for d in sorted(merged)], warnings
 
@@ -267,6 +301,46 @@ def load_picks_from_db(start: date) -> pd.DataFrame:
             select(Pick.pick_date, Pick.stock_id).where(Pick.pick_date >= start)
         ).fetchall()
     return pd.DataFrame(rows, columns=["pick_date", "stock_id"])
+
+
+def extract_fallback_days(reason_json: object) -> int | None:
+    """從 Pick.reason_json 讀 _selection_meta.fallback_days（缺欄位 → None=無法判定）。"""
+    payload = reason_json
+    if isinstance(payload, (str, bytes)):
+        try:
+            payload = json.loads(payload)
+        except (ValueError, TypeError):
+            return None
+    if not isinstance(payload, dict):
+        return None
+    meta = payload.get("_selection_meta")
+    if not isinstance(meta, dict):
+        return None
+    fd = meta.get("fallback_days")
+    try:
+        return int(fd) if fd is not None else None
+    except (TypeError, ValueError):
+        return None
+
+
+def load_fallback_meta_from_db(start: date) -> Dict[date, int]:
+    """每個 pick_date 的 fallback_days（誠實聲明 4 用；同日各列 meta 相同，取最大保守）。"""
+    from sqlalchemy import select
+
+    from app.db import get_session
+    from app.models import Pick
+
+    with get_session() as session:
+        rows = session.execute(
+            select(Pick.pick_date, Pick.reason_json).where(Pick.pick_date >= start)
+        ).fetchall()
+
+    out: Dict[date, int] = {}
+    for pick_date, reason_json in rows:
+        fd = extract_fallback_days(reason_json)
+        if fd is not None:
+            out[pick_date] = max(out.get(pick_date, 0), fd)
+    return out
 
 
 def load_prices_from_db(stock_ids: List[str], start: date) -> pd.DataFrame:
@@ -318,17 +392,37 @@ def main() -> int:
         print(f"[paper_nav] raw_prices 自 {start} 起無持倉股價格，本次不寫入。")
         return 0
 
-    new_rows = compute_nav_series(picks, prices, start, config_version)
+    fallback_by_date = load_fallback_meta_from_db(start)
+    new_rows = compute_nav_series(picks, prices, start, config_version, fallback_by_date)
     if not new_rows:
         print("[paper_nav] 重放結果為空（無再平衡日或無交易日），本次不寫入。")
         return 0
 
     existing = load_nav_file(nav_path)
+
+    # ── NAV 基底鎖定：重放錨定行必須與既有檔第一行同日 ──
+    # 不同 --start 會以新起點重新錨定 nav=1.0；若靜默合併，檔案在接縫處變成
+    # 兩個 NAV 基底的拼接（假跌/假漲），下游 forward 報酬/Sharpe 全數失真。
+    if existing and new_rows[0]["date"] != existing[0]["date"]:
+        print(
+            f"[paper_nav][ERROR] 重放錨定日 {new_rows[0]['date']}（--start {start.isoformat()}）"
+            f"與既有檔第一行 {existing[0]['date']} 不一致——拒絕寫入。\n"
+            f"  不同起算日會重新錨定 nav=1.0，合併將把 forward 紀錄拼接成兩個 NAV 基底。\n"
+            f"  請改用與既有檔一致的 --start，或刪除 {nav_path} 後重建整個序列。"
+        )
+        return 2
+
     merged, warnings = merge_rows(existing, new_rows)
     write_nav_file(nav_path, merged)
 
     for w in warnings:
         print(f"[paper_nav][WARN] {w}")
+    _fb_hits = sorted(
+        {r["date"] for r in new_rows if "⚠fallback" in r.get("notes", "")}
+    )
+    for d in _fb_hits:
+        print(f"[paper_nav][WARN] {d}: 月首 pick 為 fallback 特徵日，"
+              "進場時間戳早於訊號實際存在時點（見誠實聲明 4）")
 
     last = merged[-1]
     n_new = len(merged) - max(len(existing) - 1, 0)  # 覆蓋最後一行 + 追加行

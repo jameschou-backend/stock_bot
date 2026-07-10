@@ -31,6 +31,7 @@ from app.config import load_config
 from app.db import get_session
 from skills.backtest import run_backtest
 from skills.build_features import PRUNED_FEATURE_COLS
+from skills.trial_registry import record_backtest_trial
 from skills.mlflow_tracking import (
     log_backtest_result,
     log_metrics,
@@ -107,6 +108,13 @@ def objective(trial: optuna.Trial, months: int, mlflow_experiment: str | None) -
                 label_horizon_buffer=20,
             )
         log_backtest_result(result, mlflow_run=ml_run)
+
+    # 統計紀律：每個 Optuna trial 都是一次 selection candidate，必須進 trial registry
+    # （只記最後「採用的」會低估 DSR 的 multiple-testing 折扣；失敗不阻斷搜尋）
+    record_backtest_trial(
+        result, months=months, source="optuna_search",
+        params={"trial_number": trial.number, "study": trial.study.study_name, **trial.params},
+    )
 
     s = result.get("summary", {})
     sharpe = float(s.get("sharpe_ratio") or 0.0)

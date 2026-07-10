@@ -153,6 +153,50 @@ class TestTrialRegistry:
 
         assert HISTORICAL_TRIALS_BASE == 80
 
+    def test_record_backtest_trial_writes_source_and_params(self, tmp_path):
+        from skills.trial_registry import record_backtest_trial, registry_trial_count
+
+        reg = tmp_path / "trial_registry.jsonl"
+        result = {"summary": {"sharpe_ratio": 0.72}}
+        assert record_backtest_trial(
+            result, months=60, source="optuna_search",
+            params={"topn": 20}, registry_path=reg,
+        ) == 1
+        rec = json.loads(reg.read_text(encoding="utf-8").strip())
+        assert rec["source"] == "optuna_search"
+        assert rec["sharpe"] == 0.72
+        assert rec["params"] == {"topn": 20}
+        assert registry_trial_count(reg) == 1
+
+    def test_record_backtest_trial_failure_does_not_raise(self, tmp_path):
+        """registry 故障不可拖垮長時間掃描（optuna 30 trials 跑到一半不可炸）。"""
+        from skills.trial_registry import record_backtest_trial
+
+        bad_path = tmp_path / "not_a_dir_file"
+        bad_path.write_text("x")  # 讓 parent mkdir / append 走進錯誤
+        out = record_backtest_trial(
+            {"summary": {}}, months=60, source="grid_backtest",
+            registry_path=bad_path / "reg.jsonl",  # 檔案底下開子路徑 → OSError
+        )
+        assert out is None
+
+    def test_multi_trial_tools_wired_to_registry(self):
+        """語義鎖定：宣稱「每跑一次回測都算一次 trial」→ 所有直接呼叫
+        skills.backtest.run_backtest 的多 trial 工具都必須 append registry
+        （optuna 30 trials 只 +1 會讓 DSR n_trials 系統性低估）。"""
+        import inspect
+
+        import scripts.optuna_search as m_optuna
+        import scripts.run_grid_backtest as m_grid
+        import scripts.run_walkforward as m_wf
+        import scripts.run_walkforward_topn_sweep as m_sweep
+
+        for mod in (m_optuna, m_grid, m_wf, m_sweep):
+            src = inspect.getsource(mod)
+            assert "record_backtest_trial(" in src, (
+                f"{mod.__name__} 呼叫 run_backtest 但未 append trial registry"
+            )
+
 
 # ── 5. compute_statistics_block ─────────────────────────────────────────────
 

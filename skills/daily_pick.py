@@ -742,6 +742,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 "before_count": fallback_logs.get("candidate_count_before_liquidity", 0),
                 "after_count": fallback_logs.get("candidate_count_after_liquidity", 0),
             },
+            # fallback 時間戳誠實化（scripts/paper_nav.py 誠實聲明 4）：
+            # fallback_days > 0 表示 pick_date 是回退的特徵日、早於實際執行日；
+            # 落入 reason_json 讓 forward 紀錄可判定並標注時間戳偏差
+            "fallback_days": fallback_logs.get("fallback_days"),
+            "latest_feature_date": candidate_dates[0].isoformat(),
         }
         weights_used_manifest: Dict[str, float] | None = None
         agent_dump: Dict[str, object] | None = None
@@ -782,6 +787,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 "multi_agent_degraded" if bool(dq_ctx.get("degraded_mode", False)) else "multi_agent"
             )
             df = picks_df.copy()
+            # ── 處置股 live-only 過濾（執行衛生，對任何進場候選都成立，非 model
+            # 分支專屬 alpha 邏輯）：multi_agent picks 同樣不可含分盤交易/預收款券
+            # 股票（月底換股可能出不掉）。boolean mask 過濾保留 index（禁 merge）。
+            # 註：此處 df 已是 topN 後的 picks，剔除後不補位（寧缺勿執行髒單）。
+            df = _apply_disposition_filter(df, config, coverage_stats)
             if not df.empty:
                 first_meta = df.iloc[0]["reason_json"].get("_selection_meta", {})
                 weights_used_manifest = dict(first_meta.get("weights_used", {}))

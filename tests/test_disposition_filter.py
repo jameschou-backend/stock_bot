@@ -322,3 +322,47 @@ class TestDailyPickHook:
 
         src = inspect.getsource(daily_pick.run)
         assert "_apply_disposition_filter(" in src
+
+    def test_hook_wired_into_both_selection_branches(self):
+        """執行衛生對任何進場候選都成立：model 與 multi_agent 分支各須佈線
+        _apply_disposition_filter（multi_agent 曾整段繞過 → 靜默無過濾）。"""
+        import inspect
+
+        src = inspect.getsource(daily_pick.run)
+        assert src.count("_apply_disposition_filter(") >= 2, (
+            "run() 內 _apply_disposition_filter 呼叫點少於 2 個——"
+            "multi_agent 分支的處置股過濾被移除？"
+        )
+        # multi_agent 分支（第一個 if selection_mode == "multi_agent" 區塊）內必須有呼叫
+        ma_block = src.split('if selection_mode == "multi_agent":', 1)[1].split("\n        else:", 1)[0]
+        assert "_apply_disposition_filter(" in ma_block
+
+
+class TestConfigFlagIsReal:
+    """enable_disposition_filter / dq_adj_factor_max_lag_days 必須是真實 config 欄位
+    （曾為幽靈旗標：frozen dataclass 無欄位，getattr 永遠走預設，.env 無法關閉）。"""
+
+    def test_fields_exist_on_appconfig(self):
+        import dataclasses
+
+        from app.config import AppConfig
+
+        fields = {f.name for f in dataclasses.fields(AppConfig)}
+        assert "enable_disposition_filter" in fields
+        assert "dq_adj_factor_max_lag_days" in fields
+
+    def test_env_can_disable_disposition_filter(self, monkeypatch):
+        from app.config import load_config
+
+        monkeypatch.setenv("ENABLE_DISPOSITION_FILTER", "false")
+        cfg = load_config()
+        assert cfg.enable_disposition_filter is False
+
+        monkeypatch.setenv("ENABLE_DISPOSITION_FILTER", "true")
+        assert load_config().enable_disposition_filter is True
+
+    def test_env_can_tune_adj_factor_lag(self, monkeypatch):
+        from app.config import load_config
+
+        monkeypatch.setenv("DQ_ADJ_FACTOR_MAX_LAG_DAYS", "14")
+        assert load_config().dq_adj_factor_max_lag_days == 14

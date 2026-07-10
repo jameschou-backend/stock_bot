@@ -895,6 +895,10 @@ class WalkForwardConfig:
     # 等同假設 benchmark 每月 100% 周轉——120 期複利拖累 ×~0.495，虛增策略超額約 +190pp。
     # 新預設：benchmark 零成本（buy-and-hold 近似；對策略超額主張為保守方向）。
     # 敏感度分析請用 benchmark_tc_pct 顯式指定每期扣減值（CLI --benchmark-tc）。
+    # ⚠️ 口徑/訊號解耦（2026-07-10 P1 修復）：benchmark_tc 只影響「報表」的
+    # benchmark_return；market_filter_tiers 降倉訊號一律讀 period_results 的
+    # market_return_raw（永遠零成本原始市場報酬）——改 benchmark_tc 不會改變
+    # 策略臂持倉決策（tests/test_benchmark_zero_cost.py 鎖定此不變量）。
     benchmark_with_cost: bool = False  # DEPRECATED：僅為舊呼叫端相容保留；顯式 True 才會扣 transaction_cost_pct
     benchmark_tc_pct: float = 0.0  # benchmark 每期扣減成本（來回口徑）；0 = zero_cost（預設）
     position_sizing: str = "equal"
@@ -2060,11 +2064,20 @@ class BacktestPipeline:
         rb_date: date,
         effective_topn: int,
     ) -> Tuple[pd.DataFrame, bool, float]:
-        """根據前期大盤報酬調整持倉；回傳 (picks, market_filter_skip, mf_multiplier)。"""
+        """根據前期大盤報酬調整持倉；回傳 (picks, market_filter_skip, mf_multiplier)。
+
+        訊號來源：一律讀前期 ``market_return_raw``（零成本原始市場報酬）。
+        降倉是對「真實市場下跌」的反應，經濟語義與報表成本口徑無關——
+        不可讀 ``benchmark_return``（受 --benchmark-tc 影響，會讓報表口徑
+        耦合進策略臂持倉決策）。fallback 僅為舊 period dict 相容。
+        """
         _market_filter_skip = False
         _mf_multiplier = 1.0  # 記錄實際持倉倍率供 period_results 保存
         if len(period_results) > 0 and (self.market_filter or self.market_filter_tiers):
-            _prev_bm = period_results[-1].get("benchmark_return", 0.0)
+            _prev_period = period_results[-1]
+            _prev_bm = _prev_period.get(
+                "market_return_raw", _prev_period.get("benchmark_return", 0.0)
+            )
             if self.market_filter_tiers:
                 # 漸進式：tier 選擇委派給 select_market_filter_tier 純函數（行為鎖定測試用）
                 _thr, _mult = select_market_filter_tier(_prev_bm, self.market_filter_tiers)
@@ -2120,7 +2133,7 @@ class BacktestPipeline:
         self,
         rb_date: date,
         exit_date: date,
-    ) -> float:
+    ) -> Tuple[float, float]:
         """計算大盤等權基準報酬（套用相同流動性門檻、不設停損、無滑價）。
 
         效能（發現 4）：prepare() 已建一次 close 的 date×stock pivot，
@@ -2128,6 +2141,12 @@ class BacktestPipeline:
         + 小 pivot」逐位元一致（兩者最終都在「排序後的 stock_id」序列上取 mean；
         『在 rb 日有列』⟺『pivot cell 非 NaN ∨ close 為 NaN 而兩路徑皆剔除』）。
         未 prepare（單元測試直接呼叫）時走原全表掃描路徑。
+
+        Returns:
+            (benchmark_return, market_return_raw)：
+            - benchmark_return：報表口徑（扣 self.benchmark_tc；預設 0 = zero_cost）
+            - market_return_raw：永遠零成本的原始市場報酬——market_filter_tiers
+              的唯一訊號來源（口徑/訊號解耦，改 --benchmark-tc 不得影響持倉決策）
         """
         price_df = self.price_df
         min_avg_turnover = self.min_avg_turnover
@@ -2146,10 +2165,13 @@ class BacktestPipeline:
                 )
             valid &= (row_rb > 0) & (row_ex > 0)  # Bug-2 fix 等價：排除 0 價
             if not valid.any():
-                return 0.0
-            _raw_bm_ret = row_ex[valid] / row_rb[valid] - 1 - benchmark_tc
+                return 0.0, 0.0
+            _raw_bm_ret = row_ex[valid] / row_rb[valid] - 1
             _raw_bm_ret = _raw_bm_ret.replace([np.inf, -np.inf], np.nan).dropna()
-            return float(_raw_bm_ret.mean()) if not _raw_bm_ret.empty else 0.0
+            if _raw_bm_ret.empty:
+                return 0.0, 0.0
+            _raw_mean = float(_raw_bm_ret.mean())
+            return _raw_mean - benchmark_tc, _raw_mean
 
         all_stocks_on_date = price_df[price_df["trading_date"] == rb_date]["stock_id"].unique()
         if min_avg_turnover > 0 and liquidity_eligible_map:
@@ -2171,15 +2193,14 @@ class BacktestPipeline:
                 (_bm_valid[rb_date] > 0) & (_bm_valid[exit_date] > 0)
             ]
             if not _bm_valid.empty:
-                _raw_bm_ret = _bm_valid[exit_date] / _bm_valid[rb_date] - 1 - benchmark_tc
+                _raw_bm_ret = _bm_valid[exit_date] / _bm_valid[rb_date] - 1
                 # 二次防禦：過濾殘留的 inf/nan（adj_factor 異常等邊緣情況）
                 _raw_bm_ret = _raw_bm_ret.replace([np.inf, -np.inf], np.nan).dropna()
-                benchmark_ret = float(_raw_bm_ret.mean()) if not _raw_bm_ret.empty else 0.0
-            else:
-                benchmark_ret = 0.0
-        else:
-            benchmark_ret = 0.0
-        return benchmark_ret
+                if not _raw_bm_ret.empty:
+                    raw_mean = float(_raw_bm_ret.mean())
+                    return raw_mean - benchmark_tc, raw_mean
+        # 無有效股票（缺價 / 全零價 / 日期不在資料內）：與舊行為一致回 0（不扣 tc）
+        return 0.0, 0.0
 
     # ── 3. 主迴圈：逐期訓練 + 模擬 ─────────────────────────────────────────
     def run(self) -> Dict:
@@ -2468,7 +2489,9 @@ class BacktestPipeline:
                 _count_apply_stoploss += 1
 
             # ── 大盤基準（等權，向量化計算，不設停損／無滑價，與策略套用相同流動性門檻）──
-            benchmark_ret = self._compute_benchmark_return(rb_date, exit_date)
+            # benchmark_ret = 報表口徑（受 benchmark_tc 影響）；
+            # market_ret_raw = 零成本原始市場報酬（market_filter_tiers 唯一訊號來源）
+            benchmark_ret, market_ret_raw = self._compute_benchmark_return(rb_date, exit_date)
 
             period_ret = result["return"]
             # 現金保留：_cash_ratio 部分以 0% 報酬計（等效縮減風險敞口）
@@ -2483,6 +2506,7 @@ class BacktestPipeline:
                 "actual_entry_date": result.get("actual_entry_date", rb_date.isoformat()),
                 "return": period_ret,
                 "benchmark_return": benchmark_ret,
+                "market_return_raw": market_ret_raw,  # 零成本；market filter 訊號源（勿與報表口徑混用）
                 "excess_return": period_ret - benchmark_ret,
                 "trades": result["trades"],
                 "wins": result.get("wins", 0),

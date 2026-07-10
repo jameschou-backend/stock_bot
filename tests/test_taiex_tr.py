@@ -110,6 +110,25 @@ def test_cache_initial_backfill_and_incremental(tmp_path):
     assert len(df3) == 10
 
 
+def test_cache_tmp_file_is_pid_suffixed_and_cleaned(tmp_path):
+    """原子寫入 tmp 檔須帶 pid 後綴（兩臂並行不互踩）且寫完清乾淨。"""
+    cache = tmp_path / "taiex_tr.parquet"
+    update_taiex_tr_cache(
+        date(2024, 1, 1), date(2024, 1, 31), cache,
+        fetch_month_fn=_fake_month_df, request_delay=0,
+    )
+    leftovers = [p.name for p in tmp_path.iterdir() if p.name != cache.name]
+    assert leftovers == [], f"殘留 tmp 檔：{leftovers}"
+
+    # 行為鎖定：tmp 檔名必須含 pid（固定 .parquet.tmp 會在並行時被互踩）
+    import inspect
+
+    from skills import taiex_tr as _m
+    src = inspect.getsource(_m.update_taiex_tr_cache)
+    assert "os.getpid()" in src
+    assert 'with_suffix(".parquet.tmp")' not in src
+
+
 def test_cache_partial_last_month_refetched_with_new_rows(tmp_path):
     """max 月當初只抓到月中；下次增量重抓該月應補齊後半月列。"""
     cache = tmp_path / "taiex_tr.parquet"

@@ -8,6 +8,7 @@
 """
 from __future__ import annotations
 
+import json
 from datetime import date
 
 import numpy as np
@@ -193,6 +194,15 @@ class TestParsers:
         with pytest.raises(TWSEError):
             oaf.parse_twse_capital_reduction({"stat": "查詢結束日期小於查詢開始日期，請重新查詢!"})
 
+    def test_twse_payload_without_stat_key_raises(self):
+        """無 stat 鍵的 dict（error object / schema 變更）不可放行——放行會靜默
+        回 0 事件並被 checkpoint 固化，整月事件永久漏抓。"""
+        from app.twse_client import TWSEError
+        with pytest.raises(TWSEError):
+            oaf.parse_twse_ex_rights({"error": "internal error"})
+        with pytest.raises(TWSEError):
+            oaf.parse_twse_capital_reduction({"data": []})  # 有 data 但無 stat 亦不放行
+
     def test_twse_capital_reduction(self):
         events = oaf.parse_twse_capital_reduction(TWSE_REDUCTION_PAYLOAD)
         assert len(events) == 1
@@ -220,6 +230,27 @@ class TestParsers:
         assert (ev.stock_id, ev.event_date) == ("3064", date(2024, 2, 5))
         assert ev.ratio == pytest.approx(35.50 / 10.65)
 
+    def test_tpex_error_payload_raises(self):
+        """TPEx HTTP 200 的 JSON error object（無 tables 鍵）/ 非 ok stat /
+        schema 變更 → 必須 raise TWSEError，不可靜默當 0 事件。"""
+        from app.twse_client import TWSEError
+        with pytest.raises(TWSEError):
+            oaf.parse_tpex_ex_rights({"error": "查詢失敗", "code": 500})  # 無 tables
+        with pytest.raises(TWSEError):
+            oaf.parse_tpex_capital_reduction({"date": "20240101~20240131"})  # 無 tables
+        with pytest.raises(TWSEError):
+            oaf.parse_tpex_ex_rights({"stat": "error", "tables": []})  # 非 ok stat
+        with pytest.raises(TWSEError):
+            oaf.parse_tpex_ex_rights({"tables": {"data": []}})  # tables 非 list
+        with pytest.raises(TWSEError):
+            oaf.parse_tpex_ex_rights({"tables": [["not", "a", "dict"]]})  # 元素非 dict
+
+    def test_tpex_stat_ok_lowercase_and_empty_tables_is_empty(self):
+        """實測 TPEx stat 為小寫 'ok'；stat ok + tables 空 = 合法空月。"""
+        assert oaf.parse_tpex_ex_rights({"stat": "ok", "tables": []}) == []
+        # 節錄 fixture 無 stat 鍵但有 tables：仍視為有效（tables 為 schema 錨點）
+        assert oaf.parse_tpex_capital_reduction({"tables": []}) == []
+
     def test_events_to_dataframe_filters_non_4digit_and_bad_ratio(self):
         events = oaf.parse_twse_ex_rights(TWSE_EX_RIGHTS_PAYLOAD)
         events.append(oaf.AdjEvent("9999", date(2024, 1, 4), "TWSE", oaf.SOURCE_EX_RIGHTS,
@@ -228,6 +259,71 @@ class TestParsers:
         assert "006203" not in set(df["stock_id"])   # 6 碼 ETF 濾掉
         assert "9999" not in set(df["stock_id"])     # 無效比率濾掉
         assert set(df["stock_id"]) == {"2454", "6442"}
+
+
+# ──────────────────────────────────────────────
+# 2.5 checkpoint 續跑（scripts/build_official_adj_factors.py）
+# ──────────────────────────────────────────────
+
+class TestCheckpointResume:
+    @staticmethod
+    def _fake_client(calls: list):
+        """回空結果的假 client：記錄每次 HTTP 抓取。"""
+        from types import SimpleNamespace
+
+        def _mk(kind: str):
+            def _fetch(start, end, cache_bust=False):
+                calls.append(kind)
+                if kind.startswith("twse"):
+                    return {"stat": "OK", "data": []}
+                return {"stat": "ok", "tables": []}
+            return _fetch
+
+        return SimpleNamespace(
+            fetch_twse_ex_rights_raw=_mk("twse_ex_rights"),
+            fetch_twse_capital_reduction_raw=_mk("twse_capital_reduction"),
+            fetch_tpex_ex_rights_raw=_mk("tpex_ex_rights"),
+            fetch_tpex_capital_reduction_raw=_mk("tpex_capital_reduction"),
+        )
+
+    def test_corrupted_checkpoint_refetched_not_crash(self, tmp_path):
+        """截斷/損壞 checkpoint（JSONDecodeError）→ 自動重抓，不 crash、不需人工刪檔。"""
+        from scripts.build_official_adj_factors import fetch_all_events
+
+        calls: list = []
+        client = self._fake_client(calls)
+        window = (date(2024, 1, 1), date(2024, 1, 31))
+
+        # 第一輪：4 個來源各 1 chunk，全部 HTTP 抓取 + 寫 checkpoint
+        fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
+        assert len(calls) == 4
+        ckpts = sorted(tmp_path.glob("*.json"))
+        assert len(ckpts) == 4
+        assert not list(tmp_path.glob("*.tmp.*"))  # 原子寫入不留 tmp
+
+        # 損壞其中一個（模擬寫入中斷留下截斷 JSON）
+        ckpts[0].write_text('{"stat": "OK", "data": [', encoding="utf-8")
+
+        calls.clear()
+        fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
+        assert len(calls) == 1  # 只重抓損壞的那個 chunk，其餘走 checkpoint
+        json.loads(ckpts[0].read_text(encoding="utf-8"))  # 已被有效內容覆寫
+
+    def test_error_payload_checkpoint_refetched(self, tmp_path):
+        """舊版存下的錯誤 payload checkpoint（parse 拋 TWSEError）→ 自動重抓。"""
+        from scripts.build_official_adj_factors import fetch_all_events
+
+        calls: list = []
+        client = self._fake_client(calls)
+        window = (date(2024, 1, 1), date(2024, 1, 31))
+        fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
+
+        bad = sorted(tmp_path.glob("tpex_ex_rights_*.json"))[0]
+        bad.write_text(json.dumps({"error": "查詢失敗"}), encoding="utf-8")  # 無 tables 鍵
+
+        calls.clear()
+        fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
+        assert calls == ["tpex_ex_rights"]
 
 
 # ──────────────────────────────────────────────
@@ -417,3 +513,23 @@ class TestAdjFactorFreshness:
             issues, metrics = data_quality._check_adj_factor_freshness(session, max_lag_days=7)
         assert issues == []
         assert metrics["adj_factor_max_date"] is None
+
+    def test_check_failure_logs_and_records_issue_not_silent(self, caplog):
+        """守望機制本身壞掉（query 拋例外）→ logger warning 留痕 + QualityIssue，
+        不再被 except 沉默吞掉。"""
+        import logging
+        from skills import data_quality
+
+        class BrokenSession:
+            def query(self, *args, **kwargs):
+                raise RuntimeError("schema drifted")
+
+        with caplog.at_level(logging.WARNING, logger="skills.data_quality"):
+            issues, metrics = data_quality._check_adj_factor_freshness(
+                BrokenSession(), max_lag_days=7
+            )
+        assert len(issues) == 1
+        assert issues[0].category == "adj_factor_freshness_check_failed"
+        assert issues[0].severity == "warning"
+        assert "schema drifted" in metrics["adj_factor_freshness_check_error"]
+        assert any("新鮮度檢查本身失敗" in r.message for r in caplog.records)

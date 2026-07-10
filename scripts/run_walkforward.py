@@ -18,6 +18,7 @@ from app.config import load_config
 from app.db import get_session
 from app.models import Feature, Label
 from skills.backtest import run_backtest
+from skills.trial_registry import record_backtest_trial
 
 
 @dataclass
@@ -131,6 +132,11 @@ def main() -> None:
                 position_sizing="vol_inverse",
                 rebalance_freq="W",
                 min_avg_turnover=0.5,
+            )
+            # 統計紀律：每個 walk-forward 視窗評估都進 trial registry（DSR n_trials）
+            record_backtest_trial(
+                result, months=args.test_years * 12, source="walkforward",
+                params={"test_start": test_start.isoformat(), "topn": topn},
             )
             summary = result.get("summary", {})
             rows.append(

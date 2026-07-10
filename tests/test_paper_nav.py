@@ -204,19 +204,30 @@ class TestMergeIdempotency:
         assert warnings == []
 
     def test_frozen_rows_keep_first_write_config_version(self):
-        """歷史行凍結：config_version 保留 first-write 值，可按配置切段。"""
+        """config_version 一律 first-write：凍結行保留舊值；cutoff 行雖被覆蓋
+        （nav 取新值），版本標籤也必須保留 first-write——bump 版本後首次執行
+        不得把前一交易日（舊配置產生）誤標成新版本（配置切段以 first-write 為準）。"""
         existing = [_row("2026-01-05", 1.0, cv="v1-old"), _row("2026-01-06", 1.05, cv="v1-old")]
         new = [
             _row("2026-01-05", 1.0, cv="v2-new"),
-            _row("2026-01-06", 1.05, cv="v2-new"),
+            _row("2026-01-06", 1.06, cv="v2-new"),
             _row("2026-01-07", 1.10, cv="v2-new"),
         ]
         merged, _ = merge_rows(existing, new)
         by_date = {r["date"]: r for r in merged}
         assert by_date["2026-01-05"]["config_version"] == "v1-old"   # 凍結
-        assert by_date["2026-01-06"]["config_version"] == "v2-new"   # 最後一行：覆蓋
-        assert by_date["2026-01-07"]["config_version"] == "v2-new"   # 新增
+        assert by_date["2026-01-06"]["config_version"] == "v1-old"   # cutoff 行：版本標籤 first-write
+        assert by_date["2026-01-06"]["nav"] == pytest.approx(1.06)   # nav 仍取重放新值（同日重跑語意）
+        assert by_date["2026-01-07"]["config_version"] == "v2-new"   # 新增行：本次版本
         assert len(merged) == 3
+
+    def test_cutoff_row_version_preserved_does_not_mutate_new_rows(self):
+        """覆蓋 cutoff 行時以 copy 改標，不可原地改動呼叫端的 new_rows。"""
+        existing = [_row("2026-01-06", 1.05, cv="v1-old")]
+        new = [_row("2026-01-06", 1.06, cv="v2-new"), _row("2026-01-07", 1.10, cv="v2-new")]
+        merged, _ = merge_rows(existing, new)
+        assert new[0]["config_version"] == "v2-new"  # 原輸入不被汙染
+        assert merged[0]["config_version"] == "v1-old"
 
     def test_gap_self_healing(self):
         """漏跑數日：下次執行自動補齊缺日。"""
@@ -272,6 +283,94 @@ def test_write_and_load_roundtrip(tmp_path):
     write_nav_file(path, rows)
     assert load_nav_file(path) == rows
     assert not path.with_suffix(".jsonl.tmp").exists()  # 原子寫入不留 tmp
+
+
+# ──────────────────────────────────────────────────────────
+# --start 基底鎖定（main 層）與 fallback 時間戳標注
+# ──────────────────────────────────────────────────────────
+
+class TestStartAnchorGuard:
+    """檔案存在且重放錨定行與檔案第一行不一致 → main 直接 error 拒跑，
+    防止不同 --start 重新錨定 nav=1.0 後把 forward 紀錄拼接成兩個 NAV 基底。"""
+
+    PICKS = [
+        (date(2026, 7, 3), "1101"),
+        (date(2026, 8, 3), "1101"),
+        (date(2026, 9, 1), "1101"),
+    ]
+    PRICES = [
+        (date(2026, 7, 3), "1101", 100.0),
+        (date(2026, 8, 3), "1101", 110.0),
+        (date(2026, 8, 31), "1101", 113.0),
+        (date(2026, 9, 1), "1101", 115.0),
+        (date(2026, 9, 2), "1101", 116.0),
+    ]
+
+    def _run_main(self, monkeypatch, tmp_path, start: str) -> int:
+        import scripts.paper_nav as pn
+
+        monkeypatch.setattr(pn, "load_picks_from_db", lambda s: _mk_picks(
+            [(d, sid) for d, sid in self.PICKS if d >= s]))
+        monkeypatch.setattr(pn, "load_prices_from_db", lambda ids, s: _mk_prices(
+            [(d, sid, c) for d, sid, c in self.PRICES if d >= s]))
+        monkeypatch.setattr(pn, "load_fallback_meta_from_db", lambda s: {})
+        monkeypatch.setattr(
+            "sys.argv",
+            ["paper_nav.py", "--start", start, "--nav-path", str(tmp_path / "nav.jsonl")],
+        )
+        return pn.main()
+
+    def test_mismatched_start_rejected(self, monkeypatch, tmp_path, capsys):
+        assert self._run_main(monkeypatch, tmp_path, "2026-07-03") == 0
+        before = (tmp_path / "nav.jsonl").read_text(encoding="utf-8")
+
+        # 改用較晚的 --start 重跑：錨定行 09-01（nav=1.0）≠ 檔案第一行 07-03 → 拒跑
+        rc = self._run_main(monkeypatch, tmp_path, "2026-09-01")
+        assert rc == 2
+        assert "拒絕寫入" in capsys.readouterr().out
+        assert (tmp_path / "nav.jsonl").read_text(encoding="utf-8") == before  # 檔案未被觸碰
+
+    def test_consistent_start_rerun_ok(self, monkeypatch, tmp_path):
+        assert self._run_main(monkeypatch, tmp_path, "2026-07-03") == 0
+        assert self._run_main(monkeypatch, tmp_path, "2026-07-03") == 0  # 同 start 冪等重跑
+
+
+class TestFallbackAnnotation:
+    def test_fallback_pick_day_annotated(self):
+        """月首 pick 日 fallback_days>0 → 再平衡行 notes 標注 ⚠fallback。"""
+        picks = _mk_picks([(date(2026, 8, 3), "1101")])
+        prices = _mk_prices([
+            (date(2026, 8, 3), "1101", 100.0),
+            (date(2026, 8, 4), "1101", 101.0),
+        ])
+        rows = compute_nav_series(
+            picks, prices, date(2026, 8, 1), CV,
+            fallback_by_date={date(2026, 8, 3): 3},
+        )
+        assert "⚠fallback" in rows[0]["notes"]
+        assert "回退3個交易日" in rows[0]["notes"]
+        assert "⚠fallback" not in rows[1]["notes"]  # 非再平衡日不標注
+
+    def test_no_fallback_no_annotation(self):
+        picks = _mk_picks([(date(2026, 8, 3), "1101")])
+        prices = _mk_prices([(date(2026, 8, 3), "1101", 100.0)])
+        for fb in (None, {}, {date(2026, 8, 3): 0}):
+            rows = compute_nav_series(picks, prices, date(2026, 8, 1), CV, fallback_by_date=fb)
+            assert "⚠fallback" not in rows[0]["notes"]
+
+    def test_extract_fallback_days_variants(self):
+        from scripts.paper_nav import extract_fallback_days
+
+        assert extract_fallback_days({"_selection_meta": {"fallback_days": 2}}) == 2
+        assert extract_fallback_days({"_selection_meta": {"fallback_days": 0}}) == 0
+        assert extract_fallback_days(
+            json.dumps({"_selection_meta": {"fallback_days": 1}})) == 1
+        # 舊 picks 無欄位 / 壞資料 → None（無法判定，不標注）
+        assert extract_fallback_days({"_selection_meta": {}}) is None
+        assert extract_fallback_days({}) is None
+        assert extract_fallback_days(None) is None
+        assert extract_fallback_days("not-json{") is None
+        assert extract_fallback_days({"_selection_meta": {"fallback_days": "x"}}) is None
 
 
 def test_config_version_env(monkeypatch):

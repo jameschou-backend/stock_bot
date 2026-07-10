@@ -21,6 +21,7 @@
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
 from typing import Dict, List, Optional, Tuple
@@ -32,6 +33,8 @@ from sqlalchemy.orm import Session
 from app.job_utils import finish_job, start_job
 from app.market_calendar import calculate_lag_trading_days, get_latest_trading_day, get_recent_trading_days
 from app.models import Pick, PriceAdjustFactor, RawInstitutional, RawMarginShort, RawPrice
+
+logger = logging.getLogger(__name__)
 
 
 # ---------- 常數設定（預設值，可被 config 覆蓋）----------
@@ -507,7 +510,20 @@ def _check_adj_factor_freshness(
                 severity="warning",  # Phase 1：官方 factor 引擎切換生產後改 error
             ))
     except Exception as exc:
+        # 守望機制本身壞掉（schema 漂移 / 權限 / ORM 錯誤）不可沉默：此檢查的存在
+        # 目的正是在 adj factor 補值流程斷掉時提醒——check 失效必須留痕 + 記 issue
         metrics["adj_factor_freshness_check_error"] = str(exc)
+        logger.warning(
+            "[data_quality] adj factor 新鮮度檢查本身失敗（守望機制失效，需排查）: %s",
+            exc,
+            exc_info=True,
+        )
+        issues.append(QualityIssue(
+            category="adj_factor_freshness_check_failed",
+            message=f"adj factor 新鮮度檢查執行失敗（{type(exc).__name__}: {exc}）；"
+                    "無法確認 price_adjust_factors 是否新鮮，請排查",
+            severity="warning",
+        ))
     return issues, metrics
 
 
