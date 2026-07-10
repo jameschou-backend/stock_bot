@@ -35,7 +35,7 @@ import argparse
 import json
 import os
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -297,6 +297,23 @@ def main():
                         dest="slippage_multiplier",
                         help="悲觀敏感度：所有滑價（tiered / ATR 模型）× 此倍率（預設 1.0=不縮放；"
                              "personal-baseline 悲觀臂用 1.5）")
+    parser.add_argument("--odd-lot-costs", action="store_true",
+                        dest="odd_lot_costs",
+                        help="零股（odd-lot）成本模型：依 amt_20 流動性層套用實證校準 premium"
+                             "（收盤零股報價半價差 P75，雙邊）+ 手續費低消（20 元/邊 @3.3 萬部位）。"
+                             "與 --tiered-slippage 互斥（本模型優先）。2020-10-26 盤中零股上線前"
+                             "premium ×2 近似盤後零股時代。校準：artifacts/odd_lot/calibration.json")
+    parser.add_argument("--odd-lot-premium-mult", type=float, default=1.0,
+                        dest="odd_lot_premium_mult",
+                        help="悲觀敏感度：零股 premium × 此倍率（只縮放 premium，不縮放低消；"
+                             "odd-lot 預登記悲觀臂用 1.5）")
+    parser.add_argument("--eval-start", type=str, default=None,
+                        dest="eval_start",
+                        help="回測評估起日（YYYY-MM-DD）。設定時覆蓋 --months 推得的起日"
+                             "（odd-lot 主臂窗口 2020-11-01 起 = 盤中零股上線後的誠實窗口）")
+    parser.add_argument("--eval-end", type=str, default=None,
+                        dest="eval_end",
+                        help="回測評估迄日（YYYY-MM-DD），預設用資料最大日")
     parser.add_argument("--max-price", type=float, default=0.0,
                         dest="max_stock_price",
                         help="個股原始收盤價上限（元），0=不過濾（預設）。進場候選過濾、排名用全宇宙"
@@ -474,6 +491,11 @@ def main():
             args.min_avg_turnover = _pb["min_avg_turnover"]
         print(f"[production-baseline] 套用生產基準 preset: {_pb}")
 
+    # ── 零股成本模型與 tiered slippage 互斥（odd-lot 優先）──
+    if getattr(args, "odd_lot_costs", False) and args.tiered_slippage:
+        print("[odd-lot] ⚠️ --odd-lot-costs 與 --tiered-slippage 同時指定：odd-lot 成本模型優先，"
+              "tiered slippage 不生效（引擎內互斥）")
+
     # ── 解析參數（優先命令列，其次 config.yaml）──
     topn = args.topn or config.topn
     # P2-7a：來回成本顯式解析（CLI > config.transaction_cost_round_trip > 單邊 ×4.1）
@@ -648,6 +670,14 @@ def main():
             min_avg_turnover=args.min_avg_turnover,
             enable_tiered_slippage=args.tiered_slippage,
             slippage_multiplier=args.slippage_multiplier,
+            enable_odd_lot_costs=args.odd_lot_costs,
+            odd_lot_premium_mult=args.odd_lot_premium_mult,
+            eval_start=(
+                date.fromisoformat(args.eval_start) if args.eval_start else None
+            ),
+            eval_end=(
+                date.fromisoformat(args.eval_end) if args.eval_end else None
+            ),
             max_stock_price=args.max_stock_price,
             liquidity_weighting=args.liquidity_weighting,
             portfolio_circuit_breaker_pct=(

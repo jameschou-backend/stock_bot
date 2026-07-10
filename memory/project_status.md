@@ -1,6 +1,21 @@
 # 專案現況
 
-> 最後更新：2026-07-10（系統總體檢報告：功能缺口/缺陷/替代邏輯/路線圖/資金配置）
+> 最後更新：2026-07-11（odd-lot 零股臂 FAIL：三口徑全數出局，A 線個人實盤議題終結）
+
+---
+
+## 2026-07-11：odd-lot 零股口徑臂 → FAIL（詳見 decisions.md 同日條目）
+
+- **零股成本模型上線**：`skills/odd_lot_costs.py`（實證校準：TWSE TWTC7U + TPEx oddQuote
+  12 個月收盤報價半價差 P75 分層；微型股 0.99%/邊）+ `artifacts/odd_lot/calibration.json`
+  + `scripts/calibrate_odd_lot_costs.py`（可續跑重校準）+ 回測旗標
+  `--odd-lot-costs` / `--odd-lot-premium-mult` / `--eval-start`（新增 CLI）。
+- **預登記三臂**（docs/prereg_odd_lot_arm_20260711.md）：主窗（2020-11 起，盤中零股時代）
+  基準 0.310/-54.4%MDD、**悲觀 0.083/-58.4% → FAIL**、全窗參考 -0.063/-72.5%。
+- **結論**：整股買不起（personal-baseline FAIL）、零股付不起（本臂 FAIL）——
+  執行通路自由度窮盡，個人口徑翻案須等新 alpha 來源（PEAD），不是換通路。
+- 測試 792 → **808 passed**（+16 odd-lot 成本模型測試）。JSON：
+  `artifacts/backtest/odd_lot_20260711_arm{1,2,3}_*.json`（trial registry #9-#11）。
 
 ---
 

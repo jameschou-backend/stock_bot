@@ -1048,6 +1048,13 @@ class WalkForwardConfig:
     enable_tiered_slippage: bool = False
     # 悲觀敏感度：滑價倍率（tiered / ATR 模型皆套用；1.0 = 不縮放）
     slippage_multiplier: float = 1.0
+    # 零股（odd-lot）成本模型（2026-07-11 odd-lot arm）：
+    # True 時以 skills.odd_lot_costs 的分層 premium（實證校準：收盤零股報價半價差 P75）
+    # + 手續費低消，取代 tiered slippage 作為 per-stock 來回執行成本
+    # （兩者互斥，odd-lot 優先；供個人零股口徑臂使用）。
+    enable_odd_lot_costs: bool = False
+    # 悲觀敏感度：零股 premium 倍率（只縮放 premium，不縮放低消；預登記悲觀臂用 1.5）
+    odd_lot_premium_mult: float = 1.0
     # personal-baseline：個股原始收盤價上限（元）。>0 時進場候選過濾
     # 「0 < close_raw ≤ max_stock_price」（排名用全宇宙；比照 backtest_rotation --max-price）。
     # 0 = 不過濾（預設，機構口徑）。benchmark 不套此過濾（只套 min_avg_turnover）。
@@ -1128,6 +1135,30 @@ def benchmark_cost_convention(benchmark_tc: float) -> str:
     return "zero_cost" if benchmark_tc == 0 else "per_period_tc"
 
 
+def _odd_lot_config_block(enabled: bool, premium_mult: float) -> Optional[Dict]:
+    """summary JSON 的零股成本模型紀錄區塊（未啟用時為 None）。"""
+    if not enabled:
+        return None
+    from skills.odd_lot_costs import (
+        AFTER_HOURS_ERA_PREMIUM_MULT,
+        CALIBRATION_SOURCE,
+        DEFAULT_MIN_FEE_TWD,
+        DEFAULT_POSITION_SIZE_TWD,
+        INTRADAY_ODD_LOT_START,
+        ODD_LOT_PREMIUM_PER_SIDE,
+    )
+    return {
+        "enabled": True,
+        "premium_mult": premium_mult,
+        "premium_per_side_by_tier": dict(ODD_LOT_PREMIUM_PER_SIDE),
+        "position_size_twd": DEFAULT_POSITION_SIZE_TWD,
+        "min_fee_twd": DEFAULT_MIN_FEE_TWD,
+        "intraday_odd_lot_start": INTRADAY_ODD_LOT_START.isoformat(),
+        "after_hours_era_premium_mult": AFTER_HOURS_ERA_PREMIUM_MULT,
+        "calibration_source": CALIBRATION_SOURCE,
+    }
+
+
 class BacktestPipeline:
     """Walk-forward 回測管線。
 
@@ -1172,6 +1203,8 @@ class BacktestPipeline:
         self.enable_slippage        = wf_config.enable_slippage
         self.enable_tiered_slippage = wf_config.enable_tiered_slippage
         self.slippage_multiplier    = wf_config.slippage_multiplier
+        self.enable_odd_lot_costs   = wf_config.enable_odd_lot_costs
+        self.odd_lot_premium_mult   = wf_config.odd_lot_premium_mult
         self.max_stock_price        = wf_config.max_stock_price
         self.fast_mode              = wf_config.fast_mode
         self.clip_loss_pct          = wf_config.clip_loss_pct
@@ -2419,6 +2452,8 @@ class BacktestPipeline:
         enable_slippage        = self.enable_slippage
         enable_tiered_slippage = self.enable_tiered_slippage
         slippage_multiplier    = self.slippage_multiplier
+        enable_odd_lot_costs   = self.enable_odd_lot_costs
+        odd_lot_premium_mult   = self.odd_lot_premium_mult
         max_stock_price        = self.max_stock_price
         maxprice_eligible_map  = self.maxprice_eligible_map
         clip_loss_pct          = self.clip_loss_pct
@@ -2637,9 +2672,26 @@ class BacktestPipeline:
                         else:
                             _per_stock_sl[_sid] = -0.20  # fallback
 
-                # ── 分級滑價計算（依 amt_20 決定流動性層級）──
+                # ── 零股（odd-lot）成本模型（優先於 tiered slippage，兩者互斥）──
+                # 依 amt_20 流動性層查實證校準 premium（雙邊）+ 手續費低消；
+                # 2020-10-26 盤中零股上線前的期間以 premium ×2 近似盤後零股時代。
                 _tiered_slip_map: Optional[Dict[str, float]] = None
-                if enable_tiered_slippage and "amt_20" in day_feat.columns:
+                if enable_odd_lot_costs:
+                    from skills.odd_lot_costs import odd_lot_round_trip_cost
+                    _tiered_slip_map = {}
+                    _has_amt20 = "amt_20" in day_feat.columns
+                    for _, _p_row in picks.iterrows():
+                        _sid = str(_p_row["stock_id"])
+                        _amt20 = float("nan")
+                        if _has_amt20:
+                            _feat_row = day_feat[day_feat["stock_id"].astype(str) == _sid]
+                            if not _feat_row.empty:
+                                _amt20 = float(_feat_row["amt_20"].iloc[0])
+                        # amt_20 缺失 → odd_lot_round_trip_cost 落最差流動性層（保守）
+                        _tiered_slip_map[_sid] = odd_lot_round_trip_cost(
+                            _amt20, rb_date, premium_mult=odd_lot_premium_mult,
+                        )
+                elif enable_tiered_slippage and "amt_20" in day_feat.columns:
                     _tiered_slip_map = {}
                     for _, _p_row in picks.iterrows():
                         _sid = str(_p_row["stock_id"])
@@ -2865,6 +2917,9 @@ class BacktestPipeline:
                 "min_avg_turnover": min_avg_turnover,
                 "max_stock_price": max_stock_price,
                 "slippage_multiplier": slippage_multiplier,
+                "odd_lot_costs": _odd_lot_config_block(
+                    enable_odd_lot_costs, odd_lot_premium_mult,
+                ),
             },
         }
 
@@ -3043,6 +3098,8 @@ def run_backtest(
     enable_slippage: bool = False,
     enable_tiered_slippage: bool = False,
     slippage_multiplier: float = 1.0,
+    enable_odd_lot_costs: bool = False,
+    odd_lot_premium_mult: float = 1.0,
     max_stock_price: float = 0.0,
     fast_mode: bool = False,
     feature_columns: Optional[List[str]] = None,
@@ -3114,6 +3171,8 @@ def run_backtest(
             enable_slippage=enable_slippage,
             enable_tiered_slippage=enable_tiered_slippage,
             slippage_multiplier=slippage_multiplier,
+            enable_odd_lot_costs=enable_odd_lot_costs,
+            odd_lot_premium_mult=odd_lot_premium_mult,
             max_stock_price=max_stock_price,
             fast_mode=fast_mode,
             clip_loss_pct=clip_loss_pct,
