@@ -203,3 +203,23 @@ def test_rotation_max_price_wiring():
     assert "max_stock_price=args.max_price" in src, "CLI 必須接進 run_rotation"
     # 過濾必須套在進場候選（candidates）而非全宇宙排名
     assert "raw_price_map.get(_s, 0.0)" in src
+
+
+def test_rotation_signal_lag_wiring():
+    """--signal-lag 口徑（2026-07-10 D 重驗誠實臂）：T-1 特徵決策、T 日執行。
+
+    lag=0 用 T 日特徵（含 16-17 點才公佈的法人資料）在 T 日收盤進場，
+    是資訊上不可能的口徑；實盤時序 = T-1 晚間訊號 → T 日下單。
+    """
+    import inspect
+    import scripts.backtest_rotation as rot
+
+    sig = inspect.signature(rot.run_rotation)
+    assert "signal_lag" in sig.parameters
+    assert sig.parameters["signal_lag"].default == 0  # 預設不變（向後相容 + 對照舊數字）
+
+    src = Path(rot.__file__).read_text()
+    assert '"--signal-lag"' in src
+    assert "signal_lag=args.signal_lag" in src
+    # 決策特徵日必須依 lag 從 bt_dates 回退
+    assert "bt_dates[day_idx - signal_lag]" in src

@@ -353,6 +353,9 @@ def run_rotation(
     min_avg_turnover: float = 0.0,       # 20日平均成交值門檻（億元），0=停用
     max_stock_price: float = 0.0,        # 個股股價上限（原始收盤價，元），0=停用；
                                          # 對齊實盤 strategy_d_pick --max-price（資金/檔數買得起一張）
+    signal_lag: int = 0,                 # 訊號延遲（交易日）：1=用 T-1 特徵決策、T 日收盤執行
+                                         # （誠實口徑，對齊實盤時序）；0=舊口徑（T 日特徵 T 日進場，
+                                         # 含盤後法人資料 lookahead，僅供與歷史數字對照）
     slippage_pct: float = 0.0,           # 每筆固定滑價（進+出各一次），0=停用
     use_tiered_slippage: bool = False,   # 依流動性分級計算滑價
     # ── 動態流動性門檻（依市場規模自動調整）──
@@ -431,6 +434,8 @@ def run_rotation(
         print(f"  [Score Stability ON] drop_threshold={score_drop_threshold:.0%}, stoploss={stoploss_pct:.0%}")
     if exit_mode == "rank":
         print(f"  Rank threshold: top {rank_threshold:.0%} (sell if drops out)")
+    if signal_lag > 0:
+        print(f"  [Signal Lag] T-{signal_lag} 特徵決策、T 日收盤執行（誠實時序口徑）")
     elif exit_mode == "oracle":
         print(f"  [Oracle 訊號出場]")
         print(f"  RSI>{oracle_rsi_ob} AND Boll%B>{oracle_boll_ob} → 技術面過熱")
@@ -762,7 +767,18 @@ def run_rotation(
                 raw_price_map[_sid_px] = float(r["close"]) if pd.notna(r["close"]) else 0.0
 
         # ── Score all stocks ──
-        tf_today = feat_df[feat_df["trading_date"] == today].copy()
+        # signal_lag=1：用「前一交易日」特徵決策、今日收盤價執行——對齊實盤時序
+        # （T-1 晚間 pipeline 產訊號 → T 日下單）。lag=0 用 T 日特徵在 T 日收盤進場，
+        # 但特徵含 T 日 16-17 點才公佈的法人資料，是資訊上不可能的口徑
+        # （2026-07-10 總體檢缺陷 4：delay 口徑為先驗裁定，不掛效果量）。
+        if signal_lag > 0:
+            _sig_date = bt_dates[day_idx - signal_lag] if day_idx >= signal_lag else None
+        else:
+            _sig_date = today
+        tf_today = (
+            feat_df[feat_df["trading_date"] == _sig_date].copy()
+            if _sig_date is not None else feat_df.iloc[0:0].copy()
+        )
         tf_today = tf_today[tf_today["stock_id"].str.fullmatch(r"\d{4}")]
         if tf_today.empty:
             equity_curve.append({"date": str(today), "equity": equity})
@@ -1243,6 +1259,7 @@ def run_rotation(
             "train_label_horizon": train_label_horizon,
             "min_avg_turnover": min_avg_turnover,
             "max_stock_price": max_stock_price,
+            "signal_lag": signal_lag,
             "dynamic_liquidity": dynamic_liquidity,
             "base_liquidity": base_liquidity,
             "liquidity_lookback": liquidity_lookback,
@@ -1351,6 +1368,9 @@ def main():
                         help="Oracle 模式：5日報酬獲利了結門檻（預設 0.20）")
     parser.add_argument("--max-price", type=float, default=0.0,
                         help="個股股價上限（原始收盤價，元），0=不過濾；對齊實盤 D --max-price")
+    parser.add_argument("--signal-lag", type=int, default=0,
+                        help="訊號延遲交易日數：1=T-1 特徵決策、T 日收盤執行（誠實口徑）；"
+                             "0=舊口徑（T 日盤後特徵 T 日進場，含 lookahead）")
     parser.add_argument("--min-avg-turnover", type=float, default=0.0,
                         help="20日均成交值門檻（億元），0=停用。建議值：0.5=5千萬/日")
     parser.add_argument("--slippage", type=float, default=0.0,
@@ -1447,6 +1467,7 @@ def main():
             oracle_ret5_tp=args.oracle_ret5_tp,
             min_avg_turnover=args.min_avg_turnover,
             max_stock_price=args.max_price,
+            signal_lag=args.signal_lag,
             slippage_pct=args.slippage,
             use_tiered_slippage=args.tiered_slippage,
             chip_exit=args.chip_exit,

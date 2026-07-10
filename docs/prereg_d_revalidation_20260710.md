@@ -47,3 +47,32 @@ DATA_STORE_FREEZE=1 python scripts/backtest_rotation.py --months 120 \
    「再跑一個變體看看」都是新實驗，需另行預登記。
 4. 預期管理：A 線同型修正的先例是 +10004% → +205%（去洩漏）、0.99 → 0.65
    （誠實化）——D 從 1.925 大幅回落是預期內，不構成「修壞了」的證據。
+
+---
+
+## 修正案 1（2026-07-10，臂 1 結果已出但裁決前）：signal-lag 誠實臂
+
+**臂 1 結果**（上述指令，`d_revalidation_20260710.json`）：Sharpe 1.823 /
++594,556% / MDD -42.7%——表面落在 PASS 區，但**發現預登記設計疏失**：
+rotation 引擎不支援 entry delay，臂 1 每筆交易「用 T 日特徵（含 T 日 16-17 點
+才公佈的法人資料）在 T 日收盤進場」。此口徑已於同日總體檢報告（缺陷 4，
+commit 早於本重驗）**無條件裁定為不誠實**（delay 口徑是先驗論證，不掛效果量）；
+D 平均持倉僅 5.5 天，隔夜跳空 lookahead 占比遠大於月頻 A 線——臂 1 的 1.82
+與髒資料時代 1.925 幾乎無差，與 A 線修復經驗（0.99→0.65）矛盾，即為此故。
+
+**處置（先驗裁定的機械適用，非對好數字的反應）**：
+- rotation 新增 `--signal-lag 1`（T-1 特徵決策、T 日收盤執行 = 實盤時序：
+  T-1 晚間 18:00 pipeline 產訊號 → T 日下單）。
+- **D 的最終裁決以臂 2（signal-lag 1）為準**，判準表不變（PASS ≥0.85 / GRAY / FAIL）。
+- 臂 1 保留為「lookahead 溢價」的歸因記錄（臂1 − 臂2 = 隔夜資訊優勢的價值）。
+
+臂 2 指令（其餘與臂 1 完全相同）：
+
+```bash
+DATA_STORE_FREEZE=1 python scripts/backtest_rotation.py --months 120 \
+  --train-label-horizon 5 --max-positions 4 --rank-threshold 0.20 \
+  --trailing-stop -0.25 --min-avg-turnover 1.0 --max-price 250 \
+  --excess-label --tiered-slippage --transaction-cost 0.00585 \
+  --signal-lag 1 \
+  --output artifacts/backtest/d_revalidation_lag1_20260710.json
+```
