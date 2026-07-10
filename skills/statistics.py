@@ -268,6 +268,157 @@ def cpcv_splits(
 
 
 # ──────────────────────────────────────────────
+# Paired circular block-bootstrap Sharpe 95% CI
+# ──────────────────────────────────────────────
+
+@dataclass
+class BootstrapSharpeCI:
+    """Paired block-bootstrap Sharpe 信賴區間結果。
+
+    sharpe_observed 的計算口徑與 skills/backtest.py summary 相同：
+    (mean(r) - rf_period) / std(r, ddof=0) * sqrt(periods_per_year)。
+    excess_* 為策略減 benchmark 的主動報酬 Sharpe（information-ratio 口徑，不扣 rf），
+    僅在提供 benchmark_returns 時計算。
+    """
+    sharpe_observed: float
+    ci_low: float
+    ci_high: float
+    ci_level: float
+    n_boot: int
+    block_size: int
+    seed: int
+    n_observations: int
+    excess_sharpe_observed: Optional[float] = None
+    excess_ci_low: Optional[float] = None
+    excess_ci_high: Optional[float] = None
+
+    def __str__(self) -> str:
+        s = (
+            f"Sharpe {self.sharpe_observed:.3f} "
+            f"[{self.ci_low:.3f}, {self.ci_high:.3f}] @ {self.ci_level:.0%} "
+            f"(block={self.block_size}, B={self.n_boot}, n={self.n_observations})"
+        )
+        if self.excess_sharpe_observed is not None:
+            s += (
+                f" | excess {self.excess_sharpe_observed:.3f} "
+                f"[{self.excess_ci_low:.3f}, {self.excess_ci_high:.3f}]"
+            )
+        return s
+
+
+def _sharpe_backtest_convention(
+    returns: np.ndarray,
+    rf_period: float,
+    periods_per_year: int,
+) -> float:
+    """與 skills/backtest.py 一致的 Sharpe：excess mean / std(ddof=0) * sqrt(ppy)。"""
+    if len(returns) < 2:
+        return 0.0
+    std = returns.std()  # ddof=0（backtest summary 口徑）
+    if std <= 0:
+        return 0.0
+    return float((returns.mean() - rf_period) / std * math.sqrt(periods_per_year))
+
+
+def paired_block_bootstrap_sharpe_ci(
+    returns: np.ndarray,
+    benchmark_returns: Optional[np.ndarray] = None,
+    *,
+    block_size: int = 6,
+    n_boot: int = 1000,
+    seed: int = 42,
+    periods_per_year: int = 12,
+    risk_free_rate: float = 0.015,
+    ci_level: float = 0.95,
+) -> BootstrapSharpeCI:
+    """Paired circular（moving）block bootstrap 的 Sharpe 信賴區間。
+
+    月報酬有序列相關（動能策略、月頻再平衡），iid bootstrap 會低估 Sharpe 變異數；
+    block bootstrap 以連續 block 重抽保留 block 內自相關。「paired」= 策略與
+    benchmark 用同一組 block 索引重抽，主動報酬（excess）的相關結構得以保留。
+
+    Args:
+        returns: 策略每期報酬（月頻 → periods_per_year=12）
+        benchmark_returns: 大盤每期報酬（同長度；提供時額外回傳 excess Sharpe CI）
+        block_size: block 長度（月頻建議 ~6，覆蓋半年内的自相關）
+        n_boot: 重抽次數（預設 1000）
+        seed: RNG seed（np.random.default_rng；同 seed 結果 deterministic）
+        periods_per_year: 年化倍數
+        risk_free_rate: 年化無風險利率（幾何月化後扣除，與 backtest 相同口徑）
+        ci_level: 信賴水準（預設 0.95 → 取 2.5/97.5 百分位）
+
+    Returns:
+        BootstrapSharpeCI
+    """
+    returns = np.asarray(returns, dtype=float)
+    n = len(returns)
+    if n < 2:
+        raise ValueError(f"returns 至少需要 2 期（got {n}）")
+    if block_size < 1:
+        raise ValueError("block_size >= 1")
+    if n_boot < 1:
+        raise ValueError("n_boot >= 1")
+    if not (0 < ci_level < 1):
+        raise ValueError("ci_level in (0, 1)")
+    if benchmark_returns is not None:
+        benchmark_returns = np.asarray(benchmark_returns, dtype=float)
+        if len(benchmark_returns) != n:
+            raise ValueError(
+                f"benchmark_returns 長度 {len(benchmark_returns)} != returns 長度 {n}"
+            )
+
+    # 與 backtest summary 相同：rf 幾何月化
+    rf_period = (1 + risk_free_rate) ** (1 / periods_per_year) - 1
+
+    sharpe_obs = _sharpe_backtest_convention(returns, rf_period, periods_per_year)
+    excess_obs: Optional[float] = None
+    if benchmark_returns is not None:
+        active = returns - benchmark_returns
+        excess_obs = _sharpe_backtest_convention(active, 0.0, periods_per_year)
+
+    rng = np.random.default_rng(seed)
+    n_blocks = math.ceil(n / block_size)
+    # 一次抽出所有 replicate 的 block 起點：(n_boot, n_blocks)，circular wraparound
+    starts = rng.integers(0, n, size=(n_boot, n_blocks))
+    offsets = np.arange(block_size)
+    # idx shape: (n_boot, n_blocks * block_size) → 截斷到 n
+    idx = ((starts[:, :, None] + offsets[None, None, :]) % n).reshape(n_boot, -1)[:, :n]
+
+    boot_returns = returns[idx]  # (n_boot, n)
+    sharpe_boot = np.empty(n_boot)
+    for b in range(n_boot):
+        sharpe_boot[b] = _sharpe_backtest_convention(boot_returns[b], rf_period, periods_per_year)
+
+    alpha = (1 - ci_level) / 2
+    ci_low, ci_high = np.percentile(sharpe_boot, [100 * alpha, 100 * (1 - alpha)])
+
+    excess_low: Optional[float] = None
+    excess_high: Optional[float] = None
+    if benchmark_returns is not None:
+        boot_active = (returns - benchmark_returns)[idx]  # paired：同一組索引
+        excess_boot = np.empty(n_boot)
+        for b in range(n_boot):
+            excess_boot[b] = _sharpe_backtest_convention(boot_active[b], 0.0, periods_per_year)
+        excess_low, excess_high = (
+            float(v) for v in np.percentile(excess_boot, [100 * alpha, 100 * (1 - alpha)])
+        )
+
+    return BootstrapSharpeCI(
+        sharpe_observed=sharpe_obs,
+        ci_low=float(ci_low),
+        ci_high=float(ci_high),
+        ci_level=ci_level,
+        n_boot=n_boot,
+        block_size=block_size,
+        seed=seed,
+        n_observations=n,
+        excess_sharpe_observed=excess_obs,
+        excess_ci_low=excess_low,
+        excess_ci_high=excess_high,
+    )
+
+
+# ──────────────────────────────────────────────
 # Convenience: 從 returns 計算 annualized Sharpe + 高階動差
 # ──────────────────────────────────────────────
 

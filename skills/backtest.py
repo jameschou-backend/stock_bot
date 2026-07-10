@@ -890,7 +890,13 @@ class WalkForwardConfig:
     # ── 進出場設定 ──
     entry_delay_days: int = 0
     risk_free_rate: float = 0.015
-    benchmark_with_cost: bool = True
+    # ── benchmark 成本口徑（2026-07-10 缺陷 3 修復）──
+    # 舊行為（benchmark_with_cost=True）：等權 benchmark 每期扣 transaction_cost_pct，
+    # 等同假設 benchmark 每月 100% 周轉——120 期複利拖累 ×~0.495，虛增策略超額約 +190pp。
+    # 新預設：benchmark 零成本（buy-and-hold 近似；對策略超額主張為保守方向）。
+    # 敏感度分析請用 benchmark_tc_pct 顯式指定每期扣減值（CLI --benchmark-tc）。
+    benchmark_with_cost: bool = False  # DEPRECATED：僅為舊呼叫端相容保留；顯式 True 才會扣 transaction_cost_pct
+    benchmark_tc_pct: float = 0.0  # benchmark 每期扣減成本（來回口徑）；0 = zero_cost（預設）
     position_sizing: str = "equal"
     position_sizing_method: str = "risk_parity"
     trailing_stop_pct: Optional[float] = None
@@ -950,6 +956,32 @@ class WalkForwardConfig:
     stacking_val_frac: float = 0.20  # 末段切多少比例做 early-stopping 驗證
 
 
+# ── Benchmark 成本口徑 helpers（純函數，供單元測試鎖定行為）─────────────────
+def resolve_benchmark_tc(
+    benchmark_tc_pct: float,
+    benchmark_with_cost: bool,
+    transaction_cost_pct: float,
+) -> float:
+    """解析 benchmark 每期扣減成本（2026-07-10 缺陷 3 修復後的唯一決策點）。
+
+    優先序：
+      1. benchmark_tc_pct > 0：顯式敏感度分析值（CLI --benchmark-tc）
+      2. benchmark_with_cost=True：DEPRECATED 舊口徑（每期扣 transaction_cost_pct，
+         隱含 benchmark 每月 100% 周轉——僅為重現舊實驗保留，須顯式 opt-in）
+      3. 其餘：0.0 = zero_cost（預設，buy-and-hold 近似）
+    """
+    if benchmark_tc_pct and benchmark_tc_pct > 0:
+        return float(benchmark_tc_pct)
+    if benchmark_with_cost:
+        return float(transaction_cost_pct)
+    return 0.0
+
+
+def benchmark_cost_convention(benchmark_tc: float) -> str:
+    """summary JSON 用的口徑標籤：0 → zero_cost，>0 → per_period_tc。"""
+    return "zero_cost" if benchmark_tc == 0 else "per_period_tc"
+
+
 class BacktestPipeline:
     """Walk-forward 回測管線。
 
@@ -983,6 +1015,7 @@ class BacktestPipeline:
         self.entry_delay_days       = wf_config.entry_delay_days
         self.risk_free_rate         = wf_config.risk_free_rate
         self.benchmark_with_cost    = wf_config.benchmark_with_cost
+        self.benchmark_tc_pct       = wf_config.benchmark_tc_pct
         self.position_sizing        = wf_config.position_sizing
         self.position_sizing_method = wf_config.position_sizing_method
         self.trailing_stop_pct      = wf_config.trailing_stop_pct
@@ -1047,7 +1080,11 @@ class BacktestPipeline:
         self.data_start: Optional[date] = None
         self.data_end: Optional[date] = None
         self.backtest_start: Optional[date] = None
-        self.benchmark_tc: float = 0.0
+        # benchmark 每期扣減成本：預設 0（zero_cost，buy-and-hold 近似）。
+        # 只依賴 config 值，於 __init__ 即可解析（不需等 prepare）。
+        self.benchmark_tc: float = resolve_benchmark_tc(
+            self.benchmark_tc_pct, self.benchmark_with_cost, self.transaction_cost_pct
+        )
 
         # ── 計時統計（prepare/run 間共用）──
         self._timer_load_prices = 0.0
@@ -1139,7 +1176,11 @@ class BacktestPipeline:
         print(
             f"  交易成本: {self.transaction_cost_pct:.3%}（來回）  進場延遲: {self.entry_delay_days} 交易日"
         )
-        print(f"  無風險利率: {self.risk_free_rate:.1%}  Benchmark含成本: {self.benchmark_with_cost}")
+        print(
+            f"  無風險利率: {self.risk_free_rate:.1%}  Benchmark成本口徑: "
+            f"{benchmark_cost_convention(self.benchmark_tc)}"
+            + (f"（每期扣 {self.benchmark_tc:.4%}）" if self.benchmark_tc > 0 else "（buy-and-hold 近似）")
+        )
         if self.train_lookback_days:
             print(f"  訓練窗長: {self.train_lookback_days} 日")
         print()
@@ -1313,7 +1354,8 @@ class BacktestPipeline:
         self.data_start = data_start
         self.data_end = data_end
         self.backtest_start = backtest_start
-        self.benchmark_tc = self.transaction_cost_pct if self.benchmark_with_cost else 0.0
+        # benchmark_tc 已於 __init__ 由 resolve_benchmark_tc() 解析（缺陷 3 修復：
+        # 預設 zero_cost；舊「每期扣 transaction_cost_pct」須顯式 opt-in）
 
     # ── 2. 單期訓練 ──────────────────────────────────────────────────────
     def _train_model_for_period(
@@ -2194,7 +2236,7 @@ class BacktestPipeline:
 
         benchmark_equity = 10000.0
         benchmark_curve = [{"date": equity_curve[0]["date"], "equity": benchmark_equity}]
-        benchmark_tc = self.benchmark_tc
+        # benchmark 成本扣減點只有 _compute_benchmark_return（讀 self.benchmark_tc）
 
         # 仍保留 feat_df / label_df 區域引用（rolling 模式會在迴圈內覆寫）
         feat_df = self.feat_df
@@ -2582,11 +2624,15 @@ class BacktestPipeline:
             "stoploss_triggered": sum(p["stoploss_triggered"] for p in period_results),
             "backtest_start": period_results[0]["rebalance_date"],
             "backtest_end": period_results[-1]["exit_date"],
+            # benchmark 成本口徑（2026-07-10 缺陷 3 修復：預設 zero_cost）。
+            # 與扣成本舊口徑（每期 -0.58425%，120 期複利 ×~0.495）的結果不可直接比較。
+            "benchmark_cost_convention": benchmark_cost_convention(self.benchmark_tc),
             # 回測設定紀錄
             "config": {
                 "entry_delay_days": entry_delay_days,
                 "risk_free_rate": risk_free_rate,
-                "benchmark_with_cost": benchmark_with_cost,
+                "benchmark_with_cost": benchmark_with_cost,  # DEPRECATED（僅記錄舊旗標值）
+                "benchmark_tc_pct": round(self.benchmark_tc, 6),
                 "position_sizing": position_sizing,
                 "stoploss_pct": stoploss_pct,
                 "trailing_stop_pct": trailing_stop_pct,
@@ -2758,7 +2804,8 @@ def run_backtest(
     train_lookback_days: Optional[int] = None,
     entry_delay_days: int = 0,
     risk_free_rate: float = 0.015,
-    benchmark_with_cost: bool = True,
+    benchmark_with_cost: bool = False,  # DEPRECATED：預設 zero_cost；見 WalkForwardConfig 註解
+    benchmark_tc_pct: float = 0.0,
     position_sizing: str = "equal",
     position_sizing_method: str = "risk_parity",
     trailing_stop_pct: Optional[float] = None,
@@ -2827,6 +2874,7 @@ def run_backtest(
             entry_delay_days=entry_delay_days,
             risk_free_rate=risk_free_rate,
             benchmark_with_cost=benchmark_with_cost,
+            benchmark_tc_pct=benchmark_tc_pct,
             position_sizing=position_sizing,
             position_sizing_method=position_sizing_method,
             trailing_stop_pct=trailing_stop_pct,

@@ -20,7 +20,8 @@
 回測可信度參數:
     python scripts/run_backtest.py --entry-delay 1              # 隔日進場（預設）
     python scripts/run_backtest.py --risk-free 0.015            # 無風險利率 1.5%
-    python scripts/run_backtest.py --no-benchmark-cost          # Benchmark 不含成本
+    python scripts/run_backtest.py --benchmark-tc 0.0058425     # 敏感度分析：benchmark 每期扣成本
+                                                                # （預設 0 = zero_cost，buy-and-hold 近似）
 
 10y 逐步優化實驗（每次只改一個變數）:
     python scripts/run_backtest.py --months 120 --baseline      # 乾淨基準（無時間加權/無複雜過濾）
@@ -51,6 +52,36 @@ from skills.mlflow_tracking import (
     log_params,
     start_mlflow_run,
 )
+from skills.statistics import (
+    deflated_sharpe_ratio,
+    paired_block_bootstrap_sharpe_ci,
+    returns_moments,
+)
+
+# ── 統計紀律工具化（2026-07-10，總體檢缺陷 6 規則 1）──────────────────────────
+# trial registry：每次 run_backtest 完成 append 一行，供 DSR n_trials 累計。
+TRIAL_REGISTRY_PATH = ROOT / "artifacts" / "experiments" / "trial_registry.jsonl"
+
+# 歷史實驗基數（honest_baseline 慣例：DSR 的 n_trials 寧可高估讓折扣偏嚴）。
+# registry 自 2026-07-10 才開始記錄；在此之前 docs/experiments_history.md 與
+# memory/decisions.md 已記錄 Stage 6.1~10.6、Experiment A~F、Optuna 兩輪（30+ trials）、
+# 圓桌 filter group、vol-target/topn sweep 等歷史實驗，合計約 80 個候選配置，
+# 全數屬同一 selection process，須計入 multiple-testing 折扣。
+HISTORICAL_TRIALS_BASE = 80
+
+# bootstrap CI 固定參數（缺陷 6 規則 1：月報酬 paired block-bootstrap，block~6、1000 次）
+BOOTSTRAP_BLOCK_SIZE = 6
+BOOTSTRAP_N_RESAMPLES = 1000
+BOOTSTRAP_SEED = 42
+
+# 跨 trial Sharpe 標準差（DSR 的 sr_estimates_std）：Bailey & LdP 規定以「所有 trial
+# 的 SR 估計值離散度」估計。本專案歷史 trial 年化 Sharpe（docs/experiments_history.md
+# + memory/decisions.md）：0.49（Exp F）~ 1.33（Stage 10.1，後證洩漏），大量 NEGATIVE
+# 實驗聚集 0.6~1.0 → 年化 std ≈ 0.25。DSR 公式用「每期（月）SR」單位 → /sqrt(12)。
+# 註：若改用「完全未知」保守上限 1.0（年化），E[max SR|null] ≈ 年化 2.46，對本專案
+# 任何結果恆 p≈0——過度保守到喪失鑑別力，故採實證估計（調整時同步改此註解）。
+TRIAL_SR_STD_ANNUAL = 0.25
+TRIAL_SR_STD_MONTHLY = TRIAL_SR_STD_ANNUAL / (12 ** 0.5)
 
 
 def production_baseline_overrides() -> dict:
@@ -96,6 +127,112 @@ def resolve_round_trip_cost(cli_cost, config) -> tuple:
     _one_way = float(config.transaction_cost_pct)
     _round_trip = _one_way * 4.1
     return _round_trip, "config.transaction_cost_pct*4.1"
+
+
+# ──────────────────────────────────────────────
+# 統計紀律：trial registry + bootstrap CI + DSR
+# ──────────────────────────────────────────────
+
+def append_trial_registry(record: dict, registry_path=None) -> int:
+    """append 一行 JSONL 到 trial registry，回傳 append 後總行數。
+
+    registry 是 DSR n_trials 的資料源：每跑一次回測（不論結果好壞）都算一次
+    trial——只記「採用的」會低估 selection bias。
+    """
+    path = Path(registry_path) if registry_path else TRIAL_REGISTRY_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
+    return registry_trial_count(path)
+
+
+def registry_trial_count(registry_path=None) -> int:
+    """registry 現有行數（不存在 = 0）。"""
+    path = Path(registry_path) if registry_path else TRIAL_REGISTRY_PATH
+    if not path.exists():
+        return 0
+    with open(path, "r", encoding="utf-8") as f:
+        return sum(1 for line in f if line.strip())
+
+
+def compute_statistics_block(result: dict, n_trials: int, risk_free_rate: float) -> dict | None:
+    """從回測 result 計算統計紀律區塊（bootstrap Sharpe CI + DSR p-value）。
+
+    - Sharpe 95% CI：月報酬 paired circular block-bootstrap（block=6、1000 次、
+      seed 固定 → deterministic），與 benchmark 同索引重抽，另附 excess Sharpe CI。
+    - DSR：Bailey & López de Prado 2014。公式使用「每期（月）SR」+ 月觀察數
+      （單位一致性：sqrt(n_obs-1) 是月數）；skew/kurt 取自月報酬實際動差；
+      n_trials = trial registry 行數 + HISTORICAL_TRIALS_BASE。
+
+    periods 不足（<2）回傳 None。任何一步失敗不阻斷回測（呼叫端 try/except）。
+    """
+    periods = result.get("periods") or []
+    rets, bench = [], []
+    for p in periods:
+        r, b = p.get("return"), p.get("benchmark_return")
+        if r is not None:
+            rets.append(float(r))
+            bench.append(float(b) if b is not None else 0.0)
+    if len(rets) < 2:
+        return None
+
+    import numpy as np
+
+    rets_arr = np.asarray(rets)
+    bench_arr = np.asarray(bench)
+
+    boot = paired_block_bootstrap_sharpe_ci(
+        rets_arr,
+        bench_arr,
+        block_size=BOOTSTRAP_BLOCK_SIZE,
+        n_boot=BOOTSTRAP_N_RESAMPLES,
+        seed=BOOTSTRAP_SEED,
+        periods_per_year=12,
+        risk_free_rate=risk_free_rate,
+    )
+
+    moments = returns_moments(rets_arr)
+    # DSR 用每期（月）SR：與 summary 年化 Sharpe 同口徑但不乘 sqrt(12)
+    rf_monthly = (1 + risk_free_rate) ** (1 / 12) - 1
+    monthly_std = rets_arr.std()  # ddof=0，與 backtest summary 一致
+    monthly_sr = float((rets_arr.mean() - rf_monthly) / monthly_std) if monthly_std > 0 else 0.0
+    dsr = deflated_sharpe_ratio(
+        sr_observed=monthly_sr,
+        n_trials=n_trials,
+        n_observations=len(rets_arr),
+        skewness=moments["skewness"],
+        kurtosis=moments["kurtosis"],
+        sr_estimates_std=TRIAL_SR_STD_MONTHLY,
+    )
+
+    return {
+        "sharpe_ci_95": {
+            "sharpe_observed": round(boot.sharpe_observed, 4),
+            "ci_low": round(boot.ci_low, 4),
+            "ci_high": round(boot.ci_high, 4),
+            "excess_sharpe_observed": round(boot.excess_sharpe_observed, 4),
+            "excess_ci_low": round(boot.excess_ci_low, 4),
+            "excess_ci_high": round(boot.excess_ci_high, 4),
+            "method": "paired_circular_block_bootstrap",
+            "block_size": boot.block_size,
+            "n_boot": boot.n_boot,
+            "seed": boot.seed,
+            "n_observations": boot.n_observations,
+        },
+        "deflated_sharpe": {
+            "sr_observed_monthly": round(dsr.sr_observed, 4),
+            "sr_expected_max_under_null": round(dsr.sr_expected_under_null, 4),
+            "p_value": round(dsr.p_value, 4),
+            "is_significant_5pct": dsr.is_significant_5pct,
+            "n_trials": dsr.n_trials,
+            "n_observations": dsr.n_observations,
+            "sr_estimates_std_monthly": round(TRIAL_SR_STD_MONTHLY, 4),
+            "n_trials_source": (
+                f"trial_registry({n_trials - HISTORICAL_TRIALS_BASE}) "
+                f"+ historical_base({HISTORICAL_TRIALS_BASE})"
+            ),
+        },
+    }
 
 
 def main():
@@ -149,7 +286,12 @@ def main():
                         dest="risk_free_rate",
                         help="無風險利率年化 (預設 0.015 = 1.5%%)")
     parser.add_argument("--no-benchmark-cost", action="store_true",
-                        help="Benchmark 不套用交易成本（舊行為，不建議）")
+                        help="DEPRECATED no-op：benchmark 零成本已是預設（2026-07-10 缺陷 3 修復）")
+    parser.add_argument("--benchmark-tc", type=float, default=0.0,
+                        dest="benchmark_tc",
+                        help="敏感度分析：benchmark 每期扣減成本（來回口徑，如 0.0058425）。"
+                             "預設 0 = zero_cost（buy-and-hold 近似）。注意：>0 等同假設 "
+                             "benchmark 每期 100%% 周轉，僅供敏感度對照，不可作 headline")
 
     # ── 10y 逐步優化實驗參數 ──
     parser.add_argument("--baseline", action="store_true",
@@ -359,7 +501,17 @@ def main():
 
     entry_delay = args.entry_delay_days if args.entry_delay_days is not None else 0  # 原始：當日收盤進場
     risk_free = args.risk_free_rate if args.risk_free_rate is not None else config.backtest_risk_free_rate
-    benchmark_with_cost = not args.no_benchmark_cost and config.backtest_benchmark_with_cost
+    # ── benchmark 成本口徑（2026-07-10 缺陷 3 修復）──
+    # 預設 zero_cost（buy-and-hold 近似）；--benchmark-tc X 顯式指定每期扣減值供敏感度分析。
+    # 舊 config.backtest_benchmark_with_cost / --no-benchmark-cost 路徑退役（不再假設
+    # benchmark 每月 100% 周轉——該假設 120 期複利拖累 ×0.495，虛增超額約 +190pp）。
+    if args.no_benchmark_cost:
+        print("[benchmark] --no-benchmark-cost 已 DEPRECATED（零成本已是預設，旗標為 no-op）")
+    benchmark_tc_pct = float(args.benchmark_tc)
+    if benchmark_tc_pct > 0:
+        print(f"[benchmark] 成本口徑: per_period_tc（每期扣 {benchmark_tc_pct:.6f}，敏感度分析用）")
+    else:
+        print("[benchmark] 成本口徑: zero_cost（buy-and-hold 近似；預設）")
     ps_method = args.position_sizing_method or getattr(config, "position_sizing_method", "risk_parity")
     atr_mult = args.atr_stoploss_multiplier  # 原始：無 ATR 停損（None unless explicitly set）
 
@@ -475,7 +627,7 @@ def main():
             transaction_cost_pct=cost,
             entry_delay_days=entry_delay,
             risk_free_rate=risk_free,
-            benchmark_with_cost=benchmark_with_cost,
+            benchmark_tc_pct=benchmark_tc_pct,
             position_sizing=sizing,
             position_sizing_method=ps_method,
             trailing_stop_pct=trailing,
@@ -536,6 +688,65 @@ def main():
         if _snap_pre != _snap_post:
             print("[snapshot] ⚠️ 資料快照在本次 run 期間改變（cache 重建）——"
                   "本結果與同指令其他 run 不可直接比較（可重現性危害）")
+
+        _summary = result.get("summary") or {}
+
+        # ── 統計紀律工具化（2026-07-10 缺陷 6 規則 1）──
+        # 1) trial registry append（每次 run 都算一次 trial，不論結果）
+        # 2) 月報酬 paired block-bootstrap Sharpe 95% CI + DSR p-value
+        if _summary:
+            try:
+                _reg_record = {
+                    "timestamp": datetime.now().isoformat(timespec="seconds"),
+                    "command": " ".join(str(a) for a in sys.argv),
+                    "sharpe": _summary.get("sharpe_ratio"),
+                    "months": args.months,
+                    "data_snapshot_summary": _snap_post,
+                }
+                _reg_count = append_trial_registry(_reg_record)
+                _n_trials = _reg_count + HISTORICAL_TRIALS_BASE
+                print(f"[trial-registry] 已記錄第 {_reg_count} 筆 → {TRIAL_REGISTRY_PATH}"
+                      f"（DSR n_trials = {_reg_count} + {HISTORICAL_TRIALS_BASE} = {_n_trials}）")
+            except Exception as _reg_exc:
+                print(f"[trial-registry] 寫入失敗（統計區塊改用歷史基數）: {_reg_exc}")
+                _n_trials = registry_trial_count() + HISTORICAL_TRIALS_BASE
+
+            try:
+                _stats = compute_statistics_block(result, n_trials=_n_trials, risk_free_rate=risk_free)
+                result["summary"]["statistics"] = _stats
+                if _stats:
+                    _ci = _stats["sharpe_ci_95"]
+                    _dsr = _stats["deflated_sharpe"]
+                    print(f"\n── 統計紀律（缺陷 6 規則 1）──")
+                    print(f"  Sharpe 95% CI（block-bootstrap, block={_ci['block_size']}, "
+                          f"B={_ci['n_boot']}）: {_ci['sharpe_observed']:.3f} "
+                          f"[{_ci['ci_low']:.3f}, {_ci['ci_high']:.3f}]")
+                    print(f"  Excess Sharpe 95% CI: {_ci['excess_sharpe_observed']:.3f} "
+                          f"[{_ci['excess_ci_low']:.3f}, {_ci['excess_ci_high']:.3f}]")
+                    print(f"  DSR p-value: {_dsr['p_value']:.4f} "
+                          f"(n_trials={_dsr['n_trials']}, "
+                          f"{'SIGNIFICANT' if _dsr['is_significant_5pct'] else 'NOT significant'} @5%)")
+            except Exception as _stats_exc:
+                print(f"[statistics] 統計區塊計算失敗（欄位為 null，不阻斷）: {_stats_exc}")
+                result["summary"]["statistics"] = None
+
+            # ── TR 指數對照臂（機會成本；fetch 失敗 → null，不阻斷）──
+            try:
+                from skills.taiex_tr import compute_vs_taiex_tr
+                _vs_tr = compute_vs_taiex_tr(result.get("equity_curve") or [])
+            except Exception as _tr_exc:
+                print(f"[taiex_tr] vs_taiex_tr 失敗（欄位為 null）: {_tr_exc}")
+                _vs_tr = None
+            result["summary"]["vs_taiex_tr"] = _vs_tr
+            if _vs_tr:
+                print(f"\n── vs 發行量加權股價報酬指數（TAIEX TR，含息機會成本）──")
+                print(f"  策略年化 {_vs_tr['strategy_annualized_return']:+.2%}  "
+                      f"TR 指數年化 {_vs_tr['taiex_tr_annualized_return']:+.2%}  "
+                      f"年化超額 {_vs_tr['excess_annualized_vs_tr']:+.2%}")
+                print(f"  （窗口 {_vs_tr['window']['start']} ~ {_vs_tr['window']['end']}，"
+                      f"TR 取值 {_vs_tr['window']['tr_start_date']} ~ {_vs_tr['window']['tr_end_date']}）")
+            else:
+                print("[taiex_tr] vs_taiex_tr = null（fetch 失敗或快取不涵蓋回測窗）")
 
         # ── Stage 10.6：beta-hedge 後處理 ──
         _hedge_ratio = getattr(args, "hedge_ratio", 0.0)
