@@ -27,6 +27,7 @@ from app.job_utils import finish_job, start_job
 from app.models import Feature, Job, ModelVersion, Pick, RawPrice, Stock
 from skills.build_features import FEATURE_COLUMNS
 from skills import breakthrough as _bt
+from skills import disposition_filter as _disposition
 from skills import regime, risk
 from skills import tradability_filter
 from skills import multi_agent_selector
@@ -266,6 +267,49 @@ def _filter_overheated(
         logging.getLogger(__name__).debug("overheat_filter: removed %d stocks", n_removed)
 
     return filtered
+
+
+def _apply_disposition_filter(
+    df: pd.DataFrame,
+    config,
+    coverage_stats: Dict[str, object],
+) -> pd.DataFrame:
+    """處置股 live-only 過濾（執行衛生）：對進場候選剔除處置股；注意股不剔除、僅記錄。
+
+    - 位置語義同 _filter_overheated：打分/percentile 用完整候選集，僅在形成
+      進場候選（topN 之前）時剔除——排名不受影響。
+    - 名單來源 skills.disposition_filter（fail-open 契約：失敗回空集合＝不過濾）。
+    - ⚠️ 必須用 boolean mask 過濾以保留原 index 標籤——不可用 merge（merge 會
+      重置 index，後續 feature_df.loc[df.index] 會錯位，模型/reason 取到別檔
+      股票的特徵；見 _choose_pick_date 的 P0-1 同款教訓）。
+    """
+    if not getattr(config, "enable_disposition_filter", True):
+        coverage_stats["disposition_filter"] = "disabled"
+        return df
+    if df.empty:
+        coverage_stats["disposition_excluded"] = 0
+        coverage_stats["attention_flagged"] = []
+        return df
+
+    lists = _disposition.fetch_disposition_lists()
+    disp_set = {str(s) for s in lists.get("disposition", set())}
+    attn_set = {str(s) for s in lists.get("attention", set())}
+
+    sids = df["stock_id"].astype(str)
+    coverage_stats["attention_flagged"] = sorted(set(sids) & attn_set)
+
+    keep_mask = ~sids.isin(disp_set)
+    n_excluded = int((~keep_mask).sum())
+    coverage_stats["disposition_excluded"] = n_excluded
+    if n_excluded > 0:
+        excluded_ids = sorted(sids[~keep_mask])
+        coverage_stats["disposition_excluded_ids"] = excluded_ids
+        logger.info(
+            "disposition_filter: 剔除處置股 %d 檔（分盤交易/預收款券，月底換股可能出不掉）：%s",
+            n_excluded, excluded_ids,
+        )
+        df = df[keep_mask]
+    return df
 
 
 def _build_agent_dump_summary(agent_dump: Dict[str, object]) -> Dict[str, object]:
@@ -792,6 +836,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                 percentile_map[feat] = vals.rank(pct=True)
 
             df = _filter_overheated(df, feature_df, config)
+            # ── 處置股 live-only 過濾（總體檢保留項 1：執行衛生，非 alpha；回測不動）──
+            df = _apply_disposition_filter(df, config, coverage_stats)
             _df_pre_topn = df.copy()  # 供突破候補池使用（topN 前的完整候選集）
 
             # ── 產業集中限制（P1-1）──
