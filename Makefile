@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c daily-d api test dashboard dashboard-v2 trade-dashboard bot ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backfill-margin backtest backtest-long bt-rank-compare rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index daily-alert daily-alert-dry daily-alert-test eval-signal eval-signal-d backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors
+.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c daily-d api test dashboard dashboard-v2 trade-dashboard bot ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backfill-margin backtest backtest-long bt-rank-compare rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index daily-alert daily-alert-dry daily-alert-test eval-signal eval-signal-d backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors ipo-scan
 
 migrate:
 	python scripts/migrate.py
@@ -291,3 +291,8 @@ slow-queries:
 # 檢查 DB 重要索引是否存在
 check-index:
 	python scripts/check_db_indexes.py
+
+# 公開申購抽籤掃描（IPO/現增/可轉債承銷，散戶抽籤 +EV 檢視）
+# MIN_DISCOUNT 可選過濾門檻（小數，0.1 = 10%）：MIN_DISCOUNT=0.1 make ipo-scan
+ipo-scan:
+	python scripts/ipo_lottery_scan.py $${MIN_DISCOUNT:+--min-discount $${MIN_DISCOUNT}}
