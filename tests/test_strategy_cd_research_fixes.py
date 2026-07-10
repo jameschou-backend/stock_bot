@@ -183,3 +183,23 @@ class TestSourceWiring:
         assert src.count("compute_trading_day_cutoff(all_dates") >= 2
         # 不可殘留日曆天制 cutoff
         assert "timedelta(days=_eff_buffer)" not in src
+
+
+def test_rotation_max_price_wiring():
+    """--max-price 口徑對齊（2026-07-10 D 重驗前置）：CLI → run_rotation → 進場過濾接線。
+
+    實盤 daily_run.sh 傳 --max-price 250，重驗回測必須支援同口徑，
+    否則回測含買不起的高價股，結果對使用者不可執行。
+    """
+    import inspect
+    import scripts.backtest_rotation as rot
+
+    sig = inspect.signature(rot.run_rotation)
+    assert "max_stock_price" in sig.parameters
+    assert sig.parameters["max_stock_price"].default == 0.0  # 預設關閉（向後相容）
+
+    src = Path(rot.__file__).read_text()
+    assert '"--max-price"' in src, "CLI 旗標必須存在"
+    assert "max_stock_price=args.max_price" in src, "CLI 必須接進 run_rotation"
+    # 過濾必須套在進場候選（candidates）而非全宇宙排名
+    assert "raw_price_map.get(_s, 0.0)" in src

@@ -351,6 +351,8 @@ def run_rotation(
     train_label_horizon: int = 20,        # 訓練用 N 日 forward return（從 price_df 計算）
     # ── 流動性過濾 + 滑價 ──
     min_avg_turnover: float = 0.0,       # 20日平均成交值門檻（億元），0=停用
+    max_stock_price: float = 0.0,        # 個股股價上限（原始收盤價，元），0=停用；
+                                         # 對齊實盤 strategy_d_pick --max-price（資金/檔數買得起一張）
     slippage_pct: float = 0.0,           # 每筆固定滑價（進+出各一次），0=停用
     use_tiered_slippage: bool = False,   # 依流動性分級計算滑價
     # ── 動態流動性門檻（依市場規模自動調整）──
@@ -1037,6 +1039,14 @@ def run_rotation(
                 _eligible_today = _liquidity_map.get(today, set())
                 candidates = candidates[candidates["stock_id"].isin(_eligible_today)]
 
+            # 個股股價上限（對齊實盤 D --max-price）：排名用全宇宙、過濾只套進場候選
+            # （與 2026-06-17 filter 位置修正同語義）；用原始收盤價=實際下單價口徑
+            if max_stock_price > 0 and not candidates.empty:
+                _px_ok = candidates["stock_id"].map(
+                    lambda _s: raw_price_map.get(_s, 0.0)
+                )
+                candidates = candidates[(_px_ok > 0) & (_px_ok <= max_stock_price)]
+
             if use_quality_gate and not candidates.empty:
                 # ── 硬排除：財務地雷 / 主力晚期 ──
                 mask = pd.Series(True, index=candidates.index)
@@ -1232,6 +1242,7 @@ def run_rotation(
             "gate_rev_accel_bonus_pct": gate_rev_accel_bonus_pct,
             "train_label_horizon": train_label_horizon,
             "min_avg_turnover": min_avg_turnover,
+            "max_stock_price": max_stock_price,
             "dynamic_liquidity": dynamic_liquidity,
             "base_liquidity": base_liquidity,
             "liquidity_lookback": liquidity_lookback,
@@ -1338,6 +1349,8 @@ def main():
                         help="Oracle 模式：外資連買中斷天數（預設 3）")
     parser.add_argument("--oracle-ret5-tp", type=float, default=0.20,
                         help="Oracle 模式：5日報酬獲利了結門檻（預設 0.20）")
+    parser.add_argument("--max-price", type=float, default=0.0,
+                        help="個股股價上限（原始收盤價，元），0=不過濾；對齊實盤 D --max-price")
     parser.add_argument("--min-avg-turnover", type=float, default=0.0,
                         help="20日均成交值門檻（億元），0=停用。建議值：0.5=5千萬/日")
     parser.add_argument("--slippage", type=float, default=0.0,
@@ -1433,6 +1446,7 @@ def main():
             oracle_foreign_break_days=args.oracle_foreign_days,
             oracle_ret5_tp=args.oracle_ret5_tp,
             min_avg_turnover=args.min_avg_turnover,
+            max_stock_price=args.max_price,
             slippage_pct=args.slippage,
             use_tiered_slippage=args.tiered_slippage,
             chip_exit=args.chip_exit,
