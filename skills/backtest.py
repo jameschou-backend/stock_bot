@@ -215,6 +215,8 @@ def _overlay_adj_prices(price_df: pd.DataFrame, adj_path: str) -> pd.DataFrame:
 
     誠實基準實驗用：修正 adj_close=1.0（除權息未還原）。有 adj 的覆蓋，無 adj 的
     （如部分下市股）保留原值；volume 保留 raw（實際成交股數，不動流動性語義）。
+    另保留 `close_raw`（原始收盤價）供 max_stock_price 過濾（買得起一張的口徑
+    必須用實際下單價，不可用還原價）。
     """
     adj = pd.read_parquet(adj_path)
     adj["stock_id"] = adj["stock_id"].astype(str)
@@ -222,6 +224,7 @@ def _overlay_adj_prices(price_df: pd.DataFrame, adj_path: str) -> pd.DataFrame:
     pf = price_df.copy()
     pf["stock_id"] = pf["stock_id"].astype(str)
     pf["_td"] = pd.to_datetime(pf["trading_date"]).dt.normalize()
+    pf["close_raw"] = pd.to_numeric(pf["close"], errors="coerce")
     cols = [c for c in ("open", "high", "low", "close") if c in adj.columns]
     merged = pf.merge(adj[["stock_id", "_td"] + cols], on=["stock_id", "_td"],
                       how="left", suffixes=("", "_adj"))
@@ -229,6 +232,101 @@ def _overlay_adj_prices(price_df: pd.DataFrame, adj_path: str) -> pd.DataFrame:
         merged[c] = pd.to_numeric(merged[c + "_adj"], errors="coerce").fillna(merged[c])
         merged = merged.drop(columns=[c + "_adj"])
     return merged.drop(columns=["_td"])
+
+
+# ── P&L 口徑（2026-07-10 personal-baseline：收斂混口徑）─────────────────────
+PNL_CONVENTION_ADJ_DB = "adj_from_db_official"       # DB price_adjust_factors（官方 factor，與 label/特徵同源）
+PNL_CONVENTION_ADJ_PARQUET = "adj_price_parquet_overlay"  # 凍結 FinMind parquet overlay（舊誠實基準口徑）
+PNL_CONVENTION_RAW = "raw_close"                     # 未還原（混口徑，數字不可與含息基準比較）
+
+
+def _env_flag(value: Optional[str]) -> bool:
+    """env var 真值判斷（與 data_store.DATA_STORE_FREEZE 同語義）。"""
+    return (value or "").strip().lower() in ("1", "true", "yes", "on")
+
+
+def resolve_pnl_convention(
+    adj_from_db_env: Optional[str],
+    adj_parquet_env: Optional[str],
+) -> str:
+    """解析 P&L 還原口徑（單一決策點，優先序固定）：
+
+      1. BACKTEST_ADJ_FROM_DB 真值 → adj_from_db_official（優先於 parquet overlay）
+      2. BACKTEST_ADJ_PRICE_PARQUET 有值 → adj_price_parquet_overlay
+      3. 其餘 → raw_close
+    """
+    if _env_flag(adj_from_db_env):
+        return PNL_CONVENTION_ADJ_DB
+    if (adj_parquet_env or "").strip():
+        return PNL_CONVENTION_ADJ_PARQUET
+    return PNL_CONVENTION_RAW
+
+
+def _load_adj_factors_from_db(
+    db_session: Session,
+    start_date: date,
+    end_date: date,
+) -> pd.DataFrame:
+    """從 DB price_adjust_factors 載入官方還原因子（stock_id, trading_date, adj_factor）。"""
+    from app.models import PriceAdjustFactor
+
+    stmt = (
+        select(
+            PriceAdjustFactor.stock_id,
+            PriceAdjustFactor.trading_date,
+            PriceAdjustFactor.adj_factor,
+        )
+        .where(PriceAdjustFactor.trading_date.between(start_date, end_date))
+        .order_by(PriceAdjustFactor.trading_date, PriceAdjustFactor.stock_id)
+    )
+    factor_df = pd.read_sql(stmt, db_session.get_bind())
+    if not factor_df.empty:
+        factor_df["adj_factor"] = pd.to_numeric(factor_df["adj_factor"], errors="coerce")
+    return factor_df
+
+
+def _overlay_adj_prices_from_db(price_df: pd.DataFrame, factor_df: pd.DataFrame) -> pd.DataFrame:
+    """P&L 直接用 DB price_adjust_factors 還原 OHLC（raw × factor）。
+
+    與 skills.build_features.apply_adj_factors 同語義（label/特徵同源，消除混口徑）：
+    - factor 只在除權息/減資日跳變 → 內部缺日 per-stock ffill 沿用前值
+      （fillna(1.0) 會在 factor<1 區段中間製造單日假跳動）
+    - leading gap：per-stock bfill 用最早已知 factor
+    - 整檔無 factor（無 adj 的下市股等）：1.0（未還原）
+    - OHLC 全還原（只還原 close 會使混價量測失真）；volume 保留 raw
+    - 保留 `close_raw`（原始收盤價）供 max_stock_price 過濾（實際下單價口徑）
+    - 不動 trading_date dtype 與列順序（下游 rebalance 日期比對依賴原型別）
+    """
+    if factor_df is None or factor_df.empty:
+        raise ValueError(
+            "BACKTEST_ADJ_FROM_DB 啟用但 price_adjust_factors 查無資料——"
+            "拒絕靜默退回 raw close（混口徑）。請先跑 populate/cutover 灌入官方 factor。"
+        )
+    pf = price_df.copy()
+    pf["stock_id"] = pf["stock_id"].astype(str)
+    pf["_td"] = pd.to_datetime(pf["trading_date"]).dt.normalize()
+    pf["close_raw"] = pd.to_numeric(pf["close"], errors="coerce")
+
+    fdf = factor_df.copy()
+    fdf["stock_id"] = fdf["stock_id"].astype(str)
+    fdf["_td"] = pd.to_datetime(fdf["trading_date"]).dt.normalize()
+    fdf["adj_factor"] = pd.to_numeric(fdf["adj_factor"], errors="coerce")
+
+    merged = pf.merge(
+        fdf[["stock_id", "_td", "adj_factor"]], on=["stock_id", "_td"], how="left"
+    )
+    # per-stock ffill → bfill → 1.0（apply_adj_factors 缺日語義；先按股票+日期排序，
+    # 完成後 sort_index 還原原始列順序）
+    merged = merged.sort_values(["stock_id", "_td"])
+    merged["adj_factor"] = merged.groupby("stock_id", sort=False)["adj_factor"].ffill()
+    merged["adj_factor"] = merged.groupby("stock_id", sort=False)["adj_factor"].bfill()
+    merged["adj_factor"] = merged["adj_factor"].fillna(1.0)
+    merged = merged.sort_index()
+
+    for c in ("open", "high", "low", "close"):
+        if c in merged.columns:
+            merged[c] = pd.to_numeric(merged[c], errors="coerce") * merged["adj_factor"]
+    return merged.drop(columns=["_td", "adj_factor"])
 
 
 def _load_features_labels(
@@ -434,6 +532,39 @@ def _precompute_liquidity_eligible_map(
     return result
 
 
+def _precompute_maxprice_eligible_map(
+    price_df: pd.DataFrame,
+    max_stock_price: float,
+) -> Dict[date, set[str]]:
+    """預先計算每個交易日「原始收盤價 ≤ max_stock_price」的股票集合。
+
+    personal-baseline 口徑：資金 C / topn N 每檔部位 C/N，一張 = 1000 股 →
+    股價 > C/(N×1000) 買不起一張。口徑對齊 backtest_rotation --max-price：
+    - 用原始收盤價（close_raw；= 實際下單價），不可用還原價
+    - 排除 px <= 0（缺價/髒資料）
+    - 過濾只套進場候選（排名用全宇宙），由呼叫端在選股迴圈套用
+    """
+    if max_stock_price <= 0 or price_df.empty:
+        return {}
+
+    px_col = "close_raw" if "close_raw" in price_df.columns else "close"
+    df = price_df[["stock_id", "trading_date", px_col]].copy()
+    df[px_col] = pd.to_numeric(df[px_col], errors="coerce")
+    df = df.dropna(subset=["stock_id", "trading_date", px_col])
+    if df.empty:
+        return {}
+
+    df["stock_id"] = df["stock_id"].astype(str)
+    eligible = df[(df[px_col] > 0) & (df[px_col] <= float(max_stock_price))]
+    if eligible.empty:
+        return {}
+
+    result: Dict[date, set[str]] = {}
+    for td, sub in eligible.groupby("trading_date"):
+        result[td] = set(sub["stock_id"].tolist())
+    return result
+
+
 def _precompute_market_median_ret20(price_df: pd.DataFrame) -> Dict[date, float]:
     """預先計算每個交易日全市場 20 日報酬中位數（供大盤環境濾網）。"""
     if price_df.empty:
@@ -625,6 +756,7 @@ def _simulate_period(
     portfolio_circuit_breaker_pct: Optional[float] = None,  # 投資組合熔斷：月中等權報酬跌破此值時全出場
     cap_daily_return_pct: float = 0.0,  # 診斷：>0 時把持有期每日報酬 winsorize 到 ±cap（中和未還原減資/停牌假跳動）
     stock_row_index: Optional[Dict[str, np.ndarray]] = None,  # 效能：stock_id → price_df row positions（發現 3；None 走原 boolean mask）
+    slippage_multiplier: float = 1.0,  # 悲觀敏感度：所有滑價（tiered / ATR 模型）× 此倍率（單一縮放點）
 ) -> Dict:
     """模擬一個持有期間的績效。
 
@@ -765,6 +897,10 @@ def _simulate_period(
         entry_prices, atr_df, actual_entry_date,
         enable_slippage, tiered_slippage_map,
     )
+    # 悲觀敏感度倍率：在唯一消費點縮放（涵蓋 tiered map 與 ATR 模型兩條路徑；
+    # 建新 dict，不 mutate 呼叫端傳入的 tiered_slippage_map）
+    if slippage_multiplier != 1.0 and slippage_map:
+        slippage_map = {k: v * float(slippage_multiplier) for k, v in slippage_map.items()}
 
     # ── 診斷：cap-daily-return ──
     # cap_daily_return_pct > 0 時，預先計算每股「單日 winsorize 到 ±cap」的持有期毛報酬，
@@ -910,6 +1046,12 @@ class WalkForwardConfig:
     label_horizon_buffer: int = 20
     enable_slippage: bool = False
     enable_tiered_slippage: bool = False
+    # 悲觀敏感度：滑價倍率（tiered / ATR 模型皆套用；1.0 = 不縮放）
+    slippage_multiplier: float = 1.0
+    # personal-baseline：個股原始收盤價上限（元）。>0 時進場候選過濾
+    # 「0 < close_raw ≤ max_stock_price」（排名用全宇宙；比照 backtest_rotation --max-price）。
+    # 0 = 不過濾（預設，機構口徑）。benchmark 不套此過濾（只套 min_avg_turnover）。
+    max_stock_price: float = 0.0
     fast_mode: bool = False
     clip_loss_pct: float = -0.50
     cap_daily_return_pct: float = 0.0  # 診斷：>0 winsorize 持有期每日報酬到 ±cap（中和減資/停牌假跳動）
@@ -1029,6 +1171,8 @@ class BacktestPipeline:
         self.label_horizon_buffer   = wf_config.label_horizon_buffer
         self.enable_slippage        = wf_config.enable_slippage
         self.enable_tiered_slippage = wf_config.enable_tiered_slippage
+        self.slippage_multiplier    = wf_config.slippage_multiplier
+        self.max_stock_price        = wf_config.max_stock_price
         self.fast_mode              = wf_config.fast_mode
         self.clip_loss_pct          = wf_config.clip_loss_pct
         self.cap_daily_return_pct   = wf_config.cap_daily_return_pct
@@ -1075,6 +1219,10 @@ class BacktestPipeline:
         self.atr_df: Optional[pd.DataFrame] = None
         self.bt_stats_df: Optional[pd.DataFrame] = None
         self.liquidity_eligible_map: Dict[date, set] = {}
+        self.maxprice_eligible_map: Dict[date, set] = {}
+        # P&L 還原口徑（prepare() 依 env 解析；summary 記錄）
+        self.pnl_convention: str = PNL_CONVENTION_RAW
+        self.adj_db_snapshot: Optional[Dict] = None  # adj_from_db 時記 factor 表快照（可重現性）
         self.market_median_ret20_map: Dict[date, float] = {}
         self.market_weekly_drop_map: Dict[date, float] = {}
         self.market_200ma_bear_map: Dict[date, bool] = {}
@@ -1205,14 +1353,40 @@ class BacktestPipeline:
         if price_df.empty:
             raise ValueError("資料不足，無法進行回測")
 
-        # ── 還原股價 overlay（誠實基準實驗，env-gated，預設關閉）──
-        # 設 BACKTEST_ADJ_PRICE_PARQUET 時，OHLC 換成還原價（修 adj_close=1.0）。
-        # features 仍來自（未還原的）cache → 選股不變，只把報酬/benchmark 量測換成還原。
-        _adj_path = os.getenv("BACKTEST_ADJ_PRICE_PARQUET")
-        if _adj_path:
+        # ── 還原股價 overlay（env-gated，預設關閉）──
+        # 優先序（resolve_pnl_convention 單一決策點）：
+        #   1. BACKTEST_ADJ_FROM_DB=1：P&L 直接用 DB price_adjust_factors 還原
+        #      （官方 factor；與 label/特徵同源，消除 parquet/label 混口徑）
+        #   2. BACKTEST_ADJ_PRICE_PARQUET：凍結 FinMind parquet overlay（舊口徑）
+        #   3. 皆未設：raw close（混口徑，數字不可與含息基準比較）
+        self.pnl_convention = resolve_pnl_convention(
+            os.getenv("BACKTEST_ADJ_FROM_DB"), os.getenv("BACKTEST_ADJ_PRICE_PARQUET")
+        )
+        if self.pnl_convention == PNL_CONVENTION_ADJ_DB:
+            _n_before = len(price_df)
+            _t_fac = time.time()
+            _factor_df = _load_adj_factors_from_db(self.db_session, data_start, data_end)
+            price_df = _overlay_adj_prices_from_db(price_df, _factor_df)
+            # factor 表快照（可重現性：三臂對照須同一份 factor 表）
+            self.adj_db_snapshot = {
+                "rows": int(len(_factor_df)),
+                "n_stocks": int(_factor_df["stock_id"].nunique()),
+                "min_date": str(_factor_df["trading_date"].min()),
+                "max_date": str(_factor_df["trading_date"].max()),
+            }
+            _log(
+                f"adj-from-DB overlay 套用：price_adjust_factors "
+                f"{self.adj_db_snapshot['rows']:,} 列 / {self.adj_db_snapshot['n_stocks']} 檔"
+                f"（price {_n_before:,} 列，{time.time()-_t_fac:.1f}s）"
+            )
+            print(f"  P&L 口徑: {self.pnl_convention}（DB 官方 factor 還原，與 label/特徵同源）")
+        elif self.pnl_convention == PNL_CONVENTION_ADJ_PARQUET:
+            _adj_path = os.getenv("BACKTEST_ADJ_PRICE_PARQUET")
             _n_before = len(price_df)
             price_df = _overlay_adj_prices(price_df, _adj_path)
             _log(f"adj-price overlay 套用：{_adj_path}（{_n_before} 列）")
+        else:
+            print("  P&L 口徑: raw_close（⚠️ 未還原，數字不可與含息基準比較）")
 
         # ── 預熱 features/labels 快取（若尚未建立或已失效）──
         # _ensure() 在 get_features/get_labels 內自動呼叫；
@@ -1256,6 +1430,13 @@ class BacktestPipeline:
             print("  預計算 ATR ...", flush=True)
             atr_df = risk.compute_atr(price_df, period=self.atr_period)
         liquidity_eligible_map = _precompute_liquidity_eligible_map(price_df, self.min_avg_turnover)
+        # personal-baseline：個股原始收盤價上限（raw close 口徑；排名全宇宙、過濾只套進場候選）
+        maxprice_eligible_map = _precompute_maxprice_eligible_map(price_df, self.max_stock_price)
+        if self.max_stock_price > 0:
+            print(
+                f"  max_stock_price 過濾：原始收盤價 ≤ {self.max_stock_price:.0f} 元"
+                f"（{len(maxprice_eligible_map):,} 個交易日有合格股票）", flush=True,
+            )
         market_median_ret20_map = _precompute_market_median_ret20(price_df)
         # ── P3-2: 載入興櫃股 ID，回測 universe 與 production 一致 ──
         _emerging_ids: set = {
@@ -1349,6 +1530,7 @@ class BacktestPipeline:
         self.atr_df = atr_df
         self.bt_stats_df = bt_stats_df
         self.liquidity_eligible_map = liquidity_eligible_map
+        self.maxprice_eligible_map = maxprice_eligible_map
         self.market_median_ret20_map = market_median_ret20_map
         self.market_weekly_drop_map = market_weekly_drop_map
         self.market_200ma_bear_map = market_200ma_bear_map
@@ -2236,6 +2418,9 @@ class BacktestPipeline:
         rebalance_freq         = self.rebalance_freq
         enable_slippage        = self.enable_slippage
         enable_tiered_slippage = self.enable_tiered_slippage
+        slippage_multiplier    = self.slippage_multiplier
+        max_stock_price        = self.max_stock_price
+        maxprice_eligible_map  = self.maxprice_eligible_map
         clip_loss_pct          = self.clip_loss_pct
         cap_daily_return_pct   = self.cap_daily_return_pct
         atr_dynamic_stoploss   = self.atr_dynamic_stoploss
@@ -2392,6 +2577,14 @@ class BacktestPipeline:
                 if day_feat.empty:
                     continue
 
+            # 個股股價上限（personal-baseline）：排名用全宇宙（打分已完成）、
+            # 過濾只套進場候選；原始收盤價=實際下單價口徑（比照 backtest_rotation --max-price）
+            if max_stock_price > 0:
+                _px_keep = maxprice_eligible_map.get(rb_date, set())
+                day_feat = day_feat[day_feat["stock_id"].astype(str).isin(_px_keep)]
+                if day_feat.empty:
+                    continue
+
             # ── 停損冷卻過濾 ──
             day_feat = self._apply_cooldown_filter(day_feat, rb_date, cooldown_until)
 
@@ -2481,6 +2674,7 @@ class BacktestPipeline:
                     portfolio_circuit_breaker_pct=_wf_cb,
                     cap_daily_return_pct=cap_daily_return_pct,
                     stock_row_index=self._price_rows_by_sid,  # 發現 3：picks 列直取索引
+                    slippage_multiplier=slippage_multiplier,
                 )
                 _dt = time.time() - _t
                 _timer_simulate += _dt
@@ -2651,6 +2845,12 @@ class BacktestPipeline:
             # benchmark 成本口徑（2026-07-10 缺陷 3 修復：預設 zero_cost）。
             # 與扣成本舊口徑（每期 -0.58425%，120 期複利 ×~0.495）的結果不可直接比較。
             "benchmark_cost_convention": benchmark_cost_convention(self.benchmark_tc),
+            # P&L 還原口徑（2026-07-10 personal-baseline：混口徑收斂）：
+            # adj_from_db_official（DB 官方 factor，與 label/特徵同源）/
+            # adj_price_parquet_overlay（凍結 FinMind parquet）/ raw_close（未還原）
+            "pnl_convention": self.pnl_convention,
+            # adj_from_db 時記 factor 表快照（三臂對照可驗證同一份 factor 表）；其餘為 None
+            "adj_db_snapshot": self.adj_db_snapshot,
             # 回測設定紀錄
             "config": {
                 "entry_delay_days": entry_delay_days,
@@ -2662,6 +2862,9 @@ class BacktestPipeline:
                 "trailing_stop_pct": trailing_stop_pct,
                 "atr_stoploss_multiplier": atr_stoploss_multiplier,
                 "rebalance_freq": rebalance_freq,
+                "min_avg_turnover": min_avg_turnover,
+                "max_stock_price": max_stock_price,
+                "slippage_multiplier": slippage_multiplier,
             },
         }
 
@@ -2839,6 +3042,8 @@ def run_backtest(
     label_horizon_buffer: int = 20,
     enable_slippage: bool = False,
     enable_tiered_slippage: bool = False,
+    slippage_multiplier: float = 1.0,
+    max_stock_price: float = 0.0,
     fast_mode: bool = False,
     feature_columns: Optional[List[str]] = None,
     time_weighting: bool = False,
@@ -2908,6 +3113,8 @@ def run_backtest(
             label_horizon_buffer=label_horizon_buffer,
             enable_slippage=enable_slippage,
             enable_tiered_slippage=enable_tiered_slippage,
+            slippage_multiplier=slippage_multiplier,
+            max_stock_price=max_stock_price,
             fast_mode=fast_mode,
             clip_loss_pct=clip_loss_pct,
             cap_daily_return_pct=cap_daily_return_pct,

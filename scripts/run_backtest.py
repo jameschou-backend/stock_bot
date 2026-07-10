@@ -293,6 +293,15 @@ def main():
     parser.add_argument("--tiered-slippage", action="store_true",
                         dest="tiered_slippage",
                         help="分級滑價模型：依 amt_20 決定流動性層級（<1億 1.0%%, 1~5億 0.6%%, >5億 0.2%% 來回）")
+    parser.add_argument("--slippage-mult", type=float, default=1.0,
+                        dest="slippage_multiplier",
+                        help="悲觀敏感度：所有滑價（tiered / ATR 模型）× 此倍率（預設 1.0=不縮放；"
+                             "personal-baseline 悲觀臂用 1.5）")
+    parser.add_argument("--max-price", type=float, default=0.0,
+                        dest="max_stock_price",
+                        help="個股原始收盤價上限（元），0=不過濾（預設）。進場候選過濾、排名用全宇宙"
+                             "（比照 backtest_rotation --max-price 語義）。"
+                             "personal-baseline：資金 C / topn N / 一張 1000 股 → C/(N×1000) 元")
     parser.add_argument("--liq-weighted", action="store_true",
                         dest="liquidity_weighting",
                         help="流動性加權訓練：sample_weight ∝ log(1+amt_20)，讓模型學偏大型股模式")
@@ -638,6 +647,8 @@ def main():
             entry_signal_filter=_entry_signal_filter,
             min_avg_turnover=args.min_avg_turnover,
             enable_tiered_slippage=args.tiered_slippage,
+            slippage_multiplier=args.slippage_multiplier,
+            max_stock_price=args.max_stock_price,
             liquidity_weighting=args.liquidity_weighting,
             portfolio_circuit_breaker_pct=(
                 -abs(args.portfolio_circuit_breaker_pct)
@@ -716,15 +727,17 @@ def main():
                 result["summary"]["statistics"] = None
 
             # ── TR 指數對照臂（機會成本；fetch 失敗 → null，不阻斷）──
-            # 口徑前提（skills/taiex_tr.py docstring）：策略側必須是含息 P&L
-            # （BACKTEST_ADJ_PRICE_PARQUET 還原價 overlay）。未設定時策略側少掉
+            # 口徑前提（skills/taiex_tr.py docstring）：策略側必須是含息 P&L——
+            # BACKTEST_ADJ_FROM_DB=1（DB 官方 factor 還原，優先）或
+            # BACKTEST_ADJ_PRICE_PARQUET（凍結 parquet overlay）。皆未設時策略側少掉
             # 全部股息（台股約年化 3-4pp）卻與含息 TR 指數相減 → 混合口徑，
             # 系統性低估策略——直接設 null 拒算，不產生看似可比的假數字。
+            _summary_pnl_conv = _summary.get("pnl_convention")
             _adj_parquet_env = os.getenv("BACKTEST_ADJ_PRICE_PARQUET")
-            if not _adj_parquet_env:
-                print("[taiex_tr] vs_taiex_tr = null：未設 BACKTEST_ADJ_PRICE_PARQUET，"
-                      "策略 P&L 為 raw close（不含息），與含息 TR 指數混合口徑不可比；"
-                      "要啟用對照請帶 BACKTEST_ADJ_PRICE_PARQUET=artifacts/adj_prices/adj_prices_10y.parquet")
+            if _summary_pnl_conv not in ("adj_from_db_official", "adj_price_parquet_overlay"):
+                print("[taiex_tr] vs_taiex_tr = null：策略 P&L 為 raw close（不含息），"
+                      "與含息 TR 指數混合口徑不可比；要啟用對照請帶 BACKTEST_ADJ_FROM_DB=1"
+                      "（DB 官方 factor）或 BACKTEST_ADJ_PRICE_PARQUET=artifacts/adj_prices/adj_prices_10y.parquet")
                 _vs_tr = None
             else:
                 try:
@@ -732,8 +745,9 @@ def main():
                     _vs_tr = compute_vs_taiex_tr(result.get("equity_curve") or [])
                     if _vs_tr:
                         # 口徑標記：事後讀 JSON 的人可直接確認兩側皆含息
-                        _vs_tr["pnl_convention"] = "adjusted_close_total_return"
-                        _vs_tr["adj_price_parquet"] = _adj_parquet_env
+                        _vs_tr["pnl_convention"] = _summary_pnl_conv
+                        if _summary_pnl_conv == "adj_price_parquet_overlay":
+                            _vs_tr["adj_price_parquet"] = _adj_parquet_env
                 except Exception as _tr_exc:
                     print(f"[taiex_tr] vs_taiex_tr 失敗（欄位為 null）: {_tr_exc}")
                     _vs_tr = None
