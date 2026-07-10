@@ -1,4 +1,4 @@
-.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c daily-d api test dashboard dashboard-v2 trade-dashboard bot ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backfill-margin backtest backtest-long bt-rank-compare rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index daily-alert daily-alert-dry daily-alert-test eval-signal eval-signal-d backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors ipo-scan
+.PHONY: migrate pipeline pipeline-build pipeline-dag pipeline-dag-build migrate-features daily daily-c daily-d api test dashboard dashboard-v2 trade-dashboard bot ai-prompt report cron-daily schedule-install schedule-uninstall backfill backfill-10y backfill-listed backfill-10y-listed backfill-status backfill-estimate backfill-estimate-listed backfill-margin backtest backtest-long bt-rank-compare rebuild-features research-factors research-grid research-walkforward research-topn-sweep research-all backfill-prices backfill-institutional dq-report experiment-matrix evaluate-experiment agent-attribution experiment-summary compare-runs profile profile-live slow-queries check-index daily-alert daily-alert-dry daily-alert-test eval-signal eval-signal-d backfill-fear-greed backfill-gov-bank backfill-holding-dist backfill-broker-trades backfill-kbar backfill-sponsor backfill-per backfill-securities-lending backfill-quarterly-fundamental backfill-value-factors ipo-scan crawl-revenue
 
 migrate:
 	python scripts/migrate.py
@@ -241,6 +241,11 @@ backfill-value-factors:
 
 dq-report:
 	python scripts/data_quality_report.py --days $${DAYS:-180}
+
+# 月營收公告日 forward 爬蟲（PEAD 事件臂資料前置；每日跑一次，
+# append-only ledger → artifacts/revenue_announcements/announcements.parquet，勿手動編輯）
+crawl-revenue:
+	python scripts/crawl_revenue_announcements.py
 
 # 評估歷史訊號績效（IC / 命中率 / 超額報酬）
 eval-signal:
