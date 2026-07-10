@@ -101,6 +101,24 @@ else
     tg_send "🚨 Stock_bot pick 特徵錯位（P0-1 型）$(date '+%F %H:%M')！今日訊號分數不可信，請檢查 $LOG"
 fi
 
+# 5) 訊號價版 paper NAV（forward track record；失敗不中斷、只 log——
+#    NAV 是紀錄性質，明日重跑會自動補齊缺日，不值得半夜告警）
+echo ">>> [5/6] paper nav" | tee -a "$LOG"
+if $PYTHON scripts/paper_nav.py >> "$LOG" 2>&1; then
+    echo ">>> paper nav OK" | tee -a "$LOG"
+else
+    echo "!!! paper nav FAILED (non-fatal, 明日重跑自動補齊)" | tee -a "$LOG"
+fi
+
+# 6) 月營收公告爬蟲（另人開發中；失敗不中斷、不告警、只 log——
+#    爬蟲壞了只丟資料，不影響生產訊號）
+echo ">>> [6/6] revenue announcements crawler" | tee -a "$LOG"
+if $PYTHON scripts/crawl_revenue_announcements.py >> "$LOG" 2>&1; then
+    echo ">>> revenue crawler OK" | tee -a "$LOG"
+else
+    echo "!!! revenue crawler FAILED (non-fatal)" | tee -a "$LOG"
+fi
+
 echo "==== $(date) END ====" | tee -a "$LOG"
 
 # 清掉 30 天前 logs
