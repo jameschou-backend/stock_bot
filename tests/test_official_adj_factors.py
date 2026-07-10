@@ -75,6 +75,24 @@ class TestComputeStockFactorSeries:
         with pytest.raises(ValueError):
             oaf.compute_stock_factor_series([date(2024, 1, 4)], [-0.5], self.DATES)
 
+    def test_split_ratio_math_yageo_pattern(self):
+        """股票分割比率數學（2327 國巨 pattern）：除息 0.97 → 一拆四 0.25。
+
+        分割日之後 factor=1.0；除息後、分割前段 factor=0.25（分割向過去累乘）；
+        除息前段 factor=0.97×0.25=0.2425。adj_close = close × factor 使
+        分割前 546 元收盤還原為 546×0.25=136.5，與分割後價格軸連續。
+        """
+        events = [(date(2024, 1, 4), 0.97), (date(2024, 1, 10), 0.25)]
+        ev_dates, ratios = zip(*events)
+        f = oaf.compute_stock_factor_series(list(ev_dates), list(ratios), self.DATES)
+        np.testing.assert_allclose(f[6:], 1.0)            # 1/10 分割日（含）之後
+        np.testing.assert_allclose(f[2:6], 0.25)          # 除息後、分割前
+        np.testing.assert_allclose(f[:2], 0.97 * 0.25)    # 最早段
+        # 一拆二十（極端分割）與除息疊加不觸發任何 clip/例外
+        f20 = oaf.compute_stock_factor_series(
+            [date(2024, 1, 8), date(2024, 1, 12)], [0.05, 0.9], self.DATES)
+        assert f20[0] == pytest.approx(0.045)
+
 
 class TestBuildFactorFrame:
     def test_only_stocks_with_events(self):
@@ -167,6 +185,52 @@ TPEX_REDUCTION_PAYLOAD = {
 }
 
 
+# Phase 2：面額變更（股票分割/併股）真實 payload 節錄（2026-07-10 實測）
+TWSE_PAR_VALUE_PAYLOAD = {
+    "stat": "OK",
+    "fields": ["恢復買賣日期", "股票代號", "名稱", "停止買賣前收盤價格", "恢復買賣參考價",
+               "漲停價格", "跌停價格", "開盤競價基準", "詳細資料"],
+    "data": [
+        # 台境 一拆二（面額 10 → 5）
+        ["113/11/11", "8476", "台境", "58.80", "29.40", "32.30", "26.50", "29.40",
+         "8476,20241031,20241111"],
+        # 國巨 一拆四（面額 10 → 2.5），Phase 1 已知缺口
+        ["114/08/25", "2327", "國巨", "546.00", "136.50", "150.00", "123.00", "136.50",
+         "2327,20250814,20250825"],
+        # 康霈 千元股分割（含千分位逗號價格）
+        ["114/07/21", "6919", "康霈*", "1,215.00", "121.50", "133.50", "109.50", "121.50",
+         "6919,20250714,20250721"],
+    ],
+}
+
+TPEX_PAR_VALUE_PAYLOAD = {
+    "date": "20240101~20260709",
+    "tables": [{
+        "totalCount": 2,
+        "fields": ["恢復買賣日期", "證券代號", "證券名稱", "最後交易日之收盤價格",
+                   "恢復買賣開始參考價", "漲停價格", "跌停價格", "開始交易基準價", "詳細資料"],
+        "data": [
+            # 智通 一拆二：參考價 84.75 ≠ 開始交易基準價 84.80（tick rounding）
+            ["1130909", "8932", "智通*           ", "169.50", "84.75", "93.20", "76.30",
+             "84.80",
+             "<table><tr><th>證券代號/證券名稱:</th><td>8932&nbsp/&nbsp智通*</td></tr>"
+             "<tr><th>停止買賣日期:</th><td>113/08/29</td></tr>"
+             "<tr><th>恢復買賣日期:</th><td>113/09/09</td></tr>"
+             "<tr><th>變更股票面額換股率:</th><td>2.00000000</td></tr>"
+             "<tr><th>變更前股票面額:</th><td>10.00</td></tr>"
+             "<tr><th>變更後股票面額:</th><td>5.00</td></tr></table>"],
+            # 世紀 一拆二十（面額 10 → 0.5，ratio=0.05 需通過 RATIO_LO sanity）
+            ["1140331", "5314", "世紀*           ", "1390.00", "69.50", "76.40", "62.60",
+             "69.50",
+             "<table><tr><th>變更股票面額換股率:</th><td>20.00000000</td></tr>"
+             "<tr><th>變更前股票面額:</th><td>10.00</td></tr>"
+             "<tr><th>變更後股票面額:</th><td>0.50</td></tr></table>"],
+        ],
+    }],
+    "stat": "ok",
+}
+
+
 class TestParsers:
     def test_twse_ex_rights(self):
         events = oaf.parse_twse_ex_rights(TWSE_EX_RIGHTS_PAYLOAD)
@@ -251,6 +315,48 @@ class TestParsers:
         # 節錄 fixture 無 stat 鍵但有 tables：仍視為有效（tables 為 schema 錨點）
         assert oaf.parse_tpex_capital_reduction({"tables": []}) == []
 
+    def test_twse_par_value_change(self):
+        events = oaf.parse_twse_par_value_change(TWSE_PAR_VALUE_PAYLOAD)
+        assert len(events) == 3
+        yageo = events[1]
+        assert (yageo.stock_id, yageo.event_date) == ("2327", date(2025, 8, 25))
+        assert yageo.event_type == "面額變更"
+        assert yageo.source == oaf.SOURCE_PAR_VALUE_CHANGE
+        assert yageo.ratio == pytest.approx(0.25)   # 國巨一拆四：136.50 / 546.00
+        assert events[0].ratio == pytest.approx(0.5)  # 台境一拆二
+        assert events[2].prev_close == pytest.approx(1215.0)  # 千分位逗號
+
+    def test_twse_par_value_change_empty_and_error_stat(self):
+        from app.twse_client import TWSEError
+        assert oaf.parse_twse_par_value_change({"stat": "OK", "data": []}) == []
+        assert oaf.parse_twse_par_value_change({"stat": "查無資料"}) == []
+        with pytest.raises(TWSEError):
+            oaf.parse_twse_par_value_change({"stat": "查詢結束日期小於查詢開始日期"})
+        with pytest.raises(TWSEError):
+            oaf.parse_twse_par_value_change({"error": "no stat"})
+
+    def test_tpex_par_value_change(self):
+        events = oaf.parse_tpex_par_value_change(TPEX_PAR_VALUE_PAYLOAD)
+        assert len(events) == 2
+        ev = events[0]
+        assert (ev.stock_id, ev.event_date, ev.event_type) == ("8932", date(2024, 9, 9), "面額變更")
+        assert ev.ratio == pytest.approx(84.75 / 169.50)           # 主口徑：參考價
+        assert ev.ratio_opening == pytest.approx(84.80 / 169.50)   # 基準價僅 tick rounding
+        assert ev.payload["split_rate"] == pytest.approx(2.0)      # 詳細資料 HTML 抽出
+        assert ev.payload["par_before"] == pytest.approx(10.0)
+        assert ev.payload["par_after"] == pytest.approx(5.0)
+        # 一拆二十 ratio=0.05 需通過 RATIO_LO sanity（0.02），不可被 events_to_dataframe 濾掉
+        deep = events[1]
+        assert deep.ratio == pytest.approx(0.05)
+        df = oaf.events_to_dataframe(events)
+        assert set(df["stock_id"]) == {"8932", "5314"}
+
+    def test_tpex_par_value_change_error_payload_raises(self):
+        from app.twse_client import TWSEError
+        assert oaf.parse_tpex_par_value_change({"stat": "ok", "tables": []}) == []
+        with pytest.raises(TWSEError):
+            oaf.parse_tpex_par_value_change({"error": "查詢失敗"})
+
     def test_events_to_dataframe_filters_non_4digit_and_bad_ratio(self):
         events = oaf.parse_twse_ex_rights(TWSE_EX_RIGHTS_PAYLOAD)
         events.append(oaf.AdjEvent("9999", date(2024, 1, 4), "TWSE", oaf.SOURCE_EX_RIGHTS,
@@ -259,6 +365,32 @@ class TestParsers:
         assert "006203" not in set(df["stock_id"])   # 6 碼 ETF 濾掉
         assert "9999" not in set(df["stock_id"])     # 無效比率濾掉
         assert set(df["stock_id"]) == {"2454", "6442"}
+
+    def test_events_to_dataframe_dedupes_server_duplicate_rows(self):
+        """TWSE 偶發同 payload 回完全相同列 ×2（實測：TWTAUU 2016 5906 減資）
+        → 同鍵同價重複列必為 server 重複，只保留一筆；
+        同日不同 source/價（真實多事件）不可誤刪。"""
+        dup = oaf.AdjEvent("5906", date(2016, 7, 14), "TWSE", oaf.SOURCE_CAPITAL_REDUCTION,
+                           "減資", prev_close=1.77, ref_price=5.68)
+        distinct = oaf.AdjEvent("5906", date(2016, 7, 14), "TWSE", oaf.SOURCE_EX_RIGHTS,
+                                "息", prev_close=5.68, ref_price=5.40)
+        df = oaf.events_to_dataframe([dup, dup, dup, distinct])
+        assert len(df) == 2
+        assert sorted(df["source"]) == [oaf.SOURCE_CAPITAL_REDUCTION, oaf.SOURCE_EX_RIGHTS]
+
+    def test_validate_events_in_range(self):
+        """TWSE CDN 毒快取第二形態：stat=OK 但內容屬於別的查詢窗
+        （實測：2016-04 chunk 拿到 2019-07 資料）→ 必須 raise 讓上游重抓。"""
+        from app.twse_client import TWSEError
+        ok = oaf.AdjEvent("1101", date(2024, 1, 10), "TWSE", oaf.SOURCE_EX_RIGHTS,
+                          "息", prev_close=100.0, ref_price=95.0)
+        outside = oaf.AdjEvent("2603", date(2019, 7, 1), "TWSE", oaf.SOURCE_EX_RIGHTS,
+                               "息", prev_close=100.0, ref_price=95.0)
+        oaf.validate_events_in_range([ok], date(2024, 1, 1), date(2024, 1, 31))  # 不 raise
+        oaf.validate_events_in_range([], date(2024, 1, 1), date(2024, 1, 31))    # 空結果合法
+        with pytest.raises(TWSEError, match="窗外事件"):
+            oaf.validate_events_in_range([ok, outside],
+                                         date(2024, 1, 1), date(2024, 1, 31))
 
 
 # ──────────────────────────────────────────────
@@ -282,8 +414,10 @@ class TestCheckpointResume:
         return SimpleNamespace(
             fetch_twse_ex_rights_raw=_mk("twse_ex_rights"),
             fetch_twse_capital_reduction_raw=_mk("twse_capital_reduction"),
+            fetch_twse_par_value_change_raw=_mk("twse_par_value_change"),
             fetch_tpex_ex_rights_raw=_mk("tpex_ex_rights"),
             fetch_tpex_capital_reduction_raw=_mk("tpex_capital_reduction"),
+            fetch_tpex_par_value_change_raw=_mk("tpex_par_value_change"),
         )
 
     def test_corrupted_checkpoint_refetched_not_crash(self, tmp_path):
@@ -294,11 +428,11 @@ class TestCheckpointResume:
         client = self._fake_client(calls)
         window = (date(2024, 1, 1), date(2024, 1, 31))
 
-        # 第一輪：4 個來源各 1 chunk，全部 HTTP 抓取 + 寫 checkpoint
+        # 第一輪：6 個來源各 1 chunk，全部 HTTP 抓取 + 寫 checkpoint
         fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
-        assert len(calls) == 4
+        assert len(calls) == 6
         ckpts = sorted(tmp_path.glob("*.json"))
-        assert len(ckpts) == 4
+        assert len(ckpts) == 6
         assert not list(tmp_path.glob("*.tmp.*"))  # 原子寫入不留 tmp
 
         # 損壞其中一個（模擬寫入中斷留下截斷 JSON）
@@ -324,6 +458,30 @@ class TestCheckpointResume:
         calls.clear()
         fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
         assert calls == ["tpex_ex_rights"]
+
+    def test_poisoned_window_checkpoint_refetched(self, tmp_path):
+        """毒快取第二形態固化的 checkpoint（stat=OK 但資料屬別的查詢窗）
+        → resume 時窗驗證失敗、自動重抓，不把窗外事件帶進 events。"""
+        from scripts.build_official_adj_factors import fetch_all_events
+
+        calls: list = []
+        client = self._fake_client(calls)
+        window = (date(2024, 1, 1), date(2024, 1, 31))
+        fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
+
+        # 模擬 2016-04 chunk 拿到 2019-07 資料的實測 pattern：
+        # 2024-01 chunk checkpoint 裡塞 2024-05 的除權息列
+        poisoned = sorted(tmp_path.glob("twse_ex_rights_*.json"))[0]
+        poisoned.write_text(json.dumps({
+            "stat": "OK",
+            "data": [["113年05月10日", "2603", "長榮", "155.00", "85.00", "70.0", "息",
+                      "93.50", "76.50", "85.00", "85.00", "x", "", "", ""]],
+        }, ensure_ascii=False), encoding="utf-8")
+
+        calls.clear()
+        df = fetch_all_events(client, *window, ckpt_dir=tmp_path, resume=True)
+        assert calls == ["twse_ex_rights"]   # 只重抓毒 chunk
+        assert df.empty                       # 假 client 回空，窗外事件未殘留
 
 
 # ──────────────────────────────────────────────
@@ -446,6 +604,80 @@ class TestReconcile:
         assert res.summary["n_extra_snapshot_jumps"] == 1
         assert res.extra_jumps.iloc[0]["stock_id"] == "9998"
         assert res.extra_jumps.iloc[0]["trading_date"] == date(2024, 1, 5)
+
+    def test_matched_via_next_snapshot_gap(self):
+        """FinMind 晚一交易日調整（1538/4806 pattern）：官方事件 gap 平坦、
+        次一 gap 命中 → matched_via_next_snapshot_gap，且對應 extra jump 被吸收。"""
+        events = pd.DataFrame([
+            _mk_event("1538", date(2024, 1, 4), 2.0, source=oaf.SOURCE_CAPITAL_REDUCTION),
+        ])
+        # 官方恢復買賣日 1/4 的 gap 平坦；快照把跳動記在 1/5
+        snap = _mk_snapshot("1538", DATES_5, [2.0, 2.0, 2.0, 1.0, 1.0])
+        res = oaf.reconcile_events_vs_snapshot(events, snap)
+        assert res.match_rate == pytest.approx(1.0)
+        row = res.event_results.iloc[0]
+        assert row["reason"] == oaf.REASON_MATCHED_NEXT_GAP
+        assert row["mapped_date"] == date(2024, 1, 5)
+        assert row["r_snap"] == pytest.approx(2.0)
+        assert res.summary["n_matched_via_next_gap"] == 1
+        assert res.extra_jumps.empty   # 1/5 的快照跳動已被官方事件吸收
+
+    def test_next_gap_not_used_when_mapped_gap_has_jump(self):
+        """mapped gap 本身有跳動但比率不合 → 不走次一 gap 備援（那是不同事件），
+        即使次一 gap 的比率恰好命中官方比率。"""
+        events = pd.DataFrame([_mk_event("1111", date(2024, 1, 4), 0.80)])
+        # gap(1/4)=0.9/1.0=0.9（有跳動、不合 0.8）；gap(1/5)=1.0/1.25=0.8（恰好命中）
+        snap = _mk_snapshot("1111", DATES_5, [0.9, 0.9, 1.0, 1.25, 1.25])
+        res = oaf.reconcile_events_vs_snapshot(events, snap)
+        row = res.event_results.iloc[0]
+        assert not bool(row["matched"])
+        assert row["reason"] == oaf.REASON_RATIO_DIFF_OTHER
+        assert res.summary["n_matched_via_next_gap"] == 0
+
+    def test_market_closed_missing_excluded_from_denominator(self):
+        """颱風停市日（平日但全市場無交易）快照漏調整 → 已證實快照缺陷，
+        分類 missing_in_snapshot_market_closed 且排除於 match rate 分母。"""
+        market_days = [date(2024, 1, 2), date(2024, 1, 3), date(2024, 1, 4), date(2024, 1, 8)]
+        # 1/5（週五）全市場停市；官方除息事件掛在 1/5，快照全程平坦
+        events = pd.DataFrame([
+            _mk_event("9101", date(2024, 1, 5), 0.90),
+            _mk_event("1111", date(2024, 1, 3), 0.95),   # 正常可對帳事件
+        ])
+        snap = pd.concat([
+            _mk_snapshot("9101", market_days, [1.0] * 4),
+            _mk_snapshot("1111", market_days, [0.95, 1.0, 1.0, 1.0]),
+        ])
+        res = oaf.reconcile_events_vs_snapshot(events, snap)
+        closed = res.event_results[res.event_results["stock_id"] == "9101"].iloc[0]
+        assert closed["reason"] == oaf.REASON_MISSING_MARKET_CLOSED
+        assert res.summary["n_missing_market_closed"] == 1
+        assert res.summary["n_eligible"] == 1            # 停市缺陷不進分母
+        assert res.match_rate == pytest.approx(1.0)
+
+    def test_par_value_change_mismatch_classified(self):
+        """面額變更事件缺失/比率差有獨立分類（與除權息/減資區隔）。"""
+        ev_missing = pd.DataFrame([
+            _mk_event("2327", date(2024, 1, 4), 0.25, source=oaf.SOURCE_PAR_VALUE_CHANGE),
+        ])
+        snap_flat = _mk_snapshot("2327", DATES_5, [1.0] * 5)
+        res = oaf.reconcile_events_vs_snapshot(ev_missing, snap_flat)
+        assert res.event_results.iloc[0]["reason"] == oaf.REASON_MISSING_PAR_VALUE
+
+        ev_diff = pd.DataFrame([
+            _mk_event("2327", date(2024, 1, 4), 0.25, source=oaf.SOURCE_PAR_VALUE_CHANGE),
+        ])
+        snap_diff = _mk_snapshot("2327", DATES_5, [0.5, 0.5, 1.0, 1.0, 1.0])
+        res = oaf.reconcile_events_vs_snapshot(ev_diff, snap_diff)
+        assert res.event_results.iloc[0]["reason"] == oaf.REASON_RATIO_DIFF_PAR_VALUE
+
+    def test_par_value_change_matched(self):
+        """國巨一拆四 pattern：快照 r_snap=0.25 與官方 ratio=0.25 match。"""
+        events = pd.DataFrame([
+            _mk_event("2327", date(2024, 1, 4), 0.25, source=oaf.SOURCE_PAR_VALUE_CHANGE),
+        ])
+        snap = _mk_snapshot("2327", DATES_5, [0.25, 0.25, 1.0, 1.0, 1.0])
+        res = oaf.reconcile_events_vs_snapshot(events, snap)
+        assert res.match_rate == pytest.approx(1.0)
 
     def test_same_gap_multiple_events_combined(self):
         """停牌期間除息 + 減資落在同一 gap：官方比率相乘後比對。"""

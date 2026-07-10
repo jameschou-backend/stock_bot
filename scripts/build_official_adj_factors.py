@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-"""抓 TWSE/TPEx 官方除權息 + 減資公告 → 自算 adj factor（Phase 1：引擎 + 對帳，不切生產）。
+"""抓 TWSE/TPEx 官方除權息 + 減資 + 面額變更公告 → 自算 adj factor（引擎 + 對帳，不切生產）。
+
+Phase 2（2026-07-10）：新增面額變更（股票分割/併股）來源——TWSE TWTB8U +
+TPEx pvChgRslt（補國巨 2327 一拆四等 Phase 1 已知缺口）；切換生產另走
+scripts/cutover_official_adj_factors.py（--dry-run 預設）。
 
 輸出（--out-dir，預設 artifacts/adj_official/）：
 - events.parquet   事件明細（stock_id/event_date/market/source/event_type/比率/現金增資旗標）
@@ -42,6 +46,7 @@ from skills.official_adj_factors import (
     events_to_dataframe,
     load_clip_touched,
     reconcile_events_vs_snapshot,
+    validate_events_in_range,
 )
 
 DEFAULT_OUT_DIR = ROOT / "artifacts" / "adj_official"
@@ -63,7 +68,7 @@ def month_chunks(start: date, end: date) -> list[tuple[date, date]]:
 
 
 def year_chunks(start: date, end: date) -> list[tuple[date, date]]:
-    """減資事件稀少，用年 chunk 省 request。"""
+    """減資/面額變更事件稀少，用年 chunk 省 request。"""
     chunks: list[tuple[date, date]] = []
     cur = start
     while cur <= end:
@@ -73,13 +78,26 @@ def year_chunks(start: date, end: date) -> list[tuple[date, date]]:
     return chunks
 
 
+def _parse_validated(parser, payload, c_start: date, c_end: date, name: str) -> list:
+    """parse + 請求窗驗證（任一失敗都 raise TWSEError 讓上游重試/重抓）。
+
+    窗驗證防 TWSE CDN 毒快取第二形態：stat=OK 但內容是「別的查詢窗」的快取資料
+    （2026-07-10 實測：2016-04 chunk 拿到 2019-07 的除權息表，事件被固化進
+    checkpoint 後跨 chunk 重複 ×2~×4，全窗對帳 match rate 97%→24%）。
+    """
+    events = parser(payload)
+    validate_events_in_range(events, c_start, c_end, name)
+    return events
+
+
 def _fetch_chunk_validated(client: OfficialAdjClient, fetcher_attr: str, parser,
                            c_start: date, c_end: date, retries: int = 3) -> tuple:
-    """抓一個 chunk 並「先 parse 驗證再回傳」。
+    """抓一個 chunk 並「先 parse + 窗驗證再回傳」。
 
-    TWSE 偶發回無意義錯誤 stat（如「查詢開始日期小於92年5月5日」），且 CDN 會把
-    錯誤以 query string 為 key 快取住——parser 對這類 stat 會 raise TWSEError，
-    此處帶 cache_bust（隨機 `_` 參數）重試繞開毒快取；靜默當空結果會漏抓整月事件。
+    TWSE 偶發回無意義錯誤 stat（如「查詢開始日期小於92年5月5日」）或
+    「別的查詢窗」的快取資料，且 CDN 會把錯誤以 query string 為 key 快取住——
+    這類 payload 會 raise TWSEError，此處帶 cache_bust（隨機 `_` 參數）
+    重試繞開毒快取；靜默當空結果會漏抓/污染整月事件。
     """
     import time as _time
     from app.twse_client import TWSEError
@@ -87,11 +105,11 @@ def _fetch_chunk_validated(client: OfficialAdjClient, fetcher_attr: str, parser,
     for attempt in range(retries + 1):
         payload = getattr(client, fetcher_attr)(c_start, c_end, cache_bust=attempt > 0)
         try:
-            return payload, parser(payload)
+            return payload, _parse_validated(parser, payload, c_start, c_end, fetcher_attr)
         except TWSEError as exc:
             last_exc = exc
             wait_s = 5.0 * (attempt + 1)
-            print(f"  ⚠ {fetcher_attr} {c_start}~{c_end} 錯誤 stat（{exc}），"
+            print(f"  ⚠ {fetcher_attr} {c_start}~{c_end} 錯誤 payload（{exc}），"
                   f"{wait_s:.0f}s 後帶 cache-bust 重試 {attempt + 1}/{retries}", flush=True)
             _time.sleep(wait_s)
     raise SystemExit(f"chunk 抓取失敗（{fetcher_attr} {c_start}~{c_end}）：{last_exc}")
@@ -124,16 +142,21 @@ def fetch_all_events(client: OfficialAdjClient, start: date, end: date,
     ckpt_dir.mkdir(parents=True, exist_ok=True)
     all_events = []
     for kind, parser, fetcher_attr in FETCH_SPECS:
-        chunker = year_chunks if kind.endswith("capital_reduction") else month_chunks
+        chunker = (year_chunks
+                   if kind.endswith(("capital_reduction", "par_value_change"))
+                   else month_chunks)
         for c_start, c_end in chunker(start, end):
             ckpt = ckpt_dir / f"{kind}_{c_start:%Y%m%d}_{c_end:%Y%m%d}.json"
             events, src = None, "checkpoint"
             if resume and ckpt.exists():
                 try:
-                    events = parser(json.loads(ckpt.read_text(encoding="utf-8")))
+                    events = _parse_validated(
+                        parser, json.loads(ckpt.read_text(encoding="utf-8")),
+                        c_start, c_end, ckpt.name)
                 except (TWSEError, json.JSONDecodeError, ValueError) as exc:
                     # json.JSONDecodeError 是 ValueError 子類；一併捕 ValueError
-                    # 涵蓋其他損壞形態（如非 UTF-8 殘骸）——損壞即重抓，不 crash
+                    # 涵蓋其他損壞形態（如非 UTF-8 殘骸）——損壞/毒快取窗外資料
+                    # 即重抓，不 crash
                     print(f"  ⚠ checkpoint {ckpt.name} 內容無效（{type(exc).__name__}: {exc}），重抓",
                           flush=True)
             if events is None:
@@ -210,6 +233,10 @@ def run_reconcile(events_df: pd.DataFrame, start: date, snapshot_end: date,
     mr = result.summary["match_rate"]
     print(f"match rate        : {mr:.4%}" if mr is not None else "match rate        : n/a")
     print(f"  其中經開盤競價基準才 match: {result.summary['n_matched_via_opening_ref']}")
+    print(f"  其中經次一快照 gap 才 match（快照晚一日調整）: "
+          f"{result.summary['n_matched_via_next_gap']}")
+    print(f"颱風停市日快照漏調整（已證實缺陷，排除分母）: "
+          f"{result.summary['n_missing_market_closed']}")
     print("mismatch 分類:")
     for reason, cnt in sorted(result.summary["reason_counts"].items(), key=lambda kv: -kv[1]):
         if not reason.startswith("matched"):
