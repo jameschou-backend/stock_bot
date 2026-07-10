@@ -5,10 +5,13 @@ Strategy C 的升級版：
 - trailing stop -25%（從持倉最高點回落 25% 出場）：動態鎖利停損
 - 其餘設定與 Strategy C 相同（pos=4, rank_threshold=0.20, excess_label=True）
 
-回測結果（10y WF, 2026-04-16）：
-  +976,990%  Sharpe 1.925  MDD -49.9%  Calmar 3.248
-vs Strategy C：
-  +102,240%  Sharpe 1.480  MDD -40.4%  Calmar 2.649
+⚠️ **狀態：紙上訊號（2026-07-10 預登記重驗裁決 FAIL，勿實單跟隨）**
+docs/prereg_d_revalidation_20260710.md：
+- 臂 1（修復後資料、舊 T 日時序）：Sharpe 1.823 / +594,556% / MDD -42.7%
+- 臂 2（誠實時序 --signal-lag 1 = 實盤 T-1 訊號 T 日下單）：
+  Sharpe 0.952 / +4,800% / MDD **-60.9%** → 觸 FAIL 條件（MDD < -50%）
+- 兩臂差 = 「T 日盤後籌碼 lookahead」的價值 ≈ 123 倍累積報酬——
+  歷史 C/D 線全系列數字（含退役數字 +976,990%/Sharpe 1.925）皆含此偏差，全部不可信。
 
 狀態管理：artifacts/daily_signal/strategy_d_state.json
 輸出：    artifacts/daily_signal/strategy_d_YYYY-MM-DD.json

@@ -232,12 +232,17 @@ def _format_push_message(sig: Dict) -> str:
         exec_label = ""
 
     n_total = len(hold_list) + len(buy_list)
+    _strat = str(sig.get("strategy", "c")).upper()
     lines = [
-        f"📊 <b>Strategy C 每日選股 {d}</b>",
+        f"📊 <b>Strategy {_strat} 每日選股 {d}</b>",
         f"建議明日 {exec_label}執行｜每檔 ${amt:,}",
         f"買進 +{len(buy_list)}  賣出 -{len(sell_list)}  維持 {len(hold_list)}",
         "",
     ]
+    if _strat == "D":
+        # 2026-07-10 預登記重驗裁決 FAIL（誠實時序臂 MDD -60.9% 觸 -50% 條件，
+        # docs/prereg_d_revalidation_20260710.md）——訊號降級紙上追蹤，勿實單跟隨
+        lines.insert(1, "📄 <b>紙上訊號</b>（D 重驗 FAIL：誠實時序 MDD -61%）— 勿實單跟隨")
 
     if sell_list:
         lines.append("🔴 <b>賣出警示</b>（持倉排名掉出，建議出場）")
