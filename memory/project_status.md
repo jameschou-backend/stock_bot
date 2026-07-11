@@ -1,6 +1,22 @@
 # 專案現況
 
-> 最後更新：2026-07-11（odd-lot 零股臂 FAIL：三口徑全數出局，A 線個人實盤議題終結）
+> 最後更新：2026-07-11（PEAD 事件臂 Arm A FAIL：naive top-N 選毒尾；rank 空間訊號存在，待新預登記）
+
+---
+
+## 2026-07-11：月營收 PEAD 事件臂 Arm A → FAIL（詳見 decisions.md 同日條目）
+
+- **新引擎上線**：`scripts/backtest_pead.py`（獨立事件錨定回測，無 ML/無重訓，24 秒；
+  deadline 口徑=誠實下界：進場 = (M+1)月10日申報截止後第一個交易日 +1，出場 +20 交易日）。
+  **DB `raw_fundamentals.revenue_yoy` 全表 NULL → 引擎自 `revenue_current_month` 自算同月去年 YoY。**
+- **預登記**（docs/prereg_pead_arm_20260711.md，判準先寫死）：Arm A 超額 Sharpe 95% CI 下界 >0 才 PASS。
+- **Arm A 裁決 FAIL**：top-30 by yoy 等權累積 +38.97% vs 等權零成本大盤 +202% → 超額 **-163pp**，
+  超額 Sharpe -0.54，**95% CI [-1.619, +0.289] 下界 <0**。**停在 A，未跑 Arm B。**
+- **但訊號在 rank 空間存在**：long-short decile Sharpe **1.81**、rank IC +0.0226/ICIR 0.329。
+  失敗主因 = raw 絕對 yoy top-N 選中極端微型股毒尾（2023-06 cohort top-30 中位 yoy +1,168%）。
+  與 ML 主臂相關性 0.36 <0.5 = 獨立來源。**後續 rank/winsorize 版須新預登記（本次不做）。**
+- 工件：`artifacts/backtest/pead_20260711_armA.json`、tests/test_backtest_pead.py（14）。
+  make test **822 passed**（+14）。trial registry 第 12 筆（n_trials 92）。
 
 ---
 

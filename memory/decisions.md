@@ -1,6 +1,35 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-07-11（odd-lot 零股臂 FAIL：個人口徑翻案管道關閉）
+> 最後更新：2026-07-11（PEAD 事件臂 Arm A FAIL：naive top-N 選毒尾，但訊號在 rank 空間存在）
+
+---
+
+## 2026-07-11：月營收 PEAD 事件臂預登記 Arm A → **FAIL**（naive top-N 執行失敗，訊號 rank 空間存在）
+
+docs/prereg_pead_arm_20260711.md（判準先寫死：Arm A 超額 Sharpe 95% CI 下界 >0 才 PASS）。
+新引擎 **scripts/backtest_pead.py**（獨立事件錨定回測，無 ML/無重訓，24 秒跑完；不碰 backtest.py）。
+
+**訊號/時序**：主訊號 = revenue_yoy（**DB revenue_yoy 全表 NULL → 自 revenue_current_month
+自算同月去年**，198,917 stock-月可算）。deadline 口徑（誠實下界）：營收月 M → 申報截止
+(M+1)月10日 → 進場 = ≥deadline 第一個交易日 **再 +1 交易日**（deadline+1）→ 出場 +20 交易日。
+系統性截掉早公告前段 drift = 效果量下界。P&L = adj_from_db 官方 factor 含息，單筆 clip -50%。
+
+**Arm A 結果**（top-30 by yoy 等權 vs 等權零成本 universe，110 cohort，2017-04~2026-06）：
+策略累積 **+38.97%** vs 大盤 **+202%** → 超額 **-163pp**；Sharpe 0.20；**超額 Sharpe -0.54，
+95% CI [-1.619, +0.289] → 下界 <0 → FAIL**（DSR p=0.0006 不顯著）。**停在 Arm A，未跑 Arm B。**
+
+**關鍵 nuance（誠實）**：
+1. **訊號在 rank 空間確實存在**：long-short（top decile − bottom decile）Sharpe **1.81**、
+   rank IC **+0.0226 / ICIR 0.329**——高營收成長排序意義上勝低成長。
+2. **失敗的是 naive top-N execution 不是訊號家族**：抽 2023-06 cohort，top-30 by 絕對 yoy
+   中位 yoy **+1,168%**、最大 +71,252%、16/30 <0.5億微型股——選到「去年基期≈0→yoy 爆量」的
+   極端微型股（pump 股），20 日大幅 mean-reversion。廣義 top decile（yoy 中位 +108%）才有效。
+3. **與 A 線 ML 主臂相關性 Pearson 0.36 < 0.5 = 獨立回報流**（若 rank 版通過有分散價值）。
+4. **後續須新預登記**（不是本臂延伸、不是換通路）：截面 rank/winsorize yoy、剔除去年基期過小、
+   或 decile-neutral 中段高成長組 + Arm B 執行成本。**本次不做**（看數字後改選股法=新自由度，須另立判準）。
+
+工件：`artifacts/backtest/pead_20260711_armA.json`、tests/test_backtest_pead.py（14，鎖 deadline/
+無 lookahead/YoY 定義/成本方向）。make test 808→**822 passed**。trial registry 第 12 筆（n_trials 92）。
 
 ---
 
