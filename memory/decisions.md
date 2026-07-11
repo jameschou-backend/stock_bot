@@ -1,6 +1,52 @@
 # 重要策略決策與實驗記錄
 
-> 最後更新：2026-07-11（PEAD 事件臂 Arm A FAIL：naive top-N 選毒尾，但訊號在 rank 空間存在）
+> 最後更新：2026-07-11（PEAD rank/winsorize 臂：Arm B FAIL，但 gross 首見真實組合超額 +168pp）
+
+---
+
+## 2026-07-11：月營收 PEAD rank/winsorize 臂新預登記 → Arm B **FAIL**（gross 有 alpha，零股執行付不起）
+
+docs/prereg_pead_rank_arm_20260711.md（判準先寫死、時間戳 13:40 CST、跑數字前凍結）。
+針對前一輪 naive top-N 診斷的失敗機制做**受紀律 transform**，直接測**唯一裁決臂 Arm B**
+（個人零股可執行口徑），無 ML 無重訓。引擎擴充 scripts/backtest_pead.py（signal-transform +
+cost-mode 兩軸，不重寫）。
+
+**transform（ex-ante 凍結，§1）**：(a) 基期效應剔除 = 同月去年營收 `rev_prior_year < NT$10,000,000`
+（1000萬，任務/前一輪 §8.6 明列值，非掃描）→ 剔除「基期≈0 爆量 yoy」毒尾 + 負營收金控雜訊；
+(b) winsorize yoy 到 [P1,P99]（**單調 → 對 rank 選股 no-op**，誠實聲明，操作性槓桿只有 (a)）；
+(c) rank top-30 等權。時序仍 deadline+1、官方 adj、20 交易日、clip −50%。
+
+**三臂解構（同 pool，只成本不同；110 cohort，2017-04~2026-06）**：
+| 臂 | 累積 | 超額 vs 等權零成本 universe | Sharpe | MDD |
+|----|-----:|-----:|-----:|----:|
+| gross（對照） | **+370.07%** | **+168.03pp** | **0.8318** | −32.12% |
+| 參考（整股 tiered，不裁決） | −1.68% | −203.71pp | 0.0294 | −40.28% |
+| **Arm B（零股 ×1.5，裁決）** | **−84.67%** | −286.71pp | **−0.8877** | **−84.77%** |
+
+**裁決 Arm B FAIL**（§3：Sharpe −0.89 < 0.5 且 MDD −84.8% < −50%，雙重觸發）。
+
+**關鍵誠實 nuance**：
+1. **transform 在 gross 層確實修好 naive 失敗**：基期 floor 把 naive 的 −163pp（Sharpe 0.20）
+   翻成 **+168pp（Sharpe 0.83）**、sanity gate pool rank IC **+0.0238 > 0**（PASS，訊號沒被洗掉）。
+   **這是整條 A 線/執行系列第一個「訊號存在且有組合層 gross 超額」的臂**（前面只到 rank IC/long-short）。
+   ⚠️ 但 gross 超額 Sharpe CI 下界 −0.155、DSR p=0.107（<0.95），vs 含息 TAIEX TR(+508%) 仍 −138pp
+   ——point estimate 正、統計未過多重檢定門檻。
+2. **FAIL 純由月頻微型股輪動成交成本造成**（sanity gate 已排除訊號問題）：參考臂證明**連整股
+   tiered 成本**都把 +370% gross 吃到 −1.7%（Sharpe 0.03）；零股 spread ×1.5 再吃 **~83pp/~0.92 Sharpe**
+   到 −85%。「零股價差吃掉多少」= 83pp 累積 / 0.92 Sharpe（參考臂 §4 目的達成）。
+3. **與 A 線 ML 主臂相關性 r=0.4608 < 0.5**（仍獨立，但較 naive 的 0.36 上升——基期 floor 剔除
+   微型 mean-revert 後選股更靠近 ML 動能段）。
+4. **base floor 10M 單一 ex-ante 值，不翻案**：本 FAIL 不得事後調 floor 再跑（新自由度須另立預登記）。
+   救 PEAD 執行的方向不是調參，是**降換手成本結構**（更長持有/更高流動性子集/整股買得起的高價股子集）
+   ——新策略、須另立預登記。
+
+**終局定調**：營收 YoY PEAD 訊號家族已反覆證明存在且獨立（rank IC → 現加上 gross +168pp），
+**但個人可執行的微型股月頻口徑下成交成本結構性大於 alpha——換通路/換訊號都不能解，是月頻
+微型股輪動的容量天花板**。與 odd-lot 臂終局一致且更強（即使換上有真實 gross alpha 的新源仍 FAIL）。
+
+工件：`artifacts/backtest/pead_rank_20260711_{armB,ref_tiered,gross}.json`、
+tests/test_backtest_pead_rank.py（9）。make test **831 passed**（822→831，+9）。
+trial registry #13 Arm B（n_trials=93）/ #14 參考（94）/ #15 gross（95）。
 
 ---
 

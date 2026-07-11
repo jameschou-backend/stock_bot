@@ -1,6 +1,28 @@
 # 專案現況
 
-> 最後更新：2026-07-11（PEAD 事件臂 Arm A FAIL：naive top-N 選毒尾；rank 空間訊號存在，待新預登記）
+> 最後更新：2026-07-11（PEAD rank/winsorize 臂：Arm B FAIL；gross 首見組合超額 +168pp/Sharpe 0.83）
+
+---
+
+## 2026-07-11：月營收 PEAD rank/winsorize 臂 → Arm B FAIL（詳見 decisions.md 同日條目）
+
+- **新預登記**：docs/prereg_pead_rank_arm_20260711.md（判準先寫死、時間戳 13:40 CST）。
+  針對前一輪 naive top-N 毒尾機制做 transform，直接測**唯一裁決臂 Arm B**（個人零股口徑）。
+- **引擎擴充**：scripts/backtest_pead.py 加 `--signal-transform` + `--cost-mode {none,oddlot,tiered}`
+  + `--min-avg-turnover` + `--label`（不重寫）。transform = 基期 floor(1000萬) + winsorize[P1,P99]
+  + rank top-30；winsorize 對 rank 選股單調 no-op（操作性槓桿只有基期 floor，誠實聲明）。
+  新增 vs TAIEX TR（allow_fetch=False 用快取）、post-transform pool sanity-gate IC、全臂 corr_ML。
+- **sanity gate PASS**：transform 後 pool rank IC **+0.0238 > 0**（訊號沒被洗掉）。
+- **三臂（同 pool，只成本異；110 cohort）**：gross **+370%/Sharpe 0.83/超額 +168pp**；
+  參考整股 tiered −1.68%/0.03；**Arm B 零股 ×1.5 −84.67%/−0.89/MDD −84.8% → FAIL（雙重觸發）**。
+- **關鍵**：①transform 在 gross 層修好 naive 失敗（−163pp→+168pp）=系列首見組合層 gross 超額，
+  但 gross 超額 Sharpe CI 下界 −0.155/DSR p 0.107 未過門檻、vs 含息 TR(+508%) 仍 −138pp；
+  ②FAIL 純執行成本——參考臂證明連整股成本都把 +370% 吃到 −1.7%，零股 spread 再吃 83pp/0.92 Sharpe；
+  ③corr_ML 0.4608 仍獨立；④base floor 10M 不翻案，救 PEAD 執行須降換手成本結構（新預登記）。
+- **終局**：營收 YoY PEAD 存在且獨立（rank IC + gross +168pp），但個人微型股月頻口徑成交成本
+  結構性 > alpha——與 odd-lot 臂一致且更強（換有 gross alpha 的新源仍 FAIL）。
+- 工件：`artifacts/backtest/pead_rank_20260711_{armB,ref_tiered,gross}.json`、
+  tests/test_backtest_pead_rank.py（9）。make test **831 passed**。trial registry #13-#15。
 
 ---
 

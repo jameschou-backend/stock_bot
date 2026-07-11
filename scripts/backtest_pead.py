@@ -61,6 +61,7 @@ from skills.statistics import (  # noqa: E402
     paired_block_bootstrap_sharpe_ci,
     returns_moments,
 )
+from skills.taiex_tr import compute_vs_taiex_tr  # noqa: E402
 from skills.trial_registry import (  # noqa: E402
     HISTORICAL_TRIALS_BASE,
     record_backtest_trial,
@@ -87,6 +88,49 @@ STOCK_ID_RE = r"^\d{4}$"
 PERSONAL_MIN_AVG_TURNOVER_YI = 0.0033       # 億元（≈333,333 元）
 PERSONAL_POSITION_SIZE_TWD = 33_333.0
 ODD_LOT_PESSIMISTIC_MULT = 1.5
+
+# ── rank/winsorize 訊號 transform 常數（prereg: docs/prereg_pead_rank_arm_20260711.md §1）──
+# (a) 基期效應剔除：同月去年營收下限（元）。剔除基期≈0 假 YoY（診斷定位的失敗機制）
+#     + 負營收金控雜訊。10,000,000 = 前一輪 §8.6 明列候選值，非看數字後挑選、不掃描。
+REVENUE_BASE_FLOOR_TWD = 10_000_000.0
+# (b) winsorize 百分位（對 rank 選股為單調 no-op，僅防禦性 hygiene，見 prereg §1b）。
+WINSOR_LOWER_PCT = 1.0
+WINSOR_UPPER_PCT = 99.0
+# 參考臂整股 tiered slippage（來回；與 skills/backtest.py 生產 --tiered-slippage 逐字相同）。
+TIERED_SLIP_LARGE = 0.002    # amt_20 >= 5 億
+TIERED_SLIP_MID = 0.006      # amt_20 >= 1 億（亦為 amt_20 缺失 fallback）
+TIERED_SLIP_SMALL = 0.010    # amt_20 < 1 億
+TIERED_SLIP_BOUND_LARGE = 5e8
+TIERED_SLIP_BOUND_MID = 1e8
+
+
+def winsorize_series(values: pd.Series, lower_pct: float, upper_pct: float) -> pd.Series:
+    """截面 winsorize：clip 到 [Plower, Pupper]（純函式，供 transform 與單元測試共用）。
+
+    對 rank 選股為單調 no-op（clip 保序）；此步僅供防禦性 hygiene 與 value-based 報表。
+    空序列或全 NaN 直接回傳原序列。
+    """
+    s = pd.to_numeric(values, errors="coerce")
+    valid = s.dropna()
+    if valid.empty:
+        return s
+    lo = float(np.percentile(valid, lower_pct))
+    hi = float(np.percentile(valid, upper_pct))
+    return s.clip(lower=lo, upper=hi)
+
+
+def tiered_slippage_round_trip(amt_20: float) -> float:
+    """整股 tiered slippage（來回，比例）。參考臂用，隔離零股價差（prereg §4）。
+
+    amt_20 缺失 / 非有限 → 落中型 fallback（保守，與 backtest.py 一致）。
+    """
+    if amt_20 is None or not math.isfinite(amt_20) or amt_20 <= 0:
+        return TIERED_SLIP_MID
+    if amt_20 >= TIERED_SLIP_BOUND_LARGE:
+        return TIERED_SLIP_LARGE
+    if amt_20 >= TIERED_SLIP_BOUND_MID:
+        return TIERED_SLIP_MID
+    return TIERED_SLIP_SMALL
 
 # A 線相關性檢查用（生產 ML 主臂 v2.2 機構口徑）
 PRODUCTION_ML_JSON = ROOT / "artifacts" / "backtest" / "backtest_20260710_190850.json"
@@ -128,7 +172,11 @@ def compute_yoy_columns(df: pd.DataFrame) -> pd.DataFrame:
     df["revenue_yoy_accel"] = df["revenue_yoy"] - df["revenue_yoy_prev"]
 
     df = df.dropna(subset=["revenue_yoy"]).reset_index(drop=True)
-    return df[["stock_id", "revenue_month", "revenue_yoy", "revenue_yoy_accel"]]
+    # rev_prior_year 一併回傳：rank/winsorize transform 的基期 floor（§1a）需要它剔除
+    # 基期≈0 假 YoY 與負營收金控（rev_prior_year 可為負；revenue_yoy 只排除分母 == 0）。
+    return df[[
+        "stock_id", "revenue_month", "revenue_yoy", "revenue_yoy_accel", "rev_prior_year",
+    ]]
 
 
 def load_revenue_signals(session) -> pd.DataFrame:
@@ -249,6 +297,18 @@ def resolve_entry_exit(
 # ════════════════════════════════════════════════════════════════════════════
 # 3. 事件迴圈
 # ════════════════════════════════════════════════════════════════════════════
+def _decile_long_short(frame: pd.DataFrame) -> Optional[float]:
+    """top decile − bottom decile 的 gross_ret 均值（依 revenue_yoy 排序）。"""
+    n = len(frame)
+    if n < 2:
+        return None
+    k = max(1, int(n * DECILE_FRAC))
+    by_yoy = frame.sort_values("revenue_yoy", ascending=False)
+    top_dec = float(by_yoy.head(k)["gross_ret"].mean())
+    bot_dec = float(by_yoy.tail(k)["gross_ret"].mean())
+    return top_dec - bot_dec
+
+
 def run_cohorts(
     signals: pd.DataFrame,
     adj_prices: pd.DataFrame,
@@ -258,14 +318,29 @@ def run_cohorts(
     hold_days: int = HOLD_TRADING_DAYS,
     min_avg_turnover_yi: float = 0.0,
     odd_lot_premium_mult: float = 1.0,
-    apply_costs: bool = False,
+    cost_mode: str = "none",
+    signal_transform: bool = False,
+    base_floor: float = REVENUE_BASE_FLOOR_TWD,
+    winsor_lower: float = WINSOR_LOWER_PCT,
+    winsor_upper: float = WINSOR_UPPER_PCT,
 ) -> Tuple[List[dict], dict]:
     """逐營收月 cohort 模擬，回傳 (periods, diagnostics)。
 
-    periods[i]：entry_date / exit_date / return(策略) / benchmark_return(零成本 universe) /
-                excess_return / n_universe / n_selected。
-    diagnostics：long-short（decile）月序列、逐 cohort rank IC。
+    Args:
+        cost_mode: "none"（gross 無成本）/ "oddlot"（稅費 + 零股 spread ×premium_mult）/
+                   "tiered"（稅費 + 整股 tiered slippage，參考臂，隔離零股價差）。
+        signal_transform: True 時套 rank/winsorize transform（prereg §1）：
+                   (a) 基期 floor 剔除 rev_prior_year < base_floor（含負值/NaN）；
+                   (b) winsorize 存活 yoy 到 [winsor_lower, winsor_upper]（單調 no-op on rank）；
+                   (c) 選股仍依 revenue_yoy 降冪 rank top-N。
+
+    periods[i]：entry/exit_date / return(策略 net) / benchmark_return(零成本全 universe) /
+                excess_return / n_universe / n_pool / n_selected。
+    diagnostics：full-universe 與 post-transform-pool 兩組 long-short / rank IC 序列
+                （pool 組 = sanity gate 資料源）。
     """
+    if cost_mode not in ("none", "oddlot", "tiered"):
+        raise ValueError(f"未知 cost_mode: {cost_mode}")
     trading_days = np.sort(adj_prices["trading_date"].unique())
     # 依 (pd.Timestamp, normalized) → DataFrame(index=stock_id) 建查詢表
     adj_by_date: Dict[pd.Timestamp, pd.DataFrame] = {
@@ -277,8 +352,10 @@ def run_cohorts(
     min_turnover_twd = min_avg_turnover_yi * 1e8
 
     periods: List[dict] = []
-    ls_returns: List[float] = []     # long-short（top decile − bottom decile）
-    ic_values: List[float] = []      # 逐 cohort Spearman(yoy, holding_ret)
+    ls_returns: List[float] = []       # full universe long-short（前一輪對照）
+    ic_values: List[float] = []        # full universe 逐 cohort Spearman(yoy, ret)
+    pool_ls_returns: List[float] = []  # post-transform pool long-short（sanity gate）
+    pool_ic_values: List[float] = []   # post-transform pool 逐 cohort rank IC（sanity gate）
 
     for rev_month, cohort in signals.groupby("revenue_month", sort=True):
         deadline = compute_deadline(rev_month)
@@ -291,7 +368,7 @@ def run_cohorts(
         if entry_tbl is None or exit_tbl is None:
             continue
 
-        c = cohort[["stock_id", "revenue_yoy", "revenue_yoy_accel"]].copy()
+        c = cohort[["stock_id", "revenue_yoy", "revenue_yoy_accel", "rev_prior_year"]].copy()
         c = c.set_index("stock_id")
         c["entry_px"] = entry_tbl["adj_close"].reindex(c.index)
         c["exit_px"] = exit_tbl["adj_close"].reindex(c.index)
@@ -304,18 +381,26 @@ def run_cohorts(
         gross = (c["exit_px"] / c["entry_px"] - 1.0).clip(lower=SINGLE_TRADE_CLIP)
         c["gross_ret"] = gross
 
-        # ── benchmark：等權零成本 universe（本 cohort 全 universe 持有報酬均值）──
+        # ── benchmark：等權零成本全 universe（未套 floor / 門檻）──
         bench_ret = float(c["gross_ret"].mean())
 
-        # ── Arm B 執行成本 / 流動性門檻 ──
+        # ── 選股 pool：(a) 基期 floor（signal_transform）→ 流動性門檻 ──
         pool = c
+        if signal_transform:
+            # rev_prior_year < floor（含 NaN / 負值）→ 剔除（§1a）
+            pool = pool[pool["rev_prior_year"].fillna(-np.inf) >= base_floor]
         if min_turnover_twd > 0:
             pool = pool[pool["turnover_20"].fillna(0.0) >= min_turnover_twd]
-            if len(pool) < topn:
-                continue
+        if len(pool) < topn:
+            continue
+        if signal_transform:
+            # (b) winsorize（單調 no-op on rank；hygiene / value-based 報表用）
+            pool = pool.assign(
+                revenue_yoy_wins=winsorize_series(pool["revenue_yoy"], winsor_lower, winsor_upper)
+            )
 
-        net = pool["gross_ret"].copy()
-        if apply_costs:
+        # ── 執行成本（cost_mode）──
+        if cost_mode == "oddlot":
             cost = pool["turnover_20"].apply(
                 lambda t: ROUND_TRIP_TAX_FEE + odd_lot_round_trip_cost(
                     amt_20=float(t) if pd.notna(t) else 0.0,
@@ -324,10 +409,19 @@ def run_cohorts(
                     position_size_twd=PERSONAL_POSITION_SIZE_TWD,
                 )
             )
-            net = net - cost
+            net = pool["gross_ret"] - cost
+        elif cost_mode == "tiered":
+            cost = pool["turnover_20"].apply(
+                lambda t: ROUND_TRIP_TAX_FEE + tiered_slippage_round_trip(
+                    float(t) if pd.notna(t) else float("nan")
+                )
+            )
+            net = pool["gross_ret"] - cost
+        else:  # "none"
+            net = pool["gross_ret"].copy()
         pool = pool.assign(net_ret=net)
 
-        # ── 選股：top-N by yoy 等權 ──
+        # ── 選股：top-N by yoy 降冪 rank 等權（§1c）──
         ranked = pool.sort_values("revenue_yoy", ascending=False)
         selected = ranked.head(topn)
         strat_ret = float(selected["net_ret"].mean())
@@ -341,23 +435,31 @@ def run_cohorts(
             "benchmark_return": bench_ret,
             "excess_return": strat_ret - bench_ret,
             "n_universe": int(len(c)),
+            "n_pool": int(len(pool)),
             "n_selected": int(len(selected)),
         })
 
-        # ── 診斷（用 gross、全 universe，不受成本/門檻影響）──
-        n = len(c)
-        k = max(1, int(n * DECILE_FRAC))
-        by_yoy = c.sort_values("revenue_yoy", ascending=False)
-        top_dec = float(by_yoy.head(k)["gross_ret"].mean())
-        bot_dec = float(by_yoy.tail(k)["gross_ret"].mean())
-        ls_returns.append(top_dec - bot_dec)
+        # ── 診斷 1：full universe（gross，不受 transform/成本影響；前一輪對照）──
+        ls_full = _decile_long_short(c)
+        if ls_full is not None:
+            ls_returns.append(ls_full)
         ic = c["revenue_yoy"].corr(c["gross_ret"], method="spearman")
         if pd.notna(ic):
             ic_values.append(float(ic))
 
+        # ── 診斷 2：post-transform pool（sanity gate；gross，成本無關）──
+        ls_pool = _decile_long_short(pool)
+        if ls_pool is not None:
+            pool_ls_returns.append(ls_pool)
+        ic_pool = pool["revenue_yoy"].corr(pool["gross_ret"], method="spearman")
+        if pd.notna(ic_pool):
+            pool_ic_values.append(float(ic_pool))
+
     diagnostics = {
         "long_short_returns": ls_returns,
         "ic_values": ic_values,
+        "pool_long_short_returns": pool_ls_returns,
+        "pool_ic_values": pool_ic_values,
     }
     return periods, diagnostics
 
@@ -460,10 +562,10 @@ def statistical_block(periods: List[dict], n_trials: int) -> Optional[dict]:
     }
 
 
-def long_short_stats(diagnostics: dict) -> dict:
-    ls = np.array(diagnostics["long_short_returns"], dtype=float)
-    ic = np.array(diagnostics["ic_values"], dtype=float)
-    rf_month = (1 + RISK_FREE_RATE) ** (1 / 12) - 1
+def _ls_ic_block(ls_returns: List[float], ic_values: List[float]) -> dict:
+    """由 long-short 月序列與逐 cohort rank IC 算 Sharpe / IC / ICIR block。"""
+    ls = np.array(ls_returns, dtype=float)
+    ic = np.array(ic_values, dtype=float)
     return {
         "long_short_sharpe": round(_sharpe(ls, 0.0), 4) if len(ls) else None,
         "long_short_mean_monthly": round(float(ls.mean()), 4) if len(ls) else None,
@@ -472,6 +574,24 @@ def long_short_stats(diagnostics: dict) -> dict:
         "rank_ic_std": round(float(ic.std(ddof=1)), 4) if len(ic) > 1 else None,
         "rank_icir": round(float(ic.mean() / ic.std(ddof=1)), 4) if len(ic) > 1 and ic.std(ddof=1) > 0 else None,
         "n_cohorts": int(len(ls)),
+    }
+
+
+def long_short_stats(diagnostics: dict) -> dict:
+    """full-universe + post-transform-pool 兩組 long-short/IC；pool 組供 sanity gate。"""
+    full = _ls_ic_block(diagnostics["long_short_returns"], diagnostics["ic_values"])
+    pool = _ls_ic_block(
+        diagnostics.get("pool_long_short_returns", []),
+        diagnostics.get("pool_ic_values", []),
+    )
+    pool_ic = pool["rank_ic_mean"]
+    return {
+        # 向後相容：頂層仍是 full-universe block（前一輪 JSON 欄位不變）
+        **full,
+        "full_universe": full,
+        "post_transform_pool": pool,
+        # sanity gate（prereg §1）：transform 後 pool rank IC 須 > 0（非裁決、健全性檢查）
+        "sanity_gate_pool_ic_positive": bool(pool_ic is not None and pool_ic > 0),
     }
 
 
@@ -503,11 +623,53 @@ def correlation_with_ml(periods: List[dict]) -> dict:
     }
 
 
+def build_equity_curve(periods: List[dict]) -> List[dict]:
+    """由 cohort net 報酬複利建 equity curve（供 compute_vs_taiex_tr；起點 10000）。
+
+    每 cohort = entry→+20 交易日，月頻近似連續；以 exit_date 為節點複利。
+    """
+    eq = 10000.0
+    curve = [{"date": periods[0]["entry_date"], "equity": eq}]
+    for p in periods:
+        eq *= (1.0 + p["return"])
+        curve.append({"date": p["exit_date"], "equity": eq})
+    return curve
+
+
 # ════════════════════════════════════════════════════════════════════════════
 # 5. 臂執行
 # ════════════════════════════════════════════════════════════════════════════
-def run_arm(arm: str, output: Optional[str], hold_days: int, topn: int) -> dict:
-    print(f"[pead] === Arm {arm} 開始 ===", flush=True)
+def run_arm(
+    arm: str,
+    output: Optional[str],
+    hold_days: int,
+    topn: int,
+    *,
+    signal_transform: bool = False,
+    cost_mode: Optional[str] = None,
+    min_avg_turnover_yi: Optional[float] = None,
+    label: Optional[str] = None,
+) -> dict:
+    """執行單臂 PEAD 回測。
+
+    legacy（無新旗標）：arm A = gross/無門檻；arm B = oddlot/0.0033 門檻
+        （前一輪 docs/prereg_pead_arm_20260711.md 口徑，可重現）。
+    rank 版（signal_transform=True）：docs/prereg_pead_rank_arm_20260711.md——
+        cost_mode ∈ {none(gross), oddlot(裁決), tiered(參考)}、門檻 0.0033。
+    """
+    # 由 arm 推導 legacy 預設；新旗標覆蓋
+    if cost_mode is None:
+        cost_mode = "oddlot" if arm == "B" else "none"
+    if min_avg_turnover_yi is None:
+        min_avg_turnover_yi = PERSONAL_MIN_AVG_TURNOVER_YI if arm == "B" else 0.0
+    tag = label or f"{arm}{'_transform' if signal_transform else ''}_{cost_mode}"
+    prereg = (
+        "docs/prereg_pead_rank_arm_20260711.md" if signal_transform
+        else "docs/prereg_pead_arm_20260711.md"
+    )
+
+    print(f"[pead] === {tag} 開始 ===（transform={signal_transform} cost={cost_mode} "
+          f"門檻={min_avg_turnover_yi}億）", flush=True)
     with get_session() as session:
         signals = load_revenue_signals(session)
         print(f"[pead] 訊號列數（yoy 可算）: {len(signals):,}；"
@@ -523,77 +685,85 @@ def run_arm(arm: str, output: Optional[str], hold_days: int, topn: int) -> dict:
         print(f"[pead] 價格列數: {len(adj_prices):,}；"
               f"交易日: {adj_prices['trading_date'].nunique()}", flush=True)
 
-        if arm == "A":
-            periods, diag = run_cohorts(
-                signals, adj_prices, exclude_ids,
-                topn=topn, hold_days=hold_days,
-                min_avg_turnover_yi=0.0, apply_costs=False,
-            )
-        elif arm == "B":
-            periods, diag = run_cohorts(
-                signals, adj_prices, exclude_ids,
-                topn=topn, hold_days=hold_days,
-                min_avg_turnover_yi=PERSONAL_MIN_AVG_TURNOVER_YI,
-                odd_lot_premium_mult=ODD_LOT_PESSIMISTIC_MULT,
-                apply_costs=True,
-            )
-        else:
-            raise ValueError(f"未知 arm: {arm}")
+        periods, diag = run_cohorts(
+            signals, adj_prices, exclude_ids,
+            topn=topn, hold_days=hold_days,
+            min_avg_turnover_yi=min_avg_turnover_yi,
+            odd_lot_premium_mult=ODD_LOT_PESSIMISTIC_MULT,
+            cost_mode=cost_mode,
+            signal_transform=signal_transform,
+        )
 
     if not periods:
         raise RuntimeError("無有效 cohort（檢查資料與時序）")
 
     summary = summarize(periods)
     ls = long_short_stats(diag)
-    corr = correlation_with_ml(periods) if arm == "A" else None
+    corr = correlation_with_ml(periods)   # 所有臂都算（本輪 Arm B 需再確認獨立性）
+    vs_tr = compute_vs_taiex_tr(build_equity_curve(periods), allow_fetch=False)
 
     # trial registry（記入後 n_trials = registry + historical_base）
     record_backtest_trial(
         {"summary": summary}, months=hold_days,
-        source=f"pead_arm_{arm.lower()}",
+        source=f"pead_{tag}",
         params={"arm": arm, "topn": topn, "hold_days": hold_days,
-                "signal": "revenue_yoy", "timing": "deadline+1"},
+                "signal": "revenue_yoy", "timing": "deadline+1",
+                "signal_transform": signal_transform, "cost_mode": cost_mode,
+                "min_avg_turnover_yi": min_avg_turnover_yi},
     )
     n_trials = registry_trial_count() + HISTORICAL_TRIALS_BASE
     stats = statistical_block(periods, n_trials)
 
     result = {
         "arm": arm,
+        "label": tag,
         "engine": "backtest_pead.py",
-        "prereg": "docs/prereg_pead_arm_20260711.md",
+        "prereg": prereg,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
-        "signal": "revenue_yoy (self-computed same-month-prior-year)",
+        "signal": (
+            "winsorized-rank revenue_yoy (base-floor + winsorize + rank top-N)"
+            if signal_transform else
+            "revenue_yoy (self-computed same-month-prior-year)"
+        ),
         "timing": "deadline+1 (法定申報截止=(M+1)月10日；進場=≥deadline第一個交易日+1交易日)",
         "timing_caveat": "deadline 口徑系統性截掉早公告前段 drift → 效果量為下界（lower bound）",
         "config": {
             "topn": topn, "hold_trading_days": hold_days,
             "single_trade_clip": SINGLE_TRADE_CLIP,
-            "min_avg_turnover_yi": PERSONAL_MIN_AVG_TURNOVER_YI if arm == "B" else 0.0,
+            "signal_transform": signal_transform,
+            "revenue_base_floor_twd": REVENUE_BASE_FLOOR_TWD if signal_transform else None,
+            "winsor_pct": [WINSOR_LOWER_PCT, WINSOR_UPPER_PCT] if signal_transform else None,
+            "min_avg_turnover_yi": min_avg_turnover_yi,
             "max_stock_price": None,
-            "apply_costs": arm == "B",
-            "odd_lot_premium_mult": ODD_LOT_PESSIMISTIC_MULT if arm == "B" else None,
-            "round_trip_tax_fee": ROUND_TRIP_TAX_FEE if arm == "B" else None,
+            "cost_mode": cost_mode,
+            "odd_lot_premium_mult": ODD_LOT_PESSIMISTIC_MULT if cost_mode == "oddlot" else None,
+            "round_trip_tax_fee": ROUND_TRIP_TAX_FEE if cost_mode in ("oddlot", "tiered") else None,
             "pnl_convention": "adj_from_db_official",
         },
         "summary": summary,
         "long_short_diagnostic": ls,
         "statistics": stats,
+        "vs_taiex_tr": vs_tr,
         "correlation_with_ml": corr,
         "periods": periods,
     }
 
     # 主控台摘要
-    print(f"\n[pead] === Arm {arm} 結果 ===", flush=True)
+    print(f"\n[pead] === {tag} 結果 ===", flush=True)
     print(f"  期數: {summary['n_periods']}  窗口: {summary['backtest_start']} ~ {summary['backtest_end']}", flush=True)
     print(f"  策略累積: {summary['total_return']:+.2%}  大盤(零成本 universe): {summary['benchmark_total_return']:+.2%}  超額: {summary['excess_return']:+.2%}", flush=True)
     print(f"  Sharpe: {summary['sharpe_ratio']}  超額 Sharpe: {summary['excess_sharpe']}  MDD: {summary['max_drawdown']:.2%}  Calmar: {summary['calmar_ratio']}", flush=True)
+    if vs_tr:
+        print(f"  vs TAIEX TR: 策略 {vs_tr['strategy_total_return']:+.2%} / TR {vs_tr['taiex_tr_total_return']:+.2%} → 超額 {vs_tr['excess_total_return_vs_tr']:+.2%}", flush=True)
     if stats:
         s = stats["sharpe_ci_95"]
         d = stats["deflated_sharpe"]
         print(f"  Sharpe 95% CI: [{s['ci_low']}, {s['ci_high']}]", flush=True)
-        print(f"  超額 Sharpe 95% CI: [{s['excess_ci_low']}, {s['excess_ci_high']}]  ← Arm A 判準看下界", flush=True)
+        print(f"  超額 Sharpe 95% CI: [{s['excess_ci_low']}, {s['excess_ci_high']}]（rank 臂佐證，裁決看 Sharpe/MDD）", flush=True)
         print(f"  DSR p={d['p_value']} (n_trials={d['n_trials']})", flush=True)
-    print(f"  long-short Sharpe: {ls['long_short_sharpe']}  rank IC: {ls['rank_ic_mean']}  ICIR: {ls['rank_icir']}", flush=True)
+    print(f"  [full-universe] long-short Sharpe: {ls['long_short_sharpe']}  rank IC: {ls['rank_ic_mean']}  ICIR: {ls['rank_icir']}", flush=True)
+    pool = ls["post_transform_pool"]
+    print(f"  [sanity gate] pool long-short Sharpe: {pool['long_short_sharpe']}  rank IC: {pool['rank_ic_mean']}  → IC>0={ls['sanity_gate_pool_ic_positive']}", flush=True)
     if corr:
         print(f"  與 A 線 ML 主臂相關性: Pearson r={corr.get('pearson_r')} (n={corr.get('n_overlap')})  獨立來源={corr.get('independent_source')}", flush=True)
 
@@ -606,13 +776,28 @@ def run_arm(arm: str, output: Optional[str], hold_days: int, topn: int) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="月營收 PEAD 事件臂回測（prereg: docs/prereg_pead_arm_20260711.md）")
-    parser.add_argument("--arm", choices=["A", "B"], required=True, help="A=訊號存在性(gate)；B=可執行性(僅 A PASS 才跑)")
+    parser = argparse.ArgumentParser(description="月營收 PEAD 事件臂回測（prereg: docs/prereg_pead_*_20260711.md）")
+    parser.add_argument("--arm", choices=["A", "B"], required=True,
+                        help="A=無門檻 gross（legacy gate）；B=個人可執行 0.0033 門檻")
+    parser.add_argument("--signal-transform", action="store_true",
+                        help="套 rank/winsorize transform（prereg: docs/prereg_pead_rank_arm_20260711.md）")
+    parser.add_argument("--cost-mode", choices=["none", "oddlot", "tiered"], default=None,
+                        help="none=gross；oddlot=零股 spread ×1.5（裁決）；tiered=整股 slippage（參考）。"
+                             "省略時由 --arm 推導（A→none, B→oddlot）")
+    parser.add_argument("--min-avg-turnover", type=float, default=None, dest="min_avg_turnover",
+                        help="流動性門檻（億元）。省略時由 --arm 推導（A→0, B→0.0033）")
+    parser.add_argument("--label", type=str, default=None, help="臂標籤（JSON/trial registry 標記）")
     parser.add_argument("--output", type=str, default=None, help="結果 JSON 路徑")
     parser.add_argument("--hold-days", type=int, default=HOLD_TRADING_DAYS, help="持有交易日數（預設 20）")
     parser.add_argument("--topn", type=int, default=TOPN, help="每 cohort 選股數（預設 30）")
     args = parser.parse_args()
-    run_arm(args.arm, args.output, args.hold_days, args.topn)
+    run_arm(
+        args.arm, args.output, args.hold_days, args.topn,
+        signal_transform=args.signal_transform,
+        cost_mode=args.cost_mode,
+        min_avg_turnover_yi=args.min_avg_turnover,
+        label=args.label,
+    )
 
 
 if __name__ == "__main__":
