@@ -1,6 +1,9 @@
 #!/bin/bash
-# 每日自動執行：pipeline → strategy_d_pick → TG push
+# 每日自動執行：pipeline → D pick(紙上) → ipo scan → paper nav → TG 誠實日報 → 哨兵 → 營收爬蟲
 # launchd: ~/Library/LaunchAgents/com.jameschou.stockbot.daily.plist (週一~週五 18:00)
+#
+# 推播口徑（2026-07-18 起）：每日推「誠實日報」（telegram_bot.py --push --strategy daily-brief）。
+# D 訊號推播已降級為手動（--strategy d / listen 模式 /signal d），不再每日自動推。
 
 set -e
 cd /Users/james.chou/JamesProject/stock_bot
@@ -53,7 +56,7 @@ if ! wait_for_network; then
 fi
 
 # 1) Pipeline（資料更新 + features + labels + model + picks）─ 最多 3 次 retry
-echo ">>> [1/3] make pipeline" | tee -a "$LOG"
+echo ">>> [1/7] make pipeline" | tee -a "$LOG"
 PIPELINE_OK=false
 for try in 1 2 3; do
     echo "    [pipeline] attempt $try/3" | tee -a "$LOG"
@@ -73,27 +76,46 @@ else
     exit 1
 fi
 
-# 2) Strategy D pick（基於今日收盤 + max_price 250 過濾）
-echo ">>> [2/3] strategy_d_pick" | tee -a "$LOG"
+# 2) Strategy D pick（紙上訊號，供手動 /signal d 用；失敗不中斷——
+#    每日推播已改誠實日報，不依賴 D 訊號檔）
+echo ">>> [2/7] strategy_d_pick (paper, non-fatal)" | tee -a "$LOG"
 if $PYTHON scripts/strategy_d_pick.py --max-price 250 >> "$LOG" 2>&1; then
     echo ">>> D pick OK" | tee -a "$LOG"
 else
-    echo "!!! D pick FAILED" | tee -a "$LOG"
-    tg_send "⚠️ Stock_bot D pick FAILED $(date '+%F %H:%M')，已跳過推播以免推到昨日舊訊號，請檢查 $LOG"
-    exit 1
+    echo "!!! D pick FAILED (non-fatal, /signal d 會拿到昨日舊訊號)" | tee -a "$LOG"
+    tg_send "⚠️ Stock_bot D pick FAILED $(date '+%F %H:%M')（非致命，誠實日報照常推），請檢查 $LOG"
 fi
 
-# 3) Push D 訊號到 Telegram
-echo ">>> [3/3] telegram push D" | tee -a "$LOG"
-if $PYTHON scripts/telegram_bot.py --push --strategy d >> "$LOG" 2>&1; then
-    echo ">>> TG push OK" | tee -a "$LOG"
+# 3) 公開申購抽籤掃描（誠實日報的申購機會節資料源；失敗不中斷——
+#    日報會顯示最後一次成功掃描的日期，過期會標注）
+echo ">>> [3/7] ipo lottery scan" | tee -a "$LOG"
+if $PYTHON scripts/ipo_lottery_scan.py >> "$LOG" 2>&1; then
+    echo ">>> ipo scan OK" | tee -a "$LOG"
 else
-    echo "!!! TG push FAILED" | tee -a "$LOG"
+    echo "!!! ipo scan FAILED (non-fatal)" | tee -a "$LOG"
 fi
 
-# 4) Live 特徵一致性哨兵（P0-1 型錯位偵測：picks 特徵值必須 == features 表）
-#    失敗不中斷（訊號已推播），但立即 TG 告警——這類 bug 曾潛伏五個月
-echo ">>> [4/4] pick sanity sentinel" | tee -a "$LOG"
+# 4) 訊號價版 paper NAV（forward track record；在推播前跑，日報才拿得到今日淨值；
+#    失敗不中斷、只 log——NAV 是紀錄性質，明日重跑會自動補齊缺日）
+echo ">>> [4/7] paper nav" | tee -a "$LOG"
+if $PYTHON scripts/paper_nav.py >> "$LOG" 2>&1; then
+    echo ">>> paper nav OK" | tee -a "$LOG"
+else
+    echo "!!! paper nav FAILED (non-fatal, 明日重跑自動補齊)" | tee -a "$LOG"
+fi
+
+# 5) Push 誠實日報到 Telegram（picks 紙上追蹤 + paper NAV + 申購機會 + 處置股 + 哨兵）
+echo ">>> [5/7] telegram push daily-brief" | tee -a "$LOG"
+if $PYTHON scripts/telegram_bot.py --push --strategy daily-brief >> "$LOG" 2>&1; then
+    echo ">>> TG daily-brief OK" | tee -a "$LOG"
+else
+    echo "!!! TG daily-brief FAILED" | tee -a "$LOG"
+fi
+
+# 6) Live 特徵一致性哨兵（P0-1 型錯位偵測：picks 特徵值必須 == features 表）
+#    失敗不中斷（日報已推播），但立即 TG 告警——這類 bug 曾潛伏五個月
+#    （日報內的哨兵節與此為雙保險：日報 inline 抽驗 + 此處獨立告警）
+echo ">>> [6/7] pick sanity sentinel" | tee -a "$LOG"
 if $PYTHON scripts/reconcile_live_vs_backtest.py --sanity >> "$LOG" 2>&1; then
     echo ">>> sanity OK" | tee -a "$LOG"
 else
@@ -101,18 +123,9 @@ else
     tg_send "🚨 Stock_bot pick 特徵錯位（P0-1 型）$(date '+%F %H:%M')！今日訊號分數不可信，請檢查 $LOG"
 fi
 
-# 5) 訊號價版 paper NAV（forward track record；失敗不中斷、只 log——
-#    NAV 是紀錄性質，明日重跑會自動補齊缺日，不值得半夜告警）
-echo ">>> [5/6] paper nav" | tee -a "$LOG"
-if $PYTHON scripts/paper_nav.py >> "$LOG" 2>&1; then
-    echo ">>> paper nav OK" | tee -a "$LOG"
-else
-    echo "!!! paper nav FAILED (non-fatal, 明日重跑自動補齊)" | tee -a "$LOG"
-fi
-
-# 6) 月營收公告爬蟲（另人開發中；失敗不中斷、不告警、只 log——
+# 7) 月營收公告爬蟲（另人開發中；失敗不中斷、不告警、只 log——
 #    爬蟲壞了只丟資料，不影響生產訊號）
-echo ">>> [6/6] revenue announcements crawler" | tee -a "$LOG"
+echo ">>> [7/7] revenue announcements crawler" | tee -a "$LOG"
 if $PYTHON scripts/crawl_revenue_announcements.py >> "$LOG" 2>&1; then
     echo ">>> revenue crawler OK" | tee -a "$LOG"
 else

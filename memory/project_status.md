@@ -1,6 +1,30 @@
 # 專案現況
 
-> 最後更新：2026-07-11（PEAD rank/winsorize 臂：Arm B FAIL；gross 首見組合超額 +168pp/Sharpe 0.83）
+> 最後更新：2026-07-18（dashboard_v2 資訊瀏覽三頁 + TG 誠實日報上線；未 commit——本次 session 禁 git，由使用者自行 commit）
+
+---
+
+## 2026-07-18：dashboard_v2 資訊瀏覽三頁 + TG 推播重整（工程交付，非實驗）
+
+- **dashboard_v2 新三頁**（`make dashboard-v2`，port 8502）：
+  - `pages/7_🏠_總覽.py`：誠實橫幅（A 線無可執行 alpha）+ paper NAV 曲線（config_version 分段）
+    + 最新 picks（紙上追蹤）+ 申購機會（折價排序，過期掃描標警）+ 處置股警示（新增 diff
+    + picks 交集）+ 系統狀態（jobs / 月營收 ledger / NAV 最新日）。
+  - `pages/8_🕯️_個股K線.py`：plotly 四列子圖（K 線漲紅跌綠 + MA5/20/60 / 成交量 / 外資買賣超 /
+    融資餘額），raw close ↔ 還原價（官方 factor）切換，範圍 clamp 3 年，MA 暖身 130 日曆天，
+    rangebreaks 隱藏非交易日。「FinMind 補抓」按鈕僅該股落後 >3 交易日可按（顯式觸發，預設零 API）。
+  - `pages/9_📜_研究裁決.py`：5 筆 FAIL 裁決摘要表（硬編碼，新增裁決須同步維護
+    `info_helpers.PREREG_VERDICTS`）+ docs/prereg_*.md 全文渲染（新→舊）。
+  - 共用 loaders：`app/dashboard_v2/info_helpers.py`；main.py 首頁表加新頁、退役舊 headline 字樣。
+- **TG 誠實日報**：`scripts/telegram_bot.py --push --strategy daily-brief`（新增 choices）——
+  ①picks 前 10（紙上）②paper NAV+近 30 日 ③申購機會（折價>10% 且 sub_end 未過，唯一可行動項）
+  ④處置股新增 diff ⑤哨兵（run_sanity inline + pipeline 最新 job）。單節缺料不擋整份。
+- **daily_run.sh 改 7 步**：D pick 降非致命（D 推播降級手動 --strategy d）→ 新增 ipo scan →
+  paper_nav 移到推播前（日報才有當日 NAV）→ 推 daily-brief → 哨兵（獨立告警保留，與日報內
+  inline 抽驗雙保險）→ 營收爬蟲。
+- 測試：+17（tests/test_telegram_daily_brief.py，純函式）；make test **848 passed**（基線 831）。
+- 冒煙：三頁 streamlit 實測渲染（真 DB：NAV 5 行/picks 3 檔/ipo 6 案/處置 21 檔/2330 K 線 239 根）；
+  daily-brief --dry-run 實測輸出正常。DB 全程只讀（FinMind 補抓按鈕未觸發）。
 
 ---
 

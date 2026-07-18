@@ -24,14 +24,14 @@ apply_style()
 
 render_top_banner(
     "📈 台股 ML 選股系統 v2",
-    "Stage 10 production · Sharpe 1.33 · 10y +5115%",
+    "基準 v2.1 · Sharpe 0.613 · A 線僅紙上追蹤（各口徑無可執行 alpha，詳 docs/prereg_*）",
 )
 
 st.markdown(
     """
     ### 👋 歡迎使用 Dashboard v2
 
-    左側 sidebar 可切換 5 個視圖：
+    左側 sidebar 可切換視圖：
 
     | Page | 用途 | 目標讀者 |
     |------|------|---------|
@@ -40,6 +40,9 @@ st.markdown(
     | **🎯 Features** | SHAP 特徵歸因 + 重要性排序 | 研究模型行為 |
     | **⚕️ System Health** | data coverage / pipeline status | 監控系統健康 |
     | **📈 Experiments** | MLflow / Optuna 實驗追蹤 | 實驗管理 |
+    | **🏠 總覽** | paper NAV + picks + 申購機會 + 處置股 + 系統狀態 | 每日資訊瀏覽 |
+    | **🕯️ 個股K線** | 蠟燭圖（raw/還原價）+ 法人 + 融資 | 個股查詢 |
+    | **📜 研究裁決** | prereg 預登記文件 + 裁決摘要 | 研究誠實紀錄 |
     """
 )
 

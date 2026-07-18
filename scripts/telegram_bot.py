@@ -1,10 +1,17 @@
-"""Telegram Bot：Strategy C / D 交易通知與持倉管理。
+"""Telegram Bot：誠實日報推播 + Strategy C / D 訊號（手動）與持倉管理。
 
 模式：
-  --push      讀取今日訊號，發送到 Telegram（預設 Strategy C）
+  --push      發送到 Telegram（--strategy daily-brief=誠實日報；c/d=策略訊號，手動用）
   --listen    啟動長輪詢，等待使用者指令
   --dry-run   印出訊息內容，不實際發送
-  --strategy  選擇策略（c=Strategy C, d=Strategy D）
+  --strategy  daily-brief（每日排程預設，誠實日報）/ c / d（降級手動用）
+
+誠實日報（daily-brief）內容依序：
+  ① A 線今日 picks 前 10（紙上追蹤——各口徑均無可執行 alpha，詳 docs/prereg_*）
+  ② paper NAV 最新淨值與近 30 日變化（artifacts/paper_nav/nav.jsonl）
+  ③ 今日申購機會（artifacts/ipo_lottery/scan_*.json，折價>10%；唯一可行動項）
+  ④ 處置股新增警示（artifacts/disposition/*.json 最新 vs 前一份）
+  ⑤ 哨兵狀態（pick 特徵一致性抽驗 + pipeline 最新 job）
 
 指令（Listen 模式）：
   /signal     今日 Strategy C 選股建議
@@ -48,6 +55,15 @@ from skills.io_utils import atomic_write_json, safe_read_json
 # ─────────────────────────────────────────────
 SIGNAL_DIR     = ROOT / "artifacts" / "daily_signal"
 PORTFOLIO_FILE = SIGNAL_DIR / "portfolio.json"
+NAV_FILE        = ROOT / "artifacts" / "paper_nav" / "nav.jsonl"
+IPO_DIR         = ROOT / "artifacts" / "ipo_lottery"
+DISPOSITION_DIR = ROOT / "artifacts" / "disposition"
+
+# 誠實橫幅（與 dashboard 總覽頁同一句，單一真相源級別的文案）
+HONEST_BANNER = "A 線各口徑均無可執行 alpha（v2.2），picks 僅紙上追蹤——詳 docs/prereg_*"
+
+# 申購機會門檻：折價 > 10% 才列入日報（唯一可行動項）
+IPO_MIN_DISCOUNT = 0.10
 
 # ─────────────────────────────────────────────
 # Telegram API 封裝
@@ -578,6 +594,295 @@ def _cmd_why(args: List[str]) -> str:
         return f"❌ /why 執行失敗：{exc}\n{traceback.format_exc()[-400:]}"
 
 
+# ─────────────────────────────────────────────
+# 誠實日報（daily-brief）
+# ─────────────────────────────────────────────
+def _load_nav_records(path: Path = NAV_FILE) -> List[Dict]:
+    """讀 nav.jsonl（每行一筆 {"date","nav","holdings_n","config_version","notes"}）。
+
+    檔案缺失回空 list；損毀行跳過（日報缺一節不該擋整份推播）。
+    """
+    if not path.exists():
+        return []
+    records: List[Dict] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rec = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(rec, dict) and "date" in rec and "nav" in rec:
+            records.append(rec)
+    return records
+
+
+def _summarize_nav(records: List[Dict]) -> Optional[Dict]:
+    """最新 NAV + 近 30 日（日曆天）變化。基準取「最新日 -30 天以前最近一筆」，
+    歷史不足 30 天時退回最早一筆（chg 標注實際基準日）。"""
+    if not records:
+        return None
+    recs = sorted(records, key=lambda r: str(r["date"]))
+    latest = recs[-1]
+    latest_date = date.fromisoformat(str(latest["date"]))
+    cutoff = latest_date - timedelta(days=30)
+    base = None
+    for r in recs:
+        d = date.fromisoformat(str(r["date"]))
+        if d <= cutoff:
+            base = r
+        else:
+            break
+    if base is None:
+        base = recs[0]
+    base_nav = float(base["nav"])
+    chg = float(latest["nav"]) / base_nav - 1 if base_nav else 0.0
+    return {
+        "nav": float(latest["nav"]),
+        "date": str(latest["date"]),
+        "chg_30d": chg,
+        "base_date": str(base["date"]),
+        "holdings_n": latest.get("holdings_n"),
+        "config_version": str(latest.get("config_version", "?")),
+    }
+
+
+def _load_latest_ipo_scan(scan_dir: Path = IPO_DIR) -> Optional[Dict]:
+    """最新 scan_YYYY-MM-DD.json；無檔 / 損毀回 None。"""
+    files = sorted(scan_dir.glob("scan_*.json"))
+    if not files:
+        return None
+    try:
+        return json.loads(files[-1].read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def _select_ipo_actionable(
+    items: List[Dict], today: date, min_discount: float = IPO_MIN_DISCOUNT
+) -> List[Dict]:
+    """折價 > min_discount 且尚可申購（sub_end >= 今天）的案子，折價降冪。
+
+    折價未知（無市價）不列入——無法證明達標。sub_end 缺失視為不可申購（保守）。
+    """
+    out = []
+    for it in items:
+        disc = it.get("discount")
+        if disc is None or float(disc) < min_discount:
+            continue
+        sub_end = it.get("sub_end")
+        try:
+            if sub_end is None or date.fromisoformat(str(sub_end)) < today:
+                continue
+        except ValueError:
+            continue
+        out.append(it)
+    return sorted(out, key=lambda it: float(it["discount"]), reverse=True)
+
+
+def _load_disposition_pair(dispo_dir: Path = DISPOSITION_DIR) -> tuple:
+    """（最新, 前一份）處置股快取；不足時對應位置 None。"""
+    files = sorted(dispo_dir.glob("20??-??-??.json"))
+
+    def _read(p: Path) -> Optional[Dict]:
+        try:
+            return json.loads(p.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return None
+
+    latest = _read(files[-1]) if files else None
+    prev = _read(files[-2]) if len(files) >= 2 else None
+    return latest, prev
+
+
+def _new_disposition_ids(latest: Optional[Dict], prev: Optional[Dict]) -> List[str]:
+    """最新快取相對前一份的新增處置股（四碼）。無前一份可比 → 空（首日不誤報全量）。"""
+    if not latest or not prev:
+        return []
+    return sorted(set(latest.get("disposition", [])) - set(prev.get("disposition", [])))
+
+
+def _disposition_names(dispo: Optional[Dict]) -> Dict[str, str]:
+    out: Dict[str, str] = {}
+    for rec in (dispo or {}).get("records", []):
+        sid = str(rec.get("stock_id", ""))
+        if re.fullmatch(r"\d{4}", sid):
+            out.setdefault(sid, str(rec.get("name", "")))
+    return out
+
+
+def _fetch_today_picks(limit: int = 10) -> Dict:
+    """DB 最新 pick_date 的 picks（分數降冪，前 limit 檔）+ 總檔數。"""
+    from app.db import get_session
+    from sqlalchemy import text as _text
+
+    with get_session() as session:
+        rows = session.execute(_text("""
+            SELECT p.pick_date, p.stock_id, p.score, s.name
+            FROM picks p LEFT JOIN stocks s ON s.stock_id = p.stock_id
+            WHERE p.pick_date = (SELECT MAX(pick_date) FROM picks)
+            ORDER BY p.score DESC
+        """)).fetchall()
+    picks = [
+        {"pick_date": str(r.pick_date), "stock_id": str(r.stock_id),
+         "score": float(r.score), "name": str(r.name or r.stock_id)}
+        for r in rows
+    ]
+    return {"picks": picks[:limit], "total": len(picks)}
+
+
+def _sentinel_status() -> Dict:
+    """哨兵：pick 特徵一致性抽驗（P0-1 型錯位偵測）+ pipeline 最新 job 狀態。"""
+    status: Dict[str, object] = {"sanity_ok": None, "mismatch": None,
+                                 "error": None, "last_job": None}
+    try:
+        from app.db import get_session
+        from sqlalchemy import text as _text
+        from scripts.reconcile_live_vs_backtest import run_sanity
+
+        with get_session() as session:
+            bad = run_sanity(session)
+            row = session.execute(_text(
+                "SELECT job_name, status, started_at FROM jobs "
+                "ORDER BY started_at DESC LIMIT 1"
+            )).fetchone()
+        status["sanity_ok"] = (bad == 0)
+        status["mismatch"] = int(bad)
+        if row:
+            status["last_job"] = f"{row.job_name} {row.status}（{row.started_at}）"
+    except Exception as exc:
+        status["error"] = str(exc)
+    return status
+
+
+def _render_daily_brief(
+    today: date,
+    picks_info: Optional[Dict],
+    nav: Optional[Dict],
+    ipo_items: List[Dict],
+    ipo_scan_date: Optional[str],
+    dispo_new: List[str],
+    dispo_names: Dict[str, str],
+    dispo_total: Optional[int],
+    sentinel: Dict,
+) -> str:
+    """組裝誠實日報（純格式化，可測試；股名進 HTML parse_mode 前 escape）。"""
+    lines = [
+        f"📰 <b>誠實日報 {today.isoformat()}</b>",
+        f"⚠️ {HONEST_BANNER}",
+        "",
+    ]
+
+    # ① A 線今日 picks 前 10（紙上追蹤）
+    lines.append("① 🧾 <b>A 線今日 picks 前 10</b>（📄 紙上追蹤，非投資建議）")
+    if picks_info and picks_info["picks"]:
+        p0 = picks_info["picks"][0]
+        lines.append(f"pick_date {p0['pick_date']}｜共 {picks_info['total']} 檔"
+                     "（大盤過濾時有效 topN 會 <30）")
+        for i, p in enumerate(picks_info["picks"], 1):
+            lines.append(f"  {i}. {p['stock_id']} {html.escape(p['name'])}｜{p['score']:.4f}")
+    else:
+        lines.append("  （picks 表無資料——pipeline 可能未跑）")
+    lines.append("")
+
+    # ② paper NAV
+    lines.append("② 📈 <b>Paper NAV</b>（訊號價、無成本、raw close → 系統性低估）")
+    if nav:
+        sign = "🟢" if nav["chg_30d"] >= 0 else "🔴"
+        lines.append(
+            f"  {nav['nav']:.4f}（{nav['date']}）｜{sign} 近 30 日 {nav['chg_30d']:+.2%}"
+            f"（基準 {nav['base_date']}）｜持股 {nav['holdings_n']} 檔｜{nav['config_version']}"
+        )
+    else:
+        lines.append("  （無 NAV 紀錄——paper_nav 可能未跑）")
+    lines.append("")
+
+    # ③ 今日申購機會（唯一可行動項，放醒目）
+    lines.append(f"③ 🎯🎯 <b>今日申購機會（唯一可行動項）</b>"
+                 f"｜掃描日 {ipo_scan_date or '—'}")
+    if ipo_items:
+        for it in ipo_items:
+            name = html.escape(str(it.get("name", it.get("stock_id", "?"))))
+            price = it.get("effective_price")
+            mkt = it.get("market_price")
+            price_part = f"｜承銷 {price:,.1f} / 市價 {mkt:,.1f}" if price and mkt else ""
+            lines.append(
+                f"  🔥 {it.get('stock_id', '?')} {name}｜折價 <b>{float(it['discount']):+.1%}</b>"
+                f"｜申購 {it.get('sub_start', '?')}~{it.get('sub_end', '?')}"
+                f"｜抽籤 {it.get('draw_date', '?')}{price_part}"
+            )
+        lines.append("  （申購處理費 20 元；中籤另約 50 元；折價為掃描時點市價，申購前自行再確認）")
+    else:
+        lines.append(f"  （今日無折價 >{IPO_MIN_DISCOUNT:.0%} 且可申購的案子）")
+    lines.append("")
+
+    # ④ 處置股新增警示
+    lines.append("④ 🚧 <b>處置股</b>")
+    if dispo_total is None:
+        lines.append("  （無處置股快取）")
+    elif dispo_new:
+        names = "、".join(
+            f"{s} {html.escape(dispo_names.get(s, ''))}".rstrip() for s in dispo_new)
+        lines.append(f"  🆕 新增 {len(dispo_new)} 檔：{names}（總數 {dispo_total} 檔）")
+    else:
+        lines.append(f"  無新增（總數 {dispo_total} 檔）")
+    lines.append("")
+
+    # ⑤ 哨兵狀態
+    lines.append("⑤ 🛡️ <b>哨兵</b>")
+    if sentinel.get("error"):
+        lines.append(f"  ⚠️ 哨兵無法執行：{html.escape(str(sentinel['error'])[:120])}")
+    elif sentinel.get("sanity_ok"):
+        lines.append("  ✅ pick 特徵一致性抽驗通過")
+    else:
+        lines.append(f"  🚨 pick 特徵 MISMATCH {sentinel.get('mismatch')} 筆"
+                     "（P0-1 型錯位，今日 picks 分數不可信）")
+    if sentinel.get("last_job"):
+        lines.append(f"  pipeline 最新 job：{html.escape(str(sentinel['last_job']))}")
+
+    return "\n".join(lines)
+
+
+def _build_daily_brief() -> str:
+    """收集各節資料並組裝日報。單節失敗不擋整份（該節顯示缺料原因）。"""
+    today = date.today()
+
+    try:
+        picks_info = _fetch_today_picks(limit=10)
+    except Exception as exc:
+        print(f"[daily-brief] picks 查詢失敗：{exc}")
+        picks_info = None
+
+    nav = _summarize_nav(_load_nav_records())
+
+    scan = _load_latest_ipo_scan()
+    ipo_items: List[Dict] = []
+    ipo_scan_date = None
+    if scan:
+        ipo_scan_date = scan.get("scan_date")
+        ipo_items = _select_ipo_actionable(scan.get("items", []), today)
+
+    dispo, dispo_prev = _load_disposition_pair()
+    dispo_new = _new_disposition_ids(dispo, dispo_prev)
+    dispo_names = _disposition_names(dispo)
+    dispo_total = len(dispo.get("disposition", [])) if dispo else None
+
+    sentinel = _sentinel_status()
+
+    return _render_daily_brief(
+        today=today,
+        picks_info=picks_info,
+        nav=nav,
+        ipo_items=ipo_items,
+        ipo_scan_date=ipo_scan_date,
+        dispo_new=dispo_new,
+        dispo_names=dispo_names,
+        dispo_total=dispo_total,
+        sentinel=sentinel,
+    )
+
+
 HELP_TEXT = """\
 📖 <b>Strategy C/D Bot 指令</b>
 
@@ -636,8 +941,10 @@ def main() -> None:
     group.add_argument("--push",    action="store_true", help="推送今日訊號")
     group.add_argument("--listen",  action="store_true", help="啟動監聽模式")
     group.add_argument("--dry-run", action="store_true", help="印出訊息（不發送）")
-    parser.add_argument("--strategy", type=str, default="c", choices=["c", "d"],
-                        help="使用哪個策略的訊號（c=Strategy C, d=Strategy D，預設 c）")
+    parser.add_argument("--strategy", type=str, default="c",
+                        choices=["c", "d", "daily-brief"],
+                        help="daily-brief=誠實日報（每日排程用）；"
+                             "c/d=策略訊號（已降級紙上，手動用；預設 c）")
     args = parser.parse_args()
 
     # 載入 token
@@ -662,6 +969,16 @@ def main() -> None:
 
     # ── 推送模式 ──
     if args.push or args.dry_run:
+        # 誠實日報（每日排程預設；單節缺料不擋整份）
+        if args.strategy == "daily-brief":
+            msg = _build_daily_brief()
+            ok = bot.send(msg)
+            if ok and not dry_run:
+                print(f"✅ 誠實日報已推送（{date.today().isoformat()}）")
+            elif not ok:
+                sys.exit(1)
+            return
+
         sig = _load_latest_signal(strategy=args.strategy)
         if not sig:
             pick_script = f"python scripts/strategy_{args.strategy}_pick.py"
