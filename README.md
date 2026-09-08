@@ -1,5 +1,7 @@
 # 台股波段 ML 選股系統 MVP
 
+已有本機資料時，執行 `make workbench` 開啟新版投資工作台：候選觀察、交易計畫、紙上／實際成交記帳，以及背景回測。操作、FinMind Sponsor 額度、效能驗收與 MCP／Skills 安裝請看 [工作台說明](docs/workbench.md)。
+
 ## 快速開始
 
 1. 設定環境變數：

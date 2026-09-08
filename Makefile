@@ -309,3 +309,8 @@ workbench-init:
 
 workbench: workbench-init
 	streamlit run app/dashboard_v2/main.py --server.port 8502 --server.address 127.0.0.1
+
+.PHONY: mcp-install
+mcp-install:
+	python -m venv .cache/mcp-venv
+	python -m pip --python .cache/mcp-venv install -r requirements-mcp.txt
