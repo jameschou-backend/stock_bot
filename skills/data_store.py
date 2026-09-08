@@ -434,7 +434,7 @@ def snapshot_info() -> dict:
     return info
 
 
-def _ensure(db_session: Session) -> None:
+def _ensure(db_session: Session, kinds=("prices", "features", "labels")) -> None:
     """確保三個 parquet 存在且資料日期與來源一致，否則重建。
 
     比對邏輯（stale 任一成立即重建）：
@@ -455,7 +455,7 @@ def _ensure(db_session: Session) -> None:
     # 背景：2026-06-22 發現 rep1 因橫跨 cache 重建讀到舊快照，與其餘 run 差 0.23 Sharpe。
     # 不做 silent fallback：cache 缺檔時明確報錯，要求先建 cache 或解除凍結。
     if os.getenv("DATA_STORE_FREEZE", "").strip().lower() in ("1", "true", "yes", "on"):
-        _missing = [str(p) for p in (PRICES_PARQUET, FEATURES_PARQUET, LABELS_PARQUET) if not p.exists()]
+        _missing = [str(p) for kind, p in (("prices", PRICES_PARQUET), ("features", FEATURES_PARQUET), ("labels", LABELS_PARQUET)) if kind in kinds and not p.exists()]
         if _missing:
             raise RuntimeError(
                 f"DATA_STORE_FREEZE 啟用但 cache 不存在: {_missing}；"
@@ -482,7 +482,7 @@ def _ensure(db_session: Session) -> None:
         return False
 
     # ── Prices ──
-    if "prices" not in _ENSURED_KINDS:
+    if "prices" in kinds and "prices" not in _ENSURED_KINDS:
         try:
             _src_px = str(db_session.execute(_text("SELECT max(trading_date) FROM raw_prices")).scalar() or "")
             _src_px_rows = int(db_session.execute(_text("SELECT count(*) FROM raw_prices")).scalar() or 0)
@@ -493,7 +493,7 @@ def _ensure(db_session: Session) -> None:
         _ENSURED_KINDS.add("prices")
 
     # ── Features ──
-    if "features" not in _ENSURED_KINDS:
+    if "features" in kinds and "features" not in _ENSURED_KINDS:
         try:
             from skills.feature_store import FeatureStore as _FS
             _fs = _FS()
@@ -507,7 +507,7 @@ def _ensure(db_session: Session) -> None:
         _ENSURED_KINDS.add("features")
 
     # ── Labels ──
-    if "labels" not in _ENSURED_KINDS:
+    if "labels" in kinds and "labels" not in _ENSURED_KINDS:
         try:
             _src_lbl = str(db_session.execute(_text("SELECT max(trading_date) FROM labels")).scalar() or "")
             _src_lbl_rows = int(db_session.execute(_text("SELECT count(*) FROM labels")).scalar() or 0)
@@ -566,7 +566,7 @@ def get_prices(
 
     Columns: stock_id, trading_date, open, high, low, close, volume
     """
-    _ensure(db_session)
+    _ensure(db_session, kinds=("prices",))
     return _duck_query(PRICES_PARQUET, start_date, end_date)
 
 
@@ -581,7 +581,7 @@ def get_features(
     Returns columns already decoded from JSON, schema-filtered, stored as float32.
     feature_columns: optional list to restrict returned feature columns.
     """
-    _ensure(db_session)
+    _ensure(db_session, kinds=("features",))
     # DuckDB 謂語下推（行）+ 選擇性欄位投影（列）
     duck_cols = feature_columns  # None → SELECT *
     df = _duck_query(FEATURES_PARQUET, start_date, end_date, columns=duck_cols)
@@ -597,12 +597,13 @@ def get_labels(
 
     Columns: stock_id, trading_date, future_ret_h
     """
-    _ensure(db_session)
+    _ensure(db_session, kinds=("labels",))
     return _duck_query(LABELS_PARQUET, start_date, end_date)
 
 
 def invalidate() -> None:
     """Delete all cached parquet files; next call will rebuild from MySQL."""
+    reset_ensure_memo()
     for p in (PRICES_PARQUET, FEATURES_PARQUET, LABELS_PARQUET):
         if p.exists():
             p.unlink()
@@ -611,7 +612,7 @@ def invalidate() -> None:
 
 def warm_up(db_session: Session) -> None:
     """Force-build all caches (useful after pipeline update to pre-warm before backtest)."""
-    invalidate()
+    reset_ensure_memo()
     _ensure(db_session)
     logger.info("[data_store] warm-up complete.")
 

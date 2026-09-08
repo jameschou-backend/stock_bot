@@ -133,6 +133,8 @@ def _train_model(
       - train_groups 為每個 query（日期）的樣本數陣列
       - 直接優化 top-20 排名一致性（NDCG@20），比 regression 更貼近選股目標
     """
+    from skills.training_cache import fit_cached
+
     n_est = 150 if fast_mode else 500
     if _HAS_LGBM:
         if train_groups is not None:
@@ -152,20 +154,20 @@ def _train_model(
                 n_jobs=-1,
                 verbose=-1,
             )
-            model.fit(train_X, train_y, group=train_groups, sample_weight=sample_weight)
+            model = fit_cached(model, train_X, train_y, group=train_groups, sample_weight=sample_weight)
         else:
             # Regression 模式（現行預設）
             # P1-5 回測=部署對齊：與 train_ranker._build_model 共用 RANKER_PROD_PARAMS
             # （skills/model_params.py），改參數只能改常數，不可在兩處各寫一份。
             model = lgb.LGBMRegressor(**{**RANKER_PROD_PARAMS, "n_estimators": n_est})
-            model.fit(train_X, train_y, sample_weight=sample_weight)
+            model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
     else:
         n_est_gbr = 100 if fast_mode else 300
         model = GradientBoostingRegressor(
             n_estimators=n_est_gbr, learning_rate=0.05, max_depth=5,
             subsample=0.8, random_state=42,
         )
-        model.fit(train_X, train_y, sample_weight=sample_weight)
+        model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
     return model
 
 

@@ -55,20 +55,22 @@ def _train_model(train_X, train_y, sample_weight=None, fast_mode=False, groups=N
     groups is None  → LGBMRegressor(MSE)，可搭配 rank label 或 excess label 使用。
     """
     n_est = 150 if fast_mode else 500
+    from skills.training_cache import fit_cached
+
     _params = {**LGBM_BASE_PARAMS, "n_estimators": n_est}  # rotation 用可變 n_est（fast_mode override）
     if _HAS_LGBM and groups is not None:
         # ── LambdaRank ──
         model = lgb.LGBMRanker(**_params, min_child_samples=20)
-        model.fit(train_X, train_y, group=groups, sample_weight=sample_weight)
+        model = fit_cached(model, train_X, train_y, group=groups, sample_weight=sample_weight)
     elif _HAS_LGBM:
         model = lgb.LGBMRegressor(**_params, min_child_samples=50)
-        model.fit(train_X, train_y, sample_weight=sample_weight)
+        model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
     else:
         model = GradientBoostingRegressor(
             n_estimators=100 if fast_mode else 300, learning_rate=0.05,
             max_depth=5, subsample=0.8, random_state=42,
         )
-        model.fit(train_X, train_y, sample_weight=sample_weight)
+        model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
     return model
 
 

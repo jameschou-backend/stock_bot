@@ -16,3 +16,9 @@
 來源：[FinMind 技術面](https://finmind.github.io/tutor/TaiwanMarket/Technical/)、[基本面](https://finmind.github.io/tutor/TaiwanMarket/Fundamental/)。分鐘 K 的全市場匯出需要 SponsorPro，不把它當成 Sponsor 能力。
 
 驗證：多程序競爭固定額度、重啟保留、短 timeout、402/429 冷卻、每次重試計費、同時查詢去重、強制刷新、不快取空資料。`tests/test_finmind_budget.py` 不連真實 API。
+
+## 回測重用
+
+`skills.training_cache` 為 A 線 walk-forward 與 C/D rotation 重用相同訓練問題。key 包含實際有序 X/y、sample weights、rank groups、模型種類／參數、LightGBM/sklearn/numpy/joblib 版本。TopN 或出場規則改動而訓練問題不變時可命中；同日期同列數但數值被修正時不會命中。
+
+快取在 `.cache/training`，只載入本機工作產生的模型。`BACKTEST_TRAIN_CACHE=off` 強制重訓；`BACKTEST_TRAIN_CACHE_DIR` 可指定隔離位置。不自動吞掉損壞快取錯誤。讀取價格只確保價格快取，不再順便重建全量 features/labels；`warm_up` 只更新有變更的資料，`invalidate` 會同步清除程序 memo。

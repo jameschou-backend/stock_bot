@@ -187,3 +187,24 @@ def test_ensure_memoized_within_process(tmp_path, monkeypatch):
     ds.reset_ensure_memo()
     ds._ensure(stale)
     assert "prices" in calls and "labels" in calls
+
+
+def test_price_read_does_not_build_features_or_labels(tmp_path, monkeypatch):
+    _make_cache(tmp_path, monkeypatch)
+    _patch_fs(monkeypatch)
+    monkeypatch.delenv('DATA_STORE_FREEZE', raising=False)
+    (tmp_path / 'features.parquet').unlink()
+    (tmp_path / 'labels.parquet').unlink()
+    calls = _record_rebuilds(monkeypatch)
+    session = _FakeSession('2026-05-20', 1, '2026-05-20', 1)
+    ds._ensure(session, kinds=('prices',))
+    assert calls == []
+    assert ds._ENSURED_KINDS == {'prices'}
+
+
+def test_invalidate_clears_memo(tmp_path, monkeypatch):
+    _make_cache(tmp_path, monkeypatch)
+    ds._ENSURED_KINDS.update({'prices', 'labels', 'features'})
+    ds.invalidate()
+    assert ds._ENSURED_KINDS == set()
+    assert not any(tmp_path.glob('*.parquet'))
