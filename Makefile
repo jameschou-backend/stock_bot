@@ -301,3 +301,11 @@ check-index:
 # MIN_DISCOUNT 可選過濾門檻（小數，0.1 = 10%）：MIN_DISCOUNT=0.1 make ipo-scan
 ipo-scan:
 	python scripts/ipo_lottery_scan.py $${MIN_DISCOUNT:+--min-discount $${MIN_DISCOUNT}}
+
+# Simple investor workbench (no broker order submission).
+.PHONY: workbench workbench-init
+workbench-init:
+	python -c "from pathlib import Path; from app.db import run_migrations; run_migrations(Path('storage/migrations/016_workbench.sql'))"
+
+workbench: workbench-init
+	streamlit run app/dashboard_v2/main.py --server.port 8502 --server.address 127.0.0.1

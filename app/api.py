@@ -565,3 +565,7 @@ async def ws_metrics(websocket: WebSocket):
             await websocket.send_json(data)
     except WebSocketDisconnect:
         pass
+
+# The UI and MCP share the same ledger/data gateway and FinMind request budget.
+from app.workbench_api import router as workbench_router
+app.include_router(workbench_router)
