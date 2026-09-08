@@ -5,7 +5,7 @@
 注意：免費/低階會員可能無法使用全市場抓取，需改用逐檔抓取模式。
 
 優化特點：
-1. 支援真正的批次查詢（一次傳多個 stock_id）
+1. 已驗證資料集按日期抓全市場，其餘按單股日期區間抓取
 2. 整合 Rate Limiter 控制每小時 API 請求數
 3. 可配置的 chunk_days（建議 180 天減少 API 次數）
 """
@@ -13,10 +13,13 @@
 from __future__ import annotations
 
 import logging
+import math
+import threading
 import random
 import re
 import time
 from datetime import date, timedelta
+from email.utils import parsedate_to_datetime
 from typing import Any, Callable, Dict, Iterable, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -25,11 +28,13 @@ import pandas as pd
 import requests
 
 from app.rate_limiter import get_rate_limiter
+from app.file_lock import file_lock
+from app.finmind_cache import cache_path, read_cache, write_cache
 
 FINMIND_DATA_URL = "https://api.finmindtrade.com/api/v4/data"
 
 # 批次抓取設定（優化後）
-BATCH_SIZE = 500  # 每批抓取股票數（FinMind 支援多個 data_id）
+BATCH_SIZE = 500  # 每批寫入資料前累積的查詢數
 BATCH_DELAY = 0.1  # 批次間最小延遲（秒）
 DEFAULT_CHUNK_DAYS = 180  # 預設 chunk 天數（從 30 改為 180）
 
@@ -44,18 +49,36 @@ def _build_headers(token: str | None) -> Dict[str, str]:
     return {}
 
 
-def _is_retryable_payload(status: object, msg: str) -> bool:
-    if status in (429, "429", 402, "402"):
-        return True
-    msg_lower = (msg or "").lower()
-    return any(term in msg_lower for term in ["rate", "limit", "頻率", "超過", "exceed"])
+class FinMindQuotaError(FinMindError):
+    """Paused work can resume after retry_after_seconds; do not retry immediately."""
+    def __init__(self, retry_after_seconds: float):
+        self.retry_after_seconds = max(0, retry_after_seconds)
+        super().__init__(f"FinMind quota 暫停，約 {math.ceil(self.retry_after_seconds)} 秒後可重試；已完成資料保留")
 
 
-def _sleep_backoff(attempt: int, base_seconds: float, retry_after: float | None = None) -> None:
-    backoff = base_seconds * (2 ** attempt)
-    jitter = random.uniform(0, backoff)
-    wait_time = max(retry_after or 0.0, backoff + jitter)
-    time.sleep(wait_time)
+_http = threading.local()
+
+
+def _http_session() -> requests.Session:
+    if not hasattr(_http, "session"):
+        _http.session = requests.Session()
+    return _http.session
+
+
+def _sleep_backoff(attempt: int, base_seconds: float) -> None:
+    backoff = min(30.0, base_seconds * (2 ** attempt))
+    time.sleep(backoff + random.uniform(0, backoff))
+
+
+def _retry_after(value: str | None) -> float:
+    try:
+        seconds = float(value)
+    except (ValueError, TypeError):
+        try:
+            seconds = parsedate_to_datetime(value).timestamp() - time.time()
+        except (TypeError, ValueError, OverflowError):
+            return 3600.0
+    return max(1.0, seconds) if math.isfinite(seconds) else 3600.0
 
 
 def fetch_dataset(
@@ -69,74 +92,80 @@ def fetch_dataset(
     max_retries: int = 3,
     backoff_seconds: float = 1.0,
     timeout: int = 60,
+    *,
+    force_refresh: bool = False,
+    cache_ttl: float = 300,
 ) -> pd.DataFrame:
-    """抓取單一 dataset 資料
-    
-    Args:
-        dataset: FinMind dataset 名稱
-        start_date: 開始日期
-        end_date: 結束日期
-        token: FinMind API token
-        data_id: 股票代碼（若為 None 則全市場抓取）
-        rate_limit: 是否啟用速率限制
-        requests_per_hour: 每小時最大請求數
-        timeout: HTTP 請求超時秒數（預設 60，長區間建議 120）
-    
-    Returns:
-        DataFrame 包含抓取的資料
+    """Fetch with pooled HTTP, shared quota and 5-minute duplicate-request reuse.
+
+    Each attempt is charged. Empty/error responses are never cached. An exhausted
+    quota fails fast so jobs can pause; a process never sleeps for an hour.
+    DataFrame.attrs contains retrieved_at, cache_hit and source provenance.
     """
-    params: Dict[str, Any] = {
-        "dataset": dataset,
-        "start_date": start_date.isoformat(),
-    }
+    if not rate_limit:
+        raise ValueError("FinMind quota protection cannot be disabled")
+    if max_retries < 0 or timeout <= 0 or cache_ttl < 0 or not math.isfinite(cache_ttl):
+        raise ValueError("Invalid FinMind retry/timeout/cache settings")
+    if data_id and "," in data_id:
+        raise ValueError("FinMind data_id 必須為單一代碼；全市場請按日期查詢")
+    if end_date is not None and end_date < start_date:
+        raise ValueError("end_date must not precede start_date")
+    params: Dict[str, Any] = {"dataset": dataset, "start_date": start_date.isoformat()}
     if end_date is not None:
         params["end_date"] = end_date.isoformat()
     if data_id:
         params["data_id"] = data_id
-
-    retryable_http = {429, 500, 502, 503, 504}
-
-    for attempt in range(max_retries + 1):
-        # Rate limiting
-        if rate_limit:
-            limiter = get_rate_limiter(requests_per_hour)
-            limiter.acquire()
-
-        try:
-            resp = requests.get(
-                FINMIND_DATA_URL,
-                params=params,
-                headers=_build_headers(token),
-                timeout=timeout,
-            )
-        except requests.RequestException as exc:
-            if attempt < max_retries:
-                _sleep_backoff(attempt, backoff_seconds)
-                continue
-            raise FinMindError(f"FinMind request failed: {exc}") from exc
-
-        if resp.status_code != 200:
-            if resp.status_code in retryable_http and attempt < max_retries:
-                retry_after = resp.headers.get("Retry-After")
-                retry_after_sec = float(retry_after) if retry_after and retry_after.isdigit() else None
-                _sleep_backoff(attempt, backoff_seconds, retry_after_sec)
-                continue
-            raise FinMindError(f"FinMind HTTP {resp.status_code}: {resp.text[:200]}")
-
-        payload = resp.json()
-        status = payload.get("status")
-        if status not in (200, "200", None):
-            msg = payload.get("msg") or ""
-            if _is_retryable_payload(status, msg) and attempt < max_retries:
-                _sleep_backoff(attempt, backoff_seconds)
-                continue
-            raise FinMindError(f"FinMind status={status}, msg={msg}")
-
-        data = payload.get("data")
-        if data is None:
-            raise FinMindError(f"FinMind missing data field: {payload}")
-        return pd.DataFrame(data)
-
+    path = cache_path(params, token)
+    # Identical simultaneous requests use the first worker's result, even across processes.
+    with file_lock(path.with_suffix(".lock"), timeout=timeout):
+        cached = None if force_refresh else read_cache(path, cache_ttl)
+        if cached is not None:
+            df = pd.DataFrame(cached["data"])
+            df.attrs.update(retrieved_at=cached["retrieved_at"], cache_hit=True, source="finmind")
+            return df
+        limiter = get_rate_limiter(requests_per_hour)
+        for attempt in range(max_retries + 1):
+            if not limiter.acquire(timeout=0):
+                raise FinMindQuotaError(limiter.get_stats().retry_after_seconds)
+            try:
+                resp = _http_session().get(
+                    FINMIND_DATA_URL, params=params, headers=_build_headers(token), timeout=timeout,
+                )
+            except requests.RequestException as exc:
+                if attempt < max_retries:
+                    _sleep_backoff(attempt, backoff_seconds)
+                    continue
+                # Never reflect URLs/provider bodies/credentials into the UI or job logs.
+                raise FinMindError(f"FinMind network error ({type(exc).__name__})") from None
+            if resp.status_code in (402, 429):
+                limiter.defer(_retry_after(resp.headers.get("Retry-After")))
+                raise FinMindQuotaError(limiter.get_stats().retry_after_seconds)
+            if resp.status_code != 200:
+                if resp.status_code in {500, 502, 503, 504} and attempt < max_retries:
+                    _sleep_backoff(attempt, backoff_seconds)
+                    continue
+                raise FinMindError(f"FinMind HTTP {resp.status_code}, dataset={dataset}")
+            try:
+                payload = resp.json()
+            except ValueError:
+                raise FinMindError("FinMind returned invalid JSON") from None
+            if not isinstance(payload, dict):
+                raise FinMindError("FinMind returned invalid payload shape")
+            status = payload.get("status")
+            if str(status) in {"402", "429"}:
+                limiter.defer(_retry_after(resp.headers.get("Retry-After")))
+                raise FinMindQuotaError(limiter.get_stats().retry_after_seconds)
+            if status not in (200, "200", None):
+                raise FinMindError(f"FinMind status={status}, dataset={dataset}")
+            data = payload.get("data")
+            if not isinstance(data, list) or any(not isinstance(row, dict) for row in data):
+                raise FinMindError("FinMind missing or invalid data field")
+            retrieved_at = time.time()
+            if data and cache_ttl > 0:
+                write_cache(path, data, retrieved_at)
+            df = pd.DataFrame(data)
+            df.attrs.update(retrieved_at=retrieved_at, cache_hit=False, source="finmind")
+            return df
     raise FinMindError("FinMind request failed after retries")
 
 
@@ -228,224 +257,75 @@ def fetch_dataset_by_stocks(
     timeout: int = 60,
     error_rate_threshold: float = 0.5,
 ) -> pd.DataFrame:
-    """批次抓取資料（當全市場抓取不可用時）
-    
-    將股票清單分批，每批抓取後合併。
-    
-    優化：支援真正的批次查詢（一次 API call 抓多檔股票），
-    大幅減少 API 次數。
-    
-    Args:
-        dataset: FinMind dataset 名稱
-        start_date: 開始日期
-        end_date: 結束日期
-        stock_ids: 要抓取的股票代碼清單
-        token: FinMind API token
-        batch_size: 每批抓取的股票數
-        batch_delay: 批次間延遲（秒）
-        progress_callback: 進度回報函數 callback(current, total)
-        requests_per_hour: 每小時最大請求數
-        use_batch_query: 是否使用批次查詢（一次傳多個 data_id）
-        batch_write_callback: 每批寫入回調函數 callback(df) -> rows_written
-                              如果提供，每批抓完後立即寫入 DB，中斷也不會丟失已寫資料
-        error_rate_threshold: 錯誤率閾值（0.0~1.0），超過此比例則拋出 FinMindError
-                              預設 0.5（50% 的 batch 失敗即視為配額耗盡，不繼續）
+    """Choose documented market-per-date queries when cheaper, otherwise single-stock ranges.
 
-    Returns:
-        合併後的 DataFrame（如果有 batch_write_callback 則回傳空 DataFrame）
-
-    Raises:
-        FinMindError: 配額錯誤（402/429）或錯誤率超過 error_rate_threshold
+    Successful pages can be written incrementally. Any missing/error page raises,
+    so partial coverage is never reported as a successful complete ingestion.
     """
     if not stock_ids:
         return pd.DataFrame()
-    
-    all_dfs = []
-    total = len(stock_ids)
-    api_calls = 0
-    total_written = 0
-    error_count = 0
-    quota_error_count = 0  # 402/429 配額錯誤（所有後續 call 都會失敗，應立即停止）
-    empty_count = 0
-    first_error: Optional[str] = None
-    _first_data_logged = False
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive")
+    stock_ids = list(dict.fromkeys(stock_ids))
+    # Documented Sponsor all-market daily endpoints; never guess comma-separated IDs.
+    bulk_datasets = {"TaiwanStockPrice", "TaiwanStockPriceAdj", "TaiwanStockPER", "TaiwanStockMonthRevenue"}
+    days = (end_date - start_date).days + 1
+    if days <= 0:
+        raise ValueError("end_date must not precede start_date")
+    dates = [start_date + timedelta(days=i) for i in range(days)]
+    if dataset == "TaiwanStockMonthRevenue":
+        # FinMind's date is the following month's first day, not announcement time.
+        dates = [day for day in dates if day.day == 1]
+    bulk = use_batch_query and dataset in bulk_datasets and len(dates) <= len(stock_ids)
+    queries = ([(day, day, None) for day in dates] if bulk
+               else [(start_date, end_date, sid) for sid in stock_ids])
+    logger.info("[finmind] %s plan=%s requests<=%d (before cache/retries)",
+                dataset, "market_by_date" if bulk else "stock_by_range", len(queries))
+    all_dfs, pending = [], []
+    errors = 0
+    first_error = None
 
-    def _is_quota_error(exc: FinMindError) -> bool:
-        """判斷是否為配額耗盡錯誤（402/429）"""
-        msg = str(exc)
-        return "402" in msg or "429" in msg or "quota" in msg.lower() or "超過" in msg
-
-    total_batches = (total + batch_size - 1) // batch_size
-
-    for i in range(0, total, batch_size):
-        batch = stock_ids[i:i + batch_size]
-        batch_dfs = []
-
-        if use_batch_query:
-            # 優化：一次 API call 抓取整批股票
-            # FinMind 支援 data_id 用逗號分隔多個股票代碼
-            batch_data_id = ",".join(batch)
-            try:
-                df = fetch_dataset(
-                    dataset,
-                    start_date,
-                    end_date,
-                    token=token,
-                    data_id=batch_data_id,
-                    requests_per_hour=requests_per_hour,
-                    max_retries=max_retries,
-                    backoff_seconds=backoff_seconds,
-                    timeout=timeout,
-                )
-                api_calls += 1
-                if not df.empty:
-                    batch_dfs.append(df)
-            except FinMindError as exc:
-                error_count += 1
-                if first_error is None:
-                    first_error = f"batch data_id={batch_data_id}: {exc}"
-                if _is_quota_error(exc):
-                    quota_error_count += 1
-                    logger.error(
-                        "[finmind] 配額錯誤（%s），已完成 %d/%d batches，停止抓取 %s",
-                        exc, i // batch_size + 1, total_batches, dataset,
-                    )
-                    raise FinMindError(
-                        f"FinMind 配額耗盡 ({exc})，dataset={dataset} 已中止，"
-                        f"請稍後重試或升級方案"
-                    ) from exc
-                # 非配額錯誤：降級為逐檔抓取
-                for stock_id in batch:
-                    try:
-                        df = fetch_dataset(
-                            dataset,
-                            start_date,
-                            end_date,
-                            token=token,
-                            data_id=stock_id,
-                            requests_per_hour=requests_per_hour,
-                            max_retries=max_retries,
-                            backoff_seconds=backoff_seconds,
-                            timeout=timeout,
-                        )
-                        api_calls += 1
-                        if not df.empty:
-                            batch_dfs.append(df)
-                    except FinMindError as exc2:
-                        error_count += 1
-                        if first_error is None:
-                            first_error = f"stock_id={stock_id}: {exc2}"
-                        if _is_quota_error(exc2):
-                            quota_error_count += 1
-                            logger.error(
-                                "[finmind] 配額錯誤（%s），停止抓取 %s", exc2, dataset
-                            )
-                            raise FinMindError(
-                                f"FinMind 配額耗盡 ({exc2})，dataset={dataset} 已中止"
-                            ) from exc2
-        else:
-            # 傳統模式：逐檔抓取
-            for j, stock_id in enumerate(batch):
-                try:
-                    df = fetch_dataset(
-                        dataset,
-                        start_date,
-                        end_date,
-                        token=token,
-                        data_id=stock_id,
-                        requests_per_hour=requests_per_hour,
-                        max_retries=max_retries,
-                        backoff_seconds=backoff_seconds,
-                        timeout=timeout,
-                    )
-                    api_calls += 1
-                    if not df.empty:
-                        batch_dfs.append(df)
-                        if debug and not _first_data_logged:
-                            _first_data_logged = True
-                            logger.debug(
-                                "[finmind] 首筆回傳: stock_id=%s, rows=%d, cols=%s",
-                                stock_id, len(df), list(df.columns[:6]),
-                            )
-                    else:
-                        empty_count += 1
-                except FinMindError as exc:
-                    error_count += 1
-                    if first_error is None:
-                        first_error = f"stock_id={stock_id}: {exc}"
-                    if _is_quota_error(exc):
-                        quota_error_count += 1
-                        logger.error(
-                            "[finmind] 配額錯誤（%s），停止抓取 %s", exc, dataset
-                        )
-                        raise FinMindError(
-                            f"FinMind 配額耗盡 ({exc})，dataset={dataset} 已中止"
-                        ) from exc
-
-                # 每檔都更新進度（逐檔模式下即時顯示）
-                if progress_callback:
-                    progress_callback(i + j + 1, total)
-
-        # 處理這批資料
-        if batch_dfs:
-            batch_df = pd.concat(batch_dfs, ignore_index=True)
+    def flush():
+        if pending:
+            frame = pd.concat(pending, ignore_index=True)
             if batch_write_callback:
-                # 立即寫入這批資料
-                rows = batch_write_callback(batch_df)
-                total_written += rows
+                batch_write_callback(frame)
             else:
-                # 累積到最後合併
-                all_dfs.append(batch_df)
+                all_dfs.append(frame)
+            pending.clear()
 
-        # batch_query 模式在 batch 結束時更新進度
-        if use_batch_query and progress_callback:
-            progress_callback(min(i + batch_size, total), total)
-
-        # 批次間延遲
-        if i + batch_size < total:
+    for i, (start, end, sid) in enumerate(queries, 1):
+        try:
+            df = fetch_dataset(dataset, start, end, token=token, data_id=sid,
+                               requests_per_hour=requests_per_hour, max_retries=max_retries,
+                               backoff_seconds=backoff_seconds, timeout=timeout)
+            if bulk and not df.empty:
+                if "stock_id" not in df:
+                    raise FinMindError(f"{dataset}: missing stock_id")
+                df = df[df["stock_id"].astype(str).isin(stock_ids)]
+            if not df.empty:
+                pending.append(df)
+        except FinMindQuotaError:
+            flush()  # Preserve completed pages before pausing a resumable writer.
+            raise
+        except FinMindError as exc:
+            errors += 1
+            first_error = first_error or str(exc)
+            logger.warning("[finmind] %s query %d/%d failed: %s", dataset, i, len(queries), exc)
+        if i % batch_size == 0 or i == len(queries):
+            flush()
+        if progress_callback:
+            progress_callback(i, len(queries))
+        if errors and error_rate_threshold > 0 and (i >= 10 or i == len(queries)):
+            if errors / i > error_rate_threshold:
+                flush()
+                raise FinMindError(f"FinMind {dataset}: {errors}/{i} queries failed; {first_error}")
+        if i % batch_size == 0 and i < len(queries) and batch_delay > 0:
             time.sleep(batch_delay)
-
-        # 錯誤率檢查：每 10 批次或處理完畢時檢查
-        batches_done = i // batch_size + 1
-        if error_rate_threshold > 0 and batches_done % 10 == 0:
-            err_rate = error_count / max(api_calls, 1)
-            if err_rate > error_rate_threshold:
-                logger.error(
-                    "[finmind] %s 錯誤率過高 %.1f%% (%d/%d calls)，first_error=%s，停止抓取",
-                    dataset, err_rate * 100, error_count, api_calls, first_error,
-                )
-                raise FinMindError(
-                    f"FinMind {dataset} 錯誤率 {err_rate:.0%} 超過閾值 {error_rate_threshold:.0%}，"
-                    f"共 {error_count} 次失敗（{api_calls} calls），first_error={first_error}"
-                )
-
-    # 最終錯誤率檢查
-    if error_count > 0:
-        err_rate = error_count / max(api_calls, 1)
-        log_fn = logger.warning if err_rate < error_rate_threshold else logger.error
-        log_fn(
-            "[finmind] %s 完成：api_calls=%d, errors=%d (%.1f%%), empty=%d, written=%d, first_error=%s",
-            dataset, api_calls, error_count, err_rate * 100, empty_count, total_written, first_error,
-        )
-        if error_rate_threshold > 0 and err_rate > error_rate_threshold:
-            raise FinMindError(
-                f"FinMind {dataset} 最終錯誤率 {err_rate:.0%} 超過閾值 {error_rate_threshold:.0%}，"
-                f"共 {error_count} 次失敗（{api_calls} calls），first_error={first_error}"
-            )
-
-    # 如果有 batch_write_callback，資料已經寫入，回傳空 DataFrame
-    if batch_write_callback:
-        if debug and (error_count or empty_count):
-            logger.debug(
-                "[finmind] %s api_calls=%d empty=%d errors=%d",
-                dataset, api_calls, empty_count, error_count,
-            )
-        return pd.DataFrame()
-
-    if not all_dfs:
-        return pd.DataFrame()
-
-    return pd.concat(all_dfs, ignore_index=True)
+    # Partial output must not be recorded as a successful complete ingest.
+    if errors:
+        raise FinMindError(f"FinMind {dataset}: incomplete ({errors} failed queries); {first_error}")
+    return pd.concat(all_dfs, ignore_index=True) if all_dfs else pd.DataFrame()
 
 
 def date_chunks(

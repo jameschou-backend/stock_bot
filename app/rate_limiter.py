@@ -1,177 +1,145 @@
-"""Rate Limiter 模組
+"""Durable shared FinMind budget. Sponsor hard cap 6,000/h, 10% reserve.
 
-提供 API 請求速率控制，避免觸發 FinMind API 限流。
-
-FinMind 限制：
-- 免費用戶：每小時 600 次
-- 付費用戶：每小時 6000 次（或更高）
+All local checkouts/workers share one ledger; usage elsewhere is not observable.
 """
-
 from __future__ import annotations
 
-import threading
+import math
+import os
+import sqlite3
 import time
-from collections import deque
+from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import Optional
+from pathlib import Path
+
+SPONSOR_LIMIT = 6000
+WINDOW_SECONDS = 3600
+
+
+def state_path() -> Path:
+    return Path(os.environ.get(
+        "FINMIND_STATE_PATH", str(Path.home() / ".cache/stock-bot/finmind.sqlite3")
+    )).expanduser().resolve()
 
 
 @dataclass
 class RateLimitStats:
-    """Rate Limiter 統計資訊"""
     requests_in_window: int
     window_start_time: float
     total_requests: int
     total_wait_time: float
+    effective_limit: int
+    remaining_requests: int
+    retry_after_seconds: float
+    cooldown_until: float
 
 
 class RateLimiter:
-    """滑動視窗速率限制器
-    
-    使用滑動視窗演算法，精確控制每小時 API 請求次數。
-    
-    Example:
-        limiter = RateLimiter(requests_per_hour=6000)
-        
-        for i in range(10000):
-            limiter.acquire()  # 會自動等待如果超過限制
-            make_api_call()
-    """
-    
-    def __init__(
-        self,
-        requests_per_hour: int = 6000,
-        buffer_percent: float = 0.1,
-    ):
-        """
-        Args:
-            requests_per_hour: 每小時允許的請求數
-            buffer_percent: 預留緩衝比例（預設 10%）避免邊界問題
-        """
-        self._requests_per_hour = requests_per_hour
-        self._buffer_percent = buffer_percent
-        self._effective_limit = int(requests_per_hour * (1 - buffer_percent))
-        self._window_seconds = 3600  # 1 小時
-        
-        self._timestamps: deque[float] = deque()
-        self._lock = threading.Lock()
-        self._total_requests = 0
-        self._total_wait_time = 0.0
-    
+    def __init__(self, requests_per_hour: int = 6000, buffer_percent: float = 0.1,
+                 *, path: Path | str | None = None):
+        if requests_per_hour <= 0 or not 0 <= buffer_percent < 1:
+            raise ValueError("requests_per_hour must be positive; buffer_percent must be in [0, 1)")
+        self._requests_per_hour = min(int(requests_per_hour), SPONSOR_LIMIT)
+        self._effective_limit = max(1, int(self._requests_per_hour * (1 - buffer_percent)))
+        self.path = Path(path) if path is not None else state_path()
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        with self._connection() as con:
+            con.execute("CREATE TABLE IF NOT EXISTS requests (requested_at REAL NOT NULL)")
+            con.execute("CREATE INDEX IF NOT EXISTS requests_time ON requests(requested_at)")
+            con.execute("""CREATE TABLE IF NOT EXISTS budget (
+                id INTEGER PRIMARY KEY CHECK(id=1), cooldown_until REAL NOT NULL DEFAULT 0,
+                total_requests INTEGER NOT NULL DEFAULT 0, total_wait REAL NOT NULL DEFAULT 0,
+                active_limit INTEGER NOT NULL)""")
+            con.execute("INSERT OR IGNORE INTO budget(id, active_limit) VALUES(1, ?)",
+                        (self._effective_limit,))
+
+    @contextmanager
+    def _connection(self):
+        con = sqlite3.connect(self.path, timeout=5, isolation_level=None)
+        try:
+            # A failed ledger is an explicit error, never an unmetered request.
+            con.execute("BEGIN IMMEDIATE")
+            yield con
+            con.commit()
+        except BaseException:
+            con.rollback()
+            raise
+        finally:
+            con.close()
+
     @property
     def requests_per_hour(self) -> int:
         return self._requests_per_hour
-    
+
     @property
     def effective_limit(self) -> int:
         return self._effective_limit
-    
-    def _clean_old_timestamps(self, now: float) -> None:
-        """清除超過視窗時間的舊記錄"""
-        cutoff = now - self._window_seconds
-        while self._timestamps and self._timestamps[0] < cutoff:
-            self._timestamps.popleft()
-    
-    def acquire(self, timeout: Optional[float] = None) -> bool:
-        """取得一次 API 請求許可
-        
-        如果已達速率限制，會等待直到可以請求。
-        
-        Args:
-            timeout: 最大等待時間（秒），None 表示無限等待
-            
-        Returns:
-            True 如果成功取得許可，False 如果 timeout
-        """
-        start_wait = time.time()
-        
-        with self._lock:
-            now = time.time()
-            self._clean_old_timestamps(now)
-            
-            # 檢查是否需要等待
-            while len(self._timestamps) >= self._effective_limit:
-                if timeout is not None:
-                    elapsed = time.time() - start_wait
-                    if elapsed >= timeout:
-                        return False
-                
-                # 計算需要等待的時間
-                oldest = self._timestamps[0]
-                wait_time = oldest + self._window_seconds - time.time() + 0.1
-                
-                if wait_time > 0:
-                    # 釋放鎖再等待
-                    self._lock.release()
-                    try:
-                        actual_wait = min(wait_time, 60)  # 最多等 60 秒再重新檢查
-                        time.sleep(actual_wait)
-                        self._total_wait_time += actual_wait
-                    finally:
-                        self._lock.acquire()
-                    
-                    now = time.time()
-                    self._clean_old_timestamps(now)
-            
-            # 記錄這次請求
-            self._timestamps.append(time.time())
-            self._total_requests += 1
-            return True
-    
+
+    def _snapshot(self, con, now: float) -> RateLimitStats:
+        con.execute("DELETE FROM requests WHERE requested_at <= ?", (now - WINDOW_SECONDS,))
+        count, oldest = con.execute("SELECT count(*), min(requested_at) FROM requests").fetchone()
+        cooldown, total, waited, active_limit = con.execute(
+            "SELECT cooldown_until, total_requests, total_wait, active_limit FROM budget WHERE id=1"
+        ).fetchone()
+        # A stricter caller cannot be undone by a later default-config worker in this window.
+        limit = min(active_limit, self._effective_limit) if count else self._effective_limit
+        con.execute("UPDATE budget SET active_limit=? WHERE id=1", (limit,))
+        delay = max(0.0, cooldown - now)
+        if count >= limit:
+            release_at = con.execute(
+                "SELECT requested_at FROM requests ORDER BY requested_at LIMIT 1 OFFSET ?",
+                (count - limit,),
+            ).fetchone()[0] + WINDOW_SECONDS
+            delay = max(delay, release_at - now)
+        return RateLimitStats(count, oldest or now, total, waited, limit,
+                              max(0, limit - count), delay, cooldown)
+
+    def acquire(self, timeout: float | None = 0) -> bool:
+        """Reserve before HTTP; default fails fast, explicit timeout permits bounded waiting."""
+        if timeout is not None and (not math.isfinite(timeout) or timeout < 0):
+            raise ValueError("timeout must be non-negative and finite")
+        started = time.monotonic()
+        while True:
+            with self._connection() as con:
+                now = time.time()
+                stats = self._snapshot(con, now)
+                if stats.remaining_requests > 0 and stats.retry_after_seconds <= 0:
+                    con.execute("INSERT INTO requests VALUES(?)", (now,))
+                    con.execute("UPDATE budget SET total_requests=total_requests+1 WHERE id=1")
+                    return True
+            left = None if timeout is None else timeout - (time.monotonic() - started)
+            if left is not None and left <= 0:
+                return False
+            delay = min(max(stats.retry_after_seconds, 0.01), 1.0)
+            if left is not None:
+                delay = min(delay, left)
+            before = time.monotonic()
+            time.sleep(delay)
+            with self._connection() as con:
+                con.execute("UPDATE budget SET total_wait=total_wait+? WHERE id=1",
+                            (time.monotonic() - before,))
+
+    def defer(self, seconds: float = WINDOW_SECONDS) -> None:
+        """Share a provider 402/429 cooldown with every worker, without retry storms."""
+        if not math.isfinite(seconds) or seconds < 0:
+            raise ValueError("cooldown must be non-negative and finite")
+        with self._connection() as con:
+            con.execute("UPDATE budget SET cooldown_until=max(cooldown_until, ?) WHERE id=1",
+                        (time.time() + seconds,))
+
     def get_stats(self) -> RateLimitStats:
-        """取得目前統計資訊"""
-        with self._lock:
-            now = time.time()
-            self._clean_old_timestamps(now)
-            return RateLimitStats(
-                requests_in_window=len(self._timestamps),
-                window_start_time=self._timestamps[0] if self._timestamps else now,
-                total_requests=self._total_requests,
-                total_wait_time=self._total_wait_time,
-            )
-    
+        with self._connection() as con:
+            return self._snapshot(con, time.time())
+
     def remaining_requests(self) -> int:
-        """取得目前視窗內剩餘可用請求數"""
-        with self._lock:
-            now = time.time()
-            self._clean_old_timestamps(now)
-            return max(0, self._effective_limit - len(self._timestamps))
-    
-    def reset(self) -> None:
-        """重置計數器（用於測試）"""
-        with self._lock:
-            self._timestamps.clear()
-            self._total_requests = 0
-            self._total_wait_time = 0.0
-
-
-# 全域 Rate Limiter 實例
-_global_limiter: Optional[RateLimiter] = None
-_global_lock = threading.Lock()
+        stats = self.get_stats()
+        return 0 if stats.cooldown_until > time.time() else stats.remaining_requests
 
 
 def get_rate_limiter(requests_per_hour: int = 6000) -> RateLimiter:
-    """取得全域 Rate Limiter
-    
-    首次呼叫時會建立實例，後續呼叫返回同一實例。
-    
-    Args:
-        requests_per_hour: 每小時允許的請求數（僅首次有效）
-        
-    Returns:
-        全域 RateLimiter 實例
-    """
-    global _global_limiter
-    
-    with _global_lock:
-        if _global_limiter is None:
-            _global_limiter = RateLimiter(requests_per_hour=requests_per_hour)
-        return _global_limiter
+    configured = int(os.environ.get("FINMIND_REQUESTS_PER_HOUR", SPONSOR_LIMIT))
+    return RateLimiter(min(requests_per_hour, configured))
 
 
 def reset_global_limiter() -> None:
-    """重置全域 Rate Limiter（用於測試）"""
-    global _global_limiter
-    
-    with _global_lock:
-        _global_limiter = None
+    """Compatibility hook. Restarting a worker must NEVER erase persisted usage."""
