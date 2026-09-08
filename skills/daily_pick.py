@@ -44,14 +44,23 @@ ARTIFACTS_DIR = Path(__file__).resolve().parent.parent / "artifacts"
 
 
 def _load_market_price_df(db_session: Session, target_date: date, ma_days: int) -> pd.DataFrame:
+    """Use the published TAIEX total-return index; raw stock price averages are not an index."""
+    from app.config import load_config
+    from app.finmind import fetch_dataset, FinMindError
+    config = load_config()
     start = target_date - timedelta(days=ma_days * 2)
-    stmt = (
-        select(RawPrice.trading_date, func.avg(RawPrice.close).label("avg_close"))
-        .where(RawPrice.trading_date.between(start, target_date))
-        .group_by(RawPrice.trading_date)
-        .order_by(RawPrice.trading_date)
-    )
-    return pd.read_sql(stmt, db_session.get_bind())
+    df = fetch_dataset("TaiwanStockTotalReturnIndex", start, target_date,
+                       token=config.finmind_token, data_id="TAIEX",
+                       requests_per_hour=config.finmind_requests_per_hour, cache_ttl=86400)
+    if df.empty or not {"date", "price", "stock_id"}.issubset(df.columns):
+        raise FinMindError("TAIEX 報酬指數缺漏，無法判定市場狀態")
+    df = df[df["stock_id"] == "TAIEX"].copy()
+    df["trading_date"] = pd.to_datetime(df["date"]).dt.date
+    df["avg_close"] = pd.to_numeric(df["price"], errors="coerce")
+    df = df[df["avg_close"].gt(0) & df["trading_date"].le(target_date)]
+    if df.empty or df["trading_date"].max() != target_date:
+        raise FinMindError(f"TAIEX 報酬指數尚未更新至 {target_date}")
+    return df[["trading_date", "avg_close"]].drop_duplicates("trading_date").sort_values("trading_date")
 
 
 def _load_latest_model(session: Session) -> ModelVersion | None:
@@ -640,6 +649,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             regime_result = detector.detect(market_df, config)
             bear_market = regime_result.get("regime") == "BEAR"
             coverage_stats["regime_detector"] = getattr(config, "regime_detector", "ma")
+            coverage_stats["market_series"] = "FinMind TaiwanStockTotalReturnIndex / TAIEX"
             coverage_stats["regime_meta"] = regime_result.get("meta", {})
 
             # 週跌幅危機偵測（最近 5 個交易日平均收盤價變化）

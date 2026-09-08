@@ -892,9 +892,12 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
                 RawPrice.volume,
             )
             .where(RawPrice.trading_date.between(start_date, end_date))
+            .where(RawPrice.stock_id.regexp_match(r"^[0-9]{4}$"))
             # 不在 SQL ORDER BY（會觸發 MySQL filesort 排序數百萬列）；改在 _fetch_data return 前 pandas 統一排序
         )
         price_df = pd.read_sql(price_stmt, session.get_bind())
+    # Historical raw tables also contain warrants. Filter before joins and rolling work.
+    price_df = price_df.loc[price_df["stock_id"].astype(str).str.fullmatch(r"\d{4}")].copy()
     elapsed = time.perf_counter() - t0
     n_stocks = price_df["stock_id"].nunique() if not price_df.empty else 0
     n_days = price_df["trading_date"].nunique() if not price_df.empty else 0
@@ -1991,6 +1994,27 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             target_start = db_session.query(func.min(RawPrice.trading_date)).scalar()
         else:
             target_start = max_feature_date + timedelta(days=1)
+
+        # Revisit recent dates when an entire market's prices arrived late.
+        # Compare coverage rather than MAX(date); small IPO/warm-up exclusions do not retrigger.
+        if max_feature_date is not None:
+            from sqlalchemy import text as _text
+            check_start = max_price_date - timedelta(days=14)
+            raw_counts = pd.read_sql(_text("""
+                SELECT trading_date, COUNT(*) AS n FROM raw_prices
+                WHERE trading_date BETWEEN :start AND :end AND close>0
+                  AND stock_id REGEXP '^[0-9]{4}$'
+                GROUP BY trading_date
+            """), db_session.get_bind(), params={"start": check_start, "end": max_feature_date})
+            recent_features = _feature_store.read(check_start, max_feature_date)
+            if not raw_counts.empty:
+                counts = (recent_features.groupby("trading_date").size()
+                          if not recent_features.empty else pd.Series(dtype=float))
+                missing = [pd.Timestamp(row.trading_date).date() for row in raw_counts.itertuples()
+                           if counts.get(pd.Timestamp(row.trading_date).date(), 0) < row.n * .90]
+                if missing:
+                    target_start = min(target_start, min(missing))
+                    logs["coverage_repair_from"] = target_start.isoformat()
 
         if target_start is None or target_start > max_price_date:
             finish_job(db_session, job_id, "success", logs={"rows": 0, **logs})

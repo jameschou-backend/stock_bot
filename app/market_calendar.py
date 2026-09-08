@@ -9,7 +9,8 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from typing import List, Optional, Set
 
 from sqlalchemy import func, select
@@ -122,7 +123,9 @@ def get_latest_trading_day(session: Session) -> Optional[date]:
     """
     from app.models import RawPrice, TradingCalendar
 
-    today = date.today()
+    # Daily data is actionable only after the local evening publication window.
+    now = datetime.now(ZoneInfo("Asia/Taipei"))
+    today = now.date() if now.hour >= 18 else now.date() - timedelta(days=1)
     try:
         latest = (
             session.query(func.max(TradingCalendar.trading_date))

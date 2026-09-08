@@ -1,12 +1,4 @@
-"""驗證 ingest_trading_calendar 的 raw_prices 校準邏輯。
-
-對 in-memory SQLite 建立 minimal schema 後，注入：
-- 兩個 weekday（5/8 Fri, 5/11 Mon）有 prices 紀錄 → 應是 trading day
-- 一個 weekday（5/12 Tue）沒有 prices → 應被校準為 HOLIDAY（國定假日）
-- 一個 weekend（5/9 Sat）有 prices → 應被校準為 MAKEUP（補班日）
-
-並驗證 weekday seed + calibration 後最終 calendar 行為正確。
-"""
+"""有價格的日期只代表資料存在，不用缺行情推定假日。"""
 from __future__ import annotations
 
 from datetime import date
@@ -17,7 +9,6 @@ from sqlalchemy.orm import sessionmaker
 
 from app.models import Base, RawPrice, TradingCalendar
 from skills.ingest_trading_calendar import (
-    _calibrate_from_prices,
     seed_calendar,
 )
 
@@ -52,15 +43,3 @@ class TestActualTradingDates:
         from skills.ingest_trading_calendar import _actual_trading_dates
         actual = _actual_trading_dates(session, date(2026, 1, 1), date(2026, 12, 31))
         assert actual == set()
-
-
-@pytest.mark.skipif(
-    True,  # SQLite 不支援 on_duplicate_key_update，calibration / seed 要 MySQL
-    reason="seed_calendar / _calibrate_from_prices 使用 MySQL-specific upsert，需 MySQL fixture",
-)
-class TestCalibrationOnMySQL:
-    """這些測試需要真 MySQL；CI 跑時跳過。對應整合測試請在 staging DB 驗證。"""
-    def test_holiday_inference(self):
-        ...
-    def test_makeup_day_inference(self):
-        ...

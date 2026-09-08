@@ -17,7 +17,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     try:
-        run_daily_pipeline(skip_ingest=args.skip_ingest)
+        from app.file_lock import file_lock
+        with file_lock(Path(__file__).resolve().parents[1] / '.cache/research-or-update.lock', timeout=0):
+            run_daily_pipeline(skip_ingest=args.skip_ingest)
     except Exception as exc:
         from skills import ai_assist
         import platform

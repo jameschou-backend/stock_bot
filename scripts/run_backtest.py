@@ -512,7 +512,7 @@ def main():
     else:
         stoploss = config.stoploss_pct
 
-    entry_delay = args.entry_delay_days if args.entry_delay_days is not None else 0  # 原始：當日收盤進場
+    entry_delay = args.entry_delay_days if args.entry_delay_days is not None else config.backtest_entry_delay_days
     risk_free = args.risk_free_rate if args.risk_free_rate is not None else config.backtest_risk_free_rate
     # ── benchmark 成本口徑（2026-07-10 缺陷 3 修復）──
     # 預設 zero_cost（buy-and-hold 近似）；--benchmark-tc X 顯式指定每期扣減值供敏感度分析。
@@ -927,4 +927,6 @@ def _log_experiment(result: dict, args, argv: list) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    from app.file_lock import file_lock
+    with file_lock(Path(__file__).resolve().parents[1] / '.cache/research-or-update.lock', timeout=0):
+        main()

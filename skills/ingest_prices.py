@@ -3,7 +3,7 @@
 從 FinMind 或 TWSE/TPEx 官方 API 抓取股價資料寫入 raw_prices 表。
 
 來源切換：env var INGEST_PRICES_SOURCE
-  - finmind（預設，向後相容）：批次查詢 + 逗號分隔 data_id，每批 500 檔
+  - finmind（預設，向後相容）：官方全市場日期查詢；短區間按日抓取
   - twse：TWSE/TPEx Legacy endpoints 逐日抓全市場（一日一 call，無需 token）
 
 切換後 daily pipeline 與既有 backfill 機制不變；DB schema 不變。
@@ -75,7 +75,7 @@ def _normalize_prices(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.dropna(subset=["stock_id", "trading_date"])
     df["stock_id"] = df["stock_id"].astype(str)
-    df = df[df["stock_id"].str.fullmatch(r"\d{4,6}")]
+    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]
     return df[["stock_id", "trading_date", "open", "high", "low", "close", "volume"]].drop_duplicates(
         subset=["stock_id", "trading_date"]
     )
@@ -85,6 +85,11 @@ def _resolve_start_date(session: Session, default_start: date) -> date:
     max_date = session.query(func.max(RawPrice.trading_date)).scalar()
     if max_date is None:
         return default_start
+    from skills.price_coverage import recent_market_counts, incomplete_dates
+    gaps = incomplete_dates(recent_market_counts(session, max_date))
+    recent_gaps = [day for day in gaps if day >= max_date - timedelta(days=7)]
+    if recent_gaps:
+        return min(recent_gaps)
     return max_date + timedelta(days=1)
 
 
@@ -257,7 +262,7 @@ def _run_finmind(config, db_session: Session) -> Dict:
             backoff_seconds=config.finmind_retry_backoff,
         )
         logs["stock_count"] = len(stock_ids)
-        logs["fetch_mode"] = "by_stock_batch"
+        logs["fetch_mode"] = "documented_bulk_or_single_stock"
 
         if not stock_ids:
             logs["warning"] = "無法取得股票清單，跳過抓取"
@@ -280,7 +285,7 @@ def _run_finmind(config, db_session: Session) -> Dict:
             }
             update_job(db_session, job_id, logs=logs, commit=True)
 
-            # 使用批次查詢（每 500 檔一次 API call，逗號分隔 data_id）
+            # 依官方支援選擇全市場日期或單股區間查詢
             df = fetch_dataset_by_stocks(
                 DATASET,
                 chunk_start,
