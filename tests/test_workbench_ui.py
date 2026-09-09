@@ -40,6 +40,29 @@ def test_flow_overview_requires_all_contrasts_without_triggering_computation(mon
     assert not service.flow_research_overview()['available']
 
 
+def test_theme_overview_requires_complete_retrospective_evidence(monkeypatch,tmp_path):
+    import json
+    source=Path(__file__).resolve().parents[1]/'docs/research_themes_20260909.json'
+    report=json.loads(source.read_text())
+    monkeypatch.setattr(service,'ROOT',tmp_path)
+    assert not service.theme_research_overview()['available']
+    folder=tmp_path/'.cache/theme-research';folder.mkdir(parents=True)
+    path=folder/'report.summary.json'
+    path.write_text(json.dumps(report))
+    assert service.theme_research_overview()['available']
+    report['cases'][0].pop('counter')
+    path.write_text(json.dumps(report))
+    assert not service.theme_research_overview()['available']
+    report=json.loads(source.read_text())
+    report['results'][-1]=report['results'][0]
+    path.write_text(json.dumps(report))
+    assert not service.theme_research_overview()['available']
+    report=json.loads(source.read_text())
+    report['live_qualified']=True
+    path.write_text(json.dumps(report))
+    assert not service.theme_research_overview()['available']
+
+
 def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_path):
     engine=create_engine('sqlite://',connect_args={'check_same_thread':False},poolclass=StaticPool)
     Base.metadata.create_all(engine,tables=[*TABLES,RawPrice.__table__])
@@ -55,8 +78,16 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
         'problems':[],'data_ready':True,'markets':[],'adjustment_note':'待對帳'})
     monkeypatch.setattr(ui,'candidate_data',lambda:[])
     monkeypatch.setattr(ui.jobs,'JOBS_DIR',tmp_path)
+    # UI verification must work in a fresh checkout with no local research cache.
+    import json
+    theme=json.loads((Path(__file__).resolve().parents[1]/'docs/research_themes_20260909.json').read_text())
+    monkeypatch.setattr(service,'theme_research_overview',lambda:{**theme,'available':True})
     app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard_v2/main.py')).run(timeout=20)
     assert not app.exception
+    element(app.selectbox,'查看題材證據與受惠候選').set_value('leo').run()
+    element(app.radio,'題材持有方式').set_value('risk_exit').run()
+    assert not app.exception
+    assert any('低軌衛星' in str(d.value) for d in app.dataframe)
     element(app.checkbox,'顯示前一輪價格研究（尚未排除上市櫃前行情）').set_value(True).run()
     assert not app.exception
     element(app.number_input,'期初現金（元）').set_value(100000)

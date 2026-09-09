@@ -216,6 +216,8 @@ def render_fills(book,account):
 def render_research(status):
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    render_theme_research()
+    st.divider()
     render_flow_research()
     st.divider()
     if st.checkbox('顯示前一輪價格研究（尚未排除上市櫃前行情）'):
@@ -241,6 +243,66 @@ def render_research(status):
         st.caption(status['adjustment_note'])
         st.write('已有研究紀錄：')
         for item in evidence['documents'][-8:]: st.caption(item['name'])
+
+
+def render_theme_research():
+    st.subheader('題材出現之後，買進能贏 0050 嗎？')
+    report=service.theme_research_overview()
+    if not report['available']:
+        st.info(report['note'])
+        return
+    st.caption(f"整理於 {report['observed_at']} · 歷史行情截至 {report['source']['last_date']} · 12 組回放 {report['elapsed_seconds']:.2f} 秒 · 0 次 FinMind 請求")
+    st.warning('這是三組事後挑選的歷史案例，尚未建成自動掃描全市場的題材策略；表內不是今天的買進名單。')
+    scenario=st.radio('題材回放成本',['stress','base'],horizontal=True,key='theme_scenario',
+                     format_func=lambda s:'較高滑價（每邊 0.45%）' if s=='stress' else '基本滑價（每邊 0.30%）')
+    policy=st.radio('題材持有方式',['hold','risk_exit'],horizontal=True,key='theme_policy',
+                   format_func=lambda p:'買入後持有半年' if p=='hold' else '半年內可提前退出')
+    results=[r for r in report['results'] if r['scenario']==scenario and r['policy']==policy]
+    cases={c['id']:c for c in report['cases']}
+    rows=[]
+    for r in results:
+        c=cases[r['case_id']]; a=r['summary']; b=r['benchmark_summary']
+        rows.append({'題材':c['theme'],'比較期間':a['start']+' ～ '+a['end'],
+                     '扣成本報酬':percent(a['total_return']),'同期 0050':percent(b['total_return']),
+                     '領先／落後':f"{r['excess_return']*100:+.2f} 個百分點",'最大跌幅':percent(a['max_drawdown'])})
+    st.dataframe(pd.DataFrame(rows),hide_index=True,use_container_width=True)
+    st.caption('各案例獨立本金、期間不同且重疊，不能把三個報酬相加或平均當成一套策略績效。')
+    selected=st.selectbox('查看題材證據與受惠候選',list(cases),format_func=lambda x:cases[x]['theme'])
+    c=cases[selected]; r=next(x for x in results if x['case_id']==selected)
+    st.write('**受惠候選：** '+'、'.join(m['stock_id']+' '+m['name'] for m in c['members']))
+    st.markdown(f"**事件來源：**[{c['source_title']}]({c['source_url']}) · {c['source_date']}")
+    st.caption(c['evidence_level'])
+    st.write('**支持理由：** '+c['positive'])
+    st.write('**不利證據：** '+c['counter'])
+    st.write('**還需確認：** '+c['needs_verification'])
+    st.write(f"**何時買：** 公告日期之後首個交易日（{r['summary']['start']}）收盤，各檔等額；當天不能成交的份額留現金。")
+    st.write('**何時退：** '+('預先排定持有 126 個交易日間隔，期末收盤賣出。' if policy=='hold'
+             else '最晚持有 126 個交易日間隔；收盤相對進場價下跌至少 15%，或較持有高點回落至少 20%，次日收盤賣出。遇無法成交逐日重試；賣後不再買回。'))
+    curve=pd.DataFrame(r['equity_curve']).set_index('date').rename(columns={'strategy':'題材案例','benchmark':'0050'})
+    st.line_chart(curve,use_container_width=True)
+    st.caption('各以 1 元起算，已扣稅費與滑價；收盤觸發停損，並不保證成交價或最大虧損。')
+    if selected=='passive':
+        action=report['price_audit']['corporate_action']
+        st.markdown(f"國巨有 7 個交易日因面額變更停牌，期間以前值估值、不模擬成交；每股換 4 股的分割已反映在還原價格。[核對依據]({action['source_url']})")
+    with st.expander('逐股結果、成交紀錄與資料限制'):
+        names={m['stock_id']:m['name'] for m in c['members']}
+        st.dataframe(pd.DataFrame([{'代號':p['stock_id'],'公司':names[p['stock_id']],
+                                   '原始份額':percent(p['initial_weight']),'該份額淨報酬':percent(p['allocated_return']),
+                                   '對案例貢獻':f"{p['pnl_contribution']*100:+.2f} 個百分點",
+                                   '已買進':p['entered'],'期末未售':p['unliquidated']} for p in r['per_stock']]),
+                     hide_index=True,use_container_width=True)
+        a=r['summary']
+        st.write(f"平均現金 {percent(a['average_cash_fraction'])}；稅費及滑價合計／期初本金 {percent(a['cost_per_initial_capital'])}；雙邊成交額／期初本金 {a['two_way_turnover']:.2f} 倍。")
+        st.write(f"未買進 {a['blocked_entries']} 筆、賣出受阻 {a['blocked_exit_days']} 檔日、持有缺價 {a['held_missing_price_days']} 檔日、期末未售 {a['unliquidated_positions']} 檔；持有時還原價單日變動逾 50% 共 {len(r['large_move_exposures'])} 次。")
+        trade_rows=[{'代號':t['stock_id'],'日期':t['date'],'方向':'買進' if t['side']=='buy' else '賣出',
+                     '依據日期':t['signal_date'],'原因':{'event':'題材事件','scheduled_horizon':'半年到期',
+                         'entry_stop':'跌破進場停損','trailing_stop':'從高點回落'}[t['reason']]} for t in r['trades']]
+        st.dataframe(pd.DataFrame(trade_rows),hide_index=True,use_container_width=True)
+        st.caption(c['date_basis']+' 系統到整理日才記錄此案例，不能冒充過去即時訊號。')
+        st.caption('價格抽查：'+report['price_audit']['scope'])
+        for note in report['limitations']: st.caption('• '+note)
+    st.download_button('下載題材證據與回放結果',__import__('json').dumps(report,ensure_ascii=False,indent=2),
+                       file_name='theme-research.json',mime='application/json')
 
 
 def render_flow_research():

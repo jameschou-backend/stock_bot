@@ -119,6 +119,7 @@ def strategy_evidence():
     return {'live_qualified':False,'note':'目前沒有通過新驗證的實盤策略。歷史回測不等於實際獲利。',
             'documents':docs,'rule_research':rule_research_overview(),
             'flow_research':flow_research_overview(),
+            'theme_research':theme_research_overview(),
             'validation_requirements':['扣除稅費與滑價','訊號延遲至少一交易日',
                 '歷史資料可用時間與還原價對帳','與同期間基準比較','未用來調參的測試期與向前紙上追蹤']}
 
@@ -162,3 +163,51 @@ def flow_research_overview():
                 'results':rows}
     except (OSError,ValueError,KeyError,TypeError):
         return {'available':False,'live_qualified':False,'note':'投信與放量報告不完整，請重新產生；不沿用舊結論'}
+
+
+def theme_research_overview():
+    """Read a completed offline replay. This is never today's candidate feed."""
+    path=ROOT/'.cache/theme-research/report.summary.json'
+    if not path.exists():
+        return {'available':False,'live_qualified':False,'note':'尚未產生題材回放，請執行 make research-themes'}
+    try:
+        report=json.loads(path.read_text())
+        if (not isinstance(report,dict) or report.get('schema')!=1
+                or report.get('experiment')!='themes_20260909'
+                or report.get('mode')!='retrospective_manual_seed_cases'
+                or report.get('research_only') is not True or report.get('live_qualified') is not False):
+            raise ValueError('Unsupported theme replay')
+        cases=report['cases']
+        case_ids={'memory','passive','leo'}
+        if len(cases)!=3 or {c['id'] for c in cases}!=case_ids:
+            raise ValueError('Missing theme cases')
+        for c in cases:
+            for key in ('theme','source_date','source_title','source_url','evidence_level',
+                        'positive','counter','needs_verification','date_basis','members'):
+                if not c[key]: raise ValueError('Missing source evidence')
+            if not c['source_url'].startswith('https://'):
+                raise ValueError('Invalid source URL')
+            if not all(m['stock_id'] and m['name'] for m in c['members']):
+                raise ValueError('Missing member identity')
+        rows=report['results']
+        expected={(c,p,s) for c in case_ids for p in ('hold','risk_exit') for s in ('base','stress')}
+        if len(rows)!=12 or {(r['case_id'],r['policy'],r['scenario']) for r in rows}!=expected:
+            raise ValueError('Incomplete theme contrasts')
+        for r in rows:
+            for key in ('start','end','total_return','max_drawdown','average_cash_fraction',
+                        'cost_per_initial_capital','two_way_turnover','blocked_entries',
+                        'blocked_exit_days','held_missing_price_days','unliquidated_positions'):
+                r['summary'][key]
+                r['benchmark_summary'][key]
+            for key in ('policy_name','excess_return','trades','per_stock','large_move_exposures','equity_curve'):
+                r[key]
+            if len(r['equity_curve'])!=128:
+                raise ValueError('Incomplete replay window')
+        for key in ('observed_at','elapsed_seconds','limitations'):
+            report[key]
+        report['source']['last_date']
+        report['price_audit']['scope']
+        report['price_audit']['corporate_action']['source_url']
+        return {**report,'available':True,'live_qualified':False}
+    except (OSError,ValueError,KeyError,TypeError,AttributeError):
+        return {'available':False,'live_qualified':False,'note':'題材回放不完整，請重新執行 make research-themes；不沿用舊結論'}
