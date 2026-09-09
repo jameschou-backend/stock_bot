@@ -63,6 +63,13 @@ api:
 test:
 	python scripts/run_tests.py
 
+.PHONY: prepare-guidance research-guidance
+prepare-guidance:
+	python scripts/research_guidance.py --prepare-inputs
+
+research-guidance:
+	python scripts/research_guidance.py
+
 dashboard:
 	streamlit run app/dashboard.py
 
