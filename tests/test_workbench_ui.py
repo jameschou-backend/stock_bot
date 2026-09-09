@@ -92,6 +92,8 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
               evidence_note='標題未核對',time_note='事後回補',
               source={'legacy_latest':'2026-05-25','local_days':[],'coverage_note':'覆蓋未確認'},price_source={'note':'歷史背景'})
     monkeypatch.setattr(news,'overview',lambda mode='scan':nr)
+    from app import chain_flow_research as chain
+    monkeypatch.setattr(chain,'overview',lambda:{'available':False,'note':'測試未準備族群快取'})
     submitted=[]
     def submit_news(request):
         submitted.append(request)
@@ -106,6 +108,9 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     element(app.button,'重建新聞時間線').click().run()
     assert submitted[-1].kind=='news_review' and not submitted[-1].fetch_news
     assert submitted[-1].news_stock_id=='2408'
+    assert not app.exception
+    element(app.button,'更新族群資金').click().run()
+    assert submitted[-1].kind=='chain_flow' and submitted[-1].fetch_flow
     assert not app.exception
     element(app.selectbox,'查看題材證據與受惠候選').set_value('leo').run()
     element(app.radio,'題材持有方式').set_value('risk_exit').run()

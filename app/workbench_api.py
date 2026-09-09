@@ -54,6 +54,16 @@ def news_research(mode:Literal['scan','review']='scan',limit:int=Query(50,ge=1,l
 def portfolio(account_id:Literal['paper','real']='paper'): return service.portfolio(account_id)
 
 
+@router.get('/chain-flow')
+def chain_flow(limit:int=Query(60,ge=1,le=80)):
+    from app.chain_flow_research import overview
+    report=overview()
+    if report['available']:
+        report={**report,'groups':[{k:v for k,v in g.items() if k!='share_history'} for g in report['groups'][:limit]],
+                'groups_truncated':len(report['groups'])>limit}
+    return report
+
+
 class AccountIn(BaseModel):
     account_id:Literal['paper','real']='paper'
     initial_cash:float=Field(gt=0,le=1e10,allow_inf_nan=False)

@@ -18,7 +18,7 @@ JOBS_DIR = ROOT / '.cache/workbench/jobs'
 
 
 class WorkRequest(BaseModel):
-    kind: Literal['update_data','backtest','news_scan','news_review']
+    kind: Literal['update_data','backtest','news_scan','news_review','chain_flow']
     months: int = Field(default=12,ge=3,le=120)
     topn: int = Field(default=10,ge=1,le=50)
     quick: bool = False
@@ -28,6 +28,7 @@ class WorkRequest(BaseModel):
     news_end: date | None = None
     news_stock_id: str = Field(default='2408',pattern=r'^[0-9]{4}$')
     fetch_news: bool = False
+    fetch_flow: bool = False
 
     @model_validator(mode='after')
     def bounded_news(self):
@@ -35,6 +36,8 @@ class WorkRequest(BaseModel):
             raise ValueError('近期新聞掃描最多 14 天')
         if self.fetch_news and self.kind!='news_scan':
             raise ValueError('只有近期新聞掃描可抓取資料')
+        if self.fetch_flow and self.kind!='chain_flow':
+            raise ValueError('只有族群資金研究可使用 fetch_flow')
         return self
 
 
@@ -124,6 +127,9 @@ def submit(request: WorkRequest):
 
 
 def command_for(request, output):
+    if request.kind=='chain_flow':
+        args=[sys.executable,'scripts/research_chain_flow.py','--output',str(output)]
+        return args+(['--fetch'] if request.fetch_flow else [])
     if request.kind=='update_data':
         return [sys.executable,'scripts/run_daily.py']
     if request.kind in ('news_scan','news_review'):

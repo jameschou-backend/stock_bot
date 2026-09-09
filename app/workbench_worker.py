@@ -14,7 +14,8 @@ def main(job_id):
     with file_lock(JOBS_DIR/'submit.lock',timeout=10):
         job=read_job(job_id)
         message={'update_data':'更新資料','backtest':'載入資料與驗證策略',
-                 'news_scan':'整理新聞題材','news_review':'重建歷史新聞時間線'}[job['request']['kind']]
+                 'news_scan':'整理新聞題材','news_review':'重建歷史新聞時間線',
+                 'chain_flow':'整理族群成交分布與法人方向'}[job['request']['kind']]
         job.update(status='running',message=message,pid=os.getpid())
         write_job(job)
     started=time.perf_counter()
@@ -29,10 +30,10 @@ def main(job_id):
         result=subprocess.run(command_for(request,output),cwd=ROOT,env=env,timeout=1800)
         if result.returncode:
             job.update(status='failed',message='工作未完成，請查看資料狀態及本機工作日誌',exit_code=result.returncode)
-            if result.returncode==75 and request.kind in ('news_scan','news_review') and output.exists():
+            if result.returncode==75 and request.kind in ('news_scan','news_review','chain_flow') and output.exists():
                 value=json.loads(output.read_text())
                 retry=int(value.get('retry_after_seconds',0))+1
-                job.update(message=f'新聞更新達額度暫停，約 {retry} 秒後重試；已完成日期會重用',retry_after_seconds=retry)
+                job.update(message=f'FinMind 達額度暫停，約 {retry} 秒後重試；已完成日期會重用',retry_after_seconds=retry)
         else:
             job.update(status='completed',message='已完成；研究結果仍需資料與策略驗證')
             if output.exists():

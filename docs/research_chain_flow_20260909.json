@@ -1,0 +1,530 @@
+{
+  "schema": 1,
+  "experiment": "chain_flow_v1",
+  "as_of": "2026-09-08",
+  "start": "2026-08-05",
+  "recent_start": "2026-09-02",
+  "analyzed_at": "2026-09-09T05:40:51.056269+00:00",
+  "research_only": true,
+  "live_qualified": false,
+  "input_sha256": {
+    "flow": "f5752da50385ba2e72dea82ac21aa9026b2724022a89790741abcc3c9ba3160c",
+    "members": "e43dbd4dd8aeb3267d070bf5708ccda99f1446f174ae79a704333de5fbf03c46",
+    "quotes": "77fdb3f0b921db4c8e8d2dfea7cdde9f35b0cfa5b347e74ab292b77ed169ac6c",
+    "raw_closes": "2bdd843e9508d93ef5306392250588adbee527e96d636f9d84deec2505f900a0",
+    "institution": "8dbac512d173d6f28774f6aadac730a00ddd7b3cafe63f3905c6e301b6490355"
+  },
+  "code_sha256": "d22cfbe1b7aaf1b5ce10599e0dc9cf8cf81d7fa36945bac2eae27048ecded1f6",
+  "members_update_min": "2025-03-30",
+  "members_update_max": "2026-09-09",
+  "limitations": [
+    "成交金額代表交易活躍度，不等於市場淨流入；不同產業鏈成分重疊，占比不可相加。",
+    "法人金額為淨股數乘收盤價近似，只含連續五日完整成分；外資含外資自營商，投信另列。",
+    "收紅為收盤高於開盤，不是較前收盤上漲，也不是含息報酬。",
+    "產業鏈使用目前分類回溯，沒有歷史成分版本，不能直接作無偏差回測。",
+    "歷史日快照保留原取得版本；分類每週更新可能造成成分與總額差異，須看對帳覆蓋。",
+    "新聞只連結日期不晚於資金表且標題有點名的文章，未確認盤中時序或直接受惠。"
+  ],
+  "summary": {
+    "groups": 52,
+    "elapsed_seconds": 1.427
+  },
+  "groups": [
+    {
+      "name": "被動元件",
+      "industry": "被動元件",
+      "sub_industry": "",
+      "topic": null,
+      "available": true,
+      "excluded_provider_ids": [
+        "3089",
+        "3117",
+        "7896",
+        "7912"
+      ],
+      "missing_quote_ids": [],
+      "as_of": "2026-09-08",
+      "members": 51,
+      "quoted_members": 51,
+      "provider_traded_members": 54,
+      "member_coverage": 0.9444444444444444,
+      "money_reconciliation_gap": 0.0003907302566070747,
+      "components_reconciled": false,
+      "today_money": 68349324242.0,
+      "today_share_pct": 6.2843,
+      "share_5d_pct": 6.776740000000001,
+      "share_previous20_pct": 7.576579999999998,
+      "share_change_pp": -0.799839999999997,
+      "share_multiple": 0.8944325803990723,
+      "intraday_up_fraction": 0.058823529411764705,
+      "top1_share": 0.3301740745399102,
+      "observed_money_ex_top1": 45764260894.0,
+      "trust_coverage": 1.0,
+      "trust_observed_stocks": 51,
+      "trust_observed_net_est_5d": -3729655999.0,
+      "trust_positive_days": 1,
+      "foreign_coverage": 1.0,
+      "foreign_observed_stocks": 51,
+      "foreign_observed_net_est_5d": -282099.89999930933,
+      "foreign_positive_days": 3,
+      "flow_data_ready": false,
+      "reading": "資料待核對",
+      "leaders": [
+        {
+          "stock_id": "2327",
+          "name": "國巨*",
+          "money": 22558357199.0,
+          "intraday_return": -0.022413793103448265,
+          "trust_net_est_5d": -1856391331.0,
+          "foreign_net_est_5d": 2147098424.0
+        },
+        {
+          "stock_id": "2308",
+          "name": "台達電",
+          "money": 11509936580.0,
+          "intraday_return": -0.029569892473118253,
+          "trust_net_est_5d": -2006259630.0,
+          "foreign_net_est_5d": -6871925520.0
+        },
+        {
+          "stock_id": "3026",
+          "name": "禾伸堂",
+          "money": 9027794980.0,
+          "intraday_return": -0.0040000000000000036,
+          "trust_net_est_5d": 424399000.0,
+          "foreign_net_est_5d": 1335891131.0
+        },
+        {
+          "stock_id": "2492",
+          "name": "華新科",
+          "money": 7992320153.0,
+          "intraday_return": 0.01757188498402562,
+          "trust_net_est_5d": -21091500.0,
+          "foreign_net_est_5d": 4429834172.0
+        },
+        {
+          "stock_id": "6173",
+          "name": "信昌電",
+          "money": 4746970536.0,
+          "intraday_return": -0.04035087719298247,
+          "trust_net_est_5d": 60902500.0,
+          "foreign_net_est_5d": 31371775.5
+        }
+      ],
+      "news_named_articles": 359
+    },
+    {
+      "name": "記憶體 IC",
+      "industry": "半導體",
+      "sub_industry": "記憶體IC",
+      "topic": "memory",
+      "available": true,
+      "excluded_provider_ids": [],
+      "missing_quote_ids": [],
+      "as_of": "2026-09-08",
+      "members": 6,
+      "quoted_members": 6,
+      "provider_traded_members": 6,
+      "member_coverage": 1.0,
+      "money_reconciliation_gap": 0.0,
+      "components_reconciled": true,
+      "today_money": 101425607328.0,
+      "today_share_pct": 9.3254,
+      "share_5d_pct": 7.316239999999999,
+      "share_previous20_pct": 8.50974,
+      "share_change_pp": -1.193500000000002,
+      "share_multiple": 0.859748946501303,
+      "intraday_up_fraction": 0.5,
+      "top1_share": 0.413383627257071,
+      "observed_money_ex_top1": 59497921874.0,
+      "trust_coverage": 1.0,
+      "trust_observed_stocks": 6,
+      "trust_observed_net_est_5d": -2907218935.0,
+      "trust_positive_days": 1,
+      "foreign_coverage": 1.0,
+      "foreign_observed_stocks": 6,
+      "foreign_observed_net_est_5d": 33150231207.5,
+      "foreign_positive_days": 3,
+      "flow_data_ready": true,
+      "reading": "成交占比未增加",
+      "leaders": [
+        {
+          "stock_id": "2344",
+          "name": "華邦電",
+          "money": 41927685454.0,
+          "intraday_return": 0.016216216216216273,
+          "trust_net_est_5d": -1172661201.0,
+          "foreign_net_est_5d": 25016921726.0
+        },
+        {
+          "stock_id": "2408",
+          "name": "南亞科",
+          "money": 40694980627.0,
+          "intraday_return": 0.007590132827324458,
+          "trust_net_est_5d": -1873222866.0,
+          "foreign_net_est_5d": 9498516414.0
+        },
+        {
+          "stock_id": "2337",
+          "name": "旺宏",
+          "money": 7502333504.0,
+          "intraday_return": 0.003984063745019917,
+          "trust_net_est_5d": -280557000.0,
+          "foreign_net_est_5d": 479411316.0
+        },
+        {
+          "stock_id": "3006",
+          "name": "晶豪科",
+          "money": 5389079212.0,
+          "intraday_return": 0.0,
+          "trust_net_est_5d": 25462000.0,
+          "foreign_net_est_5d": 369438538.5
+        },
+        {
+          "stock_id": "5351",
+          "name": "鈺創",
+          "money": 3643697217.0,
+          "intraday_return": -0.04878048780487809,
+          "trust_net_est_5d": -13810000.0,
+          "foreign_net_est_5d": -1309231926.0
+        }
+      ],
+      "news_named_articles": 81
+    },
+    {
+      "name": "光通訊設備",
+      "industry": "通信網路",
+      "sub_industry": "光通訊設備(如光纖電纜、光傳輸設備)",
+      "topic": "photonics",
+      "available": true,
+      "excluded_provider_ids": [
+        "3473",
+        "7917"
+      ],
+      "missing_quote_ids": [],
+      "as_of": "2026-09-08",
+      "members": 31,
+      "quoted_members": 31,
+      "provider_traded_members": 33,
+      "member_coverage": 0.9393939393939394,
+      "money_reconciliation_gap": 0.005411754303117244,
+      "components_reconciled": false,
+      "today_money": 22327683452.0,
+      "today_share_pct": 2.0529,
+      "share_5d_pct": 3.17596,
+      "share_previous20_pct": 2.9476,
+      "share_change_pp": 0.2283599999999999,
+      "share_multiple": 1.0774731985344008,
+      "intraday_up_fraction": 0.0967741935483871,
+      "top1_share": 0.5183056486969986,
+      "observed_money_ex_top1": 10696914935.0,
+      "trust_coverage": 0.9354838709677419,
+      "trust_observed_stocks": 29,
+      "trust_observed_net_est_5d": -699701741.95,
+      "trust_positive_days": 2,
+      "foreign_coverage": 0.9354838709677419,
+      "foreign_observed_stocks": 29,
+      "foreign_observed_net_est_5d": -8585587009.5,
+      "foreign_positive_days": 2,
+      "flow_data_ready": false,
+      "reading": "資料待核對",
+      "leaders": [
+        {
+          "stock_id": "2308",
+          "name": "台達電",
+          "money": 11509936580.0,
+          "intraday_return": -0.029569892473118253,
+          "trust_net_est_5d": -2006259630.0,
+          "foreign_net_est_5d": -6871925520.0
+        },
+        {
+          "stock_id": "6442",
+          "name": "光聖",
+          "money": 3200412730.0,
+          "intraday_return": -0.0058651026392961825,
+          "trust_net_est_5d": 1302485000.0,
+          "foreign_net_est_5d": -288443130.0
+        },
+        {
+          "stock_id": "3363",
+          "name": "上詮",
+          "money": 3106612041.0,
+          "intraday_return": -0.02335164835164838,
+          "trust_net_est_5d": -93210000.0,
+          "foreign_net_est_5d": -468833391.0
+        },
+        {
+          "stock_id": "3163",
+          "name": "波若威",
+          "money": 1754951713.0,
+          "intraday_return": -0.03968253968253965,
+          "trust_net_est_5d": 0.0,
+          "foreign_net_est_5d": -286218258.0
+        },
+        {
+          "stock_id": "7717",
+          "name": "萊德光電-KY",
+          "money": 746081018.0,
+          "intraday_return": -0.0557244174265451,
+          "trust_net_est_5d": 0.0,
+          "foreign_net_est_5d": 35988490.0
+        }
+      ],
+      "news_named_articles": 7
+    },
+    {
+      "name": "伺服器",
+      "industry": "電腦及週邊設備",
+      "sub_industry": "伺服器",
+      "topic": "ai_server",
+      "available": true,
+      "excluded_provider_ids": [
+        "6707",
+        "7841",
+        "7875"
+      ],
+      "missing_quote_ids": [],
+      "as_of": "2026-09-08",
+      "members": 21,
+      "quoted_members": 21,
+      "provider_traded_members": 24,
+      "member_coverage": 0.875,
+      "money_reconciliation_gap": 0.0023622782267096465,
+      "components_reconciled": false,
+      "today_money": 32302154817.0,
+      "today_share_pct": 2.97,
+      "share_5d_pct": 3.2901399999999996,
+      "share_previous20_pct": 3.4379150000000003,
+      "share_change_pp": -0.14777500000000066,
+      "share_multiple": 0.9570160984201178,
+      "intraday_up_fraction": 0.047619047619047616,
+      "top1_share": 0.3125371126381413,
+      "observed_money_ex_top1": 22258990627.0,
+      "trust_coverage": 0.9523809523809523,
+      "trust_observed_stocks": 20,
+      "trust_observed_net_est_5d": 5413704959.35,
+      "trust_positive_days": 5,
+      "foreign_coverage": 0.9523809523809523,
+      "foreign_observed_stocks": 20,
+      "foreign_observed_net_est_5d": -5093085182.65,
+      "foreign_positive_days": 2,
+      "flow_data_ready": false,
+      "reading": "資料待核對",
+      "leaders": [
+        {
+          "stock_id": "2317",
+          "name": "鴻海",
+          "money": 10119470867.0,
+          "intraday_return": -0.017578125,
+          "trust_net_est_5d": 288912353.0,
+          "foreign_net_est_5d": 61874196.5
+        },
+        {
+          "stock_id": "2301",
+          "name": "光寶科",
+          "money": 5547265273.0,
+          "intraday_return": -0.030000000000000027,
+          "trust_net_est_5d": 599155553.0,
+          "foreign_net_est_5d": -3472280725.0
+        },
+        {
+          "stock_id": "2357",
+          "name": "華碩",
+          "money": 4802028430.0,
+          "intraday_return": -0.024193548387096753,
+          "trust_net_est_5d": 3531175899.0,
+          "foreign_net_est_5d": -1420117775.0
+        },
+        {
+          "stock_id": "2324",
+          "name": "仁寶",
+          "money": 2732926627.0,
+          "intraday_return": -0.020075282308657627,
+          "trust_net_est_5d": -36493534.099999994,
+          "foreign_net_est_5d": -1239259729.5499995
+        },
+        {
+          "stock_id": "3693",
+          "name": "營邦",
+          "money": 2535179350.0,
+          "intraday_return": -0.029027576197387495,
+          "trust_net_est_5d": 0.0,
+          "foreign_net_est_5d": 1555835344.0
+        }
+      ],
+      "news_named_articles": 13
+    },
+    {
+      "name": "散熱元件／模組",
+      "industry": "電腦及週邊設備",
+      "sub_industry": "散熱片、風扇馬達、散熱模組",
+      "topic": "cooling",
+      "available": true,
+      "excluded_provider_ids": [
+        "7892",
+        "7896",
+        "7912",
+        "7929"
+      ],
+      "missing_quote_ids": [],
+      "as_of": "2026-09-08",
+      "members": 23,
+      "quoted_members": 23,
+      "provider_traded_members": 27,
+      "member_coverage": 0.8518518518518519,
+      "money_reconciliation_gap": 0.0033010233625311303,
+      "components_reconciled": false,
+      "today_money": 30685069409.0,
+      "today_share_pct": 2.8213,
+      "share_5d_pct": 3.7680600000000006,
+      "share_previous20_pct": 3.89304,
+      "share_change_pp": -0.12497999999999942,
+      "share_multiple": 0.9678965538499478,
+      "intraday_up_fraction": 0.13043478260869565,
+      "top1_share": 0.3763412372310044,
+      "observed_money_ex_top1": 19073840698.0,
+      "trust_coverage": 1.0,
+      "trust_observed_stocks": 23,
+      "trust_observed_net_est_5d": -2886139762.0,
+      "trust_positive_days": 3,
+      "foreign_coverage": 1.0,
+      "foreign_observed_stocks": 23,
+      "foreign_observed_net_est_5d": -2693954880.4,
+      "foreign_positive_days": 2,
+      "flow_data_ready": false,
+      "reading": "資料待核對",
+      "leaders": [
+        {
+          "stock_id": "2308",
+          "name": "台達電",
+          "money": 11509936580.0,
+          "intraday_return": -0.029569892473118253,
+          "trust_net_est_5d": -2006259630.0,
+          "foreign_net_est_5d": -6871925520.0
+        },
+        {
+          "stock_id": "3017",
+          "name": "奇鋐",
+          "money": 11125560060.0,
+          "intraday_return": -0.04920405209840806,
+          "trust_net_est_5d": 167010.0,
+          "foreign_net_est_5d": 2499525520.0
+        },
+        {
+          "stock_id": "3324",
+          "name": "雙鴻",
+          "money": 3085069590.0,
+          "intraday_return": -0.05964912280701751,
+          "trust_net_est_5d": -1115055000.0,
+          "foreign_net_est_5d": 2855822955.0
+        },
+        {
+          "stock_id": "2376",
+          "name": "技嘉",
+          "money": 2273309994.0,
+          "intraday_return": -0.020576131687242816,
+          "trust_net_est_5d": 463365058.0,
+          "foreign_net_est_5d": -910488900.5
+        },
+        {
+          "stock_id": "2354",
+          "name": "鴻準",
+          "money": 1061877119.0,
+          "intraday_return": -0.025679758308157163,
+          "trust_net_est_5d": -2221700.0,
+          "foreign_net_est_5d": 264340349.79999995
+        }
+      ],
+      "news_named_articles": 26
+    },
+    {
+      "name": "無線通訊（含衛星，非純低軌）",
+      "industry": "通信網路",
+      "sub_industry": "無線通訊設備(如行動電話、衛星定位系統、衛星通訊設備、微波通訊設備、數位機上盒)",
+      "topic": "leo",
+      "available": true,
+      "excluded_provider_ids": [
+        "3473",
+        "6403",
+        "6514",
+        "6648"
+      ],
+      "missing_quote_ids": [],
+      "as_of": "2026-09-08",
+      "members": 49,
+      "quoted_members": 49,
+      "provider_traded_members": 51,
+      "member_coverage": 0.9607843137254902,
+      "money_reconciliation_gap": 0.0019235415543485956,
+      "components_reconciled": true,
+      "today_money": 41559067346.0,
+      "today_share_pct": 3.8211,
+      "share_5d_pct": 4.712020000000001,
+      "share_previous20_pct": 5.193560000000001,
+      "share_change_pp": -0.48153999999999986,
+      "share_multiple": 0.9072813253336826,
+      "intraday_up_fraction": 0.1836734693877551,
+      "top1_share": 0.27642196943937136,
+      "observed_money_ex_top1": 30129071359.0,
+      "trust_coverage": 0.8775510204081632,
+      "trust_observed_stocks": 43,
+      "trust_observed_net_est_5d": 3940315733.2,
+      "trust_positive_days": 4,
+      "foreign_coverage": 0.8775510204081632,
+      "foreign_observed_stocks": 43,
+      "foreign_observed_net_est_5d": -16794023278.150002,
+      "foreign_positive_days": 1,
+      "flow_data_ready": false,
+      "reading": "資料待核對",
+      "leaders": [
+        {
+          "stock_id": "2308",
+          "name": "台達電",
+          "money": 11509936580.0,
+          "intraday_return": -0.029569892473118253,
+          "trust_net_est_5d": -2006259630.0,
+          "foreign_net_est_5d": -6871925520.0
+        },
+        {
+          "stock_id": "2317",
+          "name": "鴻海",
+          "money": 10119470867.0,
+          "intraday_return": -0.017578125,
+          "trust_net_est_5d": 288912353.0,
+          "foreign_net_est_5d": 61874196.5
+        },
+        {
+          "stock_id": "2301",
+          "name": "光寶科",
+          "money": 5547265273.0,
+          "intraday_return": -0.030000000000000027,
+          "trust_net_est_5d": 599155553.0,
+          "foreign_net_est_5d": -3472280725.0
+        },
+        {
+          "stock_id": "2357",
+          "name": "華碩",
+          "money": 4802028430.0,
+          "intraday_return": -0.024193548387096753,
+          "trust_net_est_5d": 3531175899.0,
+          "foreign_net_est_5d": -1420117775.0
+        },
+        {
+          "stock_id": "2324",
+          "name": "仁寶",
+          "money": 2732926627.0,
+          "intraday_return": -0.020075282308657627,
+          "trust_net_est_5d": -36493534.099999994,
+          "foreign_net_est_5d": -1239259729.5499995
+        }
+      ],
+      "news_named_articles": 20
+    }
+  ],
+  "initial_collection": {
+    "valid_snapshot_requests": 32,
+    "additional_members_probe": 1,
+    "offline_replay_requests": 0,
+    "offline_seconds": 1.427
+  }
+}

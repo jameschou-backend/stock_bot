@@ -66,6 +66,13 @@ def get_news_research(mode:Literal['scan','review']='scan',limit:int=50) -> dict
 
 
 @mcp.tool(annotations=READ)
+def get_chain_flow_research(limit:int=60) -> dict:
+    """Read completed sector turnover, breadth and estimated investor activity. No fetch or trades."""
+    if not 1<=limit<=80: raise ValueError('limit must be 1..80')
+    return get('chain-flow',{'limit':limit})
+
+
+@mcp.tool(annotations=READ)
 def get_trade_review(account_id:Literal['paper','real']='paper') -> dict:
     """Read user-reported executions for fee, sizing and exit reviews."""
     book=get('portfolio',{'account_id':account_id})

@@ -71,7 +71,7 @@ def render():
         st.warning(f"FinMind 暫停請求，約 {quota['retry_after_seconds']/60:.0f} 分鐘後可重試；已取得的資料仍可查看。")
     if status['problems']:
         st.warning('；'.join(status['problems']))
-    today,holdings,news,research=st.tabs(['今日觀察','持倉與成交','新聞與題材','策略驗證'])
+    today,holdings,news,flow,research=st.tabs(['今日觀察','持倉與成交','新聞與題材','族群資金','策略驗證'])
     with today:
         st.subheader('先挑值得研究的股票')
         st.caption('排名是模型排序，不是上漲機率。目前名單供研究與紙上追蹤。')
@@ -135,6 +135,8 @@ def render():
         render_research(status)
     with news:
         render_news_research()
+    with flow:
+        render_chain_flow()
     st.divider()
     render_jobs()
 
@@ -353,6 +355,63 @@ def render_news_research():
                        file_name=f'news-{mode}.json',mime='application/json',key=f'news_download_{mode}')
 
 
+def render_chain_flow():
+    from app.chain_flow_research import overview
+    st.subheader('題材有熱度，資金有跟上嗎？')
+    st.caption('先看成交占比是否增加，再看法人方向、收紅家數與龍頭集中度。成交金額不等於淨流入。')
+    a,b=st.columns(2)
+    update=a.button('更新族群資金',type='primary')
+    offline=b.button('只重算族群快取')
+    st.caption('初次最多 32 次請求；後續新增交易日通常約 3 次。已取得的歷史日快照保留，開頁面不抓資料。')
+    if update or offline:
+        try:
+            job=jobs.submit(jobs.WorkRequest(kind='chain_flow',fetch_flow=update))
+            st.success(f"族群研究 {job['job_id'][:8]} 已啟動；完成後按頁首「重新整理」。")
+        except (ValueError,TimeoutError) as exc: st.warning(str(exc))
+    report=overview()
+    if not report['available']:
+        st.info(report['note']);return
+    st.write(f"**資料截至 {report['as_of']}** · 分析 {report['elapsed_seconds']:.2f} 秒")
+    st.caption(f"近 5 日 {report['recent_start']}～{report['as_of']}，對照自 {report['start']} 起的前 20 日。產業鏈成分更新至 {report['members_update_max']}。")
+    if (datetime.now(ZoneInfo('Asia/Taipei')).date()-date.fromisoformat(report['as_of'])).days>3:
+        st.warning('這份族群資料已超過 3 個日曆日，請更新確認。')
+    st.info('供應商部分產業鏈含興櫃；下方公司與法人只分析本機上市櫃普通股。成分或金額覆蓋不足時標示「資料待核對」，不能解讀成沒有資金。')
+    focus=st.checkbox('先看記憶體、被動元件、光通訊、伺服器、散熱與衛星相關',value=True)
+    groups=[g for g in report['groups'] if g['available'] and (not focus or g.get('topic') or g['name']=='被動元件')]
+    rows=[]
+    for g in groups:
+        rows.append({'族群':g['name'],'近5日成交占比':f"{g['share_5d_pct']:.2f}%",
+                     '前20日':f"{g['share_previous20_pct']:.2f}%",'占比變化':f"{g['share_change_pp']:+.2f} 個百分點",
+                     '當日收紅':percent(g['intraday_up_fraction']),'最大一檔占比':percent(g['top1_share']),
+                     '判讀':g['reading']})
+    st.dataframe(pd.DataFrame(rows),hide_index=True,use_container_width=True)
+    if not groups: return
+    chosen=st.selectbox('查看族群資金細節',[g['name'] for g in groups])
+    g=next(x for x in groups if x['name']==chosen)
+    a,b,c=st.columns(3)
+    def estimated_cash(value):
+        if value is None: return '資料不足'
+        return f'{value/1e4:+,.1f} 萬' if abs(value)<1e8 else f'{value/1e8:+,.1f} 億'
+    a.metric('當日族群成交額',f"{g['today_money']/1e8:,.1f} 億")
+    b.metric('投信近5日估計買賣超',estimated_cash(g['trust_observed_net_est_5d']))
+    c.metric('外資近5日估計買賣超',estimated_cash(g['foreign_observed_net_est_5d']))
+    st.caption(f"法人數值只含五日完整成分，按淨股數 × 當日收盤價估算；投信覆蓋 {percent(g['trust_coverage'])}，外資覆蓋 {percent(g['foreign_coverage'])}。正值偏買，負值偏賣。")
+    gap='未知' if g['money_reconciliation_gap'] is None else f"{g['money_reconciliation_gap']:.2%}"
+    st.caption(f"當日行情涵蓋 {g['quoted_members']}/{g['provider_traded_members']} 家；成交金額對帳差異 {gap}。收紅指收盤高於開盤。")
+    st.line_chart(pd.DataFrame(g['share_history']).set_index('date').rename(columns={'share_pct':'成交占比 (%)'}))
+    st.write('**成交最多的成分股**')
+    leaders=[{'代號':x['stock_id'],'公司':x['name'],'成交額（億）':round(x['money']/1e8,2),
+              '開盤至收盤':percent(x['intraday_return'])} for x in g['leaders']]
+    st.dataframe(pd.DataFrame(leaders),hide_index=True,use_container_width=True)
+    st.caption(f"目前保存的新聞中，日期不晚於 {report['as_of']}、符合對應題材且標題點名成分股的文章有 {g['news_named_articles']} 篇。新聞分析時間：{report['news_analyzed_at'] or '尚無分析'}。一般產業總計未加題材詞篩選。")
+    with st.expander('計算口徑與缺漏'):
+        for note in report['limitations']: st.write('• '+note)
+        st.write('供應商成分中未納入本機上市櫃普通股：'+'、'.join(g['excluded_provider_ids']))
+        st.write('本機成分缺當日有效行情：'+'、'.join(g['missing_quote_ids']))
+    st.download_button('下載族群資金研究',__import__('json').dumps(report,ensure_ascii=False),
+                       file_name='chain-flow-research.json',mime='application/json')
+
+
 def render_theme_research():
     st.subheader('題材出現之後，買進能贏 0050 嗎？')
     report=service.theme_research_overview()
@@ -522,13 +581,15 @@ def render_jobs():
     labels={'queued':'準備中','running':'執行中','completed':'已完成','failed':'未完成'}
     if not running: st.caption('尚未從工作台啟動工作。')
     for job in running:
-        kind_names={'update_data':'資料更新','backtest':'策略回測','news_scan':'新聞題材','news_review':'歷史新聞判讀'}
+        kind_names={'update_data':'資料更新','backtest':'策略回測','news_scan':'新聞題材','news_review':'歷史新聞判讀','chain_flow':'族群資金研究'}
         with st.expander(f"{labels[job['status']]} · {kind_names.get(job['request']['kind'],'研究工作')} · {job['job_id'][:8]}",expanded=job['status'] in ('running','failed')):
             st.write(job['message'])
             if job.get('elapsed_seconds') is not None: st.caption(f"執行耗時 {job['elapsed_seconds']:.1f} 秒")
             summary=job.get('summary')
             if summary and job['request']['kind'] in ('news_scan','news_review'):
                 st.write(f"去重後 {summary.get('unique_articles',0):,} 篇；合併 {summary.get('duplicates_collapsed',0):,} 筆重複列。")
+            elif summary and job['request']['kind']=='chain_flow':
+                st.write(f"已整理 {summary.get('groups',0)} 組產業鏈與子產業。")
             elif summary:
                 c=st.columns(3)
                 c[0].metric('回測累積報酬',percent(summary.get('total_return')))

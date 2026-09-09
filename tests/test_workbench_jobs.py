@@ -56,3 +56,7 @@ def test_news_jobs_have_explicit_network_scope_and_json_safe_dates(tmp_path):
     with pytest.raises(ValueError): jobs.WorkRequest(kind='news_scan',news_days=366,fetch_news=True)
     with pytest.raises(ValueError): jobs.WorkRequest(kind='news_review',fetch_news=True)
     with pytest.raises(ValueError): jobs.WorkRequest(kind='news_review',news_stock_id='../../.env')
+    flow=jobs.command_for(jobs.WorkRequest(kind='chain_flow'),tmp_path/'flow.json')
+    assert 'scripts/research_chain_flow.py' in flow and '--fetch' not in flow
+    assert '--fetch' in jobs.command_for(jobs.WorkRequest(kind='chain_flow',fetch_flow=True),tmp_path/'flow.json')
+    with pytest.raises(ValueError): jobs.WorkRequest(kind='backtest',fetch_flow=True)
