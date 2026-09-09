@@ -1,0 +1,1709 @@
+{
+  "schema": 1,
+  "experiment": "flow_20260909",
+  "research_only": true,
+  "live_qualified": false,
+  "offline": true,
+  "source": {
+    "schema": 1,
+    "prepared_at": "2026-09-09T02:28:04.278212+00:00",
+    "finmind_requests": 0,
+    "official_sources": {
+      "twse-company.json": "https://openapi.twse.com.tw/v1/opendata/t187ap03_L",
+      "tpex-company.json": "https://www.tpex.org.tw/openapi/v1/mopsfin_t187ap03_O"
+    },
+    "original_prices_sha256": {
+      "artifacts/adj_prices/adj_prices_10y.parquet": "6ec08ce7357b8d838b3d6c578bad356e8e0439fa2ce98b7565294da91ac6758f",
+      "artifacts/cache/prices.parquet": "90ca87496a4ac909474a9224d28368c2ec99a5b3e1362051ea12255a6887ea45",
+      ".cache/rule-research/0050-raw.parquet": "abcd30c42c924f11d730de538fae14180449b59fb2ce9db19b1e60a4b4d1c40a",
+      ".cache/rule-research/raw-20260521.parquet": "5c3077b97ed3502ed2cb83ec47fa1d9ea613642c00173b6fec65744c57260af9",
+      ".cache/rule-research/raw-20260522.parquet": "1b0a1ee10aa6531793e2ff8ebdd7e181a1e9df8c29f5e2bbc84ed7e2cf44139d"
+    },
+    "files_sha256": {
+      "twse-company.json": "9aa77dcc281ebf6cf1182c8664106c6cbe3c8b9b57080f1a5c97ce8db566ac49",
+      "tpex-company.json": "318bc4f08085509f2d2fe90b404208d373357b9838226415c7aee753a106936d",
+      "companies.parquet": "5fbbd42a22d2e0c08e1c072d61d43347eecd380fc257f61d5d01a575fc4f1768",
+      "quotes.parquet": "2d3d5b6f0d8b743504d0367356631119d00aefdf1c801cc4daf3f859083a22de",
+      "institutional.parquet": "2dfbd3ef2eb0c24fbcd799e200f961b83e849a9c980d76ee93e6b240886633cb"
+    },
+    "universe": "current_official_cohort_with_listing_date_mask_not_historical_universe",
+    "last_date": "2026-06-23",
+    "quote_rows": 4489978,
+    "official_companies": 1974,
+    "stocks_with_quotes": 1972,
+    "official_companies_without_quotes": [
+      "3718",
+      "7835"
+    ],
+    "prelisting_quotes_masked": 258657,
+    "minimum_daily_raw_coverage": 0.9943877551020408,
+    "institutional_snapshot_rows": 3651119,
+    "institutional_observed_fraction": 0.8586057844764982,
+    "complete_20day_institution_fraction": 0.6697018847659183,
+    "institutional_coverage_by_year_market": [
+      {
+        "year": 2016,
+        "market": "TPEX",
+        "quoted_stock_days": 140949,
+        "observed_fraction": 0.6459499535292907,
+        "complete_20day_fraction": 0.2691824702551987
+      },
+      {
+        "year": 2017,
+        "market": "TPEX",
+        "quoted_stock_days": 162666,
+        "observed_fraction": 0.6601563940835823,
+        "complete_20day_fraction": 0.3292759396554904
+      },
+      {
+        "year": 2018,
+        "market": "TPEX",
+        "quoted_stock_days": 170168,
+        "observed_fraction": 0.6126063654741197,
+        "complete_20day_fraction": 0.3544027079121809
+      },
+      {
+        "year": 2019,
+        "market": "TPEX",
+        "quoted_stock_days": 172880,
+        "observed_fraction": 0.6135527533549283,
+        "complete_20day_fraction": 0.32033780657103195
+      },
+      {
+        "year": 2020,
+        "market": "TPEX",
+        "quoted_stock_days": 178718,
+        "observed_fraction": 0.6724616434830292,
+        "complete_20day_fraction": 0.42823330610235116
+      },
+      {
+        "year": 2021,
+        "market": "TPEX",
+        "quoted_stock_days": 182497,
+        "observed_fraction": 0.7782045732258612,
+        "complete_20day_fraction": 0.5545570612119651
+      },
+      {
+        "year": 2022,
+        "market": "TPEX",
+        "quoted_stock_days": 188313,
+        "observed_fraction": 0.8010811786759279,
+        "complete_20day_fraction": 0.576996808504989
+      },
+      {
+        "year": 2023,
+        "market": "TPEX",
+        "quoted_stock_days": 187730,
+        "observed_fraction": 0.8326799126404943,
+        "complete_20day_fraction": 0.6117615724711021
+      },
+      {
+        "year": 2024,
+        "market": "TPEX",
+        "quoted_stock_days": 195651,
+        "observed_fraction": 0.9030211959049532,
+        "complete_20day_fraction": 0.7239983439900639
+      },
+      {
+        "year": 2025,
+        "market": "TPEX",
+        "quoted_stock_days": 204898,
+        "observed_fraction": 0.8635028160352957,
+        "complete_20day_fraction": 0.653730148659333
+      },
+      {
+        "year": 2026,
+        "market": "TPEX",
+        "quoted_stock_days": 97203,
+        "observed_fraction": 0.8890672098597779,
+        "complete_20day_fraction": 0.666594652428423
+      },
+      {
+        "year": 2016,
+        "market": "TWSE",
+        "quoted_stock_days": 180998,
+        "observed_fraction": 0.891783334622482,
+        "complete_20day_fraction": 0.6042276710239892
+      },
+      {
+        "year": 2017,
+        "market": "TWSE",
+        "quoted_stock_days": 207994,
+        "observed_fraction": 0.8806119407290595,
+        "complete_20day_fraction": 0.6310951277440695
+      },
+      {
+        "year": 2018,
+        "market": "TWSE",
+        "quoted_stock_days": 214758,
+        "observed_fraction": 0.8926140120507734,
+        "complete_20day_fraction": 0.6965281852131237
+      },
+      {
+        "year": 2019,
+        "market": "TWSE",
+        "quoted_stock_days": 216272,
+        "observed_fraction": 0.8969723311385662,
+        "complete_20day_fraction": 0.6841015018125324
+      },
+      {
+        "year": 2020,
+        "market": "TWSE",
+        "quoted_stock_days": 222789,
+        "observed_fraction": 0.9538442203160838,
+        "complete_20day_fraction": 0.8145599648097527
+      },
+      {
+        "year": 2021,
+        "market": "TWSE",
+        "quoted_stock_days": 226068,
+        "observed_fraction": 0.9683811950386609,
+        "complete_20day_fraction": 0.8881354282782171
+      },
+      {
+        "year": 2022,
+        "market": "TWSE",
+        "quoted_stock_days": 233127,
+        "observed_fraction": 0.968613674091804,
+        "complete_20day_fraction": 0.8753726509584905
+      },
+      {
+        "year": 2023,
+        "market": "TWSE",
+        "quoted_stock_days": 231116,
+        "observed_fraction": 0.9697035255023452,
+        "complete_20day_fraction": 0.8771828865158622
+      },
+      {
+        "year": 2024,
+        "market": "TWSE",
+        "quoted_stock_days": 243011,
+        "observed_fraction": 0.9823259029426652,
+        "complete_20day_fraction": 0.9272172864602837
+      },
+      {
+        "year": 2025,
+        "market": "TWSE",
+        "quoted_stock_days": 252471,
+        "observed_fraction": 0.974864439876263,
+        "complete_20day_fraction": 0.8941106107236079
+      },
+      {
+        "year": 2026,
+        "market": "TWSE",
+        "quoted_stock_days": 118524,
+        "observed_fraction": 0.9810165029867368,
+        "complete_20day_fraction": 0.8852806182714049
+      }
+    ],
+    "trust_net_exceeds_daily_volume_rows": 0,
+    "price_candidates_on_signal_dates": 9712,
+    "price_candidates_missing_20day_institution": 154
+  },
+  "preregistration": "docs/prereg_flow_20260909.md",
+  "preregistration_sha256": "fa714cb1169cffacf4b90defccfdd367d39755c9c5b8b1fce86ebd01f9be6d83",
+  "git_revision": "2dede16763056e1fc6548d2afd548be0cbd594ad",
+  "code_sha256": {
+    "scripts/research_flow.py": "eae2aa6a8dacc5ba5b9732771672960325393949f8db4f60bd728e91a7aebbe3",
+    "skills/flow_research.py": "ff10491b3859ccc299ebaacbbd121ac8384a2a75c78c91f386c8b57e3158cd57",
+    "skills/rule_research.py": "1789693c6575abcd94bade9ddeced1d94b6cd4a9ca9d43d4153cb1e250913cbc"
+  },
+  "load_seconds": 3.325,
+  "elapsed_seconds": 7.148,
+  "limitations": [
+    "當前公司名冊仍有存活者偏差；轉板前期間排除，未重建完整歷史股票池",
+    "還原價尚未完成官方對帳，不可當作可實現績效",
+    "歷史已被研究使用，不是全新樣本外；重疊滾動窗不是獨立樣本",
+    "本輪只有價量與投信，不含營收、獲利或產品出貨事件",
+    "合成還原單位，不含最低手續費、交易單位及個人資金容量",
+    "法人歷史修正版本與可交易性僅近似，缺資料不視為零買超"
+  ],
+  "results": [
+    {
+      "rule": "price",
+      "name": "價格強勢",
+      "scenario": "base",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.9098899429470175,
+        "annualized_return": 0.08241168784905417,
+        "max_drawdown": -0.5846986660565516,
+        "sharpe": 0.36195629237586086,
+        "trades": 1828,
+        "traded_notional_initial_equity": 158.07614358625162,
+        "fees_initial_equity": 0.9393750482353106,
+        "average_positions": 9.8300145701797,
+        "blocked_orders": 14,
+        "missing_hold_days": 20,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.2836706288134373,
+          "2019": 0.053577686351757636,
+          "2020": 0.3147459366973482,
+          "2021": 0.07449052648221977,
+          "2022": -0.4426935383886712,
+          "2023": 0.6512210131944336,
+          "2024": 0.4168697632581351,
+          "2025": -0.26287333683137515,
+          "2026": 0.8638598484582132
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.938394875503186,
+        "annualized_return": 0.26753884585617693,
+        "max_drawdown": -0.3395700389898997,
+        "sharpe": 1.1691524792598902,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.971835477197593,
+        "fees_initial_equity": 0.0422516129694345,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.058729006277561946,
+          "2019": 0.3352114323880606,
+          "2020": 0.31139038841840616,
+          "2021": 0.21923261901640534,
+          "2022": -0.21374672059807853,
+          "2023": 0.27515202649049764,
+          "2024": 0.48643994751679953,
+          "2025": 0.36866129972979667,
+          "2026": 0.6928089029714732
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.40582027384189157,
+            "annualized_return": -0.10163324768095905,
+            "max_drawdown": -0.5846986660565516,
+            "sharpe": -0.10772475287073012
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5799587817060761,
+            "annualized_return": 0.09874688257950881,
+            "max_drawdown": -0.3395700389898997,
+            "sharpe": 0.5133776708992601
+          },
+          "excess_return": -0.9857790555479676
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.7245558346321381,
+            "annualized_return": 0.20886938118211473,
+            "max_drawdown": -0.42380924878903836,
+            "sharpe": 0.6540897317598217
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.5942111466201334,
+            "annualized_return": 0.39348179596289956,
+            "max_drawdown": -0.2748498955400812,
+            "sharpe": 1.5523120877186856
+          },
+          "excess_return": -0.8696553119879953
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.8638598484582132,
+            "annualized_return": 3.1106563229644593,
+            "max_drawdown": -0.1985530986117907,
+            "sharpe": 2.6547585043054154
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6928089029714732,
+            "annualized_return": 2.3037090810844107,
+            "max_drawdown": -0.10844115834873713,
+            "sharpe": 3.99888441756175
+          },
+          "excess_return": 0.17105094548673994
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.252212389380531,
+          "median_excess": -0.1763029342335713
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.08665644171779141,
+          "median_excess": -0.4728373836363827
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.016143229493767775,
+        "annual_one_way_turnover_using_end_day_nav": 10.166799266116511,
+        "top_profit_stocks": [
+          {
+            "stock_id": "5314",
+            "name": "世紀*",
+            "pnl_initial_equity": 0.20084078620024906
+          },
+          {
+            "stock_id": "8937",
+            "name": "合騏*",
+            "pnl_initial_equity": 0.1487407771977663
+          },
+          {
+            "stock_id": "6150",
+            "name": "撼訊",
+            "pnl_initial_equity": 0.12575734161306257
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.08338199419628532,
+        "per_stock_pnl_sum": 0.90988994294703,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "28": 0.6540310276920303,
+          "31": 0.4523722851349392,
+          "25": 0.5047687210390917,
+          "05": 0.3163593108072966,
+          "26": 0.5295603771896837,
+          "22": 0.8370659491423632,
+          "10": 0.3476021062678606,
+          "24": 0.744223118210253,
+          "27": 0.4958363868169815,
+          "29": 0.20854692177902814,
+          "36": 0.12404696932859059,
+          "35": 0.13745433982747093,
+          "14": 0.31129722294817835,
+          "32": 0.22112487346357512,
+          "15": 0.697861257476324,
+          "21": 0.19614541585268763,
+          "37": 0.1573606401407219,
+          "30": 0.41555528251137525,
+          "09": 0.10169079299266118,
+          "04": 0.11852134146416987,
+          "18": 0.12521190199799986,
+          "12": 0.20462075285502968,
+          "16": 0.3764677570512955,
+          "02": 0.20740860730015953,
+          "20": 0.2336314944615314,
+          "38": 0.12943521795438925,
+          "03": 0.15009514651151118,
+          "33": 0.1309909427616618,
+          "06": 0.15603237599998834,
+          "11": 0.19754303256107436,
+          "17": 0.40957225160654065,
+          "23": 0.10625372256775287
+        }
+      }
+    },
+    {
+      "rule": "trust",
+      "name": "價格強勢＋投信",
+      "scenario": "base",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.49401555756627236,
+        "annualized_return": 0.05036257112237719,
+        "max_drawdown": -0.3741196431099837,
+        "sharpe": 0.26262397740688487,
+        "trades": 1707,
+        "traded_notional_initial_equity": 152.3564299812733,
+        "fees_initial_equity": 0.9048100861045532,
+        "average_positions": 8.99125789218067,
+        "blocked_orders": 3,
+        "missing_hold_days": 0,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.2517589723928948,
+          "2019": 0.15265859035474283,
+          "2020": 0.0024769370598243245,
+          "2021": 0.17581030375299167,
+          "2022": -0.2687027937151848,
+          "2023": 0.6054337618652441,
+          "2024": -0.016756266100100725,
+          "2025": -0.09894790448584889,
+          "2026": 0.41287540346243246
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.938394875503186,
+        "annualized_return": 0.26753884585617693,
+        "max_drawdown": -0.3395700389898997,
+        "sharpe": 1.1691524792598902,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.971835477197593,
+        "fees_initial_equity": 0.0422516129694345,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.058729006277561946,
+          "2019": 0.3352114323880606,
+          "2020": 0.31139038841840616,
+          "2021": 0.21923261901640534,
+          "2022": -0.21374672059807853,
+          "2023": 0.27515202649049764,
+          "2024": 0.48643994751679953,
+          "2025": 0.36866129972979667,
+          "2026": 0.6928089029714732
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.25655683152543596,
+            "annualized_return": -0.059211090703155,
+            "max_drawdown": -0.361005195045749,
+            "sharpe": -0.1600869206310545
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5799587817060761,
+            "annualized_return": 0.09874688257950881,
+            "max_drawdown": -0.3395700389898997,
+            "sharpe": 0.5133776708992601
+          },
+          "excess_return": -0.836515613231512
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.4223401850492643,
+            "annualized_return": 0.13046040358089406,
+            "max_drawdown": -0.374119643109982,
+            "sharpe": 0.544353545257972
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.5942111466201334,
+            "annualized_return": 0.39348179596289956,
+            "max_drawdown": -0.2748498955400812,
+            "sharpe": 1.5523120877186856
+          },
+          "excess_return": -1.1718709615708691
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.41287540346243246,
+            "annualized_return": 1.1916759465536764,
+            "max_drawdown": -0.1461131009510237,
+            "sharpe": 1.8359057201069189
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6928089029714732,
+            "annualized_return": 2.3037090810844107,
+            "max_drawdown": -0.10844115834873713,
+            "sharpe": 3.99888441756175
+          },
+          "excess_return": -0.2799334995090408
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.25663716814159293,
+          "median_excess": -0.1534355903872363
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.10812883435582822,
+          "median_excess": -0.5230937457549057
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.0990184092451686,
+        "annual_one_way_turnover_using_end_day_nav": 9.743578044306467,
+        "top_profit_stocks": [
+          {
+            "stock_id": "2383",
+            "name": "台光電",
+            "pnl_initial_equity": 0.1307008377561012
+          },
+          {
+            "stock_id": "3163",
+            "name": "波若威",
+            "pnl_initial_equity": 0.09625038402514742
+          },
+          {
+            "stock_id": "3030",
+            "name": "德律",
+            "pnl_initial_equity": 0.08914926278841338
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.10938484044933361,
+        "per_stock_pnl_sum": 0.4940155575662761,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "31": 0.3464831745901759,
+          "22": 0.3187288469667644,
+          "28": 0.5642906597167616,
+          "24": 0.7112051382511946,
+          "08": 0.11807959985029315,
+          "26": 0.23607177889083536,
+          "03": 0.19958195004065288,
+          "16": 0.30285844946203055,
+          "27": 0.41332340975019477,
+          "25": 0.5053659837385285,
+          "05": 0.22584463906237345,
+          "17": 0.6283906654820984,
+          "29": 0.4974683301375979,
+          "20": 0.11796152761034169,
+          "02": 0.21037119929342163,
+          "01": 0.20443246550429472,
+          "14": 0.4007104478144852,
+          "32": 0.2312924855930798,
+          "21": 0.12485252573643438,
+          "37": 0.30358159333047874,
+          "18": 0.11826666951690795,
+          "04": 0.10922421370264497,
+          "10": 0.3304677067042843,
+          "09": 0.12478297308028945,
+          "15": 0.3275924858338977,
+          "23": 0.10210034108620268,
+          "30": 0.12967141991583447,
+          "12": 0.22097150253735753,
+          "11": 0.21039504380458704,
+          "36": 0.13792409685497545,
+          "38": 0.10924617623818887,
+          "35": 0.1276300567862611,
+          "06": 0.11173230184379988
+        }
+      }
+    },
+    {
+      "rule": "volume",
+      "name": "價格強勢＋放量",
+      "scenario": "base",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.09259746319796291,
+        "annualized_return": 0.010897502348806265,
+        "max_drawdown": -0.577111050203486,
+        "sharpe": 0.1312517027735793,
+        "trades": 1412,
+        "traded_notional_initial_equity": 102.61131572437763,
+        "fees_initial_equity": 0.6090244785795991,
+        "average_positions": 6.928606119475473,
+        "blocked_orders": 5,
+        "missing_hold_days": 6,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.2143373058892425,
+          "2019": 0.015524054956302491,
+          "2020": 0.015143371143009565,
+          "2021": -0.18960400533923327,
+          "2022": -0.32963549689913674,
+          "2023": 0.17561009533923166,
+          "2024": 0.545615675672088,
+          "2025": -0.05166533859562872,
+          "2026": 0.4410256708767166
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.938394875503186,
+        "annualized_return": 0.26753884585617693,
+        "max_drawdown": -0.3395700389898997,
+        "sharpe": 1.1691524792598902,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.971835477197593,
+        "fees_initial_equity": 0.0422516129694345,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.058729006277561946,
+          "2019": 0.3352114323880606,
+          "2020": 0.31139038841840616,
+          "2021": 0.21923261901640534,
+          "2022": -0.21374672059807853,
+          "2023": 0.27515202649049764,
+          "2024": 0.48643994751679953,
+          "2025": 0.36866129972979667,
+          "2026": 0.6928089029714732
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.5599905280391979,
+            "annualized_return": -0.15550881064389188,
+            "max_drawdown": -0.5766072678834198,
+            "sharpe": -0.5626870229379234
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5799587817060761,
+            "annualized_return": 0.09874688257950881,
+            "max_drawdown": -0.3395700389898997,
+            "sharpe": 0.5133776708992601
+          },
+          "excess_return": -1.139949309745274
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.723163333083265,
+            "annualized_return": 0.20852954147316294,
+            "max_drawdown": -0.3222702456762828,
+            "sharpe": 0.7365023571270936
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.5942111466201334,
+            "annualized_return": 0.39348179596289956,
+            "max_drawdown": -0.2748498955400812,
+            "sharpe": 1.5523120877186856
+          },
+          "excess_return": -0.8710478135368684
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.4410256708767166,
+            "annualized_return": 1.2920689770564868,
+            "max_drawdown": -0.21250437371341435,
+            "sharpe": 2.017122861369189
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6928089029714732,
+            "annualized_return": 2.3037090810844107,
+            "max_drawdown": -0.10844115834873713,
+            "sharpe": 3.99888441756175
+          },
+          "excess_return": -0.2517832320947566
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.0790929203539823,
+          "median_excess": -0.22102966861552387
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.0,
+          "median_excess": -0.7703431885484988
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.304667501675296,
+        "annual_one_way_turnover_using_end_day_nav": 8.652695315602031,
+        "top_profit_stocks": [
+          {
+            "stock_id": "2038",
+            "name": "海光",
+            "pnl_initial_equity": 0.0780096802006642
+          },
+          {
+            "stock_id": "4743",
+            "name": "合一",
+            "pnl_initial_equity": 0.07476614292288149
+          },
+          {
+            "stock_id": "3081",
+            "name": "聯亞",
+            "pnl_initial_equity": 0.07199693555290716
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.0739728161090217,
+        "per_stock_pnl_sum": 0.09259746319794657,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "28": 0.5411086749309537,
+          "37": 0.19141442601835423,
+          "10": 0.36733420034264375,
+          "05": 0.3799474780934684,
+          "24": 0.5661103422270007,
+          "25": 0.4052044006465652,
+          "30": 0.20211376874828724,
+          "21": 0.3033926239198863,
+          "26": 0.39768822428042544,
+          "22": 0.37978842695164566,
+          "35": 0.20355100470320575,
+          "14": 0.5079713847267314,
+          "31": 0.4221552348352707,
+          "29": 0.14847455332785203,
+          "16": 0.13660979017351407,
+          "02": 0.20157051546880844,
+          "01": 0.11449909970733625,
+          "04": 0.20741295062424553,
+          "20": 0.2136834498188227,
+          "17": 0.41514600838520965,
+          "27": 0.37284932742066695,
+          "15": 0.6993547873513815,
+          "18": 0.1179720165575705,
+          "03": 0.12491541013029452,
+          "12": 0.24150889474733594,
+          "32": 0.11385535455389338,
+          "36": 0.11221281365973443,
+          "33": 0.10106344004790407,
+          "09": 0.10284782079067539,
+          "06": 0.1417258175378883,
+          "11": 0.10080753613303367,
+          "38": 0.13330916450530178,
+          "08": 0.1148187298024208
+        }
+      }
+    },
+    {
+      "rule": "trust_volume",
+      "name": "價格強勢＋投信＋放量",
+      "scenario": "base",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.06215209587584325,
+        "annualized_return": 0.007407033403170393,
+        "max_drawdown": -0.2727472566833342,
+        "sharpe": -0.03497558424910566,
+        "trades": 355,
+        "traded_notional_initial_equity": 33.77631177977275,
+        "fees_initial_equity": 0.20051865341909625,
+        "average_positions": 1.7265662943176299,
+        "blocked_orders": 1,
+        "missing_hold_days": 0,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.10805116709868545,
+          "2019": -0.009804296920718492,
+          "2020": 0.026986707106348096,
+          "2021": 0.02308285184179315,
+          "2022": -0.0365331559759593,
+          "2023": 0.0876138447823529,
+          "2024": 0.059732605895793434,
+          "2025": -0.055791613720870825,
+          "2026": 0.09162746107775277
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.938394875503186,
+        "annualized_return": 0.26753884585617693,
+        "max_drawdown": -0.3395700389898997,
+        "sharpe": 1.1691524792598902,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.971835477197593,
+        "fees_initial_equity": 0.0422516129694345,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.058729006277561946,
+          "2019": 0.3352114323880606,
+          "2020": 0.31139038841840616,
+          "2021": 0.21923261901640534,
+          "2022": -0.21374672059807853,
+          "2023": 0.27515202649049764,
+          "2024": 0.48643994751679953,
+          "2025": 0.36866129972979667,
+          "2026": 0.6928089029714732
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.10592617533006299,
+            "annualized_return": -0.02278834706945243,
+            "max_drawdown": -0.2727472566833342,
+            "sharpe": -0.3820056793006187
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5799587817060761,
+            "annualized_return": 0.09874688257950881,
+            "max_drawdown": -0.3395700389898997,
+            "sharpe": 0.5133776708992601
+          },
+          "excess_return": -0.685884957036139
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.08827556394609104,
+            "annualized_return": 0.029882231033150353,
+            "max_drawdown": -0.12882520916736384,
+            "sharpe": 0.217724721824935
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.5942111466201334,
+            "annualized_return": 0.39348179596289956,
+            "max_drawdown": -0.2748498955400812,
+            "sharpe": 1.5523120877186856
+          },
+          "excess_return": -1.5059355826740424
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.09162746107775277,
+            "annualized_return": 0.22022325378482122,
+            "max_drawdown": -0.09779219428353703,
+            "sharpe": 1.145230393952509
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6928089029714732,
+            "annualized_return": 2.3037090810844107,
+            "max_drawdown": -0.10844115834873713,
+            "sharpe": 3.99888441756175
+          },
+          "excess_return": -0.6011814418937205
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.15984513274336284,
+          "median_excess": -0.21627276736199325
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.0,
+          "median_excess": -0.5550079131285551
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.8261507409143801,
+        "annual_one_way_turnover_using_end_day_nav": 2.1876750210065214,
+        "top_profit_stocks": [
+          {
+            "stock_id": "3030",
+            "name": "德律",
+            "pnl_initial_equity": 0.07287584147611634
+          },
+          {
+            "stock_id": "5347",
+            "name": "世界",
+            "pnl_initial_equity": 0.034426560668788464
+          },
+          {
+            "stock_id": "3037",
+            "name": "欣興",
+            "pnl_initial_equity": 0.03343833704257403
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.20608452643282785,
+        "per_stock_pnl_sum": 0.062152095875846525,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "24": 0.33385234761103344,
+          "22": 0.12093927771874524,
+          "02": 0.10900297624866849,
+          "01": 0.10980596343415208,
+          "37": 0.12079578418143214,
+          "26": 0.12086112497750476,
+          "15": 0.22042939607325893,
+          "04": 0.10710321164820576,
+          "17": 0.30601266199123256,
+          "03": 0.10351370992199255,
+          "27": 0.2033493242822983,
+          "31": 0.16554606522309423,
+          "28": 0.23803971477801789,
+          "25": 0.21796537626197648,
+          "05": 0.13257177923777436,
+          "32": 0.108130806127354,
+          "21": 0.11418885710805889,
+          "18": 0.10711748368541824,
+          "35": 0.11592232838553881,
+          "10": 0.11823058613567985,
+          "09": 0.1054988484352853,
+          "12": 0.2003330606066612,
+          "16": 0.11598457291857067,
+          "30": 0.11488462606663345,
+          "36": 0.10445067717932399,
+          "29": 0.10332354961573838,
+          "14": 0.3133149774891608,
+          "11": 0.10083571037332845,
+          "20": 0.10462730625592469
+        }
+      }
+    },
+    {
+      "rule": "price",
+      "name": "價格強勢",
+      "scenario": "stress",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.49444113097251496,
+        "annualized_return": 0.050399185235169286,
+        "max_drawdown": -0.6083955860586547,
+        "sharpe": 0.2877313689042961,
+        "trades": 1828,
+        "traded_notional_initial_equity": 138.50049143814095,
+        "fees_initial_equity": 1.0306537913116227,
+        "average_positions": 9.8300145701797,
+        "blocked_orders": 14,
+        "missing_hold_days": 20,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.30395432752535323,
+          "2019": 0.023882507522436924,
+          "2020": 0.27824556587595817,
+          "2021": 0.043898683649758796,
+          "2022": -0.4592988779218077,
+          "2023": 0.6112619471640681,
+          "2024": 0.3727476536980445,
+          "2025": -0.28484150054864155,
+          "2026": 0.8373922074126687
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.91759982757525,
+        "annualized_return": 0.2670732830887008,
+        "max_drawdown": -0.33957003898989946,
+        "sharpe": 1.167299293167407,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.959948156357771,
+        "fees_initial_equity": 0.05412853108392825,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.0601325964961007,
+          "2019": 0.33521143238806417,
+          "2020": 0.31139038841840705,
+          "2021": 0.21923261901640512,
+          "2022": -0.2137467205980781,
+          "2023": 0.2751520264904983,
+          "2024": 0.48643994751679775,
+          "2025": 0.36866129972979733,
+          "2026": 0.6902558392463072
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.4858169255643332,
+            "annualized_return": -0.12798441246306336,
+            "max_drawdown": -0.6083955860586547,
+            "sharpe": -0.1813819136266337
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5776028027090916,
+            "annualized_return": 0.09840936241295872,
+            "max_drawdown": -0.33957003898989946,
+            "sharpe": 0.51173652449061
+          },
+          "excess_return": -1.0634197282734248
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.581827659057224,
+            "annualized_return": 0.17306099207386594,
+            "max_drawdown": -0.4439194301759771,
+            "sharpe": 0.5734685477182405
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.594211146620136,
+            "annualized_return": 0.3934817959629,
+            "max_drawdown": -0.27484989554008155,
+            "sharpe": 1.5523120877186862
+          },
+          "excess_return": -1.012383487562912
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.8373922074126687,
+            "annualized_return": 2.979327206372855,
+            "max_drawdown": -0.20072169511538618,
+            "sharpe": 2.5975085394115096
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6902558392463072,
+            "annualized_return": 2.2924080797410635,
+            "max_drawdown": -0.10844115834873735,
+            "sharpe": 3.9849718368826843
+          },
+          "excess_return": 0.14713636816636155
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.2234513274336283,
+          "median_excess": -0.20684669180707338
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.0299079754601227,
+          "median_excess": -0.5725739645179153
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.01599960833144176,
+        "annual_one_way_turnover_using_end_day_nav": 10.179992897670468,
+        "top_profit_stocks": [
+          {
+            "stock_id": "5314",
+            "name": "世紀*",
+            "pnl_initial_equity": 0.16578491316463198
+          },
+          {
+            "stock_id": "6150",
+            "name": "撼訊",
+            "pnl_initial_equity": 0.12228613613414548
+          },
+          {
+            "stock_id": "8937",
+            "name": "合騏*",
+            "pnl_initial_equity": 0.12147067284101751
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.0851729376538529,
+        "per_stock_pnl_sum": 0.4944411309725226,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "28": 0.6530077549863659,
+          "31": 0.4535903289823543,
+          "25": 0.5030767744457937,
+          "05": 0.31710031655008053,
+          "26": 0.5284411138895205,
+          "22": 0.8384539995614771,
+          "10": 0.3482236702393242,
+          "24": 0.7460822345206191,
+          "27": 0.4947791628579753,
+          "29": 0.20916973609435024,
+          "36": 0.1243727608457505,
+          "35": 0.13770185868770207,
+          "14": 0.3121711707132387,
+          "32": 0.22155867728159234,
+          "15": 0.6973189972066622,
+          "21": 0.19380869389131536,
+          "37": 0.15786278304827475,
+          "30": 0.4166602926867428,
+          "09": 0.10192899836174779,
+          "04": 0.11886399175909351,
+          "18": 0.12551686516512592,
+          "12": 0.2052338795420491,
+          "16": 0.37734617673688775,
+          "02": 0.2078931437953594,
+          "20": 0.23421133198505156,
+          "38": 0.1297182618476791,
+          "03": 0.1502478109740871,
+          "33": 0.13120839337036933,
+          "06": 0.1563967732573087,
+          "11": 0.19528936921820772,
+          "17": 0.40773660165350784,
+          "23": 0.10648569657551944
+        }
+      }
+    },
+    {
+      "rule": "trust",
+      "name": "價格強勢＋投信",
+      "scenario": "stress",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.17698470561614554,
+        "annualized_return": 0.02014429662086048,
+        "max_drawdown": -0.4164499516807688,
+        "sharpe": 0.15789157188971736,
+        "trades": 1707,
+        "traded_notional_initial_equity": 134.54458596083742,
+        "fees_initial_equity": 1.0007601680697458,
+        "average_positions": 8.99125789218067,
+        "blocked_orders": 3,
+        "missing_hold_days": 0,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.2710215687778891,
+          "2019": 0.12009640704008295,
+          "2020": -0.021448232748706553,
+          "2021": 0.13831968215972834,
+          "2022": -0.2871658068684356,
+          "2023": 0.5627128506441266,
+          "2024": -0.04764367442378403,
+          "2025": -0.12464801674305181,
+          "2026": 0.3934865711966342
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.91759982757525,
+        "annualized_return": 0.2670732830887008,
+        "max_drawdown": -0.33957003898989946,
+        "sharpe": 1.167299293167407,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.959948156357771,
+        "fees_initial_equity": 0.05412853108392825,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.0601325964961007,
+          "2019": 0.33521143238806417,
+          "2020": 0.31139038841840705,
+          "2021": 0.21923261901640512,
+          "2022": -0.2137467205980781,
+          "2023": 0.2751520264904983,
+          "2024": 0.48643994751679775,
+          "2025": 0.36866129972979733,
+          "2026": 0.6902558392463072
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.3516542664715614,
+            "annualized_return": -0.08535132032552117,
+            "max_drawdown": -0.4164499516807688,
+            "sharpe": -0.2659410721951655
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5776028027090916,
+            "annualized_return": 0.09840936241295872,
+            "max_drawdown": -0.33957003898989946,
+            "sharpe": 0.51173652449061
+          },
+          "excess_return": -0.929257069180653
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.30275087723876415,
+            "annualized_return": 0.09642612061535805,
+            "max_drawdown": -0.387940477760241,
+            "sharpe": 0.4260637790863001
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.594211146620136,
+            "annualized_return": 0.3934817959629,
+            "max_drawdown": -0.27484989554008155,
+            "sharpe": 1.5523120877186862
+          },
+          "excess_return": -1.291460269381372
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.3934865711966342,
+            "annualized_return": 1.123989058068097,
+            "max_drawdown": -0.14628222165403437,
+            "sharpe": 1.7669099999238504
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6902558392463072,
+            "annualized_return": 2.2924080797410635,
+            "max_drawdown": -0.10844115834873735,
+            "sharpe": 3.9849718368826843
+          },
+          "excess_return": -0.29676926804967296
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.21626106194690264,
+          "median_excess": -0.17970264694111765
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.046012269938650305,
+          "median_excess": -0.6123039248047417
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.09870213735149558,
+        "annual_one_way_turnover_using_end_day_nav": 9.760544851989037,
+        "top_profit_stocks": [
+          {
+            "stock_id": "2383",
+            "name": "台光電",
+            "pnl_initial_equity": 0.10667527679915692
+          },
+          {
+            "stock_id": "3163",
+            "name": "波若威",
+            "pnl_initial_equity": 0.07634100503258069
+          },
+          {
+            "stock_id": "3030",
+            "name": "德律",
+            "pnl_initial_equity": 0.0744561915424832
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.10732785857989104,
+        "per_stock_pnl_sum": 0.17698470561612858,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "31": 0.3471514568117757,
+          "22": 0.31964165079841994,
+          "28": 0.5655527399058375,
+          "24": 0.7104078695419445,
+          "08": 0.11839288784639146,
+          "26": 0.23680870874657703,
+          "03": 0.20021438395261387,
+          "16": 0.30358535076379833,
+          "27": 0.4143219789948128,
+          "25": 0.5067325904731201,
+          "05": 0.2262922798579896,
+          "17": 0.6294276958007092,
+          "29": 0.49653663449535307,
+          "20": 0.11829726550419783,
+          "02": 0.21064872449636643,
+          "01": 0.20496057162996884,
+          "14": 0.39887333766635735,
+          "32": 0.23187674429446545,
+          "21": 0.12509824913727083,
+          "37": 0.3044951189365082,
+          "18": 0.11854944570017868,
+          "04": 0.10949633679517558,
+          "10": 0.3286665513406371,
+          "09": 0.1251867652942527,
+          "15": 0.328384878430589,
+          "23": 0.10238298671486447,
+          "30": 0.12997541971091026,
+          "12": 0.2216324759955544,
+          "11": 0.2106759981902831,
+          "36": 0.13836105549522523,
+          "38": 0.1095211866946039,
+          "35": 0.12792548518605287,
+          "06": 0.11204961875507354
+        }
+      }
+    },
+    {
+      "rule": "volume",
+      "name": "價格強勢＋放量",
+      "scenario": "stress",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": -0.11835585211909516,
+        "annualized_return": -0.01529877683441705,
+        "max_drawdown": -0.6233403642975948,
+        "sharpe": 0.04148356974317654,
+        "trades": 1412,
+        "traded_notional_initial_equity": 92.60051189696217,
+        "fees_initial_equity": 0.6884138878885956,
+        "average_positions": 6.928606119475473,
+        "blocked_orders": 5,
+        "missing_hold_days": 6,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.23152469358287653,
+          "2019": -0.005441919952853147,
+          "2020": -0.007333251127868423,
+          "2021": -0.21479333652064703,
+          "2022": -0.3415039754855228,
+          "2023": 0.13904087516508845,
+          "2024": 0.4991385734866045,
+          "2025": -0.0700754478336999,
+          "2026": 0.4153500068670706
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.91759982757525,
+        "annualized_return": 0.2670732830887008,
+        "max_drawdown": -0.33957003898989946,
+        "sharpe": 1.167299293167407,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.959948156357771,
+        "fees_initial_equity": 0.05412853108392825,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.0601325964961007,
+          "2019": 0.33521143238806417,
+          "2020": 0.31139038841840705,
+          "2021": 0.21923261901640512,
+          "2022": -0.2137467205980781,
+          "2023": 0.2751520264904983,
+          "2024": 0.48643994751679775,
+          "2025": 0.36866129972979733,
+          "2026": 0.6902558392463072
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.6077159274251712,
+            "annualized_return": -0.17523627617304172,
+            "max_drawdown": -0.6222055002662331,
+            "sharpe": -0.6490886884274694
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5776028027090916,
+            "annualized_return": 0.09840936241295872,
+            "max_drawdown": -0.33957003898989946,
+            "sharpe": 0.51173652449061
+          },
+          "excess_return": -1.185318730134263
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.5879206716258956,
+            "annualized_return": 0.17463175627698724,
+            "max_drawdown": -0.33126281745840813,
+            "sharpe": 0.6391822904345349
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.594211146620136,
+            "annualized_return": 0.3934817959629,
+            "max_drawdown": -0.27484989554008155,
+            "sharpe": 1.5523120877186862
+          },
+          "excess_return": -1.0062904749942405
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.4153500068670706,
+            "annualized_return": 1.2004004068233587,
+            "max_drawdown": -0.2153682559192287,
+            "sharpe": 1.9228374123708687
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6902558392463072,
+            "annualized_return": 2.2924080797410635,
+            "max_drawdown": -0.10844115834873735,
+            "sharpe": 3.9849718368826843
+          },
+          "excess_return": -0.2749058323792366
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.049778761061946904,
+          "median_excess": -0.24667177452409828
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.0,
+          "median_excess": -0.8286258257294912
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.30412710754941635,
+        "annual_one_way_turnover_using_end_day_nav": 8.66976211794483,
+        "top_profit_stocks": [
+          {
+            "stock_id": "2038",
+            "name": "海光",
+            "pnl_initial_equity": 0.07467803599899732
+          },
+          {
+            "stock_id": "4743",
+            "name": "合一",
+            "pnl_initial_equity": 0.07078438746145674
+          },
+          {
+            "stock_id": "2637",
+            "name": "慧洋-KY",
+            "pnl_initial_equity": 0.06192462475777703
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.07925465330618942,
+        "per_stock_pnl_sum": -0.11835585211911034,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "28": 0.541807273124723,
+          "37": 0.1892278552430079,
+          "10": 0.36803560177025035,
+          "05": 0.3810370195095434,
+          "24": 0.5672271497709542,
+          "25": 0.40388846247843524,
+          "30": 0.20266991212858448,
+          "21": 0.3042737159187988,
+          "26": 0.3987585349674284,
+          "22": 0.38009122111186516,
+          "35": 0.20418442066192555,
+          "14": 0.5064772289773933,
+          "31": 0.4231920112444729,
+          "29": 0.1488941045802558,
+          "16": 0.1370109713889739,
+          "02": 0.20191037125048344,
+          "01": 0.11476240214429782,
+          "04": 0.2079330015597644,
+          "20": 0.21423803878896885,
+          "17": 0.4157602093146334,
+          "27": 0.37384137527315114,
+          "15": 0.6987300447611705,
+          "18": 0.11805864521440114,
+          "03": 0.1253260305896483,
+          "12": 0.24192695869365682,
+          "32": 0.11406046045074904,
+          "36": 0.11251460576177627,
+          "33": 0.10132456538094234,
+          "09": 0.10315095478583235,
+          "06": 0.14213206661527156,
+          "11": 0.10103329966209242,
+          "38": 0.13357184083109921,
+          "08": 0.1149514252018615
+        }
+      }
+    },
+    {
+      "rule": "trust_volume",
+      "name": "價格強勢＋投信＋放量",
+      "scenario": "stress",
+      "summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 0.006830978154874767,
+        "annualized_return": 0.0008335447229230741,
+        "max_drawdown": -0.28692766913601675,
+        "sharpe": -0.10462019799566716,
+        "trades": 355,
+        "traded_notional_initial_equity": 32.8915085064892,
+        "fees_initial_equity": 0.24459659201593895,
+        "average_positions": 1.7265662943176299,
+        "blocked_orders": 1,
+        "missing_hold_days": 0,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.11289762456216512,
+          "2019": -0.01583837229141072,
+          "2020": 0.02127107809409412,
+          "2021": 0.01683759703536558,
+          "2022": -0.03884378049934878,
+          "2023": 0.07816646029440855,
+          "2024": 0.048689925953444124,
+          "2025": -0.05913886158996884,
+          "2026": 0.08610383122968068
+        }
+      },
+      "benchmark_summary": {
+        "start": "2018-01-02",
+        "end": "2026-06-23",
+        "total_return": 5.91759982757525,
+        "annualized_return": 0.2670732830887008,
+        "max_drawdown": -0.33957003898989946,
+        "sharpe": 1.167299293167407,
+        "trades": 2,
+        "traded_notional_initial_equity": 7.959948156357771,
+        "fees_initial_equity": 0.05412853108392825,
+        "average_positions": 0.9995143273433705,
+        "blocked_orders": 0,
+        "missing_hold_days": 5,
+        "unliquidated_positions": 0,
+        "annual_returns": {
+          "2018": -0.0601325964961007,
+          "2019": 0.33521143238806417,
+          "2020": 0.31139038841840705,
+          "2021": 0.21923261901640512,
+          "2022": -0.2137467205980781,
+          "2023": 0.2751520264904983,
+          "2024": 0.48643994751679775,
+          "2025": 0.36866129972979733,
+          "2026": 0.6902558392463072
+        }
+      },
+      "segments": {
+        "2018_2022": {
+          "strategy": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": -0.12858149248362716,
+            "annualized_return": -0.02793848626643136,
+            "max_drawdown": -0.28692766913601675,
+            "sharpe": -0.4399474734424403
+          },
+          "benchmark": {
+            "start": "2018-01-02",
+            "end": "2022-12-30",
+            "total_return": 0.5776028027090916,
+            "annualized_return": 0.09840936241295872,
+            "max_drawdown": -0.33957003898989946,
+            "sharpe": 0.51173652449061
+          },
+          "excess_return": -0.7061842951927187
+        },
+        "2023_2025": {
+          "strategy": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 0.06379622382689853,
+            "annualized_return": 0.021759111743201665,
+            "max_drawdown": -0.1333627822261224,
+            "sharpe": 0.12061097548619033
+          },
+          "benchmark": {
+            "start": "2023-01-03",
+            "end": "2025-12-31",
+            "total_return": 1.594211146620136,
+            "annualized_return": 0.3934817959629,
+            "max_drawdown": -0.27484989554008155,
+            "sharpe": 1.5523120877186862
+          },
+          "excess_return": -1.5304149227932375
+        },
+        "2026_partial": {
+          "strategy": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.08610383122968068,
+            "annualized_return": 0.20625089790983786,
+            "max_drawdown": -0.09791036267337372,
+            "sharpe": 1.0749906501860984
+          },
+          "benchmark": {
+            "start": "2026-01-02",
+            "end": "2026-06-23",
+            "total_return": 0.6902558392463072,
+            "annualized_return": 2.2924080797410635,
+            "max_drawdown": -0.10844115834873735,
+            "sharpe": 3.9849718368826843
+          },
+          "excess_return": -0.6041520080166265
+        }
+      },
+      "rolling": {
+        "252": {
+          "overlapping_windows": 1808,
+          "win_fraction": 0.1570796460176991,
+          "median_excess": -0.22370169477340246
+        },
+        "756": {
+          "overlapping_windows": 1304,
+          "win_fraction": 0.0,
+          "median_excess": -0.5714064268035828
+        }
+      },
+      "diagnostics": {
+        "average_cash_fraction": 0.8259940358782776,
+        "annual_one_way_turnover_using_end_day_nav": 2.1906121504652907,
+        "top_profit_stocks": [
+          {
+            "stock_id": "3030",
+            "name": "德律",
+            "pnl_initial_equity": 0.06974454684965962
+          },
+          {
+            "stock_id": "5347",
+            "name": "世界",
+            "pnl_initial_equity": 0.032393603401367
+          },
+          {
+            "stock_id": "3037",
+            "name": "欣興",
+            "pnl_initial_equity": 0.032265607420057796
+          }
+        ],
+        "top3_fraction_of_positive_pnl": 0.2106901814626219,
+        "per_stock_pnl_sum": 0.006830978154874302,
+        "large_move_exposures": [],
+        "peak_industry_weights": {
+          "24": 0.334246048602347,
+          "22": 0.12097499718305622,
+          "02": 0.10901917350550727,
+          "01": 0.10985494226862932,
+          "37": 0.12103413724616802,
+          "26": 0.12093630499220077,
+          "15": 0.22074176962070133,
+          "04": 0.10721916789736767,
+          "17": 0.3064304879748699,
+          "03": 0.10365858085997967,
+          "27": 0.2036551255273765,
+          "31": 0.1658570620105778,
+          "28": 0.2381758174161742,
+          "25": 0.21822875738090708,
+          "05": 0.1327534546461487,
+          "32": 0.10824482004266234,
+          "21": 0.11432770268297517,
+          "18": 0.10714894944466191,
+          "35": 0.11602595903727567,
+          "10": 0.11837470462634794,
+          "09": 0.10559305571557148,
+          "12": 0.2004248773080698,
+          "16": 0.11608688350481469,
+          "30": 0.1149693469358259,
+          "36": 0.10459543734484002,
+          "29": 0.10337004413817398,
+          "14": 0.31392657642937954,
+          "11": 0.10103854158091559,
+          "20": 0.10474096815071071
+        }
+      }
+    }
+  ]
+}

@@ -216,7 +216,10 @@ def render_fills(book,account):
 def render_research(status):
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
-    render_rule_research()
+    render_flow_research()
+    st.divider()
+    if st.checkbox('顯示前一輪價格研究（尚未排除上市櫃前行情）'):
+        render_rule_research()
     st.divider()
     st.subheader('模型回測')
     with st.form('research'):
@@ -238,6 +241,62 @@ def render_research(status):
         st.caption(status['adjustment_note'])
         st.write('已有研究紀錄：')
         for item in evidence['documents'][-8:]: st.caption(item['name'])
+
+
+def render_flow_research():
+    st.subheader('加投信、加放量，真的有比較好嗎？')
+    report=service.flow_research_overview()
+    if not report['available']:
+        st.info(report['note'])
+        return
+    st.caption(f"資料截至 {report['source']['last_date']} · 八組比較 {report['elapsed_seconds']:.1f} 秒 · 重算使用 0 次 FinMind 請求")
+    st.warning('已排除上市櫃前行情與存託憑證，但當前名冊仍有存活者偏差，還原價也尚待對帳。這輪尚未加入營收、獲利與產品出貨事件。')
+    scenario=st.radio('投信／放量比較成本',['stress','base'],horizontal=True,key='flow_scenario',
+                     format_func=lambda x:'較高滑價（每邊 0.45%）' if x=='stress' else '基本滑價（每邊 0.30%）')
+    results=[r for r in report['results'] if r['scenario']==scenario]
+    base=next(r for r in results if r['rule']=='price')
+    rows=[]
+    for r in results:
+        rows.append({'選股方式':r['name'],'全期累積報酬':percent(r['summary']['total_return']),
+                     '年化報酬':percent(r['summary']['annualized_return']),
+                     '最大跌幅':percent(r['summary']['max_drawdown']),
+                     '平均留現金':percent(r['diagnostics']['average_cash_fraction'])})
+    bm=base['benchmark_summary']
+    rows.append({'選股方式':'0050 買入持有','全期累積報酬':percent(bm['total_return']),
+                 '年化報酬':percent(bm['annualized_return']),'最大跌幅':percent(bm['max_drawdown']),
+                 '平均留現金':'買入後持有至期末'})
+    st.dataframe(pd.DataFrame(rows),hide_index=True,use_container_width=True)
+    st.caption(f"期間：{bm['start']}～{bm['end']}；月末選股、次交易日收盤模擬成交，最多 10 檔，不足留現金。已計入稅費與滑價。")
+    improved=[r['name'] for r in results if r['rule']!='price'
+              and r['summary']['total_return']>base['summary']['total_return']]
+    st.write('比單用價格條件報酬更高：'+('、'.join(improved) if improved else '本輪沒有')+'。')
+    winners=[r['name'] for r in results if r['summary']['total_return']>bm['total_return']]
+    st.write('全期報酬超過 0050：'+('、'.join(winners) if winners else '本輪沒有')+'。這是歷史探索結果，不能視為已通過實盤驗證。')
+    with st.expander('看不同期間、現金影響與選股條件'):
+        details=[]
+        for r in results:
+            details.append({'選股方式':r['name'],
+                            '2018–2022':percent(r['segments']['2018_2022']['strategy']['total_return']),
+                            '2023–2025':percent(r['segments']['2023_2025']['strategy']['total_return']),
+                            '2026 至快照':percent(r['segments']['2026_partial']['strategy']['total_return']),
+                            '滾動一年贏0050比例':percent(r['rolling']['252']['win_fraction']),
+                            '滾動三年贏0050比例':percent(r['rolling']['756']['win_fraction']),
+                            '平均持股數':f"{r['summary']['average_positions']:.1f}"})
+        details.append({'選股方式':'0050 買入持有',
+                        '2018–2022':percent(base['segments']['2018_2022']['benchmark']['total_return']),
+                        '2023–2025':percent(base['segments']['2023_2025']['benchmark']['total_return']),
+                        '2026 至快照':percent(base['segments']['2026_partial']['benchmark']['total_return'])})
+        st.dataframe(pd.DataFrame(details),hide_index=True,use_container_width=True)
+        st.caption('滾動一年／三年按 252／756 個交易日計算；區間重疊，不能當成獨立勝率。')
+        st.write('投信：20 日淨買占成交量至少 1%，近 5 日淨買超且至少 3 天買超；缺資料不算通過。')
+        st.write('放量：近 5 日均量至少為之前 20 日的 1.5 倍、5 日上漲，且收盤位於當日高低區間的上方 30%。')
+        st.caption('加條件可能讓股票不足，留下較多現金；不能把少投入資金的影響全部當成選股能力。')
+        for r in results:
+            if r['summary']['unliquidated_positions'] or r['diagnostics']['large_move_exposures']:
+                st.caption(f"{r['name']}：期末未平倉 {r['summary']['unliquidated_positions']} 檔；持有時還原價單日變動超過 50% 共 {len(r['diagnostics']['large_move_exposures'])} 次，仍需核對。")
+        for item in report['limitations']: st.caption('• '+item)
+    st.download_button('下載投信與放量實測摘要',__import__('json').dumps(report,ensure_ascii=False,indent=2),
+                       file_name='flow-research.json',mime='application/json')
 
 
 def render_rule_research():

@@ -24,6 +24,22 @@ def test_overview_marks_missing_or_broken_report_unavailable(monkeypatch,tmp_pat
         assert '不完整' in result['note']
 
 
+def test_flow_overview_requires_all_contrasts_without_triggering_computation(monkeypatch,tmp_path):
+    import json
+    monkeypatch.setattr(service,'ROOT',tmp_path)
+    assert not service.flow_research_overview()['available']
+    folder=tmp_path/'.cache/growth-flow-research';folder.mkdir(parents=True)
+    report={'schema':1,'experiment':'flow_20260909','research_only':True,'live_qualified':False,
+            'source':{},'elapsed_seconds':1,'limitations':[],
+            'results':[{'rule':r,'scenario':s} for r in ('price','trust','volume','trust_volume')
+                       for s in ('base','stress')]}
+    (folder/'report.summary.json').write_text(json.dumps(report))
+    assert service.flow_research_overview()['available']
+    report['results'][-1]=report['results'][0]
+    (folder/'report.summary.json').write_text(json.dumps(report))
+    assert not service.flow_research_overview()['available']
+
+
 def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_path):
     engine=create_engine('sqlite://',connect_args={'check_same_thread':False},poolclass=StaticPool)
     Base.metadata.create_all(engine,tables=[*TABLES,RawPrice.__table__])
@@ -40,6 +56,8 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     monkeypatch.setattr(ui,'candidate_data',lambda:[])
     monkeypatch.setattr(ui.jobs,'JOBS_DIR',tmp_path)
     app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard_v2/main.py')).run(timeout=20)
+    assert not app.exception
+    element(app.checkbox,'顯示前一輪價格研究（尚未排除上市櫃前行情）').set_value(True).run()
     assert not app.exception
     element(app.number_input,'期初現金（元）').set_value(100000)
     element(app.button,'建立帳本').click().run()
