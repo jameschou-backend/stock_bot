@@ -319,3 +319,7 @@ mcp-install:
 .PHONY: research-rules
 research-rules:
 	python scripts/research_rules.py
+
+.PHONY: research-flow
+research-flow:
+	python scripts/research_flow.py
