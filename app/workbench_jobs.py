@@ -1,6 +1,6 @@
 """One bounded background task at a time. Results survive API/UI restarts."""
 from __future__ import annotations
-from datetime import datetime
+from datetime import date, datetime
 import json
 import os
 from pathlib import Path
@@ -9,7 +9,7 @@ import subprocess
 import sys
 import time
 from uuid import uuid4
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from typing import Literal
 from app.file_lock import file_lock
 
@@ -18,12 +18,24 @@ JOBS_DIR = ROOT / '.cache/workbench/jobs'
 
 
 class WorkRequest(BaseModel):
-    kind: Literal['update_data','backtest']
+    kind: Literal['update_data','backtest','news_scan','news_review']
     months: int = Field(default=12,ge=3,le=120)
     topn: int = Field(default=10,ge=1,le=50)
     quick: bool = False
     cost: float = Field(default=.00585,ge=.00585,le=.05,allow_inf_nan=False)
     stoploss: float = Field(default=-.12,ge=-.5,le=-.01,allow_inf_nan=False)
+    news_days: int = Field(default=7,ge=1,le=366)
+    news_end: date | None = None
+    news_stock_id: str = Field(default='2408',pattern=r'^[0-9]{4}$')
+    fetch_news: bool = False
+
+    @model_validator(mode='after')
+    def bounded_news(self):
+        if self.kind=='news_scan' and self.news_days>14:
+            raise ValueError('近期新聞掃描最多 14 天')
+        if self.fetch_news and self.kind!='news_scan':
+            raise ValueError('只有近期新聞掃描可抓取資料')
+        return self
 
 
 def job_path(job_id):
@@ -89,12 +101,12 @@ def submit(request: WorkRequest):
                     except ProcessLookupError:
                         pass
                 if alive or time.time()-job['created_at']<10:
-                    if job['request']==request.model_dump():
+                    if job['request']==request.model_dump(mode='json'):
                         return job
                     raise ValueError('已有工作執行中；完成後再開始下一個，避免資源競爭')
                 job.update(status='failed',message='前次工作已中斷，可重新執行')
                 write_job(job)
-        job={'job_id':uuid4().hex,'request':request.model_dump(),'status':'queued',
+        job={'job_id':uuid4().hex,'request':request.model_dump(mode='json'),'status':'queued',
              'created_at':time.time(),'message':'準備執行','pid':None}
         write_job(job)
         env=dict(os.environ,AI_ASSIST_ENABLED='0',PYTHONUNBUFFERED='1')
@@ -114,6 +126,14 @@ def submit(request: WorkRequest):
 def command_for(request, output):
     if request.kind=='update_data':
         return [sys.executable,'scripts/run_daily.py']
+    if request.kind in ('news_scan','news_review'):
+        args=[sys.executable,'scripts/news_research.py',
+              'scan' if request.kind=='news_scan' else 'review','--days',str(request.news_days),
+              '--output',str(output)]
+        if request.news_end: args+=['--end',request.news_end.isoformat()]
+        if request.kind=='news_review': args+=['--stock-id',request.news_stock_id]
+        if request.fetch_news: args.append('--fetch')
+        return args
     args=[sys.executable,'scripts/run_backtest.py','--months',str(request.months),
           '--topn',str(request.topn),'--entry-delay','1','--cost',str(request.cost),
           '--stoploss',str(request.stoploss),'--train-lookback','730','--pruned-features','--slippage',

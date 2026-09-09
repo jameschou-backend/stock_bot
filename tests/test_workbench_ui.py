@@ -82,7 +82,30 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     import json
     theme=json.loads((Path(__file__).resolve().parents[1]/'docs/research_themes_20260909.json').read_text())
     monkeypatch.setattr(service,'theme_research_overview',lambda:{**theme,'available':True})
+    from app import news_research as news
+    from skills.news_radar import analyze
+    nr=analyze([{'stock_id':'2408','title':'南亞科 DDR4 出貨增加','source':'測試媒體','link':'https://example.com',
+                 'provider_datetime':'2025-07-01T04:00:00','first_recorded_at':'2026-09-09T04:00:00+00:00'}],
+               {'2408':'南亞科'})
+    nr.update(available=True,stock_id='2408',stock_name='南亞科',names={'2408':'南亞科'},cutoff='2025-07-10',
+              start='2025-04-01',end='2025-07-09',analyzed_at='2026-09-09T04:00:00+00:00',elapsed_seconds=.2,
+              evidence_note='標題未核對',time_note='事後回補',
+              source={'legacy_latest':'2026-05-25','local_days':[],'coverage_note':'覆蓋未確認'},price_source={'note':'歷史背景'})
+    monkeypatch.setattr(news,'overview',lambda mode='scan':nr)
+    submitted=[]
+    def submit_news(request):
+        submitted.append(request)
+        return {'job_id':'b'*32}
+    monkeypatch.setattr(ui.jobs,'submit',submit_news)
     app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard_v2/main.py')).run(timeout=20)
+    assert not app.exception
+    element(app.button,'更新近 7 天並分析').click().run()
+    assert submitted[-1].kind=='news_scan' and submitted[-1].fetch_news
+    assert submitted[-1].news_days==7
+    element(app.radio,'新聞研究方式').set_value('review').run()
+    element(app.button,'重建新聞時間線').click().run()
+    assert submitted[-1].kind=='news_review' and not submitted[-1].fetch_news
+    assert submitted[-1].news_stock_id=='2408'
     assert not app.exception
     element(app.selectbox,'查看題材證據與受惠候選').set_value('leo').run()
     element(app.radio,'題材持有方式').set_value('risk_exit').run()

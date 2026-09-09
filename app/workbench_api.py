@@ -39,6 +39,17 @@ def candidates(limit:int=Query(20,ge=1,le=50)): return service.candidates(limit)
 def evidence(): return service.strategy_evidence()
 
 
+@router.get('/news')
+def news_research(mode:Literal['scan','review']='scan',limit:int=Query(50,ge=1,le=200)):
+    from app.news_research import overview
+    report=overview(mode)
+    if report['available']:
+        stories=report['stories']
+        report={**report,'stories':stories[-limit:],'stories_truncated':len(stories)>limit,
+                'story_count':len(stories)}
+    return report
+
+
 @router.get('/portfolio')
 def portfolio(account_id:Literal['paper','real']='paper'): return service.portfolio(account_id)
 

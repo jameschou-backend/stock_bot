@@ -59,6 +59,13 @@ def get_strategy_evidence() -> dict:
 
 
 @mcp.tool(annotations=READ)
+def get_news_research(mode:Literal['scan','review']='scan',limit:int=50) -> dict:
+    """Read analyzed headline themes or historical review. No fetch, LLM, orders, or implied verified beneficiaries."""
+    if not 1<=limit<=200: raise ValueError('limit must be 1..200')
+    return get('news',{'mode':mode,'limit':limit})
+
+
+@mcp.tool(annotations=READ)
 def get_trade_review(account_id:Literal['paper','real']='paper') -> dict:
     """Read user-reported executions for fee, sizing and exit reviews."""
     book=get('portfolio',{'account_id':account_id})

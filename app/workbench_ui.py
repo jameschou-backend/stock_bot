@@ -1,5 +1,5 @@
 """Streamlit workbench: decisions, recorded fills and explicit research jobs."""
-from datetime import datetime, time as daytime, timezone
+from datetime import date, datetime, time as daytime, timezone
 from zoneinfo import ZoneInfo
 from uuid import uuid4
 import pandas as pd
@@ -40,6 +40,8 @@ def render():
     h1 {font-size:2rem!important;letter-spacing:-.04em}
     [data-testid="stMetric"] {border:1px solid #dde4eb;border-radius:14px;padding:16px 20px}
     [data-testid="stMetricLabel"] {font-size:.85rem}
+    [data-testid="stMetricValue"] {font-size:1.5rem;white-space:normal}
+    [data-testid="stMetricValue"] > div {white-space:normal;overflow:visible}
     [data-testid="stTabs"] button {font-size:1rem;padding-left:18px;padding-right:18px}
     .wb-eyebrow {color:#197b80;font-weight:700;letter-spacing:.12em;font-size:12px}
     .wb-note {color:#637487;font-size:14px;line-height:1.6}
@@ -69,7 +71,7 @@ def render():
         st.warning(f"FinMind 暫停請求，約 {quota['retry_after_seconds']/60:.0f} 分鐘後可重試；已取得的資料仍可查看。")
     if status['problems']:
         st.warning('；'.join(status['problems']))
-    today,holdings,research=st.tabs(['今日觀察','持倉與成交','策略驗證'])
+    today,holdings,news,research=st.tabs(['今日觀察','持倉與成交','新聞與題材','策略驗證'])
     with today:
         st.subheader('先挑值得研究的股票')
         st.caption('排名是模型排序，不是上漲機率。目前名單供研究與紙上追蹤。')
@@ -131,6 +133,10 @@ def render():
         render_ledger()
     with research:
         render_research(status)
+    with news:
+        render_news_research()
+    st.divider()
+    render_jobs()
 
 
 def render_ledger():
@@ -236,13 +242,115 @@ def render_research(status):
                 job=jobs.submit(jobs.WorkRequest(kind='backtest',months=months,topn=topn,stoploss=-stop/100,quick=quick))
                 st.success(f"工作 {job['job_id'][:8]} 已啟動，可繼續使用其他頁面。")
             except (ValueError,TimeoutError) as exc: st.warning(str(exc))
-    render_jobs()
     with st.expander('目前還需要確認的證據'):
         evidence=service.strategy_evidence()
         for item in evidence['validation_requirements']: st.write('• '+item)
         st.caption(status['adjustment_note'])
         st.write('已有研究紀錄：')
         for item in evidence['documents'][-8:]: st.caption(item['name'])
+
+
+def render_news_research():
+    from app.news_research import overview
+    from skills.news_radar import THEMES, EVENTS, STATUS
+    st.subheader('從新聞找線索，再核對公司是否受惠')
+    st.caption('規則版：辨識 11 組題材、供給、報價、接單、量產與獲利線索；不是全文 AI 判讀，也不是買進排名。')
+    mode=st.radio('新聞研究方式',['scan','review'],horizontal=True,
+                  format_func=lambda m:'看最近題材' if m=='scan' else '回到歷史日期')
+    if mode=='scan':
+        a,b=st.columns(2)
+        fetch=a.button('更新近 7 天並分析',type='primary')
+        offline=b.button('只分析本機近 7 天')
+        st.caption('更新正常最多 7 次 FinMind 請求；一小時內重按優先重用日快取。分析本機資料為 0 次請求。')
+        if fetch or offline:
+            try:
+                job=jobs.submit(jobs.WorkRequest(kind='news_scan',news_days=7,fetch_news=fetch))
+                st.success(f"新聞工作 {job['job_id'][:8]} 已啟動；下方可看進度，完成後按頁首「重新整理」。")
+            except (ValueError,TimeoutError) as exc: st.warning(str(exc))
+    else:
+        with st.form('historical_news'):
+            a,b,c=st.columns(3)
+            sid=a.text_input('回顧股票代號',value='2408',max_chars=4)
+            cutoff=b.date_input('回到哪一天判讀',value=date(2025,7,10),max_value=datetime.now(ZoneInfo('Asia/Taipei')).date())
+            days=c.selectbox('往前查看幾天',[30,90,100,180,365],index=2)
+            st.caption('只用截止日前的新聞；當日因時區未確認而排除。價格欄只看報導前，不拿後來漲幅替新聞打分。')
+            if st.form_submit_button('重建新聞時間線',type='primary'):
+                try:
+                    job=jobs.submit(jobs.WorkRequest(kind='news_review',news_stock_id=sid,news_end=cutoff,news_days=days))
+                    st.success(f"歷史判讀 {job['job_id'][:8]} 已啟動；完成後按頁首「重新整理」。")
+                except (ValueError,TimeoutError) as exc: st.warning(str(exc))
+    report=overview(mode)
+    if not report['available']:
+        st.info(report['note'])
+        return
+    st.divider()
+    description=(f"{report['stock_id']} {report['stock_name']} · 判讀截止 {report['cutoff']}" if mode=='review' else '最近一次完成的新聞分析')
+    st.write('**目前顯示：** '+description)
+    st.caption(f"新聞日期 {report['start']}～{report['end']} · 分析完成 {report['analyzed_at']} · 耗時 {report['elapsed_seconds']:.2f} 秒")
+    if mode=='scan' and (datetime.now(ZoneInfo('Asia/Taipei')).date()-date.fromisoformat(report['end'])).days>1:
+        st.warning('這份近期新聞結果已過期，請更新；股價新鮮不代表新聞也已更新。')
+    c=st.columns(3)
+    c[0].metric('去重後新聞',f"{report['unique_articles']:,}")
+    c[1].metric('合併重複列',f"{report['duplicates_collapsed']:,}")
+    c[2].metric('涵蓋題材',len(report['themes']))
+    st.info(report['evidence_note'])
+    st.caption(report['time_note'])
+    if not report['themes']:
+        st.warning('這個日期範圍沒有可辨識題材；不能據此認定市場沒有題材。')
+    if report['stories']:
+        table=[{'題材':t['name'],'新聞數':t['articles'],'營運線索':t['operating_clues'],
+                '預期／概念':t['expectations'],'負面／正反並存':t['negative_or_mixed'],
+                '股價評論':t['price_commentary'],'關聯公司':len(t['stock_ids'])} for t in report['themes']]
+        if table: st.dataframe(pd.DataFrame(table),hide_index=True,use_container_width=True)
+        selected=st.selectbox('挑選要讀的題材',['all']+[t['id'] for t in report['themes']],
+                              format_func=lambda x:'全部新聞（含未分類）' if x=='all' else THEMES[x][0],key=f'news_topic_{mode}')
+        focus=st.checkbox('先看營運、預期與負面線索',value=True,key=f'news_focus_{mode}')
+        query=st.text_input('搜尋日期、公司或新聞文字',key=f'news_search_{mode}',
+                            placeholder='例如：2025-05-16、南亞科、漲價').strip().casefold()
+        stories=[s for s in report['stories'] if (selected=='all' or selected in s['themes'])
+                 and (not focus or s['status'] in ('operating_clue','expectation','negative_or_mixed'))
+                 and (not query or query in ' '.join([s['source_date'],s['title'],*s['stock_ids'],
+                       *(report['names'].get(sid,'') for sid in s['stock_ids'])]).casefold())]
+        if mode=='scan': stories=list(reversed(stories))
+        rows=[]
+        for s in stories:
+            item={'日期':s['source_date'],'新聞':s['title'],'判讀':STATUS[s['status']],
+                  '線索':'、'.join(EVENTS[e][0] for e in s['events']),
+                  '標題點名':'、'.join(sid+' '+report['names'].get(sid,'') for sid in s['headline_named_ids']),
+                  '供應商關聯':'、'.join(s['stock_ids']),'來源':'、'.join(s['sources'])}
+            if mode=='review':
+                p=s.get('price_context')
+                item['報導前20日超額']=f"{p['excess_20d']*100:+.1f} 個百分點" if p else '行情不足'
+            rows.append(item)
+        st.caption(f'符合篩選 {len(rows)} 篇，表格先列 {min(100,len(rows))} 篇；完整結果可下載。同題材和供應商關聯不是直接受惠證據。')
+        if rows: st.dataframe(pd.DataFrame(rows[:100]),hide_index=True,use_container_width=True)
+        if stories:
+            story_id=st.selectbox('查看一篇新聞的依據',[s['id'] for s in stories[:100]],
+                                 format_func=lambda x:next(s['source_date']+' '+s['title'][:65] for s in stories if s['id']==x),
+                                 key=f'news_story_{mode}_{selected}_{focus}')
+            s=next(s for s in stories if s['id']==story_id)
+            st.text(s['title'])
+            st.write('**觸發詞：** '+'、'.join(s['matched_terms']))
+            st.write('**判讀：** '+STATUS[s['status']]+'；應再核對原文的主詞、時程、否定語句與數字。')
+            st.caption(f"供應商時間 {s['provider_datetime']}；首次本機記錄 {s['first_recorded_at']}。")
+            for i,url in enumerate(s['links'][:3]): st.link_button(f'開啟新聞來源 {i+1}',url)
+            if mode=='review':
+                p=s.get('price_context')
+                if p:
+                    st.write(f"截至報導前 {p['as_of']}：股票 20 日報酬 {percent(p['stock_return_20d'])}，0050 {percent(p['benchmark_return_20d'])}。")
+                    st.caption('報導前已相對 0050 上漲至少 10 個百分點；需注意價格可能已先反應。' if p['already_outperforming_10pp']
+                               else '報導前超額未達 10 個百分點；這不能證明股價尚未反映題材。')
+                else: st.caption('固定價格快照不足，這篇不顯示價格先後判讀。')
+    with st.expander('覆蓋範圍、未分類題材與使用限制'):
+        st.write(f"舊新聞庫最後一筆：{report['source']['legacy_latest'] or '無'}；本次取用 {len(report['source']['local_days'])} 天日快取。")
+        st.caption(report['source']['coverage_note'])
+        if report['unclassified_topic_phrases']:
+            st.write('尚待人工命名的題材詞：'+ '、'.join(p['phrase'] for p in report['unclassified_topic_phrases']))
+        st.caption('去重只處理相同標題與來源尾綴；不同標題仍可能在轉載同一事件。來源家數不等於獨立證據數。')
+        if mode=='review': st.caption(report['price_source'].get('note',''))
+        st.caption('目前沒有全文抽取、事件因果證明或自動選股下單；標題規則可能誤判否定句與受惠主體。')
+    st.download_button('下載這次新聞研究',__import__('json').dumps(report,ensure_ascii=False),
+                       file_name=f'news-{mode}.json',mime='application/json',key=f'news_download_{mode}')
 
 
 def render_theme_research():
@@ -414,11 +522,14 @@ def render_jobs():
     labels={'queued':'準備中','running':'執行中','completed':'已完成','failed':'未完成'}
     if not running: st.caption('尚未從工作台啟動工作。')
     for job in running:
-        with st.expander(f"{labels[job['status']]} · {'資料更新' if job['request']['kind']=='update_data' else '策略回測'} · {job['job_id'][:8]}",expanded=job['status'] in ('running','failed')):
+        kind_names={'update_data':'資料更新','backtest':'策略回測','news_scan':'新聞題材','news_review':'歷史新聞判讀'}
+        with st.expander(f"{labels[job['status']]} · {kind_names.get(job['request']['kind'],'研究工作')} · {job['job_id'][:8]}",expanded=job['status'] in ('running','failed')):
             st.write(job['message'])
             if job.get('elapsed_seconds') is not None: st.caption(f"執行耗時 {job['elapsed_seconds']:.1f} 秒")
             summary=job.get('summary')
-            if summary:
+            if summary and job['request']['kind'] in ('news_scan','news_review'):
+                st.write(f"去重後 {summary.get('unique_articles',0):,} 篇；合併 {summary.get('duplicates_collapsed',0):,} 筆重複列。")
+            elif summary:
                 c=st.columns(3)
                 c[0].metric('回測累積報酬',percent(summary.get('total_return')))
                 c[1].metric('最大回撤',percent(summary.get('max_drawdown')))

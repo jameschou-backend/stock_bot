@@ -43,3 +43,16 @@ def test_research_command_requires_cost_slippage_and_next_day_execution(tmp_path
         jobs.WorkRequest(kind='backtest',cost=0)
     with pytest.raises(ValueError):
         jobs.job_path('../../.env')
+
+
+def test_news_jobs_have_explicit_network_scope_and_json_safe_dates(tmp_path):
+    import json
+    from datetime import date
+    request=jobs.WorkRequest(kind='news_review',news_stock_id='2408',news_end=date(2025,7,10),news_days=100)
+    command=jobs.command_for(request,tmp_path/'result.json')
+    assert 'review' in command and '--fetch' not in command
+    assert command[command.index('--end')+1]=='2025-07-10'
+    assert json.loads(json.dumps(request.model_dump(mode='json')))['news_end']=='2025-07-10'
+    with pytest.raises(ValueError): jobs.WorkRequest(kind='news_scan',news_days=366,fetch_news=True)
+    with pytest.raises(ValueError): jobs.WorkRequest(kind='news_review',fetch_news=True)
+    with pytest.raises(ValueError): jobs.WorkRequest(kind='news_review',news_stock_id='../../.env')
