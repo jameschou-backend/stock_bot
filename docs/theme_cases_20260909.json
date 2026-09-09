@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "experiment": "themes_20260909",
+  "observed_at": "2026-09-09",
+  "mode": "retrospective_manual_seed_cases",
+  "cases": [
+    {
+      "id": "memory",
+      "theme": "記憶體｜出貨與量產轉折",
+      "source_date": "2025-07-10",
+      "source_title": "南亞科 2025 年第二季營運成果",
+      "source_url": "https://www.nanya.com/en/IR/16/Press%20Release?IRId=10032",
+      "evidence_level": "公司官方營運公告",
+      "members": [{"stock_id": "2408", "name": "南亞科"}],
+      "positive": "第二季位元出貨季增約七成多；1B 製程 DDR5 5600 與 DDR4 已量產。",
+      "counter": "平均售價仍季減中個位數百分比，毛利率 -20.6%、EPS -1.32 元；尚未證實獲利反轉。",
+      "needs_verification": "後續售價、毛利、訂單持續性；不能把 2026 年才公布的獲利倒填進本事件。",
+      "date_basis": "官方新聞稿標示 2025/07/10；未取得發布時刻或原始封存版本。"
+    },
+    {
+      "id": "passive",
+      "theme": "被動元件｜AI 需求成長",
+      "source_date": "2025-07-29",
+      "source_title": "國巨 2025 年第二季法說簡報，第 1、4、6 頁",
+      "source_url": "https://yageogroup.com/content/Resource%20Library/Financial/YAGEO%202Q25%20Earnings%20Conference%20Presentation_CH_FINAL.pdf",
+      "evidence_level": "公司官方法說簡報",
+      "members": [{"stock_id": "2327", "name": "國巨"}],
+      "positive": "營收季增 5.4%；公司指出 AI 需求帶動多個產品類別成長。",
+      "counter": "部分需求來自關稅前提前拉貨；毛利率大致持平，EPS 季減 9.6%，匯率及稅率影響獲利。",
+      "needs_verification": "AI 收入占比、拉貨能否延續；這份簡報不能證明被動元件普遍缺貨或漲價。",
+      "date_basis": "官方簡報封面標示 2025/07/29；未取得首次上架時刻。"
+    },
+    {
+      "id": "leo",
+      "theme": "低軌衛星｜供應鏈需求",
+      "source_date": "2025-04-15",
+      "source_title": "TrendForce：Taiwanese National Space Team / B5G",
+      "source_url": "https://www.trendforce.com/news/2025/04/15/%E3%80%90computex-2025%E3%80%91taiwanese-national-space-team-mobilizes-heavy-major-forces-in-establishing-b5g-national-defense-starlink/",
+      "evidence_level": "產業研究列名；尚非逐家公司訂單證據",
+      "members": [
+        {"stock_id": "2454", "name": "聯發科"},
+        {"stock_id": "3105", "name": "穩懋"},
+        {"stock_id": "2392", "name": "正崴"},
+        {"stock_id": "6282", "name": "康舒"},
+        {"stock_id": "6285", "name": "啟碁"},
+        {"stock_id": "2383", "name": "台光電"},
+        {"stock_id": "2313", "name": "華通"}
+      ],
+      "positive": "文章列出上述七家台廠參與國際低軌衛星供應鏈；全部保留，沒有事後只挑漲最多的公司。",
+      "counter": "國家計畫時程與預算仍待核定，部分發射計畫延後；產業預測不代表各家公司已取得訂單。",
+      "needs_verification": "逐家公司核對產品角色、客戶、量產時間與相關營收占比；目前只達研究候選等級。",
+      "date_basis": "文章標示 2025-04-15；未取得當日封存版本。"
+    }
+  ]
+}
