@@ -314,3 +314,8 @@ workbench: workbench-init
 mcp-install:
 	python -m venv .cache/mcp-venv
 	python -m pip --python .cache/mcp-venv install -r requirements-mcp.txt
+
+# Fixed non-ML research; local snapshots only, never trains or fetches implicitly.
+.PHONY: research-rules
+research-rules:
+	python scripts/research_rules.py
