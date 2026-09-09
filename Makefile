@@ -324,6 +324,10 @@ research-rules:
 research-flow:
 	python scripts/research_flow.py
 
+.PHONY: research-revenue
+research-revenue:
+	python scripts/research_revenue.py
+
 .PHONY: research-themes
 research-themes:
 	python scripts/research_themes.py

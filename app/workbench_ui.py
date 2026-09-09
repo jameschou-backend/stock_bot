@@ -224,6 +224,8 @@ def render_fills(book,account):
 def render_research(status):
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    render_revenue_research()
+    st.divider()
     render_theme_research()
     st.divider()
     render_flow_research()
@@ -470,6 +472,52 @@ def render_theme_research():
         for note in report['limitations']: st.caption('• '+note)
     st.download_button('下載題材證據與回放結果',__import__('json').dumps(report,ensure_ascii=False,indent=2),
                        file_name='theme-research.json',mime='application/json')
+
+
+def render_revenue_research():
+    from app.revenue_research import overview
+    st.subheader('營收變好，選股有比較準嗎？')
+    report=overview()
+    if not report['available']:
+        st.info(report['note'])
+        return
+    st.caption(f"30 組比較 {report['elapsed_seconds']:.1f} 秒 · 重算 0 次 FinMind 請求 · 行情截至 {report['source']['last_date']}")
+    st.warning('歷史重播：營收尚缺完整公告時間與修訂版本，還原價也仍有對帳差異。以下結果不能當作已驗證的可實現報酬。')
+    view=st.selectbox('營收比較情境',['主要比較','再延後 15 天','基本滑價','只看上市','只看上櫃'],key='revenue_view')
+    lag,scenario,market={'主要比較':(45,'stress','ALL'),'再延後 15 天':(60,'stress','ALL'),
+                         '基本滑價':(45,'base','ALL'),'只看上市':(45,'stress','TWSE'),
+                         '只看上櫃':(45,'stress','TPEX')}[view]
+    selected=[r for r in report['results'] if (r['lag_days'],r['scenario'],r['market'])==(lag,scenario,market)]
+    base=selected[0];bm=base['benchmark_summary']
+    st.caption(f"{bm['start']}～{bm['end']} · 營收資料月份的次月 1 日再等 {lag} 天 · 訊號後一交易日成交 · 每邊滑價 {'0.45%' if scenario=='stress' else '0.30%'}，另計稅費")
+    table=[{'選股方式':r['name'],'累積淨報酬':percent(r['summary']['total_return']),
+            '年化報酬':percent(r['summary']['annualized_return']),
+            '最大跌幅':percent(r['summary']['max_drawdown']),
+            '平均留現金':percent(r['diagnostics']['average_cash_fraction'])} for r in selected]
+    table.append({'選股方式':'0050 買入持有','累積淨報酬':percent(bm['total_return']),
+                  '年化報酬':percent(bm['annualized_return']),'最大跌幅':percent(bm['max_drawdown']),
+                  '平均留現金':'持有至期末'})
+    st.dataframe(pd.DataFrame(table),hide_index=True,use_container_width=True)
+    winners=[r['name'] for r in selected if r['summary']['total_return']>bm['total_return']]
+    st.write('全期超過 0050：'+('、'.join(winners) if winners else '這組比較沒有')+'。')
+    st.write('營收加速：近三個月營收年增至少 20%，且高於前三個月的年增率；營收優先則直接按營收成長排序。每月選最多 10 檔，不足留現金。')
+    with st.expander('看分年、市場差異、成本與資料核對'):
+        years=sorted(bm['annual_returns'])
+        annual=[{'選股方式':r['name'],**{y:percent(r['summary']['annual_returns'][y]) for y in years}} for r in selected]
+        annual.append({'選股方式':'0050 買入持有',**{y:percent(bm['annual_returns'][y]) for y in years}})
+        st.dataframe(pd.DataFrame(annual),hide_index=True,use_container_width=True)
+        st.caption('2026 為截至快照的部分年度；歷史已研究過，分年比較不等於未見樣本外驗證。')
+        diagnostics=[{'選股方式':r['name'],
+                      '滾動一年贏0050':percent(r['rolling']['252']['win_fraction']),
+                      '年均單邊換手':f"{r['diagnostics']['annual_one_way_turnover_using_end_day_nav']:.1f} 倍",
+                      '累計成本／期初資金':percent(r['summary']['fees_initial_equity'])} for r in selected]
+        st.dataframe(pd.DataFrame(diagnostics),hide_index=True,use_container_width=True)
+        st.caption('滾動窗口重疊；累計成本以期初資金為分母，因多年反覆交易可能超過 100%，不是年費率。')
+        audit=report['revenue_inputs']['audit']
+        st.write(f"資料抽查：3 家公司共 {sum(c['matched'] for c in audit['finmind_db_checks'])} 筆與 FinMind 相符；台積電 {audit['official_check']['months']} 個月與公司 SEC 申報相符。抽查不能證明全市場正確或歷史版本完整。")
+        for item in report['limitations']: st.caption('• '+item)
+    st.download_button('下載營收交叉驗證摘要',__import__('json').dumps(report,ensure_ascii=False,indent=2),
+                       file_name='revenue-research.json',mime='application/json')
 
 
 def render_flow_research():

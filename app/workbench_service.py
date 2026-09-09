@@ -113,6 +113,7 @@ def portfolio(account_id='paper'):
 
 
 def strategy_evidence():
+    from app.revenue_research import overview as revenue_overview
     docs=[]
     for path in sorted((ROOT/'docs').glob('prereg*.md')):
         docs.append({'name':path.name,'path':str(path),'status':'historical_research'})
@@ -120,6 +121,7 @@ def strategy_evidence():
             'documents':docs,'rule_research':rule_research_overview(),
             'flow_research':flow_research_overview(),
             'theme_research':theme_research_overview(),
+            'revenue_research':revenue_overview(),
             'validation_requirements':['扣除稅費與滑價','訊號延遲至少一交易日',
                 '歷史資料可用時間與還原價對帳','與同期間基準比較','未用來調參的測試期與向前紙上追蹤']}
 

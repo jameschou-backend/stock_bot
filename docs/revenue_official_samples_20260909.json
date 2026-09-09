@@ -1,0 +1,17 @@
+{
+  "reviewed_at": "2026-09-09",
+  "method": "Manually transcribed numerical facts from company-filed SEC 6-K tables via web reading; section 1 Revenue in NT$ thousands multiplied by 1000. TSMC IR direct HTTP request returned 403; SEC company filings were explicitly selected as independent evidence.",
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000013/tsm-revenue20250210.htm",
+    "https://www.sec.gov/Archives/edgar/data/1046179/000104617925000026/tsm-revenue20250310.htm",
+    "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000005/tsm-revenue20260109.htm"
+  ],
+  "samples": [
+    {"stock_id": "2330", "revenue_month": "2024-01-01", "revenue_ntd": 215785127000, "source_index": 0},
+    {"stock_id": "2330", "revenue_month": "2025-01-01", "revenue_ntd": 293288038000, "source_index": 0},
+    {"stock_id": "2330", "revenue_month": "2024-02-01", "revenue_ntd": 181648270000, "source_index": 1},
+    {"stock_id": "2330", "revenue_month": "2025-02-01", "revenue_ntd": 260008796000, "source_index": 1},
+    {"stock_id": "2330", "revenue_month": "2024-12-01", "revenue_ntd": 278163107000, "source_index": 2},
+    {"stock_id": "2330", "revenue_month": "2025-12-01", "revenue_ntd": 335003568000, "source_index": 2}
+  ]
+}

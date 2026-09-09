@@ -94,6 +94,9 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     monkeypatch.setattr(news,'overview',lambda mode='scan':nr)
     from app import chain_flow_research as chain
     monkeypatch.setattr(chain,'overview',lambda:{'available':False,'note':'測試未準備族群快取'})
+    from app import revenue_research as revenue
+    revenue_report=json.loads((Path(__file__).resolve().parents[1]/'docs/research_revenue_20260909.json').read_text())
+    monkeypatch.setattr(revenue,'overview',lambda:{**revenue_report,'available':True})
     submitted=[]
     def submit_news(request):
         submitted.append(request)
@@ -101,6 +104,14 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     monkeypatch.setattr(ui.jobs,'submit',submit_news)
     app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard_v2/main.py')).run(timeout=20)
     assert not app.exception
+    element(app.selectbox,'營收比較情境').set_value('再延後 15 天').run()
+    assert not app.exception
+    assert any(ui.percent(.6554) in d.value['累積淨報酬'].tolist()
+               for d in app.dataframe if '累積淨報酬' in d.value)
+    element(app.selectbox,'營收比較情境').set_value('只看上市').run()
+    assert not app.exception
+    assert any(ui.percent(1.9038) in d.value['累積淨報酬'].tolist()
+               for d in app.dataframe if '累積淨報酬' in d.value)
     element(app.button,'更新近 7 天並分析').click().run()
     assert submitted[-1].kind=='news_scan' and submitted[-1].fetch_news
     assert submitted[-1].news_days==7
