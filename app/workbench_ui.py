@@ -216,6 +216,9 @@ def render_fills(book,account):
 def render_research(status):
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    render_rule_research()
+    st.divider()
+    st.subheader('模型回測')
     with st.form('research'):
         c1,c2,c3=st.columns(3)
         months=c1.selectbox('驗證區間（月）',[3,6,12,24,60,120],index=2)
@@ -235,6 +238,52 @@ def render_research(status):
         st.caption(status['adjustment_note'])
         st.write('已有研究紀錄：')
         for item in evidence['documents'][-8:]: st.caption(item['name'])
+
+
+def render_rule_research():
+    st.subheader('不用模型，也可以比較選股規則')
+    report=service.rule_research_overview()
+    if not report['available']:
+        st.info(report['note'])
+        return
+    st.caption(f"歷史快照截至 {report['source']['last_date']} · 六組比較計算 {report['elapsed_seconds']:.1f} 秒 · 重算不呼叫 FinMind")
+    st.warning('這是方向探索：歷史上市日期與還原價尚未完成對帳，可能混入當時興櫃股票。不能把表內報酬當作可實現績效。')
+    scenario=st.radio('交易成本情境',['stress','base'],horizontal=True,
+                     format_func=lambda x:'較高滑價（每邊 0.45%）' if x=='stress' else '基本滑價（每邊 0.30%）')
+    results=[r for r in report['results'] if r['scenario']==scenario]
+    rows=[]
+    for r in results:
+        rows.append({'選股方式':r['name'],
+                     '2023–2025 報酬':percent(r['segments']['2023_2025']['strategy']['total_return']),
+                     '2026 年至快照報酬':percent(r['segments']['2026_partial']['strategy']['total_return']),
+                     '全期累積報酬':percent(r['summary']['total_return']),
+                     '全期最大跌幅':percent(r['summary']['max_drawdown'])})
+    bm=results[0]
+    rows.append({'選股方式':'0050 買入持有（比較基準）',
+                 '2023–2025 報酬':percent(bm['segments']['2023_2025']['benchmark']['total_return']),
+                 '2026 年至快照報酬':percent(bm['segments']['2026_partial']['benchmark']['total_return']),
+                 '全期累積報酬':percent(bm['benchmark_summary']['total_return']),
+                 '全期最大跌幅':percent(bm['benchmark_summary']['max_drawdown'])})
+    st.dataframe(pd.DataFrame(rows),hide_index=True,use_container_width=True)
+    st.caption(f"全期：{bm['summary']['start']}～{bm['summary']['end']}。均含手續費、交易稅與滑價；分段是同一組合的連續表現。")
+    unsettled=[f"{r['name']} {r['summary']['unliquidated_positions']} 檔" for r in results
+               if r['summary']['unliquidated_positions']]
+    if unsettled:
+        st.caption('期末仍無法賣出：'+'、'.join(unsettled)+'；該部位按最後可得價格估值，未扣未來賣出成本。')
+    passed=[r['name'] for r in results if all(r['segments'][p]['excess_return']>0
+                                           for p in ('2023_2025','2026_partial'))]
+    if not passed:
+        st.write('目前沒有一組在 2023–2025 與 2026 年兩段都勝過 0050，尚無證據支持用這些規則取代基準。')
+    else:
+        st.write('兩段皆勝過基準的方向：'+ '、'.join(passed)+'；仍需先排除資料缺陷，再作新的向前驗證。')
+    with st.expander('這三種方法怎麼選股？'):
+        st.write('中期動能：挑中期漲幅較強、股價高於半年均線的股票。')
+        st.write('波動調整動能：相同資格，再把漲幅除以波動，降低忽上忽下股票的排名。')
+        st.write('接近一年新高：挑接近一年高點、均線向上，且近三個月仍上漲的股票。')
+        st.caption('共同條件：近 20 日平均成交額至少 5,000 萬元；月末決定名單，次一交易日收盤模擬成交；最多 10 檔、不足留現金。')
+        for item in report['limitations']: st.caption('• '+item)
+    st.download_button('下載規則比較摘要',__import__('json').dumps(report,ensure_ascii=False,indent=2),
+                       file_name='rule-research.json',mime='application/json')
 
 
 @st.fragment(run_every='5s')

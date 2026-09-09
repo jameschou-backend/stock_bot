@@ -117,5 +117,25 @@ def strategy_evidence():
     for path in sorted((ROOT/'docs').glob('prereg*.md')):
         docs.append({'name':path.name,'path':str(path),'status':'historical_research'})
     return {'live_qualified':False,'note':'目前沒有通過新驗證的實盤策略。歷史回測不等於實際獲利。',
-            'documents':docs,'validation_requirements':['扣除稅費與滑價','訊號延遲至少一交易日',
+            'documents':docs,'rule_research':rule_research_overview(),
+            'validation_requirements':['扣除稅費與滑價','訊號延遲至少一交易日',
                 '歷史資料可用時間與還原價對帳','與同期間基準比較','未用來調參的測試期與向前紙上追蹤']}
+
+
+def rule_research_overview():
+    """Read the explicit local experiment, never start computation on a page read."""
+    path=ROOT/'.cache/rule-research/report.json'
+    if not path.exists():
+        return {'available':False,'live_qualified':False,'note':'尚未產生規則比較報告'}
+    try:
+        report=json.loads(path.read_text())
+        if not isinstance(report,dict) or report.get('schema')!=1 or report.get('research_only') is not True:
+            raise ValueError('Unsupported research report')
+        rows=[{k:r[k] for k in ('rule','name','scenario','summary','benchmark_summary','segments')}
+              for r in report['results']]
+        if len(rows)!=6: raise ValueError('Incomplete comparison')
+        return {'available':True,'live_qualified':False,'source':report['source'],
+                'elapsed_seconds':report['elapsed_seconds'],'limitations':report['limitations'],
+                'results':rows}
+    except (OSError,ValueError,KeyError,TypeError):
+        return {'available':False,'live_qualified':False,'note':'規則比較報告不完整，請重新產生；不沿用舊結論'}

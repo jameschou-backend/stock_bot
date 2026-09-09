@@ -13,6 +13,17 @@ def element(elements,label):
     return next(e for e in elements if e.label==label)
 
 
+def test_overview_marks_missing_or_broken_report_unavailable(monkeypatch,tmp_path):
+    monkeypatch.setattr(service,'ROOT',tmp_path)
+    assert service.rule_research_overview()['available'] is False
+    folder=tmp_path/'.cache/rule-research';folder.mkdir(parents=True)
+    for content in ('[]','{"schema":1,"research_only":true,"results":[]}'):
+        (folder/'report.json').write_text(content)
+        result=service.rule_research_overview()
+        assert result['available'] is False and result['live_qualified'] is False
+        assert '不完整' in result['note']
+
+
 def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_path):
     engine=create_engine('sqlite://',connect_args={'check_same_thread':False},poolclass=StaticPool)
     Base.metadata.create_all(engine,tables=[*TABLES,RawPrice.__table__])
