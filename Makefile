@@ -332,3 +332,7 @@ research-themes:
 .PHONY: news-radar
 news-radar:
 	python scripts/news_research.py scan --days 7 --fetch
+
+.PHONY: research-chain-flow
+research-chain-flow:
+	python scripts/research_chain_flow.py --fetch
