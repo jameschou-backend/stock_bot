@@ -224,6 +224,8 @@ def render_fills(book,account):
 def render_research(status):
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    render_event_group_research()
+    st.divider()
     render_revenue_research()
     st.divider()
     render_theme_research()
@@ -647,3 +649,61 @@ def render_jobs():
                 curve=pd.DataFrame(job.get('equity_curve',[]))
                 if not curve.empty and {'date','equity'}.issubset(curve.columns): st.line_chart(curve.set_index('date')[['equity']])
                 st.download_button('下載驗證摘要',__import__('json').dumps(job,ensure_ascii=False,indent=2),file_name=f"{job['job_id']}.json",key=f"dl_{job['job_id']}")
+
+
+def render_event_group_research():
+    from app.event_group_research import overview
+    st.subheader('營運轉好＋題材有錢，能拿來選股嗎？')
+    report=overview()
+    if not report['available']:
+        st.info(report['note'])
+        return
+    audit=report['source_audit']; inputs=report['inputs']
+    st.error('新聞日期核對未通過：目前不能用這份歷史資料判定策略是否贏 0050。')
+    st.write('已完成三種規則：營運事件、題材群轉強、兩者同時成立。群體確認排除個股自己，檢查同群漲勢、均線及成交比重。')
+    st.caption(f"掃描本機 {inputs['provenance']['news']['db_news_rows']:,} 筆新聞 · 抽出 {inputs['counts']['accepted']:,} 筆待核對營運線索 · 題材關聯不是已確認受惠")
+    st.write('例如華東：FinMind 記為 2022-01-01，原文卻是 2020-08-14。已直接重查 API，仍回傳相同日期；不是本機轉換造成。')
+    with st.expander('查看原文日期核對與失敗原因'):
+        labels={'date_conflict':'明確錯置','calendar_date_difference':'日期差異待釐清',
+                'same_calendar_date_only':'日期相同，版本未證實','unverified':'原文未取得'}
+        st.dataframe(pd.DataFrame([{'代號':e['stock_id'],'標題':e['title'],'供應商日期':e['source_date'],
+            '原文日期':e['original_publication_date'] or '未知','核對':labels[e['date_check']],'原文':e['link']}
+            for e in audit['samples']]),hide_index=True,use_container_width=True,
+            column_config={'原文':st.column_config.LinkColumn('原文')})
+        st.caption('每種事件按時間取最早三筆，共 12 筆；選樣時未看事後股價。這不是隨機抽樣，不能推算全體錯誤率。')
+        st.write('下一步需要把原文發佈、更新、供應商日期與首次抓到時間分開保存；日期未核對的新聞不進正式策略驗證。')
+        for note in report['limitations']: st.caption('• '+note)
+    st.caption(f"效能：訊號快照 {inputs['elapsed_seconds']:.1f} 秒；30 組診斷 {report['elapsed_seconds']:.1f} 秒。重算不呼叫 FinMind。本輪補缺口 16 次、來源核對 2 次，共 18 次；16 個缺日回應皆空，仍標為未知。")
+    if st.checkbox('展開程式診斷數字（不能作為策略績效）',key='event_diagnostic'):
+        st.warning('以下保留原供應商日期，用來檢查交易引擎、成本及價格口徑。新聞時序未過，數字不支持策略優劣或可實現報酬。')
+        view=st.selectbox('事件診斷情境',['官方參考價・壓力成本','舊還原價・壓力成本','再晚一天進場','官方參考價・基本成本','舊還原價・基本成本'],key='event_view')
+        basis,scenario,delay={'官方參考價・壓力成本':('official','stress',0),'舊還原價・壓力成本':('snapshot','stress',0),
+            '再晚一天進場':('official','stress',1),'官方參考價・基本成本':('official','base',0),
+            '舊還原價・基本成本':('snapshot','base',0)}[view]
+        horizon=st.radio('事件持有上限',[63,126],format_func=lambda v:f'{v} 個交易日',horizontal=True,key='event_horizon')
+        selected=[r for r in report['results'] if (r['basis'],r['scenario'],r['delay'],r['horizon'])==(basis,scenario,delay,horizon)]
+        bm=selected[0]['benchmark_summary']
+        st.caption(f"{bm['start']}～{bm['end']}；新訊號截止 2025-11-30，後續只退出持股。每邊滑價 {'0.45%' if scenario=='stress' else '0.30%'}，另計稅費；一般訊號後一交易日收盤執行。")
+        table=[{'診斷方式':r['name'],'模擬累積淨報酬':percent(r['summary']['total_return']),
+            '最大跌幅':percent(r['summary']['max_drawdown']),'平均留現金':percent(r['diagnostics']['average_cash_fraction']),
+            '完成交易':r['summary']['completed_trades']} for r in selected]
+        table.append({'診斷方式':'0050 同期持有','模擬累積淨報酬':percent(bm['total_return']),
+            '最大跌幅':percent(bm['max_drawdown']),'平均留現金':'持有至期末','完成交易':1})
+        st.dataframe(pd.DataFrame(table),hide_index=True,use_container_width=True)
+        st.caption('每股初始配置最多前日資產 10%，最多 10 檔，不足留現金。跌破進場價 15% 或自高點跌 20%，下一交易日才嘗試退出；跳空可能超過停損幅度。')
+        with st.expander('分年、成本與贏輸交易'):
+            years=sorted(bm['annual_returns'])
+            annual=[{'方式':r['name'],**{y:percent(r['summary']['annual_returns'][y]) for y in years}} for r in selected]
+            annual.append({'方式':'0050',**{y:percent(bm['annual_returns'][y]) for y in years}})
+            st.dataframe(pd.DataFrame(annual),hide_index=True,use_container_width=True)
+            st.dataframe(pd.DataFrame([{'方式':r['name'],'平均持有交易日':r['summary']['average_holding_sessions'],
+                '累計成本／期初資金':percent(r['summary']['fees_initial_equity']),
+                '受阻單數':r['summary']['blocked_orders'],'缺價持有日':r['summary']['missing_hold_days']}
+                for r in selected]),hide_index=True,use_container_width=True)
+            st.caption('2026 為部分年度；累計成本不是年費率。以下保留最好與最差已完成交易，不可相加成投資組合績效。')
+            examples=[{'方式':r['name'],'類型':label,'代號':t['stock_id'],'買入':t['entry_date'],
+                       '賣出':t['exit_date'],'單筆模擬淨報酬':percent(t['net_return'])}
+                      for r in selected for key,label in [('best_trades','較好'),('worst_trades','較差')] for t in r[key][:3]]
+            st.dataframe(pd.DataFrame(examples),hide_index=True,use_container_width=True)
+    st.download_button('下載事件診斷與日期稽核',__import__('json').dumps(report,ensure_ascii=False,indent=2),
+                       file_name='event-group-diagnostic.json',mime='application/json')

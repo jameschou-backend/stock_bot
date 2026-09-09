@@ -340,3 +340,12 @@ news-radar:
 .PHONY: research-chain-flow
 research-chain-flow:
 	python scripts/research_chain_flow.py --fetch
+
+.PHONY: prepare-event-groups diagnose-event-groups
+prepare-event-groups:
+	python scripts/prepare_event_groups.py
+	python scripts/research_event_groups.py --prepare-signals
+
+# Publication dates failed verification; this is explicitly not strategy evidence.
+diagnose-event-groups:
+	python scripts/research_event_groups.py --diagnostic-only

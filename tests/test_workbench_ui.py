@@ -97,6 +97,9 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     from app import revenue_research as revenue
     revenue_report=json.loads((Path(__file__).resolve().parents[1]/'docs/research_revenue_20260909.json').read_text())
     monkeypatch.setattr(revenue,'overview',lambda:{**revenue_report,'available':True})
+    from app import event_group_research as event_research
+    event_report=json.loads((Path(__file__).resolve().parents[1]/'docs/research_event_groups_20260909.json').read_text())
+    monkeypatch.setattr(event_research,'overview',lambda:{**event_report,'available':True})
     submitted=[]
     def submit_news(request):
         submitted.append(request)
@@ -104,6 +107,16 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     monkeypatch.setattr(ui.jobs,'submit',submit_news)
     app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard_v2/main.py')).run(timeout=20)
     assert not app.exception
+    assert any('新聞日期核對未通過' in e.value for e in app.error)
+    assert not any('模擬累積淨報酬' in d.value for d in app.dataframe)
+    element(app.checkbox,'展開程式診斷數字（不能作為策略績效）').set_value(True).run()
+    assert not app.exception
+    element(app.selectbox,'事件診斷情境').set_value('再晚一天進場').run()
+    element(app.radio,'事件持有上限').set_value(126).run()
+    assert not app.exception
+    expected=next(r for r in event_report['results'] if (r['basis'],r['scenario'],r['delay'],r['horizon'],r['rule'])==('official','stress',1,126,'combined'))
+    assert any(ui.percent(expected['summary']['total_return']) in d.value['模擬累積淨報酬'].tolist()
+               for d in app.dataframe if '模擬累積淨報酬' in d.value)
     element(app.selectbox,'營收比較情境').set_value('再延後 15 天').run()
     assert not app.exception
     assert any(ui.percent(.6554) in d.value['累積淨報酬'].tolist()
