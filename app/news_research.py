@@ -86,7 +86,7 @@ def collect_recent(end, days, config, *, now=None):
         day = end - timedelta(days=offset)
         path = CACHE / 'days' / f'{day.isoformat()}.json'
         cached = json.loads(path.read_text()) if path.exists() else None
-        ttl = 3600 if (now.date()-day).days <= 2 else 86400
+        ttl = 3600 if (now.astimezone(ZoneInfo('Asia/Taipei')).date()-day).days <= 1 else 86400
         age = (now-datetime.fromisoformat(cached['fetched_at'])).total_seconds() if cached else None
         if cached and 0 <= age < ttl:
             stats['day_cache_hits'] += 1

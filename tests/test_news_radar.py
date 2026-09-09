@@ -89,6 +89,23 @@ def test_review_cutoff_excludes_same_day_and_never_fetches(monkeypatch, tmp_path
     assert result['live_qualified'] is False
 
 
+def test_only_today_and_yesterday_use_hourly_refresh_in_taipei(tmp_path, monkeypatch):
+    monkeypatch.setattr(service, 'CACHE', tmp_path)
+    now = datetime(2026, 9, 9, 16, 30, tzinfo=timezone.utc)  # Taipei Sep 10.
+    for day in [date(2026,9,8),date(2026,9,9),date(2026,9,10)]:
+        frame=pd.DataFrame([{'stock_id':'2408','date':str(day)+' 00:00','title':'記憶體'}])
+        service.store_day(day,frame,now-timedelta(hours=2))
+    calls=[]
+    def fetch(dataset,day,**kwargs):
+        calls.append(day)
+        return pd.DataFrame([{'stock_id':'2408','date':str(day)+' 00:00','title':'記憶體'}])
+    monkeypatch.setattr(service,'fetch_dataset',fetch)
+    cfg=SimpleNamespace(finmind_token='test',finmind_requests_per_hour=5400)
+    stats=service.collect_recent(date(2026,9,10),3,cfg,now=now)
+    assert calls==[date(2026,9,9),date(2026,9,10)]
+    assert stats['day_cache_hits']==1
+
+
 def test_price_context_uses_only_pre_publication_closes_and_keeps_missing_unknown(tmp_path, monkeypatch):
     import numpy as np
     from scripts import research_flow
