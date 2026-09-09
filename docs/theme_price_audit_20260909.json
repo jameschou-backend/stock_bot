@@ -1,0 +1,106 @@
+{
+  "checked_at": "2026-09-09",
+  "scope": "只核對南亞科、國巨及 0050 的十筆進出場原始收盤；不等於九檔全部行情與還原因子均已對帳。",
+  "raw_checks": [
+    {
+      "stock_id": "2408",
+      "date": "2025-07-11",
+      "official_close": 42.95,
+      "local_raw_close": 42.95,
+      "local_adjusted_close": 42.95,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20250701&stockNo=2408"
+    },
+    {
+      "stock_id": "2408",
+      "date": "2026-01-13",
+      "official_close": 230.0,
+      "local_raw_close": 230.0,
+      "local_adjusted_close": 230.0,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260101&stockNo=2408"
+    },
+    {
+      "stock_id": "2327",
+      "date": "2025-07-30",
+      "official_close": 523.0,
+      "local_raw_close": 523.0,
+      "local_adjusted_close": 129.81829,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20250701&stockNo=2327"
+    },
+    {
+      "stock_id": "2327",
+      "date": "2026-01-30",
+      "official_close": 277.5,
+      "local_raw_close": 277.5,
+      "local_adjusted_close": 275.522565,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260101&stockNo=2327"
+    },
+    {
+      "stock_id": "0050",
+      "date": "2025-07-11",
+      "official_close": 49.62,
+      "local_raw_close": 49.62,
+      "local_adjusted_close": 48.587031,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20250701&stockNo=0050"
+    },
+    {
+      "stock_id": "0050",
+      "date": "2025-07-30",
+      "official_close": 51.0,
+      "local_raw_close": 51.0,
+      "local_adjusted_close": 50.290188,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20250701&stockNo=0050"
+    },
+    {
+      "stock_id": "0050",
+      "date": "2026-01-13",
+      "official_close": 70.7,
+      "local_raw_close": 70.7,
+      "local_adjusted_close": 69.716006,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260101&stockNo=0050"
+    },
+    {
+      "stock_id": "0050",
+      "date": "2026-01-30",
+      "official_close": 72.6,
+      "local_raw_close": 72.6,
+      "local_adjusted_close": 72.6,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20260101&stockNo=0050"
+    },
+    {
+      "stock_id": "0050",
+      "date": "2025-04-16",
+      "official_close": 162.35,
+      "local_raw_close": 162.35,
+      "local_adjusted_close": 39.74046,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20250401&stockNo=0050"
+    },
+    {
+      "stock_id": "0050",
+      "date": "2025-10-16",
+      "official_close": 63.0,
+      "local_raw_close": 63.0,
+      "local_adjusted_close": 62.123173,
+      "raw_matches": true,
+      "source_url": "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date=20251001&stockNo=0050"
+    }
+  ],
+  "corporate_action": {
+    "stock_id": "2327",
+    "shares_per_old_share": 4,
+    "suspension_start": "2025-08-14",
+    "suspension_end": "2025-08-22",
+    "resumed_on": "2025-08-25",
+    "source_title": "期交所 2025-08-06 公函（元大期貨保存副本）",
+    "source_url": "https://www.yuantafutures.com.tw/UploadFile/Artical/202508/1754470641752_2327_20250825.pdf",
+    "note": "公函引用證交所面額變更公告，每 1,000 股換 4,000 股；相關停止交易日與國巨七個缺價交易日吻合。這是回放後的價格品質核對，不是新增進場訊號。"
+  }
+}

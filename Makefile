@@ -323,3 +323,7 @@ research-rules:
 .PHONY: research-flow
 research-flow:
 	python scripts/research_flow.py
+
+.PHONY: research-themes
+research-themes:
+	python scripts/research_themes.py
