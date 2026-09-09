@@ -327,3 +327,8 @@ research-flow:
 .PHONY: research-themes
 research-themes:
 	python scripts/research_themes.py
+
+# Bounded headline collection: at most seven calls, shared quota and resumable day cache.
+.PHONY: news-radar
+news-radar:
+	python scripts/news_research.py scan --days 7 --fetch
