@@ -78,6 +78,13 @@ prepare-diffusion:
 research-diffusion:
 	python scripts/research_diffusion.py
 
+.PHONY: prepare-regime-switch research-regime-switch
+prepare-regime-switch:
+	python scripts/research_regime_switch.py --prepare-states
+
+research-regime-switch:
+	python scripts/research_regime_switch.py
+
 dashboard:
 	streamlit run app/dashboard.py
 
