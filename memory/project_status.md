@@ -1,6 +1,27 @@
 # 專案現況
 
-> 最後更新：2026-07-18（dashboard_v2 資訊瀏覽三頁 + TG 誠實日報上線；未 commit——本次 session 禁 git，由使用者自行 commit）
+> 最後更新：2026-09-10（Codex 9/9–9/10 研究輪審查完成；P0 preset 漂移待修；memory 由 Claude 補記，Codex 未更新）
+
+---
+
+## 2026-09-10：Codex 研究輪審查（詳見 decisions.md 同日條目、artifacts/review_pack_codex_sept_audit_20260910.md）
+
+- **現況**：Codex 9/9–9/10 建了「族群領先股 3 槽 / 100 萬整數股帳本」研究工作台（41 commit，全部已 push main）。
+  「原策略」loss12 + 剩餘 0050：2022-01～2026-09-09 +710.8%／MDD −35.9%（0050 +242%），**live_qualified=false、未進實盤**。
+  帳本 `.cache/technical-research/report.json`（24.8 MB，7 帳戶離線重現一致），封存來源 6,321 檔；`.cache` 共 2.3 GB **未進 git、未異機備份**。
+- **審查結論**：訊號鏈 0 前視；但 +710% 在路徑運氣帶正中（隨機優先序 p5–p95 +430%～+1,284%）、事件層 vs 0050 CI 含 0、
+  趨勢閘門與 loss12 皆同歷史挑出 → 各變體結論不可靠。有真實截面 alpha（vs 等權流動池 +6pp/63 日，CI 不含 0），但不敵 0050。
+- **待修（優先序）**：
+  1. **P0** `scripts/run_backtest.py:515` entry_delay 預設 0→1 漂移：preset 加 `entry_delay_days: 0` + `tests/test_production_invariants.py` 鎖 + 重跑對照 0.647/0.613。
+  2. **P1** `skills/daily_pick.py:46-63` TAIEX FinMind 致命依賴＋24h 快取釘死；`skills/ingest_trading_calendar.py:102-121` 日曆整段改寫無 sanity；
+     `skills/data_quality.py` 最新一日分市場硬條件。
+  3. **P1** 引擎：`allow_fee_shortfall` 旗標統一四引擎；容量純因果臂；零股揭示量上限臂。
+  4. **研究誠信**：路徑 null / 月叢集 bootstrap / DSR / trial registry 接進 research driver（腳本已在 artifacts）。
+  5. 工程：四引擎整併（~900 行重複）、CAS 取代 copyfile（省 1.4 GB）、verify stamp memo（4.4 GB 雜湊）、工作台 display.json、
+     launchd 與工作台鎖排隊、`update_data` 來源對齊 .env、12 MB JSON 移出 git、docs 索引。
+- **未動**：A 線生產 pipeline（launchd 18:00）照常；Codex 動過的生產檔（`daily_pick`、`ingest_trading_calendar`、`ingest_prices` 四碼過濾、
+  `data_store.warm_up` 不再 invalidate、`training_cache` 預設 on）9/9、9/10 兩次 pipeline OK，但上述 P1 是潛在單點故障。
+- **測試**：`make test` 2,171 passed / 90 秒（1,399 個 def test_ + ~772 parametrize 展開；8 檔真 AppTest）。
 
 ---
 
