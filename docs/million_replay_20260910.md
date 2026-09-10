@@ -35,6 +35,14 @@ make research-million-replay
 make verify-million-replay
 ```
 
+Excel匯出使用本機Codex提供的Node及`@oai/artifact-tool`，不重新抓資料或執行策略：
+
+```sh
+node scripts/build_million_workbook.mjs
+```
+
+若依賴安裝於其他位置，可用`--runtime-modules /absolute/path/to/node_modules`指定。匯出器先確認報告封存及離線重現成功，再重算Excel公式並比對帳本，保存各工作表預覽。輸出及檢查檔不加入Git。
+
 FinMind一律使用專案共用快取與全域配額器，6,000次／小時保留10%緩衝。HTTP402／配額不足時停止並保留已有來源，下次可續用，不另外開平行帳號或繞過限制。官方零股API與FinMind分開記次數。純帳本重算不重新抓全市場，也不重訓模型。
 
 `.cache/million-replay/manifest.json` 封存輸入、程式、runtime、來源與输出SHA256；`report.json`包含完整明細，`summary.json`為摘要。原舊回測封存不變；本次另外修補新資料庫匯出缺少的市場日和0050價格，不能據此宣稱舊封存研究也缺同樣日期。
