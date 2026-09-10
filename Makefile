@@ -70,6 +70,14 @@ prepare-guidance:
 research-guidance:
 	python scripts/research_guidance.py
 
+.PHONY: prepare-diffusion research-diffusion
+prepare-diffusion:
+	python scripts/research_diffusion.py --prepare-inputs
+	python scripts/research_diffusion.py --prepare-signals
+
+research-diffusion:
+	python scripts/research_diffusion.py
+
 dashboard:
 	streamlit run app/dashboard.py
 
