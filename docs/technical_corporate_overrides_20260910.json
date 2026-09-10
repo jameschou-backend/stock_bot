@@ -1,0 +1,202 @@
+{
+  "schema": 1,
+  "account_policy": "dematerialized account; no cash capital subscriptions; no fractional-share consolidation",
+  "overrides": {
+    "4123-2023-09-08": {
+      "shares_per_share": 0.09916825873,
+      "pay_date": "2023-10-13",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "cash_rounding_source": "MOPS 2023-08-24 announcement: the total cash dividend is truncated to whole NTD",
+      "source": "Issuer shareholder notice and annual report, cross-checked against MOPS announcements republished by Cnyes (2023-08-24) and MoneyDJ (2023-10-05); republished pages are not direct MOPS copies",
+      "entitlement_source": "https://news.cnyes.com/news/id/5300938",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=214c7dbb-7f07-409e-97fd-7d53e306f44c",
+      "shares_per_1000": [
+        54.5425423,
+        44.62571643
+      ],
+      "fractional_terms": "Issuer shareholder notice page 2, III(II), and MOPS republished announcement II.7(3): cash for sub-share rights in depository book-entry accounts pays book-entry processing fees; net account cash is zero",
+      "issuer_primary_sources": [
+        {
+          "url": "https://www.centerlab.com.tw/investor/shareholder_service/annual_report_download/18?name=112%E5%B9%B4%E6%99%9F%E5%BE%B7%E8%82%A1%E6%9D%B1%E6%9C%83%E5%B9%B4%E5%A0%B1%E4%B8%8A%E5%82%B3%E6%AA%94.pdf",
+          "title": "Issuer 112 annual report",
+          "pdf_page_1_based": 72,
+          "printed_page": 68,
+          "verified_facts": [
+            "54.54254230 new shares per 1000 from earnings",
+            "44.62571643 new shares per 1000 from capital reserve",
+            "Both distributions delivered on 2023-10-13"
+          ],
+          "evidence_role": "Retrospective verification of actual corporate action; not an announcement available at the 2023-09-08 signal date"
+        },
+        {
+          "url": "https://www.centerventures.com.tw/investor/shareholder_service/meeting_record_download/41?name=%28%E4%B8%AD%29%E6%99%9F%E5%BE%B7112%E5%B9%B4%E9%96%8B%E6%9C%83%E9%80%9A%E7%9F%A5%E6%9B%B8%28%E4%B8%8A%E5%82%B3%E7%89%88%29.pdf",
+          "title": "Issuer 112 annual shareholder meeting notice",
+          "pdf_page_1_based": 2,
+          "section": "III(II)",
+          "verified_facts": [
+            "Residual fractions pay cash at face value, rounded down to whole NTD",
+            "For book-entry depository recipients, the sub-share cash pays book-entry processing fees"
+          ],
+          "evidence_role": "Primary evidence for fraction settlement terms; initial 55/45 ratios in this earlier notice were subsequently revised and are not used as final ratios"
+        }
+      ],
+      "official_exchange_rounding_note": "TPEx per-1000 field is 99.16825874; issuer component sum is 99.16825873; use the explicitly announced components"
+    },
+    "1815-2026-09-09": {
+      "shares_per_share": 0.05000171092,
+      "pay_date": "2026-10-13",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "announcement_date": "2026-08-24",
+      "source": "MOPS announcement republished by Cnyes on 2026-08-24; planned delivery, not completed delivery at replay end",
+      "entitlement_source": "https://news.cnyes.com/news/id/6585370",
+      "delivery_source": "https://news.cnyes.com/news/id/6585370",
+      "delivery_status_at_replay_end": "scheduled; shares and cash remain receivable on 2026-09-09",
+      "fractional_terms": "Section 17(4): depository sub-share cash pays book-entry fees; account net cash zero",
+      "cash_rounding_source": "Section 17(3): total cash dividend truncated to whole NTD",
+      "timing_source": "Section 17(2): rights certificates scheduled for delivery and TPEx trading on 2026-10-13, subject to a later change notice"
+    },
+    "2890-2026-07-23": {
+      "shares_per_share": 0.02,
+      "pay_date": "2026-08-24",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "announcement_date": "2026-07-07",
+      "source": "Issuer shareholder information cross-checked with MOPS distribution announcement and TWSE listing announcement republished by nStock; republished pages are not direct MOPS/TWSE copies",
+      "issuer_source": "https://www.sinopac.com/investors/20211210153456867633/20211210153457700590.html",
+      "entitlement_source": "https://www.nstock.tw/news/article_m?id=506514",
+      "delivery_source": "https://www.nstock.tw/news/article_m?id=534593",
+      "shares_per_1000": 20.0,
+      "fractional_terms": "2026-07-07 announcement VII(2): depository book-entry recipients use sub-share cash to pay book-entry fees; net cash is zero under the unchanged account policy",
+      "cash_rounding_source": "2026-07-07 announcement VII(1): aggregate cash dividend is truncated to whole NTD",
+      "delivery_evidence": "2026-08-14 exchange announcement: 289846446 new shares start trading on 2026-08-24, capital registration completed 2026-08-05; issuer posted delivery announcement to MOPS on 2026-08-07",
+      "verification_note": "docs/exit_corporate_sources_2890_20260910.md",
+      "entitlement_content_sha256": "489ec69bef43219fe98f0b5960ec25601c804c4aa29dfc31d2ebccda43c56184",
+      "delivery_content_sha256": "1bbc58891e767285df619342e0115d21998e3cd55bf03f03c9d3d68a73f55669"
+    },
+    "2885-2023-08-11": {
+      "shares_per_share": 0.015,
+      "pay_date": "2023-10-02",
+      "fractional_cash_per_share": 0,
+      "announcement_date": "2023-07-27",
+      "source": "Issuer 2023 shareholder meeting notice and MOPS distribution/listing announcements republished by Cnyes and MoneyDJ; republished pages are not direct MOPS copies",
+      "shares_per_1000": 15.0,
+      "entitlement_source": "https://news.cnyes.com/news/id/5265626",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=32228e8f-0f3f-4a38-9ce8-c81cad5cb6e2",
+      "issuer_fraction_source": "https://www.yuanta.com/Files/4.1.6-a18071670367c78c0a8a-tw/2023_AGMNotice_C.pdf?s=2023",
+      "fractional_terms": "Issuer 2023 shareholder meeting notice, first PDF page, stock book-entry application clause 3: sub-share cash pays book-entry fees; net cash zero for this non-consolidating depository account",
+      "delivery_evidence": "2023-09-19 listing announcement confirms new shares delivered and listed on 2023-10-02",
+      "cash_note": "2023-08-11 is stock rights only; no additional cash distribution is inferred from this event",
+      "verification_note": "docs/exit_corporate_sources_2885_20260910.md"
+    },
+    "2881-2024-09-09": {
+      "shares_per_share": 0.05,
+      "pay_date": "2024-10-15",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_amount_basis": "Issuer-announced gross face-value right, not verified net cash; adapter separates this receivable from stock delivery",
+      "fractional_payment_status": "unverified; keep rounded gross cash receivable, never release on whole-share delivery",
+      "source": "Issuer 2024 shareholder notice and MOPS distribution/delivery announcements republished by nStock and Esun/MoneyDJ; processing/remittance fees and fractional payment date remain unverified",
+      "shares_per_1000": 50.0,
+      "announcement_date": "2024-08-23",
+      "entitlement_source": "https://www.nstock.tw/news/article_m?id=217751",
+      "delivery_source": "https://m.esunsec.com.tw/news/instant-detail.aspx?id=%7BF61EF278-230A-4488-8C78-AC48385DF1CB%7D",
+      "issuer_fraction_source": "https://www.fubon.com/financialholdings/governance/shareholders/MEETING-NOTICE.pdf",
+      "issuer_fraction_source_sha256": "5e2ace93f6ee5173a8404acac313e583188c3812850b28f1e462a16798ba80ae",
+      "fractional_terms": "Issuer 2024 meeting notice PDF page 2, sixth copy, clause IV: unconsolidated sub-share rights pay face-value cash truncated to whole NTD. NT$10 face value confirmed by 2024-08-23 distribution announcement. No verified net-fee or cash-payment-date term.",
+      "cash_note": "2024-09-09 is stock rights only; the independent NT$2.5 cash dividend ex-date is 2024-07-19",
+      "verification_note": "docs/exit_corporate_sources_2881_20260910.md"
+    },
+    "2881-2024-07-19": {
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer 2024 shareholder notice, PDF page 2, sixth copy, section II(V)",
+      "cash_rounding_source": "https://www.fubon.com/financialholdings/governance/shareholders/MEETING-NOTICE.pdf",
+      "verification_note": "docs/exit_corporate_sources_2881_20260910.md"
+    },
+    "1808-2024-09-26": {
+      "shares_per_share": 1.2,
+      "pay_date": "2024-10-31",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer original 2024-08-12 distribution PDF and shareholder notice; final TWSE listing announcement republished by Cnyes 2024-10-15",
+      "delivery_source": "https://news.cnyes.com/news/id/5743321",
+      "fractional_terms": "Issuer notice: depository sub-share cash pays book-entry fees; net zero under unchanged account policy",
+      "verification_note": "docs/exit_corporate_sources_1808_20260910.md"
+    },
+    "1519-2025-07-25": {
+      "shares_per_share": 0.1,
+      "pay_date": "2025-08-29",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer 2025 shareholder meeting notice cross-checked with MOPS distribution and actual listing announcements republished by Refinitiv/TradingView",
+      "entitlement_source": "https://tw.tradingview.com/news/reuters.com,2025-07-11:newsml_MOP4JMJ0W:0/",
+      "delivery_source": "https://tw.tradingview.com/news/reuters.com,2025-08-15:newsml_MOP33xtCx:0/",
+      "issuer_fraction_source": "https://www.fortune.com.tw/WEB_Manage/attached/file/shareholder/20250513/2025_1140613%20%E9%96%8B%E6%9C%83%E9%80%9A%E7%9F%A5%E6%9B%B8.pdf",
+      "fractional_terms": "Issuer meeting notice page 1 stock book-entry application: sub-share cash pays book-entry fees; net zero. Final distribution announcement confirms same term.",
+      "verification_note": "docs/exit_corporate_sources_1519_20260910.md"
+    },
+    "2880-2024-08-13": {
+      "shares_per_share": 0.01,
+      "pay_date": "2024-09-30",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "cash_rounding": "floor_ntd",
+      "certificate_delivery_date": "2024-08-30",
+      "ordinary_share_available_date": "2024-09-30",
+      "valuation_basis": "ordinary_share_close_proxy",
+      "certificate_trading_modeled": false,
+      "fractional_amount_basis": "Face-value estimate from issuer provisions, not a verified personal gross/net payment formula; unknown payment date remains receivable",
+      "cash_rounding_limitation": "Floor only; actual tail redistribution may add NT$1, which cannot be determined without all shareholder records",
+      "source": "Issuer filed 2024 AGM handbook and distribution/listing announcements; explicitly restricted account does not trade rights certificates. Ordinary-share availability is 2024-09-30, not the earlier certificate listing.",
+      "entitlement_source": "https://www.nstock.tw/news/article_m?id=199281",
+      "delivery_source": "https://news.cnyes.com/news/id/5722269",
+      "verification_note": "docs/exit_corporate_sources_2880_20260910.md"
+    },
+    "2736-2023-08-30": {
+      "shares_per_share": 0.01999998653,
+      "pay_date": "2023-10-02",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "source": "TPEx precise per-1000 entitlement cross-checked against issuer 2023 AGM handbook and MOPS ordinary-share distribution announcement republished by MoneyDJ on 2023-09-26; fractional net fees/payment date unverified",
+      "shares_per_1000": 19.99998653,
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=15106b38-d8b4-4b65-a9eb-2c1789453608",
+      "fractional_terms": "Issuer AGM handbook: unconsolidated sub-share rights paid at face value with NTD fractions truncated; exact net remittance and payment date not verified, keep gross receivable",
+      "delivery_evidence": "Announcement names listed ordinary shares 979847, ordinary-share delivery and depository credit on 2023-10-02; not rights certificates. No separate exchange listing notice was obtained.",
+      "verification_note": "docs/exit_corporate_sources_2736_20260910.md"
+    },
+    "2834-2022-08-02": {
+      "shares_per_share": 0.037,
+      "pay_date": "2022-09-07",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer 2022 AGM manual and dividend page; final ordinary-share delivery date corroborated by issuer announcement republished by Cnyes 2022-08-29. Fractional gross valuation uses par 10 as an explicitly unverified shareholder refund-price assumption.",
+      "entitlement_source": "https://ir.tbb.com.tw/getfile?item=15&y=2022&i=85",
+      "delivery_source": "https://news.cnyes.com/news/id/4942545",
+      "fractional_terms": "AGM manual PDF page40 printed38: fractional shares converted to cash, sub-NTD amount truncated; pooled fractional shares subscribed at par. Shareholder refund price itself not explicit, net cash and payment date unverified; retain any positive gross cash as receivable.",
+      "fractional_valuation_verified": false,
+      "fractional_valuation_assumption": "Par value NTD10. Pre-correction risk2 source probe held 1 share on the 2022 ex-date, creating .037 fractional share; estimated gross .37 NTD truncated to 0. This is not a holding claim for the final fee-funded replay.",
+      "issuer_primary_sources": [
+        {
+          "url": "https://ir.tbb.com.tw/shareholder/dividend",
+          "role": "cash .10, stock .37, ex2022-08-02"
+        },
+        {
+          "url": "https://ir.tbb.com.tw/getfile?item=15&y=2022&i=85",
+          "sha256": "02c42467cc67b3fc78d4f25bef96eac6e015c6b7a6d58a57c51057f4dd519af1",
+          "pdf_pages_1_based": [
+            38,
+            40
+          ]
+        }
+      ]
+    }
+  },
+  "inherited_from": "docs/exit_corporate_overrides_20260910.json",
+  "research_scope": "Technical support, risk sizing, additions and contraction-breakout; independent override copy; original sealed parent unchanged"
+}
