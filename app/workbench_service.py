@@ -113,6 +113,7 @@ def portfolio(account_id='paper'):
 
 
 def strategy_evidence():
+    from app.capacity_research import overview as capacity_overview
     from app.regime_switch_research import overview as regime_switch_overview
     from app.diffusion_research import overview as diffusion_overview
     from app.guidance_research import overview as guidance_overview
@@ -130,6 +131,7 @@ def strategy_evidence():
             'guidance_research':guidance_overview(),
             'diffusion_research':diffusion_overview(),
             'regime_switch_research':regime_switch_overview(),
+            'capacity_research':capacity_overview(),
             'validation_requirements':['扣除稅費與滑價','訊號延遲至少一交易日',
                 '歷史資料可用時間與還原價對帳','與同期間基準比較','未用來調參的測試期與向前紙上追蹤']}
 
