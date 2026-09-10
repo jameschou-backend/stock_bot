@@ -85,6 +85,13 @@ prepare-regime-switch:
 research-regime-switch:
 	python scripts/research_regime_switch.py
 
+.PHONY: prepare-capacity research-capacity
+prepare-capacity:
+	python scripts/research_capacity.py --prepare-signals
+
+research-capacity:
+	python scripts/research_capacity.py
+
 dashboard:
 	streamlit run app/dashboard.py
 
