@@ -84,6 +84,9 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     from app import cash_allocation_research as allocation
     monkeypatch.setattr(allocation,'overview',lambda:{'available':False,
         'note':'測試未準備資金配置快取','source_verification':{'status':'pending'}})
+    from app import technical_research as technical
+    monkeypatch.setattr(technical,'overview',lambda:{'available':False,
+        'note':'測試未準備技術策略快取','source_verification':{'status':'pending'}})
     import json
     theme=json.loads((Path(__file__).resolve().parents[1]/'docs/research_themes_20260909.json').read_text())
     monkeypatch.setattr(service,'theme_research_overview',lambda:{**theme,'available':True})
