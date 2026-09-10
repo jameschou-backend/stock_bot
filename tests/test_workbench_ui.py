@@ -79,6 +79,11 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     monkeypatch.setattr(ui,'candidate_data',lambda:[])
     monkeypatch.setattr(ui.jobs,'JOBS_DIR',tmp_path)
     # UI verification must work in a fresh checkout with no local research cache.
+    # Allocation rendering and sealed real-data verification have their own
+    # tests; paper-fill actions must not depend on an evolving local replay.
+    from app import cash_allocation_research as allocation
+    monkeypatch.setattr(allocation,'overview',lambda:{'available':False,
+        'note':'測試未準備資金配置快取','source_verification':{'status':'pending'}})
     import json
     theme=json.loads((Path(__file__).resolve().parents[1]/'docs/research_themes_20260909.json').read_text())
     monkeypatch.setattr(service,'theme_research_overview',lambda:{**theme,'available':True})
