@@ -92,6 +92,19 @@ prepare-capacity:
 research-capacity:
 	python scripts/research_capacity.py
 
+.PHONY: prepare-million-replay research-million-replay verify-million-replay
+prepare-million-replay:
+	python scripts/prepare_million_prices.py
+	python scripts/prepare_million_signals.py --fetch-adjusted --prepare-signals
+	python scripts/replay_million.py --prepare-and-replay
+
+# Frozen inputs only: recompute both integer-share accounts and compare every row.
+research-million-replay:
+	python scripts/replay_million.py --offline-replay
+
+verify-million-replay:
+	python scripts/replay_million.py --verify
+
 dashboard:
 	streamlit run app/dashboard.py
 

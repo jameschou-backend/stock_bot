@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "account_policy": "dematerialized account; no cash capital subscriptions; no fractional-share consolidation",
+  "overrides": {
+    "4123-2023-09-08": {
+      "shares_per_share": 0.09916825873,
+      "pay_date": "2023-10-13",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "cash_rounding_source": "MOPS 2023-08-24 announcement: the total cash dividend is truncated to whole NTD",
+      "source": "Issuer shareholder notice and annual report, cross-checked against MOPS announcements republished by Cnyes (2023-08-24) and MoneyDJ (2023-10-05); republished pages are not direct MOPS copies",
+      "entitlement_source": "https://news.cnyes.com/news/id/5300938",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=214c7dbb-7f07-409e-97fd-7d53e306f44c",
+      "shares_per_1000": [
+        54.5425423,
+        44.62571643
+      ],
+      "fractional_terms": "Issuer shareholder notice page 2, III(II), and MOPS republished announcement II.7(3): cash for sub-share rights in depository book-entry accounts pays book-entry processing fees; net account cash is zero",
+      "issuer_primary_sources": [
+        {
+          "url": "https://www.centerlab.com.tw/investor/shareholder_service/annual_report_download/18?name=112%E5%B9%B4%E6%99%9F%E5%BE%B7%E8%82%A1%E6%9D%B1%E6%9C%83%E5%B9%B4%E5%A0%B1%E4%B8%8A%E5%82%B3%E6%AA%94.pdf",
+          "title": "Issuer 112 annual report",
+          "pdf_page_1_based": 72,
+          "printed_page": 68,
+          "verified_facts": [
+            "54.54254230 new shares per 1000 from earnings",
+            "44.62571643 new shares per 1000 from capital reserve",
+            "Both distributions delivered on 2023-10-13"
+          ],
+          "evidence_role": "Retrospective verification of actual corporate action; not an announcement available at the 2023-09-08 signal date"
+        },
+        {
+          "url": "https://www.centerventures.com.tw/investor/shareholder_service/meeting_record_download/41?name=%28%E4%B8%AD%29%E6%99%9F%E5%BE%B7112%E5%B9%B4%E9%96%8B%E6%9C%83%E9%80%9A%E7%9F%A5%E6%9B%B8%28%E4%B8%8A%E5%82%B3%E7%89%88%29.pdf",
+          "title": "Issuer 112 annual shareholder meeting notice",
+          "pdf_page_1_based": 2,
+          "section": "III(II)",
+          "verified_facts": [
+            "Residual fractions pay cash at face value, rounded down to whole NTD",
+            "For book-entry depository recipients, the sub-share cash pays book-entry processing fees"
+          ],
+          "evidence_role": "Primary evidence for fraction settlement terms; initial 55/45 ratios in this earlier notice were subsequently revised and are not used as final ratios"
+        }
+      ],
+      "official_exchange_rounding_note": "TPEx per-1000 field is 99.16825874; issuer component sum is 99.16825873; use the explicitly announced components"
+    },
+    "1815-2026-09-09": {
+      "shares_per_share": 0.05000171092,
+      "pay_date": "2026-10-13",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "announcement_date": "2026-08-24",
+      "source": "MOPS announcement republished by Cnyes on 2026-08-24; planned delivery, not completed delivery at replay end",
+      "entitlement_source": "https://news.cnyes.com/news/id/6585370",
+      "delivery_source": "https://news.cnyes.com/news/id/6585370",
+      "delivery_status_at_replay_end": "scheduled; shares and cash remain receivable on 2026-09-09",
+      "fractional_terms": "Section 17(4): depository sub-share cash pays book-entry fees; account net cash zero",
+      "cash_rounding_source": "Section 17(3): total cash dividend truncated to whole NTD",
+      "timing_source": "Section 17(2): rights certificates scheduled for delivery and TPEx trading on 2026-10-13, subject to a later change notice"
+    }
+  }
+}
