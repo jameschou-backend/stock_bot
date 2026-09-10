@@ -399,3 +399,74 @@ def test_unfilled_entry_is_visible_in_sizing_audit():
     assert row['requested_qty']>0 and row['filled_qty']==0
     assert row['failure']=='partial_or_unfilled_execution'
     assert not account['cohorts']
+
+
+def small_residual_fixture(*, cash=330., slots=3, insufficient=False, blocked=()):
+    stock=np.full(SIZE,100.);stock[ENTRY+2:]=87.
+    def mutate(quotes,days):
+        if insufficient:
+            mask=quotes.stock_id.eq('1101') & quotes.date.ge(days[ENTRY])
+            for key,value in [('open',60.),('high',61.),('low',59.),('close',60.)]:
+                quotes.loc[mask,key]=value
+        mask=quotes.stock_id.eq('1101') & quotes.date.ge(days[ENTRY+2])
+        price=1. if insufficient else 10.
+        for key,value in [('open',price),('high',price+.1),('low',price-.1),('close',price)]:
+            quotes.loc[mask,key]=value
+    days,adjusted,args,kwargs=fixture(stock=stock,entries=[ENTRY],mutate=mutate,blocked=blocked)
+    kwargs.update(initial_cash=cash,slots=slots)
+    engine=TechnicalReplay(*args,technical_signals=Signals(adjusted,days),mode='control',**kwargs)
+    account=engine.run();audit(account)
+    return engine,account,days
+
+
+def test_one_share_exit_pays_exact_fee_shortfall_and_releases_cohort():
+    replay,account,days=small_residual_fixture()
+    sales=[t for t in account['trades'] if t['stock_id']=='1101' and t['side']=='sell']
+    assert len(sales)==1 and sales[0]['qty']==1
+    sale=sales[0]
+    assert sale['gross']==10. and sale['commission']==20. and sale['slippage']==1.
+    assert sale['cash_change']==-11. and sale['negative_proceeds_settlement'] is True
+    assert sale['reason']=='loss12' and sale['signal_date']==str(days[ENTRY+2].date())
+    orders=[r for r in account['orders'] if r['stock_id']=='1101' and r['side']=='sell']
+    assert len(orders)==1 and orders[0]['filled_qty']==1 and orders[0]['failure'] is None
+    assert account['cohorts'][0]['exit_date']==str(days[ENTRY+3].date())
+    assert account['daily'][-1]['cash']==248. and account['daily'][-1]['market_value']==0
+    assert '1101' not in replay.holdings
+
+
+def test_fee_shortfall_without_enough_cash_stays_visible_and_never_overdraws():
+    replay,account,_=small_residual_fixture(cash=142.,slots=1,insufficient=True)
+    assert not [t for t in account['trades'] if t['stock_id']=='1101' and t['side']=='sell']
+    rejected=[r for r in account['orders'] if r['stock_id']=='1101' and r['side']=='sell']
+    assert rejected and all(r['failure']=='proceeds_below_costs_insufficient_cash' for r in rejected)
+    assert all(r['negative_proceeds_cash_required']==19. and r['negative_proceeds_cash_available']==1. for r in rejected)
+    assert account['daily'][-1]['cash']==1. and replay.holdings['1101']['qty']==2
+    assert account['cohorts'][0]['exit_date'] is None
+
+
+def test_negative_proceeds_never_override_price_limit_block():
+    days=pd.bdate_range('2021-01-04',periods=SIZE)
+    _,account,_=small_residual_fixture(blocked=[('1101',days[ENTRY+3])])
+    sales=[t for t in account['trades'] if t['stock_id']=='1101' and t['side']=='sell']
+    assert {t['date'] for t in sales}=={str(days[ENTRY+4].date())}
+    blocked=[o for o in account['orders'] if o['stock_id']=='1101' and o['date']==str(days[ENTRY+3].date())]
+    assert blocked and all(o['failure']=='at_lower_limit' and o['filled_qty']==0 for o in blocked)
+
+
+def test_negative_proceeds_partial_fills_still_obey_shared_channel_capacity_no_short():
+    stock=np.full(SIZE,100.);stock[ENTRY+2:]=87.
+    def mutate(quotes,days):
+        mask=quotes.stock_id.eq('1101') & quotes.date.ge(days[ENTRY+2])
+        for field,value in [('open',.02),('high',.021),('low',.019),('close',.02),('volume',100_000.)]:
+            quotes.loc[mask,field]=value
+    replay,account,days=run('control',stock=stock,entries=[ENTRY],mutate=mutate,odd_volume=1000,end=ENTRY+3)
+    sales=[t for t in account['trades'] if t['stock_id']=='1101' and t['side']=='sell']
+    assert sales and all(t['negative_proceeds_settlement'] is True for t in sales)
+    assert sum(t['qty'] for t in sales if t['channel']=='board')==1000
+    assert sum(t['qty'] for t in sales if t['channel']=='odd')==50
+    assert replay.used[('1101','board')]==1000 and replay.used[('1101','odd')]==50
+    before=replay.holdings['1101']['qty']
+    assert before>0
+    assert replay.order(days[ENTRY+3],'1101','sell',before,'scheduled_exit','entry-'+str(ENTRY))==0
+    assert replay.holdings['1101']['qty']==before
+    assert all(row['cash']>=0 for row in account['daily'])

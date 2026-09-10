@@ -178,6 +178,55 @@ class TechnicalReplay(ScenarioExitReplay):
                 holding['due_index'] = state['target_index']
         return income
 
+    def order(self, day, sid, side, qty, reason, event_id, signal_date=None):
+        """Allow an otherwise executable residual sale to pay more fee than gross.
+
+        All original price, limit, liquidity and channel checks run first. A
+        fee larger than the residual market value does not justify trapping a
+        cohort indefinitely when the account can pay the shortfall. Only that
+        one original rejection is reconsidered, with no fee waiver or funding.
+        """
+        first = len(self.orders)
+        filled_total = super().order(day, sid, side, qty, reason, event_id, signal_date)
+        if side != 'sell':
+            return filled_total
+        for row in self.orders[first:]:
+            if row.get('failure') != 'proceeds_below_costs':
+                continue
+            channel, reference = row['channel'], row['reference_price']
+            step = 1000 if channel == 'board' else 1
+            capacity = max(0, row['capacity_qty']-self.used[(sid, channel)])
+            remaining = self.holdings.get(sid, {}).get('qty', 0)
+            filled = min(row['requested_qty'], capacity, remaining)//step*step
+            if not filled:
+                continue
+            paid = costs(reference, int(filled), 'sell', sid)
+            row['negative_proceeds_cash_required'] = max(0., -paid['cash_change'])
+            row['negative_proceeds_cash_available'] = self.cash
+            if money(self.cash+paid['cash_change']) < 0:
+                row['failure'] = 'proceeds_below_costs_insufficient_cash'
+                continue
+            price = self.raw(day, sid)
+            self.cash_move(day, 'sell', paid['cash_change'], stock_id=sid,
+                           event_id=row['event_id'], channel=channel)
+            self.holdings[sid]['qty'] -= filled
+            self.marks[sid] = dict(price=price, date=str(day.date()))
+            self.used[(sid, channel)] += filled
+            self.day_cost += paid['total_cost']
+            self.day_basis -= filled*(price-reference)
+            row['negative_proceeds_settlement'] = True
+            trade = dict(row, **paid, qty=int(filled), reference_price=reference,
+                cash_after=self.cash, remaining_shares=self.holdings[sid]['qty'],
+                day_participation=filled/(row['day_volume'] if channel == 'board' else row['odd_volume']),
+                sequence=len(self.trades)+1)
+            trade.pop('filled_qty')
+            trade.pop('failure')
+            self.trades.append(trade)
+            row['filled_qty'] = int(filled)
+            row['failure'] = 'partial_capacity_or_cash' if filled < row['requested_qty'] else None
+            filled_total += filled
+        return filled_total
+
     def _entry_plan(self, day, event, opening_nav, previous_price, budget):
         sid = event['members'][0]
         technical = self._technical(self.positions[day], sid)
