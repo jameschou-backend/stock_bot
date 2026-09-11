@@ -1,0 +1,305 @@
+{
+  "scope": "restatement_halt_odd_lot_and_integration",
+  "observed_at": "2026-09-11T17:48:01.677296+00:00",
+  "original_books": {
+    "signal": {
+      "path": "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/journal.sqlite3",
+      "events": 4,
+      "head": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132",
+      "fills": 0
+    },
+    "strategy": {
+      "path": "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/portfolio-v2.sqlite3",
+      "events": 7,
+      "head": "1b6541786852d5cfc9658ac2b1ef578bad38a912ed332d27228f537e9cc79f05",
+      "fills": 0,
+      "nav": "1000000",
+      "cash": "1000000",
+      "price_date": "2026-09-11"
+    },
+    "benchmark": {
+      "path": "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/benchmark-0050.sqlite3",
+      "events": 7,
+      "head": "95ec2fb2510db496012bdc6c6635a58fc791381dcd7b382d0863ce07a50ece70",
+      "fills": 0,
+      "nav": "1000000",
+      "cash": "1000000",
+      "price_date": "2026-09-11"
+    }
+  },
+  "original_books_unchanged": true,
+  "code_sha256": {
+    "app/forward_restatement.py": "de4f183f3ee0bbf6cc04bf0709b8365c2ab0b0b7b7036b832bf0230cf4a5dcb6",
+    "app/forward_halts.py": "7aae4292d129400757594b757989392d49b5b0d37ad1b72ba6c96d4b70d0ce27",
+    "app/forward_odd_lot.py": "aaeeb22134ab95caad2baa455fed05f4c74574d96981e11c5127c4a1985937d9",
+    "app/forward_evidence_ui.py": "87fedde7f78790425965870f18f30434d1318e5bc67252940aa7ddcf7eb130d6",
+    "app/forward_portfolio_ui.py": "8120953e867ed15401d14b0a4e43bfb276e4b78965693a10f3b9a823e5828606",
+    "app/forward_corporate_audit.py": "ed3ebe86f1abdd350ba122ab9bb93d66b270adc4f1f062278ce5562d9c0ba14c",
+    "app/forward_comparison_ui.py": "d057e460f7d80c4e836f380f75ecb7430adf6e0c946b9d727546cfcbadedca54",
+    "scripts/portfolio_forward.py": "684b2d26477c5a9e0c65ff1aeb7929dd023412a59898d89d4754f50685c42c3c"
+  },
+  "odd_lot_actual_probes": [
+    {
+      "hash": "3569569fe25222eea2e2a2db0200f495f50149533eef267bd91af21ed5de37d6",
+      "query": [
+        "tse",
+        "0050"
+      ],
+      "status": "ok",
+      "quote": {
+        "asks": [
+          {
+            "price": "107.7500",
+            "shares": 91088
+          },
+          {
+            "price": "107.8000",
+            "shares": 165161
+          },
+          {
+            "price": "107.8500",
+            "shares": 42662
+          },
+          {
+            "price": "107.9000",
+            "shares": 5908
+          },
+          {
+            "price": "107.9500",
+            "shares": 3808
+          }
+        ],
+        "bids": [
+          {
+            "price": "107.7000",
+            "shares": 188877
+          },
+          {
+            "price": "107.6500",
+            "shares": 72765
+          },
+          {
+            "price": "107.6000",
+            "shares": 105917
+          },
+          {
+            "price": "107.5500",
+            "shares": 30359
+          },
+          {
+            "price": "107.5000",
+            "shares": 170407
+          }
+        ],
+        "channel": "intraday_odd",
+        "daily_volume_shares": 11868480,
+        "market": "tse",
+        "quantity_unit": "shares",
+        "quote_at": "2026-09-11T13:30:00+08:00",
+        "raw_row_sha256": "2a42bc9fa9e2d04c39bff3382ac07f63246b37f8fca3818daa26682a07648b4d",
+        "retrieved_at": "2026-09-11T17:37:54.121407+00:00",
+        "source": "https://mis.twse.com.tw/stock/api/getOddInfo.jsp",
+        "stock_id": "0050"
+      }
+    },
+    {
+      "hash": "3ad1bee66d3335c0c9ef571196580121c3dd0239faa983f273c8c74c569509c0",
+      "query": [
+        "tse",
+        "1560"
+      ],
+      "status": "ok",
+      "quote": {
+        "asks": [
+          {
+            "price": "790.0000",
+            "shares": 12944
+          },
+          {
+            "price": "791.0000",
+            "shares": 513
+          },
+          {
+            "price": "792.0000",
+            "shares": 1260
+          },
+          {
+            "price": "793.0000",
+            "shares": 1211
+          },
+          {
+            "price": "794.0000",
+            "shares": 2865
+          }
+        ],
+        "bids": [
+          {
+            "price": "789.0000",
+            "shares": 388
+          },
+          {
+            "price": "788.0000",
+            "shares": 317
+          },
+          {
+            "price": "787.0000",
+            "shares": 52
+          },
+          {
+            "price": "786.0000",
+            "shares": 283
+          },
+          {
+            "price": "785.0000",
+            "shares": 861
+          }
+        ],
+        "channel": "intraday_odd",
+        "daily_volume_shares": 217297,
+        "market": "tse",
+        "quantity_unit": "shares",
+        "quote_at": "2026-09-11T13:30:00+08:00",
+        "raw_row_sha256": "339e7085f6f4f00db94da0df165e4d1f3d5967b69e5d9f4e31357febfdda5526",
+        "retrieved_at": "2026-09-11T17:38:06.779633+00:00",
+        "source": "https://mis.twse.com.tw/stock/api/getOddInfo.jsp",
+        "stock_id": "1560"
+      }
+    },
+    {
+      "hash": "56167fbbba987f5a7babe268bb5f400efdc6b918ce9d8da6a250ab78d5a310f4",
+      "query": [
+        "otc",
+        "3105"
+      ],
+      "status": "ok",
+      "quote": {
+        "asks": [
+          {
+            "price": "437.0000",
+            "shares": 1062
+          },
+          {
+            "price": "437.5000",
+            "shares": 50
+          },
+          {
+            "price": "438.0000",
+            "shares": 86
+          },
+          {
+            "price": "438.5000",
+            "shares": 300
+          },
+          {
+            "price": "439.0000",
+            "shares": 750
+          }
+        ],
+        "bids": [
+          {
+            "price": "436.5000",
+            "shares": 251
+          },
+          {
+            "price": "436.0000",
+            "shares": 462
+          },
+          {
+            "price": "435.5000",
+            "shares": 1201
+          },
+          {
+            "price": "435.0000",
+            "shares": 22159
+          },
+          {
+            "price": "434.5000",
+            "shares": 447
+          }
+        ],
+        "channel": "intraday_odd",
+        "daily_volume_shares": 465380,
+        "market": "otc",
+        "quantity_unit": "shares",
+        "quote_at": "2026-09-11T13:30:00+08:00",
+        "raw_row_sha256": "337d2dc814bee45d75aef95b2bd87e891a72900920ab8cce6b67534c0c3d6349",
+        "retrieved_at": "2026-09-11T17:38:07.818575+00:00",
+        "source": "https://mis.twse.com.tw/stock/api/getOddInfo.jsp",
+        "stock_id": "3105"
+      }
+    }
+  ],
+  "live_qualified": false,
+  "data_status_file": "docs/forward_execution_data_status_20260912.json",
+  "limitations": [
+    "No executions yet in either original book",
+    "User reports are not broker authenticated",
+    "No complete automated TWSE/TPEX corporate announcement coverage",
+    "Complex corporate actions and intraday halts remain blocked",
+    "Restated or estimated curves are not original complete observed performance"
+  ],
+  "validation": {
+    "tests_passed": 2293,
+    "warnings": 28,
+    "test_seconds": 53.67,
+    "pipeline_successful_runs": 3,
+    "api": [
+      {
+        "endpoint": "/health",
+        "status": 200,
+        "count": null,
+        "result": {
+          "status": "ok"
+        }
+      },
+      {
+        "endpoint": "/picks",
+        "status": 200,
+        "count": 20,
+        "result": null
+      },
+      {
+        "endpoint": "/models",
+        "status": 200,
+        "count": 7,
+        "result": null
+      },
+      {
+        "endpoint": "/jobs?limit=10",
+        "status": 200,
+        "count": 10,
+        "result": null
+      }
+    ],
+    "logs": {
+      "tests": {
+        "path": ".cache/forward-validation/acceptance-20260912/tests.log",
+        "sha256": "830c7985c574acae5121df0b4493c8fcb269b04d67eff0244cce843643a3d67d"
+      },
+      "pipeline_first": {
+        "path": ".cache/forward-validation/acceptance-20260912/pipeline_first.log",
+        "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03"
+      },
+      "pipeline_repeat": {
+        "path": ".cache/forward-validation/acceptance-20260912/pipeline_repeat.log",
+        "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03"
+      },
+      "pipeline_final": {
+        "path": ".cache/forward-validation/acceptance-20260912/pipeline_final.log",
+        "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03"
+      }
+    },
+    "focused_evidence_tests": 17
+  },
+  "comparison": {
+    "ready": false,
+    "reasons": [
+      "benchmark 尚無成交回報",
+      "strategy 尚無成交回報"
+    ],
+    "points": [],
+    "live_qualified": false,
+    "entry_session": "2026-09-14",
+    "as_of": "2026-09-11"
+  }
+}

@@ -1,0 +1,108 @@
+{
+  "price_date": "2026-09-11",
+  "expected_date": "2026-09-11",
+  "feature_date": "2026-09-11",
+  "feature_stocks": 2195,
+  "markets": [
+    {
+      "market": "TPEX",
+      "date": "2026-09-11",
+      "stocks": 862
+    },
+    {
+      "market": "TWSE",
+      "date": "2026-09-11",
+      "stocks": 1082
+    }
+  ],
+  "data_ready": true,
+  "problems": [],
+  "strategy_ready": false,
+  "strategy_note": "目前策略尚未完成新的成本後驗證；候選名單與計畫供研究／紙上追蹤。",
+  "adjustment_note": "還原價來源與歷史修正尚需完整對帳，不能以因子表最新日期推定正確。",
+  "quota": {
+    "requests_in_window": 9,
+    "window_start_time": 1789144936.968549,
+    "total_requests": 2613,
+    "total_wait_time": 0,
+    "effective_limit": 4860,
+    "remaining_requests": 4851,
+    "retry_after_seconds": 0,
+    "cooldown_until": 0
+  },
+  "jobs": [
+    {
+      "name": "export_report",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:08",
+      "ended_at": "2026-09-11 17:41:08"
+    },
+    {
+      "name": "daily_pick",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:07",
+      "ended_at": "2026-09-11 17:41:08"
+    },
+    {
+      "name": "build_labels",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:06",
+      "ended_at": "2026-09-11 17:41:07"
+    },
+    {
+      "name": "build_features",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:05",
+      "ended_at": "2026-09-11 17:41:06"
+    },
+    {
+      "name": "ingest_gov_bank",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:02",
+      "ended_at": "2026-09-11 17:41:02"
+    },
+    {
+      "name": "ingest_per",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:02",
+      "ended_at": "2026-09-11 17:41:02"
+    },
+    {
+      "name": "data_quality_check",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:02",
+      "ended_at": "2026-09-11 17:41:05"
+    },
+    {
+      "name": "ingest_fear_greed",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:02",
+      "ended_at": "2026-09-11 17:41:02"
+    },
+    {
+      "name": "ingest_corporate_actions",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:01",
+      "ended_at": "2026-09-11 17:41:01"
+    },
+    {
+      "name": "ingest_margin_short",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:01",
+      "ended_at": "2026-09-11 17:41:01"
+    },
+    {
+      "name": "ingest_theme_flow",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:01",
+      "ended_at": "2026-09-11 17:41:02"
+    },
+    {
+      "name": "ingest_fundamental",
+      "status": "success",
+      "started_at": "2026-09-11 17:41:01",
+      "ended_at": "2026-09-11 17:41:01"
+    }
+  ],
+  "observed_at": "2026-09-11T17:41:33.165923Z"
+}
