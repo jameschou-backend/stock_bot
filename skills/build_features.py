@@ -40,7 +40,7 @@ from app.models import (
     RawFearGreed,
     RawFundamental,
     RawGovBank,
-    RawHoldingDist,
+    ValidatedHoldingDist as RawHoldingDist,
     RawInstitutional,
     RawKBarDaily,
     RawMarginShort,
@@ -1160,15 +1160,15 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
         holding_stmt = (
             select(
                 RawHoldingDist.stock_id,
-                RawHoldingDist.trading_date,
+                RawHoldingDist.available_date.label("trading_date"),
                 RawHoldingDist.large_holder_pct,
             )
-            .where(RawHoldingDist.trading_date.between(start_date - timedelta(days=30), end_date))
+            .where(RawHoldingDist.available_date.between(start_date - timedelta(days=30), end_date))
             .order_by(RawHoldingDist.stock_id, RawHoldingDist.trading_date)
         )
         holding_df = pd.read_sql(holding_stmt, session.get_bind())
-    except Exception:
-        holding_df = pd.DataFrame()
+    except Exception as exc:
+        raise RuntimeError("Validated holder table unavailable; run make migrate and scripts/repair_holding_cache.py --apply") from exc
     elapsed = time.perf_counter() - t0
     logger.info(f"[PERF] fetch_holding_dist: {elapsed:.2f}s（{len(holding_df):,}列）")
 
@@ -1194,6 +1194,7 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
                 sub_h.sort_values("trading_date")[["trading_date", "large_holder_pct"]],
                 on="trading_date",
                 direction="backward",
+                tolerance=pd.Timedelta(days=21),
             )
             aligned = aligned.rename(columns={"large_holder_pct": "large_holder_pct_raw"})
             merged_holding.append(aligned)

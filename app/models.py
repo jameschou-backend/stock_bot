@@ -351,6 +351,19 @@ class RawHoldingDist(Base):
     __table_args__ = (Index("idx_raw_holding_dist_date", "trading_date"),)
 
 
+class ValidatedHoldingDist(Base):
+    """Reconciled 15-tier ratios (0..1). Legacy aggregates remain quarantined."""
+    __tablename__ = "validated_holding_dist"
+    stock_id = Column(String(16), primary_key=True)
+    trading_date = Column(Date, primary_key=True)  # observation, not release date
+    available_date = Column(Date, nullable=False)
+    large_holder_pct = Column(DECIMAL(10, 4))  # >1000 lots
+    small_holder_pct = Column(DECIMAL(10, 4))  # <=1000 lots
+    top_level_pct = Column(DECIMAL(10, 4))
+    holder_count = Column(BigInteger)
+    __table_args__ = (Index("idx_validated_holding_available", "available_date"),)
+
+
 # ─────────────────────────────────────────────────────────────
 # Priority 3：分鐘 K 線日內聚合特徵（TaiwanStockKBar）
 # ─────────────────────────────────────────────────────────────
