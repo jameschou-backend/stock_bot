@@ -7,6 +7,8 @@ from app.forward_portfolio_ui import render as render_portfolio
 
 def render():
     render_portfolio()
+    from app.forward_comparison_ui import render as render_comparison
+    render_comparison()
     with st.expander('原策略訊號封存與舊版證據（v1）'):
         data=journal.summary()
         st.caption(f"已封存 {data['prospective_days']} 個訊號日；舊版委託 {data['orders']} 筆、成交 {data['confirmed_fills']} 筆。新版不匯入舊委託或假定成交。")

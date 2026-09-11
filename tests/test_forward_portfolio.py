@@ -239,7 +239,7 @@ def test_portfolio_ui_shows_unknown_nav_and_partial_order(monkeypatch):
     data=dict(nav=None,available_cash='900000',reserved_cash='40000',price_date=None,fill_count=1,holdings=[],rows=[],
         orders=[dict(order_id='test',stock_id='2492',side='buy',session='2026-09-14',channel='odd',limit_price='100',
             qty=999,filled=400,remaining=599,status='部分成交')])
-    monkeypatch.setattr(ui.p,'summary',lambda:data)
+    monkeypatch.setattr(ui.p,'summary',lambda *args:data)
     app=AppTest.from_string('from app.forward_portfolio_ui import render\nrender()').run()
     assert not app.exception
     assert app.metric[0].value=='未知，待完整估值'
