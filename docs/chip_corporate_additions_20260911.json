@@ -1,0 +1,36 @@
+{
+  "overrides": {
+    "2887-2023-07-26": {
+      "shares_per_share": 0.04200000002,
+      "pay_date": "2023-08-25",
+      "fractional_cash_per_share": 0,
+      "source": "MOPS distribution and listing announcements republished by Cnyes and MoneyDJ; issuer historical dividend table cross-check",
+      "entitlement_source": "https://news.cnyes.com/news/id/5246548",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=8660f49d-5827-4874-9fba-0f14a9085f57",
+      "fractional_terms": "Uncombined fractions pay book-entry fees, net account cash zero"
+    },
+    "2543-2024-10-22": {
+      "shares_per_share": 0.27,
+      "pay_date": "2024-11-25",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "source": "MOPS issuance and final listing announcements republished by Cnyes and MoneyDJ",
+      "entitlement_source": "https://news.cnyes.com/news/id/5694756",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=df946043-1210-45ff-a79b-2e7e1d6d8373",
+      "fractional_terms": "Face-value gross cash rounded down to NTD; payment and net processing fees unverified, retain receivable"
+    },
+    "6691-2023-07-17": {
+      "shares_per_share": 0.30398405542223975,
+      "pay_date": "2023-08-21",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "source": "Derived entitlement: issuer new shares 20372142 divided by FinMind participating shares 67017140; final listing announcement republished by MoneyDJ",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=ca75a234-bb6a-463c-9946-a37b4b0e3874",
+      "ratio_method": "20372142 / 67017140; not the rounded 3.0398 NTD stock dividend or total issued shares including treasury shares",
+      "ratio_publication_precision_verified": false,
+      "fractional_terms": "Explicit gross face-value floor valuation assumption only; net entitlement terms and payment unverified, never spend this receivable"
+    }
+  }
+}

@@ -222,6 +222,7 @@ def render_fills(book,account):
 
 
 def render_research(status):
+    from app.chip_research_ui import render as render_chip
     from app.technical_research import render as render_technical
     from app.cash_allocation_research import render as render_cash_allocation
     from app.exit_research import render as render_exit
@@ -231,6 +232,8 @@ def render_research(status):
     from app.guidance_research_ui import render as render_guidance
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    render_chip()
+    st.divider()
     render_technical()
     st.divider()
     render_cash_allocation()
