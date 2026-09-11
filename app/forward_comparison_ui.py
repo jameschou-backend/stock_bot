@@ -1,12 +1,13 @@
 """Aligned evidence first; no scorecard while either book is incomplete."""
 import pandas as pd
 import streamlit as st
-from app import forward_comparison as c
+from app import forward_comparison as c, forward_halts as h, forward_portfolio as p
 
 
 def render():
     st.subheader('策略與0050：同本金前向比較')
-    try: result=c.comparison()
+    st.caption('比較固定使用兩份原始帳本；上方選取的更正版本不會替換原始前向績效。')
+    try: result=h.compare(p.PATH,c.BENCHMARK)
     except (ValueError,OSError) as exc:
         st.error('比較證據未通過檢查：'+str(exc));return
     if not result['ready']:

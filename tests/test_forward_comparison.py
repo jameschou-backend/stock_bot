@@ -131,7 +131,7 @@ def test_benchmark_rejects_discretionary_trading_and_other_stocks(tmp_path):
 def test_no_complete_evidence_means_no_return_widgets(monkeypatch):
     from app import forward_comparison_ui as ui
     from streamlit.testing.v1 import AppTest
-    monkeypatch.setattr(ui.c,'comparison',lambda:dict(ready=False,reasons=['strategy 尚無成交回報']))
+    monkeypatch.setattr(ui.h,'compare',lambda *args:dict(ready=False,reasons=['strategy 尚無成交回報']))
     app=AppTest.from_string('from app.forward_comparison_ui import render\nrender()').run()
     assert not app.exception and not app.metric
     assert '尚無成交回報' in app.info[0].value

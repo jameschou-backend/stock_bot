@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 import pandas as pd
 import streamlit as st
+from app import forward_halts as halts, forward_evidence_ui as evidence_ui
 from app import forward_corporate_audit as corporate, forward_corporate_ui, forward_portfolio as p, forward_portfolio_service as service, forward_journal as j, forward_comparison as comparison
 
 
@@ -14,6 +15,7 @@ def render():
     if benchmark and not path.exists():
         st.info('0050比較帳本尚未建立。')
         return
+    path=evidence_ui.select_version(path,account)
     st.caption('0050買入持有、股息入帳後再投入｜獨立紙上成交紀錄' if benchmark else '策略按上一收盤總資產複利配置｜不送券商、不用報價假設成交')
     try: data=p.summary(path)
     except (ValueError,OSError) as exc:
@@ -24,7 +26,10 @@ def render():
     columns[2].metric('委託預留',f"${float(data['reserved_cash']):,.0f}")
     st.caption(f"估值日期：{data['price_date'] or '尚未封存收盤'}；已登錄紙上成交：{data['fill_count']} 筆。回報由使用者提供，尚未經券商認證。")
     st.info('盤前先核對公司行動 → 盤中登錄成交 → 封存收盤資產 → 建立下一交易日計畫。現階段尚不能宣稱可實戰或已勝過0050。')
+    if halts.estimated(data['rows']):st.warning('總資產包含停牌估值，請查看下方價格來源日期。')
     forward_corporate_ui.render(path, account)
+    evidence_ui.render_halts(path,account)
+    evidence_ui.render_odd(path,account)
     with st.expander('今日結算與下一交易日計畫',expanded=True):
         reviewed=st.checkbox('已核對持股的除息、分割及股款交付；如有事件已先登錄',key='pf_actions_reviewed_'+account)
         left,right=st.columns(2)
@@ -36,10 +41,10 @@ def render():
         if right.button('建立下一交易日紙上計畫',key='pf_plan_'+account,use_container_width=True):
             try:
                 if benchmark:
-                    plans=comparison.reinvest_dividends(path)
+                    plans=halts.save_plans(path,benchmark=True)
                     st.success(f'已保存 {len(plans)} 筆股息再投入計畫；未成交初始本金不自動重試。')
                 else:
-                    result=comparison.save_strategy_plans(path)
+                    result=halts.save_plans(path)
                     if result['entry_block']: st.warning('出場已獨立檢查；新買進暫停：'+result['entry_block'])
                     else: st.success('已保存出場及買入計畫。')
             except (ValueError,KeyError) as exc: st.error(str(exc))
@@ -66,18 +71,14 @@ def render():
                 try:
                     c=dict(kind='fill',id=report_id,order_id=order['order_id'],qty=n,price=str(price),fee=str(fees),tax=str(tax),
                         executed_at=at,evidence=dict(source='paper_execution_report',report_id=report_id))
-                    if benchmark: comparison.record_benchmark(c,path)
-                    else:
-                        with j.connection(path) as con: p.submit(con,c)
+                    halts.record(path,c,benchmark)
                     st.success('成交已入帳，持股與剩餘預留已更新。');st.rerun()
                 except (ValueError,KeyError) as exc: st.error(str(exc))
             reason=st.text_input('取消剩餘原因',value='核對當日回報，確認剩餘未成交',key='pf_cancel_reason_'+account)
             if st.button('取消剩餘數量',key='pf_cancel_'+account):
                 try:
                     command=dict(kind='cancel',id=order['order_id'],order_id=order['order_id'],reason=reason)
-                    if benchmark: comparison.record_benchmark(command,path)
-                    else:
-                        with j.connection(path) as con: p.submit(con,command)
+                    halts.record(path,command,benchmark)
                     st.rerun()
                 except (ValueError,KeyError) as exc: st.error(str(exc))
     intents=[r for r in data['rows'] if r['kind']=='funding_intent']
@@ -85,22 +86,22 @@ def render():
         st.warning('曾有個股因現金不足而保留盤前資金需求；不代表已下單或已成交。')
         if st.button('0050成交入帳後，釋放今日資金需求',key='pf_release_'+account):
             try:
-                service.release_funded_intents(path);st.rerun()
+                halts.require_observed(path);service.release_funded_intents(path);st.rerun()
             except (ValueError,KeyError) as exc: st.error(str(exc))
     with st.expander('規則、公司行動與完整帳本'):
         if benchmark: st.write('0050基準不採個股停損或換股；初始未成交餘款留現金，只將已交付股息提出再投入計畫。')
         else: st.write('出場：收盤跌至調整後進場價的88%，或持有63個交易日，下一交易日提出限價賣出；未成交剩餘持股保留出場決策。限價委託不保證成交。')
-        st.write('除權息當天須先登錄權益，再登錄任何成交；若已漏登，不可倒填，需先停止結算並對帳。')
+        st.write('除權息當天須先登錄權益，再登錄任何成交；若已漏登，先停止結算；使用下方「帳本更正」預覽並另存版本，不改寫原始紀錄。')
         st.write('股息先列應收，實際入帳後才可使用；分割股未交付前禁止交易及完整估值。減資、碎股等未支援事件須暫停並對帳。')
-        st.write('零股即時深度尚未接入；0050比較帳本使用相同會計引擎，但兩邊需要各自成交與結算證據。公司行動已加入來源交叉檢查；完整公告覆蓋及複雜權益仍待人工核對。')
+        st.write('零股五檔可在上方按鈕查詢並保存證據，過期報價不能當作即時深度；0050比較帳本使用相同會計引擎，但兩邊需要各自成交與結算證據。公司行動已加入來源交叉檢查；完整公告覆蓋及複雜權益仍待人工核對。')
         report=st.file_uploader('進階：已核對公司行動 JSON（entitlement／delivery）',type=['json'],key='pf_action_'+account)
         if st.button('登錄公司行動證據',disabled=report is None,key='pf_action_save_'+account):
             try:
                 c=json.loads(report.getvalue())
                 if c['kind'] not in ('entitlement','delivery'): raise ValueError('只接受權益及交付紀錄')
-                if benchmark: comparison.record_benchmark(c,path)
-                else:
-                    with j.connection(path) as con: p.submit(con,c)
+                halts.record(path,c,benchmark)
                 st.rerun()
             except (ValueError,KeyError,TypeError) as exc: st.error(str(exc))
         st.download_button('下載新版完整帳本',json.dumps(data['rows'],ensure_ascii=False,indent=2),'benchmark-0050.json' if benchmark else 'portfolio-v2.json','application/json',key='pf_download_'+account)
+
+    evidence_ui.render_restatement(path,account)
