@@ -62,3 +62,10 @@ def test_link_partial_reports_keeps_accounting_unchanged_and_detects_double_dept
     after=p.summary(book,clock('2026-09-14'))
     assert (before['cash'],before['holdings'],before['fill_count'])==(after['cash'],after['holdings'],after['fill_count'])
     assert len(q.review(book)['fills'])==2
+
+    # Restated fills keep old attachments as history, without inheriting their attestation.
+    from app import forward_restatement as repair
+    preview=repair.preview(book,[dict(op='replace',target=a['hash'],body=dict(a['body'],fee='30'))],proof,clock('2026-09-15'))
+    derived=repair.materialize(book,preview['command'],tmp_path/'versions',clock('2026-09-15'))
+    assert all(x['quote_status']=='缺少零股行情／成交憑證連結' for x in q.review(derived)['fills'])
+    assert len([x for x in repair.read(derived) if x['kind']=='historical_execution_evidence'])==2

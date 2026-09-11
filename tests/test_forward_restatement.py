@@ -64,3 +64,38 @@ def test_cannot_void_fill_that_subsequent_split_depends_on(tmp_path):
         setup(con);o=buy(con);f=fill(con,o,1000,'100');close(con,'2026-09-14',{'2492':'100','0050':'100'})
         p.submit(con,dict(kind='entitlement',id='split',action_id='split',action_type='split',stock_id='2492',ex_date='2026-09-15',delivery_date='2026-09-16',eligible_qty=1000,ratio='2',result_qty=2000,evidence='fixture'),clock('2026-09-15',8))
     with pytest.raises(ValueError):r.preview(path,[dict(op='void',target=f['hash'])],PROOF,clock('2026-09-16'))
+
+
+def test_restatement_of_later_fill_preserves_intermediate_book_and_original_times(tmp_path):
+    path,f=account(tmp_path);original=r.read(path);versions=tmp_path/'versions'
+    first=r.preview(path,[dict(op='replace',target=f['hash'],body=dict(f['body'],fee='30'))],PROOF,clock('2026-09-15'))
+    derived=r.materialize(path,first['command'],versions,clock('2026-09-15'))
+    with j.connection(derived) as con:
+        close(con,'2026-09-15',{'2492':'100','0050':'100'})
+        o=buy(con,sid='0050',n=100,day='2026-09-16',signalday='2026-09-15',key='later')
+        later=fill(con,o,100,'99',day='2026-09-16',key='later-fill')
+        close(con,'2026-09-16',{'2492':'100','0050':'100'})
+    intermediate=r.read(derived)
+    second=r.preview(derived,[dict(op='replace',target=later['hash'],body=dict(later['body'],fee='40'))],PROOF,clock('2026-09-17'))
+    newest=r.materialize(derived,second['command'],versions,clock('2026-09-17'))
+    assert r.read(path)==original and r.read(derived)==intermediate
+    assert len(r.versions(path,versions))==2
+    summary=p.summary(newest,clock('2026-09-17'))
+    assert summary['cash']=='950430' and summary['nav']=='1000430'
+    assert summary['fill_count']==2
+    # Second reconstruction can itself be previewed; observations are never backdated physically.
+    own_fill=next(x for x in r.read(newest) if x['kind']=='fill')
+    third=r.preview(newest,[dict(op='replace',target=own_fill['hash'],body=dict(own_fill['body'],fee='35'))],PROOF,clock('2026-09-18'))
+    assert third['after']['cash']=='950425'
+
+
+def test_explicit_late_cancellation_can_be_inserted_without_backdating_book(tmp_path):
+    path=tmp_path/'original'
+    with j.connection(path) as con:setup(con);o=buy(con,n=999);fill(con,o,400,'99')
+    op=dict(op='insert',before='$end',kind='cancel',body=dict(order_id='buy',reason='核對當日剩餘確實未成交'),occurred_at='2026-09-14T14:00:00+08:00')
+    report=r.preview(path,[op],PROOF,clock('2026-09-15'))
+    derived=r.materialize(path,report['command'],tmp_path/'v',clock('2026-09-15'))
+    rows=r.read(derived);c=next(x for x in rows if x['kind']=='cancel')
+    assert c['recorded_at']==clock('2026-09-15')().isoformat()
+    assert p.summary(derived,clock('2026-09-15'))['orders'][0]['status']=='已取消剩餘'
+    with pytest.raises(ValueError):r.preview(path,[dict(op,occurred_at='2026-09-10T14:00:00+08:00')],PROOF,clock('2026-09-15'))

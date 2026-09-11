@@ -26,6 +26,19 @@ def read(path):
         return j.read_events(con)
 
 
+def logical_rows(rows):
+    """Recover virtual replay times, while physical events stay recorded at creation.
+
+    The current lineage is written first, before copied older lineages. Later
+    observations not present in this map retain their actual recording times.
+    """
+    lineage=next((r for r in rows if r['kind']=='restatement_lineage'),None)
+    if not lineage:return rows
+    times=lineage['body'].get('replay_recorded_at_by_key')
+    if not isinstance(times,dict):raise ValueError('此舊更正版本缺少可驗證的重播時間表，不能繼續更正')
+    return [dict(r,recorded_at=times.get(r['event_key'],r['recorded_at'])) for r in rows]
+
+
 def evidence(value):
     required = {'reference','reviewer','reason','text'}
     if not isinstance(value,dict) or set(value)!=required or any(not isinstance(v,str) or not v.strip() for v in value.values()):
@@ -59,13 +72,19 @@ def _project(rows, operations):
                 edits[target]=dict(original,body=body)
             else:edits[target]=None
         elif mode=='insert':
-            if set(op)!={'op','before','kind','body'} or op['kind'] not in EDITABLE:
+            if not {'op','before','kind','body'}<=set(op) or set(op)-{'op','before','kind','body','occurred_at'} or op['kind'] not in EDITABLE:
                 raise ValueError('補登只接受成交、權益、交付、收盤或取消，且必須指定插入位置')
             target=op['before']
             if target not in by_hash and target!='$end':raise ValueError('補登位置不存在')
             if target==rows[0]['hash'] or target==first_close:raise ValueError('不能在期初帳本之前補登')
-            item=dict(kind=op['kind'],body=deepcopy(op['body']),hash='insert:'+str(index),
-                      event_key='restated_insert:'+str(index),recorded_at=None)
+            at=op.get('occurred_at')
+            if at is not None:
+                if op['kind']!='cancel':raise ValueError('occurred_at 僅供取消補登；成交、權益及收盤使用各自的實際日期欄位')
+                j.timestamp(at)
+            if op['kind']=='cancel' and at is None:raise ValueError('補登取消需 occurred_at，明確記錄當時取消時間')
+            identity=j.digest(op)[:32]
+            item=dict(kind=op['kind'],body=deepcopy(op['body']),hash='insert:'+identity,
+                      event_key='restated_insert:'+identity,recorded_at=at)
             inserts.setdefault(target,[]).append(item)
         else:raise ValueError('更正類型須replace、void或insert')
     result=[]
@@ -133,6 +152,7 @@ def replay(projected,clock=j.now):
             elif kind=='cancel':
                 o=s['orders'].get(b['order_id'])
                 if not o or o['closed'] or o['filled']>=o['qty'] or not b['reason']:raise ValueError('取消紀錄失去對應的未完成委託')
+                if when<j.timestamp(o['recorded_at']):raise ValueError('取消時間不能早於委託')
             elif kind=='decision':
                 try:p._decision(b,s,when.astimezone(p.TZ))
                 except (ValueError,KeyError):deviations.append(dict(event=row['hash'],note='更正後不符合原策略出場條件；保留原決策及實際成交，不重選歷史策略'))
@@ -161,8 +181,7 @@ def _summary(rows):
 
 def preview(path,operations,proof,clock=j.now):
     rows=read(path)
-    if any(r['kind']=='restatement_lineage' for r in rows):raise ValueError('請從原始帳本合併全部更正重新建立版本，不能對更正版本疊加重建')
-    changed,deviations=replay(_project(rows,operations),clock)
+    changed,deviations=replay(_project(logical_rows(rows),operations),clock)
     body=dict(version=VERSION,source_path=str(Path(path).resolve()),source_head=rows[-1]['hash'],
               operations=operations,evidence=evidence(proof),
               projection_sha256=j.digest(changed),code_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
@@ -187,7 +206,7 @@ def materialize(path,command,directory=ROOT,clock=j.now):
     with j.connection(path) as source:
         p.initialize(source,clock);rows=j.read_events(source)
         if rows[-1]['hash']!=command['source_head']:raise ValueError('原帳本已更新，請重新預覽更正')
-        projected,deviations=replay(_project(rows,command['operations']),clock)
+        projected,deviations=replay(_project(logical_rows(rows),command['operations']),clock)
         expected=dict(version=VERSION,source_path=str(Path(path).resolve()),source_head=rows[-1]['hash'],
             operations=command['operations'],evidence=evidence({k:v for k,v in command['evidence'].items() if k in {'reference','reviewer','reason','text'}}),
             projection_sha256=j.digest(projected),code_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
@@ -202,7 +221,10 @@ def materialize(path,command,directory=ROOT,clock=j.now):
         try:
             with j.connection(temp) as con:
                 first=p.initialize(con,clock);mapping={rows[0]['hash']:first['hash']}
-                lineage=j.append(con,'restatement_lineage','restatement_lineage',dict(command=command,
+                parent=next((r for r in rows if r['kind']=='restatement_lineage'),None)
+                lineage=j.append(con,'restatement_lineage:'+command['id'],'restatement_lineage',dict(command=command,
+                    root_source_path=parent['body'].get('root_source_path',parent['body']['command']['source_path']) if parent else command['source_path'],
+                    replay_recorded_at_by_key={r['event_key']:r['recorded_at'] for r in projected},
                     reconstructed_at=clock().isoformat(),original_event_times={r['hash']:r['recorded_at'] for r in rows},
                     classification='restated_not_original_forward_evidence',live_qualified=False,deviations=deviations),clock)
                 for row in projected:
@@ -212,7 +234,9 @@ def materialize(path,command,directory=ROOT,clock=j.now):
                     if row['kind'] in ('order','funding_intent'):
                         for field in ('reason','funding_intent'):
                             if field in b:b[field]=_remap(b[field],mapping)
-                    saved=j.append(con,row['event_key'],row['kind'],b,clock)
+                    # Preserve old quote attestations as history; corrected executions need new linkage.
+                    saved_kind='historical_execution_evidence' if row['kind']=='execution_evidence' else row['kind']
+                    saved=j.append(con,row['event_key'],saved_kind,b,clock)
                     mapping[row['hash']]=saved['hash']
                 # Values must be identical to preview even though new record timestamps are NOW.
                 if _summary(j.read_events(con))!=_summary(projected):raise ValueError('更正版本會計結果與預覽不符')
@@ -227,6 +251,6 @@ def versions(path,directory=ROOT):
     for candidate in sorted(Path(directory).glob('*.sqlite3')):
         rows=read(candidate)
         lineage=next((r for r in rows if r['kind']=='restatement_lineage'),None)
-        if lineage and lineage['body']['command']['source_path']==str(Path(path).resolve()):
+        if lineage and str(Path(path).resolve()) in (lineage['body']['command']['source_path'],lineage['body'].get('root_source_path')):
             result.append(dict(path=str(candidate),created_at=lineage['recorded_at'],source_head=lineage['body']['command']['source_head']))
     return result
