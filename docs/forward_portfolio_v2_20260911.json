@@ -1,0 +1,89 @@
+{
+  "cash": "1000000",
+  "nav": "1000000",
+  "available_cash": "77.900000",
+  "reserved_cash": "999922.100000",
+  "price_date": "2026-09-11",
+  "fill_count": 0,
+  "live_qualified": false,
+  "version": "paper-portfolio-v2",
+  "verification_completed": "2026-09-12",
+  "rules": {
+    "code_sha256": {
+      "app/forward_journal.py": "f40706d63564c10b2d84494497049b19f284d2bb3e8c3a3ebd2576aea28af4bd",
+      "app/forward_portfolio.py": "18f0cccd00e66918a1464f25bd4163bd1c6ec9edfd85d601adc6f059527e672a",
+      "app/forward_portfolio_service.py": "d0ee70f5f21a4f21397c1f231e805f6480055556804d171644e6c0441be02887"
+    },
+    "rules": {
+      "allocation": "last_complete_close_nav_divided_by_3",
+      "buy_retry": false,
+      "cash_policy": "confirmed_sale_proceeds_available_no_margin",
+      "corporate_policy": "explicit_entitlement_then_payment_or_share_delivery",
+      "exit_retry": true,
+      "fill_source": "user_supplied_paper_execution_report",
+      "holding_sessions": 63,
+      "idle_asset": "0050",
+      "initial_cash": "1000000",
+      "live_qualified": false,
+      "note": "Separate prospective execution protocol; not a replay of historical returns",
+      "slots": 3,
+      "stop": "close_below_88pct_adjusted_entry_then_next_session_limit",
+      "version": "paper-portfolio-v2"
+    }
+  },
+  "first_close_at": "2026-09-11T15:59:47.885205+00:00",
+  "event_hashes": [
+    "bf7e1674c6024cb276a6dcf0f81eb36b4537444e624f6817ae448ed1a092a935",
+    "a7469d716f88fb218ed404b930ab516b5fa3288b1c44ed1c95e53ee0efa79fd5",
+    "d329b5f17e1185fef0375a5b248b67420f94d55ba6dce209942e2d179f3a905a",
+    "bb73077afdb0f4eb656f05f7f78f647c449c12836543ec9b71f4bb49c52835aa",
+    "1d9b39681c38f40854b7a0b7621bc35f3ba8abe52476d26f5f93cbd4b70ec977",
+    "f227ca73fa5a4d3bc86f2ca1cc9d016bf58ed632c20d7ef9d3fbbaf031978a0f"
+  ],
+  "old_event_count": 4,
+  "planned_orders": [
+    {
+      "order_id": "2026-09-14:1560:odd",
+      "stock_id": "1560",
+      "side": "buy",
+      "channel": "odd",
+      "qty": 421,
+      "limit_price": "790.0",
+      "session": "2026-09-14",
+      "status": "等待成交證據"
+    },
+    {
+      "order_id": "2026-09-14:0050:board",
+      "stock_id": "0050",
+      "side": "buy",
+      "channel": "board",
+      "qty": 6000,
+      "limit_price": "107.700000",
+      "session": "2026-09-14",
+      "status": "等待成交證據"
+    },
+    {
+      "order_id": "2026-09-14:0050:odd",
+      "stock_id": "0050",
+      "side": "buy",
+      "channel": "odd",
+      "qty": 183,
+      "limit_price": "107.700000",
+      "session": "2026-09-14",
+      "status": "等待成交證據"
+    }
+  ],
+  "validation": {
+    "targeted_tests": 14,
+    "full_tests_passed": 2235,
+    "warnings": 28,
+    "pipeline_runs": 2,
+    "api_status": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs": 200
+    }
+  },
+  "evidence_kind": "prospective_unfilled_paper_plans_not_returns"
+}
