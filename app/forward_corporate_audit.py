@@ -313,7 +313,9 @@ def capture_close(path=p.PATH, actions_reviewed=False, clock=j.now, evidence_pat
             prices = {str(sid): str(price) for sid, price in db.execute(select(RawPrice.stock_id, RawPrice.close).where(
                 RawPrice.stock_id.in_(list(s['holdings']) + ['0050']), RawPrice.trading_date == today)) if price is not None and price > 0}
         p.submit(con, dict(kind='calendar', id=today, sessions=sessions, source='DB/trading_calendar'), clock)
-        body = dict(date=today, prices=prices, actions_reviewed=True,
+        from app.forward_halts import valuation_prices
+        prices, estimated = valuation_prices(rows, today, prices)
+        body = dict(date=today, prices=prices, estimated_prices=estimated, actions_reviewed=True,
                     source='DB/raw_prices; corporate-audit:' + j.digest(audit))
         nav = p.valuation({**s, 'mark': {'body': body}})
         if nav is None:
