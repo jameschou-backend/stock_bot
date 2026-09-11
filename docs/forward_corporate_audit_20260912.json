@@ -1,0 +1,305 @@
+{
+  "recorded_at": "2026-09-11T16:43:31.657560+00:00",
+  "checks": {
+    "signal": {
+      "event_count": 4,
+      "last_hash": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132",
+      "fills": 0
+    },
+    "strategy": {
+      "event_count": 7,
+      "last_hash": "1b6541786852d5cfc9658ac2b1ef578bad38a912ed332d27228f537e9cc79f05",
+      "fills": 0
+    },
+    "benchmark": {
+      "event_count": 7,
+      "last_hash": "95ec2fb2510db496012bdc6c6635a58fc791381dcd7b382d0863ce07a50ece70",
+      "fills": 0
+    }
+  },
+  "comparison": {
+    "ready": false,
+    "reasons": [
+      "benchmark 尚無成交回報",
+      "strategy 尚無成交回報"
+    ],
+    "points": [],
+    "live_qualified": false,
+    "entry_session": "2026-09-14",
+    "as_of": "2026-09-11"
+  },
+  "strategy": {
+    "version": "corporate-review-v1",
+    "scope": {
+      "stock_ids": [
+        "0050",
+        "1560"
+      ],
+      "start": "2026-09-11",
+      "end": "2026-09-14",
+      "query_start": "2025-01-01",
+      "query_end": "2026-09-12"
+    },
+    "sources": [
+      {
+        "dataset": "股利政策",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 4,
+        "retrieved_at": "2026-09-11T16:32:15.902380+00:00",
+        "hash": "4afd5a7b42a04ee18c9d598783965d78ddc90ac8451ad61563231d462916eaf0"
+      },
+      {
+        "dataset": "股利政策",
+        "stock_id": "1560",
+        "status": "已取得（非完整性保證）",
+        "rows": 2,
+        "retrieved_at": "2026-09-11T16:38:53.098737+00:00",
+        "hash": "0d946650d72f8b0d569eb5ee8fce479fe9a4e041b7ab63a83e77710e93f509d9"
+      },
+      {
+        "dataset": "除權息結果",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 4,
+        "retrieved_at": "2026-09-11T16:32:16.096547+00:00",
+        "hash": "e41c4e1059b29111bd4134eb8c3c24978421dbfc6dd7e2b55123b57d6105336a"
+      },
+      {
+        "dataset": "除權息結果",
+        "stock_id": "1560",
+        "status": "已取得（非完整性保證）",
+        "rows": 2,
+        "retrieved_at": "2026-09-11T16:38:53.296704+00:00",
+        "hash": "2d3dcfa117fc01b1ae0964d5a5d4dd0b48077a92973df0ca14d19104a50003a0"
+      },
+      {
+        "dataset": "分割參考價",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 1,
+        "retrieved_at": "2026-09-11T16:32:16.296997+00:00",
+        "hash": "7aa48b3f91ebb42dc962e544e1bdea7fea72ed6f3fa38926e431c8ede0482ebc"
+      },
+      {
+        "dataset": "分割參考價",
+        "stock_id": "1560",
+        "status": "已取得（非完整性保證）",
+        "rows": 0,
+        "retrieved_at": "2026-09-11T16:38:53.477933+00:00",
+        "hash": "9be0ff72ba01d221efd6f388f2aa1f025e3663fe7d0366ee3c36c92f4f8ef5ed"
+      },
+      {
+        "dataset": "減資參考價",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 0,
+        "retrieved_at": "2026-09-11T16:38:53.678249+00:00",
+        "hash": "c7514def7d6d460eaabb0a76a88291ff89a11b5da1def0c815f36ddae81fc5b8"
+      },
+      {
+        "dataset": "減資參考價",
+        "stock_id": "1560",
+        "status": "已取得（非完整性保證）",
+        "rows": 0,
+        "retrieved_at": "2026-09-11T16:38:53.949144+00:00",
+        "hash": "6c8a258576091b4eeb8f65c98cdea67d8d517be264e8ad4a5fb5af6b4459a874"
+      },
+      {
+        "dataset": "面額變更",
+        "stock_id": "全市場",
+        "status": "已取得（非完整性保證）",
+        "rows": 4,
+        "retrieved_at": "2026-09-11T16:32:44.335196+00:00",
+        "hash": "64f980c6bb9b3ef6e2357243a0325a3457fa9d20b2f8e4b3fae5f2900eaf7ef4"
+      }
+    ],
+    "events": [],
+    "issues": [],
+    "blocked": false,
+    "coverage_complete": false,
+    "manual_review_required": true,
+    "limitation": "同一供應商的交叉檢查，並非完整官方公告覆蓋；空資料不代表沒有事件，仍需人工核對停復牌、權益條款及實際交付。",
+    "account_head": "1b6541786852d5cfc9658ac2b1ef578bad38a912ed332d27228f537e9cc79f05"
+  },
+  "benchmark": {
+    "version": "corporate-review-v1",
+    "scope": {
+      "stock_ids": [
+        "0050"
+      ],
+      "start": "2026-09-11",
+      "end": "2026-09-14",
+      "query_start": "2025-01-01",
+      "query_end": "2026-09-12"
+    },
+    "sources": [
+      {
+        "dataset": "股利政策",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 4,
+        "retrieved_at": "2026-09-11T16:32:15.902380+00:00",
+        "hash": "4afd5a7b42a04ee18c9d598783965d78ddc90ac8451ad61563231d462916eaf0"
+      },
+      {
+        "dataset": "除權息結果",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 4,
+        "retrieved_at": "2026-09-11T16:32:16.096547+00:00",
+        "hash": "e41c4e1059b29111bd4134eb8c3c24978421dbfc6dd7e2b55123b57d6105336a"
+      },
+      {
+        "dataset": "分割參考價",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 1,
+        "retrieved_at": "2026-09-11T16:32:16.296997+00:00",
+        "hash": "7aa48b3f91ebb42dc962e544e1bdea7fea72ed6f3fa38926e431c8ede0482ebc"
+      },
+      {
+        "dataset": "減資參考價",
+        "stock_id": "0050",
+        "status": "已取得（非完整性保證）",
+        "rows": 0,
+        "retrieved_at": "2026-09-11T16:38:53.678249+00:00",
+        "hash": "c7514def7d6d460eaabb0a76a88291ff89a11b5da1def0c815f36ddae81fc5b8"
+      },
+      {
+        "dataset": "面額變更",
+        "stock_id": "全市場",
+        "status": "已取得（非完整性保證）",
+        "rows": 4,
+        "retrieved_at": "2026-09-11T16:32:44.335196+00:00",
+        "hash": "64f980c6bb9b3ef6e2357243a0325a3457fa9d20b2f8e4b3fae5f2900eaf7ef4"
+      }
+    ],
+    "events": [],
+    "issues": [],
+    "blocked": false,
+    "coverage_complete": false,
+    "manual_review_required": true,
+    "limitation": "同一供應商的交叉檢查，並非完整官方公告覆蓋；空資料不代表沒有事件，仍需人工核對停復牌、權益條款及實際交付。",
+    "account_head": "95ec2fb2510db496012bdc6c6635a58fc791381dcd7b382d0863ce07a50ece70"
+  },
+  "repeat": {
+    "calls": 0,
+    "reused": 9
+  },
+  "source_hashes": {
+    "4afd5a7b42a04ee18c9d598783965d78ddc90ac8451ad61563231d462916eaf0": {
+      "query": [
+        "TaiwanStockDividend",
+        "0050",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:32:15.902380+00:00",
+      "rows": 4
+    },
+    "0d946650d72f8b0d569eb5ee8fce479fe9a4e041b7ab63a83e77710e93f509d9": {
+      "query": [
+        "TaiwanStockDividend",
+        "1560",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:38:53.098737+00:00",
+      "rows": 2
+    },
+    "e41c4e1059b29111bd4134eb8c3c24978421dbfc6dd7e2b55123b57d6105336a": {
+      "query": [
+        "TaiwanStockDividendResult",
+        "0050",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:32:16.096547+00:00",
+      "rows": 4
+    },
+    "2d3dcfa117fc01b1ae0964d5a5d4dd0b48077a92973df0ca14d19104a50003a0": {
+      "query": [
+        "TaiwanStockDividendResult",
+        "1560",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:38:53.296704+00:00",
+      "rows": 2
+    },
+    "7aa48b3f91ebb42dc962e544e1bdea7fea72ed6f3fa38926e431c8ede0482ebc": {
+      "query": [
+        "TaiwanStockSplitPrice",
+        "0050",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:32:16.296997+00:00",
+      "rows": 1
+    },
+    "9be0ff72ba01d221efd6f388f2aa1f025e3663fe7d0366ee3c36c92f4f8ef5ed": {
+      "query": [
+        "TaiwanStockSplitPrice",
+        "1560",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:38:53.477933+00:00",
+      "rows": 0
+    },
+    "c7514def7d6d460eaabb0a76a88291ff89a11b5da1def0c815f36ddae81fc5b8": {
+      "query": [
+        "TaiwanStockCapitalReductionReferencePrice",
+        "0050",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:38:53.678249+00:00",
+      "rows": 0
+    },
+    "6c8a258576091b4eeb8f65c98cdea67d8d517be264e8ad4a5fb5af6b4459a874": {
+      "query": [
+        "TaiwanStockCapitalReductionReferencePrice",
+        "1560",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:38:53.949144+00:00",
+      "rows": 0
+    },
+    "64f980c6bb9b3ef6e2357243a0325a3457fa9d20b2f8e4b3fae5f2900eaf7ef4": {
+      "query": [
+        "TaiwanStockParValueChange",
+        "",
+        "2025-01-01",
+        "2026-09-12"
+      ],
+      "retrieved_at": "2026-09-11T16:32:44.335196+00:00",
+      "rows": 4
+    }
+  },
+  "test": {
+    "passed": 2261,
+    "warnings": 28
+  },
+  "source_code_sha256": {
+    "app/forward_corporate_audit.py": "34e630a3f43f06e68a95100a934cd99f4c454caf19d77033ff0e4e4541177255",
+    "app/forward_corporate_ui.py": "b1fc55c93f7f3a2457e5e1b523d353c21fc916a862ccc11d645b7fe045186251"
+  },
+  "validation": {
+    "make_test": "2261 passed, 28 warnings",
+    "pipeline_runs": 2,
+    "pipeline_exit_codes": [
+      0,
+      0
+    ],
+    "api_http": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs": 200
+    },
+    "ui": "CUA verified both accounts: corporate panel, manual review warning, zero fills"
+  }
+}

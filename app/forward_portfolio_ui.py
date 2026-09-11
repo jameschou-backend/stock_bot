@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 import pandas as pd
 import streamlit as st
-from app import forward_portfolio as p, forward_portfolio_service as service, forward_journal as j, forward_comparison as comparison
+from app import forward_corporate_audit as corporate, forward_corporate_ui, forward_portfolio as p, forward_portfolio_service as service, forward_journal as j, forward_comparison as comparison
 
 
 def render():
@@ -23,13 +23,14 @@ def render():
     columns[1].metric('可用現金',f"${float(data['available_cash']):,.0f}")
     columns[2].metric('委託預留',f"${float(data['reserved_cash']):,.0f}")
     st.caption(f"估值日期：{data['price_date'] or '尚未封存收盤'}；已登錄紙上成交：{data['fill_count']} 筆。回報由使用者提供，尚未經券商認證。")
-    st.info('先核對成交及公司行動 → 封存收盤資產 → 建立下一交易日計畫。現階段尚不能宣稱可實戰或已勝過0050。')
+    st.info('盤前先核對公司行動 → 盤中登錄成交 → 封存收盤資產 → 建立下一交易日計畫。現階段尚不能宣稱可實戰或已勝過0050。')
+    forward_corporate_ui.render(path, account)
     with st.expander('今日結算與下一交易日計畫',expanded=True):
         reviewed=st.checkbox('已核對持股的除息、分割及股款交付；如有事件已先登錄',key='pf_actions_reviewed_'+account)
         left,right=st.columns(2)
         if left.button('封存今日收盤資產',key='pf_close_'+account,use_container_width=True):
             try:
-                (comparison.capture_benchmark_close if benchmark else service.capture_close)(path,actions_reviewed=reviewed)
+                corporate.capture_close(path,actions_reviewed=reviewed)
                 st.success('已封存；再次操作保留第一次紀錄。');st.rerun()
             except (ValueError,KeyError) as exc: st.error(str(exc))
         if right.button('建立下一交易日紙上計畫',key='pf_plan_'+account,use_container_width=True):
@@ -89,8 +90,9 @@ def render():
     with st.expander('規則、公司行動與完整帳本'):
         if benchmark: st.write('0050基準不採個股停損或換股；初始未成交餘款留現金，只將已交付股息提出再投入計畫。')
         else: st.write('出場：收盤跌至調整後進場價的88%，或持有63個交易日，下一交易日提出限價賣出；未成交剩餘持股保留出場決策。限價委託不保證成交。')
+        st.write('除權息當天須先登錄權益，再登錄任何成交；若已漏登，不可倒填，需先停止結算並對帳。')
         st.write('股息先列應收，實際入帳後才可使用；分割股未交付前禁止交易及完整估值。減資、碎股等未支援事件須暫停並對帳。')
-        st.write('零股即時深度尚未接入；0050比較帳本使用相同會計引擎，但兩邊需要各自成交與結算證據。公司行動自動核對尚未完成。')
+        st.write('零股即時深度尚未接入；0050比較帳本使用相同會計引擎，但兩邊需要各自成交與結算證據。公司行動已加入來源交叉檢查；完整公告覆蓋及複雜權益仍待人工核對。')
         report=st.file_uploader('進階：已核對公司行動 JSON（entitlement／delivery）',type=['json'],key='pf_action_'+account)
         if st.button('登錄公司行動證據',disabled=report is None,key='pf_action_save_'+account):
             try:
