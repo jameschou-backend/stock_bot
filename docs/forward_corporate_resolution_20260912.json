@@ -1,0 +1,48 @@
+{
+  "observed_at": "2026-09-11T16:59:02.776947+00:00",
+  "checks": {
+    "signal": {
+      "event_count": 4,
+      "last_hash": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132",
+      "fills": 0
+    },
+    "strategy": {
+      "event_count": 7,
+      "last_hash": "1b6541786852d5cfc9658ac2b1ef578bad38a912ed332d27228f537e9cc79f05",
+      "fills": 0
+    },
+    "benchmark": {
+      "event_count": 7,
+      "last_hash": "95ec2fb2510db496012bdc6c6635a58fc791381dcd7b382d0863ce07a50ece70",
+      "fills": 0
+    }
+  },
+  "unchanged_from": "forward_corporate_audit_20260912.json",
+  "current_audit": {
+    "version": "corporate-review-v2",
+    "blocked": false,
+    "issues": [],
+    "elapsed_seconds": 0.0019939590129069984
+  },
+  "validation": {
+    "tests": 2276,
+    "warnings": 28,
+    "pipeline_exit_codes": [
+      0,
+      0
+    ],
+    "api_http": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs": 200
+    },
+    "ui": "CUA checked both account forms; AppTest checked preview/save without changing cash"
+  },
+  "accounting_tests": "synthetic fixtures only; no real local ledger mutations",
+  "source_code_sha256": {
+    "app/forward_corporate_resolution.py": "4115248ba4205635946437ffcb5a7a32f4d99fcde44bc768ee0fb3ab2137cf57",
+    "app/forward_corporate_resolution_ui.py": "48f598763bf6212dd895c1129e8b0fb79a7cf60505a48f2b0d2947d5d94937a1",
+    "app/forward_corporate_audit.py": "f910c3b0f20c9a5cd285ffb0e3609425062639ea1adac1cd5183b45c2d3bd1fd"
+  }
+}

@@ -15,7 +15,7 @@ from app import forward_journal as j, forward_portfolio as p
 from app.finmind import fetch_dataset, FinMindError, FinMindQuotaError
 
 PATH = j.ROOT / '.cache/forward-validation/corporate-audit.sqlite3'
-VERSION = 'corporate-review-v1'
+VERSION = 'corporate-review-v2'
 TTL = 3600
 POLICY = 'TaiwanStockDividend'
 RESULT = 'TaiwanStockDividendResult'
@@ -149,7 +149,7 @@ def before_ex(rows, ex):
     return p.state(prior)
 
 
-def inspect(path=p.PATH, evidence_path=PATH, clock=j.now, *, rows=None):
+def inspect(path=p.PATH, evidence_path=PATH, clock=j.now, *, rows=None, resolve=True):
     rows = account_rows(path, clock) if rows is None else rows
     sc, s = scope(rows, clock), p.state(rows)
     history = source_history(evidence_path)
@@ -272,10 +272,14 @@ def inspect(path=p.PATH, evidence_path=PATH, clock=j.now, *, rows=None):
     for r in s['rights'].values():
         if r['action_type'] == 'cash' and (r['stock_id'], r['ex_date']) not in known_cash:
             issue(r['stock_id'], r['ex_date'], 'unmatched_right', '已登錄股息缺少對應來源')
-    return dict(version=VERSION, scope=sc, sources=status, events=events, issues=issues,
+    report = dict(version=VERSION, scope=sc, sources=status, events=events, issues=issues,
                 blocked=any(i['blocking'] for i in issues), coverage_complete=False,
                 manual_review_required=bool(sc['stock_ids']), limitation=LIMITATION,
                 account_head=rows[-1]['hash'] if rows else None)
+    if resolve:
+        from app.forward_corporate_resolution import apply
+        return apply(report, rows, evidence_path, clock)
+    return report
 
 
 def capture_close(path=p.PATH, actions_reviewed=False, clock=j.now, evidence_path=PATH):

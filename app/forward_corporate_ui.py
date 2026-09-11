@@ -35,3 +35,6 @@ def render(path, account):
         st.caption(report['limitation'])
         st.download_button('下載公司行動核對報告', json.dumps(report, ensure_ascii=False, indent=2),
                            'corporate-review.json', 'application/json', key='corp_download_' + account)
+
+    from app.forward_corporate_resolution_ui import render as render_resolution
+    render_resolution(path, account, report)
