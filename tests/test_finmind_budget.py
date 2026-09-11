@@ -146,3 +146,15 @@ def test_monthly_bulk_queries_only_period_dates(transport):
     assert len(transport.calls) == 1
     assert transport.calls[0]['params']['start_date'] == '2026-09-01'
     assert 'data_id' not in transport.calls[0]['params']
+
+
+def test_snapshot_shares_quota_and_uses_short_separate_cache(transport, monkeypatch):
+    frame = finmind.fetch_dataset('TaiwanStockTickSnapshot', date(2026,9,11), token='test-secret', data_id='2330')
+    assert transport.calls[0]['params'] == {'data_id':'2330'}
+    finmind.fetch_dataset('TaiwanStockTickSnapshot', date(2026,9,11), token='test-secret', data_id='2330')
+    assert len(transport.calls) == 1
+    future=time.time()+11
+    monkeypatch.setattr('app.finmind.time.time',lambda:future)
+    finmind.fetch_dataset('TaiwanStockTickSnapshot', date(2026,9,11), token='test-secret', data_id='2330')
+    assert len(transport.calls) == 2
+    assert get_rate_limiter().get_stats().requests_in_window == 2

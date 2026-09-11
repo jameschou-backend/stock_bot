@@ -115,7 +115,15 @@ def fetch_dataset(
         params["end_date"] = end_date.isoformat()
     if data_id:
         params["data_id"] = data_id
-    path = cache_path(params, token)
+    # Sponsor snapshot has a dedicated endpoint; reuse the same quota/cache route.
+    snapshot = dataset == "TaiwanStockTickSnapshot"
+    url = FINMIND_DATA_URL
+    if snapshot:
+        if cache_ttl > 10:
+            cache_ttl = 10
+        url = "https://api.finmindtrade.com/api/v4/taiwan_stock_tick_snapshot"
+        params = {"data_id": data_id or ""}
+    path = cache_path({**params, "_endpoint": url}, token) if snapshot else cache_path(params, token)
     # Identical simultaneous requests use the first worker's result, even across processes.
     with file_lock(path.with_suffix(".lock"), timeout=timeout):
         cached = None if force_refresh else read_cache(path, cache_ttl)
@@ -129,7 +137,7 @@ def fetch_dataset(
                 raise FinMindQuotaError(limiter.get_stats().retry_after_seconds)
             try:
                 resp = _http_session().get(
-                    FINMIND_DATA_URL, params=params, headers=_build_headers(token), timeout=timeout,
+                    url, params=params, headers=_build_headers(token), timeout=timeout,
                 )
             except requests.RequestException as exc:
                 if attempt < max_retries:

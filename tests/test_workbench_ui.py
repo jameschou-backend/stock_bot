@@ -81,6 +81,15 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     # UI verification must work in a fresh checkout with no local research cache.
     # Allocation rendering and sealed real-data verification have their own
     # tests; paper-fill actions must not depend on an evolving local replay.
+    from app import execution_holder_ui, forward_ui
+    monkeypatch.setattr(execution_holder_ui, 'load', lambda folder: None)
+    monkeypatch.setattr(forward_ui, 'render', lambda: None)
+    # These sealed histories have dedicated UI tests; a cash-ledger interaction
+    # must not rehash machine-local research files on each widget rerun.
+    import importlib
+    for name in ('chip_research_ui', 'exit_research', 'capacity_research_ui',
+                 'regime_switch_ui', 'diffusion_research_ui', 'guidance_research_ui'):
+        monkeypatch.setattr(importlib.import_module('app.'+name), 'render', lambda: None)
     from app import cash_allocation_research as allocation
     monkeypatch.setattr(allocation,'overview',lambda:{'available':False,
         'note':'測試未準備資金配置快取','source_verification':{'status':'pending'}})
