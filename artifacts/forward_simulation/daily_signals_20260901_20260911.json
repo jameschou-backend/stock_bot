@@ -1,0 +1,522 @@
+{
+  "start": "2026-09-01",
+  "end": "2026-09-11",
+  "snapshot_prepared_at": "2026-09-11T23:06:03.698185+08:00",
+  "interpretation": "Close-of-day candidates for next session; not fills or account-level orders",
+  "account_policy": {
+    "slots": 3,
+    "idle_cash": "cash",
+    "benchmark": "0050"
+  },
+  "limitations": [
+    "Historical reconstruction from a later snapshot, not contemporaneously recorded signals",
+    "Future-price invariance does not certify historical publication versions or universe",
+    "No historical fills; cash, occupied slots and position exits cannot be asserted"
+  ],
+  "source_sha256": {
+    "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/signals/2026-09-11/manifest.json": "6984179ef4c2cecbaa19d55fe63ba50f4cd2158293eca014f10f75707fc3b0e8",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/million-replay-signals/manifest.json": "58121f6af635678d4a7efd9efcbb044c2a6542ea7a6df1242b4fc0cdbc1380c3",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/million-replay-signals/companies.parquet": "5fbbd42a22d2e0c08e1c072d61d43347eecd380fc257f61d5d01a575fc4f1768",
+    "/Users/james.chou/JamesProject/stock_bot/scripts/replay_daily_signals.py": "54a684d07ade8577408a084dcb88b55466c7facb76a93d15d6aa4e21e0701ba7",
+    "/Users/james.chou/JamesProject/stock_bot/scripts/audit_signal_causality.py": "d5ce6bb360a9da3237bf9d0d5df7ce7798ec06d53d3e5570a8c862a76d9b4732",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/signals/2026-09-11/close-official.parquet": "eef953d74ba0aa95d9299179e008e2a4c72f567214a653805164aed63b73f555",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/signals/2026-09-11/close-quality.parquet": "70dcfad2e43a610f583f8c6550d30c4e98d6ab4847c21ea246da07839bb4df82",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/signals/2026-09-11/raw-close.parquet": "09daeb194c81c7a33b1b546df1a8c6ade857be4c20f16e78431b660b101ff19f",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/signals/2026-09-11/raw-volume.parquet": "fca6e894f4acd5b3306d98f1287d351b40ae05c1b629ea666ee6402a91721f54",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/forward-validation/signals/2026-09-11/signals.json": "89ffcdc7dae03f857f7617773a106ebcc3407b03f2562d9e9d0e3947c16d24b0",
+    "/Users/james.chou/JamesProject/stock_bot/scripts/prepare_forward_signals.py": "7c5489f837c55a697a01fc67cfc0ae6f44503322a881b214e7afc8cf95f3b45b",
+    "/Users/james.chou/JamesProject/stock_bot/scripts/prepare_million_signals.py": "5aad515778fa4999f27f9ece68e640532a02ad91e9a4e9854f128800c5592040",
+    "/Users/james.chou/JamesProject/stock_bot/skills/diffusion_signals.py": "df9f1e8020c0382b049f82fa6cac7a19acfd9d1285fd6dc6d7961788cb53f350",
+    "/Users/james.chou/JamesProject/stock_bot/skills/regime_state.py": "2e5755c018448e9464470b202bb4e675324fe2a30702dee8383b6081404d3a4d",
+    "/Users/james.chou/JamesProject/stock_bot/skills/official_adj_factors.py": "d89c8c87574fe2dd0af79443785356a77dbbce232e1a52d5887554b1bd83e1a4"
+  },
+  "full_rebuild_matches_sealed": true,
+  "sources_unchanged_after_run": true,
+  "passed": true,
+  "finmind_requests": 0,
+  "live_qualified": false,
+  "daily": [
+    {
+      "date": "2026-09-01",
+      "trend": {
+        "date": "2026-09-01",
+        "state": "ON",
+        "ma120": 95.8248319892473,
+        "evidence_date": "2026-09-01",
+        "observation_count": 120
+      },
+      "signals": [],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-02",
+      "trend": {
+        "date": "2026-09-02",
+        "state": "ON",
+        "ma120": 96.06710685483871,
+        "evidence_date": "2026-09-02",
+        "observation_count": 120
+      },
+      "signals": [
+        {
+          "event_id": "2026-09-g003-2026-09-02-4576",
+          "signal_date": "2026-09-02",
+          "entry_date": "2026-09-03",
+          "members": [
+            "4576"
+          ],
+          "priority": 0.08119000901521978,
+          "trend_state": "ON",
+          "trend_decision_date": "2026-09-02",
+          "group_id": "2026-09-g003",
+          "group_members": [
+            "1597",
+            "2049",
+            "2359",
+            "4576"
+          ],
+          "group_cutoff_date": "2026-08-31",
+          "selection_reason": "60-session breakout, positive excess20, volume expansion, low peer breadth; original signal trend ON required",
+          "leader_evidence": {
+            "leader_peer_breadth": 0.3333333333333333,
+            "leader_return20": 0.11009174311926606,
+            "benchmark_return20": 0.028901734104046284,
+            "leader_volume_ratio": 2.8147589290606465,
+            "leader_turnover_share": {
+              "last5_mean": 0.0020608513812661955,
+              "prior20_mean": 0.00434013213656168,
+              "rising": false,
+              "coverage_min": 0.9817536746071972,
+              "valid": true
+            }
+          },
+          "liquidity_at_signal": {
+            "as_of": "2026-09-02",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 2823266.7,
+            "mean_turnover20_twd": 622796844.25
+          },
+          "liquidity_before_entry": {
+            "as_of": "2026-09-02",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 2823266.7,
+            "mean_turnover20_twd": 622796844.25
+          },
+          "stock_id": "4576",
+          "name": "大銀微系統",
+          "reference_close": 242.0,
+          "passes_turnover_screen": true,
+          "execution_status": "unknown_no_historical_intraday_fill_evidence"
+        }
+      ],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-03",
+      "trend": {
+        "date": "2026-09-03",
+        "state": "ON",
+        "ma120": 96.31763440860213,
+        "evidence_date": "2026-09-03",
+        "observation_count": 120
+      },
+      "signals": [],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-04",
+      "trend": {
+        "date": "2026-09-04",
+        "state": "ON",
+        "ma120": 96.58771253360216,
+        "evidence_date": "2026-09-04",
+        "observation_count": 120
+      },
+      "signals": [],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-07",
+      "trend": {
+        "date": "2026-09-07",
+        "state": "ON",
+        "ma120": 96.87735635080645,
+        "evidence_date": "2026-09-07",
+        "observation_count": 120
+      },
+      "signals": [
+        {
+          "event_id": "2026-09-g007-2026-09-07-3006",
+          "signal_date": "2026-09-07",
+          "entry_date": "2026-09-08",
+          "members": [
+            "3006"
+          ],
+          "priority": 0.02384328471886743,
+          "trend_state": "ON",
+          "trend_decision_date": "2026-09-07",
+          "group_id": "2026-09-g007",
+          "group_members": [
+            "2337",
+            "2344",
+            "2408",
+            "2451",
+            "3006",
+            "3135",
+            "3260",
+            "4967",
+            "4973",
+            "5289",
+            "5351",
+            "6265",
+            "6770",
+            "8112",
+            "8271",
+            "8299"
+          ],
+          "group_cutoff_date": "2026-08-31",
+          "selection_reason": "60-session breakout, positive excess20, volume expansion, low peer breadth; original signal trend ON required",
+          "leader_evidence": {
+            "leader_peer_breadth": 0.0,
+            "leader_return20": 0.07803992740471877,
+            "benchmark_return20": 0.05419664268585134,
+            "leader_volume_ratio": 1.890658240532719,
+            "leader_turnover_share": {
+              "last5_mean": 0.07896165246245868,
+              "prior20_mean": 0.12367761922664781,
+              "rising": false,
+              "coverage_min": 0.9817536746071972,
+              "valid": true
+            }
+          },
+          "liquidity_at_signal": {
+            "as_of": "2026-09-07",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 14369164.5,
+            "mean_turnover20_twd": 3957342767.275
+          },
+          "liquidity_before_entry": {
+            "as_of": "2026-09-07",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 14369164.5,
+            "mean_turnover20_twd": 3957342767.275
+          },
+          "stock_id": "3006",
+          "name": "晶豪科",
+          "reference_close": 297.0,
+          "passes_turnover_screen": true,
+          "execution_status": "unknown_no_historical_intraday_fill_evidence"
+        }
+      ],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-08",
+      "trend": {
+        "date": "2026-09-08",
+        "state": "ON",
+        "ma120": 97.15621975806451,
+        "evidence_date": "2026-09-08",
+        "observation_count": 120
+      },
+      "signals": [],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-09",
+      "trend": {
+        "date": "2026-09-09",
+        "state": "ON",
+        "ma120": 97.42555779569892,
+        "evidence_date": "2026-09-09",
+        "observation_count": 120
+      },
+      "signals": [],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-10",
+      "trend": {
+        "date": "2026-09-10",
+        "state": "ON",
+        "ma120": 97.7056384408602,
+        "evidence_date": "2026-09-10",
+        "observation_count": 120
+      },
+      "signals": [
+        {
+          "event_id": "2026-09-g017-2026-09-10-3441",
+          "signal_date": "2026-09-10",
+          "entry_date": "2026-09-11",
+          "members": [
+            "3441"
+          ],
+          "priority": 0.7535090137273277,
+          "trend_state": "ON",
+          "trend_decision_date": "2026-09-10",
+          "group_id": "2026-09-g017",
+          "group_members": [
+            "3008",
+            "3019",
+            "3362",
+            "3406",
+            "3441",
+            "3504",
+            "6209"
+          ],
+          "group_cutoff_date": "2026-08-31",
+          "selection_reason": "60-session breakout, positive excess20, volume expansion, low peer breadth; original signal trend ON required",
+          "leader_evidence": {
+            "leader_peer_breadth": 0.16666666666666666,
+            "leader_return20": 0.776470588235294,
+            "benchmark_return20": 0.02296157450796632,
+            "leader_volume_ratio": 1.713715071995495,
+            "leader_turnover_share": {
+              "last5_mean": 0.019681873055701987,
+              "prior20_mean": 0.021009825189544636,
+              "rising": false,
+              "coverage_min": 0.9812563323201621,
+              "valid": true
+            }
+          },
+          "liquidity_at_signal": {
+            "as_of": "2026-09-10",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 17031655.0,
+            "mean_turnover20_twd": 2033469150.3049998
+          },
+          "liquidity_before_entry": {
+            "as_of": "2026-09-10",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 17031655.0,
+            "mean_turnover20_twd": 2033469150.3049998
+          },
+          "stock_id": "3441",
+          "name": "聯一光電",
+          "reference_close": 151.0,
+          "passes_turnover_screen": true,
+          "execution_status": "unknown_no_historical_intraday_fill_evidence"
+        }
+      ],
+      "account_orders_evaluated": false
+    },
+    {
+      "date": "2026-09-11",
+      "trend": {
+        "date": "2026-09-11",
+        "state": "ON",
+        "ma120": 97.97446404569892,
+        "evidence_date": "2026-09-11",
+        "observation_count": 120
+      },
+      "signals": [
+        {
+          "event_id": "2026-09-g002-2026-09-11-1560",
+          "signal_date": "2026-09-11",
+          "entry_date": "2026-09-14",
+          "members": [
+            "1560"
+          ],
+          "priority": 0.07743712730101104,
+          "trend_state": "ON",
+          "trend_decision_date": "2026-09-11",
+          "group_id": "2026-09-g002",
+          "group_members": [
+            "1560",
+            "2467",
+            "3583",
+            "4749"
+          ],
+          "group_cutoff_date": "2026-08-31",
+          "selection_reason": "60-session breakout, positive excess20, volume expansion, low peer breadth; original signal trend ON required",
+          "leader_evidence": {
+            "leader_peer_breadth": 0.0,
+            "leader_return20": 0.08965517241379306,
+            "benchmark_return20": 0.012218045112782017,
+            "leader_volume_ratio": 3.579366289222869,
+            "leader_turnover_share": {
+              "last5_mean": 0.002101558808117211,
+              "prior20_mean": 0.001833716081467486,
+              "rising": true,
+              "coverage_min": 0.9812563323201621,
+              "valid": true
+            }
+          },
+          "liquidity_at_signal": {
+            "as_of": "2026-09-11",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 1254992.75,
+            "mean_turnover20_twd": 909215573.2
+          },
+          "liquidity_before_entry": {
+            "as_of": "2026-09-11",
+            "observations": 20,
+            "complete_20_sessions": true,
+            "adv20_shares": 1254992.75,
+            "mean_turnover20_twd": 909215573.2
+          },
+          "stock_id": "1560",
+          "name": "中砂",
+          "reference_close": 790.0,
+          "passes_turnover_screen": true,
+          "execution_status": "unknown_no_historical_intraday_fill_evidence"
+        }
+      ],
+      "account_orders_evaluated": false
+    }
+  ],
+  "cases": [
+    {
+      "cutoff": "2026-09-01",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "61df30e092f8554fba401045875d8d60450581f4056052d8bbad423949113f01",
+      "actual_sha256": "61df30e092f8554fba401045875d8d60450581f4056052d8bbad423949113f01"
+    },
+    {
+      "cutoff": "2026-09-01",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "61df30e092f8554fba401045875d8d60450581f4056052d8bbad423949113f01",
+      "actual_sha256": "61df30e092f8554fba401045875d8d60450581f4056052d8bbad423949113f01"
+    },
+    {
+      "cutoff": "2026-09-02",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "cff509b83a76d213405599b5e0ec3a60080a45aa56b75b87e39b6d419f8e3b6a",
+      "actual_sha256": "cff509b83a76d213405599b5e0ec3a60080a45aa56b75b87e39b6d419f8e3b6a"
+    },
+    {
+      "cutoff": "2026-09-02",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "cff509b83a76d213405599b5e0ec3a60080a45aa56b75b87e39b6d419f8e3b6a",
+      "actual_sha256": "cff509b83a76d213405599b5e0ec3a60080a45aa56b75b87e39b6d419f8e3b6a"
+    },
+    {
+      "cutoff": "2026-09-03",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "894f1fa41f51b1028762168adbf32f7154524faf4ff987ea0de352ccce26515d",
+      "actual_sha256": "894f1fa41f51b1028762168adbf32f7154524faf4ff987ea0de352ccce26515d"
+    },
+    {
+      "cutoff": "2026-09-03",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "894f1fa41f51b1028762168adbf32f7154524faf4ff987ea0de352ccce26515d",
+      "actual_sha256": "894f1fa41f51b1028762168adbf32f7154524faf4ff987ea0de352ccce26515d"
+    },
+    {
+      "cutoff": "2026-09-04",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "6c30e34fafd3432fffc74d5f57d79d20af1e45386813791dc2166792f9c36be3",
+      "actual_sha256": "6c30e34fafd3432fffc74d5f57d79d20af1e45386813791dc2166792f9c36be3"
+    },
+    {
+      "cutoff": "2026-09-04",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "6c30e34fafd3432fffc74d5f57d79d20af1e45386813791dc2166792f9c36be3",
+      "actual_sha256": "6c30e34fafd3432fffc74d5f57d79d20af1e45386813791dc2166792f9c36be3"
+    },
+    {
+      "cutoff": "2026-09-07",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "23f3dabc58d20d7fa4fe8392ade0725604cce4fe45584940317131e554f615d8",
+      "actual_sha256": "23f3dabc58d20d7fa4fe8392ade0725604cce4fe45584940317131e554f615d8"
+    },
+    {
+      "cutoff": "2026-09-07",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "23f3dabc58d20d7fa4fe8392ade0725604cce4fe45584940317131e554f615d8",
+      "actual_sha256": "23f3dabc58d20d7fa4fe8392ade0725604cce4fe45584940317131e554f615d8"
+    },
+    {
+      "cutoff": "2026-09-08",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "264a8cafc4995290929d9ac667166358bc928e19b9ef91b697de6a5d4f7b22e9",
+      "actual_sha256": "264a8cafc4995290929d9ac667166358bc928e19b9ef91b697de6a5d4f7b22e9"
+    },
+    {
+      "cutoff": "2026-09-08",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "264a8cafc4995290929d9ac667166358bc928e19b9ef91b697de6a5d4f7b22e9",
+      "actual_sha256": "264a8cafc4995290929d9ac667166358bc928e19b9ef91b697de6a5d4f7b22e9"
+    },
+    {
+      "cutoff": "2026-09-09",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "c463a87ffd63d75156056d819320b0b0fe9dbfd77cd908ee9de28a28c36593e1",
+      "actual_sha256": "c463a87ffd63d75156056d819320b0b0fe9dbfd77cd908ee9de28a28c36593e1"
+    },
+    {
+      "cutoff": "2026-09-09",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "c463a87ffd63d75156056d819320b0b0fe9dbfd77cd908ee9de28a28c36593e1",
+      "actual_sha256": "c463a87ffd63d75156056d819320b0b0fe9dbfd77cd908ee9de28a28c36593e1"
+    },
+    {
+      "cutoff": "2026-09-10",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "ff42169fe0448b07eeaf2056c44e66f4ae9eb65dd6f8d44407eb4f962ffcf0c5",
+      "actual_sha256": "ff42169fe0448b07eeaf2056c44e66f4ae9eb65dd6f8d44407eb4f962ffcf0c5"
+    },
+    {
+      "cutoff": "2026-09-10",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "ff42169fe0448b07eeaf2056c44e66f4ae9eb65dd6f8d44407eb4f962ffcf0c5",
+      "actual_sha256": "ff42169fe0448b07eeaf2056c44e66f4ae9eb65dd6f8d44407eb4f962ffcf0c5"
+    },
+    {
+      "cutoff": "2026-09-11",
+      "mode": "truncate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "e2c3464d3f67a70c80e25a6d41770f971aa7cf61ea67150d8bfdf1a5e1fbe01f",
+      "actual_sha256": "e2c3464d3f67a70c80e25a6d41770f971aa7cf61ea67150d8bfdf1a5e1fbe01f"
+    },
+    {
+      "cutoff": "2026-09-11",
+      "mode": "mutate",
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "e2c3464d3f67a70c80e25a6d41770f971aa7cf61ea67150d8bfdf1a5e1fbe01f",
+      "actual_sha256": "e2c3464d3f67a70c80e25a6d41770f971aa7cf61ea67150d8bfdf1a5e1fbe01f"
+    }
+  ],
+  "elapsed_seconds": 10.531
+}
