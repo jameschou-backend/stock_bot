@@ -1,0 +1,31 @@
+import json,requests
+from pathlib import Path
+def no_network(*a,**k):raise AssertionError("network disabled")
+requests.sessions.Session.request=no_network
+from skills.replay_market_feeds import ReplayMarketFeeds
+from scripts import research_cash_allocation as r
+changes=[]
+def normalize(value,key):
+ actual=Path(value).resolve();relative=actual.relative_to(r.ROOT.resolve());mapped=str(Path("/Users/james.chou/JamesProject/stock_bot")/relative)
+ if value!=mapped:changes.append(dict(field=key,actual=value,comparison_value=mapped))
+ return mapped
+original_manifest=ReplayMarketFeeds.manifest
+def relocated_manifest(self):
+ v=original_manifest(self);v["cache_directory"]=normalize(v["cache_directory"],"cache_directory");return v
+ReplayMarketFeeds.manifest=relocated_manifest
+original_parent_sources=r.parent.verify_sources
+def relocated_parent_sources():
+ v=original_parent_sources();v["child_cache_directory"]=normalize(v["child_cache_directory"],"parent.child_cache_directory");return v
+r.parent.verify_sources=relocated_parent_sources
+original_sources=r.verify_sources
+def relocated_sources():
+ v=original_sources();v["child_cache_directory"]=normalize(v["child_cache_directory"],"child_cache_directory");return v
+r.verify_sources=relocated_sources
+try:r.verify_report();result={"relocation_diagnostic":"passed"}
+except Exception as e:result={"relocation_diagnostic":type(e).__name__+": "+str(e)}
+result.update(normalized_location_fields=changes,original_verifier_unchanged=False,interpretation="diagnostic with explicit path normalization, not original strict verification or performance validation",live_qualified=False)
+print(json.dumps(result,ensure_ascii=False))
+import time
+started=time.monotonic()
+r._offline_all(r.load_inputs(),r.read(r.OUTPUT/"report.json"))
+print(json.dumps(dict(offline_reproduction="all four accounts identical",seconds=round(time.monotonic()-started,3),network="disabled",live_qualified=False)))

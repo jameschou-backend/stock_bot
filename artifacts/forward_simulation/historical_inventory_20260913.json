@@ -1,0 +1,13 @@
+{
+  "scope": "read-only declared historical inventory audit; not strategy validation",
+  "files_checked": 4154,
+  "mismatches": [
+    {
+      "file": "app/finmind.py",
+      "expected": "1acbae168b5504aa3feb8482bc1c46e9363c0196668bcc60ea7fe9792ab39d92",
+      "actual": "e04883f03c1a4bf5d6c624ac1bfad026cdc704771bf76b48778aaa9135d4ed5e"
+    }
+  ],
+  "seconds": 1.408,
+  "live_qualified": false
+}

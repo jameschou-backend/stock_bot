@@ -1,0 +1,47 @@
+{
+  "source_integrity": "ValueError: Execution source manifest changed",
+  "full_verify": "ValueError: Execution source manifest changed",
+  "isolated_directory": "/var/folders/fn/yrnch0n92rv_xn6p55s2f9nc0000gn/T/stock-historical-audit-cm4nxa8m",
+  "historical_finmind_commit": "ead1b10ee3432d66f36e4515aef956a10dd0fc64",
+  "network": "disabled in verifier",
+  "live_qualified": false,
+  "relocation_diagnostic": {
+    "relocation_diagnostic": "passed",
+    "normalized_location_fields": [
+      {
+        "field": "cache_directory",
+        "actual": "/private/var/folders/fn/yrnch0n92rv_xn6p55s2f9nc0000gn/T/stock-historical-audit-cm4nxa8m/.cache/million-replay-inputs/execution-feeds",
+        "comparison_value": "/Users/james.chou/JamesProject/stock_bot/.cache/million-replay-inputs/execution-feeds"
+      },
+      {
+        "field": "parent.child_cache_directory",
+        "actual": "/private/var/folders/fn/yrnch0n92rv_xn6p55s2f9nc0000gn/T/stock-historical-audit-cm4nxa8m/.cache/exit-research-inputs",
+        "comparison_value": "/Users/james.chou/JamesProject/stock_bot/.cache/exit-research-inputs"
+      },
+      {
+        "field": "cache_directory",
+        "actual": "/private/var/folders/fn/yrnch0n92rv_xn6p55s2f9nc0000gn/T/stock-historical-audit-cm4nxa8m/.cache/exit-research-inputs/execution-feeds",
+        "comparison_value": "/Users/james.chou/JamesProject/stock_bot/.cache/exit-research-inputs/execution-feeds"
+      },
+      {
+        "field": "child_cache_directory",
+        "actual": "/private/var/folders/fn/yrnch0n92rv_xn6p55s2f9nc0000gn/T/stock-historical-audit-cm4nxa8m/.cache/cash-allocation-inputs",
+        "comparison_value": "/Users/james.chou/JamesProject/stock_bot/.cache/cash-allocation-inputs"
+      },
+      {
+        "field": "cache_directory",
+        "actual": "/private/var/folders/fn/yrnch0n92rv_xn6p55s2f9nc0000gn/T/stock-historical-audit-cm4nxa8m/.cache/cash-allocation-inputs/execution-feeds",
+        "comparison_value": "/Users/james.chou/JamesProject/stock_bot/.cache/cash-allocation-inputs/execution-feeds"
+      }
+    ],
+    "original_verifier_unchanged": false,
+    "interpretation": "diagnostic with explicit path normalization, not original strict verification or performance validation",
+    "live_qualified": false
+  },
+  "offline_replay": {
+    "offline_reproduction": "all four accounts identical",
+    "seconds": 10.017,
+    "network": "disabled",
+    "live_qualified": false
+  }
+}

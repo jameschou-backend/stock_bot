@@ -1,0 +1,262 @@
+{
+  "calls": 0,
+  "reused": 10,
+  "report": {
+    "observed_at": "2026-09-12T17:07:15.357099+00:00",
+    "policy": "cash-allocation-forward-v1",
+    "books": {
+      "strategy": {
+        "head": "8c91d11465f45010e2e251af9c88050647933eaa905fd7465c4f8b5d25b8baa6",
+        "source_blocked": false,
+        "sources": [
+          {
+            "dataset": "股利政策",
+            "stock_id": "1560",
+            "status": "已取得（非完整性保證）",
+            "rows": 2,
+            "retrieved_at": "2026-09-12T17:00:06.456583+00:00",
+            "hash": "ebf759bc31ba85df3bd3180f2e3a3187f22e6a8caf5f2a2f88c0772fa4ca13e7"
+          },
+          {
+            "dataset": "除權息結果",
+            "stock_id": "1560",
+            "status": "已取得（非完整性保證）",
+            "rows": 2,
+            "retrieved_at": "2026-09-12T17:00:06.784727+00:00",
+            "hash": "ea10a6efb3b88c0cd45f066accbb95bb027ed2f7c185929045acb08b40c81f5e"
+          },
+          {
+            "dataset": "分割參考價",
+            "stock_id": "1560",
+            "status": "已取得（非完整性保證）",
+            "rows": 0,
+            "retrieved_at": "2026-09-12T17:00:07.074361+00:00",
+            "hash": "9e38f6418b9a8981f0286c10abc1606bcd77c79a0f5d1722becb897cc322b1fc"
+          },
+          {
+            "dataset": "減資參考價",
+            "stock_id": "1560",
+            "status": "已取得（非完整性保證）",
+            "rows": 0,
+            "retrieved_at": "2026-09-12T17:00:07.280038+00:00",
+            "hash": "7d22d22510c2ea8ff4ec7d56204be9886ecfe050d3f3fe21d2aec6b05643764e"
+          },
+          {
+            "dataset": "面額變更",
+            "stock_id": "全市場",
+            "status": "已取得（非完整性保證）",
+            "rows": 4,
+            "retrieved_at": "2026-09-12T17:00:07.476406+00:00",
+            "hash": "1b6d64fb6715c5f548ae6e02cf4f10e570ae5686f252d149fd144c5dd8eac3b6"
+          }
+        ],
+        "issues": [],
+        "events": [],
+        "scope": {
+          "stock_ids": [
+            "1560"
+          ],
+          "start": "2026-09-11",
+          "end": "2026-09-14",
+          "query_start": "2025-01-01",
+          "query_end": "2026-09-13"
+        },
+        "official_coverage_complete": false,
+        "manual_close_review_required": false,
+        "review_current": false,
+        "execution": [
+          {
+            "order_id": "2026-09-14:1560:odd",
+            "stock_id": "1560",
+            "channel": "odd",
+            "side": "buy",
+            "session": "2026-09-14",
+            "planned": 421,
+            "filled": 0,
+            "unfilled": 421,
+            "cancelled": false,
+            "fill_ratio": 0.0,
+            "average_price": null,
+            "adverse_vs_limit_bps": null,
+            "fees_and_tax": "0"
+          },
+          {
+            "order_id": "2026-09-14:0050:board",
+            "stock_id": "0050",
+            "channel": "board",
+            "side": "buy",
+            "session": "2026-09-14",
+            "planned": 6000,
+            "filled": 0,
+            "unfilled": 6000,
+            "cancelled": true,
+            "fill_ratio": 0.0,
+            "average_price": null,
+            "adverse_vs_limit_bps": null,
+            "fees_and_tax": "0"
+          },
+          {
+            "order_id": "2026-09-14:0050:odd",
+            "stock_id": "0050",
+            "channel": "odd",
+            "side": "buy",
+            "session": "2026-09-14",
+            "planned": 183,
+            "filled": 0,
+            "unfilled": 183,
+            "cancelled": true,
+            "fill_ratio": 0.0,
+            "average_price": null,
+            "adverse_vs_limit_bps": null,
+            "fees_and_tax": "0"
+          }
+        ],
+        "simulated_fills": 0
+      },
+      "benchmark": {
+        "head": "607fe3cefe118012240e051d8491ed0ec764004278105e92e3904887726d8127",
+        "source_blocked": false,
+        "sources": [
+          {
+            "dataset": "股利政策",
+            "stock_id": "0050",
+            "status": "已取得（非完整性保證）",
+            "rows": 4,
+            "retrieved_at": "2026-09-12T17:00:07.702105+00:00",
+            "hash": "52d5deb55eadc532adc18464cf34746c6258a59182949bf1d019ef630461ebee"
+          },
+          {
+            "dataset": "除權息結果",
+            "stock_id": "0050",
+            "status": "已取得（非完整性保證）",
+            "rows": 4,
+            "retrieved_at": "2026-09-12T17:00:07.906868+00:00",
+            "hash": "732848812d425ca35490153b8e7266c0789cbe4e5189ebabedb7dcf59b025ed6"
+          },
+          {
+            "dataset": "分割參考價",
+            "stock_id": "0050",
+            "status": "已取得（非完整性保證）",
+            "rows": 1,
+            "retrieved_at": "2026-09-12T17:00:08.138232+00:00",
+            "hash": "d88c13c804e898b636af59739373394ce3f656566bae52370a3d1dd4a982a402"
+          },
+          {
+            "dataset": "減資參考價",
+            "stock_id": "0050",
+            "status": "已取得（非完整性保證）",
+            "rows": 0,
+            "retrieved_at": "2026-09-12T17:00:08.339995+00:00",
+            "hash": "a496e483b3e1c23a1c90359bb596a51828a307ab9320607130f8b1b6b7b764a0"
+          },
+          {
+            "dataset": "面額變更",
+            "stock_id": "全市場",
+            "status": "已取得（非完整性保證）",
+            "rows": 4,
+            "retrieved_at": "2026-09-12T17:00:07.476406+00:00",
+            "hash": "1b6d64fb6715c5f548ae6e02cf4f10e570ae5686f252d149fd144c5dd8eac3b6"
+          }
+        ],
+        "issues": [],
+        "events": [],
+        "scope": {
+          "stock_ids": [
+            "0050"
+          ],
+          "start": "2026-09-11",
+          "end": "2026-09-14",
+          "query_start": "2025-01-01",
+          "query_end": "2026-09-13"
+        },
+        "official_coverage_complete": false,
+        "manual_close_review_required": false,
+        "review_current": false,
+        "execution": [
+          {
+            "order_id": "initial:board",
+            "stock_id": "0050",
+            "channel": "board",
+            "side": "buy",
+            "session": "2026-09-14",
+            "planned": 9000,
+            "filled": 0,
+            "unfilled": 9000,
+            "cancelled": false,
+            "fill_ratio": 0.0,
+            "average_price": null,
+            "adverse_vs_limit_bps": null,
+            "fees_and_tax": "0"
+          },
+          {
+            "order_id": "initial:odd",
+            "stock_id": "0050",
+            "channel": "odd",
+            "side": "buy",
+            "session": "2026-09-14",
+            "planned": 271,
+            "filled": 0,
+            "unfilled": 271,
+            "cancelled": false,
+            "fill_ratio": 0.0,
+            "average_price": null,
+            "adverse_vs_limit_bps": null,
+            "fees_and_tax": "0"
+          }
+        ],
+        "simulated_fills": 0
+      }
+    },
+    "days": [],
+    "completed_days": 0,
+    "live_qualified": false,
+    "broker_execution_verified": false,
+    "next_action": "等待交易時段觀察；有成交持股後仍需當日公告核對",
+    "research_gaps": [
+      "現金版未累積未見區間績效",
+      "歷史還原價與資料可用時間仍需完整對帳",
+      "歷史股票名冊與存活者偏差仍需驗證"
+    ]
+  },
+  "acceptance": {
+    "checked_at": "2026-09-12T17:08:33.735513+00:00",
+    "tests": {
+      "full_passed": 2333,
+      "warnings": 28,
+      "seconds": 68.16,
+      "additional_archive_ui_test_passed": 1
+    },
+    "api": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs?limit=10": 200
+    },
+    "original_and_simulation_books_unchanged": 8,
+    "frozen_cash_code_sha256": {
+      "app/forward_cash_policy.py": "96266366dd2490b727180ecb4bef20dee49d69e63ddd29e055dcec9f2c700c97",
+      "app/forward_cash_automation.py": "d569f1b9425f5d9b8690f4714a583399e3c8e75f77592d1271a7e6585c8a10f9",
+      "scripts/run_cash_forward.py": "98367ba4f7fe774a8bc974bdf99d0d2d68081335f1e5d58907748f3a41d1afac"
+    },
+    "automation": "existing cash command active; unchanged",
+    "historical_reverification": "blocked: Frozen source hash changed: app/finmind.py",
+    "broker_account": "real account uninitialized; no authenticated executions",
+    "default_pipeline": "failed: TPEx SSL unknown error",
+    "finmind_pipeline": "passed",
+    "logs": {
+      "stock-readiness-test.log": "4dd8f2672c91f131b6581a379f74fc44c93e2b9ea5ee5e273beb011fb700def9",
+      "stock-readiness-pipeline.log": "00ad71d762c7e370bd5a997be82fdc52c54958b61add93536ff06d4c90f4d6c6",
+      "stock-readiness-pipeline-finmind.log": "4b1b3872f10cd6df8aad6e72b87cde19adba5267efa8c03f57e212f4fb4502d8",
+      "stock-cash-reverify.log": "5c0e172948ea84bf18162467a1eb0fe1dd5e510c118a8227c86751c8c5f82454",
+      "stock-readiness-isolated-replay.log": "b2c73c72be6e0174fdf2dab3204b2cad0dff5a5aa641ddc442190454ca88f0dd"
+    },
+    "isolated_historical_replay": {
+      "accounts_identical": 4,
+      "seconds": 10.017,
+      "network_requests": 0,
+      "uses_archived_finmind": true,
+      "explicit_path_normalization": true,
+      "live_qualified": false
+    }
+  }
+}
