@@ -1,0 +1,408 @@
+{
+  "spec_sha256": "e807b96f13135accf549272c9df876d7a0c81654135f3064490986e22bf84555",
+  "audit_code_sha256": "d5ce6bb360a9da3237bf9d0d5df7ce7798ec06d53d3e5570a8c862a76d9b4732",
+  "source_sha256": {
+    ".cache/million-replay-signals/close-official.parquet": "485ad49f892b8aaf6895cb668fb82940e5e7f86359f20e393fcc0d4cdd9cad3e",
+    ".cache/million-replay-signals/close-quality.parquet": "c0ae95b48aa9962ecf59bb4f8df5c85a545d7a6469487160cc4984de4626c236",
+    ".cache/million-replay-signals/raw-close.parquet": "1bc072f87bd7792be9f678bab351e906d9fca8074fc3154409e7c86ba6fec403",
+    ".cache/million-replay-signals/raw-volume.parquet": "840b9a23a1d7f5355b2eabbdf6ba61d27bd4f08fd09b6b6a7489ea46b6de9b47",
+    ".cache/million-replay-signals/companies.parquet": "5fbbd42a22d2e0c08e1c072d61d43347eecd380fc257f61d5d01a575fc4f1768",
+    ".cache/million-replay-signals/signals.json": "e794ee605c33727b2efde0d3603384314d7b6b0a025c2e36ccb4e12f173d3582",
+    "scripts/prepare_million_signals.py": "5aad515778fa4999f27f9ece68e640532a02ad91e9a4e9854f128800c5592040",
+    "skills/diffusion_signals.py": "df9f1e8020c0382b049f82fa6cac7a19acfd9d1285fd6dc6d7961788cb53f350",
+    "skills/regime_state.py": "2e5755c018448e9464470b202bb4e675324fe2a30702dee8383b6081404d3a4d",
+    "skills/official_adj_factors.py": "d89c8c87574fe2dd0af79443785356a77dbbce232e1a52d5887554b1bd83e1a4"
+  },
+  "manifest_sha256": "58121f6af635678d4a7efd9efcbb044c2a6542ea7a6df1242b4fc0cdbc1380c3",
+  "full_rebuild_matches_sealed": true,
+  "accepted_candidates": 458,
+  "rejected_candidates": 72,
+  "cases": [
+    {
+      "requested_cutoff": "2022-03-31",
+      "cutoff": "2022-03-31",
+      "mode": "truncate",
+      "accepted_candidates": 19,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "3b5ac0266f97aefeb6a436dfb80e9a267e67896b486f1abc7e325dd2a3c033f3",
+      "actual_sha256": "3b5ac0266f97aefeb6a436dfb80e9a267e67896b486f1abc7e325dd2a3c033f3"
+    },
+    {
+      "requested_cutoff": "2022-03-31",
+      "cutoff": "2022-03-31",
+      "mode": "mutate",
+      "accepted_candidates": 19,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "3b5ac0266f97aefeb6a436dfb80e9a267e67896b486f1abc7e325dd2a3c033f3",
+      "actual_sha256": "3b5ac0266f97aefeb6a436dfb80e9a267e67896b486f1abc7e325dd2a3c033f3"
+    },
+    {
+      "requested_cutoff": "2022-06-30",
+      "cutoff": "2022-06-30",
+      "mode": "truncate",
+      "accepted_candidates": 19,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "084931ddf4b5615e4f254f87e2036ae80f36a7ef76b8749c07fdcc925919f462",
+      "actual_sha256": "084931ddf4b5615e4f254f87e2036ae80f36a7ef76b8749c07fdcc925919f462"
+    },
+    {
+      "requested_cutoff": "2022-06-30",
+      "cutoff": "2022-06-30",
+      "mode": "mutate",
+      "accepted_candidates": 19,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "084931ddf4b5615e4f254f87e2036ae80f36a7ef76b8749c07fdcc925919f462",
+      "actual_sha256": "084931ddf4b5615e4f254f87e2036ae80f36a7ef76b8749c07fdcc925919f462"
+    },
+    {
+      "requested_cutoff": "2022-09-30",
+      "cutoff": "2022-09-30",
+      "mode": "truncate",
+      "accepted_candidates": 19,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "dc250e8be831eef9aca63ed895911d938ed78f4cef71e5d377f6f1ca9aa771c0",
+      "actual_sha256": "dc250e8be831eef9aca63ed895911d938ed78f4cef71e5d377f6f1ca9aa771c0"
+    },
+    {
+      "requested_cutoff": "2022-09-30",
+      "cutoff": "2022-09-30",
+      "mode": "mutate",
+      "accepted_candidates": 19,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "dc250e8be831eef9aca63ed895911d938ed78f4cef71e5d377f6f1ca9aa771c0",
+      "actual_sha256": "dc250e8be831eef9aca63ed895911d938ed78f4cef71e5d377f6f1ca9aa771c0"
+    },
+    {
+      "requested_cutoff": "2022-12-31",
+      "cutoff": "2022-12-30",
+      "mode": "truncate",
+      "accepted_candidates": 29,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "833af23ebb5328f50174b25e2ea9a1435a306a699d10bc787c616a427e23562f",
+      "actual_sha256": "833af23ebb5328f50174b25e2ea9a1435a306a699d10bc787c616a427e23562f"
+    },
+    {
+      "requested_cutoff": "2022-12-31",
+      "cutoff": "2022-12-30",
+      "mode": "mutate",
+      "accepted_candidates": 29,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "833af23ebb5328f50174b25e2ea9a1435a306a699d10bc787c616a427e23562f",
+      "actual_sha256": "833af23ebb5328f50174b25e2ea9a1435a306a699d10bc787c616a427e23562f"
+    },
+    {
+      "requested_cutoff": "2023-03-31",
+      "cutoff": "2023-03-31",
+      "mode": "truncate",
+      "accepted_candidates": 64,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "b8558f15ab13900e135f6329eb83c19d96177d7435c9f1a80e3e21b5e2333779",
+      "actual_sha256": "b8558f15ab13900e135f6329eb83c19d96177d7435c9f1a80e3e21b5e2333779"
+    },
+    {
+      "requested_cutoff": "2023-03-31",
+      "cutoff": "2023-03-31",
+      "mode": "mutate",
+      "accepted_candidates": 64,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "b8558f15ab13900e135f6329eb83c19d96177d7435c9f1a80e3e21b5e2333779",
+      "actual_sha256": "b8558f15ab13900e135f6329eb83c19d96177d7435c9f1a80e3e21b5e2333779"
+    },
+    {
+      "requested_cutoff": "2023-06-30",
+      "cutoff": "2023-06-30",
+      "mode": "truncate",
+      "accepted_candidates": 101,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "ef02ebbac829626bc5b2c53d14baa0b22d67009ac2b134d189ca24ba25d0c73d",
+      "actual_sha256": "ef02ebbac829626bc5b2c53d14baa0b22d67009ac2b134d189ca24ba25d0c73d"
+    },
+    {
+      "requested_cutoff": "2023-06-30",
+      "cutoff": "2023-06-30",
+      "mode": "mutate",
+      "accepted_candidates": 101,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "ef02ebbac829626bc5b2c53d14baa0b22d67009ac2b134d189ca24ba25d0c73d",
+      "actual_sha256": "ef02ebbac829626bc5b2c53d14baa0b22d67009ac2b134d189ca24ba25d0c73d"
+    },
+    {
+      "requested_cutoff": "2023-09-30",
+      "cutoff": "2023-09-28",
+      "mode": "truncate",
+      "accepted_candidates": 127,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "6b524c3888ad07808483a4f1b86308ec1b2a39ba5cbd4c7750d7b0e62ed35dcd",
+      "actual_sha256": "6b524c3888ad07808483a4f1b86308ec1b2a39ba5cbd4c7750d7b0e62ed35dcd"
+    },
+    {
+      "requested_cutoff": "2023-09-30",
+      "cutoff": "2023-09-28",
+      "mode": "mutate",
+      "accepted_candidates": 127,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "6b524c3888ad07808483a4f1b86308ec1b2a39ba5cbd4c7750d7b0e62ed35dcd",
+      "actual_sha256": "6b524c3888ad07808483a4f1b86308ec1b2a39ba5cbd4c7750d7b0e62ed35dcd"
+    },
+    {
+      "requested_cutoff": "2023-12-31",
+      "cutoff": "2023-12-29",
+      "mode": "truncate",
+      "accepted_candidates": 145,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "0a077ac74fcc07abd29f7975f010aa197df23067d8cfa440f194e8dcc4b393d8",
+      "actual_sha256": "0a077ac74fcc07abd29f7975f010aa197df23067d8cfa440f194e8dcc4b393d8"
+    },
+    {
+      "requested_cutoff": "2023-12-31",
+      "cutoff": "2023-12-29",
+      "mode": "mutate",
+      "accepted_candidates": 145,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "0a077ac74fcc07abd29f7975f010aa197df23067d8cfa440f194e8dcc4b393d8",
+      "actual_sha256": "0a077ac74fcc07abd29f7975f010aa197df23067d8cfa440f194e8dcc4b393d8"
+    },
+    {
+      "requested_cutoff": "2024-03-31",
+      "cutoff": "2024-03-29",
+      "mode": "truncate",
+      "accepted_candidates": 165,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "84c2ef06291e47f5f0026f80d8541e9fa1b5f9f3db58d89967707e9a7a2afdff",
+      "actual_sha256": "84c2ef06291e47f5f0026f80d8541e9fa1b5f9f3db58d89967707e9a7a2afdff"
+    },
+    {
+      "requested_cutoff": "2024-03-31",
+      "cutoff": "2024-03-29",
+      "mode": "mutate",
+      "accepted_candidates": 165,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "84c2ef06291e47f5f0026f80d8541e9fa1b5f9f3db58d89967707e9a7a2afdff",
+      "actual_sha256": "84c2ef06291e47f5f0026f80d8541e9fa1b5f9f3db58d89967707e9a7a2afdff"
+    },
+    {
+      "requested_cutoff": "2024-06-30",
+      "cutoff": "2024-06-28",
+      "mode": "truncate",
+      "accepted_candidates": 207,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "ec844c36ac781b90e6b10f3351783bb9966d74fb98a132a7ea61393da5065143",
+      "actual_sha256": "ec844c36ac781b90e6b10f3351783bb9966d74fb98a132a7ea61393da5065143"
+    },
+    {
+      "requested_cutoff": "2024-06-30",
+      "cutoff": "2024-06-28",
+      "mode": "mutate",
+      "accepted_candidates": 207,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "ec844c36ac781b90e6b10f3351783bb9966d74fb98a132a7ea61393da5065143",
+      "actual_sha256": "ec844c36ac781b90e6b10f3351783bb9966d74fb98a132a7ea61393da5065143"
+    },
+    {
+      "requested_cutoff": "2024-09-30",
+      "cutoff": "2024-09-30",
+      "mode": "truncate",
+      "accepted_candidates": 231,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "31defbc2901075c8e16931adc66b24fb2d3f5f12ef38825db3c541d0ffe098b1",
+      "actual_sha256": "31defbc2901075c8e16931adc66b24fb2d3f5f12ef38825db3c541d0ffe098b1"
+    },
+    {
+      "requested_cutoff": "2024-09-30",
+      "cutoff": "2024-09-30",
+      "mode": "mutate",
+      "accepted_candidates": 231,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "31defbc2901075c8e16931adc66b24fb2d3f5f12ef38825db3c541d0ffe098b1",
+      "actual_sha256": "31defbc2901075c8e16931adc66b24fb2d3f5f12ef38825db3c541d0ffe098b1"
+    },
+    {
+      "requested_cutoff": "2024-12-31",
+      "cutoff": "2024-12-31",
+      "mode": "truncate",
+      "accepted_candidates": 266,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "c6ada79c5bc1cbbe5514029cd413d8f77a7dcacb6b2a475301b6323d2a4510f4",
+      "actual_sha256": "c6ada79c5bc1cbbe5514029cd413d8f77a7dcacb6b2a475301b6323d2a4510f4"
+    },
+    {
+      "requested_cutoff": "2024-12-31",
+      "cutoff": "2024-12-31",
+      "mode": "mutate",
+      "accepted_candidates": 266,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "c6ada79c5bc1cbbe5514029cd413d8f77a7dcacb6b2a475301b6323d2a4510f4",
+      "actual_sha256": "c6ada79c5bc1cbbe5514029cd413d8f77a7dcacb6b2a475301b6323d2a4510f4"
+    },
+    {
+      "requested_cutoff": "2025-03-31",
+      "cutoff": "2025-03-31",
+      "mode": "truncate",
+      "accepted_candidates": 285,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "d2ae67a7daa50afc869c9447d65fa8669f9d009cc999faaf9488887efbe4eccc",
+      "actual_sha256": "d2ae67a7daa50afc869c9447d65fa8669f9d009cc999faaf9488887efbe4eccc"
+    },
+    {
+      "requested_cutoff": "2025-03-31",
+      "cutoff": "2025-03-31",
+      "mode": "mutate",
+      "accepted_candidates": 285,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "d2ae67a7daa50afc869c9447d65fa8669f9d009cc999faaf9488887efbe4eccc",
+      "actual_sha256": "d2ae67a7daa50afc869c9447d65fa8669f9d009cc999faaf9488887efbe4eccc"
+    },
+    {
+      "requested_cutoff": "2025-06-30",
+      "cutoff": "2025-06-30",
+      "mode": "truncate",
+      "accepted_candidates": 289,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "63ed7a7469e0548700baf342edfaef3d07ccc2888e82f174134661aa8772efef",
+      "actual_sha256": "63ed7a7469e0548700baf342edfaef3d07ccc2888e82f174134661aa8772efef"
+    },
+    {
+      "requested_cutoff": "2025-06-30",
+      "cutoff": "2025-06-30",
+      "mode": "mutate",
+      "accepted_candidates": 289,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "63ed7a7469e0548700baf342edfaef3d07ccc2888e82f174134661aa8772efef",
+      "actual_sha256": "63ed7a7469e0548700baf342edfaef3d07ccc2888e82f174134661aa8772efef"
+    },
+    {
+      "requested_cutoff": "2025-09-30",
+      "cutoff": "2025-09-30",
+      "mode": "truncate",
+      "accepted_candidates": 337,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "c614fd66b721b9e879c45e26c4356b9b4091c830f939dc83bc8080b9622b7301",
+      "actual_sha256": "c614fd66b721b9e879c45e26c4356b9b4091c830f939dc83bc8080b9622b7301"
+    },
+    {
+      "requested_cutoff": "2025-09-30",
+      "cutoff": "2025-09-30",
+      "mode": "mutate",
+      "accepted_candidates": 337,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "c614fd66b721b9e879c45e26c4356b9b4091c830f939dc83bc8080b9622b7301",
+      "actual_sha256": "c614fd66b721b9e879c45e26c4356b9b4091c830f939dc83bc8080b9622b7301"
+    },
+    {
+      "requested_cutoff": "2025-12-31",
+      "cutoff": "2025-12-31",
+      "mode": "truncate",
+      "accepted_candidates": 368,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "312b7c115645a9b96184459a22bf49df6f710c9a1f7dd6bc335037bbb5450820",
+      "actual_sha256": "312b7c115645a9b96184459a22bf49df6f710c9a1f7dd6bc335037bbb5450820"
+    },
+    {
+      "requested_cutoff": "2025-12-31",
+      "cutoff": "2025-12-31",
+      "mode": "mutate",
+      "accepted_candidates": 368,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "312b7c115645a9b96184459a22bf49df6f710c9a1f7dd6bc335037bbb5450820",
+      "actual_sha256": "312b7c115645a9b96184459a22bf49df6f710c9a1f7dd6bc335037bbb5450820"
+    },
+    {
+      "requested_cutoff": "2026-03-31",
+      "cutoff": "2026-03-31",
+      "mode": "truncate",
+      "accepted_candidates": 399,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "19dee6a9be7e39ce4b9f4818f0189abee860a42a73df65f07af7865c4a573034",
+      "actual_sha256": "19dee6a9be7e39ce4b9f4818f0189abee860a42a73df65f07af7865c4a573034"
+    },
+    {
+      "requested_cutoff": "2026-03-31",
+      "cutoff": "2026-03-31",
+      "mode": "mutate",
+      "accepted_candidates": 399,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "19dee6a9be7e39ce4b9f4818f0189abee860a42a73df65f07af7865c4a573034",
+      "actual_sha256": "19dee6a9be7e39ce4b9f4818f0189abee860a42a73df65f07af7865c4a573034"
+    },
+    {
+      "requested_cutoff": "2026-06-30",
+      "cutoff": "2026-06-30",
+      "mode": "truncate",
+      "accepted_candidates": 443,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "3322c27500e0aa75b9ce9c89e1365197c5b952204ed1c6824f8142bb9054ad9d",
+      "actual_sha256": "3322c27500e0aa75b9ce9c89e1365197c5b952204ed1c6824f8142bb9054ad9d"
+    },
+    {
+      "requested_cutoff": "2026-06-30",
+      "cutoff": "2026-06-30",
+      "mode": "mutate",
+      "accepted_candidates": 443,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "3322c27500e0aa75b9ce9c89e1365197c5b952204ed1c6824f8142bb9054ad9d",
+      "actual_sha256": "3322c27500e0aa75b9ce9c89e1365197c5b952204ed1c6824f8142bb9054ad9d"
+    },
+    {
+      "requested_cutoff": "2026-09-08",
+      "cutoff": "2026-09-08",
+      "mode": "truncate",
+      "accepted_candidates": 458,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "98634035bdbe7115ad6e16809a38d8dc5a376bfd2f4a6056062bc0da11c0d327",
+      "actual_sha256": "98634035bdbe7115ad6e16809a38d8dc5a376bfd2f4a6056062bc0da11c0d327"
+    },
+    {
+      "requested_cutoff": "2026-09-08",
+      "cutoff": "2026-09-08",
+      "mode": "mutate",
+      "accepted_candidates": 458,
+      "passed": true,
+      "differing_sections": [],
+      "expected_sha256": "98634035bdbe7115ad6e16809a38d8dc5a376bfd2f4a6056062bc0da11c0d327",
+      "actual_sha256": "98634035bdbe7115ad6e16809a38d8dc5a376bfd2f4a6056062bc0da11c0d327"
+    }
+  ],
+  "live_qualified": false,
+  "finmind_requests": 0,
+  "scope": "Signal causality on the supplied snapshot; not publication-time, universe or execution certification.",
+  "elapsed_seconds": 36.233,
+  "sources_unchanged_after_run": true,
+  "passed": true
+}
