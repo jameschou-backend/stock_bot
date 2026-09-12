@@ -1,0 +1,179 @@
+{
+  "checked_at": "2026-09-12T07:07:25.312886+00:00",
+  "live_qualified": false,
+  "policy": {
+    "version": "cash-allocation-forward-v1",
+    "idle_asset": "cash",
+    "cash_interest": "0",
+    "stock_slots": 3,
+    "stock_budget": "prior_close_nav_divided_by_3",
+    "benchmark": "0050_independent_account",
+    "override": "Only remove strategy-account 0050 allocation; preserve inherited signal, exit and matching rules.",
+    "live_qualified": false
+  },
+  "code_sha256": {
+    "app/forward_cash_policy.py": "96266366dd2490b727180ecb4bef20dee49d69e63ddd29e055dcec9f2c700c97",
+    "app/forward_cash_automation.py": "d569f1b9425f5d9b8690f4714a583399e3c8e75f77592d1271a7e6585c8a10f9",
+    "scripts/run_cash_forward.py": "98367ba4f7fe774a8bc974bdf99d0d2d68081335f1e5d58907748f3a41d1afac"
+  },
+  "original_books": {
+    ".cache/forward-validation/journal.sqlite3": {
+      "event_count": 4,
+      "fills": 0,
+      "head": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132",
+      "unchanged": true
+    },
+    ".cache/forward-validation/portfolio-v2.sqlite3": {
+      "event_count": 7,
+      "fills": 0,
+      "head": "1b6541786852d5cfc9658ac2b1ef578bad38a912ed332d27228f537e9cc79f05",
+      "unchanged": true
+    },
+    ".cache/forward-validation/benchmark-0050.sqlite3": {
+      "event_count": 7,
+      "fills": 0,
+      "head": "95ec2fb2510db496012bdc6c6635a58fc791381dcd7b382d0863ce07a50ece70",
+      "unchanged": true
+    },
+    ".cache/forward-simulation/v1/signals.sqlite3": {
+      "event_count": 4,
+      "fills": 0,
+      "head": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132",
+      "unchanged": true
+    },
+    ".cache/forward-simulation/v1/strategy.sqlite3": {
+      "event_count": 8,
+      "fills": 0,
+      "head": "df11d3b7bd6bfad11d5c33be6add4be498d2038ea1228cd7a6e91e7842c1a532",
+      "unchanged": true
+    },
+    ".cache/forward-simulation/v1/benchmark.sqlite3": {
+      "event_count": 8,
+      "fills": 0,
+      "head": "c9c45f17f1a16d11c44f5368b142b26a1f87e791739f1bfcb84e7312f5e5f5ba",
+      "unchanged": true
+    }
+  },
+  "books": {
+    "strategy": {
+      "cash": "1000000",
+      "reserved_cash": "333064.0",
+      "available_cash": "666936.0",
+      "nav": "1000000",
+      "price_date": "2026-09-11",
+      "fill_count": 0,
+      "head": "8c91d11465f45010e2e251af9c88050647933eaa905fd7465c4f8b5d25b8baa6",
+      "orders": [
+        {
+          "stock_id": "1560",
+          "qty": 421,
+          "filled": 0,
+          "closed": false,
+          "limit_price": "790.0",
+          "session": "2026-09-14"
+        },
+        {
+          "stock_id": "0050",
+          "qty": 6000,
+          "filled": 0,
+          "closed": true,
+          "limit_price": "107.700000",
+          "session": "2026-09-14"
+        },
+        {
+          "stock_id": "0050",
+          "qty": 183,
+          "filled": 0,
+          "closed": true,
+          "limit_price": "107.700000",
+          "session": "2026-09-14"
+        }
+      ]
+    },
+    "benchmark": {
+      "cash": "1000000",
+      "reserved_cash": "999909.700000",
+      "available_cash": "90.300000",
+      "nav": "1000000",
+      "price_date": "2026-09-11",
+      "fill_count": 0,
+      "head": "607fe3cefe118012240e051d8491ed0ec764004278105e92e3904887726d8127",
+      "orders": [
+        {
+          "stock_id": "0050",
+          "qty": 9000,
+          "filled": 0,
+          "closed": false,
+          "limit_price": "107.700000",
+          "session": "2026-09-14"
+        },
+        {
+          "stock_id": "0050",
+          "qty": 271,
+          "filled": 0,
+          "closed": false,
+          "limit_price": "107.700000",
+          "session": "2026-09-14"
+        }
+      ]
+    }
+  },
+  "api": {
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs?limit=10": 200
+  },
+  "tests": {
+    "passed": 2328,
+    "warnings": 28,
+    "seconds": 56.13
+  },
+  "pipeline": {
+    "default_source": "failed twice: TPEx TLS certificate verification",
+    "explicit_source": "INGEST_PRICES_SOURCE=finmind",
+    "successful_runs": 3,
+    "default_tls_fixed": false
+  },
+  "logs": {
+    "stock-cash-forward-final-test.log": {
+      "sha256": "959ddbec91355898a50c586f400b80fc4d892b5eec13551c2b48f3531ce1d0fc",
+      "exit_code": 0
+    },
+    "stock-cash-forward-pipeline.log": {
+      "sha256": "7327410172e841e41cacea616d1e9882c6869168d6777b002b7f543d2853bd40",
+      "exit_code": 2
+    },
+    "stock-cash-forward-pipeline-retry.log": {
+      "sha256": "7327410172e841e41cacea616d1e9882c6869168d6777b002b7f543d2853bd40",
+      "exit_code": 2
+    },
+    "stock-cash-forward-pipeline-finmind.log": {
+      "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03",
+      "exit_code": 0
+    },
+    "stock-cash-forward-pipeline-finmind-repeat.log": {
+      "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03",
+      "exit_code": 0
+    },
+    "stock-cash-forward-final-pipeline.log": {
+      "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03",
+      "exit_code": 0
+    }
+  },
+  "automation": {
+    "id": "automation",
+    "status": "ACTIVE",
+    "first_entry_session": "2026-09-14",
+    "command": "INGEST_PRICES_SOURCE=finmind python scripts/run_cash_forward.py run --observe-seconds 20",
+    "same_schedule_and_thread": true,
+    "configuration_sha256": "4125a445bef5ec36f3ba6096bd0a72c418ce1b29f7469de33048de7f42017201",
+    "scheduled_trading_execution_verified": false
+  },
+  "browser": "127.0.0.1:8502 strategy tab: cash default, benchmark independent, strategy cash 1000000/reserved333064/available666936; both0fills; original books collapsed. No financial or review action submitted.",
+  "manual_run": {
+    "status": "closed_market",
+    "date": "2026-09-12",
+    "stages": []
+  }
+}
