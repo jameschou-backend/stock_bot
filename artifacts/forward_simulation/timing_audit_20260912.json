@@ -1,0 +1,976 @@
+{
+  "recorded_date_checks_pass": true,
+  "violations": [],
+  "candidates": 458,
+  "entry_fills": 108,
+  "exit_decisions": 2659,
+  "total_fills": 478,
+  "fills_without_execution_timestamp": 478,
+  "same_day_etf_funding_buy_fills": 95,
+  "same_day_etf_funding_events": 51,
+  "funding_links": [
+    {
+      "date": "2022-01-04",
+      "event_id": "2022-01-g015-2022-01-03-6284",
+      "stock_id": "6284",
+      "buy_sequence": 5,
+      "preceding_etf_sale_sequences": [
+        3,
+        4
+      ]
+    },
+    {
+      "date": "2022-01-04",
+      "event_id": "2022-01-g015-2022-01-03-6284",
+      "stock_id": "6284",
+      "buy_sequence": 6,
+      "preceding_etf_sale_sequences": [
+        3,
+        4
+      ]
+    },
+    {
+      "date": "2022-01-04",
+      "event_id": "2022-01-g005-2022-01-03-8261",
+      "stock_id": "8261",
+      "buy_sequence": 9,
+      "preceding_etf_sale_sequences": [
+        7,
+        8
+      ]
+    },
+    {
+      "date": "2022-01-04",
+      "event_id": "2022-01-g005-2022-01-03-8261",
+      "stock_id": "8261",
+      "buy_sequence": 10,
+      "preceding_etf_sale_sequences": [
+        7,
+        8
+      ]
+    },
+    {
+      "date": "2022-01-05",
+      "event_id": "2022-01-g008-2022-01-04-6477",
+      "stock_id": "6477",
+      "buy_sequence": 14,
+      "preceding_etf_sale_sequences": [
+        12,
+        13
+      ]
+    },
+    {
+      "date": "2022-01-05",
+      "event_id": "2022-01-g008-2022-01-04-6477",
+      "stock_id": "6477",
+      "buy_sequence": 15,
+      "preceding_etf_sale_sequences": [
+        12,
+        13
+      ]
+    },
+    {
+      "date": "2022-01-10",
+      "event_id": "2022-01-g001-2022-01-07-2884",
+      "stock_id": "2884",
+      "buy_sequence": 19,
+      "preceding_etf_sale_sequences": [
+        18
+      ]
+    },
+    {
+      "date": "2022-01-10",
+      "event_id": "2022-01-g001-2022-01-07-2884",
+      "stock_id": "2884",
+      "buy_sequence": 20,
+      "preceding_etf_sale_sequences": [
+        18
+      ]
+    },
+    {
+      "date": "2022-02-10",
+      "event_id": "2022-02-g004-2022-02-09-1760",
+      "stock_id": "1760",
+      "buy_sequence": 35,
+      "preceding_etf_sale_sequences": [
+        33,
+        34
+      ]
+    },
+    {
+      "date": "2022-02-10",
+      "event_id": "2022-02-g004-2022-02-09-1760",
+      "stock_id": "1760",
+      "buy_sequence": 36,
+      "preceding_etf_sale_sequences": [
+        33,
+        34
+      ]
+    },
+    {
+      "date": "2022-03-01",
+      "event_id": "2022-02-g010-2022-02-25-8150",
+      "stock_id": "8150",
+      "buy_sequence": 44,
+      "preceding_etf_sale_sequences": [
+        42,
+        43
+      ]
+    },
+    {
+      "date": "2022-03-01",
+      "event_id": "2022-02-g010-2022-02-25-8150",
+      "stock_id": "8150",
+      "buy_sequence": 45,
+      "preceding_etf_sale_sequences": [
+        42,
+        43
+      ]
+    },
+    {
+      "date": "2022-11-16",
+      "event_id": "2022-11-g005-2022-11-15-2606",
+      "stock_id": "2606",
+      "buy_sequence": 64,
+      "preceding_etf_sale_sequences": [
+        62,
+        63
+      ]
+    },
+    {
+      "date": "2022-11-16",
+      "event_id": "2022-11-g005-2022-11-15-2606",
+      "stock_id": "2606",
+      "buy_sequence": 65,
+      "preceding_etf_sale_sequences": [
+        62,
+        63
+      ]
+    },
+    {
+      "date": "2022-11-22",
+      "event_id": "2022-11-g010-2022-11-21-2468",
+      "stock_id": "2468",
+      "buy_sequence": 68,
+      "preceding_etf_sale_sequences": [
+        66,
+        67
+      ]
+    },
+    {
+      "date": "2022-11-22",
+      "event_id": "2022-11-g010-2022-11-21-2468",
+      "stock_id": "2468",
+      "buy_sequence": 69,
+      "preceding_etf_sale_sequences": [
+        66,
+        67
+      ]
+    },
+    {
+      "date": "2022-11-22",
+      "event_id": "2022-11-g008-2022-11-21-6245",
+      "stock_id": "6245",
+      "buy_sequence": 72,
+      "preceding_etf_sale_sequences": [
+        70,
+        71
+      ]
+    },
+    {
+      "date": "2022-11-22",
+      "event_id": "2022-11-g008-2022-11-21-6245",
+      "stock_id": "6245",
+      "buy_sequence": 73,
+      "preceding_etf_sale_sequences": [
+        70,
+        71
+      ]
+    },
+    {
+      "date": "2023-01-10",
+      "event_id": "2023-01-g004-2023-01-09-8464",
+      "stock_id": "8464",
+      "buy_sequence": 81,
+      "preceding_etf_sale_sequences": [
+        79,
+        80
+      ]
+    },
+    {
+      "date": "2023-03-07",
+      "event_id": "2023-03-g003-2023-03-06-8222",
+      "stock_id": "8222",
+      "buy_sequence": 95,
+      "preceding_etf_sale_sequences": [
+        93,
+        94
+      ]
+    },
+    {
+      "date": "2023-03-07",
+      "event_id": "2023-03-g003-2023-03-06-8222",
+      "stock_id": "8222",
+      "buy_sequence": 96,
+      "preceding_etf_sale_sequences": [
+        93,
+        94
+      ]
+    },
+    {
+      "date": "2023-03-17",
+      "event_id": "2023-03-g009-2023-03-16-3661",
+      "stock_id": "3661",
+      "buy_sequence": 106,
+      "preceding_etf_sale_sequences": [
+        104,
+        105
+      ]
+    },
+    {
+      "date": "2023-05-03",
+      "event_id": "2023-05-g007-2023-05-02-1905",
+      "stock_id": "1905",
+      "buy_sequence": 113,
+      "preceding_etf_sale_sequences": [
+        111,
+        112
+      ]
+    },
+    {
+      "date": "2023-05-03",
+      "event_id": "2023-05-g007-2023-05-02-1905",
+      "stock_id": "1905",
+      "buy_sequence": 114,
+      "preceding_etf_sale_sequences": [
+        111,
+        112
+      ]
+    },
+    {
+      "date": "2023-06-26",
+      "event_id": "2023-06-g019-2023-06-21-2736",
+      "stock_id": "2736",
+      "buy_sequence": 126,
+      "preceding_etf_sale_sequences": [
+        124,
+        125
+      ]
+    },
+    {
+      "date": "2023-06-26",
+      "event_id": "2023-06-g019-2023-06-21-2736",
+      "stock_id": "2736",
+      "buy_sequence": 127,
+      "preceding_etf_sale_sequences": [
+        124,
+        125
+      ]
+    },
+    {
+      "date": "2023-07-11",
+      "event_id": "2023-07-g005-2023-07-10-2340",
+      "stock_id": "2340",
+      "buy_sequence": 135,
+      "preceding_etf_sale_sequences": [
+        133,
+        134
+      ]
+    },
+    {
+      "date": "2023-07-11",
+      "event_id": "2023-07-g005-2023-07-10-2340",
+      "stock_id": "2340",
+      "buy_sequence": 136,
+      "preceding_etf_sale_sequences": [
+        133,
+        134
+      ]
+    },
+    {
+      "date": "2023-08-08",
+      "event_id": "2023-08-g013-2023-08-07-3689",
+      "stock_id": "3689",
+      "buy_sequence": 144,
+      "preceding_etf_sale_sequences": [
+        142,
+        143
+      ]
+    },
+    {
+      "date": "2023-08-08",
+      "event_id": "2023-08-g013-2023-08-07-3689",
+      "stock_id": "3689",
+      "buy_sequence": 145,
+      "preceding_etf_sale_sequences": [
+        142,
+        143
+      ]
+    },
+    {
+      "date": "2023-09-13",
+      "event_id": "2023-09-g005-2023-09-12-2327",
+      "stock_id": "2327",
+      "buy_sequence": 154,
+      "preceding_etf_sale_sequences": [
+        152,
+        153
+      ]
+    },
+    {
+      "date": "2023-09-13",
+      "event_id": "2023-09-g005-2023-09-12-2327",
+      "stock_id": "2327",
+      "buy_sequence": 155,
+      "preceding_etf_sale_sequences": [
+        152,
+        153
+      ]
+    },
+    {
+      "date": "2023-10-13",
+      "event_id": "2023-10-g006-2023-10-12-3006",
+      "stock_id": "3006",
+      "buy_sequence": 165,
+      "preceding_etf_sale_sequences": [
+        163,
+        164
+      ]
+    },
+    {
+      "date": "2023-10-13",
+      "event_id": "2023-10-g006-2023-10-12-3006",
+      "stock_id": "3006",
+      "buy_sequence": 166,
+      "preceding_etf_sale_sequences": [
+        163,
+        164
+      ]
+    },
+    {
+      "date": "2023-10-18",
+      "event_id": "2023-10-g010-2023-10-17-3491",
+      "stock_id": "3491",
+      "buy_sequence": 169,
+      "preceding_etf_sale_sequences": [
+        167,
+        168
+      ]
+    },
+    {
+      "date": "2023-10-18",
+      "event_id": "2023-10-g010-2023-10-17-3491",
+      "stock_id": "3491",
+      "buy_sequence": 170,
+      "preceding_etf_sale_sequences": [
+        167,
+        168
+      ]
+    },
+    {
+      "date": "2023-11-06",
+      "event_id": "2023-11-g014-2023-11-03-3661",
+      "stock_id": "3661",
+      "buy_sequence": 177,
+      "preceding_etf_sale_sequences": [
+        175,
+        176
+      ]
+    },
+    {
+      "date": "2023-12-19",
+      "event_id": "2023-12-g009-2023-12-18-3006",
+      "stock_id": "3006",
+      "buy_sequence": 184,
+      "preceding_etf_sale_sequences": [
+        182,
+        183
+      ]
+    },
+    {
+      "date": "2023-12-19",
+      "event_id": "2023-12-g009-2023-12-18-3006",
+      "stock_id": "3006",
+      "buy_sequence": 185,
+      "preceding_etf_sale_sequences": [
+        182,
+        183
+      ]
+    },
+    {
+      "date": "2024-01-24",
+      "event_id": "2024-01-g008-2024-01-23-3265",
+      "stock_id": "3265",
+      "buy_sequence": 195,
+      "preceding_etf_sale_sequences": [
+        193,
+        194
+      ]
+    },
+    {
+      "date": "2024-01-24",
+      "event_id": "2024-01-g008-2024-01-23-3265",
+      "stock_id": "3265",
+      "buy_sequence": 196,
+      "preceding_etf_sale_sequences": [
+        193,
+        194
+      ]
+    },
+    {
+      "date": "2024-02-15",
+      "event_id": "2024-02-g011-2024-02-05-6546",
+      "stock_id": "6546",
+      "buy_sequence": 202,
+      "preceding_etf_sale_sequences": [
+        200,
+        201
+      ]
+    },
+    {
+      "date": "2024-02-15",
+      "event_id": "2024-02-g011-2024-02-05-6546",
+      "stock_id": "6546",
+      "buy_sequence": 203,
+      "preceding_etf_sale_sequences": [
+        200,
+        201
+      ]
+    },
+    {
+      "date": "2024-03-14",
+      "event_id": "2024-03-g002-2024-03-13-1503",
+      "stock_id": "1503",
+      "buy_sequence": 216,
+      "preceding_etf_sale_sequences": [
+        214,
+        215
+      ]
+    },
+    {
+      "date": "2024-03-14",
+      "event_id": "2024-03-g002-2024-03-13-1503",
+      "stock_id": "1503",
+      "buy_sequence": 217,
+      "preceding_etf_sale_sequences": [
+        214,
+        215
+      ]
+    },
+    {
+      "date": "2024-03-20",
+      "event_id": "2024-03-g005-2024-03-19-4938",
+      "stock_id": "4938",
+      "buy_sequence": 225,
+      "preceding_etf_sale_sequences": [
+        223,
+        224
+      ]
+    },
+    {
+      "date": "2024-03-20",
+      "event_id": "2024-03-g005-2024-03-19-4938",
+      "stock_id": "4938",
+      "buy_sequence": 226,
+      "preceding_etf_sale_sequences": [
+        223,
+        224
+      ]
+    },
+    {
+      "date": "2024-06-18",
+      "event_id": "2024-06-g021-2024-06-17-3163",
+      "stock_id": "3163",
+      "buy_sequence": 237,
+      "preceding_etf_sale_sequences": [
+        235,
+        236
+      ]
+    },
+    {
+      "date": "2024-06-18",
+      "event_id": "2024-06-g021-2024-06-17-3163",
+      "stock_id": "3163",
+      "buy_sequence": 238,
+      "preceding_etf_sale_sequences": [
+        235,
+        236
+      ]
+    },
+    {
+      "date": "2024-08-12",
+      "event_id": "2024-08-g011-2024-08-09-8374",
+      "stock_id": "8374",
+      "buy_sequence": 251,
+      "preceding_etf_sale_sequences": [
+        249,
+        250
+      ]
+    },
+    {
+      "date": "2024-08-12",
+      "event_id": "2024-08-g011-2024-08-09-8374",
+      "stock_id": "8374",
+      "buy_sequence": 252,
+      "preceding_etf_sale_sequences": [
+        249,
+        250
+      ]
+    },
+    {
+      "date": "2024-09-20",
+      "event_id": "2024-09-g007-2024-09-19-2357",
+      "stock_id": "2357",
+      "buy_sequence": 262,
+      "preceding_etf_sale_sequences": [
+        260,
+        261
+      ]
+    },
+    {
+      "date": "2024-09-20",
+      "event_id": "2024-09-g007-2024-09-19-2357",
+      "stock_id": "2357",
+      "buy_sequence": 263,
+      "preceding_etf_sale_sequences": [
+        260,
+        261
+      ]
+    },
+    {
+      "date": "2024-09-23",
+      "event_id": "2024-09-g015-2024-09-20-3653",
+      "stock_id": "3653",
+      "buy_sequence": 267,
+      "preceding_etf_sale_sequences": [
+        265,
+        266
+      ]
+    },
+    {
+      "date": "2024-11-15",
+      "event_id": "2024-11-g009-2024-11-14-3706",
+      "stock_id": "3706",
+      "buy_sequence": 276,
+      "preceding_etf_sale_sequences": [
+        274,
+        275
+      ]
+    },
+    {
+      "date": "2024-11-15",
+      "event_id": "2024-11-g009-2024-11-14-3706",
+      "stock_id": "3706",
+      "buy_sequence": 277,
+      "preceding_etf_sale_sequences": [
+        274,
+        275
+      ]
+    },
+    {
+      "date": "2025-01-02",
+      "event_id": "2024-12-g015-2024-12-31-2404",
+      "stock_id": "2404",
+      "buy_sequence": 290,
+      "preceding_etf_sale_sequences": [
+        288,
+        289
+      ]
+    },
+    {
+      "date": "2025-01-02",
+      "event_id": "2024-12-g015-2024-12-31-2404",
+      "stock_id": "2404",
+      "buy_sequence": 291,
+      "preceding_etf_sale_sequences": [
+        288,
+        289
+      ]
+    },
+    {
+      "date": "2025-01-03",
+      "event_id": "2025-01-g015-2025-01-02-6689",
+      "stock_id": "6689",
+      "buy_sequence": 295,
+      "preceding_etf_sale_sequences": [
+        293,
+        294
+      ]
+    },
+    {
+      "date": "2025-01-03",
+      "event_id": "2025-01-g015-2025-01-02-6689",
+      "stock_id": "6689",
+      "buy_sequence": 296,
+      "preceding_etf_sale_sequences": [
+        293,
+        294
+      ]
+    },
+    {
+      "date": "2025-06-26",
+      "event_id": "2025-06-g019-2025-06-25-6739",
+      "stock_id": "6739",
+      "buy_sequence": 316,
+      "preceding_etf_sale_sequences": [
+        315
+      ]
+    },
+    {
+      "date": "2025-06-26",
+      "event_id": "2025-06-g009-2025-06-25-2344",
+      "stock_id": "2344",
+      "buy_sequence": 318,
+      "preceding_etf_sale_sequences": [
+        317
+      ]
+    },
+    {
+      "date": "2025-06-26",
+      "event_id": "2025-06-g009-2025-06-25-2344",
+      "stock_id": "2344",
+      "buy_sequence": 319,
+      "preceding_etf_sale_sequences": [
+        317
+      ]
+    },
+    {
+      "date": "2025-07-03",
+      "event_id": "2025-07-g015-2025-07-02-4991",
+      "stock_id": "4991",
+      "buy_sequence": 321,
+      "preceding_etf_sale_sequences": [
+        320
+      ]
+    },
+    {
+      "date": "2025-07-22",
+      "event_id": "2025-07-g021-2025-07-21-5469",
+      "stock_id": "5469",
+      "buy_sequence": 327,
+      "preceding_etf_sale_sequences": [
+        325,
+        326
+      ]
+    },
+    {
+      "date": "2025-07-22",
+      "event_id": "2025-07-g021-2025-07-21-5469",
+      "stock_id": "5469",
+      "buy_sequence": 328,
+      "preceding_etf_sale_sequences": [
+        325,
+        326
+      ]
+    },
+    {
+      "date": "2025-10-02",
+      "event_id": "2025-10-g010-2025-10-01-6290",
+      "stock_id": "6290",
+      "buy_sequence": 337,
+      "preceding_etf_sale_sequences": [
+        335,
+        336
+      ]
+    },
+    {
+      "date": "2025-10-02",
+      "event_id": "2025-10-g010-2025-10-01-6290",
+      "stock_id": "6290",
+      "buy_sequence": 338,
+      "preceding_etf_sale_sequences": [
+        335,
+        336
+      ]
+    },
+    {
+      "date": "2025-10-03",
+      "event_id": "2025-10-g021-2025-10-02-3450",
+      "stock_id": "3450",
+      "buy_sequence": 342,
+      "preceding_etf_sale_sequences": [
+        340,
+        341
+      ]
+    },
+    {
+      "date": "2025-10-03",
+      "event_id": "2025-10-g021-2025-10-02-3450",
+      "stock_id": "3450",
+      "buy_sequence": 343,
+      "preceding_etf_sale_sequences": [
+        340,
+        341
+      ]
+    },
+    {
+      "date": "2025-10-15",
+      "event_id": "2025-10-g008-2025-10-14-2059",
+      "stock_id": "2059",
+      "buy_sequence": 348,
+      "preceding_etf_sale_sequences": [
+        347
+      ]
+    },
+    {
+      "date": "2025-11-04",
+      "event_id": "2025-11-g004-2025-11-03-6209",
+      "stock_id": "6209",
+      "buy_sequence": 356,
+      "preceding_etf_sale_sequences": [
+        354,
+        355
+      ]
+    },
+    {
+      "date": "2025-11-04",
+      "event_id": "2025-11-g004-2025-11-03-6209",
+      "stock_id": "6209",
+      "buy_sequence": 357,
+      "preceding_etf_sale_sequences": [
+        354,
+        355
+      ]
+    },
+    {
+      "date": "2025-11-27",
+      "event_id": "2025-11-g012-2025-11-26-2606",
+      "stock_id": "2606",
+      "buy_sequence": 361,
+      "preceding_etf_sale_sequences": [
+        360
+      ]
+    },
+    {
+      "date": "2025-11-27",
+      "event_id": "2025-11-g012-2025-11-26-2606",
+      "stock_id": "2606",
+      "buy_sequence": 362,
+      "preceding_etf_sale_sequences": [
+        360
+      ]
+    },
+    {
+      "date": "2026-02-04",
+      "event_id": "2026-02-g011-2026-02-03-3017",
+      "stock_id": "3017",
+      "buy_sequence": 380,
+      "preceding_etf_sale_sequences": [
+        378,
+        379
+      ]
+    },
+    {
+      "date": "2026-02-04",
+      "event_id": "2026-02-g011-2026-02-03-3017",
+      "stock_id": "3017",
+      "buy_sequence": 381,
+      "preceding_etf_sale_sequences": [
+        378,
+        379
+      ]
+    },
+    {
+      "date": "2026-02-09",
+      "event_id": "2026-02-g003-2026-02-06-5475",
+      "stock_id": "5475",
+      "buy_sequence": 384,
+      "preceding_etf_sale_sequences": [
+        382,
+        383
+      ]
+    },
+    {
+      "date": "2026-02-09",
+      "event_id": "2026-02-g003-2026-02-06-5475",
+      "stock_id": "5475",
+      "buy_sequence": 385,
+      "preceding_etf_sale_sequences": [
+        382,
+        383
+      ]
+    },
+    {
+      "date": "2026-03-11",
+      "event_id": "2026-03-g007-2026-03-10-5340",
+      "stock_id": "5340",
+      "buy_sequence": 392,
+      "preceding_etf_sale_sequences": [
+        390,
+        391
+      ]
+    },
+    {
+      "date": "2026-03-11",
+      "event_id": "2026-03-g007-2026-03-10-5340",
+      "stock_id": "5340",
+      "buy_sequence": 393,
+      "preceding_etf_sale_sequences": [
+        390,
+        391
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "event_id": "2026-03-g017-2026-03-26-2455",
+      "stock_id": "2455",
+      "buy_sequence": 403,
+      "preceding_etf_sale_sequences": [
+        401,
+        402
+      ]
+    },
+    {
+      "date": "2026-03-27",
+      "event_id": "2026-03-g017-2026-03-26-2455",
+      "stock_id": "2455",
+      "buy_sequence": 404,
+      "preceding_etf_sale_sequences": [
+        401,
+        402
+      ]
+    },
+    {
+      "date": "2026-05-20",
+      "event_id": "2026-05-g007-2026-05-19-2355",
+      "stock_id": "2355",
+      "buy_sequence": 411,
+      "preceding_etf_sale_sequences": [
+        409,
+        410
+      ]
+    },
+    {
+      "date": "2026-05-20",
+      "event_id": "2026-05-g007-2026-05-19-2355",
+      "stock_id": "2355",
+      "buy_sequence": 412,
+      "preceding_etf_sale_sequences": [
+        409,
+        410
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "event_id": "2026-06-g011-2026-06-09-6197",
+      "stock_id": "6197",
+      "buy_sequence": 438,
+      "preceding_etf_sale_sequences": [
+        436,
+        437
+      ]
+    },
+    {
+      "date": "2026-06-10",
+      "event_id": "2026-06-g011-2026-06-09-6197",
+      "stock_id": "6197",
+      "buy_sequence": 439,
+      "preceding_etf_sale_sequences": [
+        436,
+        437
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "event_id": "2026-06-g010-2026-06-29-6139",
+      "stock_id": "6139",
+      "buy_sequence": 449,
+      "preceding_etf_sale_sequences": [
+        447,
+        448
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "event_id": "2026-06-g010-2026-06-29-6139",
+      "stock_id": "6139",
+      "buy_sequence": 450,
+      "preceding_etf_sale_sequences": [
+        447,
+        448
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "event_id": "2026-07-g017-2026-07-01-2890",
+      "stock_id": "2890",
+      "buy_sequence": 454,
+      "preceding_etf_sale_sequences": [
+        452,
+        453
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "event_id": "2026-07-g017-2026-07-01-2890",
+      "stock_id": "2890",
+      "buy_sequence": 455,
+      "preceding_etf_sale_sequences": [
+        452,
+        453
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "event_id": "2026-08-g018-2026-08-04-2834",
+      "stock_id": "2834",
+      "buy_sequence": 470,
+      "preceding_etf_sale_sequences": [
+        468,
+        469
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "event_id": "2026-08-g018-2026-08-04-2834",
+      "stock_id": "2834",
+      "buy_sequence": 471,
+      "preceding_etf_sale_sequences": [
+        468,
+        469
+      ]
+    },
+    {
+      "date": "2026-08-11",
+      "event_id": "2026-08-g013-2026-08-10-2615",
+      "stock_id": "2615",
+      "buy_sequence": 476,
+      "preceding_etf_sale_sequences": [
+        474,
+        475
+      ]
+    },
+    {
+      "date": "2026-08-11",
+      "event_id": "2026-08-g013-2026-08-10-2615",
+      "stock_id": "2615",
+      "buy_sequence": 477,
+      "preceding_etf_sale_sequences": [
+        474,
+        475
+      ]
+    }
+  ],
+  "live_qualified": false,
+  "verdict": "date_order_only_execution_unverified",
+  "limits": [
+    "Date checks do not verify original publication or retrieval timestamps.",
+    "Daily close, final odd-lot quote and full-day volume cannot establish intraday fills.",
+    "Account sequence does not prove an ETF sale filled before a stock purchase.",
+    "Current-company universe, revised prices and repeated historical selection remain unresolved."
+  ],
+  "input_sha256": {
+    ".cache/exit-research/report.json": "3e45ba4a74b77f01638862d116367634390a39a2536329631cc252b2ee818c93",
+    ".cache/million-replay-signals/signals.json": "e794ee605c33727b2efde0d3603384314d7b6b0a025c2e36ccb4e12f173d3582",
+    ".cache/million-replay-inputs/calendar.parquet": "9861f6910c76d497c108cc767b84940e88e86961174755f6921c7c8b86211480"
+  },
+  "manifest_sha256": {
+    ".cache/exit-research/manifest.json": "cb080ea0f44a878bb6643a1552bd5339869dfb95a94fc11b35b31a4b86e43102",
+    ".cache/exit-research-inputs/manifest.json": "015120f9c7892d73f0cb42e307915c2909e531cfd936d501f67ff9a375ee53f0"
+  },
+  "audit_code_sha256": "7be0a79c765422f268d98a5de49496011815b18826518f4900e43cb8ab0f484a",
+  "historical_code_drift": [
+    "app/finmind.py"
+  ],
+  "verification_scope": "Selected saved report, signals and calendar hashes; not full source replay or original-time certification."
+}
