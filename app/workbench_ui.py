@@ -236,6 +236,9 @@ def render_research(status):
     from app.forward_ui import render as render_forward
     render_forward()
     st.divider()
+    from app.cash_risk_ui import render as render_cash_risk
+    render_cash_risk()
+    st.divider()
     render_execution_holder()
     st.divider()
     render_chip()
