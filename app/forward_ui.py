@@ -11,7 +11,7 @@ def render():
     mode=st.selectbox("前向模擬版本", ["個股＋現金（目前排程）", "舊版：閒置資金買0050（保留紀錄）"], key="sim_version")
     render_simulation(cash.ROOT if mode.startswith("個股") else sim.ROOT, cash_mode=mode.startswith("個股"))
     from app.forward_comparison_ui import render as render_comparison
-    with st.expander("原始回報帳本與比較（保留舊配置）"):
+    if st.checkbox("查看原始回報帳本與比較（保留舊配置）", key="show_original_forward_books"):
         render_portfolio()
         render_comparison()
     with st.expander('原策略訊號封存與舊版證據（v1）'):
