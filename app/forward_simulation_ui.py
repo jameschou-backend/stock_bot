@@ -10,6 +10,8 @@ def render(root=None, cash_mode=False):
     from app import forward_cash_policy as cash
     if cash_mode:
         st.info("目前使用：個股＋現金。閒置資金保留現金；0050僅作獨立比較基準。")
+        from app.forward_readiness_ui import render as render_readiness
+        render_readiness(root)
     st.subheader('自動前向驗證｜模擬帳本')
     st.caption('策略與0050各100萬元，使用相同撮合規則。以下成交為模型推定，與下方原始回報帳本分開；不是券商成交。')
     if not root.exists():
