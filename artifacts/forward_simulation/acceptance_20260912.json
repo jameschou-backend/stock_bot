@@ -1,0 +1,86 @@
+{
+  "checked_at": "2026-09-12T04:22:33.623473+00:00",
+  "scope": "daily workflow and preregistered counterfactual simulation",
+  "live_qualified": false,
+  "tests": {
+    "passed": 2316,
+    "warnings": 28,
+    "targeted_passed": 23
+  },
+  "pipeline_successful_runs": 2,
+  "api": {
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs?limit=10": 200
+  },
+  "browser": "Verified at 127.0.0.1:8502 strategy tab: separate simulated NAVs 1000000 each, zero fills, original account zero fills, review required and model-only labels visible. No review or trade submitted.",
+  "logs": {
+    "stock-auto-final-test.log": {
+      "sha256": "8cc1db4216f7bd692dc1fac4c821b944933300b9940009dd689403144c6e7cec",
+      "exit_code": 0
+    },
+    "stock-auto-pipeline-1.log": {
+      "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03",
+      "exit_code": 0
+    },
+    "stock-auto-pipeline-2.log": {
+      "sha256": "21b01fbded5a3aef5daa8692b73b9a14f969a7c59a516ebd26934489be79fa03",
+      "exit_code": 0
+    }
+  },
+  "code_sha256": {
+    "app/forward_simulation.py": "62b02af6f46b74ef86adc7999d9caaa4740af238104ad477ef9f6d527e6e1b2c",
+    "app/forward_market_quotes.py": "92391e7bb8be27d813c4a33704f8b492855b9b9a9295a3fbacc37b37a2efbba2",
+    "app/forward_automation.py": "4c8c7f36e06fbd6a6bc0687dc0c1f8849c5f29d739425710d6541e3263beea24",
+    "scripts/prepare_rolling_forward.py": "47e6c78d06e53167e5981a81c573210797c524bc2d13611da3033ab581e80f1c",
+    "app/forward_halts.py": "7aae4292d129400757594b757989392d49b5b0d37ad1b72ba6c96d4b70d0ce27",
+    "app/forward_corporate_audit.py": "ed3ebe86f1abdd350ba122ab9bb93d66b270adc4f1f062278ce5562d9c0ba14c"
+  },
+  "journals": {
+    ".cache/forward-validation/journal.sqlite3": {
+      "event_count": 4,
+      "fills": 0,
+      "head": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132"
+    },
+    ".cache/forward-validation/portfolio-v2.sqlite3": {
+      "event_count": 7,
+      "fills": 0,
+      "head": "1b6541786852d5cfc9658ac2b1ef578bad38a912ed332d27228f537e9cc79f05"
+    },
+    ".cache/forward-validation/benchmark-0050.sqlite3": {
+      "event_count": 7,
+      "fills": 0,
+      "head": "95ec2fb2510db496012bdc6c6635a58fc791381dcd7b382d0863ce07a50ece70"
+    },
+    ".cache/forward-simulation/v1/signals.sqlite3": {
+      "event_count": 4,
+      "fills": 0,
+      "head": "066a724ef97ce4992a09ee890eaabe975b84d666dc3454293400312f2667f132"
+    },
+    ".cache/forward-simulation/v1/strategy.sqlite3": {
+      "event_count": 8,
+      "fills": 0,
+      "head": "df11d3b7bd6bfad11d5c33be6add4be498d2038ea1228cd7a6e91e7842c1a532"
+    },
+    ".cache/forward-simulation/v1/benchmark.sqlite3": {
+      "event_count": 8,
+      "fills": 0,
+      "head": "c9c45f17f1a16d11c44f5368b142b26a1f87e791739f1bfcb84e7312f5e5f5ba"
+    }
+  },
+  "manual_run": {
+    "status": "closed_market",
+    "date": "2026-09-12",
+    "stages": []
+  },
+  "automation": {
+    "id": "automation",
+    "kind": "heartbeat",
+    "status": "ACTIVE",
+    "thread": "01a0819a-647b-72c1-8b54-bede985f786a",
+    "cadence": "Weekdays at quarter hours in 08-13 and 18-19 local hour windows; script gates by Asia/Taipei official calendar and session.",
+    "first_entry_session": "2026-09-14",
+    "unverified": "First scheduled trading-day execution has not occurred; no claim of reliable timing or executable profit."
+  }
+}

@@ -6,6 +6,8 @@ from app.forward_portfolio_ui import render as render_portfolio
 
 
 def render():
+    from app.forward_simulation_ui import render as render_simulation
+    render_simulation()
     render_portfolio()
     from app.forward_comparison_ui import render as render_comparison
     render_comparison()
