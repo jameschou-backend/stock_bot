@@ -46,7 +46,7 @@ def render(path=REPORT):
         key=st.selectbox('查看換倉核對明細',['capacity_control_original','capacity_combined_original'],
             format_func=lambda s:'一般條件' if 'control' in s else '合併壓力',key='contingent_case')
         case=report['cases'][key]
-        st.caption(f"共{case['dependency_days']}個依賴日，其中{case['slot_release_with_odd_final_sale_days']}天需要零股最後成交才能釋放名額；整張逐筆快取覆蓋{case['board_tick_cached']}/{case['board_tick_requests']}個股票日。")
+        st.caption(f"共{case['dependency_days']}個依賴日，其中{case['slot_release_with_odd_final_sale_days']}天需要零股最後成交才能釋放名額；上輪稽核封存時的整張逐筆快取覆蓋{case['board_tick_cached']}/{case['board_tick_requests']}個股票日，後續補件進度見上方面板。")
         frame=table(case);st.dataframe(frame,hide_index=True,use_container_width=True)
         st.download_button('下載先賣再買核對明細',frame.to_csv(index=False).encode('utf-8-sig'),
             key+'-sequence.csv','text/csv',key='contingent_csv')

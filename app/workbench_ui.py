@@ -236,6 +236,8 @@ def render_research(status):
     from app.reservation_bridge_ui import render as render_reservation_bridge
     render_reservation_bridge()
     from app.contingent_execution_ui import render as render_contingent_execution
+    from app.contingent_replay_ui import render as render_contingent_replay
+    render_contingent_replay()
     render_contingent_execution()
     from app.forward_ui import render as render_forward
     from app.capacity_forward_ui import render as render_capacity_forward
