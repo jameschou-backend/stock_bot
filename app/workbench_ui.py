@@ -234,7 +234,10 @@ def render_research(status):
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
     from app.forward_ui import render as render_forward
-    render_forward()
+    from app.capacity_forward_ui import render as render_capacity_forward
+    render_capacity_forward()
+    if st.checkbox('查看舊版前向模擬與原始帳本', key='show_archived_forward_versions'):
+        render_forward()
     st.divider()
     from app.cash_risk_ui import render as render_cash_risk
     from app.cash_risk_ui import ROOT as cash_risk_root
