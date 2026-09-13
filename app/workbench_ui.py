@@ -239,6 +239,8 @@ def render_research(status):
     if st.checkbox('查看舊版前向模擬與原始帳本', key='show_archived_forward_versions'):
         render_forward()
     st.divider()
+    from app.intraday_limit_ui import render as render_intraday_limit
+    render_intraday_limit()
     from app.cash_risk_ui import render as render_cash_risk
     from app.cash_risk_ui import ROOT as cash_risk_root
     from app.five_axis_ui import render as render_five_axis
