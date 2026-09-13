@@ -1,0 +1,22 @@
+{
+  "observed_date": "2026-09-14",
+  "purchased": false,
+  "historical_odd_execution_verified": false,
+  "files": [
+    {
+      "path": ".cache/reservation-sources-20260914/h4-old.docx",
+      "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008242a6c301825ca927ec0009.docx",
+      "sha256": "ff5b4eb0b40a5cc7ebe498d243715d94d9bcbc9d3597580c242961a882958740"
+    },
+    {
+      "path": ".cache/reservation-sources-20260914/h4-20260401.docx",
+      "url": "https://eshop.twse.com.tw/uploadFile/upload/8a82e9e69c3aecea019da8fa4128015b.docx",
+      "sha256": "6eadfd4013e45b911c523afa2e7917ffd76636f1a7efc8e21882ab80c8004b3e"
+    },
+    {
+      "path": ".cache/reservation-sources-20260914/h4-sample.txt",
+      "url": "https://eshop.twse.com.tw/uploadFile/upload/000000008242a6c3018247fa50200005.txt",
+      "sha256": "9bd17813592a625fe586efdb6c03c07f705ee0b7af92cff7ce1ca1936a947fee"
+    }
+  ]
+}
