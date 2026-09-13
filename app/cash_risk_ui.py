@@ -24,8 +24,8 @@ def render(path=REPORT, *, title='現金版補強：成交壓力、整戶減碼�
                 raise ValueError('完整帳戶尚未通過離線重現')
         except (KeyError, ValueError, OSError) as exc:
             st.error('研究證據不可用：'+str(exc)); return
-        st.warning('歷史壓力試驗，尚未取得實盤資格；全帳戶減碼仍是比較版本，沒有套用到目前帳本。')
-        st.caption('2022/1/3–2026/9/9，本金100萬元複利、個股最多3檔、閒置現金。百分比皆為整段歷史扣成本報酬。')
+        st.warning(report.get('warning', '歷史壓力試驗，尚未取得實盤資格；全帳戶減碼仍是比較版本，沒有套用到目前帳本。'))
+        st.caption(report.get('caption', '2022/1/3–2026/9/9，本金100萬元複利、個股最多3檔、閒置現金。百分比皆為整段歷史扣成本報酬。'))
         rows = report['comparison']
         names = list(rows)
         selected = st.selectbox('查看哪一組比較', names, key=key_prefix+'_comparison')
