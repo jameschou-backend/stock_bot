@@ -235,6 +235,8 @@ def render_research(status):
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
     from app.reservation_bridge_ui import render as render_reservation_bridge
     render_reservation_bridge()
+    from app.contingent_execution_ui import render as render_contingent_execution
+    render_contingent_execution()
     from app.forward_ui import render as render_forward
     from app.capacity_forward_ui import render as render_capacity_forward
     render_capacity_forward()
