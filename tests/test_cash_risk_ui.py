@@ -36,3 +36,23 @@ def test_simple_table_switches_without_triggering_research(tmp_path):
     at.selectbox[0].select('整戶減碼').run()
     assert not at.exception
     assert at.dataframe[0].value.iloc[0]['情境'] == '測試規則'
+
+
+def two_reports(path):
+    from pathlib import Path
+    from app.cash_risk_ui import render
+    render(Path(path))
+    render(Path(path), title='新一輪', key_prefix='observed_risk')
+
+
+def test_two_versions_have_independent_controls(tmp_path):
+    path = tmp_path/'report.json'
+    path.write_text(json.dumps(dict(research_code_sha256={}, offline_identical=True,
+        comparison={'成交壓力':[{'情境':'原版'}], '整戶減碼':[{'情境':'新版'}]},
+        conclusion='仍需驗證', remaining=[], offline_seconds=1)))
+    at = AppTest.from_function(two_reports, args=(str(path),)).run()
+    assert not at.exception and len(at.selectbox) == 2
+    at.selectbox(key='observed_risk_comparison').select('整戶減碼').run()
+    assert not at.exception
+    assert at.dataframe[0].value.iloc[0]['情境'] == '原版'
+    assert at.dataframe[1].value.iloc[0]['情境'] == '新版'

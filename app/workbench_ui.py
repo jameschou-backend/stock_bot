@@ -237,6 +237,9 @@ def render_research(status):
     render_forward()
     st.divider()
     from app.cash_risk_ui import render as render_cash_risk
+    from app.cash_risk_ui import ROOT as cash_risk_root
+    render_cash_risk(cash_risk_root / 'artifacts/forward_simulation/observed_risk_delivery_20260913.json',
+                    title='最新研究：錯日行情隔離與停牌後風控', key_prefix='observed_risk')
     render_cash_risk()
     st.divider()
     render_execution_holder()

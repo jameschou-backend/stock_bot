@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / 'artifacts/forward_simulation/cash_risk_delivery_20260913.json'
 
 
-def render(path=REPORT):
-    with st.expander('現金版補強：成交壓力、整戶減碼與資料缺口', expanded=True):
+def render(path=REPORT, *, title='現金版補強：成交壓力、整戶減碼與資料缺口', key_prefix='cash_risk'):
+    with st.expander(title, expanded=True):
         if not path.is_file():
             st.info('補強研究尚未完成封存；不顯示暫存績效。')
             return
@@ -28,7 +28,7 @@ def render(path=REPORT):
         st.caption('2022/1/3–2026/9/9，本金100萬元複利、個股最多3檔、閒置現金。百分比皆為整段歷史扣成本報酬。')
         rows = report['comparison']
         names = list(rows)
-        selected = st.selectbox('查看哪一組比較', names, key='cash_risk_comparison')
+        selected = st.selectbox('查看哪一組比較', names, key=key_prefix+'_comparison')
         st.dataframe(pd.DataFrame(rows[selected]), hide_index=True, use_container_width=True)
         st.write(report['conclusion'])
         st.write('仍待完成：')
@@ -36,4 +36,4 @@ def render(path=REPORT):
             st.write('• '+item)
         st.caption(f"完整離線重播 {report['offline_seconds']:.1f} 秒；開啟本區塊不抓資料、不跑回測。")
         st.download_button('下載補強結果與來源指紋', path.read_text(),
-                           'cash-risk-research.json', 'application/json', key='cash_risk_download')
+                           path.name, 'application/json', key=key_prefix+'_download')
