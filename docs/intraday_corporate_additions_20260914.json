@@ -1,0 +1,70 @@
+{
+  "overrides": {
+    "4123-2026-08-17": {
+      "pay_date": "2026-09-18",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer MOPS announcements republished verbatim by MoneyDJ; delivery is proposed and after study end, never usable for an in-period trade",
+      "delivery_source": "https://www.moneydj.com/KMDJ/news/newsviewer.aspx?a=546c3775-f7ce-45d2-9a84-71533c1c7a2a",
+      "delivery_announced_at": "2026-09-10",
+      "delivery_status": "proposed_pending_exchange_approval_after_study_end",
+      "accounting_only_after_end": true,
+      "fractional_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=12bc1305-01a0-4174-a596-0ce68179763a",
+      "fractional_terms": "2026-04-14 MOPS issuance announcement section 12: sub-share cash pays book-entry fees. No new shares or fractional cash become spendable by 2026-09-09."
+    },
+    "4123-2025-10-03": {
+      "pay_date": "2025-11-10",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer dividend table confirms delivery; TPEx 2025-11-06 listing announcement confirms first trading date; issuer AGM notice page 2 confirms sub-share cash pays book-entry fees",
+      "delivery_source": "https://www.centerlab.com.tw/investor/shareholder_service/dividend",
+      "listing_source": "https://wwwov.tpex.org.tw/web/bulletin/announcement/tdr_detail.php?d=114%2F11%2F06&k=1&l=zh-tw&op=8&stock_code=4123&type=IND",
+      "fractional_source": "https://www.centerlab.com.tw/investor/shareholder_service/meeting_record_download/48?name=%E9%96%8B%E6%9C%83%E9%80%9A%E7%9F%A5.pdf",
+      "fractional_terms": "Issuer 2025 AGM notice page 2 III(2): unconsolidated sub-share cash pays book-entry fees, net account cash zero. Keep original TPEx per-1000 entitlement precision."
+    },
+    "2885-2024-08-12": {
+      "shares_per_share": 0.02,
+      "pay_date": "2024-09-13",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer dividend table and AGM notice; MOPS new-share delivery announcement republished verbatim",
+      "rate_source": "https://www.yuanta.com/TW/IR/Investor-Info/Dividend-Info",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=7ed36ecf-6810-4314-9d6f-224e5f999c52",
+      "fractional_source": "https://www.yuanta.com/Files/4.1.6-a18071670367c78c0a8a-tw/2024_AGMNotice_C.pdf?s=2024",
+      "fractional_terms": "Issuer AGM notice page 1: sub-share cash pays book-entry fees, net account cash zero."
+    },
+    "2885-2025-08-12": {
+      "shares_per_share": 0.03,
+      "pay_date": "2025-09-12",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer dividend table and AGM notice; MOPS new-share delivery announcement republished verbatim",
+      "rate_source": "https://www.yuanta.com/TW/IR/Investor-Info/Dividend-Info",
+      "delivery_source": "https://ebroker-dj.fbs.com.tw/z/zf/zfz/zfz_B805ECB0-5F87-4615-9951-4FB114D1AA89.djhtm",
+      "fractional_source": "https://www.yuanta.com/Files/4.1.6-a18071670367c78c0a8a-tw/2025_AGMNotice_C.pdf?s=2025",
+      "fractional_terms": "Issuer AGM notice page 1: sub-share cash pays book-entry fees, net account cash zero."
+    },
+    "2885-2026-08-18": {
+      "shares_per_share": 0.04,
+      "pay_date": "2026-09-24",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer dividend table and AGM notice; MOPS new-share delivery announcement republished verbatim",
+      "rate_source": "https://www.yuanta.com/TW/IR/Investor-Info/Dividend-Info",
+      "delivery_source": "https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=e0c024b9-f1f3-4f95-b708-3d529f13826c",
+      "fractional_source": "https://www.yuanta.com/Files/4.1.6-a18071670367c78c0a8a-tw/2026_AGMNotice_C.pdf?s=2026",
+      "fractional_terms": "Issuer AGM notice page 1: sub-share cash pays book-entry fees, net account cash zero.",
+      "accounting_only_after_end": true,
+      "delivery_announced_at": "2026-09-10",
+      "delivery_status": "announced_after_study_end"
+    }
+  },
+  "evidence_sha256": {
+    ".cache/intraday-limit-20260914/corporate-evidence/4123-2026-distribution.html": "76b1aa7f0c419fe78c8661a799e9d216c6c77e57083a9ee1e4d779258e5bcfe4",
+    ".cache/intraday-limit-20260914/corporate-evidence/4123-2026-terms.html": "7698b3e71f3afe97363bbd16e2a2ffdaf9dab3c8ebb0fe9b05b4e21d91e38799",
+    ".cache/intraday-limit-20260914/corporate-evidence/4123-2025-notice.pdf": "61fdc470d0754898988d0f8111c59218db6c52a4331da58c88ac2969c66f6c28",
+    ".cache/intraday-limit-20260914/corporate-evidence/4123-dividend.html": "bbe76964fd049a9fd87a0d823a3b766459acbed2af735dcf972f364d4408fd1a",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-dividends.html": "c213eafc4cbd7dbf3bec90ba9f704b787bcc2862bf31c13b355b92b8cdbe13fd",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-2024-delivery.html": "1bcc2fd187ab09c7b7d3bd4a63eb87caa64dec728eb0fea552ebe25cee28828e",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-2025-delivery.html": "a4fa7ada3c3f10f98a4d1c2876cf62641013f1f313e534332ae9a892552f8771",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-2026-delivery.html": "66efffb567c2b96e50ef722abe0978e69cae7954a29e328a1b6e29513e7b891c",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-2024-notice.pdf": "fb1f3f47ca58b2c9a7da2ba5d017a2170f9b676589eb7b13fe72e6f1e8d4341a",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-2025-notice.pdf": "1ee42e9e3d264b9cc151c99a3172b99e6e7c30ec4302ded0872dc74a4c14331f",
+    ".cache/intraday-limit-20260914/corporate-evidence/2885-2026-notice.pdf": "d28669dc722ca9a3c1baa347529bed536957bc5ae2acedb1abeab934fd60f587"
+  }
+}
