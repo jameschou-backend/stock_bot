@@ -31,6 +31,29 @@ def render(root=policy.ROOT):
                 st.caption(f"現金 {float(b['cash']):,.0f} 元｜模擬成交 {b['fill_count']} 筆｜估值日 {b['price_date']}")
         role=st.selectbox('查看帳本',['strategy','control','benchmark'],format_func=LABELS.get,key='capacity_role')
         book=report['books'][role]
+        from app.capacity_source_review import review
+        try:
+            temporal=review(root)
+            checks=temporal['books'][role]['fills']
+            passed=sum(f['source_freshness_passed'] for f in checks)
+            st.write(f"成交當時的來源期限：{passed}／{len(checks)} 筆通過時間重建核對。")
+            st.caption('目前來源過期不會自動推翻較早成交；這項核對只檢查當時資料是否已取得且未過期，不能代替完整公司行動或券商對帳。')
+            if temporal['guard']['active']:
+                st.caption('逐筆來源檢查啟用時間：'+pd.Timestamp(temporal['guard']['effective_at']).tz_convert('Asia/Taipei').strftime('%Y/%m/%d %H:%M:%S')+'（台北）；啟用前後分段保留。')
+                if temporal['guard']['pending_checks']:
+                    st.warning('有來源檢查尚未記錄完成結果，需核對中斷時的帳本；不可直接重推成交。')
+            else:
+                st.caption('逐筆來源檢查尚未啟用。')
+            if checks:
+                table=[dict(成交時間=pd.Timestamp(f['executed_at']).tz_convert('Asia/Taipei').strftime('%m/%d %H:%M:%S'),股數=f['qty'],
+                            當時來源期限='通過' if f['source_freshness_passed'] else '缺件／過期',
+                            最大來源年齡秒=round(max(s['age_seconds'] for s in f['sources'] if s['age_seconds'] is not None),2)
+                            if any(s['age_seconds'] is not None for s in f['sources']) else None) for f in checks]
+                st.dataframe(pd.DataFrame(table),hide_index=True)
+            st.download_button('下載成交當時與目前來源核對',json.dumps(temporal,ensure_ascii=False,indent=2),
+                               'capacity-source-review.json','application/json',key='capacity_source_review_download')
+        except (ValueError,OSError) as exc:
+            st.error('來源時間核對未完成：'+str(exc))
         st.write('資料狀態：'+('來源缺漏或有待核對事件' if book['source_blocked'] else '未發現已知來源衝突；仍須核對官方公告'))
         if book['issues']:st.dataframe(pd.DataFrame(book['issues']),hide_index=True)
         if book['plan']:
