@@ -70,7 +70,9 @@ def render(root=policy.ROOT):
         if role!='benchmark':
             guard=book['risk']
             st.write('新增買進：'+('暫停 — '+str(guard['reason']) if guard['blocked'] else '尚未觸及風險門檻'))
-            st.caption('收盤資產高點回撤20%暫停新增為模擬暫定值，尚非使用者選定的實盤承受上限；原停損出場仍保留。')
+            from app.trading_risk_preference import load as load_risk_preference
+            preference=load_risk_preference()
+            st.caption(f"你的資金設定：本金 {float(preference['initial_capital_twd']):,.0f} 元、最大虧損 {float(preference['maximum_loss_fraction']):.0%}，設計採收盤資產高點回撤。現有封存模擬仍在20%暫停新增；50%設定尚未套用，原個股停損保留。")
             reason=st.text_input('暫停／恢復核對說明（至少10字）',key='capacity_pause_reason')
             left,right=st.columns(2)
             for cell,paused,label in [(left,True,'暫停新增並取消未成交買單'),(right,False,'核對後恢復後續計畫')]:
@@ -107,6 +109,9 @@ def render(root=policy.ROOT):
                         'execution-comparison.json','application/json',key='capacity_execution_download')
                 except (ValueError,UnicodeError,OSError) as exc:st.error(str(exc))
         if report['days']:st.dataframe(pd.DataFrame(report['days'][-10:]),hide_index=True)
-        for item in report['remaining']:st.write('• '+item)
+        for item in report['remaining']:
+            if item=='20%整戶回撤暫定值僅供模擬，實盤水位須使用者選定':
+                item='實盤資金偏好已記錄；現有20%模擬規則尚未切換至新風控版本。'
+            st.write('• '+item)
         st.download_button('下載三帳本狀態與每日決策',json.dumps(report,ensure_ascii=False,indent=2),
             'capacity-forward-status.json','application/json',key='capacity_report_download')

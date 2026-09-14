@@ -1,0 +1,27 @@
+{
+  "stock_id": "0050",
+  "source_url": "https://www.twse.com.tw/zh/ETFortune/announcement?company=A00005&date=20250617&fund=0050&seq=1&type=other",
+  "published_at": "2025-06-17T11:35:21+08:00",
+  "retrieved_on": "2026-09-14",
+  "verified_terms": {
+    "units_after_per_unit_before": "4",
+    "exact_split_price_factor": "0.25",
+    "last_trading_date_before_split": "2025-06-10",
+    "suspension_start": "2025-06-11",
+    "suspension_end": "2025-06-17",
+    "new_units_listing_date": "2025-06-18",
+    "exchange_date": "2025-06-18",
+    "resumption_reference_twd": "47.16",
+    "prior_close_twd": "188.65"
+  },
+  "factor_note": "Use the exact reciprocal of the unit ratio, not rounded reference price divided by prior close.",
+  "suspension_known_before_start_verified": false,
+  "opening_availability_verified": false,
+  "applied_to_production": false,
+  "live_qualified": false,
+  "limitations": [
+    "The June 17 announcement cannot establish knowledge of the suspension before June 11.",
+    "The announcement specifies a uniform depository exchange on June 18 but not its exact completion time.",
+    "This evidence record is not an approval of the daily corporate review or a complete benchmark action history."
+  ]
+}

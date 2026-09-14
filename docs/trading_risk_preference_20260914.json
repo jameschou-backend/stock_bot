@@ -1,0 +1,13 @@
+{
+  "version": "user-risk-preference-20260914",
+  "initial_capital_twd": "1000000",
+  "maximum_loss_fraction": "0.50",
+  "user_statement": "100萬，最大虧損50%",
+  "measurement": "close_nav_high_water_mark_drawdown",
+  "measurement_note": "設計採帳戶已確認收盤資產高點回撤；已向使用者說明。入出金需先校正，缺估值不得推算通過。",
+  "trigger_action": "pause_new_entries_and_require_review",
+  "existing_simulation_drawdown_fraction": "0.20",
+  "applied_to_existing_simulation": false,
+  "broker_orders_authorized": false,
+  "guaranteed_loss_cap": false
+}
