@@ -1,0 +1,27 @@
+{
+  "schema": "historical_data_completion_v1",
+  "date": "2026-09-14",
+  "live_qualified": false,
+  "sources": {
+    "price_repair": {
+      "path": ".cache/readiness-completion-20260914/price-repair/result.json",
+      "sha256": "97868a5af10bb80cf7c565c823bd45e0879dbbbd0557fbe23aeee61639a7684b"
+    },
+    "derived_rebuild": {
+      "path": ".cache/readiness-completion-20260914/price-repair/derived-rebuild.json",
+      "sha256": "832a4fc42a5995e395fc079016ebbd960eee09ed829f32c60c3919e7d4788400"
+    },
+    "market_identity": {
+      "path": ".cache/readiness-completion-20260914/identity-v2/report.json",
+      "sha256": "353af73d4ec89a9acc9095e3842f2e202a6def2f7ff221fed43e7316c354a55d"
+    },
+    "odd_lot_sample": {
+      "path": ".cache/readiness-completion-20260914/h4-sample-audit.json",
+      "sha256": "fe68a2ec14bc6601620e8c1c85ebbeeed8951bfe8d6a6404d5d0414c420b9718"
+    },
+    "price_registry": {
+      "path": "docs/price_quarantine_20260914.json",
+      "sha256": "3a07920bbf058712bd448f72a678b802f17e937a70f20ab3df69543384cf7769"
+    }
+  }
+}

@@ -31,7 +31,7 @@ def render(path=REPORT, *, title='現金版補強：成交壓力、整戶減碼�
         selected = st.selectbox('查看哪一組比較', names, key=key_prefix+'_comparison')
         st.dataframe(pd.DataFrame(rows[selected]), hide_index=True, use_container_width=True)
         st.write(report['conclusion'])
-        st.write('仍待完成：')
+        st.write('封存當時的缺件（最新修補進度見本頁上方）：')
         for item in report['remaining']:
             st.write('• '+item)
         st.caption(f"完整離線重播 {report['offline_seconds']:.1f} 秒；開啟本區塊不抓資料、不跑回測。")

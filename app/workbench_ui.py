@@ -256,7 +256,7 @@ def render_research(status):
     from app.five_axis_ui import render as render_five_axis
     render_five_axis()
     render_cash_risk(cash_risk_root / 'artifacts/forward_simulation/observed_risk_delivery_20260913.json',
-                    title='最新研究：錯日行情隔離與停牌後風控', key_prefix='observed_risk')
+                    title='9/13封存研究：錯日行情隔離與停牌後風控', key_prefix='observed_risk')
     render_cash_risk()
     st.divider()
     render_execution_holder()
