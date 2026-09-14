@@ -1,0 +1,21 @@
+{
+  "observed_at": "2026-09-14T05:42:05.336443+00:00",
+  "period": [
+    "2016-02-15",
+    "2026-09-09"
+  ],
+  "report_path": ".cache/readiness-continuation-20260914/audit-v3/report.json",
+  "report_sha256": "a2d38dfc0915734480bf3582631891ee26ef37a3b9cbe8cd0b4f125370af84f9",
+  "source_windows": 302,
+  "shadow_stocks": 2027,
+  "shadow_rows": 4616245,
+  "changed_stocks": 730,
+  "changed_rows": 1552198,
+  "candidate_count": 458,
+  "candidate_unresolved": 1,
+  "candidate_changed_above_0_1pp": 0,
+  "cross_market_transitions": 10,
+  "unresolved_post_end_companies": 22,
+  "applied_to_production": false,
+  "live_qualified": false
+}
