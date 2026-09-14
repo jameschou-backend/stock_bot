@@ -82,6 +82,8 @@ def render(root=policy.ROOT):
         from app.capacity_close_preview_ui import render as render_close_preview
         render_close_preview(root,role)
         if st.checkbox('有持股後：顯示每日公司行動核對',key='capacity_show_review'):
+            from app.official_review_packet_ui import render as render_official_packet
+            render_official_packet(root,role)
             reviewer=st.text_input('核對人',key='capacity_reviewer')
             note=st.text_area('核對公告、停復牌及權益的結果',key='capacity_review_note')
             checked=st.checkbox('已完成所選帳本持股的今日公告核對',key='capacity_review_checked')
