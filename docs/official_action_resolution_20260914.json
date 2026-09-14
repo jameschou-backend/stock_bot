@@ -1,0 +1,10 @@
+{
+  "source_path": "artifacts/adj_official/checkpoints/twse_capital_reduction_20160101_20161231.json",
+  "source_sha256": "dcc59e4c7e9f4699e3a8e8832b0e89fe58887e5b624eda2b9f7c63e86be07bc8",
+  "key": ["5906", "2016-07-14", "TWSE", "capital_reduction"],
+  "expected_rows": 2,
+  "resolution": "Treat the two rows as one price adjustment in the shadow research series.",
+  "evidence": "The cached official rows use F-台南 and 台南-KY, with identical effective date, prior close 1.77, reference 5.68, opening reference 5.68 and loss-reduction reason. Detail identifiers differ (20160624 and 20160629); both original payloads remain in the audit.",
+  "scope": "Only this exact source hash and economically identical parsed events. All other duplicates remain blocked.",
+  "applied_to_production": false
+}

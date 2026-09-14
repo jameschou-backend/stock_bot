@@ -15,12 +15,19 @@
     "prior_close_twd": "188.65"
   },
   "factor_note": "Use the exact reciprocal of the unit ratio, not rounded reference price divided by prior close.",
-  "suspension_known_before_start_verified": false,
+  "schedule_source": {
+    "url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d696b406fc0196ce27c2e90063.pdf",
+    "published_on": "2025-05-14",
+    "conservative_known_by": "2025-05-15",
+    "local_path": ".cache/readiness-continuation-20260914/0050-split-notice.pdf",
+    "sha256": "33a58af2b6377f381d250406ed750999756508c2d96f7a2f45443201d50cbcb7"
+  },
+  "suspension_known_before_start_verified": true,
   "opening_availability_verified": false,
   "applied_to_production": false,
   "live_qualified": false,
   "limitations": [
-    "The June 17 announcement cannot establish knowledge of the suspension before June 11.",
+    "The May 14 TWSE notice establishes the split schedule before June 11; its exact publication time is unavailable, so May 15 is the conservative known-by date.",
     "The announcement specifies a uniform depository exchange on June 18 but not its exact completion time.",
     "This evidence record is not an approval of the daily corporate review or a complete benchmark action history."
   ]
