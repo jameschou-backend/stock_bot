@@ -79,6 +79,8 @@ def render(root=policy.ROOT):
                         with file_lock(root/'.run.lock',timeout=0):policy.pause(root/(role+'.sqlite3'),paused,reason)
                         st.success('已保存；賣出委託保留。');st.rerun()
                     except (ValueError,OSError) as exc:st.error(str(exc))
+        from app.capacity_close_preview_ui import render as render_close_preview
+        render_close_preview(root,role)
         if st.checkbox('有持股後：顯示每日公司行動核對',key='capacity_show_review'):
             reviewer=st.text_input('核對人',key='capacity_reviewer')
             note=st.text_area('核對公告、停復牌及權益的結果',key='capacity_review_note')

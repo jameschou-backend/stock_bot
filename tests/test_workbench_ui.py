@@ -88,7 +88,8 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
     # must not rehash machine-local research files on each widget rerun.
     import importlib
     for name in ('chip_research_ui', 'exit_research', 'capacity_research_ui',
-                 'regime_switch_ui', 'diffusion_research_ui', 'guidance_research_ui'):
+                 'regime_switch_ui', 'diffusion_research_ui', 'guidance_research_ui',
+                 'capacity_forward_ui'):
         monkeypatch.setattr(importlib.import_module('app.'+name), 'render', lambda: None)
     from app import cash_allocation_research as allocation
     monkeypatch.setattr(allocation,'overview',lambda:{'available':False,

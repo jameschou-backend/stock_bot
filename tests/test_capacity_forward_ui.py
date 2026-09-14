@@ -29,4 +29,6 @@ def test_ui_distinguishes_fresh_at_fill_from_current_expiry(tmp_path,monkeypatch
     assert not at.exception and not at.error
     assert any('1／1 筆通過' in m.value for m in at.markdown)
     assert any('目前來源過期' in c.value for c in at.caption)
+    assert any('今晚能結算嗎' in m.value for m in at.markdown)
+    assert any(b.label == '下載三帳本結算前清單' for b in at.get('download_button'))
     assert cap.verify(root/'strategy.sqlite3')==before
