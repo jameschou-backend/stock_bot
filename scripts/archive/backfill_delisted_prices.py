@@ -132,6 +132,8 @@ def backfill(config, start: date, end: date, chunk_days: int = 1) -> None:
             records = df.to_dict("records")
             if not records:
                 continue
+            from app.price_quarantine import reject_quarantined
+            reject_quarantined(records)
             stmt = insert(RawPrice).values(records)
             stmt = stmt.on_duplicate_key_update(
                 open=stmt.inserted.open, high=stmt.inserted.high,

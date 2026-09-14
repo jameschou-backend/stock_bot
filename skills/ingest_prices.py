@@ -195,6 +195,8 @@ def _run_twse(config, db_session: Session) -> Dict:
             BATCH_SIZE = 5000
             for i in range(0, len(records), BATCH_SIZE):
                 batch = records[i : i + BATCH_SIZE]
+                from app.price_quarantine import reject_quarantined
+                reject_quarantined(batch)
                 stmt = insert(RawPrice).values(batch)
                 update_cols = {
                     col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]
@@ -309,6 +311,8 @@ def _run_finmind(config, db_session: Session) -> Dict:
             BATCH_SIZE = 5000
             for i in range(0, len(records), BATCH_SIZE):
                 batch = records[i : i + BATCH_SIZE]
+                from app.price_quarantine import reject_quarantined
+                reject_quarantined(batch)
                 stmt = insert(RawPrice).values(batch)
                 update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
                 stmt = stmt.on_duplicate_key_update(**update_cols)

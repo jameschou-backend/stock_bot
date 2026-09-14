@@ -71,6 +71,8 @@ def main() -> None:
                     records = df.to_dict("records")
                     if not records:
                         break
+                    from app.price_quarantine import reject_quarantined
+                    reject_quarantined(records)
                     stmt = insert(RawPrice).values(records)
                     stmt = stmt.on_duplicate_key_update(
                         open=stmt.inserted.open,

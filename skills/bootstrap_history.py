@@ -324,6 +324,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                     price_df = _normalize_prices(price_df)
                     records: List[Dict] = price_df.to_dict("records")
                     if records:
+                        from app.price_quarantine import reject_quarantined
+                        reject_quarantined(records)
                         stmt = insert(RawPrice).values(records)
                         update_cols = {col: stmt.inserted[col] for col in ["open", "high", "low", "close", "volume"]}
                         stmt = stmt.on_duplicate_key_update(**update_cols)

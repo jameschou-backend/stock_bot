@@ -463,6 +463,8 @@ def _backfill_prices(
                 if records:
                     for k in range(0, len(records), 5000):
                         batch = records[k:k + 5000]
+                        from app.price_quarantine import reject_quarantined
+                        reject_quarantined(batch)
                         stmt = insert(RawPrice).values(batch)
                         update_cols = {
                             col: stmt.inserted[col]

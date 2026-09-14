@@ -122,6 +122,8 @@ def main() -> int:
                 else:
                     records = df.to_dict("records")
                     with get_session() as s:
+                        from app.price_quarantine import reject_quarantined
+                        reject_quarantined(records)
                         stmt = insert(RawPrice).values(records)
                         update_cols = {c: stmt.inserted[c] for c in ["open", "high", "low", "close", "volume"]}
                         stmt = stmt.on_duplicate_key_update(**update_cols)
