@@ -233,6 +233,9 @@ def render_research(status):
     from app.guidance_research_ui import render as render_guidance
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    from app.backtest_tool_ui import render as render_backtest_tool
+    render_backtest_tool()
+    st.divider()
     from app.priority_optimization_ui import render as render_priority_optimization
     render_priority_optimization()
     from app.completion_gaps_ui import render as render_completion_gaps
@@ -690,7 +693,8 @@ def render_jobs():
     labels={'queued':'準備中','running':'執行中','completed':'已完成','failed':'未完成'}
     if not running: st.caption('尚未從工作台啟動工作。')
     for job in running:
-        kind_names={'update_data':'資料更新','backtest':'策略回測','news_scan':'新聞題材','news_review':'歷史新聞判讀','chain_flow':'族群資金研究'}
+        kind_names={'update_data':'資料更新','backtest':'策略回測','verified_backtest':'固定條件回測',
+                    'news_scan':'新聞題材','news_review':'歷史新聞判讀','chain_flow':'族群資金研究'}
         with st.expander(f"{labels[job['status']]} · {kind_names.get(job['request']['kind'],'研究工作')} · {job['job_id'][:8]}",expanded=job['status'] in ('running','failed')):
             st.write(job['message'])
             if job.get('elapsed_seconds') is not None: st.caption(f"執行耗時 {job['elapsed_seconds']:.1f} 秒")
@@ -699,7 +703,7 @@ def render_jobs():
                 st.write(f"去重後 {summary.get('unique_articles',0):,} 篇；合併 {summary.get('duplicates_collapsed',0):,} 筆重複列。")
             elif summary and job['request']['kind']=='chain_flow':
                 st.write(f"已整理 {summary.get('groups',0)} 組產業鏈與子產業。")
-            elif summary:
+            elif summary and job['request']['kind']=='backtest':
                 c=st.columns(3)
                 c[0].metric('回測累積報酬',percent(summary.get('total_return')))
                 c[1].metric('最大回撤',percent(summary.get('max_drawdown')))

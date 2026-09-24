@@ -60,3 +60,20 @@ def test_news_jobs_have_explicit_network_scope_and_json_safe_dates(tmp_path):
     assert 'scripts/research_chain_flow.py' in flow and '--fetch' not in flow
     assert '--fetch' in jobs.command_for(jobs.WorkRequest(kind='chain_flow',fetch_flow=True),tmp_path/'flow.json')
     with pytest.raises(ValueError): jobs.WorkRequest(kind='backtest',fetch_flow=True)
+
+
+def test_verified_backtest_command_is_bounded_and_offline(tmp_path):
+    request=jobs.WorkRequest(kind='verified_backtest')
+    command=jobs.command_for(request,tmp_path/'result.json')
+    assert command[1:]==['scripts/run_verified_backtest.py','--mode','daily','--policy','all',
+                         '--stress','all','--output',str(tmp_path/'result.json'),'--preflight-only']
+    command=jobs.command_for(jobs.WorkRequest(kind='verified_backtest',replay_mode='strict',
+        replay_policy='board_only',replay_stress='combined',replay_preflight=False,replay_fresh=True),tmp_path/'run.json')
+    assert '--preflight-only' not in command and '--fresh' in command
+    assert command[command.index('--mode')+1]=='strict'
+    assert command[command.index('--policy')+1]=='board_only'
+    assert command[command.index('--stress')+1]=='combined'
+    assert '--fetch' not in command
+    for invalid in ({'replay_mode':'live'},{'replay_policy':'../../.env'},{'replay_stress':'unlimited'},
+                    {'fetch_news':True},{'fetch_flow':True}):
+        with pytest.raises(ValueError): jobs.WorkRequest(kind='verified_backtest',**invalid)

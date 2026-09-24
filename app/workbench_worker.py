@@ -14,6 +14,7 @@ def main(job_id):
     with file_lock(JOBS_DIR/'submit.lock',timeout=10):
         job=read_job(job_id)
         message={'update_data':'更新資料','backtest':'載入資料與驗證策略',
+                 'verified_backtest':'核對封存資料並執行所選歷史研究',
                  'news_scan':'整理新聞題材','news_review':'重建歷史新聞時間線',
                  'chain_flow':'整理族群成交分布與法人方向'}[job['request']['kind']]
         job.update(status='running',message=message,pid=os.getpid())
@@ -36,7 +37,19 @@ def main(job_id):
                 job.update(message=f'FinMind 達額度暫停，約 {retry} 秒後重試；已完成日期會重用',retry_after_seconds=retry)
         else:
             job.update(status='completed',message='已完成；研究結果仍需資料與策略驗證')
-            if output.exists():
+            if request.kind=='verified_backtest':
+                import hashlib
+                from app.backtest_tool_ui import load_report
+                value=load_report(output,root=ROOT)
+                messages={
+                    'preflight_ready':'資料預檢完成；尚未計算報酬，可開始背景驗證回測',
+                    'blocked':'研究檢查完成；部分或全部案例被阻擋，僅完成案例可查歷史日資料估算',
+                    'exploratory':'日資料估算完成；僅供歷史研究，尚未取得逐筆驗證或實盤資格',
+                }
+                job.update(message=messages[value['status']],report_status=value['status'],
+                           result_path=str(output),result_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
+                           research_only=True,live_qualified=False,unseen_validation=False)
+            elif output.exists():
                 value=json.loads(output.read_text())
                 if value.get('error'):
                     raise ValueError(value['error'])

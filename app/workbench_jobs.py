@@ -18,7 +18,7 @@ JOBS_DIR = ROOT / '.cache/workbench/jobs'
 
 
 class WorkRequest(BaseModel):
-    kind: Literal['update_data','backtest','news_scan','news_review','chain_flow']
+    kind: Literal['update_data','backtest','verified_backtest','news_scan','news_review','chain_flow']
     months: int = Field(default=12,ge=3,le=120)
     topn: int = Field(default=10,ge=1,le=50)
     quick: bool = False
@@ -29,6 +29,11 @@ class WorkRequest(BaseModel):
     news_stock_id: str = Field(default='2408',pattern=r'^[0-9]{4}$')
     fetch_news: bool = False
     fetch_flow: bool = False
+    replay_mode: Literal['daily','strict'] = 'daily'
+    replay_policy: Literal['mixed','board_only','all'] = 'all'
+    replay_stress: Literal['control','combined','all'] = 'all'
+    replay_preflight: bool = True
+    replay_fresh: bool = False
 
     @model_validator(mode='after')
     def bounded_news(self):
@@ -83,7 +88,8 @@ def recent_jobs(limit=10):
                 matches=re.findall(r'\[TIMER\] ([\w]+) (start|done)',tail)
                 if matches and job['status']=='running':
                     names={'load_prices':'載入股價','load_features':'載入特徵','load_labels':'載入標籤',
-                           'precompute':'預先計算指標','prepare':'準備回測資料','backtest':'執行回測'}
+                           'precompute':'預先計算指標','prepare':'準備回測資料','backtest':'執行回測',
+                           'source_validation':'核對封存來源','case':'計算研究案例'}
                     name,phase=matches[-1]
                     job['message']=names.get(name,'計算策略')+('中' if phase=='start' else '完成，進入下一階段')
         result.append(job)
@@ -127,6 +133,12 @@ def submit(request: WorkRequest):
 
 
 def command_for(request, output):
+    if request.kind=='verified_backtest':
+        args=[sys.executable,'scripts/run_verified_backtest.py','--mode',request.replay_mode,
+              '--policy',request.replay_policy,'--stress',request.replay_stress,'--output',str(output)]
+        if request.replay_preflight: args.append('--preflight-only')
+        if request.replay_fresh: args.append('--fresh')
+        return args
     if request.kind=='chain_flow':
         args=[sys.executable,'scripts/research_chain_flow.py','--output',str(output)]
         return args+(['--fetch'] if request.fetch_flow else [])
