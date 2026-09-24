@@ -46,7 +46,7 @@ from app.models import (
     RawMarginShort,
     RawPER,
     RawPrice,
-    RawQuarterlyFundamental,
+    QuarterlyFundamentalSnapshot,
     RawSecuritiesLending,
     RawThemeFlow,
     Stock,
@@ -1377,72 +1377,15 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             how="left",
         )
 
-    # ── 季報財務（QuarterlyFundamental，Sponsor，60天公告延遲）──
-    t0 = time.perf_counter()
-    try:
-        qfund_stmt = (
-            select(
-                RawQuarterlyFundamental.stock_id,
-                RawQuarterlyFundamental.report_date,
-                RawQuarterlyFundamental.roe,
-                RawQuarterlyFundamental.debt_ratio,
-                RawQuarterlyFundamental.operating_margin,
-            )
-            .where(RawQuarterlyFundamental.report_date.between(
-                start_date - timedelta(days=450),   # 往前 15 個月確保有最新季報
-                end_date,
-            ))
-            .order_by(RawQuarterlyFundamental.stock_id, RawQuarterlyFundamental.report_date)
-        )
-        qfund_df = pd.read_sql(qfund_stmt, session.get_bind())
-    except Exception:
-        qfund_df = pd.DataFrame()
-    elapsed_fetch = time.perf_counter() - t0
-    logger.info(f"[PERF] fetch_quarterly_fundamental: {elapsed_fetch:.2f}s（{len(qfund_df):,}列）")
-
-    t0 = time.perf_counter()
-    if qfund_df.empty:
-        price_df["roe_raw"] = np.nan
-        price_df["debt_ratio_raw"] = np.nan
-        price_df["operating_margin_raw"] = np.nan
-    else:
-        qfund_df["stock_id"] = qfund_df["stock_id"].astype(str)
-        qfund_df["report_date"] = pd.to_datetime(qfund_df["report_date"], errors="coerce")
-        for col in ["roe", "debt_ratio", "operating_margin"]:
-            qfund_df[col] = pd.to_numeric(qfund_df[col], errors="coerce")
-        # 加入 60 天公告延遲（同月營收的 45 天機制）
-        qfund_df["available_date"] = qfund_df["report_date"] + pd.Timedelta(days=60)
-        qfund_df = qfund_df.sort_values(["stock_id", "available_date"])
-        price_df = price_df.sort_values(["stock_id", "trading_date"])
-        qmerged = []
-        for sid, sub in price_df.groupby("stock_id", sort=False):
-            sub_q = qfund_df[qfund_df["stock_id"] == sid]
-            if sub_q.empty:
-                sub = sub.copy()
-                sub["roe_raw"] = np.nan
-                sub["debt_ratio_raw"] = np.nan
-                sub["operating_margin_raw"] = np.nan
-                qmerged.append(sub)
-                continue
-            aligned = pd.merge_asof(
-                sub.sort_values("trading_date"),
-                sub_q.sort_values("available_date")[
-                    ["available_date", "roe", "debt_ratio", "operating_margin"]
-                ],
-                left_on="trading_date",
-                right_on="available_date",
-                direction="backward",
-            )
-            aligned = aligned.drop(columns=["available_date"], errors="ignore")
-            aligned = aligned.rename(columns={
-                "roe": "roe_raw",
-                "debt_ratio": "debt_ratio_raw",
-                "operating_margin": "operating_margin_raw",
-            })
-            qmerged.append(aligned)
-        price_df = pd.concat(qmerged, ignore_index=True)
-    elapsed_merge = time.perf_counter() - t0
-    logger.info(f"[PERF] merge_quarterly_fundamental: {elapsed_merge:.2f}s（per-stock merge_asof）")
+    # Verified observations only; legacy report_date + 60 days is not publication evidence.
+    from skills.quarterly_validation import align_prices
+    qfund_stmt = select(QuarterlyFundamentalSnapshot).where(
+        QuarterlyFundamentalSnapshot.available_date <= end_date,
+        QuarterlyFundamentalSnapshot.report_date.between(start_date - timedelta(days=450), end_date),
+    )
+    # Missing migration is an explicit error, never a silent empty-feature fallback.
+    qfund_df = pd.read_sql(qfund_stmt, session.get_bind())
+    price_df = align_prices(price_df, qfund_df)
 
     # filesort 消除：上方各大表查詢已移除多餘的 SQL ORDER BY（pd.merge 不需 DB 排序，
     # 否則 optimizer 走 trading_date index range + filesort 排序數百萬列）。在此統一以

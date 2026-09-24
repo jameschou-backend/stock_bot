@@ -1,0 +1,153 @@
+{
+  "stocks": [
+    "1101",
+    "2330"
+  ],
+  "network_requests": 0,
+  "reinserted_rows": 0,
+  "snapshots": [
+    {
+      "stock_id": "1101",
+      "report_date": "2024-12-31",
+      "observed_at": "2026-09-24 10:18:10.580464",
+      "available_date": "2026-09-25",
+      "roe_ttm": "5.563987",
+      "roa_ttm": "2.941048",
+      "debt_ratio": "48.112372",
+      "fcf_ttm": "-1809575000.000000",
+      "fcf_per_share": "None",
+      "source_manifest": ".cache/quarterly-observations/1101/20260924T101810580464Z/manifest.json"
+    },
+    {
+      "stock_id": "1101",
+      "report_date": "2026-06-30",
+      "observed_at": "2026-09-24 10:18:10.580464",
+      "available_date": "2026-09-25",
+      "roe_ttm": "-3.051426",
+      "roa_ttm": "-1.511968",
+      "debt_ratio": "49.779570",
+      "fcf_ttm": "2961414000.000000",
+      "fcf_per_share": "None",
+      "source_manifest": ".cache/quarterly-observations/1101/20260924T101810580464Z/manifest.json"
+    },
+    {
+      "stock_id": "2330",
+      "report_date": "2024-12-31",
+      "observed_at": "2026-09-24 10:18:11.360954",
+      "available_date": "2026-09-25",
+      "roe_ttm": "30.036018",
+      "roa_ttm": "19.181972",
+      "debt_ratio": "35.391274",
+      "fcf_ttm": "870170532000.000000",
+      "fcf_per_share": "None",
+      "source_manifest": ".cache/quarterly-observations/2330/20260924T101811360954Z/manifest.json"
+    },
+    {
+      "stock_id": "2330",
+      "report_date": "2026-06-30",
+      "observed_at": "2026-09-24 10:18:11.360954",
+      "available_date": "2026-09-25",
+      "roe_ttm": "40.334184",
+      "roa_ttm": "27.307439",
+      "debt_ratio": "30.943799",
+      "fcf_ttm": "1143556366000.000000",
+      "fcf_per_share": "None",
+      "source_manifest": ".cache/quarterly-observations/2330/20260924T101811360954Z/manifest.json"
+    }
+  ],
+  "official_checks": [
+    {
+      "field": "TotalAssets",
+      "date": "2024-12-31",
+      "finmind": 6691938000000.0,
+      "official_twd": 6691938000000,
+      "exact": true
+    },
+    {
+      "field": "Equity",
+      "date": "2024-12-31",
+      "finmind": 4323575865000.0,
+      "official_twd": 4323575865000,
+      "exact": true
+    },
+    {
+      "field": "Equity",
+      "date": "2023-12-31",
+      "finmind": 3483262847000.0,
+      "official_twd": 3483262847000,
+      "exact": true
+    },
+    {
+      "field": "CashFlowsFromOperatingActivities",
+      "date": "2024-12-31",
+      "finmind": 1826177068000.0,
+      "official_twd": 1826177068000,
+      "exact": true
+    },
+    {
+      "field": "PropertyAndPlantAndEquipment",
+      "date": "2024-12-31",
+      "finmind": -956006536000.0,
+      "official_twd": -956006536000,
+      "exact": true
+    },
+    {
+      "field": "IncomeAfterTaxes_four_quarters",
+      "finmind": 1172431759000.0,
+      "official_twd": 1172431759000,
+      "exact": true
+    }
+  ],
+  "row_count": 28,
+  "schema_version": 1,
+  "date": "2026-09-24",
+  "status": "calculation_and_observed_timing_repaired",
+  "live_qualified": false,
+  "historical_publication_verified": false,
+  "full_market_coverage": false,
+  "finmind_calls": {
+    "source_probe": 6,
+    "ingestion": 6,
+    "total": 12
+  },
+  "source_url": "https://investor.tsmc.com/sites/ir/financial-report/2024/TSMC%202024Q4%20Consolidated%20Financial%20Statements_E_0.pdf",
+  "feature_alignment_check": {
+    "date": "2026-09-24",
+    "rows": 1983,
+    "seconds": 3.374,
+    "financial_nonnull_before_available": 0
+  },
+  "tests": {
+    "passed": 2617,
+    "warnings": 29,
+    "seconds": 62.42
+  },
+  "limitations": [
+    "No verified historical announcement/revision timeline",
+    "No verified share denominators",
+    "Only two stocks ingested",
+    "Industry-specific statement mappings not broadly reconciled"
+  ],
+  "files_sha256": {
+    ".cache/quarterly-observations/1101/20260924T101810580464Z/TaiwanStockBalanceSheet.parquet": "71e1931cb664f1c4884f547d34f21423fbfa6622e3be880ec3f341bedcf10038",
+    ".cache/quarterly-observations/1101/20260924T101810580464Z/TaiwanStockCashFlowsStatement.parquet": "b525a0b57dadee20b3474ed1ea8f5b74455bfcd33934545ff876b5aa4d69ec53",
+    ".cache/quarterly-observations/1101/20260924T101810580464Z/TaiwanStockFinancialStatements.parquet": "e0b3cdc6820d1bfbd4ba57036207eff9788b6b11f15f29191f236221659cd9ba",
+    ".cache/quarterly-observations/1101/20260924T101810580464Z/manifest.json": "b2c8d9f2938bdbfb83e241da7cc21582179c2145569d7873ec2e2e2ab5c72742",
+    ".cache/quarterly-observations/2330/20260924T101811360954Z/TaiwanStockBalanceSheet.parquet": "10417f498b6ab84b81ca67370ec6d995c3534d53628c5922e543019690d53ed9",
+    ".cache/quarterly-observations/2330/20260924T101811360954Z/TaiwanStockCashFlowsStatement.parquet": "140657ab6063941568c068068b83161c97a06d9314b2e09d6b6514b67ce1ec76",
+    ".cache/quarterly-observations/2330/20260924T101811360954Z/TaiwanStockFinancialStatements.parquet": "2ce0329f0ecfab65170fb7917d158f127a55ac957f05b58a9c42cd84ec49f455",
+    ".cache/quarterly-observations/2330/20260924T101811360954Z/manifest.json": "87948da39f5097b1abd762bfc0ca7e88493e3a822ce5f9ad1063180a7c8fcebd",
+    ".cache/quarterly-repair-20260924/raw/1101-TaiwanStockBalanceSheet.parquet": "e95c44d3eb4b36e3b1e6fa38a41c93022d467e6ec335e09946a58affad8e1444",
+    ".cache/quarterly-repair-20260924/raw/1101-TaiwanStockCashFlowsStatement.parquet": "ab113f3e8743e0f3d776e5dcfaa74f4a1e0a1e24217b07ded474aba6fbaf4476",
+    ".cache/quarterly-repair-20260924/raw/1101-TaiwanStockFinancialStatements.parquet": "ac8a7d6a35fc69021d5151948092cacb2bbf7d1385e40b4669b66515a86c54a1",
+    ".cache/quarterly-repair-20260924/raw/2330-TaiwanStockBalanceSheet.parquet": "3ec898d7d3cf1a9850f3d0a86cc8a308e383e3a45a33697f5db6ac40c58cb007",
+    ".cache/quarterly-repair-20260924/raw/2330-TaiwanStockCashFlowsStatement.parquet": "6ea210f541f509a281c4c8aee2ea8a19c6585fe77d875684ce7b9496f757076e",
+    ".cache/quarterly-repair-20260924/raw/2330-TaiwanStockFinancialStatements.parquet": "c1d9d97090de1aa3b0f7abf42f84728cbbc13975b1ef94fcb3dd80c791989fa5",
+    "app/models.py": "051a2a8fad24be2d6a9d2011474205d4fcfb82b73bfcb5cd35b6af8c34349ddd",
+    "skills/build_features.py": "5f6675560b044d8c396455a833c58387f884114bb3f198594fe0b018b0ddd0f1",
+    "skills/ingest_quarterly_fundamental.py": "9ea3fbb88abf150bc6773d72bee61516b07d3f5d07167d5257f15df26c81cf14",
+    "skills/quarterly_validation.py": "93a82ed4d27992624725680719eafdc0cc0510b3f01c338479ec57acc90b81b9",
+    "storage/migrations/018_quarterly_snapshots.sql": "25be7039c3c1d1e9ec852e76597d3989656865fa9f69b124ee5c2a42ee8d3c33",
+    "tests/test_quarterly_validation.py": "957e6b15cd7cac2a4b0b964221981e843abeea0eb022d47d69b8e7c010c07cf1"
+  }
+}

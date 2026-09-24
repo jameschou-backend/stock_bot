@@ -475,7 +475,7 @@ class RawSecuritiesLending(Base):
 # Priority 8：季報財務摘要（BalanceSheet + FinancialStatements + CashFlow）
 # ─────────────────────────────────────────────────────────────
 class RawQuarterlyFundamental(Base):
-    """季報財務摘要（Sponsor 專屬，約 60 天公告延遲）
+    """Legacy financial summaries, retained for audit only; not feature input.
 
     聚合自 TaiwanStockBalanceSheet / TaiwanStockFinancialStatements /
     TaiwanStockCashFlowsStatement 三個 dataset。
@@ -500,6 +500,39 @@ class RawQuarterlyFundamental(Base):
     fcf_per_share       = Column(DECIMAL(12, 6))
 
     __table_args__ = (Index("idx_raw_qfund_report_date", "report_date"),)
+
+
+class QuarterlyFundamentalSnapshot(Base):
+    """Immutable observed versions; amounts TWD, ratios percent, FCF/share TWD.
+
+    ROE/ROA use four consecutive quarters and average year-endpoint balances.
+    available_date is after actual observation, never a guessed publication.
+    """
+    __tablename__ = "quarterly_fundamental_snapshots"
+    stock_id = Column(String(16), primary_key=True)
+    report_date = Column(Date, primary_key=True)
+    observed_at = Column(DateTime, primary_key=True)  # UTC; MySQL stores microseconds
+    available_date = Column(Date, nullable=False)
+    source_sha256 = Column(String(64), nullable=False)
+    source_manifest = Column(String(255), nullable=False)
+    definition_version = Column(String(32), nullable=False)
+    timing_basis = Column(String(48), nullable=False)
+    missing_metrics = Column(String(255), nullable=False)
+    roe_ttm = Column(DECIMAL(18, 6))
+    roa_ttm = Column(DECIMAL(18, 6))
+    debt_ratio = Column(DECIMAL(18, 6))
+    operating_margin = Column(DECIMAL(18, 6))
+    net_margin = Column(DECIMAL(18, 6))
+    fcf_ttm = Column(DECIMAL(24, 6))
+    fcf_per_share = Column(DECIMAL(18, 6))
+    __table_args__ = (Index("idx_quarterly_snapshot_available", "available_date"),)
+
+
+class QuarterlyIngestState(Base):
+    """Fetch progress is separate from immutable financial availability."""
+    __tablename__ = "quarterly_ingest_state"
+    stock_id = Column(String(16), primary_key=True)
+    checked_at = Column(DateTime, nullable=False)
 
 
 # ─────────────────────────────────────────────────────────────

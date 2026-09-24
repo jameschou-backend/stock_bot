@@ -1,313 +1,96 @@
-"""Priority 8：季報財務摘要（多 dataset 聚合）
-
-從 FinMind 抓取三個季報 dataset，彙整成關鍵財務指標，
-寫入 raw_quarterly_fundamental 表。
-
-來源 dataset：
-  TaiwanStockBalanceSheet     — 資產負債表（負債/資產 → debt_ratio，ROE）
-  TaiwanStockFinancialStatements — 損益表（營業利益率、稅後淨利率）
-  TaiwanStockCashFlowsStatement  — 現金流量表（FCF/股）
-
-Fields（原始）：
-  date, stock_id, type, value   ← 長格式，需 pivot
-
-時間延遲：
-  季報在季底後約 60 天公告（3 月底 → 5 月中）。
-  build_features.py 使用 available_date = report_date + 60d 做 merge_asof，
-  避免前向洩漏（與月營收 45 天延遲同樣機制）。
-"""
-from __future__ import annotations
-
-import logging
-from datetime import date, datetime, timedelta
-from typing import Dict, List, Optional, Set
+"""Bounded, archived FinMind financial observations with no guessed release date."""
+from datetime import date, datetime, timezone
+from pathlib import Path
 from zoneinfo import ZoneInfo
+import hashlib
+import json
+import re
 
-import pandas as pd
-from sqlalchemy import func
-from sqlalchemy.dialects.mysql import insert
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from app.file_lock import file_lock
+from app.finmind import FinMindError, fetch_dataset
+from app.job_utils import finish_job, start_job
+from app.models import QuarterlyFundamentalSnapshot, QuarterlyIngestState, Stock
+from skills.quarterly_validation import calculate
 
-from app.finmind import (
-    FinMindError,
-    fetch_dataset,
-)
-from app.job_utils import finish_job, start_job, update_job
-from app.models import RawQuarterlyFundamental, Stock
-
-logger = logging.getLogger(__name__)
-
-# 資產負債表欄位：type 對應的 value 欄位名稱（FinMind 原始文字）
-BS_ROW_MAP = {
-    "TotalAssets": "total_assets",
-    "TotalLiabilities": "total_liabilities",
-    "EquityAttributableToOwnersOfParent": "equity",
-    "RetainedEarnings": "retained_earnings",
-}
-IS_ROW_MAP = {
-    "OperatingIncome": "operating_income",
-    "NetIncome": "net_income",
-    "Revenue": "revenue",
-}
-CF_ROW_MAP = {
-    "CashFlowsFromOperatingActivities": "cfo",
-    "PurchaseOfPropertyPlantAndEquipment": "capex",
-}
-
-UPDATE_COLS = ["roe", "roa", "debt_ratio", "operating_margin", "net_margin", "fcf_per_share"]
-PUBLICATION_DELAY_DAYS = 60   # 季報公告延遲（天）
-CHUNK_DAYS = 365              # 每次查詢跨度（天）
+ROOT = Path(__file__).resolve().parents[1]
+DATASETS = ('TaiwanStockBalanceSheet','TaiwanStockFinancialStatements','TaiwanStockCashFlowsStatement')
 
 
-def _resolve_start_date(session: Session, default_start: date) -> date:
-    max_date = session.query(func.max(RawQuarterlyFundamental.report_date)).scalar()
-    if max_date is None:
-        return default_start
-    # 往前 90 天重算以補齊最新季報
-    return max(default_start, max_date - timedelta(days=90))
+def persist_snapshots(session, records):
+    """Do not replace old revisions or move unchanged observations forward."""
+    inserted = 0
+    for row in records:
+        latest = session.execute(select(QuarterlyFundamentalSnapshot).where(
+            QuarterlyFundamentalSnapshot.stock_id == row['stock_id'],
+            QuarterlyFundamentalSnapshot.report_date == row['report_date']
+        ).order_by(QuarterlyFundamentalSnapshot.observed_at.desc()).limit(1)).scalar_one_or_none()
+        if latest and latest.source_sha256 == row['source_sha256']:
+            continue
+        if latest and row['observed_at'] <= latest.observed_at:
+            raise FinMindError('Financial revision must have a later observation timestamp')
+        session.add(QuarterlyFundamentalSnapshot(**row))
+        session.flush()
+        inserted += 1
+    return inserted
 
 
-def _load_stock_ids(session: Session) -> List[str]:
-    rows = (
-        session.query(Stock.stock_id)
-        .filter(Stock.is_listed == True)
-        .filter(Stock.security_type == "stock")
-        .order_by(Stock.stock_id)
-        .all()
-    )
-    return [row[0] for row in rows]
+def run(config, db_session, *, stock_ids=None, max_requests=180, **kwargs):
+    with file_lock(ROOT/'.cache/quarterly-observations.lock', timeout=0):
+        return _run(config, db_session, stock_ids=stock_ids, max_requests=max_requests)
 
 
-def _pivot_long(df: pd.DataFrame, row_map: Dict[str, str]) -> pd.DataFrame:
-    """將 FinMind 長格式財報（date, stock_id, type, value）pivot 成寬格式。"""
-    if df.empty:
-        return pd.DataFrame()
-
-    df = df.copy()
-    df = df.rename(columns={"date": "report_date"})
-    df["report_date"] = pd.to_datetime(df["report_date"], errors="coerce").dt.date
-    df["stock_id"] = df["stock_id"].astype(str)
-    df = df.dropna(subset=["stock_id", "report_date"])
-    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]
-
-    type_col = next((c for c in ["type", "Type", "statement_type"] if c in df.columns), None)
-    val_col = next((c for c in ["value", "Value", "amount"] if c in df.columns), None)
-    if type_col is None or val_col is None:
-        return pd.DataFrame()
-
-    df["value_n"] = pd.to_numeric(df[val_col], errors="coerce")
-    df_filtered = df[df[type_col].isin(row_map.keys())].copy()
-    df_filtered["field"] = df_filtered[type_col].map(row_map)
-
-    wide = (
-        df_filtered.groupby(["stock_id", "report_date", "field"])["value_n"]
-        .mean()
-        .unstack("field")
-        .reset_index()
-    )
-    return wide
-
-
-def _compute_metrics(bs: pd.DataFrame, is_: pd.DataFrame, cf: pd.DataFrame) -> pd.DataFrame:
-    """合併三張報表並計算關鍵財務指標。"""
-    if bs.empty and is_.empty and cf.empty:
-        return pd.DataFrame()
-
-    key_cols = ["stock_id", "report_date"]
-
-    # 合併三表（inner join on stock_id + report_date）
-    merged = bs.copy() if not bs.empty else pd.DataFrame()
-    if not is_.empty:
-        if merged.empty:
-            merged = is_.copy()
-        else:
-            merged = merged.merge(is_, on=key_cols, how="outer")
-    if not cf.empty:
-        if merged.empty:
-            merged = cf.copy()
-        else:
-            merged = merged.merge(cf, on=key_cols, how="outer")
-
-    if merged.empty:
-        return pd.DataFrame()
-
-    def safe(col):
-        return merged[col] if col in merged.columns else pd.Series([None] * len(merged), dtype=float)
-
-    total_assets = pd.to_numeric(safe("total_assets"), errors="coerce")
-    total_liabs = pd.to_numeric(safe("total_liabilities"), errors="coerce")
-    equity = pd.to_numeric(safe("equity"), errors="coerce")
-    revenue = pd.to_numeric(safe("revenue"), errors="coerce")
-    op_income = pd.to_numeric(safe("operating_income"), errors="coerce")
-    net_income = pd.to_numeric(safe("net_income"), errors="coerce")
-    cfo = pd.to_numeric(safe("cfo"), errors="coerce")
-    capex = pd.to_numeric(safe("capex"), errors="coerce").abs()  # capex 原始為負值
-
-    # ── 財務指標計算 ──
-    merged["roe"] = net_income / equity.replace(0, float("nan")) * 100
-    merged["roa"] = net_income / total_assets.replace(0, float("nan")) * 100
-    merged["debt_ratio"] = total_liabs / total_assets.replace(0, float("nan")) * 100
-    merged["operating_margin"] = op_income / revenue.replace(0, float("nan")) * 100
-    merged["net_margin"] = net_income / revenue.replace(0, float("nan")) * 100
-
-    # FCF / 股（若無股數資訊，用絕對值 /1000 估計；後續可接 shares outstanding）
-    fcf = cfo - capex
-    # FinMind 財務數字單位為「千元」，除以 1000 轉成「百萬元」，再 /1000 為每千股（張）
-    # 簡化：保留原始 FCF 值（千元）供後續相對比較
-    merged["fcf_per_share"] = fcf / 1000.0  # 轉換成百萬元，相對指標
-
-    result = merged[["stock_id", "report_date",
-                     "roe", "roa", "debt_ratio", "operating_margin", "net_margin", "fcf_per_share"]].copy()
-    # 合理性 clip（避免極端值）
-    result["roe"] = result["roe"].clip(-500, 500)
-    result["roa"] = result["roa"].clip(-200, 200)
-    result["debt_ratio"] = result["debt_ratio"].clip(0, 200)
-    result["operating_margin"] = result["operating_margin"].clip(-200, 200)
-    result["net_margin"] = result["net_margin"].clip(-200, 200)
-
-    return result.dropna(subset=["stock_id", "report_date"])
-
-
-def _fetch_one_dataset(dataset: str, stock_id: str, start: date, end: date, config) -> pd.DataFrame:
-    """抓取單一 dataset。
-
-    錯誤分流：
-    - 配額錯誤（FinMindError 含 402/429/quota/超過）→ 重新拋出（讓整批 ingest 中止）。
-    - 其他 FinMindError（單股暫時性問題）→ 記錄 warning 後回傳空 DF，繼續下一檔。
-
-    注意：不再用 `except Exception: return pd.DataFrame()` 靜默吞錯
-    （CLAUDE.md 禁止 silent fallback）。
-    """
+def _run(config, session, *, stock_ids, max_requests):
+    if not isinstance(max_requests,int) or max_requests < 3 or max_requests > 180:
+        raise ValueError('Quarterly batch max_requests must be between 3 and 180')
+    job_id = start_job(session, 'ingest_quarterly_fundamental', commit=True)
+    logs = dict(rows=0, requests_reserved=0, timing_basis='first_observed_next_day', legacy_table_used=False)
     try:
-        df = fetch_dataset(
-            dataset=dataset,
-            start_date=start,
-            end_date=end,
-            token=config.finmind_token,
-            data_id=stock_id,
-            requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
-            max_retries=getattr(config, "finmind_retry_max", 3),
-            backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
-            timeout=120,
-        )
-        return df if df is not None else pd.DataFrame()
-    except FinMindError as exc:
-        msg = str(exc)
-        is_quota = (
-            "402" in msg or "429" in msg
-            or "quota" in msg.lower()
-            or "超過" in msg
-        )
-        if is_quota:
-            # 系統性配額錯誤，後續所有 stock 都會失敗，立刻中止整個 ingest
-            logger.error(
-                "[ingest_quarterly_fundamental] FinMind 配額錯誤 dataset=%s stock_id=%s: %s",
-                dataset, stock_id, exc,
-            )
-            raise
-        # 單股暫時性錯誤（schema 變動、無資料等）：warn 並繼續
-        logger.warning(
-            "[ingest_quarterly_fundamental] %s stock_id=%s 抓取失敗（跳過此檔）: %s",
-            dataset, stock_id, exc,
-        )
-        return pd.DataFrame()
-
-
-def run(config, db_session: Session, **kwargs) -> Dict:
-    job_id = start_job(db_session, "ingest_quarterly_fundamental", commit=True)
-    logs: Dict = {}
-    try:
+        allowed = set(session.execute(select(Stock.stock_id).where(
+            Stock.is_listed.is_(True),Stock.security_type=='stock')).scalars())
+        ids = sorted(allowed if stock_ids is None else set(stock_ids))
+        if any(not re.fullmatch(r'\d{4}',s) or s not in allowed for s in ids):
+            raise ValueError('Financial batch contains a nonordinary/unlisted/invalid stock ID')
+        seen = dict(session.execute(select(QuarterlyIngestState.stock_id,QuarterlyIngestState.checked_at)).all())
         today = datetime.now(ZoneInfo(config.tz)).date()
-        default_start = max(
-            today - timedelta(days=365 * config.train_lookback_years),
-            date(2013, 1, 1),   # FinMind 季報從 2013 年起完整
-        )
-        start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
-
-        logs["start_date"] = start_date.isoformat()
-        logs["end_date"] = end_date.isoformat()
-
-        if start_date > end_date:
-            logs["rows"] = 0
-            logs["skip_reason"] = "already_up_to_date"
-            finish_job(db_session, job_id, "success", logs=logs)
-            return {"rows": 0}
-
-        stock_ids = _load_stock_ids(db_session)
-        if not stock_ids:
-            logs["rows"] = 0
-            finish_job(db_session, job_id, "success", logs=logs)
-            return {"rows": 0}
-
-        logs["stocks"] = len(stock_ids)
-        logger.info(
-            "[ingest_quarterly_fundamental] %s ~ %s，%d 檔",
-            start_date, end_date, len(stock_ids),
-        )
-
-        total_rows = 0
-        commit_buffer: List[Dict] = []
-
-        for i, stock_id in enumerate(stock_ids, 1):
-            if i % 100 == 0:
-                update_job(
-                    db_session, job_id,
-                    logs={**logs, "progress": f"{i}/{len(stock_ids)}", "rows": total_rows},
-                    commit=True,
-                )
-                logger.info("[%d/%d] rows=%d", i, len(stock_ids), total_rows)
-
-            # 每檔股票一次抓全期（季報資料量小，一年只有 4 筆）
-            bs_raw = _fetch_one_dataset("TaiwanStockBalanceSheet", stock_id, start_date, end_date, config)
-            is_raw = _fetch_one_dataset("TaiwanStockFinancialStatements", stock_id, start_date, end_date, config)
-            cf_raw = _fetch_one_dataset("TaiwanStockCashFlowsStatement", stock_id, start_date, end_date, config)
-
-            bs = _pivot_long(bs_raw, BS_ROW_MAP)
-            is_ = _pivot_long(is_raw, IS_ROW_MAP)
-            cf = _pivot_long(cf_raw, CF_ROW_MAP)
-
-            metrics = _compute_metrics(bs, is_, cf)
-            if metrics.empty:
-                continue
-
-            commit_buffer.extend(metrics.to_dict("records"))
-
-            if len(commit_buffer) >= 2000:
-                _flush(db_session, commit_buffer)
-                total_rows += len(commit_buffer)
-                commit_buffer.clear()
-
-        if commit_buffer:
-            _flush(db_session, commit_buffer)
-            total_rows += len(commit_buffer)
-
-        logs["rows"] = total_rows
-        logger.info("ingest_quarterly_fundamental: %d 筆", total_rows)
-        finish_job(db_session, job_id, "success", logs=logs)
-        return {"rows": total_rows}
-
+        # Fetch progress cannot move financial first-observed timestamps forward.
+        ids.sort(key=lambda sid:(seen.get(sid,datetime.min),sid))
+        logs['requested_stocks'] = len(ids)
+        if stock_ids is not None and len(ids)*3 > max_requests:
+            raise ValueError('Explicit financial batch exceeds request budget; reduce stock_ids')
+        selected = ids[:max_requests//3]
+        logs['stocks'] = len(selected); logs['deferred_stocks'] = len(ids)-len(selected)
+        start = date(today.year-3,1,1)  # TTM income, prior-year equity and YTD cash flow warmup
+        for sid in selected:
+            frames = []
+            for dataset in DATASETS:
+                logs['requests_reserved'] += 1
+                frames.append(fetch_dataset(dataset,start,today,data_id=sid,token=config.finmind_token,
+                    requests_per_hour=config.finmind_requests_per_hour,max_retries=0,timeout=30))
+            if any(f.empty for f in frames):
+                raise FinMindError(f'Incomplete three-statement source: {sid}')
+            if any(set(f.stock_id.astype(str)) != {sid} for f in frames):
+                raise FinMindError(f'Wrong stock in financial source: {sid}')
+            observed = datetime.now(timezone.utc)
+            folder = ROOT/'.cache/quarterly-observations'/sid/observed.strftime('%Y%m%dT%H%M%S%fZ')
+            folder.mkdir(parents=True)
+            manifest = dict(stock_id=sid,start=start.isoformat(),end=today.isoformat(),
+                observed_at=observed.isoformat(),amount_unit='TWD',income_basis='single_quarter',
+                cashflow_basis='year_to_date',files_sha256={})
+            for dataset,frame in zip(DATASETS,frames):
+                path = folder/(dataset+'.parquet');frame.to_parquet(path,index=False)
+                manifest['files_sha256'][path.name] = hashlib.sha256(path.read_bytes()).hexdigest()
+            path = folder/'manifest.json';path.write_text(json.dumps(manifest,ensure_ascii=False,sort_keys=True))
+            records = calculate(*frames,observed_at=observed)
+            for row in records:
+                row['source_manifest'] = str(path.relative_to(ROOT))
+            logs['rows'] += persist_snapshots(session,records)
+            session.merge(QuarterlyIngestState(stock_id=sid,checked_at=observed.replace(tzinfo=None)))
+            session.commit()
+        logs['missing_share_denominator'] = True
+        finish_job(session,job_id,'success',logs=logs)
+        return logs
     except Exception as exc:
-        logger.error(
-            "[ingest_quarterly_fundamental] 失敗: %s", exc, exc_info=True,
-        )
-        try:
-            db_session.rollback()
-        except Exception as rb_exc:
-            logger.warning(
-                "[ingest_quarterly_fundamental] rollback 失敗: %s", rb_exc
-            )
-        try:
-            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
-        except Exception as finish_exc:
-            logger.warning(
-                "[ingest_quarterly_fundamental] finish_job 寫入失敗: %s", finish_exc
-            )
+        session.rollback()
+        finish_job(session,job_id,'failed',error_text=str(exc),logs=logs)
         raise
-
-
-def _flush(session: Session, buffer: List[Dict]) -> None:
-    stmt = insert(RawQuarterlyFundamental).values(buffer)
-    stmt = stmt.on_duplicate_key_update({col: stmt.inserted[col] for col in UPDATE_COLS})
-    session.execute(stmt)
-    session.commit()
