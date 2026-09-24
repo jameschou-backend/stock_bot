@@ -1,0 +1,6151 @@
+{
+  "schema": 1,
+  "date": "2026-09-24",
+  "decision": "retain_existing_strategy_no_promotion",
+  "live_qualified": false,
+  "unseen_validation": false,
+  "source": {
+    "path": ".cache/broker-persistence-research-20260924/manifest.json",
+    "sha256": "adbff268a9cdf455ac2629aaf0d0f2a5d3e4a3eeaf3d6479c8ec428decbce22e"
+  },
+  "preparation": {
+    "path": ".cache/broker-persistence-20260924/manifest.json",
+    "sha256": "4dc1737e87e690192c7082e1faf9e940e95785e9933919e74c45f17c50481fe6",
+    "elapsed_seconds": 344.621,
+    "request_reservations": 2212
+  },
+  "verification": {
+    "all_completed": true,
+    "all_identical": true,
+    "elapsed_seconds": 57.689,
+    "manifest_sha256": "adbff268a9cdf455ac2629aaf0d0f2a5d3e4a3eeaf3d6479c8ec428decbce22e",
+    "network_requests": 0
+  },
+  "coverage": {
+    "20": {
+      "known": 125,
+      "missing_branch_market_day": 317,
+      "missing_branch_selection_or_warmup": 16
+    },
+    "5": {
+      "known": 251,
+      "missing_branch_market_day": 191,
+      "missing_branch_selection_or_warmup": 16
+    }
+  },
+  "cases": {
+    "20_control_combined": {
+      "attribution": [
+        {
+          "net_pnl": 498658.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 441548.0,
+          "stock_id": "2345"
+        },
+        {
+          "net_pnl": 298183.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 235913.11,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 182105.5,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 173030.59999999998,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 126784.59999999999,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 104076.0,
+          "stock_id": "2603"
+        },
+        {
+          "net_pnl": 87706.5,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": 75011.00000000003,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": 56830.200000000026,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 50274.600000000006,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 34571.0,
+          "stock_id": "3363"
+        },
+        {
+          "net_pnl": 31146.899999999965,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 11950.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 11514.0,
+          "stock_id": "4576"
+        },
+        {
+          "net_pnl": 10455.000000000011,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": 7074.100000000011,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 3734.4699999999953,
+          "stock_id": "2883"
+        },
+        {
+          "net_pnl": -5068.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -5803.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -8285.0,
+          "stock_id": "2882"
+        },
+        {
+          "net_pnl": -13427.75,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -14696.399999999989,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -19208.75,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -21240.0,
+          "stock_id": "8358"
+        },
+        {
+          "net_pnl": -21622.0,
+          "stock_id": "2421"
+        },
+        {
+          "net_pnl": -22507.699999999953,
+          "stock_id": "2887"
+        },
+        {
+          "net_pnl": -34571.0,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -42184.5,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -43736.0,
+          "stock_id": "6235"
+        },
+        {
+          "net_pnl": -44646.0,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": -47549.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -48248.600000000006,
+          "stock_id": "8171"
+        },
+        {
+          "net_pnl": -49272.5,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -53305.5,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -60622.8,
+          "stock_id": "4967"
+        },
+        {
+          "net_pnl": -65363.29999999999,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -70952.0,
+          "stock_id": "3450"
+        },
+        {
+          "net_pnl": -72671.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -79078.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": -129006.76000000001,
+          "stock_id": "8112"
+        },
+        {
+          "net_pnl": -170698.0,
+          "stock_id": "8016"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 125,
+      "completed": true,
+      "config": {
+        "mode": "control",
+        "stress": "combined",
+        "window": 20
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.22258011342336848,
+        "outperform_fraction": 0.2918552036199095,
+        "overlapping_windows": 884,
+        "worst_excess": -0.7470423207346271
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 986677.55,
+            "max_drawdown": -0.10375449073370191,
+            "partial_year": false,
+            "profit": -13322.449999999953,
+            "start_nav": 1000000.0,
+            "total_return": -0.013322449999999986,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1383199.0,
+            "max_drawdown": -0.1566967308151166,
+            "partial_year": false,
+            "profit": 396521.44999999995,
+            "start_nav": 986677.55,
+            "total_return": 0.40187541512422165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1265730.1700000002,
+            "max_drawdown": -0.21380574728951307,
+            "partial_year": false,
+            "profit": -117468.82999999984,
+            "start_nav": 1383199.0,
+            "total_return": -0.08492547348573842,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1510055.28,
+            "max_drawdown": -0.12724688629329217,
+            "partial_year": false,
+            "profit": 244325.10999999987,
+            "start_nav": 1265730.1700000002,
+            "total_return": 0.19303096014532062,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2296803.02,
+            "max_drawdown": -0.19730740802056757,
+            "partial_year": true,
+            "profit": 786747.74,
+            "start_nav": 1510055.28,
+            "total_return": 0.5210059197303027,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 89,
+        "cagr": 0.19435866865695206,
+        "cash": 566948.02,
+        "costs": {
+          "commission": 59863.0,
+          "slippage": 375238.0,
+          "tax": 62457.0,
+          "total_cost": 497558.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 931480.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 8030,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-09-g003-2026-09-02-4576",
+            "mark_date": "2026-09-09",
+            "market_value": 798368.0,
+            "name": "大銀微系統",
+            "price": 244.0,
+            "qty": 3272,
+            "stale": false,
+            "stock_id": "4576"
+          }
+        ],
+        "final_nav": 2296803.02,
+        "final_receivables": [
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 1729848.0,
+        "max_drawdown": -0.26402048182216165,
+        "minimum_cash": 35.23,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 1,
+          "partial_capacity_or_cash": 37,
+          "single_price_session": 2,
+          "slots_full": 77
+        },
+        "profit": 1296803.02,
+        "receivable": 7.0,
+        "sell_count": 100,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 47,
+        "total_return": 1.29680302,
+        "trade_count": 189,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "20_control_control": {
+      "attribution": [
+        {
+          "net_pnl": 747408.2,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 588646.5,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 536460.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 266532.0,
+          "stock_id": "2368"
+        },
+        {
+          "net_pnl": 263289.15,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 258054.19999999995,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 143190.0,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 140023.2,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": 132088.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 118342.29999999997,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 107334.5,
+          "stock_id": "1503"
+        },
+        {
+          "net_pnl": 105292.40000000002,
+          "stock_id": "6235"
+        },
+        {
+          "net_pnl": 104877.2,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 81541.6,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 49228.5,
+          "stock_id": "4576"
+        },
+        {
+          "net_pnl": 46905.20000000001,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 16451.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 8476.699999999977,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": -911.5499999999893,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -2801.5999999999767,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -6714.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -10330.849999999977,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -13778.25,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -16190.0,
+          "stock_id": "2383"
+        },
+        {
+          "net_pnl": -19596.8,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -20965.0,
+          "stock_id": "1795"
+        },
+        {
+          "net_pnl": -24052.0,
+          "stock_id": "2421"
+        },
+        {
+          "net_pnl": -28996.5,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": -33856.5,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": -35606.0,
+          "stock_id": "2337"
+        },
+        {
+          "net_pnl": -36059.20000000001,
+          "stock_id": "8171"
+        },
+        {
+          "net_pnl": -37471.919999999984,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -44374.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -46602.39999999998,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -55836.0,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -56240.0,
+          "stock_id": "3035"
+        },
+        {
+          "net_pnl": -62680.0,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -70806.59999999998,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": -70858.5,
+          "stock_id": "2520"
+        },
+        {
+          "net_pnl": -72256.90000000002,
+          "stock_id": "4967"
+        },
+        {
+          "net_pnl": -74493.0,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -76261.5,
+          "stock_id": "3450"
+        },
+        {
+          "net_pnl": -98242.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -146965.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -177689.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -181125.4,
+          "stock_id": "8112"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 125,
+      "completed": true,
+      "config": {
+        "mode": "control",
+        "stress": "control",
+        "window": 20
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.07920101842182836,
+        "outperform_fraction": 0.4626696832579186,
+        "overlapping_windows": 884,
+        "worst_excess": -0.5251640017666399
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 823188.0999999999,
+            "max_drawdown": -0.1929018,
+            "partial_year": false,
+            "profit": -176811.90000000014,
+            "start_nav": 1000000.0,
+            "total_return": -0.17681190000000013,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1201970.5499999998,
+            "max_drawdown": -0.18958248508751296,
+            "partial_year": false,
+            "profit": 378782.44999999995,
+            "start_nav": 823188.0999999999,
+            "total_return": 0.4601408232213269,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1365593.8,
+            "max_drawdown": -0.21166787051842528,
+            "partial_year": false,
+            "profit": 163623.25000000023,
+            "start_nav": 1201970.5499999998,
+            "total_return": 0.13612916722460477,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1546266.88,
+            "max_drawdown": -0.170384179573835,
+            "partial_year": false,
+            "profit": 180673.07999999984,
+            "start_nav": 1365593.8,
+            "total_return": 0.13230367624691897,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3192380.18,
+            "max_drawdown": -0.19440008666373143,
+            "partial_year": true,
+            "profit": 1646113.3000000003,
+            "start_nav": 1546266.88,
+            "total_return": 1.0645725658949639,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 92,
+        "cagr": 0.28137755054643465,
+        "cash": 886640.18,
+        "costs": {
+          "commission": 69087.0,
+          "slippage": 217586.0,
+          "tax": 72667.0,
+          "total_cost": 359340.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1270432.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 10952,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-09-g003-2026-09-02-4576",
+            "mark_date": "2026-09-09",
+            "market_value": 1035292.0,
+            "name": "大銀微系統",
+            "price": 244.0,
+            "qty": 4243,
+            "stale": false,
+            "stock_id": "4576"
+          }
+        ],
+        "final_nav": 3192380.18,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2305724.0,
+        "max_drawdown": -0.2806054747819261,
+        "minimum_cash": 19.65,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 4,
+          "invalid_odd_lot_quote": 4,
+          "overlapping_member": 3,
+          "partial_capacity_or_cash": 10,
+          "single_price_session": 6,
+          "slots_full": 70
+        },
+        "profit": 2192380.18,
+        "receivable": 16.0,
+        "sell_count": 92,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 49,
+        "total_return": 2.1923801800000002,
+        "trade_count": 184,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "20_filter_combined": {
+      "attribution": [
+        {
+          "net_pnl": 581891.5,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 260382.64,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 199751.5,
+          "stock_id": "2884"
+        },
+        {
+          "net_pnl": 190604.0,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 188121.0,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 133601.0,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 124579.4,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 93897.5,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": 91983.0,
+          "stock_id": "2603"
+        },
+        {
+          "net_pnl": 89734.26999999999,
+          "stock_id": "1785"
+        },
+        {
+          "net_pnl": 46127.399999999994,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 14528.0,
+          "stock_id": "2458"
+        },
+        {
+          "net_pnl": 13369.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 12913.4,
+          "stock_id": "2542"
+        },
+        {
+          "net_pnl": 7903.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 7551.899999999989,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": -5068.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -8498.899999999976,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -11446.4,
+          "stock_id": "2882"
+        },
+        {
+          "net_pnl": -14009.9,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -17753.800000000025,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -18994.0,
+          "stock_id": "8358"
+        },
+        {
+          "net_pnl": -25239.5,
+          "stock_id": "2887"
+        },
+        {
+          "net_pnl": -32333.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": -47549.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -56867.5,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -57363.77,
+          "stock_id": "1795"
+        },
+        {
+          "net_pnl": -60244.8,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -70952.0,
+          "stock_id": "3450"
+        },
+        {
+          "net_pnl": -100601.30000000005,
+          "stock_id": "3707"
+        },
+        {
+          "net_pnl": -103252.5,
+          "stock_id": "5309"
+        },
+        {
+          "net_pnl": -104613.5,
+          "stock_id": "8271"
+        },
+        {
+          "net_pnl": -110593.31000000001,
+          "stock_id": "8112"
+        },
+        {
+          "net_pnl": -113963.8,
+          "stock_id": "1326"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 53,
+      "completed": true,
+      "config": {
+        "mode": "filter",
+        "stress": "combined",
+        "window": 20
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.177050916123632,
+        "outperform_fraction": 0.2420814479638009,
+        "overlapping_windows": 884,
+        "worst_excess": -0.8904153519453144
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 970982.55,
+            "max_drawdown": -0.1128948641269597,
+            "partial_year": false,
+            "profit": -29017.449999999953,
+            "start_nav": 1000000.0,
+            "total_return": -0.02901745,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1189572.03,
+            "max_drawdown": -0.08681303163517073,
+            "partial_year": false,
+            "profit": 218589.47999999998,
+            "start_nav": 970982.55,
+            "total_return": 0.22512194477645342,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1386142.0,
+            "max_drawdown": -0.1586575069563676,
+            "partial_year": false,
+            "profit": 196569.96999999997,
+            "start_nav": 1189572.03,
+            "total_return": 0.16524427696908783,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1780432.44,
+            "max_drawdown": -0.1161678905807334,
+            "partial_year": false,
+            "profit": 394290.43999999994,
+            "start_nav": 1386142.0,
+            "total_return": 0.2844516939822903,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2097593.5300000003,
+            "max_drawdown": -0.21993990764099614,
+            "partial_year": true,
+            "profit": 317161.0900000003,
+            "start_nav": 1780432.44,
+            "total_return": 0.17813711033034219,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 67,
+        "cagr": 0.17143595100917874,
+        "cash": 458520.03,
+        "costs": {
+          "commission": 45579.0,
+          "slippage": 285213.0,
+          "tax": 47141.0,
+          "total_cost": 377933.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-06-g014-2026-06-22-2884",
+            "mark_date": "2026-09-09",
+            "market_value": 859777.5,
+            "name": "玉山金",
+            "price": 44.25,
+            "qty": 19430,
+            "stale": false,
+            "stock_id": "2884"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 779288.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 6718,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 2097593.5300000003,
+        "final_receivables": [
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 8.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 1639065.5,
+        "max_drawdown": -0.21993990764099614,
+        "minimum_cash": 39.6,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 4,
+          "partial_capacity_or_cash": 28,
+          "single_price_session": 2,
+          "slots_full": 15
+        },
+        "profit": 1097593.5300000003,
+        "receivable": 8.0,
+        "sell_count": 78,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 36,
+        "total_return": 1.0975935300000002,
+        "trade_count": 145,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "20_filter_control": {
+      "attribution": [
+        {
+          "net_pnl": 1040458.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 466833.14,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 451343.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": 398745.3999999999,
+          "stock_id": "1326"
+        },
+        {
+          "net_pnl": 381095.3999999999,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 287341.3999999999,
+          "stock_id": "2884"
+        },
+        {
+          "net_pnl": 275782.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 268478.0,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 169562.44999999995,
+          "stock_id": "1785"
+        },
+        {
+          "net_pnl": 152491.0,
+          "stock_id": "2603"
+        },
+        {
+          "net_pnl": 140114.0,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 124023.6,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 70703.59999999998,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 61560.80000000001,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": 43889.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 30954.199999999975,
+          "stock_id": "3005"
+        },
+        {
+          "net_pnl": 28849.0,
+          "stock_id": "2458"
+        },
+        {
+          "net_pnl": 26618.0,
+          "stock_id": "2542"
+        },
+        {
+          "net_pnl": 22806.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 13112.0,
+          "stock_id": "2882"
+        },
+        {
+          "net_pnl": 9258.949999999977,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": -17859.5,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -37067.39999999998,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -55480.60000000002,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -67106.0,
+          "stock_id": "2337"
+        },
+        {
+          "net_pnl": -88497.80000000005,
+          "stock_id": "3707"
+        },
+        {
+          "net_pnl": -113439.0,
+          "stock_id": "8271"
+        },
+        {
+          "net_pnl": -129253.45,
+          "stock_id": "2887"
+        },
+        {
+          "net_pnl": -129608.0,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -135286.5,
+          "stock_id": "3450"
+        },
+        {
+          "net_pnl": -177721.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -193991.61,
+          "stock_id": "8112"
+        },
+        {
+          "net_pnl": -199400.38999999996,
+          "stock_id": "5309"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 53,
+      "completed": true,
+      "config": {
+        "mode": "filter",
+        "stress": "control",
+        "window": 20
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.05772310355604593,
+        "outperform_fraction": 0.4649321266968326,
+        "overlapping_windows": 884,
+        "worst_excess": -0.8861289549324836
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 972967.6500000001,
+            "max_drawdown": -0.11203745883677552,
+            "partial_year": false,
+            "profit": -27032.34999999986,
+            "start_nav": 1000000.0,
+            "total_return": -0.027032349999999816,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1751795.05,
+            "max_drawdown": -0.1100092791420455,
+            "partial_year": false,
+            "profit": 778827.3999999999,
+            "start_nav": 972967.6500000001,
+            "total_return": 0.800465873659828,
+            "year": "2023"
+          },
+          {
+            "end_nav": 2421157.6,
+            "max_drawdown": -0.15181531687769412,
+            "partial_year": false,
+            "profit": 669362.55,
+            "start_nav": 1751795.05,
+            "total_return": 0.38210094839576136,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2967982.74,
+            "max_drawdown": -0.17207286731630533,
+            "partial_year": false,
+            "profit": 546825.1400000001,
+            "start_nav": 2421157.6,
+            "total_return": 0.22585276563574386,
+            "year": "2025"
+          },
+          {
+            "end_nav": 4119307.69,
+            "max_drawdown": -0.18221377028796915,
+            "partial_year": true,
+            "profit": 1151324.9499999997,
+            "start_nav": 2967982.74,
+            "total_return": 0.3879149748694293,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 69,
+        "cagr": 0.3530825674453195,
+        "cash": 1242210.19,
+        "costs": {
+          "commission": 77205.0,
+          "slippage": 243415.0,
+          "tax": 81845.0,
+          "total_cost": 402465.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-06-g014-2026-06-22-2884",
+            "mark_date": "2026-09-09",
+            "market_value": 1319446.5,
+            "name": "玉山金",
+            "price": 44.25,
+            "qty": 29818,
+            "stale": false,
+            "stock_id": "2884"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1557648.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 13428,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 4119307.69,
+        "final_receivables": [
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 3.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2877094.5,
+        "max_drawdown": -0.24381925067529164,
+        "minimum_cash": 5.25,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 4,
+          "invalid_odd_lot_quote": 1,
+          "partial_capacity_or_cash": 4,
+          "single_price_session": 4,
+          "slots_full": 15
+        },
+        "profit": 3119307.69,
+        "receivable": 3.0,
+        "sell_count": 65,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 36,
+        "total_return": 3.1193076900000003,
+        "trade_count": 134,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "20_rank_combined": {
+      "attribution": [
+        {
+          "net_pnl": 772502.2,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 434614.5,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 298183.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 205170.45,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 172776.59999999998,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 126784.59999999999,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 109970.0,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 104076.0,
+          "stock_id": "2603"
+        },
+        {
+          "net_pnl": 87706.5,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": 75011.00000000003,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": 50274.600000000006,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 46709.0,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 34571.0,
+          "stock_id": "3363"
+        },
+        {
+          "net_pnl": 31146.899999999965,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 11950.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 11546.0,
+          "stock_id": "4576"
+        },
+        {
+          "net_pnl": 10455.000000000011,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": 7074.100000000011,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 3734.4699999999953,
+          "stock_id": "2883"
+        },
+        {
+          "net_pnl": -5068.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -5803.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -8285.0,
+          "stock_id": "2882"
+        },
+        {
+          "net_pnl": -13460.850000000006,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -14696.399999999989,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -19100.5,
+          "stock_id": "2887"
+        },
+        {
+          "net_pnl": -21240.0,
+          "stock_id": "8358"
+        },
+        {
+          "net_pnl": -21622.0,
+          "stock_id": "2421"
+        },
+        {
+          "net_pnl": -30425.79999999999,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -42184.5,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -43736.0,
+          "stock_id": "6235"
+        },
+        {
+          "net_pnl": -44646.0,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": -45436.5,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -47549.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -48248.600000000006,
+          "stock_id": "8171"
+        },
+        {
+          "net_pnl": -49272.5,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -60622.8,
+          "stock_id": "4967"
+        },
+        {
+          "net_pnl": -64039.40000000002,
+          "stock_id": "1802"
+        },
+        {
+          "net_pnl": -65363.29999999999,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -70952.0,
+          "stock_id": "3450"
+        },
+        {
+          "net_pnl": -72937.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -79078.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": -99425.0,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": -147420.21000000002,
+          "stock_id": "8112"
+        },
+        {
+          "net_pnl": -170698.0,
+          "stock_id": "8016"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 125,
+      "completed": true,
+      "config": {
+        "mode": "rank",
+        "stress": "combined",
+        "window": 20
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.27090982872656055,
+        "outperform_fraction": 0.34502262443438914,
+        "overlapping_windows": 884,
+        "worst_excess": -0.7470423207346271
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 986677.55,
+            "max_drawdown": -0.10375449073370191,
+            "partial_year": false,
+            "profit": -13322.449999999953,
+            "start_nav": 1000000.0,
+            "total_return": -0.013322449999999986,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1383199.0,
+            "max_drawdown": -0.1566967308151166,
+            "partial_year": false,
+            "profit": 396521.44999999995,
+            "start_nav": 986677.55,
+            "total_return": 0.40187541512422165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1220577.27,
+            "max_drawdown": -0.21380574728951307,
+            "partial_year": false,
+            "profit": -162621.72999999998,
+            "start_nav": 1383199.0,
+            "total_return": -0.11756929407843697,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1290760.37,
+            "max_drawdown": -0.22972255467977254,
+            "partial_year": false,
+            "profit": 70183.1000000001,
+            "start_nav": 1220577.27,
+            "total_return": 0.05749992378606228,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2302945.56,
+            "max_drawdown": -0.19705478686815592,
+            "partial_year": true,
+            "profit": 1012185.19,
+            "start_nav": 1290760.37,
+            "total_return": 0.7841774612277568,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 91,
+        "cagr": 0.195040217393041,
+        "cash": 571938.56,
+        "costs": {
+          "commission": 58812.0,
+          "slippage": 368443.0,
+          "tax": 61314.0,
+          "total_cost": 488569.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 930436.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 8021,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-09-g003-2026-09-02-4576",
+            "mark_date": "2026-09-09",
+            "market_value": 800564.0,
+            "name": "大銀微系統",
+            "price": 244.0,
+            "qty": 3281,
+            "stale": false,
+            "stock_id": "4576"
+          }
+        ],
+        "final_nav": 2302945.56,
+        "final_receivables": [
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 1731000.0,
+        "max_drawdown": -0.3720004116046476,
+        "minimum_cash": 15.52,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 1,
+          "partial_capacity_or_cash": 37,
+          "single_price_session": 6,
+          "slots_full": 76
+        },
+        "profit": 1302945.56,
+        "receivable": 7.0,
+        "sell_count": 100,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 48,
+        "total_return": 1.30294556,
+        "trade_count": 191,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "20_rank_control": {
+      "attribution": [
+        {
+          "net_pnl": 774175.8,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 602421.5,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 564007.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 546691.0,
+          "stock_id": "2345"
+        },
+        {
+          "net_pnl": 343228.3999999999,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 277182.42,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 150402.0,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 140350.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 118342.29999999997,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 114305.0,
+          "stock_id": "1503"
+        },
+        {
+          "net_pnl": 105292.40000000002,
+          "stock_id": "6235"
+        },
+        {
+          "net_pnl": 104877.2,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 90777.0,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 54147.5,
+          "stock_id": "4576"
+        },
+        {
+          "net_pnl": 51373.10000000002,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": 40171.40000000002,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": 36849.100000000006,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 28337.81999999996,
+          "stock_id": "2883"
+        },
+        {
+          "net_pnl": 18486.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 9824.0,
+          "stock_id": "2882"
+        },
+        {
+          "net_pnl": 8476.699999999977,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": -989.8999999999783,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -2969.750000000011,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -6962.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -13778.25,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -20454.0,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -22386.5,
+          "stock_id": "1795"
+        },
+        {
+          "net_pnl": -24113.0,
+          "stock_id": "2421"
+        },
+        {
+          "net_pnl": -28996.5,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": -36059.20000000001,
+          "stock_id": "8171"
+        },
+        {
+          "net_pnl": -39325.06,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -46602.39999999998,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -46933.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -55836.0,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -56240.0,
+          "stock_id": "3035"
+        },
+        {
+          "net_pnl": -66147.0,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -75170.0,
+          "stock_id": "2520"
+        },
+        {
+          "net_pnl": -75193.40000000002,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": -75930.79999999999,
+          "stock_id": "4967"
+        },
+        {
+          "net_pnl": -78191.0,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -88067.5,
+          "stock_id": "3450"
+        },
+        {
+          "net_pnl": -91434.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -115721.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -167317.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -207551.59999999992,
+          "stock_id": "5309"
+        },
+        {
+          "net_pnl": -213003.13,
+          "stock_id": "8112"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 125,
+      "completed": true,
+      "config": {
+        "mode": "rank",
+        "stress": "control",
+        "window": 20
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.10276870622219936,
+        "outperform_fraction": 0.47737556561085975,
+        "overlapping_windows": 884,
+        "worst_excess": -0.5058637669816107
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 823188.0999999999,
+            "max_drawdown": -0.1929018,
+            "partial_year": false,
+            "profit": -176811.90000000014,
+            "start_nav": 1000000.0,
+            "total_return": -0.17681190000000013,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1276845.2,
+            "max_drawdown": -0.17567737107934156,
+            "partial_year": false,
+            "profit": 453657.1000000001,
+            "start_nav": 823188.0999999999,
+            "total_return": 0.5510977381718714,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1576046.82,
+            "max_drawdown": -0.18616754274443625,
+            "partial_year": false,
+            "profit": 299201.6200000001,
+            "start_nav": 1276845.2,
+            "total_return": 0.23432881292109653,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1625233.18,
+            "max_drawdown": -0.27842801684207386,
+            "partial_year": false,
+            "profit": 49186.35999999987,
+            "start_nav": 1576046.82,
+            "total_return": 0.031208692137711935,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3524345.65,
+            "max_drawdown": -0.20894438811724747,
+            "partial_year": true,
+            "profit": 1899112.47,
+            "start_nav": 1625233.18,
+            "total_return": 1.1685169201381922,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 91,
+        "cagr": 0.3087420212240779,
+        "cash": 978413.65,
+        "costs": {
+          "commission": 72807.0,
+          "slippage": 229465.0,
+          "tax": 76784.0,
+          "total_cost": 379056.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1402788.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 12093,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-09-g003-2026-09-02-4576",
+            "mark_date": "2026-09-09",
+            "market_value": 1143140.0,
+            "name": "大銀微系統",
+            "price": 244.0,
+            "qty": 4685,
+            "stale": false,
+            "stock_id": "4576"
+          }
+        ],
+        "final_nav": 3524345.65,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 4.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2545928.0,
+        "max_drawdown": -0.33142396953125175,
+        "minimum_cash": 18.4,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 4,
+          "invalid_odd_lot_quote": 2,
+          "overlapping_member": 2,
+          "partial_capacity_or_cash": 10,
+          "single_price_session": 10,
+          "slots_full": 72
+        },
+        "profit": 2524345.65,
+        "receivable": 4.0,
+        "sell_count": 92,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 48,
+        "total_return": 2.52434565,
+        "trade_count": 183,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "5_control_combined": {
+      "attribution": [
+        {
+          "net_pnl": 895503.0,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 556628.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 406182.4,
+          "stock_id": "6488"
+        },
+        {
+          "net_pnl": 318924.0,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 301344.2,
+          "stock_id": "3715"
+        },
+        {
+          "net_pnl": 301252.5,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": 191944.0,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 184900.59999999998,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": 135561.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 133399.39999999997,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 132009.0,
+          "stock_id": "3005"
+        },
+        {
+          "net_pnl": 125360.0,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 86011.0,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 75011.00000000003,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": 73007.24999999988,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 50702.400000000045,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 34571.0,
+          "stock_id": "3363"
+        },
+        {
+          "net_pnl": 26865.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 25916.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 16327.0,
+          "stock_id": "3265"
+        },
+        {
+          "net_pnl": 16256.0,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 6942.0,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": 3995.5,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 1722.0,
+          "stock_id": "6643"
+        },
+        {
+          "net_pnl": -2035.8000000000002,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -7075.400000000025,
+          "stock_id": "3006"
+        },
+        {
+          "net_pnl": -8351.899999999976,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -11639.4,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -13107.0,
+          "stock_id": "6176"
+        },
+        {
+          "net_pnl": -13460.850000000006,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -21240.0,
+          "stock_id": "8358"
+        },
+        {
+          "net_pnl": -21622.0,
+          "stock_id": "2421"
+        },
+        {
+          "net_pnl": -23758.099999999988,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -29829.79999999999,
+          "stock_id": "2486"
+        },
+        {
+          "net_pnl": -30362.199999999997,
+          "stock_id": "3624"
+        },
+        {
+          "net_pnl": -35212.5,
+          "stock_id": "3227"
+        },
+        {
+          "net_pnl": -36977.15000000002,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -41431.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -42184.5,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -45367.5,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -47549.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -48979.59999999998,
+          "stock_id": "6695"
+        },
+        {
+          "net_pnl": -50474.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -51064.24999999998,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -52432.200000000004,
+          "stock_id": "3594"
+        },
+        {
+          "net_pnl": -58194.5,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -58370.0,
+          "stock_id": "4162"
+        },
+        {
+          "net_pnl": -62027.0,
+          "stock_id": "3260"
+        },
+        {
+          "net_pnl": -64272.3,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": -64585.90000000003,
+          "stock_id": "2399"
+        },
+        {
+          "net_pnl": -66919.0,
+          "stock_id": "2059"
+        },
+        {
+          "net_pnl": -77685.0,
+          "stock_id": "4968"
+        },
+        {
+          "net_pnl": -102791.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -112200.74999999997,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": -246442.0,
+          "stock_id": "8016"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 251,
+      "completed": true,
+      "config": {
+        "mode": "control",
+        "stress": "combined",
+        "window": 5
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.042791084158328885,
+        "outperform_fraction": 0.4287330316742081,
+        "overlapping_windows": 884,
+        "worst_excess": -0.7665818733973264
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 961679.5000000001,
+            "max_drawdown": -0.10299376566276741,
+            "partial_year": false,
+            "profit": -38320.49999999988,
+            "start_nav": 1000000.0,
+            "total_return": -0.03832049999999987,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1185094.1,
+            "max_drawdown": -0.2819118019547533,
+            "partial_year": false,
+            "profit": 223414.59999999998,
+            "start_nav": 961679.5000000001,
+            "total_return": 0.2323171077266386,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1119953.7,
+            "max_drawdown": -0.21233189580375222,
+            "partial_year": false,
+            "profit": -65140.40000000014,
+            "start_nav": 1185094.1,
+            "total_return": -0.054966436842441624,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1505918.7,
+            "max_drawdown": -0.19706945736129577,
+            "partial_year": false,
+            "profit": 385965.0,
+            "start_nav": 1119953.7,
+            "total_return": 0.34462585372948906,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3552692.6499999994,
+            "max_drawdown": -0.27154668332677123,
+            "partial_year": true,
+            "profit": 2046773.9499999995,
+            "start_nav": 1505918.7,
+            "total_return": 1.3591530206776765,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 106,
+        "cagr": 0.3109833607838932,
+        "cash": 36091.3,
+        "costs": {
+          "commission": 68432.0,
+          "slippage": 428445.0,
+          "tax": 70650.0,
+          "total_cost": 567527.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1068976.3499999999,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 59553,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1321472.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 11392,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1068480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 8480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 3552692.6499999994,
+        "final_receivables": [
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0145086016,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 424,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 4240.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 3458928.3499999996,
+        "max_drawdown": -0.3531912953927948,
+        "minimum_cash": 5.4,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 6,
+          "invalid_odd_lot_quote": 2,
+          "overlapping_member": 3,
+          "partial_capacity_or_cash": 69,
+          "single_price_session": 2,
+          "slots_full": 189
+        },
+        "profit": 2552692.6499999994,
+        "receivable": 57673.0,
+        "sell_count": 137,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 2.5526926499999996,
+        "trade_count": 243,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "5_control_control": {
+      "attribution": [
+        {
+          "net_pnl": 2261173.0,
+          "stock_id": "3105"
+        },
+        {
+          "net_pnl": 1708692.0,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 1212471.2,
+          "stock_id": "6488"
+        },
+        {
+          "net_pnl": 1138272.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 948745.5,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 930886.8999999999,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 697383.0,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 660046.06,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 581259.0,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": 425261.0,
+          "stock_id": "6290"
+        },
+        {
+          "net_pnl": 313688.4,
+          "stock_id": "3005"
+        },
+        {
+          "net_pnl": 304085.6,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": 284540.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 270375.30000000005,
+          "stock_id": "8222"
+        },
+        {
+          "net_pnl": 249754.2,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 240067.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 218441.6000000001,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 213010.5,
+          "stock_id": "2603"
+        },
+        {
+          "net_pnl": 182097.5,
+          "stock_id": "1503"
+        },
+        {
+          "net_pnl": 101471.90000000002,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 94056.6,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 71986.4,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 59139.0,
+          "stock_id": "6643"
+        },
+        {
+          "net_pnl": 42901.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 34659.79999999995,
+          "stock_id": "3706"
+        },
+        {
+          "net_pnl": 33039.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 22213.0,
+          "stock_id": "4991"
+        },
+        {
+          "net_pnl": 16587.0,
+          "stock_id": "8374"
+        },
+        {
+          "net_pnl": 9916.0,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": -3844.7500000000236,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -13406.950000000023,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -21567.75,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -28996.5,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": -35543.5,
+          "stock_id": "3624"
+        },
+        {
+          "net_pnl": -49410.80000000001,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -50287.5,
+          "stock_id": "4162"
+        },
+        {
+          "net_pnl": -55836.0,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -63653.0,
+          "stock_id": "2383"
+        },
+        {
+          "net_pnl": -67193.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -71731.57999999996,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -89200.69999999995,
+          "stock_id": "3006"
+        },
+        {
+          "net_pnl": -105018.0,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -109110.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -112262.0,
+          "stock_id": "6533"
+        },
+        {
+          "net_pnl": -122930.75,
+          "stock_id": "6127"
+        },
+        {
+          "net_pnl": -127971.04999999996,
+          "stock_id": "3594"
+        },
+        {
+          "net_pnl": -135841.19999999995,
+          "stock_id": "2328"
+        },
+        {
+          "net_pnl": -139710.49999999997,
+          "stock_id": "6695"
+        },
+        {
+          "net_pnl": -142626.94999999998,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -223207.0,
+          "stock_id": "3227"
+        },
+        {
+          "net_pnl": -474100.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -482575.0,
+          "stock_id": "8039"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 251,
+      "completed": true,
+      "config": {
+        "mode": "control",
+        "stress": "control",
+        "window": 5
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.31911077318180714,
+        "outperform_fraction": 0.6006787330316742,
+        "overlapping_windows": 884,
+        "worst_excess": -0.45178822385190043
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 803674.7000000001,
+            "max_drawdown": -0.19632529999999992,
+            "partial_year": false,
+            "profit": -196325.29999999993,
+            "start_nav": 1000000.0,
+            "total_return": -0.19632529999999992,
+            "year": "2022"
+          },
+          {
+            "end_nav": 2479633.51,
+            "max_drawdown": -0.22510499764784542,
+            "partial_year": false,
+            "profit": 1675958.8099999996,
+            "start_nav": 803674.7000000001,
+            "total_return": 2.085369627785968,
+            "year": "2023"
+          },
+          {
+            "end_nav": 3023571.6100000003,
+            "max_drawdown": -0.16649114469148374,
+            "partial_year": false,
+            "profit": 543938.1000000006,
+            "start_nav": 2479633.51,
+            "total_return": 0.21936229600317048,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3778148.08,
+            "max_drawdown": -0.14575406116915746,
+            "partial_year": false,
+            "profit": 754576.4699999997,
+            "start_nav": 3023571.6100000003,
+            "total_return": 0.2495646101135338,
+            "year": "2025"
+          },
+          {
+            "end_nav": 11600194.98,
+            "max_drawdown": -0.30274557206304953,
+            "partial_year": true,
+            "profit": 7822046.9,
+            "start_nav": 3778148.08,
+            "total_return": 2.0703388894169548,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 108,
+        "cagr": 0.6879751578823554,
+        "cash": 127956.63,
+        "costs": {
+          "commission": 168639.0,
+          "slippage": 531735.0,
+          "tax": 177049.0,
+          "total_cost": 877423.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 3428683.35,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 191013,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 4287592.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 36962,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 3563658.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 28283,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 11600194.98,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.19838995036,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1414,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 14141.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 11279933.35,
+        "max_drawdown": -0.30274557206304953,
+        "minimum_cash": 12.16,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 6,
+          "at_upper_limit": 4,
+          "invalid_odd_lot_quote": 4,
+          "odd_lot_at_price_limit": 1,
+          "overlapping_member": 4,
+          "partial_capacity_or_cash": 24,
+          "single_price_session": 6,
+          "slots_full": 187
+        },
+        "profit": 10600194.98,
+        "receivable": 192305.0,
+        "sell_count": 115,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 57,
+        "total_return": 10.600194980000001,
+        "trade_count": 223,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "5_filter_combined": {
+      "attribution": [
+        {
+          "net_pnl": 998286.0,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 630281.5,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 348245.4,
+          "stock_id": "3715"
+        },
+        {
+          "net_pnl": 311411.79999999993,
+          "stock_id": "2884"
+        },
+        {
+          "net_pnl": 259519.0,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": 212123.5,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 178057.59999999998,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": 131873.0,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 125360.0,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 107872.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 86011.0,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 78827.0,
+          "stock_id": "1503"
+        },
+        {
+          "net_pnl": 75011.00000000003,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": 71325.70000000003,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 64232.74999999988,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 63228.20000000001,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": 61462.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 34768.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 25916.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 12765.800000000023,
+          "stock_id": "3706"
+        },
+        {
+          "net_pnl": 12302.0,
+          "stock_id": "3265"
+        },
+        {
+          "net_pnl": 6942.0,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": -296.5,
+          "stock_id": "3587"
+        },
+        {
+          "net_pnl": -1851.9500000000116,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -7271.399999999976,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -20527.0,
+          "stock_id": "6533"
+        },
+        {
+          "net_pnl": -21240.0,
+          "stock_id": "8358"
+        },
+        {
+          "net_pnl": -23043.800000000025,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -25777.5,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -30362.199999999997,
+          "stock_id": "3624"
+        },
+        {
+          "net_pnl": -33161.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": -41431.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -42184.5,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -42639.30000000005,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -42647.0,
+          "stock_id": "3044"
+        },
+        {
+          "net_pnl": -47549.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -48924.5,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -54796.4,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": -58370.0,
+          "stock_id": "4162"
+        },
+        {
+          "net_pnl": -59021.00000000002,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -60043.50000000004,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -61023.200000000004,
+          "stock_id": "3594"
+        },
+        {
+          "net_pnl": -61235.399999999994,
+          "stock_id": "3260"
+        },
+        {
+          "net_pnl": -64180.5,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -74359.0,
+          "stock_id": "2059"
+        },
+        {
+          "net_pnl": -119176.50000000003,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": -127199.0,
+          "stock_id": "4749"
+        },
+        {
+          "net_pnl": -202659.5699999999,
+          "stock_id": "8112"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 208,
+      "completed": true,
+      "config": {
+        "mode": "filter",
+        "stress": "combined",
+        "window": 5
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.027333989397212766,
+        "outperform_fraction": 0.47398190045248867,
+        "overlapping_windows": 884,
+        "worst_excess": -0.6572295059722247
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 926325.0,
+            "max_drawdown": -0.12691499561895603,
+            "partial_year": false,
+            "profit": -73675.0,
+            "start_nav": 1000000.0,
+            "total_return": -0.07367500000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 928358.1000000001,
+            "max_drawdown": -0.297807440455666,
+            "partial_year": false,
+            "profit": 2033.1000000000931,
+            "start_nav": 926325.0,
+            "total_return": 0.0021948020403206314,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1228392.65,
+            "max_drawdown": -0.14424599818137696,
+            "partial_year": false,
+            "profit": 300034.5499999998,
+            "start_nav": 928358.1000000001,
+            "total_return": 0.3231883795703401,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1704544.85,
+            "max_drawdown": -0.18168831567590282,
+            "partial_year": false,
+            "profit": 476152.2000000002,
+            "start_nav": 1228392.65,
+            "total_return": 0.3876221499697188,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3524850.53,
+            "max_drawdown": -0.08377771629961728,
+            "partial_year": true,
+            "profit": 1820305.6799999997,
+            "start_nav": 1704544.85,
+            "total_return": 1.0679130443531597,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 98,
+        "cagr": 0.3087820648477799,
+        "cash": 28.88,
+        "costs": {
+          "commission": 63574.0,
+          "slippage": 397954.0,
+          "tax": 65312.0,
+          "total_cost": 526840.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-06-g014-2026-06-22-2884",
+            "mark_date": "2026-09-09",
+            "market_value": 1340067.0,
+            "name": "玉山金",
+            "price": 44.25,
+            "qty": 30284,
+            "stale": false,
+            "stock_id": "2884"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 940346.6499999999,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 52387,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1180746.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 9371,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 3524850.53,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.56603303132,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 468,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 4685.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 3461159.65,
+        "max_drawdown": -0.297807440455666,
+        "minimum_cash": 6.25,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 1,
+          "at_upper_limit": 5,
+          "invalid_odd_lot_quote": 1,
+          "overlapping_member": 3,
+          "partial_capacity_or_cash": 74,
+          "single_price_session": 3,
+          "slots_full": 147
+        },
+        "profit": 2524850.53,
+        "receivable": 63662.0,
+        "sell_count": 132,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 2.5248505299999997,
+        "trade_count": 230,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "5_filter_control": {
+      "attribution": [
+        {
+          "net_pnl": 1130586.0,
+          "stock_id": "3105"
+        },
+        {
+          "net_pnl": 1060605.4,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 758134.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 500952.61,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 483243.80000000005,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 398756.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 381379.0,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 348942.0,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": 251963.0,
+          "stock_id": "6290"
+        },
+        {
+          "net_pnl": 251094.19999999998,
+          "stock_id": "8222"
+        },
+        {
+          "net_pnl": 245108.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 201379.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 161369.5,
+          "stock_id": "2603"
+        },
+        {
+          "net_pnl": 137950.0,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 114177.3999999999,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 105404.29999999999,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 97793.8,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 60221.0,
+          "stock_id": "3265"
+        },
+        {
+          "net_pnl": 53930.5,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 45649.05999999996,
+          "stock_id": "2883"
+        },
+        {
+          "net_pnl": 37298.0,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": 33681.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 28788.799999999952,
+          "stock_id": "3706"
+        },
+        {
+          "net_pnl": 22826.050000000047,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": 20456.0,
+          "stock_id": "5706"
+        },
+        {
+          "net_pnl": 17024.0,
+          "stock_id": "2379"
+        },
+        {
+          "net_pnl": 13732.0,
+          "stock_id": "4991"
+        },
+        {
+          "net_pnl": 9916.0,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": -1968.9500000000216,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -7913.0,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -28996.5,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": -35543.5,
+          "stock_id": "3624"
+        },
+        {
+          "net_pnl": -48638.30000000001,
+          "stock_id": "4541"
+        },
+        {
+          "net_pnl": -50657.39999999998,
+          "stock_id": "8050"
+        },
+        {
+          "net_pnl": -53461.0,
+          "stock_id": "4162"
+        },
+        {
+          "net_pnl": -55836.0,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -63771.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -70256.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -81358.0,
+          "stock_id": "6533"
+        },
+        {
+          "net_pnl": -85515.05000000002,
+          "stock_id": "3594"
+        },
+        {
+          "net_pnl": -85603.44999999998,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -87413.0,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -92346.5,
+          "stock_id": "3231"
+        },
+        {
+          "net_pnl": -92530.24999999997,
+          "stock_id": "6127"
+        },
+        {
+          "net_pnl": -98190.40000000002,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": -101830.19999999995,
+          "stock_id": "2328"
+        },
+        {
+          "net_pnl": -104460.5,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -121357.0,
+          "stock_id": "3227"
+        },
+        {
+          "net_pnl": -198628.0,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": -263568.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -313065.69,
+          "stock_id": "8112"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 208,
+      "completed": true,
+      "config": {
+        "mode": "filter",
+        "stress": "control",
+        "window": 5
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.18335109808725075,
+        "outperform_fraction": 0.5656108597285068,
+        "overlapping_windows": 884,
+        "worst_excess": -0.6120143784055194
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 844852.75,
+            "max_drawdown": -0.16282850000000004,
+            "partial_year": false,
+            "profit": -155147.25,
+            "start_nav": 1000000.0,
+            "total_return": -0.15514724999999996,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1826933.31,
+            "max_drawdown": -0.2485718578157653,
+            "partial_year": false,
+            "profit": 982080.56,
+            "start_nav": 844852.75,
+            "total_return": 1.1624280799228033,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1897699.2200000002,
+            "max_drawdown": -0.23238208876188338,
+            "partial_year": false,
+            "profit": 70765.91000000015,
+            "start_nav": 1826933.31,
+            "total_return": 0.0387348074572027,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2316148.02,
+            "max_drawdown": -0.1709634812220382,
+            "partial_year": false,
+            "profit": 418448.7999999998,
+            "start_nav": 1897699.2200000002,
+            "total_return": 0.22050322600649008,
+            "year": "2025"
+          },
+          {
+            "end_nav": 5829452.7299999995,
+            "max_drawdown": -0.25050399871213214,
+            "partial_year": true,
+            "profit": 3513304.7099999995,
+            "start_nav": 2316148.02,
+            "total_return": 1.5168739992705644,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 105,
+        "cagr": 0.45725451132671857,
+        "cash": 69959.18,
+        "costs": {
+          "commission": 109174.0,
+          "slippage": 344176.0,
+          "tax": 113851.0,
+          "total_cost": 567201.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1729105.55,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 96329,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1975016.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 17026,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1950228.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 15478,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 5829452.7299999995,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.92648161976,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 773,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 7739.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 5654349.55,
+        "max_drawdown": -0.36118223432660157,
+        "minimum_cash": 55.92,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 3,
+          "odd_lot_at_price_limit": 1,
+          "partial_capacity_or_cash": 21,
+          "single_price_session": 7,
+          "slots_full": 150
+        },
+        "profit": 4829452.7299999995,
+        "receivable": 105144.0,
+        "sell_count": 111,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 4.82945273,
+        "trade_count": 216,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "5_rank_combined": {
+      "attribution": [
+        {
+          "net_pnl": 895503.0,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 569162.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 413278.5,
+          "stock_id": "6488"
+        },
+        {
+          "net_pnl": 324570.0,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 309322.6,
+          "stock_id": "3715"
+        },
+        {
+          "net_pnl": 302748.5,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": 184900.59999999998,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": 183966.0,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 142960.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 141449.0,
+          "stock_id": "3005"
+        },
+        {
+          "net_pnl": 137085.80000000002,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 86011.0,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 75011.00000000003,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": 74294.74999999988,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 61562.0,
+          "stock_id": "2543"
+        },
+        {
+          "net_pnl": 52953.599999999955,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 41005.4,
+          "stock_id": "5706"
+        },
+        {
+          "net_pnl": 34571.0,
+          "stock_id": "3363"
+        },
+        {
+          "net_pnl": 26865.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 25916.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 16918.0,
+          "stock_id": "3265"
+        },
+        {
+          "net_pnl": 16897.0,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 13488.15,
+          "stock_id": "1524"
+        },
+        {
+          "net_pnl": 6786.0,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": 2141.5,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 1722.0,
+          "stock_id": "6643"
+        },
+        {
+          "net_pnl": -1990.9500000000235,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -7075.400000000025,
+          "stock_id": "3006"
+        },
+        {
+          "net_pnl": -8626.500000000011,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -12120.0,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -13460.850000000006,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -14726.5,
+          "stock_id": "6176"
+        },
+        {
+          "net_pnl": -21240.0,
+          "stock_id": "8358"
+        },
+        {
+          "net_pnl": -21622.0,
+          "stock_id": "2421"
+        },
+        {
+          "net_pnl": -23758.099999999988,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -31481.0,
+          "stock_id": "2486"
+        },
+        {
+          "net_pnl": -37563.29999999999,
+          "stock_id": "6505"
+        },
+        {
+          "net_pnl": -41431.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -42184.5,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -43100.0,
+          "stock_id": "6278"
+        },
+        {
+          "net_pnl": -45367.5,
+          "stock_id": "1519"
+        },
+        {
+          "net_pnl": -47549.0,
+          "stock_id": "6139"
+        },
+        {
+          "net_pnl": -48979.59999999998,
+          "stock_id": "6695"
+        },
+        {
+          "net_pnl": -52423.0,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -52432.200000000004,
+          "stock_id": "3594"
+        },
+        {
+          "net_pnl": -52782.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -59521.5,
+          "stock_id": "2376"
+        },
+        {
+          "net_pnl": -60196.0,
+          "stock_id": "4162"
+        },
+        {
+          "net_pnl": -62027.0,
+          "stock_id": "3260"
+        },
+        {
+          "net_pnl": -64681.90000000003,
+          "stock_id": "2399"
+        },
+        {
+          "net_pnl": -66317.0,
+          "stock_id": "2324"
+        },
+        {
+          "net_pnl": -68636.0,
+          "stock_id": "2059"
+        },
+        {
+          "net_pnl": -75259.0,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": -101510.0,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": -113639.50000000003,
+          "stock_id": "2605"
+        },
+        {
+          "net_pnl": -246442.0,
+          "stock_id": "8016"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 251,
+      "completed": true,
+      "config": {
+        "mode": "rank",
+        "stress": "combined",
+        "window": 5
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.055174765451290075,
+        "outperform_fraction": 0.42194570135746606,
+        "overlapping_windows": 884,
+        "worst_excess": -0.7582375566144495
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 987991.2999999999,
+            "max_drawdown": -0.10955580768189999,
+            "partial_year": false,
+            "profit": -12008.70000000007,
+            "start_nav": 1000000.0,
+            "total_return": -0.012008700000000094,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1228665.8,
+            "max_drawdown": -0.27710437494185924,
+            "partial_year": false,
+            "profit": 240674.50000000012,
+            "start_nav": 987991.2999999999,
+            "total_return": 0.24359981712389578,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1038811.55,
+            "max_drawdown": -0.21120572234030133,
+            "partial_year": false,
+            "profit": -189854.25,
+            "start_nav": 1228665.8,
+            "total_return": -0.15452065972699813,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1538693.25,
+            "max_drawdown": -0.1958615751788525,
+            "partial_year": false,
+            "profit": 499881.69999999995,
+            "start_nav": 1038811.55,
+            "total_return": 0.4812053735829178,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3602945.1,
+            "max_drawdown": -0.27140806817549634,
+            "partial_year": true,
+            "profit": 2064251.85,
+            "start_nav": 1538693.25,
+            "total_return": 1.3415616465465097,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 107,
+        "cagr": 0.3149223877672691,
+        "cash": 91918.45,
+        "costs": {
+          "commission": 70044.0,
+          "slippage": 438654.0,
+          "tax": 72448.0,
+          "total_cost": 581146.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1087895.65,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 60607,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1344788.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 11593,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1023120.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 8120,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 3602945.1,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 2.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 2.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "2543-2024-10-22-stock-fractional-cash",
+            "amount": 3.0,
+            "event_id": "2024-09-g006-2024-09-26-2543",
+            "ex_date": "2024-10-22",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2543"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0138926704,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 406,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 4060.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 3455803.65,
+        "max_drawdown": -0.35325724048185014,
+        "minimum_cash": 8.45,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 6,
+          "invalid_odd_lot_quote": 2,
+          "overlapping_member": 2,
+          "partial_capacity_or_cash": 76,
+          "single_price_session": 2,
+          "slots_full": 189
+        },
+        "profit": 2602945.1,
+        "receivable": 55223.0,
+        "sell_count": 139,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 57,
+        "total_return": 2.6029451,
+        "trade_count": 246,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "5_rank_control": {
+      "attribution": [
+        {
+          "net_pnl": 1954544.6,
+          "stock_id": "2464"
+        },
+        {
+          "net_pnl": 1352688.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 1084042.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 779874.1,
+          "stock_id": "2486"
+        },
+        {
+          "net_pnl": 690105.0,
+          "stock_id": "8046"
+        },
+        {
+          "net_pnl": 657184.2,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 569967.0,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 506223.0,
+          "stock_id": "6290"
+        },
+        {
+          "net_pnl": 455001.5900000001,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 311332.0,
+          "stock_id": "3005"
+        },
+        {
+          "net_pnl": 282704.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 268387.9,
+          "stock_id": "8222"
+        },
+        {
+          "net_pnl": 238083.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 208362.4,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 160689.05000000028,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 128501.5,
+          "stock_id": "3374"
+        },
+        {
+          "net_pnl": 100734.70000000001,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 93534.6,
+          "stock_id": "1513"
+        },
+        {
+          "net_pnl": 77233.79999999996,
+          "stock_id": "1524"
+        },
+        {
+          "net_pnl": 72283.3,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 58613.0,
+          "stock_id": "6643"
+        },
+        {
+          "net_pnl": 47949.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 44842.599999999904,
+          "stock_id": "3706"
+        },
+        {
+          "net_pnl": 27037.0,
+          "stock_id": "4991"
+        },
+        {
+          "net_pnl": 10312.5,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": -3826.9000000000233,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -12944.700000000023,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -25091.600000000093,
+          "stock_id": "2886"
+        },
+        {
+          "net_pnl": -28996.5,
+          "stock_id": "6477"
+        },
+        {
+          "net_pnl": -42505.0,
+          "stock_id": "6278"
+        },
+        {
+          "net_pnl": -49053.0,
+          "stock_id": "2609"
+        },
+        {
+          "net_pnl": -50034.0,
+          "stock_id": "4162"
+        },
+        {
+          "net_pnl": -55836.0,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -66580.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -67982.79999999997,
+          "stock_id": "6215"
+        },
+        {
+          "net_pnl": -85389.63,
+          "stock_id": "3167"
+        },
+        {
+          "net_pnl": -88570.19999999995,
+          "stock_id": "3006"
+        },
+        {
+          "net_pnl": -91908.5,
+          "stock_id": "3030"
+        },
+        {
+          "net_pnl": -102776.0,
+          "stock_id": "3013"
+        },
+        {
+          "net_pnl": -104321.0,
+          "stock_id": "3014"
+        },
+        {
+          "net_pnl": -137331.25,
+          "stock_id": "6127"
+        },
+        {
+          "net_pnl": -138383.19999999995,
+          "stock_id": "2328"
+        },
+        {
+          "net_pnl": -139382.20000000004,
+          "stock_id": "6695"
+        },
+        {
+          "net_pnl": -158277.5,
+          "stock_id": "3044"
+        },
+        {
+          "net_pnl": -161888.70000000004,
+          "stock_id": "5351"
+        },
+        {
+          "net_pnl": -169484.35000000003,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -215115.0,
+          "stock_id": "8033"
+        },
+        {
+          "net_pnl": -374630.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -428603.0,
+          "stock_id": "4958"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 251,
+      "completed": true,
+      "config": {
+        "mode": "rank",
+        "stress": "control",
+        "window": 5
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.1715988400446684,
+        "outperform_fraction": 0.6889140271493213,
+        "overlapping_windows": 884,
+        "worst_excess": -0.38849036263293746
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 797840.25,
+            "max_drawdown": -0.2025907496997873,
+            "partial_year": false,
+            "profit": -202159.75,
+            "start_nav": 1000000.0,
+            "total_return": -0.20215974999999997,
+            "year": "2022"
+          },
+          {
+            "end_nav": 2461598.44,
+            "max_drawdown": -0.224996425170643,
+            "partial_year": false,
+            "profit": 1663758.19,
+            "start_nav": 797840.25,
+            "total_return": 2.085327470004177,
+            "year": "2023"
+          },
+          {
+            "end_nav": 3062659.3400000003,
+            "max_drawdown": -0.26725648652567313,
+            "partial_year": false,
+            "profit": 601060.9000000004,
+            "start_nav": 2461598.44,
+            "total_return": 0.2441750409949075,
+            "year": "2024"
+          },
+          {
+            "end_nav": 4490453.96,
+            "max_drawdown": -0.14574645209878323,
+            "partial_year": false,
+            "profit": 1427794.6199999996,
+            "start_nav": 3062659.3400000003,
+            "total_return": 0.4661943956195924,
+            "year": "2025"
+          },
+          {
+            "end_nav": 8381318.8100000005,
+            "max_drawdown": -0.2241935726163915,
+            "partial_year": true,
+            "profit": 3890864.8500000006,
+            "start_nav": 4490453.96,
+            "total_return": 0.8664747227471854,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 106,
+        "cagr": 0.5747669100628736,
+        "cash": 132692.91,
+        "costs": {
+          "commission": 159170.0,
+          "slippage": 502180.0,
+          "tax": 167164.0,
+          "total_cost": 828514.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 2492931.9,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 138882,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 2685864.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 23154,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 2912742.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 23117,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 8381318.8100000005,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.88955133764,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1155,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 11558.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 8091537.9,
+        "max_drawdown": -0.28734290317226474,
+        "minimum_cash": 2.44,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 4,
+          "invalid_odd_lot_quote": 2,
+          "overlapping_member": 5,
+          "partial_capacity_or_cash": 22,
+          "single_price_session": 2,
+          "slots_full": 188
+        },
+        "profit": 7381318.8100000005,
+        "receivable": 157088.0,
+        "sell_count": 110,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 7.38131881,
+        "trade_count": 216,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "full_combined": {
+      "attribution": [
+        {
+          "net_pnl": 710711.0,
+          "stock_id": "3105"
+        },
+        {
+          "net_pnl": 652999.5,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 579586.8,
+          "stock_id": "6488"
+        },
+        {
+          "net_pnl": 404472.0,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 251590.5,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 200650.5,
+          "stock_id": "6187"
+        },
+        {
+          "net_pnl": 196786.0,
+          "stock_id": "3044"
+        },
+        {
+          "net_pnl": 181516.0,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 172293.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 163131.2,
+          "stock_id": "5469"
+        },
+        {
+          "net_pnl": 156918.0,
+          "stock_id": "4967"
+        },
+        {
+          "net_pnl": 98363.39999999998,
+          "stock_id": "2606"
+        },
+        {
+          "net_pnl": 96645.25,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 94829.20000000001,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": 94107.90000000005,
+          "stock_id": "2891"
+        },
+        {
+          "net_pnl": 86011.0,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 82650.0,
+          "stock_id": "6290"
+        },
+        {
+          "net_pnl": 78827.0,
+          "stock_id": "1503"
+        },
+        {
+          "net_pnl": 47069.0,
+          "stock_id": "2455"
+        },
+        {
+          "net_pnl": 40900.5,
+          "stock_id": "5009"
+        },
+        {
+          "net_pnl": 34571.0,
+          "stock_id": "3363"
+        },
+        {
+          "net_pnl": 30039.0,
+          "stock_id": "3324"
+        },
+        {
+          "net_pnl": 26865.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 23517.49999999999,
+          "stock_id": "1905"
+        },
+        {
+          "net_pnl": 21112.0,
+          "stock_id": "3030"
+        },
+        {
+          "net_pnl": 20438.499999999993,
+          "stock_id": "2887"
+        },
+        {
+          "net_pnl": 19782.8,
+          "stock_id": "2881"
+        },
+        {
+          "net_pnl": 13307.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 12302.0,
+          "stock_id": "3265"
+        },
+        {
+          "net_pnl": 6256.5,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": 1879.04,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": -2310.25,
+          "stock_id": "2880"
+        },
+        {
+          "net_pnl": -3215.51,
+          "stock_id": "3529"
+        },
+        {
+          "net_pnl": -6303.150000000023,
+          "stock_id": "2885"
+        },
+        {
+          "net_pnl": -8020.000000000012,
+          "stock_id": "4971"
+        },
+        {
+          "net_pnl": -9059.0,
+          "stock_id": "1795"
+        },
+        {
+          "net_pnl": -20702.550000000025,
+          "stock_id": "8150"
+        },
+        {
+          "net_pnl": -24398.5,
+          "stock_id": "3491"
+        },
+        {
+          "net_pnl": -30659.400000000023,
+          "stock_id": "1303"
+        },
+        {
+          "net_pnl": -37502.20000000001,
+          "stock_id": "2468"
+        },
+        {
+          "net_pnl": -39162.5,
+          "stock_id": "8261"
+        },
+        {
+          "net_pnl": -41431.0,
+          "stock_id": "6669"
+        },
+        {
+          "net_pnl": -42184.5,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -42266.1,
+          "stock_id": "6284"
+        },
+        {
+          "net_pnl": -53860.4,
+          "stock_id": "6282"
+        },
+        {
+          "net_pnl": -54627.5,
+          "stock_id": "8171"
+        },
+        {
+          "net_pnl": -55965.0,
+          "stock_id": "3213"
+        },
+        {
+          "net_pnl": -57024.149999999994,
+          "stock_id": "3694"
+        },
+        {
+          "net_pnl": -57653.79999999999,
+          "stock_id": "3689"
+        },
+        {
+          "net_pnl": -58238.0,
+          "stock_id": "2404"
+        },
+        {
+          "net_pnl": -58773.0,
+          "stock_id": "3289"
+        },
+        {
+          "net_pnl": -75790.99999999999,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -77446.6,
+          "stock_id": "5309"
+        },
+        {
+          "net_pnl": -91701.0,
+          "stock_id": "6139"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "candidate_count": 458,
+      "completed": true,
+      "config": {
+        "mode": "control",
+        "stress": "combined",
+        "window": 0
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.0014860884385716755,
+        "outperform_fraction": 0.501131221719457,
+        "overlapping_windows": 884,
+        "worst_excess": -0.35310489276171175
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833127.75,
+            "max_drawdown": -0.18262554999999991,
+            "partial_year": false,
+            "profit": -166872.25,
+            "start_nav": 1000000.0,
+            "total_return": -0.16687225000000006,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1044132.79,
+            "max_drawdown": -0.15832313018800093,
+            "partial_year": false,
+            "profit": 211005.04000000004,
+            "start_nav": 833127.75,
+            "total_return": 0.2532685293461898,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1531998.9400000002,
+            "max_drawdown": -0.21357770773124907,
+            "partial_year": false,
+            "profit": 487866.15000000014,
+            "start_nav": 1044132.79,
+            "total_return": 0.46724531081913456,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1937177.03,
+            "max_drawdown": -0.21815877504906678,
+            "partial_year": false,
+            "profit": 405178.08999999985,
+            "start_nav": 1531998.9400000002,
+            "total_return": 0.2644767430452659,
+            "year": "2025"
+          },
+          {
+            "end_nav": 4651832.98,
+            "max_drawdown": -0.26524750932624463,
+            "partial_year": true,
+            "profit": 2714655.95,
+            "start_nav": 1937177.03,
+            "total_return": 1.4013463446859062,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 102,
+        "cagr": 0.38867995942085987,
+        "cash": 85956.03,
+        "costs": {
+          "commission": 68416.0,
+          "slippage": 426596.0,
+          "tax": 70359.0,
+          "total_cost": 565371.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1415195.95,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 78841,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1675968.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 14448,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1399230.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 11105,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 4651832.98,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 1.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.2689997666,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 555,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 5552.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 4490393.95,
+        "max_drawdown": -0.26524750932624463,
+        "minimum_cash": 9.33,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 1,
+          "at_upper_limit": 6,
+          "invalid_odd_lot_quote": 4,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 78,
+          "single_price_session": 6,
+          "slots_full": 391
+        },
+        "profit": 3651832.9800000004,
+        "receivable": 75483.0,
+        "sell_count": 138,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 3.65183298,
+        "trade_count": 240,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "full_control": {
+      "attribution": [
+        {
+          "net_pnl": 2928065.86,
+          "stock_id": "4958"
+        },
+        {
+          "net_pnl": 2488260.0,
+          "stock_id": "5475"
+        },
+        {
+          "net_pnl": 1663842.0,
+          "stock_id": "3037"
+        },
+        {
+          "net_pnl": 1074783.2000000002,
+          "stock_id": "2615"
+        },
+        {
+          "net_pnl": 977130.0,
+          "stock_id": "3017"
+        },
+        {
+          "net_pnl": 833681.5,
+          "stock_id": "6442"
+        },
+        {
+          "net_pnl": 757382.06,
+          "stock_id": "6223"
+        },
+        {
+          "net_pnl": 749286.0,
+          "stock_id": "1815"
+        },
+        {
+          "net_pnl": 614831.6799999999,
+          "stock_id": "4979"
+        },
+        {
+          "net_pnl": 550087.0,
+          "stock_id": "6290"
+        },
+        {
+          "net_pnl": 403078.1,
+          "stock_id": "3044"
+        },
+        {
+          "net_pnl": 308634.60000000003,
+          "stock_id": "8111"
+        },
+        {
+          "net_pnl": 294248.80000000005,
+          "stock_id": "5469"
+        },
+        {
+          "net_pnl": 251094.19999999998,
+          "stock_id": "8222"
+        },
+        {
+          "net_pnl": 239367.0,
+          "stock_id": "3163"
+        },
+        {
+          "net_pnl": 222186.0,
+          "stock_id": "3131"
+        },
+        {
+          "net_pnl": 217238.0499999998,
+          "stock_id": "2834"
+        },
+        {
+          "net_pnl": 181538.0,
+          "stock_id": "3661"
+        },
+        {
+          "net_pnl": 150614.5,
+          "stock_id": "1503"
+        },
+        {
+          "net_pnl": 139979.0,
+          "stock_id": "2327"
+        },
+        {
+          "net_pnl": 112178.0,
+          "stock_id": "2606"
+        },
+        {
+          "net_pnl": 95264.29999999999,
+          "stock_id": "6245"
+        },
+        {
+          "net_pnl": 71373.5,
+          "stock_id": "4938"
+        },
+        {
+          "net_pnl": 60842.00000000002,
+          "stock_id": "1905"
+        },
+        {
+          "net_pnl": 60453.0,
+          "stock_id": "3265"
+        },
+        {
+          "net_pnl": 52417.0,
+          "stock_id": "3653"
+        },
+        {
+          "net_pnl": 46745.79999999996,
+          "stock_id": "3706"
+        },
+        {
+          "net_pnl": 32149.0,
+          "stock_id": "2357"
+        },
+        {
+          "net_pnl": 27281.309999999998,
+          "stock_id": "6274"
+        },
+        {
+          "net_pnl": 26739.900000000012,
+          "stock_id": "2884"
+        },
+        {
+          "net_pnl": 23016.0,
+          "stock_id": "8374"
+        },
+        {
+          "net_pnl": 19703.399999999987,
+          "stock_id": "2887"
+        },
+        {
+          "net_pnl": 9631.5,
+          "stock_id": "2412"
+        },
+        {
+          "net_pnl": -7118.0,
+          "stock_id": "2340"
+        },
+        {
+          "net_pnl": -20634.799999999952,
+          "stock_id": "8110"
+        },
+        {
+          "net_pnl": -22614.999999999985,
+          "stock_id": "1303"
+        },
+        {
+          "net_pnl": -31434.0,
+          "stock_id": "2404"
+        },
+        {
+          "net_pnl": -39710.0,
+          "stock_id": "3491"
+        },
+        {
+          "net_pnl": -40991.54999999999,
+          "stock_id": "2468"
+        },
+        {
+          "net_pnl": -47548.0,
+          "stock_id": "3515"
+        },
+        {
+          "net_pnl": -49867.5,
+          "stock_id": "8261"
+        },
+        {
+          "net_pnl": -49942.700000000004,
+          "stock_id": "3689"
+        },
+        {
+          "net_pnl": -55506.0,
+          "stock_id": "5483"
+        },
+        {
+          "net_pnl": -66364.40000000002,
+          "stock_id": "6284"
+        },
+        {
+          "net_pnl": -71332.9,
+          "stock_id": "2736"
+        },
+        {
+          "net_pnl": -106026.0,
+          "stock_id": "6546"
+        },
+        {
+          "net_pnl": -157123.59999999995,
+          "stock_id": "3006"
+        },
+        {
+          "net_pnl": -161992.5,
+          "stock_id": "2344"
+        },
+        {
+          "net_pnl": -163021.4,
+          "stock_id": "3694"
+        },
+        {
+          "net_pnl": -167075.8999999999,
+          "stock_id": "6127"
+        },
+        {
+          "net_pnl": -196883.5,
+          "stock_id": "3213"
+        },
+        {
+          "net_pnl": -392392.1000000002,
+          "stock_id": "2355"
+        },
+        {
+          "net_pnl": -550835.0,
+          "stock_id": "8039"
+        },
+        {
+          "net_pnl": -642047.7999999998,
+          "stock_id": "6197"
+        },
+        {
+          "net_pnl": -643461.63,
+          "stock_id": "6257"
+        },
+        {
+          "net_pnl": -889196.5,
+          "stock_id": "6139"
+        }
+      ],
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "candidate_count": 458,
+      "completed": true,
+      "config": {
+        "mode": "control",
+        "stress": "control",
+        "window": 0
+      },
+      "live_qualified": false,
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.5012945896889972,
+        "outperform_fraction": 0.9366515837104072,
+        "overlapping_windows": 884,
+        "worst_excess": -0.21729288475802488
+      },
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 847812.25,
+            "max_drawdown": -0.17419949999999995,
+            "partial_year": false,
+            "profit": -152187.75,
+            "start_nav": 1000000.0,
+            "total_return": -0.15218774999999996,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1907661.04,
+            "max_drawdown": -0.21789362110538202,
+            "partial_year": false,
+            "profit": 1059848.79,
+            "start_nav": 847812.25,
+            "total_return": 1.2500984622479803,
+            "year": "2023"
+          },
+          {
+            "end_nav": 3545724.1399999997,
+            "max_drawdown": -0.19732261333421275,
+            "partial_year": false,
+            "profit": 1638063.0999999996,
+            "start_nav": 1907661.04,
+            "total_return": 0.8586761828505967,
+            "year": "2024"
+          },
+          {
+            "end_nav": 5654177.600000001,
+            "max_drawdown": -0.16460367796956688,
+            "partial_year": false,
+            "profit": 2108453.460000001,
+            "start_nav": 3545724.1399999997,
+            "total_return": 0.594646784901885,
+            "year": "2025"
+          },
+          {
+            "end_nav": 12110001.479999999,
+            "max_drawdown": -0.2610142005735293,
+            "partial_year": true,
+            "profit": 6455823.879999998,
+            "start_nav": 5654177.600000001,
+            "total_return": 1.1417794658590132,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 113,
+        "cagr": 0.7035535890235196,
+        "cash": 137508.53,
+        "costs": {
+          "commission": 196633.0,
+          "slippage": 619953.0,
+          "tax": 206352.0,
+          "total_cost": 1022938.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 3543706.9499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 197421,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 4392804.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 37869,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 3829392.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 30392,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 12110001.479999999,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.65199828064,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1519,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 15196.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 11765902.95,
+        "max_drawdown": -0.2610142005735293,
+        "minimum_cash": 0.05,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 8,
+          "invalid_odd_lot_quote": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 36,
+          "single_price_session": 6,
+          "slots_full": 386
+        },
+        "profit": 11110001.479999999,
+        "receivable": 206590.0,
+        "sell_count": 127,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 58,
+        "total_return": 11.11000148,
+        "trade_count": 240,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    }
+  },
+  "elapsed_seconds": 107.409,
+  "execution_requests": {
+    "finmind": 6,
+    "official": 24
+  },
+  "limitations": [
+    "reused_history_not_unseen",
+    "historical_membership_and_adjustment_versions_unresolved",
+    "odd_lot_fill_assumptions_not_actual_auction_proof",
+    "missing_branch_days_unknown_not_zero",
+    "branch_identity_not_beneficial_owner",
+    "historical_first_publication_unverified"
+  ],
+  "signal_day_reconciliation": {
+    "path": ".cache/broker-persistence-20260924/all-signal-reconciliation.json",
+    "sha256": "6d47db060eef54d9051fcaeff2567605cfecb3375a35136d5cb5a55a2e2ac26f",
+    "checked": 2210,
+    "conflicts": [],
+    "missing_signal_day": []
+  }
+}

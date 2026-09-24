@@ -26,3 +26,9 @@
 - 因完整pipeline驗收仍有外部來源阻擋，本輪程式先本機commit，未push。不可關掉市場過濾器或冒用9/23指數來宣稱驗收通過。
 
 證據位於 `.cache/optimization-20260924/`：data-status.json、jobs-evidence.json、price-verification/storage-verification.json、pipeline-verified.log、preflight-blocked.log、make-test-verified.log。完整性檢查不會自動恢復排程，也不會下單。
+
+## 同日後續驗收（17:52後）
+
+TAIEX來源補至9/24後，原有守門未放寬，兩次手動`make pipeline`均正常完成；第二次features與labels新增列數均為0，daily_pick使用9/24指數／特徵且fallback_days=0，產出20個研究候選。重啟`make api`後四個curl端點成功，最新`make test`為2591 passed、29 warnings。驗收使用`INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off AI_ASSIST_ENABLED=0`，避免擴大Sponsor抓取範圍；未修改`.env`、排程或正式策略。
+
+資料品質仍報告5筆近期單日價格大幅變動警示，沒有據此認證全部行情、還原價或歷史母體。新驗收紀錄位於`.cache/broker-persistence-20260924/`的`pipeline.log`、`pipeline-repeat.log`、`api-*.json`與`make-test-final.log`。上述外部來源阻擋已解除；先前未push是較早驗收當下的狀態。
