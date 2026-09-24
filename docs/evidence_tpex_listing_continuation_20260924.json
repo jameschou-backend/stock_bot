@@ -1,0 +1,455 @@
+{
+  "schema": "tpex_listing_continuation_evidence_v1",
+  "generated_at": "2026-09-24T15:34:29.647246+00:00",
+  "requested_codes": [
+    "5820",
+    "5102",
+    "5306",
+    "5281",
+    "4712",
+    "5383",
+    "6446",
+    "6747",
+    "5371",
+    "5236",
+    "3426"
+  ],
+  "verified": [
+    {
+      "stock_id": "3426",
+      "market": "TPEx",
+      "start": "2016-12-21",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/publish/factbook/105/03_1.doc",
+      "source_path": ".cache/listing-continuation-20260924/tpex/new105.doc",
+      "source_sha256": "48b64047d7eacbd2bba0d923d1bf5d60e1642607ff80e4e307fd1aba5351ff1b",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/new105.source.json",
+      "source_meta_sha256": "5d0a68dc4fb77416a2784000a69ce3cdbf3a5d2f29823440b466af193eb41275",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:17:57.657658+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "doc",
+        "snippets": [
+          "上櫃股票新掛牌公司彙總表",
+          "Date of Listing",
+          "105/12/21\n3426"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_yearbook_listing_record",
+      "catalog": {
+        "path": ".cache/listing-continuation-20260924/tpex/catalog105.html",
+        "sha256": "3b22680d3a100b2b896c656c0de2e223216e0676c0639d09e807c2847677c9a2",
+        "url": "https://www.tpex.org.tw/zh-tw/about/publication/detail-105.html",
+        "download_path": "/storage/publish/factbook/105/03_1.doc"
+      }
+    },
+    {
+      "stock_id": "4712",
+      "market": "TPEx",
+      "start": "1999-04-03",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/publish/factbook/88/T1.doc",
+      "source_path": ".cache/listing-continuation-20260924/tpex/new88.doc",
+      "source_sha256": "89d664020073bdea5d64c3c2c7fdc19059829c448444c270f95e66d9294e0023",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/new88.source.json",
+      "source_meta_sha256": "15d068968900c28114505a010aaa7f09b92bece13a6b9555c0fbc0b76ca29a4d",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:32:38.073668+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "doc",
+        "snippets": [
+          "表一、八十八年度新上櫃公司資料",
+          "上櫃\n日期",
+          "88.4.3\n4712\n南璋\n普通股"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_yearbook_listing_record",
+      "catalog": {
+        "path": ".cache/listing-continuation-20260924/tpex/catalog88.html",
+        "sha256": "dadf7ea42fc58d5c79fa7a8549192d1c90bbc25170004f30b9e4a03f3125e9c7",
+        "url": "https://www.tpex.org.tw/zh-tw/about/publication/detail-88.html",
+        "download_path": "/storage/publish/factbook/88/T1.doc"
+      }
+    },
+    {
+      "stock_id": "5102",
+      "market": "TPEx",
+      "start": "2000-10-27",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "http://www.fuchian.com.tw/FuchianWeb/file/106%E5%B9%B4%E8%82%A1%E6%9D%B1%E6%9C%83/105%E5%B9%B4%E5%B9%B4%E5%A0%B1.pdf",
+      "source_path": ".cache/listing-continuation-20260924/tpex/5102-2016-moved.pdf",
+      "source_sha256": "af291bfed09bc1fe4386360508e1a9a4769fa35cfb96d109299e2864e44bc9e4",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/5102-2016-moved.source.json",
+      "source_meta_sha256": "a69bff4eabca5981ad86f41ba4151ac5080973be300734a8ba1683b2b3fb345f",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:21:49.736838+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "pdf",
+        "snippets": [
+          "富強輪胎工廠股份有限公司",
+          "本公司股票自民國89年10月27日起於財團法人證券櫃檯買賣中心掛牌交易"
+        ],
+        "visual_only": false,
+        "page": 117
+      },
+      "evidence_kind": "issuer_financial_report_retrospective",
+      "identity_verification": {
+        "kind": "pdf",
+        "snippets": [
+          "股票代號：5102",
+          "富強輪胎工廠股份有限公司"
+        ],
+        "visual_only": false,
+        "page": 107
+      },
+      "share_class_verification": {
+        "kind": "pdf",
+        "snippets": [
+          "普通股",
+          "已上櫃股份",
+          "64,085,067"
+        ],
+        "visual_only": false,
+        "page": 61
+      },
+      "publication_note": "2017-03-28 is board authorization for issue, not independently verified public publication time. The MOPS 2020 annual report download failed and is not the accepted source."
+    },
+    {
+      "stock_id": "5236",
+      "market": "TPEx",
+      "start": "2021-07-29",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/eb_data/11007/11000075301.html",
+      "source_path": ".cache/listing-continuation-20260924/tpex/5236-listing.html",
+      "source_sha256": "5629333a99b09953dade512f01bf66974dd586ed97d5fe1c6a122320bb42b7f0",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/5236-listing.source.json",
+      "source_meta_sha256": "0462d4a13e9c0abf5b98b6b306441a216920d13150ba79ba52da559646dc9494",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:15:56.980520+00:00",
+      "publication_date": "2021-07-28",
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "html",
+        "snippets": [
+          "初次申請上櫃普通股股票",
+          "上櫃股票開始買賣日期：110年7月29日",
+          "代號：5236",
+          "中華民國110年7月28日"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_initial_listing_announcement"
+    },
+    {
+      "stock_id": "5281",
+      "market": "TPEx",
+      "start": "2016-03-30",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/publish/factbook/105/03_1.doc",
+      "source_path": ".cache/listing-continuation-20260924/tpex/new105.doc",
+      "source_sha256": "48b64047d7eacbd2bba0d923d1bf5d60e1642607ff80e4e307fd1aba5351ff1b",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/new105.source.json",
+      "source_meta_sha256": "5d0a68dc4fb77416a2784000a69ce3cdbf3a5d2f29823440b466af193eb41275",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:17:57.657658+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "doc",
+        "snippets": [
+          "上櫃股票新掛牌公司彙總表",
+          "Date of Listing",
+          "105/03/30\n5281"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_yearbook_listing_record",
+      "catalog": {
+        "path": ".cache/listing-continuation-20260924/tpex/catalog105.html",
+        "sha256": "3b22680d3a100b2b896c656c0de2e223216e0676c0639d09e807c2847677c9a2",
+        "url": "https://www.tpex.org.tw/zh-tw/about/publication/detail-105.html",
+        "download_path": "/storage/publish/factbook/105/03_1.doc"
+      }
+    },
+    {
+      "stock_id": "5306",
+      "market": "TPEx",
+      "start": "1995-12-26",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://investoredu.twse.com.tw/FileSystem/FileUpload/7b64967a-a384-44dd-bcc5-091ae41357c1.pdf",
+      "source_path": ".cache/listing-continuation-20260924/tpex/5306-twse.pdf",
+      "source_sha256": "7eead3ee6ff6a746bf81bae0032ed245ba37da3b949e3f2e434a9aa87a5fe51b",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/5306-twse.source.json",
+      "source_meta_sha256": "54eb5839a3e5ae8e0a1bed27a4c878de1a97c68cf4b0c2886818436d20f4d47c",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:20:31.697223+00:00",
+      "publication_date": "2021-10-28",
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "pdf",
+        "snippets": [
+          "桂盟國際股份有限公司公開說明書摘要",
+          "上櫃日期：84 年 12 月 26 日"
+        ],
+        "visual_only": false,
+        "page": 2
+      },
+      "evidence_kind": "exchange_press_release_with_issuer_prospectus",
+      "publication_verification": {
+        "page": 1,
+        "snippets": [
+          "臺灣證券交易所股份有限公司",
+          "新聞稿",
+          "中華民國110年10月28日",
+          "代號：5306"
+        ]
+      },
+      "publication_note": "Date is the 2021 retrospective TWSE press release, not the original 1995 listing announcement."
+    },
+    {
+      "stock_id": "5371",
+      "market": "TPEx",
+      "start": "1999-01-20",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.coretronic.com/en/ir/financial/financial-quarterlies/1kLAZO/download/q4",
+      "source_path": ".cache/listing-continuation-20260924/tpex/5371-2022.pdf",
+      "source_sha256": "7309faf3f3a8bd58024cda1d0b4f105b55534b912e19996d3aad488c8d2ab7ca",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/5371-2022.source.json",
+      "source_meta_sha256": "88f0aed06d25d198ba65c963818756964ede5161babfa9bc5ba71aac5aeb105f",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:17:18.309529+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "pdf",
+        "snippets": [
+          "CORETRONIC CORPORATION AND SUBSIDIARIES",
+          "CORE’s ordinary shares were publicly listed on the Taipei Exchange on",
+          "January 20, 1999."
+        ],
+        "visual_only": false,
+        "page": 12
+      },
+      "evidence_kind": "issuer_financial_report_retrospective",
+      "publication_note": "2023-02-13 is board authorization for issue, not independently verified public publication timestamp."
+    },
+    {
+      "stock_id": "5383",
+      "market": "TPEx",
+      "start": "1999-04-14",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/publish/factbook/88/T1.doc",
+      "source_path": ".cache/listing-continuation-20260924/tpex/new88.doc",
+      "source_sha256": "89d664020073bdea5d64c3c2c7fdc19059829c448444c270f95e66d9294e0023",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/new88.source.json",
+      "source_meta_sha256": "15d068968900c28114505a010aaa7f09b92bece13a6b9555c0fbc0b76ca29a4d",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:32:38.073668+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "doc",
+        "snippets": [
+          "表一、八十八年度新上櫃公司資料",
+          "上櫃\n日期",
+          "88.4.14\n5383\n金利精密\n普通股"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_yearbook_listing_record",
+      "catalog": {
+        "path": ".cache/listing-continuation-20260924/tpex/catalog88.html",
+        "sha256": "dadf7ea42fc58d5c79fa7a8549192d1c90bbc25170004f30b9e4a03f3125e9c7",
+        "url": "https://www.tpex.org.tw/zh-tw/about/publication/detail-88.html",
+        "download_path": "/storage/publish/factbook/88/T1.doc"
+      },
+      "conflicting_retrospective_source": {
+        "source_url": "https://doc.twse.com.tw/pdf/2022_5383_20230615F04_20260924_232703.pdf",
+        "source_path": ".cache/listing-continuation-20260924/tpex/5383-mops-2022.pdf",
+        "source_sha256": "2aa921b1f90ed7202711be8504a31f2204a38c2a6c46cccbb4b3d4f22bc89a9c",
+        "source_meta_path": ".cache/listing-continuation-20260924/tpex/5383-mops-2022.source.json",
+        "source_meta_sha256": "84093b1c410e3a04c4a4e2ddc3e7500362c131c397fb33cbf908b389b9aeaa61",
+        "status": 200,
+        "retrieved_at": "2026-09-24T15:29:47.119583+00:00",
+        "asserted_start": "1999-01-15",
+        "accepted_as_listing_start": false,
+        "verification": {
+          "kind": "pdf",
+          "page": 110,
+          "visual_only": true,
+          "snippets": [
+            "本公司股票自88年1月15日起在財團法人中華民國證券櫃檯買賣中心掛牌交易買賣"
+          ],
+          "render_path": ".cache/listing-continuation-20260924/tpex/5383-page110.png",
+          "render_sha256": "acea11f4f5802f86e610bd91f8a23bd3b22700c8f62cb25fe35f4b919c7d12da",
+          "render_command": "pdftoppm -f 110 -singlefile -scale-to 1800 -png SOURCE.pdf OUTPUT",
+          "raw_extracted_snippets": [
+            "88 ԃ 1 Д 15 В"
+          ]
+        },
+        "other_same_document_evidence": {
+          "kind": "pdf",
+          "snippets": [
+            "1999 年",
+            "4 月股票正式上櫃掛牌買賣"
+          ],
+          "visual_only": false,
+          "page": 8
+        },
+        "resolution": "Use the exchange 1999 new-listings table explicitly tying 5383 to 88.4.14. The issuer 2022 annual report history agrees on April but its financial note says January 15; retain the inconsistency and do not treat that financial-note date as proven."
+      }
+    },
+    {
+      "stock_id": "5820",
+      "market": "TPEx",
+      "start": "2002-02-05",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/publish/factbook/91/91.pdf",
+      "source_path": ".cache/listing-continuation-20260924/tpex/factbook91-reused.pdf",
+      "source_sha256": "d77d27cad07d4ec761faf94551fb333fdec1aecf0be6c639aaf273ee767156ab",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/factbook91-reused.source.json",
+      "source_meta_sha256": "de6e67d7d0d1de64e50a6f0e42ef35496a3b813c30f9f8dc4efef1b2f0373baa",
+      "status": 200,
+      "retrieved_at": "2026-09-24T14:51:38.947627+00:00",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "pdf",
+        "snippets": [
+          "日盛金融控股",
+          "2002/2/5",
+          "5820",
+          "Date of Listing"
+        ],
+        "visual_only": true,
+        "page": 30,
+        "render_path": ".cache/listing-continuation-20260924/tpex/5820-page30.png",
+        "render_sha256": "2eb6b2fffecc4bfd3f9be07cb7d552be79c075ffabd1f87ef6fb361549283ab4",
+        "render_command": "pdftoppm -f 30 -singlefile -scale-to 1800 -png SOURCE.pdf OUTPUT",
+        "raw_extracted_snippets": [
+          "gfe=prk=cfk^k`f^i=eliaJ",
+          "OMMOLOLR",
+          "RUOM"
+        ],
+        "limitation": "Embedded font maps render correctly but pdftotext output is encoded. Date/code visually verified on PDF page 30; ordinary whitespace-normalized text matching cannot prove transcribed values."
+      },
+      "evidence_kind": "primary_yearbook_listing_record",
+      "cache_reuse": {
+        "source_path": ".cache/listing-sources-20260924/factbook91.pdf",
+        "source_sha256": "d77d27cad07d4ec761faf94551fb333fdec1aecf0be6c639aaf273ee767156ab",
+        "additional_http_requests": 0
+      }
+    },
+    {
+      "stock_id": "6446",
+      "market": "TPEx",
+      "start": "2016-07-19",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/eb_data/10507/10500202141.htm",
+      "source_path": ".cache/listing-continuation-20260924/tpex/6446-listing-network.html",
+      "source_sha256": "c97a3334ac4e146eba13a4cc21f0e5b545564ab8dee32d4605c8f9f9112cc3cf",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/6446-listing-network.source.json",
+      "source_meta_sha256": "6154920fdd401fde4d46c8e37fb29b7b361624d3c9da19c87e73e2a9a9a29e0b",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:15:37.548455+00:00",
+      "publication_date": "2016-07-18",
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "html",
+        "snippets": [
+          "初次申請上櫃普通股股票",
+          "上櫃股票開始買賣日期:民國105年7月19日",
+          "代號：6446",
+          "發文日期：中華民國105年7月18日"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_initial_listing_announcement"
+    },
+    {
+      "stock_id": "6747",
+      "market": "TPEx",
+      "start": "2021-01-19",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "source_url": "https://www.tpex.org.tw/storage/eb_data/11001/11000002831.html",
+      "source_path": ".cache/listing-continuation-20260924/tpex/6747-listing.html",
+      "source_sha256": "a34098f70a07a601b8631920c446dcf38227df3355498cee13f49ff7e9577168",
+      "source_meta_path": ".cache/listing-continuation-20260924/tpex/6747-listing.source.json",
+      "source_meta_sha256": "54f9396ee1fbb24c27e090a776e8cec8c2905521d5ea3fe13423ec83d181bf0c",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:15:50.978216+00:00",
+      "publication_date": "2021-01-18",
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "verification": {
+        "kind": "html",
+        "snippets": [
+          "初次申請上櫃普通股股票",
+          "上櫃股票開始買賣日期:110年1月19日",
+          "代號：6747",
+          "中華民國110年1月18日"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_initial_listing_announcement"
+    }
+  ],
+  "unresolved": [],
+  "request_count": 29,
+  "additional_web_origin_open_requests": 1,
+  "finmind_requests": 0,
+  "database_mutations": 0,
+  "complete_historical_universe": false,
+  "publication_revision_archive_complete": false,
+  "live_qualified": false,
+  "limitations": [
+    "Dates establish historical listing starts only, not continuous eligibility between listing and termination.",
+    "Three original initial listing announcements provide official publication dates but no exact intraday timestamps; announcement_available_at remains null.",
+    "Search snippets and secondary sources used only as discovery leads, never accepted as acquired primary evidence.",
+    "5820 rendered PDF is visually verified and explicitly requires visual audit because embedded font text is encoded.",
+    "5383 issuer 2022 annual report contains inconsistent listing dates; the original exchange 1999 new-listings table is accepted and both conflicting retrospective text and rendered page are retained."
+  ],
+  "total_official_company_http_requests": 30,
+  "request_budget": 30,
+  "request_count_note": "29 direct origin requests (including failures and one redirect) plus one failed official-company web.open; source-discovery web search queries and local reuse are not direct origin downloads."
+}

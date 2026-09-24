@@ -1,0 +1,482 @@
+{
+  "schema": "twse_listing_continuation_evidence_v1",
+  "created_at": "2026-09-24T15:25:05.708412+00:00",
+  "verified": [
+    {
+      "stock_id": "1701",
+      "name": "中化",
+      "market": "TWSE",
+      "start": "1962-02-09",
+      "category": "股票",
+      "security_class": "ordinary_stock",
+      "source_url": "https://www.twse.com.tw/staticFiles/product/publication/twse60/P2.pdf",
+      "source_path": ".cache/listing-continuation-20260924/twse/twse60-P2.pdf",
+      "source_sha256": "437cbddfca21f548e6b17768a43f22628dd1f88eb6c0f3fa79a712e0aa84a1e6",
+      "source_metadata_path": ".cache/listing-continuation-20260924/twse/twse60-P2.source.json",
+      "source_metadata_sha256": "a7d8120afcc95420eca99009759d6ef7b2f391f01b9c69b60e826efe842e00fc",
+      "publication_date": null,
+      "announcement_available_at": null,
+      "source_type": "retrospective_exchange_book",
+      "verification": {
+        "kind": "pdf",
+        "page": 2,
+        "printed_page": "75",
+        "snippets": [
+          "集中交易市場於51年2月9日開業時",
+          "一律在證交所上市",
+          "中化"
+        ],
+        "visual_only": false,
+        "visual_reviewed": true,
+        "render_path": ".cache/listing-continuation-20260924/twse/twse60-P2-evidence.png",
+        "render_sha256": "5f17d75fd59a1bb2ffeedac5cbc28e4d596b4f887854fa6ffe4632e951512701",
+        "render_command": [
+          "pdftoppm",
+          "-f",
+          "2",
+          "-l",
+          "2",
+          "-scale-to",
+          "2000",
+          "-singlefile",
+          "-png",
+          ".cache/listing-continuation-20260924/twse/twse60-P2.pdf",
+          ".cache/listing-continuation-20260924/twse/twse60-P2-evidence"
+        ]
+      },
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": false,
+      "note": "交易所60週年特刊記錄開業時第一批上市公司含中化；公司2015年報封面另確證1701為普通股。",
+      "category_evidence": {
+        "source_path": ".cache/listing-continuation-20260924/twse/1701annual2015.pdf",
+        "source_sha256": "c261fa9edff4def3e2f9b1b47478afbd2fc8996736761cd02b5413011fa0e52c",
+        "source_url": "https://www.cenra.com/uploads/images/Invester/annual-report/2015.pdf",
+        "verification": {
+          "kind": "pdf",
+          "page": 1,
+          "snippets": [
+            "普通股股票代碼：1701"
+          ],
+          "visual_only": false
+        }
+      }
+    },
+    {
+      "stock_id": "2809",
+      "name": "京城銀",
+      "market": "TWSE",
+      "start": "1983-07-20",
+      "category": "股票",
+      "security_class": "ordinary_stock",
+      "source_url": "https://esg.ktb.com.tw/upload/file/2021/09-13/572456ffa0a44df29c24891e3b380fbb.pdf",
+      "source_path": ".cache/listing-continuation-20260924/twse/2809annual2015.pdf",
+      "source_sha256": "ac3195c85e494733ead742b3d46d356bccde7069dfa5a6f42ea412a7090b82e2",
+      "source_metadata_path": ".cache/listing-continuation-20260924/twse/2809annual2015.source.json",
+      "source_metadata_sha256": "fc4c14f106b8e7c710fb78e302374f4eb85a727c0a07f15707119498fbaddca2",
+      "publication_date": null,
+      "announcement_available_at": null,
+      "source_type": "issuer_annual_report",
+      "verification": {
+        "kind": "pdf",
+        "page": 6,
+        "printed_page": "3",
+        "snippets": [
+          "July 20, 1983",
+          "Listed on TWSE with Code 2809."
+        ],
+        "visual_only": false,
+        "visual_reviewed": true,
+        "render_path": ".cache/listing-continuation-20260924/twse/2809annual2015-evidence.png",
+        "render_sha256": "06205249b430dccd327d81002e5a26f6e1bb424d2c84004cd96209631630f002",
+        "render_command": [
+          "pdftoppm",
+          "-f",
+          "6",
+          "-l",
+          "6",
+          "-scale-to",
+          "2000",
+          "-singlefile",
+          "-png",
+          ".cache/listing-continuation-20260924/twse/2809annual2015.pdf",
+          ".cache/listing-continuation-20260924/twse/2809annual2015-evidence"
+        ]
+      },
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": false,
+      "note": "2015年報直接記錄上市日期；已另取得公司英文profile同日期，未採用公開發行或2006更名日。",
+      "category_evidence": {
+        "source_path": ".cache/listing-continuation-20260924/twse/2809annual2015.pdf",
+        "source_sha256": "ac3195c85e494733ead742b3d46d356bccde7069dfa5a6f42ea412a7090b82e2",
+        "source_url": "https://esg.ktb.com.tw/upload/file/2021/09-13/572456ffa0a44df29c24891e3b380fbb.pdf",
+        "verification": {
+          "kind": "pdf",
+          "page": 12,
+          "snippets": [
+            "Common shares",
+            "Listed"
+          ],
+          "visual_only": false
+        }
+      }
+    },
+    {
+      "stock_id": "2841",
+      "name": "台開",
+      "market": "TWSE",
+      "start": "1999-01-08",
+      "category": "股票",
+      "security_class": "ordinary_stock",
+      "source_url": "https://www.twse.com.tw/downloads/zh/about/company/annual_88.pdf",
+      "source_path": ".cache/listing-continuation-20260924/twse/annual88.pdf",
+      "source_sha256": "6dc4711f56ed18fe8e082714976a5b5961d81536e6be31d6299513454efc9db6",
+      "source_metadata_path": ".cache/listing-continuation-20260924/twse/annual88.source.json",
+      "source_metadata_sha256": "d0d34efa3f3a9b10902927ed1ea44e4d8431380c6343fd434808df8eeaa3709b",
+      "publication_date": null,
+      "announcement_available_at": null,
+      "source_type": "retrospective_exchange_book",
+      "verification": {
+        "kind": "pdf",
+        "page": 13,
+        "printed_page": "22",
+        "snippets": [
+          "八十八年上市異動",
+          "上市",
+          "普通股",
+          "台開信託普通股股票",
+          "2841",
+          "1月8日"
+        ],
+        "visual_only": true,
+        "visual_reviewed": true,
+        "render_path": ".cache/listing-continuation-20260924/twse/annual88-evidence.png",
+        "render_sha256": "c10090a614c4092247751fefc98b7497e76265883364d84630fcac18d5512c0b",
+        "render_command": [
+          "pdftoppm",
+          "-f",
+          "13",
+          "-l",
+          "13",
+          "-scale-to",
+          "2400",
+          "-singlefile",
+          "-png",
+          ".cache/listing-continuation-20260924/twse/annual88.pdf",
+          ".cache/listing-continuation-20260924/twse/annual88-evidence"
+        ]
+      },
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": false,
+      "note": "掃描PDF沒有可抽文字；日期為視覺核對右頁表格，不能宣称機器解析。"
+    },
+    {
+      "stock_id": "9188",
+      "name": "精熙-DR",
+      "market": "TWSE",
+      "start": "2009-10-08",
+      "category": "臺灣存託憑證(TDR)",
+      "security_class": "TDR",
+      "source_url": "https://www.twse.com.tw/downloads/zh/about/company/annual_98.pdf",
+      "source_path": ".cache/listing-continuation-20260924/twse/annual98.pdf",
+      "source_sha256": "47a4def2d2bfe7cea08aaa52cefa113a8babce9db9870d7926c6287b4b6f4bfc",
+      "source_metadata_path": ".cache/listing-continuation-20260924/twse/annual98.source.json",
+      "source_metadata_sha256": "bb2e0045ac7e3f267ccc8d20f531626fc698cc3e6e16c72a75c74f8547f2727e",
+      "publication_date": null,
+      "announcement_available_at": null,
+      "source_type": "retrospective_exchange_book",
+      "verification": {
+        "kind": "pdf",
+        "page": 18,
+        "printed_page": "33",
+        "snippets": [
+          "九十八年度有價證券上市異動",
+          "上市臺灣存託憑證",
+          "9188",
+          "精熙國際",
+          "98/10/08"
+        ],
+        "visual_only": true,
+        "visual_reviewed": true,
+        "render_path": ".cache/listing-continuation-20260924/twse/annual98-evidence.png",
+        "render_sha256": "947b4206796fcda5fad181d8f7586a277a0af2f6e209395218142a1fba127ec3",
+        "render_command": [
+          "pdftoppm",
+          "-f",
+          "18",
+          "-l",
+          "18",
+          "-scale-to",
+          "2400",
+          "-singlefile",
+          "-png",
+          ".cache/listing-continuation-20260924/twse/annual98.pdf",
+          ".cache/listing-continuation-20260924/twse/annual98-evidence"
+        ]
+      },
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": false,
+      "note": "台灣TDR起日，不是香港普通股上市日；不納入普通股候選。"
+    }
+  ],
+  "unresolved": [
+    {
+      "stock_id": "1507",
+      "market": "TWSE",
+      "reason": "已取回公司2020英文年報第107頁，仅明示1989年11月上市；MOPS中文年報傳輸逾時，精確起日未核。不將月份推成1989-11-09。",
+      "confirmed_precision": "month",
+      "confirmed_month": "1989-11",
+      "source_url": "https://en.hitachi-yungtay.com.tw/wp-content/uploads/2022/01/109%E5%B9%B4%E5%A0%B1-%E8%8B%B1%E6%96%87lock.pdf.pdf",
+      "source_path": ".cache/listing-continuation-20260924/twse/1507annual2020.pdf",
+      "source_sha256": "59f1e302d7b8dbba620877b0f67286abdd55a4361e8b4ccdbc34750db9914e20",
+      "verification": {
+        "kind": "pdf",
+        "page": 107,
+        "printed_page": "101",
+        "snippets": [
+          "Yungtay Engineering Co., Ltd.",
+          "were listed on the Taiwan Stock Exchange in November, 1989."
+        ],
+        "visual_only": false,
+        "visual_reviewed": true,
+        "render_path": ".cache/listing-continuation-20260924/twse/1507annual2020-partial-evidence.png",
+        "render_sha256": "00a2550b4cc3d4e50c747a6c9178aba9f51d3435506a79bb8e66e6a203ef032c"
+      },
+      "announcement_available_at": null,
+      "last_failed_fetch_metadata": ".cache/listing-continuation-20260924/twse/1507-mops-annual.source.json"
+    },
+    {
+      "stock_id": "2358",
+      "market": "TWSE",
+      "reason": "原年報第8頁只明示民國85年12月上市，沒有日；不採用二手日期1996-12-18。",
+      "confirmed_precision": "month",
+      "confirmed_month": "1996-12",
+      "source_url": "https://doc.twse.com.tw/pdf/2022_2358_20230616F04_20260924_232301.pdf",
+      "source_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.pdf",
+      "source_sha256": "8f4beb2ad9fa44ea55656ba56cd60e408d8d96b9adb87d556d4ad974984656df",
+      "verification": {
+        "kind": "pdf",
+        "page": 8,
+        "snippets": [
+          "民國 85 年 12 月",
+          "本公司股票正式列入第一類股上市交易"
+        ],
+        "visual_only": false,
+        "visual_reviewed": true,
+        "printed_page": "4",
+        "render_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual-partial-evidence.png",
+        "render_sha256": "3b5900d465cddff1a4ea66771ff8b9f7ecf9f47f6dcd1f6aec264d88cf3ae8b3"
+      },
+      "report_upload_timestamp": "2023-05-26T11:08:02+08:00",
+      "upload_evidence_path": ".cache/listing-continuation-20260924/twse/2358-annual-index.html",
+      "upload_evidence_sha256": "2ff3228dfeda466349bc9f22e22891ad8de99575c86dd8ba710a28a736ee4030",
+      "announcement_available_at": null
+    }
+  ],
+  "database_mutations": 0,
+  "live_qualified": false,
+  "complete_historical_universe": false,
+  "publication_time_archive_complete": false,
+  "limitations": [
+    "年報或交易所歷史刊物證明日期，不等於IPO原始公告已保存。",
+    "起訖日期不證明區间每一天可交易；停牌、變更交易等另需每日證据。",
+    "9188為TDR，不得轉成普通股。",
+    "2841與9188是掃描原件，僅視覺核對；自動驗證只能核原件與渲染SHA。"
+  ],
+  "request_budget": {
+    "maximum": 30,
+    "direct_fetch_attempts": 22,
+    "known_redirect_requests": 2,
+    "web_open_attempts": 2,
+    "counted_attempts": 26,
+    "automatic_retries": 0,
+    "finmind_requests": 0,
+    "explanation": "22 explicit direct fetch attempts including 3 sandbox DNS failures; 2 extra TWSE redirects to not-found pages; 2 web.open attempts conservatively counted. Search-index discovery is not counted as direct source download. No automatic retry; DNS failures were retried manually only after approved network escalation."
+  },
+  "source_inventory": [
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1507-annual-download.source.json",
+      "metadata_sha256": "1d44eb34a164f532e6ac3b42c0785d33fa113a6b8143c8ecc9dcc2fa3aaf2e03",
+      "url": "https://doc.twse.com.tw/server-java/t57sb01",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1507-annual-index.source.json",
+      "metadata_sha256": "dd25e4e53a2fb53ac1b255dbfb534c732dd61f767ba0743361b9d00bc2ac258a",
+      "url": "https://doc.twse.com.tw/server-java/t57sb01?step=1&colorchg=1&co_id=1507&year=110&seamon=&mtype=F",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1507-financial-index.source.json",
+      "metadata_sha256": "57d60568c1e726d09f14d5fc90d2e8c8d5bac60ad7f5cbf7a240a3883203cbac",
+      "url": "https://www.hitachi-yungtay.com.tw/financial-reports/",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1507-mops-annual.source.json",
+      "metadata_sha256": "8d8cc7fae17090c9941e6574f9a382e5d1281c4ea1b58ec6966fac0598912e3a",
+      "url": "https://doc.twse.com.tw/pdf/2020_1507_20210621F04_20260924_232301.pdf",
+      "status": null,
+      "error": "The read operation timed out",
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1507annual2011.source.json",
+      "metadata_sha256": "702e1bc762d54954f8f6476a8e07f5c56093ec70ac2bb0c856c47585e4d37e72",
+      "url": "https://www.hitachi-yungtay.com.tw/wp-content/uploads/2020/04/100%E5%B9%B42011%E5%B9%B4%E5%A0%B1.pdf",
+      "status": 404,
+      "error": "HTTP Error 404: Not Found",
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1507annual2020.source.json",
+      "metadata_sha256": "935fdeb01dab90ed015553a7880ee9d0912dbf383bef887cef75ab7aa2d9c074",
+      "url": "https://en.hitachi-yungtay.com.tw/wp-content/uploads/2022/01/109%E5%B9%B4%E5%A0%B1-%E8%8B%B1%E6%96%87lock.pdf.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1701annual2015.attempt1-error.json",
+      "metadata_sha256": "0d76439efb615d0f549e62cf26097afa86472a1a29136ddcbdcb8cecab090cef",
+      "url": "https://www.cenra.com/uploads/images/Invester/annual-report/2015.pdf",
+      "status": null,
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>",
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/1701annual2015.source.json",
+      "metadata_sha256": "32fe8edb1be936ab38f3c2841955f8c1efe23f6ce6247b037812204956948306",
+      "url": "https://www.cenra.com/uploads/images/Invester/annual-report/2015.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2358-annual-download.source.json",
+      "metadata_sha256": "584de1fe6c8f5ab3f6115a326f3844784d01789052a29571c04eeeb7d630c80e",
+      "url": "https://doc.twse.com.tw/server-java/t57sb01",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2358-annual-index.source.json",
+      "metadata_sha256": "5fc4f98839da9038629bbf317e496e98973ce629f610cf8ff5150f57f3dba03f",
+      "url": "https://doc.twse.com.tw/server-java/t57sb01?step=1&colorchg=1&co_id=2358&year=112&seamon=&mtype=F",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2358-doc-index.source.json",
+      "metadata_sha256": "d2e89638b190606da2e389edc2c610f173ea5d0578eff9bc9d0ee20d3930008a",
+      "url": "https://doc.twse.com.tw/server-java/t57sb01?step=1&colorchg=1&co_id=2358&year=112&seamon=&mtype=A",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2358-home.source.json",
+      "metadata_sha256": "362cd0370cd3fc6f50275a8969e1567ae18527a2bfc90ad692ea72dda5ab4b65",
+      "url": "https://www.tingsin.com.tw",
+      "status": 403,
+      "error": "HTTP Error 403: Forbidden",
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.source.json",
+      "metadata_sha256": "2a75ac4e98afdf5e3842056cc2e0fa1fb8625678fbfd673c3df4e6fd2168f41e",
+      "url": "https://doc.twse.com.tw/pdf/2022_2358_20230616F04_20260924_232301.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2809-profile.source.json",
+      "metadata_sha256": "4fb0332ea65ef56bbc85648bdc5d1c620b56addc7713683dfb0938b1617fde57",
+      "url": "https://esg.ktb.com.tw/investor/company-profile",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/2809annual2015.source.json",
+      "metadata_sha256": "fc4c14f106b8e7c710fb78e302374f4eb85a727c0a07f15707119498fbaddca2",
+      "url": "https://esg.ktb.com.tw/upload/file/2021/09-13/572456ffa0a44df29c24891e3b380fbb.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/annual78.source.json",
+      "metadata_sha256": "4f08f789be96644ea93993c6d83ba3185e7db768905aece52637c9372d1f0441",
+      "url": "https://www.twse.com.tw/downloads/zh/about/company/annual_78.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": "TWSE page-not-found HTML after redirect; HTTP 200 is not successful source retrieval"
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/annual85.source.json",
+      "metadata_sha256": "f8b9c65fd4c0cba6eee77a970c45af6b94ab53feb66d51abf7bb7034a8497c15",
+      "url": "https://www.twse.com.tw/downloads/zh/about/company/annual_85.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": "TWSE page-not-found HTML after redirect; HTTP 200 is not successful source retrieval"
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/annual88.attempt1-error.json",
+      "metadata_sha256": "1703bc019cc637216dc212951c324e45c1f13c6cb54f85d1cf13f5ccd4024d46",
+      "url": "https://www.twse.com.tw/downloads/zh/about/company/annual_88.pdf",
+      "status": null,
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>",
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/annual88.source.json",
+      "metadata_sha256": "d0d34efa3f3a9b10902927ed1ea44e4d8431380c6343fd434808df8eeaa3709b",
+      "url": "https://www.twse.com.tw/downloads/zh/about/company/annual_88.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/annual98.attempt1-error.json",
+      "metadata_sha256": "3348a517c78a308aeab077de5a1d5aa76d34227f1bdbde41dfba5d49fc1e8d35",
+      "url": "https://www.twse.com.tw/downloads/zh/about/company/annual_98.pdf",
+      "status": null,
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>",
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/annual98.source.json",
+      "metadata_sha256": "bb2e0045ac7e3f267ccc8d20f531626fc698cc3e6e16c72a75c74f8547f2727e",
+      "url": "https://www.twse.com.tw/downloads/zh/about/company/annual_98.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    },
+    {
+      "metadata_path": ".cache/listing-continuation-20260924/twse/twse60-P2.source.json",
+      "metadata_sha256": "a7d8120afcc95420eca99009759d6ef7b2f391f01b9c69b60e826efe842e00fc",
+      "url": "https://www.twse.com.tw/staticFiles/product/publication/twse60/P2.pdf",
+      "status": 200,
+      "error": null,
+      "rejected_reason": null
+    }
+  ],
+  "completed_at": "2026-09-24T15:29:42.107404+00:00",
+  "checks": {
+    "primary_source_sha256_verified": 4,
+    "machine_verifiable_exact_date_rows": 2,
+    "visually_verified_exact_date_rows": 2,
+    "partial_month_rows_verified": 2,
+    "successful_source_downloads": 14,
+    "db_mutations": 0
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "schema": "isin_date_corrections_evidence_v1",
+  "generated_at": "2026-09-24T15:36:56.102859+00:00",
+  "verified": [
+    {
+      "stock_id": "4953",
+      "name": "緯致",
+      "market": "TPEx",
+      "start": "2014-01-08",
+      "replaces_snapshot_start": "2026-07-30",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "publication_date": "2014-01-07",
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": true,
+      "source_url": "https://www.tpex.org.tw/storage/eb_data/10301/10200332041.htm",
+      "source_path": ".cache/isin-date-corrections-20260924/4953-original-listing.html",
+      "source_sha256": "79c9553dfc6d70b6c044fd01c31c5a3bffd8fcbd01b2b99564c197bc532fd496",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/4953-original-listing.html.source.json",
+      "source_meta_sha256": "e05c4d68b8588e63ffc6b2fe79e633552171b2cbbf70372a68d4b8dde2b47347",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:31:05.291234+00:00",
+      "verification": {
+        "kind": "html",
+        "snippets": [
+          "初次申請上櫃普通股股票",
+          "民國103年1月8日",
+          "代號：4953",
+          "中華民國103年1月7日"
+        ],
+        "visual_only": false
+      },
+      "evidence_kind": "primary_initial_listing_announcement",
+      "correction_evidence": {
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11507/11500044231.html",
+        "source_path": ".cache/isin-date-corrections-20260924/4953-name-change.html",
+        "source_sha256": "2b8b5c4d04a6b92488e348afd6c47b1a9dbc2bdf9119a018db4bf255df4d7f5d",
+        "source_meta_path": ".cache/isin-date-corrections-20260924/4953-name-change.html.source.json",
+        "source_meta_sha256": "a5962f301cf52d37272f82bc0bc5ef558fa96c8078ac173cdbcf8ecc630c86ae",
+        "status": 200,
+        "retrieved_at": "2026-09-24T15:31:05.291302+00:00",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：4953",
+            "因更名全面換發新股",
+            "115年7月30日"
+          ],
+          "visual_only": false
+        },
+        "event_date": "2026-07-30",
+        "publication_date": "2026-07-08",
+        "event_type": "rename_share_exchange",
+        "note": "此日期為更名換發新股票開始櫃檯買賣，不是原初上櫃。"
+      },
+      "corroborating_evidence": [
+        {
+          "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+          "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+          "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+          "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+          "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+          "status": 200,
+          "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+          "verification": {
+            "kind": "csv",
+            "key_column": "公司代號",
+            "key_value": "4953",
+            "values": {
+              "上櫃日期": "20140108",
+              "出表日期": "1150924"
+            },
+            "visual_only": false
+          }
+        }
+      ]
+    },
+    {
+      "stock_id": "6111",
+      "name": "光聚晶電",
+      "market": "TPEx",
+      "start": "2001-08-08",
+      "replaces_snapshot_start": "2026-03-12",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": false,
+      "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+      "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+      "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+      "status": 200,
+      "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+      "verification": {
+        "kind": "csv",
+        "key_column": "公司代號",
+        "key_value": "6111",
+        "values": {
+          "上櫃日期": "20010808",
+          "出表日期": "1150924"
+        },
+        "visual_only": false
+      },
+      "evidence_kind": "current_official_basic_data_original_listing_date",
+      "correction_evidence": {
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11502/11500006281.html",
+        "source_path": ".cache/isin-date-corrections-20260924/6111-name-change.html",
+        "source_sha256": "d10500cbbbaf796f97573edfc23eb623e95909382928e3a2e1f6671c55ca2581",
+        "source_meta_path": ".cache/isin-date-corrections-20260924/6111-name-change.html.source.json",
+        "source_meta_sha256": "68eb962ada7796c511cc74c98ae2e47e359640be8abc4c4f9bb4fdaee558448a",
+        "status": 200,
+        "retrieved_at": "2026-09-24T15:31:05.291056+00:00",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：6111",
+            "因更名全面換發新股",
+            "115年3月12日"
+          ],
+          "visual_only": false
+        },
+        "event_date": "2026-03-12",
+        "publication_date": "2026-02-13",
+        "event_type": "rename_share_exchange",
+        "note": "此日期為更名換發新股票開始櫃檯買賣，不是原初上櫃。"
+      },
+      "note": "原上櫃日由本日官方基本資料的上櫃日期欄確認；不是從行情首日或目前ISIN日期推估。舊年鑑下載失敗未列證據。"
+    },
+    {
+      "stock_id": "6125",
+      "name": "廣運",
+      "market": "TPEx",
+      "start": "2002-01-23",
+      "replaces_snapshot_start": "2026-06-01",
+      "category": "股票",
+      "security_class": "ordinary_share",
+      "publication_date": null,
+      "publication_time": null,
+      "announcement_available_at": null,
+      "continuous_eligibility_proven": false,
+      "original_ipo_announcement_archived": false,
+      "source_url": "https://www.tpex.org.tw/storage/publish/factbook/91/91.pdf",
+      "source_path": ".cache/listing-sources-20260924/factbook91.pdf",
+      "source_sha256": "d77d27cad07d4ec761faf94551fb333fdec1aecf0be6c639aaf273ee767156ab",
+      "source_meta_path": ".cache/listing-sources-20260924/factbook91.source.json",
+      "source_meta_sha256": "de6e67d7d0d1de64e50a6f0e42ef35496a3b813c30f9f8dc4efef1b2f0373baa",
+      "status": 200,
+      "retrieved_at": "2026-09-24T14:51:38.947627+00:00",
+      "verification": {
+        "kind": "pdf",
+        "page": 30,
+        "printed_page": "30",
+        "snippets": [
+          "廣運機械工程",
+          "2002/1/23",
+          "6125"
+        ],
+        "visual_only": true,
+        "visual_reviewed": true,
+        "render_path": ".cache/isin-date-corrections-20260924/6125-original-listing.png",
+        "render_sha256": "c475bb6bf49dd6b4f6a8e256ec5e9cc3d18df77ca087ea8d2976373952ead706",
+        "render_command": [
+          "pdftoppm",
+          "-f",
+          "30",
+          "-l",
+          "30",
+          "-scale-to",
+          "2000",
+          "-singlefile",
+          "-png",
+          ".cache/listing-sources-20260924/factbook91.pdf",
+          ".cache/isin-date-corrections-20260924/6125-original-listing"
+        ]
+      },
+      "evidence_kind": "primary_yearbook_listing_record",
+      "correction_evidence": {
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11505/11502011171.html",
+        "source_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html",
+        "source_sha256": "cb449d69be519247d44e10eb1489e3c1c8e9d1fc93248f1cd49a437e4e028220",
+        "source_meta_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html.source.json",
+        "source_meta_sha256": "65823177284dd0fd766ee1ab8fd776ee0a592a4ad9488ecda57faf2e04f6e532",
+        "status": 200,
+        "retrieved_at": "2026-09-24T15:31:07.097381+00:00",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：6125",
+            "由「光電業」調整為「電機機械」",
+            "115年6月1日",
+            "證券代號不予變更"
+          ],
+          "visual_only": false
+        },
+        "event_date": "2026-06-01",
+        "publication_date": "2026-05-19",
+        "event_type": "industry_reclassification",
+        "note": "此日期為產業類別調整生效日，證券代號維持不變，不是原初上櫃。"
+      },
+      "corroborating_evidence": [
+        {
+          "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+          "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+          "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+          "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+          "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+          "status": 200,
+          "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+          "verification": {
+            "kind": "csv",
+            "key_column": "公司代號",
+            "key_value": "6125",
+            "values": {
+              "上櫃日期": "20020123",
+              "出表日期": "1150924"
+            },
+            "visual_only": false
+          }
+        }
+      ]
+    }
+  ],
+  "unresolved": [],
+  "direct_http_attempts": 9,
+  "direct_http_success": 5,
+  "finmind_data_requests": 0,
+  "database_mutations": 0,
+  "live_qualified": false,
+  "rule": "Apply only to the exact replaces_snapshot_start with current_official_ISIN provenance; preserve the replaced date and evidence. This does not prove uninterrupted historical eligibility or historical publication-time availability.",
+  "source_discovery": {
+    "official_catalog": "https://data.gov.tw/dataset/25036",
+    "resource_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+    "catalog_schema_note": "政府官方目錄明列上櫃日期欄位與CSV資源；只核實這三股，不按CSV批次改全部身份。"
+  },
+  "failed_sources": [
+    {
+      "url": "https://www.tpex.org.tw/storage/publish/factbook/90/2001%E5%B9%B4%E9%91%91.pdf",
+      "retrieved_at": "2026-09-24T15:31:07.684995+00:00",
+      "request_number": 5,
+      "error": "IncompleteRead(277691 bytes read, 11985394 more expected)"
+    },
+    {
+      "url": "https://www.tpex.org.tw/storage/publish/factbook/90/2001%E5%B9%B4%E9%91%91.pdf",
+      "retrieved_at": "2026-09-24T15:32:25.831064+00:00",
+      "request_number": 6,
+      "reason": "single explicit retry after incomplete response; no automatic retries",
+      "error": "[USER] unknown error (_ssl.c:2578)"
+    },
+    {
+      "url": "https://group.softstar.com.tw/basicInformation.php",
+      "retrieved_at": "2026-09-24T15:33:22.875742+00:00",
+      "request_number": 7,
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    {
+      "url": "https://www.tpex.org.tw/openapi/swagger.json",
+      "retrieved_at": "2026-09-24T15:33:22.875925+00:00",
+      "request_number": 8,
+      "error": "IncompleteRead(196096 bytes read, 280827 more expected)"
+    }
+  ]
+}
