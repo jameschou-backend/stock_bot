@@ -158,3 +158,33 @@ def test_snapshot_shares_quota_and_uses_short_separate_cache(transport, monkeypa
     finmind.fetch_dataset('TaiwanStockTickSnapshot', date(2026,9,11), token='test-secret', data_id='2330')
     assert len(transport.calls) == 2
     assert get_rate_limiter().get_stats().requests_in_window == 2
+
+
+def test_broker_interval_uses_shared_budget_cache_and_explicit_endpoint(transport, monkeypatch):
+    calls = []
+    original = transport.get
+    def capture(url, **kwargs):
+        calls.append(url)
+        return original(url, **kwargs)
+    monkeypatch.setattr(transport, 'get', capture)
+    for _ in range(2):
+        finmind.fetch_dataset('TaiwanStockTradingDailyReportSecIdAgg', date(2026,9,1),
+            date(2026,9,9), data_id='2330', token='test-secret', max_retries=0, securities_trader_id='1020')
+    assert len(calls) == 1
+    assert calls[0].endswith('/taiwan_stock_trading_daily_report_secid_agg')
+    assert transport.calls[0]['params'] == dict(data_id='2330', securities_trader_id='1020',
+                                                start_date='2026-09-01', end_date='2026-09-09')
+    assert get_rate_limiter().get_stats().requests_in_window == 1
+    for sid, end, broker in [(None, date(2026,9,9), '1020'), ('2330', None, '1020'),
+                             ('BAD', date(2026,9,9), '1020'), ('2330', date(2026,9,9), None),
+                             ('2330', date(2026,9,9), '../1020')]:
+        with pytest.raises(ValueError):
+            finmind.fetch_dataset('TaiwanStockTradingDailyReportSecIdAgg', date(2026,9,1), end,
+                                 data_id=sid, securities_trader_id=broker)
+    with pytest.raises(ValueError):
+        finmind.fetch_dataset('TaiwanStockPrice', date(2026,9,1), securities_trader_id='1020')
+    assert len(calls) == 1
+    finmind.fetch_dataset('TaiwanStockTradingDailyReportSecIdAgg', date(2026,9,1),
+        date(2026,9,9), data_id='2330', token='test-secret', max_retries=0, securities_trader_id='1021')
+    assert len(calls) == 2
+    assert get_rate_limiter().get_stats().requests_in_window == 2

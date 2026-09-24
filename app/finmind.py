@@ -95,6 +95,7 @@ def fetch_dataset(
     *,
     force_refresh: bool = False,
     cache_ttl: float = 300,
+    securities_trader_id: str | None = None,
 ) -> pd.DataFrame:
     """Fetch with pooled HTTP, shared quota and 5-minute duplicate-request reuse.
 
@@ -117,13 +118,23 @@ def fetch_dataset(
         params["data_id"] = data_id
     # Sponsor snapshot has a dedicated endpoint; reuse the same quota/cache route.
     snapshot = dataset == "TaiwanStockTickSnapshot"
+    broker_aggregate = dataset == "TaiwanStockTradingDailyReportSecIdAgg"
+    if securities_trader_id is not None and not broker_aggregate:
+        raise ValueError("securities_trader_id 僅適用分點統計資料集")
     url = FINMIND_DATA_URL
     if snapshot:
         if cache_ttl > 10:
             cache_ttl = 10
         url = "https://api.finmindtrade.com/api/v4/taiwan_stock_tick_snapshot"
         params = {"data_id": data_id or ""}
-    path = cache_path({**params, "_endpoint": url}, token) if snapshot else cache_path(params, token)
+    elif broker_aggregate:
+        if (not data_id or not re.fullmatch(r"\d{4}", data_id) or end_date is None
+                or not securities_trader_id or not re.fullmatch(r"[A-Za-z0-9]+", securities_trader_id)):
+            raise ValueError("分點統計查詢須提供四碼股票代碼、券商代碼與明確起訖日期")
+        url = "https://api.finmindtrade.com/api/v4/taiwan_stock_trading_daily_report_secid_agg"
+        params = {"data_id": data_id, "securities_trader_id": securities_trader_id,
+                  "start_date": start_date.isoformat(), "end_date": end_date.isoformat()}
+    path = cache_path({**params, "_endpoint": url}, token) if snapshot or broker_aggregate else cache_path(params, token)
     # Identical simultaneous requests use the first worker's result, even across processes.
     with file_lock(path.with_suffix(".lock"), timeout=timeout):
         cached = None if force_refresh else read_cache(path, cache_ttl)
