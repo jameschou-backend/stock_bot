@@ -1,0 +1,13 @@
+# 整股五檔來源補齊：事前規格
+
+承接已封存的board-only研究：原四控制與兩個整股0050完成，正常／combined整股五檔分別因2881的2025-09-25配股條件、3687限價來源缺失而blocked。本案只補足新持股路徑所需來源，不改參數、成交規則、信號、樣本、成本、名額、現金／預算鎖定、殘股記帳或0050基準。沿用[原事前規格](prereg_board_only_20260925.md)。原結果及blocked partial ledger永久保留，不覆寫原程式、資料、manifest或結果。
+
+來源準備與績效執行分開。来源準備限FinMind總計10次、官方直接讀取10次（主agent在首次v2績效前將原5次額度增至10次），websearch另行計數；失敗也計次且不自動重試，共用持久budget ledger。由主agent準備，本研究wrapper本身只讀來源且完全離線。新cache由原inputs完整複製，原限制來源與股利快取逐檔hash不變，新限價使用原`ReplayMarketFeeds` parser保存raw／normalized／index provenance。公司行動只接受有官方來源與檔案SHA256的新增override，不能用價格反推配股比例／交付日或填任意預設；未取得證據的欄位繼續blocked。每個source接納前檢查hash並記完整inventory。
+
+新增wrapper以顯式cache／override注入原`BoardOnlyReplay`與`BoardOnlyBenchmark`，不修改已封存引擎或以global patch改行為。四個mixed五檔／0050控制須逐欄重現最新父帳戶，整股0050須逐欄重現原board-only帳戶。來源補齊僅用於新整股案，原mixed控制仍用原公司行動規格。新來源若暴露後續缺口則保留blocked，不為取得較高收益調整政策。若需要再次補來源，重新封存新source版本與新output，所有已執行版本保留；共同預算不重置。
+
+首次v2績效執行前的review指出兩個v1邊界：來源含某股票但缺個別日期時，父引擎只記一般未成交；極低價整張賣單可在`StressOrder.order`補做負淨收入結算，v1 decision在該補做前記錄filled。v2新增`BoardOnlyVerifiedReplay`／`BoardOnlyVerifiedBenchmark`子類，不改v1：有當日價量且可請求至少一張卻缺當日limits時明確blocked；最外層order結束後按trade sequence記最終成交量，audit逐decision精確對齊。這是缺來源及audit的修正，不增加成交假設、不免費、不更改策略參數。v1不具有這兩項更嚴格保證，其既有結果保留並揭露此限制；mixedcontrol保持原程式以驗證精確一致。
+
+每個版本固定八個帳戶，完整績效才報全期收益／年化／最大回撤／成本／年度及與同policy0050的252日超額比例；另展示原mixed0050。partial ledger只做截至最後完整日的股數、現金、NAV、resources與slots重建，不能以截短績效冒充全期結果。全部結果離線逐欄重播，0 DB writes、0重訓、不恢復排程、不切換正式策略。
+
+整股仍是日級成交假設，不等於盤中或下單證據；已見歷史及市場身分／公告修訂限制未改。`live_qualified=false`、`unseen_validation=false`，本案沒有參數搜尋或自動promote。

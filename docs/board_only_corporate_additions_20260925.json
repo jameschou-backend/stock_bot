@@ -1,0 +1,28 @@
+{
+  "overrides": {},
+  "evidence_sha256": {
+    ".cache/board-only-supplement-20260925/2881-2025-delivery-moneydj.html": "c8d36666826ceb015ab4189d34ab047e7f9a7663c8fa17bc0a83d0e60a4c6ed1",
+    ".cache/board-only-supplement-20260925/2881-2025-delivery-moneydj.source.json": "5c5e5b07b0e132efafaca7a28149e257718369e825196ff63c0b1553ee6b448b",
+    ".cache/board-only-supplement-20260925/2881-2025-source-status.json": "831bf8ac3c9c2c390d1ede11687ecdd1b62a4d5a978eeaf24ef9e3b04a6fecc0",
+    ".cache/board-only-supplement-20260925/corporate_request_ledger.json": "9d041c21f2ffed1a3a5ea23114f625f511fa485295942745973250b24ce99d3e",
+    ".cache/board-only-supplement-20260925/mops-2881-202511-fullmonth.html": "e69850bc6411a0bea3969735821f9fec2e73b2acb6df71f9aa8b0096e07e6f67",
+    ".cache/board-only-supplement-20260925/mops-2881-202511-fullmonth.source.json": "33ee8f0f483a94e24e9b82ab5783d31f24bafc74b755798cbdea1c87f83ee1d4",
+    ".cache/board-only-supplement-20260925/mops-2881-202511-list.html": "32ecf1bfb96c2d60cbc6b633561eb27315276b12bc7e4e0846a6b2d5d5034db6",
+    ".cache/board-only-supplement-20260925/mops-2881-202511-list.source.json": "5bcc686ee6392db0319bbc6fe46e27754d44c419a168731ce14cf0a7d6f6690b",
+    ".cache/board-only-supplement-20260925/mops-2881-20251111-list.html": "e69850bc6411a0bea3969735821f9fec2e73b2acb6df71f9aa8b0096e07e6f67",
+    ".cache/board-only-supplement-20260925/mops-2881-20251111-list.source.json": "bbf83d1fbd08e2755bc646cf95ef034899c3d3dd99c45a26f60efac68cf72bca",
+    ".cache/board-only-supplement-20260925/mops-t59sb01.html": "b28b14444ff9eb35afd7b8084b2c65b97050fc618d47c40fca102712958ed01f",
+    ".cache/board-only-supplement-20260925/mops-t59sb01.source.json": "340ae09b2a84e55d7d6adf6750aafc23640b49a68713e9800df8f44caef3318c"
+  },
+  "status": "blocked_primary_share_delivery_evidence_missing",
+  "event": {
+    "stock_id": "2881",
+    "ex_date": "2025-09-25",
+    "kind": "capital_reserve_capitalization"
+  },
+  "accepted_overrides_count": 0,
+  "secondary_sources_used_in_replay": false,
+  "source_status_path": ".cache/board-only-supplement-20260925/2881-2025-source-status.json",
+  "request_ledger_path": ".cache/board-only-supplement-20260925/corporate_request_ledger.json",
+  "reason": "Primary source package with final share delivery date was not obtained within the bounded audit. Keep the corporate action blocked; search-index facts and MoneyDJ republication remain research evidence only."
+}
