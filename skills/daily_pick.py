@@ -49,9 +49,12 @@ def _load_market_price_df(db_session: Session, target_date: date, ma_days: int) 
     from app.finmind import fetch_dataset, FinMindError
     config = load_config()
     start = target_date - timedelta(days=ma_days * 2)
+    # Recent windows may be only partially published. A day-long cache would
+    # preserve yesterday's index after today's stock prices have arrived.
+    ttl = 300 if target_date >= date.today() - timedelta(days=7) else 86400
     df = fetch_dataset("TaiwanStockTotalReturnIndex", start, target_date,
                        token=config.finmind_token, data_id="TAIEX",
-                       requests_per_hour=config.finmind_requests_per_hour, cache_ttl=86400)
+                       requests_per_hour=config.finmind_requests_per_hour, cache_ttl=ttl)
     if df.empty or not {"date", "price", "stock_id"}.issubset(df.columns):
         raise FinMindError("TAIEX 報酬指數缺漏，無法判定市場狀態")
     df = df[df["stock_id"] == "TAIEX"].copy()
@@ -476,6 +479,14 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     coverage_stats: Dict[str, object] = {}
     
     try:
+        # Direct invocation must have the same source guard as the pipeline.
+        from skills.market_input_gate import require_market_inputs
+        try:
+            coverage_stats.update(require_market_inputs(config, db_session))
+        except (ValueError, RuntimeError) as exc:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs={"market_inputs_blocked": True})
+            db_session.commit()  # No candidate writes have occurred at preflight.
+            raise
         # ── 取得候選日期：優先 Parquet FeatureStore，fallback MySQL ──
         _used_parquet_dp = False
         try:

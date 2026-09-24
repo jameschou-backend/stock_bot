@@ -43,6 +43,8 @@ def _create_report_table(session: Session) -> None:
 
 
 def test_data_quality_run_persists_reports(monkeypatch):
+    # This fixture isolates report persistence; market gating has real DB tests.
+    monkeypatch.setattr('skills.market_input_gate.require_market_inputs', lambda *_: {})
     engine = create_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
 
@@ -86,6 +88,7 @@ def test_data_quality_run_persists_reports(monkeypatch):
 
 
 def test_data_quality_report_upsert_overwrites_same_key(monkeypatch):
+    monkeypatch.setattr('skills.market_input_gate.require_market_inputs', lambda *_: {})
     engine = create_engine("sqlite:///:memory:")
     Base.metadata.create_all(engine)
 

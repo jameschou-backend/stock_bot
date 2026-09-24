@@ -785,6 +785,17 @@ def run(config, db_session: Session, **kwargs) -> Dict:
     logs: Dict[str, object] = {}
     
     try:
+        # A partial market cannot be downgraded by research/dev mode. This runs
+        # before features/labels/training in both sequential and DAG pipelines.
+        from skills.market_input_gate import require_market_inputs
+        try:
+            logs.update(require_market_inputs(config, db_session))
+        except (ValueError, RuntimeError) as exc:
+            finish_job(db_session, job_id, "failed", error_text=str(exc), logs={"market_inputs_blocked": True})
+            # This preflight has only written its job, before quality reports or
+            # derived data. Preserve the failure when the runner rolls back.
+            db_session.commit()
+            raise
         dq_mode = str(getattr(config, "data_quality_mode", "strict")).lower()
         if dq_mode not in {"strict", "research", "dev"}:
             dq_mode = "strict"
