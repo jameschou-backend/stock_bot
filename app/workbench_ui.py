@@ -233,6 +233,8 @@ def render_research(status):
     from app.guidance_research_ui import render as render_guidance
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    from app.completion_gaps_ui import render as render_completion_gaps
+    render_completion_gaps()
     from app.adjustment_readiness_ui import render as render_adjustment_readiness
     render_adjustment_readiness()
     from app.contingent_portfolio_ui import render as render_contingent_portfolio
@@ -243,6 +245,8 @@ def render_research(status):
     from app.contingent_replay_ui import render as render_contingent_replay
     render_contingent_replay()
     render_contingent_execution()
+    from app.manual_execution_ui import render as render_manual_execution
+    render_manual_execution()
     from app.forward_ui import render as render_forward
     from app.capacity_forward_ui import render as render_capacity_forward
     render_capacity_forward()
