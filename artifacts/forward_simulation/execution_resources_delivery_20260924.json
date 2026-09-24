@@ -1,0 +1,6033 @@
+{
+  "all_completed": true,
+  "candidate_count": 458,
+  "cases": {
+    "benchmark_combined_000": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 24,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": false,
+        "stress": "combined"
+      },
+      "legacy_identical": true,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_combined_000.json",
+      "sha256": "9d5055ebdb539f867acf9cbce4cdf2c47ca26b11bb2ecd46d57c34053eeeba2c",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_combined_001": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 24,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": false,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_combined_001.json",
+      "sha256": "894285c8a9d8571aa16f93bff50e216bbc49e5e4246fd571a46066f722068428",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 6,
+          "resource_cash_locked": 1
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_combined_100": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 28,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": true,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_combined_100.json",
+      "sha256": "3739581d95cb912fcb94ee42757c8c66021312a77b28b564c10ddda541edeb69",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 6
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_combined_101": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 28,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": true,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_combined_101.json",
+      "sha256": "f330c5c482aad4aac8b9dbab98317bc8c9432a421d1beff4c8e1fc603360a4d1",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 7
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_control_000": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 23,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": false,
+        "stress": "control"
+      },
+      "legacy_identical": true,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_control_000.json",
+      "sha256": "07884ff0ae4667543d86d22abca357021f354c706ae7fe0636c666b229ff5985",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_control_001": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 23,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": false,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_control_001.json",
+      "sha256": "d41a20eaa58dbb6d364cf59d36d2c0d6c2648304ad5a30b46d2d1364a8ffd3ab",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_control_100": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 27,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": true,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_control_100.json",
+      "sha256": "71ad5607f8cbf8ead7ff99d926091f6de6ee3b0f8245208bc0cc8dfddb117034",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "benchmark_control_101": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 27,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "completed": true,
+      "config": {
+        "benchmark": true,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": true,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/benchmark_control_101.json",
+      "sha256": "7575ee26c1d106085c2124535079a0d1f155ca3ea06b35a2c45fa6f4af7e10b9",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_000": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 252,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_000",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": false,
+        "stress": "combined"
+      },
+      "legacy_identical": true,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_000.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.0014860884385716755,
+        "outperform_fraction": 0.501131221719457,
+        "overlapping_windows": 884,
+        "worst_excess": -0.35310489276171175
+      },
+      "sha256": "b5cb2423605695632433decc16a5379759990e453a5409f44f255b207caaa5dc",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833127.75,
+            "max_drawdown": -0.18262554999999991,
+            "partial_year": false,
+            "profit": -166872.25,
+            "start_nav": 1000000.0,
+            "total_return": -0.16687225000000006,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1044132.79,
+            "max_drawdown": -0.15832313018800093,
+            "partial_year": false,
+            "profit": 211005.04000000004,
+            "start_nav": 833127.75,
+            "total_return": 0.2532685293461898,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1531998.9400000002,
+            "max_drawdown": -0.21357770773124907,
+            "partial_year": false,
+            "profit": 487866.15000000014,
+            "start_nav": 1044132.79,
+            "total_return": 0.46724531081913456,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1937177.03,
+            "max_drawdown": -0.21815877504906678,
+            "partial_year": false,
+            "profit": 405178.08999999985,
+            "start_nav": 1531998.9400000002,
+            "total_return": 0.2644767430452659,
+            "year": "2025"
+          },
+          {
+            "end_nav": 4651832.98,
+            "max_drawdown": -0.26524750932624463,
+            "partial_year": true,
+            "profit": 2714655.95,
+            "start_nav": 1937177.03,
+            "total_return": 1.4013463446859062,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 102,
+        "cagr": 0.38867995942085987,
+        "cash": 85956.03,
+        "costs": {
+          "commission": 68416.0,
+          "slippage": 426596.0,
+          "tax": 70359.0,
+          "total_cost": 565371.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1415195.95,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 78841,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1675968.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 14448,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1399230.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 11105,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 4651832.98,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 1.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.2689997666,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 555,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 5552.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 4490393.95,
+        "max_drawdown": -0.26524750932624463,
+        "minimum_cash": 9.33,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 1,
+          "at_upper_limit": 6,
+          "invalid_odd_lot_quote": 4,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 78,
+          "single_price_session": 6,
+          "slots_full": 391
+        },
+        "profit": 3651832.9800000004,
+        "receivable": 75483.0,
+        "sell_count": 138,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 3.65183298,
+        "trade_count": 240,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_001": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 254,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 6,
+          "resource_cash_locked": 1
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_001",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": false,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_001.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.002638860656210662,
+        "outperform_fraction": 0.49434389140271495,
+        "overlapping_windows": 884,
+        "worst_excess": -0.3692349193119546
+      },
+      "sha256": "89ffb40a68eccc4258589706788b85c49004449affaf9cc88a19a26b85606d09",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833074.6000000001,
+            "max_drawdown": -0.18267180000000005,
+            "partial_year": false,
+            "profit": -166925.3999999999,
+            "start_nav": 1000000.0,
+            "total_return": -0.1669253999999999,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1055377.04,
+            "max_drawdown": -0.15779379471716592,
+            "partial_year": false,
+            "profit": 222302.43999999994,
+            "start_nav": 833074.6000000001,
+            "total_return": 0.2668457782772393,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1529761.44,
+            "max_drawdown": -0.2122998379570432,
+            "partial_year": false,
+            "profit": 474384.3999999999,
+            "start_nav": 1055377.04,
+            "total_return": 0.4494928182254181,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1944546.73,
+            "max_drawdown": -0.21825434762249207,
+            "partial_year": false,
+            "profit": 414785.29000000004,
+            "start_nav": 1529761.44,
+            "total_return": 0.27114377389457545,
+            "year": "2025"
+          },
+          {
+            "end_nav": 4146867.18,
+            "max_drawdown": -0.2962177538544126,
+            "partial_year": true,
+            "profit": 2202320.45,
+            "start_nav": 1944546.73,
+            "total_return": 1.1325623684034585,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 106,
+        "cagr": 0.35501109531276476,
+        "cash": 8858.23,
+        "costs": {
+          "commission": 72156.0,
+          "slippage": 450170.0,
+          "tax": 74220.0,
+          "total_cost": 596546.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1235695.95,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 68841,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1510552.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 13022,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1320480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 10480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 4146867.18,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 8.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0179304416,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 524,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 5240.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 4066727.95,
+        "max_drawdown": -0.2962177538544126,
+        "minimum_cash": 20.99,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 1,
+          "at_upper_limit": 8,
+          "invalid_odd_lot_quote": 4,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 80,
+          "resource_cash_locked": 1,
+          "single_price_session": 6,
+          "slots_full": 387
+        },
+        "profit": 3146867.18,
+        "receivable": 71281.0,
+        "sell_count": 135,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 57,
+        "total_return": 3.14686718,
+        "trade_count": 241,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_010": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 245,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 6
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_000",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": false,
+        "opening_cash_only": false,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_010.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.13665634648791447,
+        "outperform_fraction": 0.4117647058823529,
+        "overlapping_windows": 884,
+        "worst_excess": -0.8251672563481783
+      },
+      "sha256": "ec5edcb6ace2f6aa4c114434e52ea0857834c9575532e8b2415a286839c281bd",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833127.75,
+            "max_drawdown": -0.18262554999999991,
+            "partial_year": false,
+            "profit": -166872.25,
+            "start_nav": 1000000.0,
+            "total_return": -0.16687225000000006,
+            "year": "2022"
+          },
+          {
+            "end_nav": 958026.8,
+            "max_drawdown": -0.19141849341614636,
+            "partial_year": false,
+            "profit": 124899.05000000005,
+            "start_nav": 833127.75,
+            "total_return": 0.1499158442387738,
+            "year": "2023"
+          },
+          {
+            "end_nav": 746202.65,
+            "max_drawdown": -0.27332336734526674,
+            "partial_year": false,
+            "profit": -211824.15000000002,
+            "start_nav": 958026.8,
+            "total_return": -0.22110461836766993,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1221083.79,
+            "max_drawdown": -0.11710345582218318,
+            "partial_year": false,
+            "profit": 474881.14,
+            "start_nav": 746202.65,
+            "total_return": 0.636397016279693,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2270043.04,
+            "max_drawdown": -0.24588785876913355,
+            "partial_year": true,
+            "profit": 1048959.25,
+            "start_nav": 1221083.79,
+            "total_return": 0.8590395340519588,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 103,
+        "cagr": 0.19137266864487956,
+        "cash": 35294.44,
+        "costs": {
+          "commission": 48508.0,
+          "slippage": 301783.0,
+          "tax": 49295.0,
+          "total_cost": 399586.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 674345.6,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 37568,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 832648.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 7178,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 690480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 5480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 2270043.04,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 2.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0093758416,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 274,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 2740.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2197473.6,
+        "max_drawdown": -0.36855234868765585,
+        "minimum_cash": 37.79,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 10,
+          "overlapping_member": 8,
+          "partial_capacity_or_cash": 68,
+          "resource_slots_locked": 19,
+          "single_price_session": 1,
+          "slots_full": 371
+        },
+        "profit": 1270043.04,
+        "receivable": 37275.0,
+        "sell_count": 131,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 1.27004304,
+        "trade_count": 234,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_011": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 244,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 771783.45,
+            "max_drawdown": -0.33970252813934865,
+            "partial_year": false,
+            "profit": -228216.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22821655000000007,
+            "year": "2022"
+          },
+          {
+            "end_nav": 983115.0499999998,
+            "max_drawdown": -0.07032304618117224,
+            "partial_year": false,
+            "profit": 211331.59999999986,
+            "start_nav": 771783.45,
+            "total_return": 0.27382240445814165,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1458755.35,
+            "max_drawdown": -0.21207216630190384,
+            "partial_year": false,
+            "profit": 475640.3000000003,
+            "start_nav": 983115.0499999998,
+            "total_return": 0.4838093974860831,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1995447.4699999997,
+            "max_drawdown": -0.2750061276635807,
+            "partial_year": false,
+            "profit": 536692.1199999996,
+            "start_nav": 1458755.35,
+            "total_return": 0.3679109865818142,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3397291.12,
+            "max_drawdown": -0.15339358002187575,
+            "partial_year": true,
+            "profit": 1401843.6500000004,
+            "start_nav": 1995447.4699999997,
+            "total_return": 0.702520948847629,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 13,
+        "cagr": 0.2985183605158983,
+        "cash": 5.17,
+        "costs": {
+          "commission": 1675.0,
+          "slippage": 10470.0,
+          "tax": 0.0,
+          "total_cost": 12145.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3397285.95,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30983,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3397291.12,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3397285.95,
+        "max_drawdown": -0.33970252813934865,
+        "minimum_cash": 5.17,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 6,
+          "resource_cash_locked": 1
+        },
+        "profit": 2397291.12,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.39729112,
+        "trade_count": 13,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_001",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": true,
+        "opening_cash_only": false,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_011.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.1407165850157397,
+        "outperform_fraction": 0.4106334841628959,
+        "overlapping_windows": 884,
+        "worst_excess": -0.823987814092401
+      },
+      "sha256": "a585b1b4e225fe6c243709b7042ae60c190271b84f60f0d7af0a0d8606477d4f",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833074.6000000001,
+            "max_drawdown": -0.18267180000000005,
+            "partial_year": false,
+            "profit": -166925.3999999999,
+            "start_nav": 1000000.0,
+            "total_return": -0.1669253999999999,
+            "year": "2022"
+          },
+          {
+            "end_nav": 954162.5,
+            "max_drawdown": -0.1929194376076131,
+            "partial_year": false,
+            "profit": 121087.8999999999,
+            "start_nav": 833074.6000000001,
+            "total_return": 0.1453506084569136,
+            "year": "2023"
+          },
+          {
+            "end_nav": 744401.25,
+            "max_drawdown": -0.2724193770541007,
+            "partial_year": false,
+            "profit": -209761.25,
+            "start_nav": 954162.5,
+            "total_return": -0.21983807789553667,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1217364.59,
+            "max_drawdown": -0.11686667634082848,
+            "partial_year": false,
+            "profit": 472963.3400000001,
+            "start_nav": 744401.25,
+            "total_return": 0.635360754700506,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2236020.09,
+            "max_drawdown": -0.2407877330679976,
+            "partial_year": true,
+            "profit": 1018655.4999999998,
+            "start_nav": 1217364.59,
+            "total_return": 0.8367710941879785,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 103,
+        "cagr": 0.18753599857166714,
+        "cash": 28133.54,
+        "costs": {
+          "commission": 48082.0,
+          "slippage": 298876.0,
+          "tax": 48795.0,
+          "total_cost": 395753.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 663952.5499999999,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 36989,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 816176.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 7036,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 690480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 5480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 2236020.09,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 5.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0093758416,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 274,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 2740.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2170608.55,
+        "max_drawdown": -0.3687831763085947,
+        "minimum_cash": 35.59,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 10,
+          "overlapping_member": 8,
+          "partial_capacity_or_cash": 77,
+          "resource_slots_locked": 20,
+          "single_price_session": 1,
+          "slots_full": 370
+        },
+        "profit": 1236020.0899999999,
+        "receivable": 37278.0,
+        "sell_count": 130,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 1.2360200899999998,
+        "trade_count": 233,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_100": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 255,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 6
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_100",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": true,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_100.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.05105440500480951,
+        "outperform_fraction": 0.47737556561085975,
+        "overlapping_windows": 884,
+        "worst_excess": -0.7749620838052032
+      },
+      "sha256": "28a8b532d60b76ab029027074239f47e18602e1849d1766d4a0b0af6dfacbbcc",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833127.75,
+            "max_drawdown": -0.18262554999999991,
+            "partial_year": false,
+            "profit": -166872.25,
+            "start_nav": 1000000.0,
+            "total_return": -0.16687225000000006,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1143013.9,
+            "max_drawdown": -0.1200559194928773,
+            "partial_year": false,
+            "profit": 309886.1499999999,
+            "start_nav": 833127.75,
+            "total_return": 0.3719551413333668,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1123748.2,
+            "max_drawdown": -0.17223974842941192,
+            "partial_year": false,
+            "profit": -19265.699999999953,
+            "start_nav": 1143013.9,
+            "total_return": -0.01685517560197647,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1481295.69,
+            "max_drawdown": -0.14278722382370712,
+            "partial_year": false,
+            "profit": 357547.49,
+            "start_nav": 1123748.2,
+            "total_return": 0.3181740268860942,
+            "year": "2025"
+          },
+          {
+            "end_nav": 4375135.29,
+            "max_drawdown": -0.2831941955269103,
+            "partial_year": true,
+            "profit": 2893839.6,
+            "start_nav": 1481295.69,
+            "total_return": 1.9535867278463495,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 105,
+        "cagr": 0.3706088525641533,
+        "cash": 1.69,
+        "costs": {
+          "commission": 63576.0,
+          "slippage": 396013.0,
+          "tax": 65078.0,
+          "total_cost": 524667.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1303313.5999999999,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 72608,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1591288.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 13718,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1404774.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 11149,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 4375135.29,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 1.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 1.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.46907504708,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 557,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 5574.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 4299375.6,
+        "max_drawdown": -0.2831941955269103,
+        "minimum_cash": 1.69,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 6,
+          "invalid_odd_lot_quote": 3,
+          "overlapping_member": 12,
+          "partial_capacity_or_cash": 75,
+          "resource_cash_locked": 3,
+          "single_price_session": 3,
+          "slots_full": 384
+        },
+        "profit": 3375135.29,
+        "receivable": 75758.0,
+        "sell_count": 138,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 3.3751352900000002,
+        "trade_count": 243,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_101": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 254,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 7
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_101",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": true,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_101.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.04872918141388738,
+        "outperform_fraction": 0.47850678733031676,
+        "overlapping_windows": 884,
+        "worst_excess": -0.7502656702571909
+      },
+      "sha256": "8571aba259aeb874e252f5a1f23327a4fb39e5b8cba2370c4d9e653b956af90d",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833074.6000000001,
+            "max_drawdown": -0.18267180000000005,
+            "partial_year": false,
+            "profit": -166925.3999999999,
+            "start_nav": 1000000.0,
+            "total_return": -0.1669253999999999,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1148829.95,
+            "max_drawdown": -0.12120244812832426,
+            "partial_year": false,
+            "profit": 315755.34999999986,
+            "start_nav": 833074.6000000001,
+            "total_return": 0.37902409940238213,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1151320.25,
+            "max_drawdown": -0.16284911328147744,
+            "partial_year": false,
+            "profit": 2490.3000000000466,
+            "start_nav": 1148829.95,
+            "total_return": 0.002167683737702042,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1532969.14,
+            "max_drawdown": -0.14172865535690427,
+            "partial_year": false,
+            "profit": 381648.8899999999,
+            "start_nav": 1151320.25,
+            "total_return": 0.33148803732063237,
+            "year": "2025"
+          },
+          {
+            "end_nav": 4408334.840000001,
+            "max_drawdown": -0.28398515284260684,
+            "partial_year": true,
+            "profit": 2875365.700000001,
+            "start_nav": 1532969.14,
+            "total_return": 1.8756840075723904,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 105,
+        "cagr": 0.3728237644526129,
+        "cash": 5.94,
+        "costs": {
+          "commission": 63319.0,
+          "slippage": 394157.0,
+          "tax": 64782.0,
+          "total_cost": 522258.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 1313616.9,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 73182,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 1591288.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 13718,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 1426446.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 11321,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 4408334.840000001,
+        "final_receivables": [
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 2.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.06936932532,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 566,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 5660.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 4331350.9,
+        "max_drawdown": -0.28398515284260684,
+        "minimum_cash": 5.94,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 6,
+          "invalid_odd_lot_quote": 3,
+          "overlapping_member": 11,
+          "partial_capacity_or_cash": 81,
+          "resource_cash_locked": 2,
+          "single_price_session": 3,
+          "slots_full": 386
+        },
+        "profit": 3408334.840000001,
+        "receivable": 76978.0,
+        "sell_count": 137,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 3.408334840000001,
+        "trade_count": 242,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_110": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 244,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 6
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_100",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": false,
+        "opening_cash_only": true,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_110.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.13673894225320016,
+        "outperform_fraction": 0.4117647058823529,
+        "overlapping_windows": 884,
+        "worst_excess": -0.8241944254529202
+      },
+      "sha256": "a8a77be7ebb45791949e51cd982d73f79ada96c5c56226d08677d2992b7fb9f5",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833127.75,
+            "max_drawdown": -0.18262554999999991,
+            "partial_year": false,
+            "profit": -166872.25,
+            "start_nav": 1000000.0,
+            "total_return": -0.16687225000000006,
+            "year": "2022"
+          },
+          {
+            "end_nav": 958026.8,
+            "max_drawdown": -0.19141849341614636,
+            "partial_year": false,
+            "profit": 124899.05000000005,
+            "start_nav": 833127.75,
+            "total_return": 0.1499158442387738,
+            "year": "2023"
+          },
+          {
+            "end_nav": 746202.65,
+            "max_drawdown": -0.27332336734526674,
+            "partial_year": false,
+            "profit": -211824.15000000002,
+            "start_nav": 958026.8,
+            "total_return": -0.22110461836766993,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1220370.0899999999,
+            "max_drawdown": -0.11710345582218318,
+            "partial_year": false,
+            "profit": 474167.4399999998,
+            "start_nav": 746202.65,
+            "total_return": 0.6354405736833015,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2188370.2399999998,
+            "max_drawdown": -0.27653669336837694,
+            "partial_year": true,
+            "profit": 968000.1499999999,
+            "start_nav": 1220370.0899999999,
+            "total_return": 0.7932021260861941,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 103,
+        "cagr": 0.1820847362065594,
+        "cash": 30873.09,
+        "costs": {
+          "commission": 48197.0,
+          "slippage": 299598.0,
+          "tax": 48920.0,
+          "total_cost": 396715.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 650454.15,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 36237,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 779288.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 6718,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 690480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 5480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 2188370.2399999998,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 2.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0093758416,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 274,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 2740.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2120222.15,
+        "max_drawdown": -0.36855234868765585,
+        "minimum_cash": 441.75,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 8,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 68,
+          "resource_slots_locked": 17,
+          "single_price_session": 1,
+          "slots_full": 373
+        },
+        "profit": 1188370.2399999998,
+        "receivable": 37275.0,
+        "sell_count": 130,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 1.1883702399999998,
+        "trade_count": 233,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_combined_111": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 243,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 7
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_101",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": true,
+        "opening_cash_only": true,
+        "stress": "combined"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_combined_111.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.14059918501191876,
+        "outperform_fraction": 0.4106334841628959,
+        "overlapping_windows": 884,
+        "worst_excess": -0.8230149831971428
+      },
+      "sha256": "6ad41b06ffa1eff4072bc3ea688ea1ca6fec0489332ba403651d1c357548c65a",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833074.6000000001,
+            "max_drawdown": -0.18267180000000005,
+            "partial_year": false,
+            "profit": -166925.3999999999,
+            "start_nav": 1000000.0,
+            "total_return": -0.1669253999999999,
+            "year": "2022"
+          },
+          {
+            "end_nav": 954162.5,
+            "max_drawdown": -0.1929194376076131,
+            "partial_year": false,
+            "profit": 121087.8999999999,
+            "start_nav": 833074.6000000001,
+            "total_return": 0.1453506084569136,
+            "year": "2023"
+          },
+          {
+            "end_nav": 744401.25,
+            "max_drawdown": -0.2724193770541007,
+            "partial_year": false,
+            "profit": -209761.25,
+            "start_nav": 954162.5,
+            "total_return": -0.21983807789553667,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1216650.89,
+            "max_drawdown": -0.11686667634082848,
+            "partial_year": false,
+            "profit": 472249.6399999999,
+            "start_nav": 744401.25,
+            "total_return": 0.6344019975785906,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2157262.29,
+            "max_drawdown": -0.2726550967435736,
+            "partial_year": true,
+            "profit": 940611.4000000001,
+            "start_nav": 1216650.89,
+            "total_return": 0.7731152853551935,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 103,
+        "cagr": 0.17847533927594128,
+        "cash": 10514.19,
+        "costs": {
+          "commission": 47948.0,
+          "slippage": 297761.0,
+          "tax": 48579.0,
+          "total_cost": 394288.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 639702.1,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 35638,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 779288.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 6718,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 690480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 5480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 2157262.29,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 5.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0093758416,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 274,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 2740.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2109470.1,
+        "max_drawdown": -0.3687831763085947,
+        "minimum_cash": 452.9,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 8,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 76,
+          "resource_slots_locked": 18,
+          "single_price_session": 1,
+          "slots_full": 372
+        },
+        "profit": 1157262.29,
+        "receivable": 37278.0,
+        "sell_count": 129,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 1.1572622900000002,
+        "trade_count": 232,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_000": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 253,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_000",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": false,
+        "stress": "control"
+      },
+      "legacy_identical": true,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_000.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.5012945896889972,
+        "outperform_fraction": 0.9366515837104072,
+        "overlapping_windows": 884,
+        "worst_excess": -0.21729288475802488
+      },
+      "sha256": "8e9fbd34600036408ac732b469db70514e97d47a08dffd5f4446b77d74f919ec",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 847812.25,
+            "max_drawdown": -0.17419949999999995,
+            "partial_year": false,
+            "profit": -152187.75,
+            "start_nav": 1000000.0,
+            "total_return": -0.15218774999999996,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1907661.04,
+            "max_drawdown": -0.21789362110538202,
+            "partial_year": false,
+            "profit": 1059848.79,
+            "start_nav": 847812.25,
+            "total_return": 1.2500984622479803,
+            "year": "2023"
+          },
+          {
+            "end_nav": 3545724.1399999997,
+            "max_drawdown": -0.19732261333421275,
+            "partial_year": false,
+            "profit": 1638063.0999999996,
+            "start_nav": 1907661.04,
+            "total_return": 0.8586761828505967,
+            "year": "2024"
+          },
+          {
+            "end_nav": 5654177.600000001,
+            "max_drawdown": -0.16460367796956688,
+            "partial_year": false,
+            "profit": 2108453.460000001,
+            "start_nav": 3545724.1399999997,
+            "total_return": 0.594646784901885,
+            "year": "2025"
+          },
+          {
+            "end_nav": 12110001.479999999,
+            "max_drawdown": -0.2610142005735293,
+            "partial_year": true,
+            "profit": 6455823.879999998,
+            "start_nav": 5654177.600000001,
+            "total_return": 1.1417794658590132,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 113,
+        "cagr": 0.7035535890235196,
+        "cash": 137508.53,
+        "costs": {
+          "commission": 196633.0,
+          "slippage": 619953.0,
+          "tax": 206352.0,
+          "total_cost": 1022938.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 3543706.9499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 197421,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 4392804.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 37869,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 3829392.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 30392,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 12110001.479999999,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.65199828064,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1519,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 15196.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 11765902.95,
+        "max_drawdown": -0.2610142005735293,
+        "minimum_cash": 0.05,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 8,
+          "invalid_odd_lot_quote": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 36,
+          "single_price_session": 6,
+          "slots_full": 386
+        },
+        "profit": 11110001.479999999,
+        "receivable": 206590.0,
+        "sell_count": 127,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 58,
+        "total_return": 11.11000148,
+        "trade_count": 240,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_001": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 251,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_001",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": false,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_001.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.5012161054258575,
+        "outperform_fraction": 0.9377828054298643,
+        "overlapping_windows": 884,
+        "worst_excess": -0.21612600156389383
+      },
+      "sha256": "7fdda841e846a880c8337130613fe3d5ec4cb4b7e0213b27e78ec88f15df12df",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 849961.95,
+            "max_drawdown": -0.17297360000000006,
+            "partial_year": false,
+            "profit": -150038.05000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.15003805000000003,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1906907.84,
+            "max_drawdown": -0.21762693389468624,
+            "partial_year": false,
+            "profit": 1056945.8900000001,
+            "start_nav": 849961.95,
+            "total_return": 1.2435214188117483,
+            "year": "2023"
+          },
+          {
+            "end_nav": 3551277.04,
+            "max_drawdown": -0.1965523531511334,
+            "partial_year": false,
+            "profit": 1644369.2,
+            "start_nav": 1906907.84,
+            "total_return": 0.8623223238727677,
+            "year": "2024"
+          },
+          {
+            "end_nav": 5688110.42,
+            "max_drawdown": -0.16450218606529643,
+            "partial_year": false,
+            "profit": 2136833.38,
+            "start_nav": 3551277.04,
+            "total_return": 0.6017084434505284,
+            "year": "2025"
+          },
+          {
+            "end_nav": 12936641.91,
+            "max_drawdown": -0.2287448961191343,
+            "partial_year": true,
+            "profit": 7248531.49,
+            "start_nav": 5688110.42,
+            "total_return": 1.2743303056342565,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 113,
+        "cagr": 0.72775112103677,
+        "cash": 146792.76,
+        "costs": {
+          "commission": 190306.0,
+          "slippage": 599922.0,
+          "tax": 199623.0,
+          "total_cost": 989851.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 3785601.15,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 210897,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 4692548.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 40453,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 4090968.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 32468,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 12936641.91,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.45555015056,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1623,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 16234.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 12569117.15,
+        "max_drawdown": -0.23990502369600797,
+        "minimum_cash": 3.65,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 8,
+          "invalid_odd_lot_quote": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 48,
+          "single_price_session": 6,
+          "slots_full": 386
+        },
+        "profit": 11936641.91,
+        "receivable": 220732.0,
+        "sell_count": 125,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 58,
+        "total_return": 11.93664191,
+        "trade_count": 238,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_010": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 231,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_000",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": false,
+        "opening_cash_only": false,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_010.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.35459388965366856,
+        "outperform_fraction": 0.8857466063348416,
+        "overlapping_windows": 884,
+        "worst_excess": -0.26538293518255607
+      },
+      "sha256": "6630d908792e4e035bf949afca6fe20a06b79168c7d94259b0d8debfe390477d",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 789190.7000000001,
+            "max_drawdown": -0.2255089,
+            "partial_year": false,
+            "profit": -210809.29999999993,
+            "start_nav": 1000000.0,
+            "total_return": -0.21080929999999998,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1401744.7,
+            "max_drawdown": -0.12628444077911483,
+            "partial_year": false,
+            "profit": 612553.9999999999,
+            "start_nav": 789190.7000000001,
+            "total_return": 0.7761799524500224,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1815194.8499999999,
+            "max_drawdown": -0.3026849668097469,
+            "partial_year": false,
+            "profit": 413450.1499999999,
+            "start_nav": 1401744.7,
+            "total_return": 0.29495395987586037,
+            "year": "2024"
+          },
+          {
+            "end_nav": 4258832.4,
+            "max_drawdown": -0.10710731458902811,
+            "partial_year": false,
+            "profit": 2443637.5500000007,
+            "start_nav": 1815194.8499999999,
+            "total_return": 1.3462122537423467,
+            "year": "2025"
+          },
+          {
+            "end_nav": 9745735.78,
+            "max_drawdown": -0.31215882327843303,
+            "partial_year": true,
+            "profit": 5486903.379999999,
+            "start_nav": 4258832.4,
+            "total_return": 1.2883586073967126,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 105,
+        "cagr": 0.6263249925115189,
+        "cash": 1386512.83,
+        "costs": {
+          "commission": 141143.0,
+          "slippage": 445019.0,
+          "tax": 149577.0,
+          "total_cost": 735739.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-07-g001-2026-07-06-1216",
+            "mark_date": "2026-09-09",
+            "market_value": 1569248.0,
+            "name": "統一",
+            "price": 76.0,
+            "qty": 20648,
+            "stale": false,
+            "stock_id": "1216"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 3025310.9499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 168541,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 3764664.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 32454,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 9745735.78,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 8359222.949999999,
+        "max_drawdown": -0.3151523264677668,
+        "minimum_cash": 0.05,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 4,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 2,
+          "odd_lot_at_price_limit": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 24,
+          "resource_slots_locked": 19,
+          "slots_full": 375
+        },
+        "profit": 8745735.78,
+        "receivable": 0.0,
+        "sell_count": 113,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 54,
+        "total_return": 8.745735779999999,
+        "trade_count": 218,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_011": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 234,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 776787.9,
+            "max_drawdown": -0.33958133302587934,
+            "partial_year": false,
+            "profit": -223212.09999999998,
+            "start_nav": 1000000.0,
+            "total_return": -0.22321210000000002,
+            "year": "2022"
+          },
+          {
+            "end_nav": 989639.2,
+            "max_drawdown": -0.07026081249876581,
+            "partial_year": false,
+            "profit": 212851.29999999993,
+            "start_nav": 776787.9,
+            "total_return": 0.27401469564600567,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1468570.35,
+            "max_drawdown": -0.21205524939170906,
+            "partial_year": false,
+            "profit": 478931.15000000014,
+            "start_nav": 989639.2,
+            "total_return": 0.48394520952686615,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2009043.5599999998,
+            "max_drawdown": -0.27495420250372593,
+            "partial_year": false,
+            "profit": 540473.2099999997,
+            "start_nav": 1468570.35,
+            "total_return": 0.36802677515585125,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3420731.7600000002,
+            "max_drawdown": -0.15339491604834388,
+            "partial_year": true,
+            "profit": 1411688.2000000004,
+            "start_nav": 2009043.5599999998,
+            "total_return": 0.702666795338176,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 12,
+        "cagr": 0.300426912055862,
+        "cash": 90.36,
+        "costs": {
+          "commission": 1682.0,
+          "slippage": 5266.0,
+          "tax": 0.0,
+          "total_cost": 6948.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3420641.4000000004,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31196,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3420731.7600000002,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3420641.4000000004,
+        "max_drawdown": -0.33958133302587934,
+        "minimum_cash": 31.36,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 5
+        },
+        "profit": 2420731.7600000002,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4207317600000002,
+        "trade_count": 12,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_001",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": true,
+        "opening_cash_only": false,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_011.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.291219356952306,
+        "outperform_fraction": 0.7047511312217195,
+        "overlapping_windows": 884,
+        "worst_excess": -0.49955681516883366
+      },
+      "sha256": "f8b28c9d2896b120cc100f51684684692d850bcb16c7aea566d53ebc10c5254a",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 789110.25,
+            "max_drawdown": -0.22494375,
+            "partial_year": false,
+            "profit": -210889.75,
+            "start_nav": 1000000.0,
+            "total_return": -0.21088975,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1344734.3,
+            "max_drawdown": -0.1272057221868137,
+            "partial_year": false,
+            "profit": 555624.05,
+            "start_nav": 789110.25,
+            "total_return": 0.70411460249059,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1423195.85,
+            "max_drawdown": -0.3775829728902984,
+            "partial_year": false,
+            "profit": 78461.55000000005,
+            "start_nav": 1344734.3,
+            "total_return": 0.05834725120047879,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3270913.0599999996,
+            "max_drawdown": -0.11463945497811778,
+            "partial_year": false,
+            "profit": 1847717.2099999995,
+            "start_nav": 1423195.85,
+            "total_return": 1.2982873790701395,
+            "year": "2025"
+          },
+          {
+            "end_nav": 7371616.739999999,
+            "max_drawdown": -0.3101309677377011,
+            "partial_year": true,
+            "profit": 4100703.6799999997,
+            "start_nav": 3270913.0599999996,
+            "total_return": 1.2536877638686001,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 107,
+        "cagr": 0.5321749540892797,
+        "cash": 910630.29,
+        "costs": {
+          "commission": 116522.0,
+          "slippage": 367158.0,
+          "tax": 122785.0,
+          "total_cost": 606465.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-07-g001-2026-07-06-1216",
+            "mark_date": "2026-09-09",
+            "market_value": 1326732.0,
+            "name": "統一",
+            "price": 76.0,
+            "qty": 17457,
+            "stale": false,
+            "stock_id": "1216"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 2287027.4499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 127411,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 2847220.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 24545,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 7371616.739999999,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 6460979.449999999,
+        "max_drawdown": -0.3775829728902984,
+        "minimum_cash": 5.35,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 4,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 2,
+          "odd_lot_at_price_limit": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 36,
+          "resource_slots_locked": 18,
+          "slots_full": 374
+        },
+        "profit": 6371616.739999999,
+        "receivable": 7.0,
+        "sell_count": 113,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 6.3716167399999994,
+        "trade_count": 220,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_100": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 236,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_100",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": false,
+        "opening_cash_only": true,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_100.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.43624525977634043,
+        "outperform_fraction": 0.8065610859728507,
+        "overlapping_windows": 884,
+        "worst_excess": -0.5076703622326244
+      },
+      "sha256": "e2f11045df654013c7c93eb84e36f1852e56211f50e609db78a3eac05a585faa",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 789190.7000000001,
+            "max_drawdown": -0.2255089,
+            "partial_year": false,
+            "profit": -210809.29999999993,
+            "start_nav": 1000000.0,
+            "total_return": -0.21080929999999998,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1928898.88,
+            "max_drawdown": -0.17701443408394568,
+            "partial_year": false,
+            "profit": 1139708.1799999997,
+            "start_nav": 789190.7000000001,
+            "total_return": 1.4441480113741831,
+            "year": "2023"
+          },
+          {
+            "end_nav": 2055137.48,
+            "max_drawdown": -0.18931837015555375,
+            "partial_year": false,
+            "profit": 126238.6000000001,
+            "start_nav": 1928898.88,
+            "total_return": 0.06544593980997071,
+            "year": "2024"
+          },
+          {
+            "end_nav": 4718374.199999999,
+            "max_drawdown": -0.10710318536658092,
+            "partial_year": false,
+            "profit": 2663236.7199999993,
+            "start_nav": 2055137.48,
+            "total_return": 1.2958922436663456,
+            "year": "2025"
+          },
+          {
+            "end_nav": 8250230.590000001,
+            "max_drawdown": -0.35234158249649616,
+            "partial_year": true,
+            "profit": 3531856.3900000015,
+            "start_nav": 4718374.199999999,
+            "total_return": 0.748532490280233,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 111,
+        "cagr": 0.5694733313462075,
+        "cash": 93516.69,
+        "costs": {
+          "commission": 145683.0,
+          "slippage": 459075.0,
+          "tax": 152441.0,
+          "total_cost": 757199.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 2414310.9,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 134502,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 2992684.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 25799,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 2608956.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 20706,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 8250230.590000001,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.33542630952,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1035,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 10353.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 8015950.9,
+        "max_drawdown": -0.35234158249649616,
+        "minimum_cash": 2.28,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 8,
+          "invalid_odd_lot_quote": 1,
+          "overlapping_member": 10,
+          "partial_capacity_or_cash": 20,
+          "resource_cash_locked": 3,
+          "single_price_session": 2,
+          "slots_full": 382
+        },
+        "profit": 7250230.590000001,
+        "receivable": 140763.0,
+        "sell_count": 114,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 58,
+        "total_return": 7.250230590000001,
+        "trade_count": 225,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_101": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 238,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_101",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": false,
+        "lock_unused": true,
+        "opening_cash_only": true,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_101.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.31235570790114575,
+        "outperform_fraction": 0.670814479638009,
+        "overlapping_windows": 884,
+        "worst_excess": -0.415937528760304
+      },
+      "sha256": "2230e094317b95a596278c84ae9811a522d26165600d88f92f42e3007592baa1",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 819703.0,
+            "max_drawdown": -0.19572784999999993,
+            "partial_year": false,
+            "profit": -180297.0,
+            "start_nav": 1000000.0,
+            "total_return": -0.18029700000000004,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1996574.03,
+            "max_drawdown": -0.17729485847865534,
+            "partial_year": false,
+            "profit": 1176871.03,
+            "start_nav": 819703.0,
+            "total_return": 1.4357285870614112,
+            "year": "2023"
+          },
+          {
+            "end_nav": 2427330.33,
+            "max_drawdown": -0.13335353366080582,
+            "partial_year": false,
+            "profit": 430756.30000000005,
+            "start_nav": 1996574.03,
+            "total_return": 0.21574772261261965,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3885612.23,
+            "max_drawdown": -0.16420021941878604,
+            "partial_year": false,
+            "profit": 1458281.9,
+            "start_nav": 2427330.33,
+            "total_return": 0.6007760385872161,
+            "year": "2025"
+          },
+          {
+            "end_nav": 9377567.55,
+            "max_drawdown": -0.20638435155043888,
+            "partial_year": true,
+            "profit": 5491955.32,
+            "start_nav": 3885612.23,
+            "total_return": 1.4134079766369276,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 108,
+        "cagr": 0.6130025580582357,
+        "cash": 106325.5,
+        "costs": {
+          "commission": 128717.0,
+          "slippage": 405677.0,
+          "tax": 134494.0,
+          "total_cost": 668888.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 2744178.05,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 152879,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 3401584.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 29324,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 2965536.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 23536,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 9377567.55,
+        "final_receivables": [
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.84026821312,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 1176,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 11768.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 9111298.05,
+        "max_drawdown": -0.23042324581354512,
+        "minimum_cash": 4.8,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 2,
+          "at_upper_limit": 8,
+          "capacity_or_cash_zero": 1,
+          "invalid_odd_lot_quote": 1,
+          "overlapping_member": 10,
+          "partial_capacity_or_cash": 41,
+          "resource_cash_locked": 1,
+          "single_price_session": 6,
+          "slots_full": 384
+        },
+        "profit": 8377567.550000001,
+        "receivable": 159944.0,
+        "sell_count": 118,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 58,
+        "total_return": 8.37756755,
+        "trade_count": 226,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_110": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 231,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_100",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": false,
+        "opening_cash_only": true,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_110.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.3547587279556299,
+        "outperform_fraction": 0.8868778280542986,
+        "overlapping_windows": 884,
+        "worst_excess": -0.264894013925858
+      },
+      "sha256": "b7f189534d4288116d7982b6dd75048ad1e6fc5827a67c3c7068aa00b8226915",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 789190.7000000001,
+            "max_drawdown": -0.2255089,
+            "partial_year": false,
+            "profit": -210809.29999999993,
+            "start_nav": 1000000.0,
+            "total_return": -0.21080929999999998,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1401744.7,
+            "max_drawdown": -0.12628444077911483,
+            "partial_year": false,
+            "profit": 612553.9999999999,
+            "start_nav": 789190.7000000001,
+            "total_return": 0.7761799524500224,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1815194.8499999999,
+            "max_drawdown": -0.3026849668097469,
+            "partial_year": false,
+            "profit": 413450.1499999999,
+            "start_nav": 1401744.7,
+            "total_return": 0.29495395987586037,
+            "year": "2024"
+          },
+          {
+            "end_nav": 4258832.4,
+            "max_drawdown": -0.10710731458902811,
+            "partial_year": false,
+            "profit": 2443637.5500000007,
+            "start_nav": 1815194.8499999999,
+            "total_return": 1.3462122537423467,
+            "year": "2025"
+          },
+          {
+            "end_nav": 9745735.78,
+            "max_drawdown": -0.31215882327843303,
+            "partial_year": true,
+            "profit": 5486903.379999999,
+            "start_nav": 4258832.4,
+            "total_return": 1.2883586073967126,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 105,
+        "cagr": 0.6263249925115189,
+        "cash": 1386512.83,
+        "costs": {
+          "commission": 141143.0,
+          "slippage": 445019.0,
+          "tax": 149577.0,
+          "total_cost": 735739.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-07-g001-2026-07-06-1216",
+            "mark_date": "2026-09-09",
+            "market_value": 1569248.0,
+            "name": "統一",
+            "price": 76.0,
+            "qty": 20648,
+            "stale": false,
+            "stock_id": "1216"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 3025310.9499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 168541,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 3764664.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 32454,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 9745735.78,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 8359222.949999999,
+        "max_drawdown": -0.3151523264677668,
+        "minimum_cash": 0.05,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 4,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 2,
+          "odd_lot_at_price_limit": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 24,
+          "resource_cash_locked": 2,
+          "resource_slots_locked": 17,
+          "slots_full": 375
+        },
+        "profit": 8745735.78,
+        "receivable": 0.0,
+        "sell_count": 113,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 54,
+        "total_return": 8.745735779999999,
+        "trade_count": 218,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "capacity_control_111": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 234,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "resource_policy_reconciled": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_101",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "lock_slots": true,
+        "lock_unused": true,
+        "opening_cash_only": true,
+        "stress": "control"
+      },
+      "legacy_identical": false,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/capacity_control_111.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.290657037824023,
+        "outperform_fraction": 0.7047511312217195,
+        "overlapping_windows": 884,
+        "worst_excess": -0.4990727803843833
+      },
+      "sha256": "5e3ca65231f7d2cccd2ec7f31cdec004c1becd6ad60aea95632d8ea58d70bcc4",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 789110.25,
+            "max_drawdown": -0.22494375,
+            "partial_year": false,
+            "profit": -210889.75,
+            "start_nav": 1000000.0,
+            "total_return": -0.21088975,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1344734.3,
+            "max_drawdown": -0.1272057221868137,
+            "partial_year": false,
+            "profit": 555624.05,
+            "start_nav": 789110.25,
+            "total_return": 0.70411460249059,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1423195.85,
+            "max_drawdown": -0.3775829728902984,
+            "partial_year": false,
+            "profit": 78461.55000000005,
+            "start_nav": 1344734.3,
+            "total_return": 0.05834725120047879,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3270913.0599999996,
+            "max_drawdown": -0.11463945497811778,
+            "partial_year": false,
+            "profit": 1847717.2099999995,
+            "start_nav": 1423195.85,
+            "total_return": 1.2982873790701395,
+            "year": "2025"
+          },
+          {
+            "end_nav": 7371616.739999999,
+            "max_drawdown": -0.3101309677377011,
+            "partial_year": true,
+            "profit": 4100703.6799999997,
+            "start_nav": 3270913.0599999996,
+            "total_return": 1.2536877638686001,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 107,
+        "cagr": 0.5321749540892797,
+        "cash": 910630.29,
+        "costs": {
+          "commission": 116522.0,
+          "slippage": 367158.0,
+          "tax": 122785.0,
+          "total_cost": 606465.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-07-g001-2026-07-06-1216",
+            "mark_date": "2026-09-09",
+            "market_value": 1326732.0,
+            "name": "統一",
+            "price": 76.0,
+            "qty": 17457,
+            "stale": false,
+            "stock_id": "1216"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 2287027.4499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 127411,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 2847220.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 24545,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 7371616.739999999,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 6460979.449999999,
+        "max_drawdown": -0.3775829728902984,
+        "minimum_cash": 5.35,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 4,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 2,
+          "odd_lot_at_price_limit": 1,
+          "overlapping_member": 9,
+          "partial_capacity_or_cash": 36,
+          "resource_cash_locked": 1,
+          "resource_slots_locked": 17,
+          "slots_full": 374
+        },
+        "profit": 6371616.739999999,
+        "receivable": 7.0,
+        "sell_count": 113,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 6.3716167399999994,
+        "trade_count": 220,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "reserved_combined": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 243,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "precommitted_budget_and_quantity": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 772525.45,
+            "max_drawdown": -0.33904490498539785,
+            "partial_year": false,
+            "profit": -227474.55000000005,
+            "start_nav": 1000000.0,
+            "total_return": -0.22747455000000005,
+            "year": "2022"
+          },
+          {
+            "end_nav": 984092.95,
+            "max_drawdown": -0.07000731280888539,
+            "partial_year": false,
+            "profit": 211567.5,
+            "start_nav": 772525.45,
+            "total_return": 0.27386476393755066,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1459422.25,
+            "max_drawdown": -0.21207312485593854,
+            "partial_year": false,
+            "profit": 475329.30000000005,
+            "start_nav": 984092.95,
+            "total_return": 0.48301260566900717,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1996081.2899999998,
+            "max_drawdown": -0.27506722846786036,
+            "partial_year": false,
+            "profit": 536659.0399999998,
+            "start_nav": 1459422.25,
+            "total_return": 0.3677201988663663,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3398296.3400000003,
+            "max_drawdown": -0.15339499736331197,
+            "partial_year": true,
+            "profit": 1402215.0500000005,
+            "start_nav": 1996081.2899999998,
+            "total_return": 0.7024839404210841,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 17,
+        "cagr": 0.2986004183489739,
+        "cash": 23.54,
+        "costs": {
+          "commission": 1755.0,
+          "slippage": 10472.0,
+          "tax": 0.0,
+          "total_cost": 12227.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3398272.8000000003,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 30992,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3398296.3400000003,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3398272.8000000003,
+        "max_drawdown": -0.33904490498539785,
+        "minimum_cash": 4.49,
+        "partial_or_rejected_orders": {
+          "capacity_or_cash_zero": 1,
+          "partial_capacity_or_cash": 9,
+          "resource_cash_locked": 6
+        },
+        "profit": 2398296.3400000003,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.3982963400000004,
+        "trade_count": 17,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_combined_100",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "reserved": true,
+        "stress": "combined"
+      },
+      "legacy_identical": true,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/reserved_combined.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": -0.14059918501191876,
+        "outperform_fraction": 0.4106334841628959,
+        "overlapping_windows": 884,
+        "worst_excess": -0.8230149831971428
+      },
+      "sha256": "5ab7094cac51bccd6497c0159193ccaaa30beb7658d46ee27d6a8af53425929a",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 833074.6000000001,
+            "max_drawdown": -0.18267180000000005,
+            "partial_year": false,
+            "profit": -166925.3999999999,
+            "start_nav": 1000000.0,
+            "total_return": -0.1669253999999999,
+            "year": "2022"
+          },
+          {
+            "end_nav": 954162.5,
+            "max_drawdown": -0.1929194376076131,
+            "partial_year": false,
+            "profit": 121087.8999999999,
+            "start_nav": 833074.6000000001,
+            "total_return": 0.1453506084569136,
+            "year": "2023"
+          },
+          {
+            "end_nav": 744401.25,
+            "max_drawdown": -0.2724193770541007,
+            "partial_year": false,
+            "profit": -209761.25,
+            "start_nav": 954162.5,
+            "total_return": -0.21983807789553667,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1216650.89,
+            "max_drawdown": -0.11686667634082848,
+            "partial_year": false,
+            "profit": 472249.6399999999,
+            "start_nav": 744401.25,
+            "total_return": 0.6344019975785906,
+            "year": "2025"
+          },
+          {
+            "end_nav": 2157262.29,
+            "max_drawdown": -0.2726550967435736,
+            "partial_year": true,
+            "profit": 940611.4000000001,
+            "start_nav": 1216650.89,
+            "total_return": 0.7731152853551935,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 103,
+        "cagr": 0.17847533927594128,
+        "cash": 10514.19,
+        "costs": {
+          "commission": 47948.0,
+          "slippage": 297761.0,
+          "tax": 48579.0,
+          "total_cost": 394288.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 639702.1,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 35638,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 779288.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 6718,
+            "stale": false,
+            "stock_id": "2615"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "mark_date": "2026-09-09",
+            "market_value": 690480.0,
+            "name": "富喬",
+            "price": 126.0,
+            "qty": 5480,
+            "stale": false,
+            "stock_id": "1815"
+          }
+        ],
+        "final_nav": 2157262.29,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 5.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          },
+          {
+            "action_id": "2881-2024-09-09-stock-fractional-cash",
+            "amount": 9.0,
+            "event_id": "2024-08-g001-2024-08-16-2881",
+            "ex_date": "2024-09-09",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2881"
+          },
+          {
+            "action_id": "1815-2026-09-09-stock",
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "fraction": 0.0093758416,
+            "fractional_cash_per_share": 0,
+            "kind": "shares",
+            "pay_date": "2026-10-13",
+            "qty": 274,
+            "stock_id": "1815"
+          },
+          {
+            "action_id": "1815-cash-2026-09-09",
+            "amount": 2740.0,
+            "event_id": "2026-08-g004-2026-08-21-1815",
+            "ex_date": "2026-09-09",
+            "kind": "cash",
+            "pay_date": "2026-10-13",
+            "stock_id": "1815"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 2109470.1,
+        "max_drawdown": -0.3687831763085947,
+        "minimum_cash": 452.9,
+        "partial_or_rejected_orders": {
+          "at_upper_limit": 8,
+          "partial_capacity_or_cash": 76,
+          "single_price_session": 1
+        },
+        "profit": 1157262.29,
+        "receivable": 37278.0,
+        "sell_count": 129,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 55,
+        "total_return": 1.1572622900000002,
+        "trade_count": 232,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    },
+    "reserved_control": {
+      "audit": {
+        "all_daily_nav_reconciled": true,
+        "capacity_and_order_limits": true,
+        "cash_ledger_reconciled": true,
+        "cash_movements": 234,
+        "daily_shares_reconstructed": true,
+        "fees_recomputed": true,
+        "integer_shares": true,
+        "no_overdraft": true,
+        "opening_nav_continuity": true,
+        "precommitted_budget_and_quantity": true,
+        "trade_cash_reconciled": true,
+        "trading_days": 1136
+      },
+      "benchmark": {
+        "annual": [
+          {
+            "end_nav": 777538.85,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false,
+            "profit": -222461.15000000002,
+            "start_nav": 1000000.0,
+            "total_return": -0.22246115,
+            "year": "2022"
+          },
+          {
+            "end_nav": 990859.7999999998,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false,
+            "profit": 213320.94999999984,
+            "start_nav": 777538.85,
+            "total_return": 0.27435407246853294,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1469935.95,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false,
+            "profit": 479076.15000000014,
+            "start_nav": 990859.7999999998,
+            "total_return": 0.48349539460577584,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2010644.9399999997,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false,
+            "profit": 540708.9899999998,
+            "start_nav": 1469935.95,
+            "total_return": 0.3678452724419725,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3423350.99,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true,
+            "profit": 1412706.0500000005,
+            "start_nav": 2010644.9399999997,
+            "total_return": 0.7026133863296624,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 16,
+        "cagr": 0.3006395319831825,
+        "cash": 77.99,
+        "costs": {
+          "commission": 1762.0,
+          "slippage": 5269.0,
+          "tax": 0.0,
+          "total_cost": 7031.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "benchmark",
+            "mark_date": "2026-09-09",
+            "market_value": 3423273.0,
+            "name": "元大台灣50",
+            "price": 109.65,
+            "qty": 31220,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3423350.99,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3423273.0,
+        "max_drawdown": -0.33891916061205296,
+        "minimum_cash": 4.94,
+        "partial_or_rejected_orders": {
+          "partial_capacity_or_cash": 4,
+          "resource_cash_locked": 6
+        },
+        "profit": 2423350.99,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 0,
+        "total_return": 2.4233509900000003,
+        "trade_count": 16,
+        "trading_days": 1136
+      },
+      "benchmark_case": "benchmark_control_100",
+      "completed": true,
+      "config": {
+        "benchmark": false,
+        "reserved": true,
+        "stress": "control"
+      },
+      "legacy_identical": true,
+      "live_qualified": false,
+      "path": ".cache/execution-resources-20260924/cases/reserved_control.json",
+      "rolling252": {
+        "independent_samples": false,
+        "median_excess": 0.290657037824023,
+        "outperform_fraction": 0.7047511312217195,
+        "overlapping_windows": 884,
+        "worst_excess": -0.4990727803843833
+      },
+      "sha256": "a825afb401aea9599f8d5520bffb4552ec5db121b7a2ee294109b77db5f09dfe",
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 789110.25,
+            "max_drawdown": -0.22494375,
+            "partial_year": false,
+            "profit": -210889.75,
+            "start_nav": 1000000.0,
+            "total_return": -0.21088975,
+            "year": "2022"
+          },
+          {
+            "end_nav": 1344734.3,
+            "max_drawdown": -0.1272057221868137,
+            "partial_year": false,
+            "profit": 555624.05,
+            "start_nav": 789110.25,
+            "total_return": 0.70411460249059,
+            "year": "2023"
+          },
+          {
+            "end_nav": 1423195.85,
+            "max_drawdown": -0.3775829728902984,
+            "partial_year": false,
+            "profit": 78461.55000000005,
+            "start_nav": 1344734.3,
+            "total_return": 0.05834725120047879,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3270913.0599999996,
+            "max_drawdown": -0.11463945497811778,
+            "partial_year": false,
+            "profit": 1847717.2099999995,
+            "start_nav": 1423195.85,
+            "total_return": 1.2982873790701395,
+            "year": "2025"
+          },
+          {
+            "end_nav": 7371616.739999999,
+            "max_drawdown": -0.3101309677377011,
+            "partial_year": true,
+            "profit": 4100703.6799999997,
+            "start_nav": 3270913.0599999996,
+            "total_return": 1.2536877638686001,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 107,
+        "cagr": 0.5321749540892797,
+        "cash": 910630.29,
+        "costs": {
+          "commission": 116522.0,
+          "slippage": 367158.0,
+          "tax": 122785.0,
+          "total_cost": 606465.0
+        },
+        "end": "2026-09-09",
+        "final_holdings": [
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-07-g001-2026-07-06-1216",
+            "mark_date": "2026-09-09",
+            "market_value": 1326732.0,
+            "name": "統一",
+            "price": 76.0,
+            "qty": 17457,
+            "stale": false,
+            "stock_id": "1216"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g018-2026-08-04-2834",
+            "mark_date": "2026-09-09",
+            "market_value": 2287027.4499999997,
+            "name": "臺企銀",
+            "price": 17.95,
+            "qty": 127411,
+            "stale": false,
+            "stock_id": "2834"
+          },
+          {
+            "date": "2026-09-09",
+            "event_id": "2026-08-g013-2026-08-10-2615",
+            "mark_date": "2026-09-09",
+            "market_value": 2847220.0,
+            "name": "萬海",
+            "price": 116.0,
+            "qty": 24545,
+            "stale": false,
+            "stock_id": "2615"
+          }
+        ],
+        "final_nav": 7371616.739999999,
+        "final_receivables": [
+          {
+            "action_id": "2880-2024-08-13-stock-fractional-cash",
+            "amount": 7.0,
+            "event_id": "2024-05-g001-2024-05-10-2880",
+            "ex_date": "2024-08-13",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2880"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 6460979.449999999,
+        "max_drawdown": -0.3775829728902984,
+        "minimum_cash": 5.35,
+        "partial_or_rejected_orders": {
+          "at_lower_limit": 4,
+          "at_upper_limit": 2,
+          "invalid_odd_lot_quote": 2,
+          "odd_lot_at_price_limit": 1,
+          "partial_capacity_or_cash": 36
+        },
+        "profit": 6371616.739999999,
+        "receivable": 7.0,
+        "sell_count": 113,
+        "stale_final_holdings": 0,
+        "start": "2022-01-03",
+        "stock_cohorts": 56,
+        "total_return": 6.3716167399999994,
+        "trade_count": 220,
+        "trading_days": 1136
+      },
+      "unseen_validation": false
+    }
+  },
+  "conditional_contrasts": [
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_control_000",
+      "net_return_difference": -3.8597708899999983,
+      "stress": "control",
+      "to_case": "capacity_control_100"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_control_001",
+      "net_return_difference": -3.5590743600000003,
+      "stress": "control",
+      "to_case": "capacity_control_101"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_control_010",
+      "net_return_difference": 0.0,
+      "stress": "control",
+      "to_case": "capacity_control_110"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_control_011",
+      "net_return_difference": 0.0,
+      "stress": "control",
+      "to_case": "capacity_control_111"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_control_000",
+      "net_return_difference": -2.3642657000000007,
+      "stress": "control",
+      "to_case": "capacity_control_010"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_control_001",
+      "net_return_difference": -5.565025170000001,
+      "stress": "control",
+      "to_case": "capacity_control_011"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_control_100",
+      "net_return_difference": 1.4955051899999976,
+      "stress": "control",
+      "to_case": "capacity_control_110"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_control_101",
+      "net_return_difference": -2.0059508100000008,
+      "stress": "control",
+      "to_case": "capacity_control_111"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_control_000",
+      "net_return_difference": 0.8266404300000012,
+      "stress": "control",
+      "to_case": "capacity_control_001"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_control_010",
+      "net_return_difference": -2.374119039999999,
+      "stress": "control",
+      "to_case": "capacity_control_011"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_control_100",
+      "net_return_difference": 1.1273369599999992,
+      "stress": "control",
+      "to_case": "capacity_control_101"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_control_110",
+      "net_return_difference": -2.374119039999999,
+      "stress": "control",
+      "to_case": "capacity_control_111"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_combined_000",
+      "net_return_difference": -0.2766976899999998,
+      "stress": "combined",
+      "to_case": "capacity_combined_100"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_combined_001",
+      "net_return_difference": 0.261467660000001,
+      "stress": "combined",
+      "to_case": "capacity_combined_101"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_combined_010",
+      "net_return_difference": -0.08167280000000021,
+      "stress": "combined",
+      "to_case": "capacity_combined_110"
+    },
+    {
+      "factor": "opening_cash_only",
+      "from_case": "capacity_combined_011",
+      "net_return_difference": -0.07875779999999954,
+      "stress": "combined",
+      "to_case": "capacity_combined_111"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_combined_000",
+      "net_return_difference": -2.38178994,
+      "stress": "combined",
+      "to_case": "capacity_combined_010"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_combined_001",
+      "net_return_difference": -1.9108470900000003,
+      "stress": "combined",
+      "to_case": "capacity_combined_011"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_combined_100",
+      "net_return_difference": -2.1867650500000004,
+      "stress": "combined",
+      "to_case": "capacity_combined_110"
+    },
+    {
+      "factor": "lock_slots",
+      "from_case": "capacity_combined_101",
+      "net_return_difference": -2.251072550000001,
+      "stress": "combined",
+      "to_case": "capacity_combined_111"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_combined_000",
+      "net_return_difference": -0.5049657999999999,
+      "stress": "combined",
+      "to_case": "capacity_combined_001"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_combined_010",
+      "net_return_difference": -0.03402295000000022,
+      "stress": "combined",
+      "to_case": "capacity_combined_011"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_combined_100",
+      "net_return_difference": 0.033199550000000855,
+      "stress": "combined",
+      "to_case": "capacity_combined_101"
+    },
+    {
+      "factor": "lock_unused",
+      "from_case": "capacity_combined_110",
+      "net_return_difference": -0.03110794999999955,
+      "stress": "combined",
+      "to_case": "capacity_combined_111"
+    }
+  ],
+  "database_writes": 0,
+  "elapsed_seconds": 34.43,
+  "limitations": [
+    "Daily execution order is not verified intraday order timing",
+    "Historical odd-lot auctions and complete historical universe remain incomplete",
+    "All cases reuse explored history; no optimization or live adoption",
+    "Factor contrasts include compounded path and membership changes, not per-trade causality"
+  ],
+  "live_qualified": false,
+  "network_calls": 1,
+  "unseen_validation": false,
+  "offline_verification": {
+    "all_cases_identical": true,
+    "all_completed": true,
+    "elapsed_seconds": 83.732,
+    "manifest_sha256": "c6472cc91d78be666be37251723ff02bab7ded08963c0ce5c5a133e990681387",
+    "network_calls": 0
+  },
+  "tests": {
+    "passed": 2617,
+    "warnings": 29,
+    "seconds": 62.42
+  },
+  "report": "docs/research_execution_resources_20260924.md",
+  "decision": "do_not_adopt_execution_sensitive",
+  "preparation_requests": {
+    "finmind": 0,
+    "official": 1
+  }
+}
