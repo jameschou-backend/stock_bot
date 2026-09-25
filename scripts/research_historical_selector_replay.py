@@ -27,6 +27,8 @@ from skills.scenario_exit_replay import ExitSignals
 from skills.replay_market_feeds import ReplayMarketFeeds, ReplayDataUnavailable
 from skills.million_replay import UnresolvedAction
 from skills.backtest_contract import validate_completed_account
+from scripts.prepare_historical_listing_prefix import verify as verify_prefix, OUTPUT as PREFIX
+from skills.historical_listing_prefix import restore as restore_prefix
 
 BASE = ROOT / '.cache/five-axis-20260913/rebuild'
 PARENT = ROOT / '.cache/backtest-corporate-completion-20260925/probe-v2'
@@ -34,6 +36,7 @@ OUTPUT = ROOT / '.cache/historical-selector-replay-20260925'
 ARMS = ('original', 'identity', 'omitted', 'combined')
 CODE = ('scripts/research_historical_selector_replay.py', 'scripts/prepare_historical_selector_quality.py',
         'scripts/prepare_historical_selector_execution.py',
+        'scripts/prepare_historical_listing_prefix.py', 'skills/historical_listing_prefix.py',
         'skills/historical_selector_replay.py', 'skills/historical_diffusion_signals.py',
         'skills/historical_universe_completion.py', 'skills/backtest_corporate_completion.py',
         'docs/prereg_historical_selector_replay_20260925.md')
@@ -43,6 +46,7 @@ def inventory():
     identity, _ = source_context()
     report = verify_identity()
     raw, quality = verify_raw(), verify_quality()
+    prefix = verify_prefix()
     load_corporate_completion(ROOT)
     refs = dict(identity['source_sha256'])
     refs.update(report['source_sha256'])
@@ -55,6 +59,8 @@ def inventory():
     paths = [IDENTITY, IDENTITY.with_suffix('.sha256'), DIRECTORY / 'manifest.json', DIRECTORY / 'quotes.parquet',
              QUALITY / 'manifest.json', QUALITY / 'manifest.sha256', ROOT / DOCUMENT]
     paths += [QUALITY / p for p in quality['files_sha256']]
+    paths += [PREFIX / 'manifest.json', PREFIX / 'manifest.sha256']
+    paths += [PREFIX / p for p in prefix['files_sha256']]
     paths += [ROOT / p for p in CODE]
     refs.update(file_identities(paths, ROOT))
     return refs, report, raw, quality
@@ -186,20 +192,42 @@ def run(output, signals_only=False, execution_inputs=None):
     original, _ = sealed.parent.source.inputs()
     frames = load_frames()
     companies = pd.read_parquet(ROOT / '.cache/million-replay-signals/companies.parquet')
+    prefix_report = verify_prefix()
+    prefix_quotes = pd.read_parquet(PREFIX / 'quotes.parquet')
+    prefix_quotes['date'] = pd.to_datetime(prefix_quotes.date)
+    bad_prefix = {(r['stock_id'], pd.Timestamp(r['date'])) for r in prefix_report['summary']['quarantine']}
+    prefix_quotes = prefix_quotes.loc[[(s, d) not in bad_prefix for s, d in zip(prefix_quotes.stock_id, prefix_quotes.date)]]
+    prefix_quality = {}
+    for row in prefix_report['plan']['rows']:
+        q = pd.read_parquet(PREFIX / (row['stock_id'] + '.parquet'))
+        q['date'] = pd.to_datetime(q.date)
+        prefix_quality[row['stock_id']] = q.set_index('date')['close']
+    corrected, corrected_companies, prefix_anchors = restore_prefix(frames, companies, original.events,
+        prefix_quotes, prefix_quality, prefix_report['plan'])
+    write(output / 'listing-prefix.json', dict(anchors=prefix_anchors,
+        unconfirmed_discrepancies=prefix_report['plan']['unconfirmed_discrepancies']))
     expanded_companies = pd.concat([companies, supplemental_companies(report, raw)], ignore_index=True)
+    corrected_expanded_companies = pd.concat([corrected_companies, supplemental_companies(report, raw)], ignore_index=True)
     expanded, supplement_quotes = augment(frames, raw, original.events)
+    corrected_expanded, _ = augment(corrected, raw, original.events)
     all_quotes = pd.read_parquet(ROOT / '.cache/million-replay-inputs/quotes.parquet')
     all_quotes['date'] = pd.to_datetime(all_quotes.date)
     bad = {(r['stock_id'], pd.Timestamp(r['date'])) for r in read(sealed.parent.source.five.AUDIT)['quarantine']}
     all_quotes = all_quotes.loc[[(sid, day) not in bad for sid, day in zip(all_quotes.stock_id, all_quotes.date)]]
     all_quotes = pd.concat([all_quotes, supplement_quotes], ignore_index=True)
+    corrected_quotes = pd.concat([all_quotes, prefix_quotes], ignore_index=True)
+    if corrected_quotes.duplicated(['stock_id', 'date']).any():
+        raise ValueError('Restored prefix overlaps the old quote snapshot')
     additions = load_corporate_completion(ROOT)
     results, signal_summaries, baseline_entries = {}, {}, None
     with offline_only():
         for arm in ARMS:
             has_new = arm in ('omitted', 'combined')
-            arm_companies = expanded_companies if has_new else companies
-            arm_frames, mask = prepare_arm(arm, expanded if has_new else frames, arm_companies,
+            arm_companies = {'original': companies, 'identity': corrected_companies,
+                             'omitted': expanded_companies, 'combined': corrected_expanded_companies}[arm]
+            arm_base = {'original': frames, 'identity': corrected, 'omitted': expanded,
+                        'combined': corrected_expanded}[arm]
+            arm_frames, mask = prepare_arm(arm, arm_base, arm_companies,
                                            report, raw['plan']['stock_ids'])
             tick = time.monotonic()
             signals = build_signals(arm_frames, arm_companies, mask)
@@ -223,7 +251,8 @@ def run(output, signals_only=False, execution_inputs=None):
             if signals_only:
                 continue
             pool = sorted({'0050'} | {e['members'][0] for e in entries})
-            quotes = all_quotes[all_quotes.stock_id.isin(pool)].copy()
+            quote_source = corrected_quotes if arm in ('identity', 'combined') else all_quotes
+            quotes = quote_source[quote_source.stock_id.isin(pool)].copy()
             if mask is not None:
                 valid = [(day in mask.index and bool(mask.at[day, sid])) for sid, day in zip(quotes.stock_id, quotes.date)]
                 quotes = quotes.loc[valid]
