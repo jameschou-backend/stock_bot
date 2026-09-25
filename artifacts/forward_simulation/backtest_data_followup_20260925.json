@@ -1,0 +1,27 @@
+{
+  "base_data_report": {
+    "path": "artifacts/forward_simulation/backtest_data_completion_20260925.json",
+    "sha256": "59921a01837a2ae0d72c7164a8d5622fb7357297e471ccd220ca5921100a5375"
+  },
+  "live_qualified": false,
+  "performance_recomputed": false,
+  "reports": {
+    "identity": {
+      "path": ".cache/historical-universe-followup-20260925/report-final.json",
+      "sha256": "92cb7b4300b75a55269fb2c4f00c1777bcab33c400d2399fb81eca4934c2a5e6"
+    },
+    "odd_lot": {
+      "path": ".cache/odd-lot-provider-request-20260925-v3/request.json",
+      "sha256": "6365c5905b836d5cb089e4839b1dd42536ff8ed4a56779d9c4109c834850b22a"
+    },
+    "ordinary": {
+      "path": "artifacts/forward_simulation/board_tape_reconciliation_20260925.json",
+      "sha256": "016ccc7a7f6e884fcb1fed6d64756a51a51b6fc008592056d6b5c6d020d3b4ec"
+    },
+    "publication": {
+      "path": ".cache/publication-versions-20260925/walsin-v1/archive.json",
+      "sha256": "838c743b0a80ef829c14472025c8eab5c7a7a364e311af71d8adf26861aabcab"
+    }
+  },
+  "schema": "backtest_data_followup_v1"
+}
