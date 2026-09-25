@@ -233,8 +233,8 @@ def render_research(status):
     from app.guidance_research_ui import render as render_guidance
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
-    from app.backtest_data_followup_ui import render as render_data_followup
-    render_data_followup()
+    from app.backtest_full_pass_ui import render as render_full_pass
+    render_full_pass()
     from app.backtest_completion_ui import render as render_backtest_completion
     render_backtest_completion()
     from app.backtest_tool_ui import render as render_backtest_tool

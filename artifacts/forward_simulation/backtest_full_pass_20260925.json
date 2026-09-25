@@ -1,0 +1,44 @@
+{
+  "code_sha256": {
+    "app/backtest_full_pass_ui.py": "bfd6b55f6af383ccb8c011c4e0be78d45ab35a0d35c42631d26085ca68df8ad7",
+    "scripts/publish_backtest_full_pass.py": "2333a0550f1edea898f629adf06d418e9cca3419fa20398b3b55275352a3772a"
+  },
+  "live_qualified": false,
+  "parent_followup": {
+    "path": "artifacts/forward_simulation/backtest_data_followup_20260925.json",
+    "sha256": "4017c552f968ed8d23f45ef08ca617985a4004ae1e7771c199908eb8fde5cae6"
+  },
+  "performance_recomputed": false,
+  "reports": {
+    "cohort_prices": {
+      "path": ".cache/historical-cohort-supplement-20260925/verified-snapshot/manifest.json",
+      "sha256": "8f602a98d105d63e64f11f1e535fcb40a91e1cc0a730cdb5c6f2e64ccd3c8cc0"
+    },
+    "dependencies": {
+      "path": "artifacts/forward_simulation/backtest_case_dependencies_20260925.json",
+      "sha256": "d1d054758cf89abe1f8a5cba660c0dc6d2f7dc7f10b1cfdbfb146c955b83cf6c"
+    },
+    "external": {
+      "path": ".cache/mops-publication-channel-20260925/report.json",
+      "sha256": "bcb4f8ed7019e45e7933f217e52a857f6296398b22c740eda2fce56b880a4efe"
+    },
+    "identity": {
+      "path": ".cache/historical-universe-followup-v2-20260925/report-final.json",
+      "sha256": "5751f1d19fd8c5ade99f8847e4923dea975564189f5ca29c29e9d56d5c11bfd0"
+    },
+    "odd_daily": {
+      "path": ".cache/odd-lot-daily-gaps-20260925/report.json",
+      "sha256": "3375d3046a411561ee9fd067ec4dd40710541ae91461937428ed625b6a86b9a2"
+    },
+    "ordinary": {
+      "path": "artifacts/forward_simulation/board_tape_reconciliation_v2_20260925.json",
+      "sha256": "cb1b8e82d770f98c1d66508a04b5627ac13051125fbed978ce1cdc33bc1ed36b"
+    },
+    "provider_refresh": {
+      "path": "artifacts/forward_simulation/provider_tape_conflicts_20260925.json",
+      "sha256": "0e5d737012c5be7d4539ed36889bb1aeee26fe8630d7d54cc2a5d762765eaf41"
+    }
+  },
+  "schema": "backtest_full_pass_v1",
+  "strict_data_ready": false
+}
