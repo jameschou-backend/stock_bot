@@ -1,0 +1,465 @@
+{
+  "base_path": ".cache/listing-continuation-20260924/report.json",
+  "base_sha256": "160c5c02107d25191d0a052d7520c48e24614cfbf883ddb89eced6aa2fa59094",
+  "finmind_requests": 0,
+  "industry_sources": [
+    {
+      "expected_count": 13,
+      "retrieved_at": "2026-09-24T15:31:07.097381+00:00",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html.source.json",
+      "source_meta_sha256": "65823177284dd0fd766ee1ab8fd776ee0a592a4ad9488ecda57faf2e04f6e532",
+      "source_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html",
+      "source_sha256": "cb449d69be519247d44e10eb1489e3c1c8e9d1fc93248f1cd49a437e4e028220",
+      "source_url": "https://www.tpex.org.tw/storage/eb_data/11505/11502011171.html",
+      "verification": {
+        "kind": "html",
+        "snippets": [
+          "115年6月1日",
+          "證券代號不予變更"
+        ],
+        "visual_only": false
+      },
+      "year": 2026
+    },
+    {
+      "expected_count": 11,
+      "retrieved_at": "2026-09-25T03:40:56.683025+00:00",
+      "source_meta_path": ".cache/historical-universe-followup-20260925/industry-2025.source.json",
+      "source_meta_sha256": "14df7bb8e0e9cc139d44f09d811f6f075396dc13f28d16a272ca872fffa07e14",
+      "source_path": ".cache/historical-universe-followup-20260925/industry-2025.html",
+      "source_sha256": "53cc57c73cbfa2c1e36ef2e6cd77186f4064e756293a2b287cc0e1930992f667",
+      "source_url": "https://www.tpex.org.tw/storage/eb_data/11405/11402010541.html",
+      "verification": {
+        "kind": "html",
+        "snippets": [
+          "114年6月2日",
+          "證券代號不予變更"
+        ],
+        "visual_only": false
+      },
+      "year": 2025
+    }
+  ],
+  "listing_evidence": [
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "category_evidence": {
+        "retrieved_at": "2026-09-24T15:18:00.802956+00:00",
+        "source_meta_path": ".cache/listing-continuation-20260924/twse/1507annual2020.source.json",
+        "source_meta_sha256": "935fdeb01dab90ed015553a7880ee9d0912dbf383bef887cef75ab7aa2d9c074",
+        "source_path": ".cache/listing-continuation-20260924/twse/1507annual2020.pdf",
+        "source_sha256": "59f1e302d7b8dbba620877b0f67286abdd55a4361e8b4ccdbc34750db9914e20",
+        "source_url": "https://en.hitachi-yungtay.com.tw/wp-content/uploads/2022/01/109%E5%B9%B4%E5%A0%B1-%E8%8B%B1%E6%96%87lock.pdf.pdf",
+        "verification": {
+          "kind": "pdf",
+          "page": 65,
+          "render_path": ".cache/historical-universe-followup-20260925/1507-category.png",
+          "render_sha256": "aa54d3fd7a386f7d539ee3f026b09a8404fa1ee04b02a30b3d75e15f49770683",
+          "snippets": [
+            "Common stock",
+            "410,820,000",
+            "Listed stock"
+          ],
+          "visual_only": false,
+          "visual_reviewed": true
+        }
+      },
+      "continuous_eligibility_proven": false,
+      "corroborating_evidence": [
+        {
+          "retrieved_at": "2026-09-25T03:41:28.314290+00:00",
+          "source_meta_path": ".cache/historical-universe-followup-20260925/1507-termination.source.json",
+          "source_meta_sha256": "9d15e90eeccbaaaf58e22b918b8f1b05d9d171ba08f9e27fc9d5d3a2c0cdf440",
+          "source_path": ".cache/historical-universe-followup-20260925/1507-termination.pdf",
+          "source_sha256": "eb9da639db7201e7a89d8eb57b26971d1a7fcb4f8b87272b5e66bbece16c2b84",
+          "source_url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/ff8080817d22b9cb017f6d9b33a80729.pdf",
+          "verification": {
+            "kind": "pdf",
+            "page": 1,
+            "snippets": [
+              "永大機電工業股份有限公司",
+              "證券代號：1507",
+              "111年4月14日起停止買賣",
+              "111年4月21日起終止上市"
+            ],
+            "visual_only": false
+          }
+        }
+      ],
+      "end": "2022-04-21",
+      "evidence_kind": "exchange_chronology_with_issuer_common_stock_table",
+      "market": "TWSE",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "retrieved_at": "2026-09-25T03:38:31.298366+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/historical-universe-followup-20260925/twse60-P17.source.json",
+      "source_meta_sha256": "5b08257e2d0ebc031eb598ec9c37c552a3fa5526cbcd178d2ae751a6cd446085",
+      "source_path": ".cache/historical-universe-followup-20260925/twse60-P17.pdf",
+      "source_sha256": "d191cf8747b2fb8255c5b71f3ab1897ec7c13febceda20ccdc490c78a002d0b9",
+      "source_url": "https://www.twse.com.tw/staticFiles/product/publication/twse60/P17.pdf",
+      "start": "1989-11-09",
+      "stock_id": "1507",
+      "verification": {
+        "kind": "pdf",
+        "page": 3,
+        "render_path": ".cache/historical-universe-followup-20260925/1507-listing.png",
+        "render_sha256": "3028baba209f76b43c8ab0fc41d95127454276dee099b990247a1fee327eb97c",
+        "snippets": [
+          "上市公司異動",
+          "78年",
+          "11月09日︰永大機電上市"
+        ],
+        "visual_only": false,
+        "visual_reviewed": true
+      }
+    },
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "category_evidence": {
+        "retrieved_at": "2026-09-24T15:23:35.685375+00:00",
+        "source_meta_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.source.json",
+        "source_meta_sha256": "2a75ac4e98afdf5e3842056cc2e0fa1fb8625678fbfd673c3df4e6fd2168f41e",
+        "source_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.pdf",
+        "source_sha256": "8f4beb2ad9fa44ea55656ba56cd60e408d8d96b9adb87d556d4ad974984656df",
+        "source_url": "https://doc.twse.com.tw/pdf/2022_2358_20230616F04_20260924_232301.pdf",
+        "verification": {
+          "kind": "pdf",
+          "page": 194,
+          "render_path": ".cache/historical-universe-followup-20260925/2358-category.png",
+          "render_sha256": "0b8bdd2eee56917f045155186ac4a92cd83ecbf3452cf1d756d4f342246316bc",
+          "snippets": [
+            "前述額定股本總額均為普通股",
+            "136,616",
+            "124,616"
+          ],
+          "visual_only": false,
+          "visual_reviewed": true
+        }
+      },
+      "continuous_eligibility_proven": false,
+      "corroborating_evidence": [
+        {
+          "retrieved_at": "2026-09-24T15:23:35.685375+00:00",
+          "source_meta_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.source.json",
+          "source_meta_sha256": "2a75ac4e98afdf5e3842056cc2e0fa1fb8625678fbfd673c3df4e6fd2168f41e",
+          "source_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.pdf",
+          "source_sha256": "8f4beb2ad9fa44ea55656ba56cd60e408d8d96b9adb87d556d4ad974984656df",
+          "source_url": "https://doc.twse.com.tw/pdf/2022_2358_20230616F04_20260924_232301.pdf",
+          "verification": {
+            "kind": "pdf",
+            "page": 1,
+            "snippets": [
+              "股票代號：2358"
+            ],
+            "visual_only": false
+          }
+        }
+      ],
+      "end": "2024-11-19",
+      "evidence_kind": "issuer_annual_report_exact_listing_date",
+      "market": "TWSE",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "retrieved_at": "2026-09-24T15:23:35.685375+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.source.json",
+      "source_meta_sha256": "2a75ac4e98afdf5e3842056cc2e0fa1fb8625678fbfd673c3df4e6fd2168f41e",
+      "source_path": ".cache/listing-continuation-20260924/twse/2358-mops-annual.pdf",
+      "source_sha256": "8f4beb2ad9fa44ea55656ba56cd60e408d8d96b9adb87d556d4ad974984656df",
+      "source_url": "https://doc.twse.com.tw/pdf/2022_2358_20230616F04_20260924_232301.pdf",
+      "start": "1996-12-18",
+      "stock_id": "2358",
+      "verification": {
+        "kind": "pdf",
+        "page": 98,
+        "render_path": ".cache/historical-universe-followup-20260925/2358-listing.png",
+        "render_sha256": "b98db83d36f7dc38881184f1239defdfb8d43c3e60c7719a8cac9952b47edd17",
+        "snippets": [
+          "廷鑫興業股份有限公司",
+          "本公司股票自民國八十五年十二月十八日正式掛牌台灣證券交易所買賣",
+          "美格科技股份有限公司更名為廷鑫興業股份有限公司"
+        ],
+        "visual_only": false,
+        "visual_reviewed": true
+      }
+    },
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "continuous_eligibility_proven": false,
+      "correction_evidence": {
+        "event_date": "2026-06-01",
+        "event_type": "industry_reclassification",
+        "publication_date": "2026-05-19",
+        "retrieved_at": "2026-09-24T15:31:07.097381+00:00",
+        "source_meta_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html.source.json",
+        "source_meta_sha256": "65823177284dd0fd766ee1ab8fd776ee0a592a4ad9488ecda57faf2e04f6e532",
+        "source_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html",
+        "source_sha256": "cb449d69be519247d44e10eb1489e3c1c8e9d1fc93248f1cd49a437e4e028220",
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11505/11502011171.html",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：3313",
+            "證券代號不予變更",
+            "115年6月1日"
+          ],
+          "visual_only": false
+        }
+      },
+      "evidence_kind": "current_official_basic_data_original_listing_date",
+      "market": "TPEx",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "replaces_snapshot_start": "2026-06-01",
+      "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+      "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+      "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+      "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+      "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "start": "2006-05-29",
+      "stock_id": "3313",
+      "verification": {
+        "key_column": "公司代號",
+        "key_value": "3313",
+        "kind": "csv",
+        "values": {
+          "上櫃日期": "20060529",
+          "出表日期": "1150924"
+        },
+        "visual_only": false
+      }
+    },
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "continuous_eligibility_proven": false,
+      "correction_evidence": {
+        "event_date": "2026-06-01",
+        "event_type": "industry_reclassification",
+        "publication_date": "2026-05-19",
+        "retrieved_at": "2026-09-24T15:31:07.097381+00:00",
+        "source_meta_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html.source.json",
+        "source_meta_sha256": "65823177284dd0fd766ee1ab8fd776ee0a592a4ad9488ecda57faf2e04f6e532",
+        "source_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html",
+        "source_sha256": "cb449d69be519247d44e10eb1489e3c1c8e9d1fc93248f1cd49a437e4e028220",
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11505/11502011171.html",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：4905",
+            "證券代號不予變更",
+            "115年6月1日"
+          ],
+          "visual_only": false
+        }
+      },
+      "evidence_kind": "current_official_basic_data_original_listing_date",
+      "market": "TPEx",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "replaces_snapshot_start": "2026-06-01",
+      "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+      "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+      "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+      "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+      "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "start": "2001-12-07",
+      "stock_id": "4905",
+      "verification": {
+        "key_column": "公司代號",
+        "key_value": "4905",
+        "kind": "csv",
+        "values": {
+          "上櫃日期": "20011207",
+          "出表日期": "1150924"
+        },
+        "visual_only": false
+      }
+    },
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "continuous_eligibility_proven": false,
+      "correction_evidence": {
+        "event_date": "2026-06-01",
+        "event_type": "industry_reclassification",
+        "publication_date": "2026-05-19",
+        "retrieved_at": "2026-09-24T15:31:07.097381+00:00",
+        "source_meta_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html.source.json",
+        "source_meta_sha256": "65823177284dd0fd766ee1ab8fd776ee0a592a4ad9488ecda57faf2e04f6e532",
+        "source_path": ".cache/isin-date-corrections-20260924/6125-industry-change.html",
+        "source_sha256": "cb449d69be519247d44e10eb1489e3c1c8e9d1fc93248f1cd49a437e4e028220",
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11505/11502011171.html",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：5381",
+            "證券代號不予變更",
+            "115年6月1日"
+          ],
+          "visual_only": false
+        }
+      },
+      "evidence_kind": "current_official_basic_data_original_listing_date",
+      "market": "TPEx",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "replaces_snapshot_start": "2026-06-01",
+      "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+      "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+      "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+      "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+      "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "start": "1999-03-19",
+      "stock_id": "5381",
+      "verification": {
+        "key_column": "公司代號",
+        "key_value": "5381",
+        "kind": "csv",
+        "values": {
+          "上櫃日期": "19990319",
+          "出表日期": "1150924"
+        },
+        "visual_only": false
+      }
+    },
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "continuous_eligibility_proven": false,
+      "correction_evidence": {
+        "event_date": "2025-06-02",
+        "event_type": "industry_reclassification",
+        "publication_date": "2025-05-21",
+        "retrieved_at": "2026-09-25T03:40:56.683025+00:00",
+        "source_meta_path": ".cache/historical-universe-followup-20260925/industry-2025.source.json",
+        "source_meta_sha256": "14df7bb8e0e9cc139d44f09d811f6f075396dc13f28d16a272ca872fffa07e14",
+        "source_path": ".cache/historical-universe-followup-20260925/industry-2025.html",
+        "source_sha256": "53cc57c73cbfa2c1e36ef2e6cd77186f4064e756293a2b287cc0e1930992f667",
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11405/11402010541.html",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：3521",
+            "證券代號不予變更",
+            "114年6月2日"
+          ],
+          "visual_only": false
+        }
+      },
+      "evidence_kind": "current_official_basic_data_original_listing_date",
+      "market": "TPEx",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "replaces_snapshot_start": "2025-06-02",
+      "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+      "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+      "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+      "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+      "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "start": "2007-08-07",
+      "stock_id": "3521",
+      "verification": {
+        "key_column": "公司代號",
+        "key_value": "3521",
+        "kind": "csv",
+        "values": {
+          "上櫃日期": "20070807",
+          "出表日期": "1150924"
+        },
+        "visual_only": false
+      }
+    },
+    {
+      "announcement_available_at": null,
+      "category": "股票",
+      "continuous_eligibility_proven": false,
+      "correction_evidence": {
+        "event_date": "2025-06-02",
+        "event_type": "industry_reclassification",
+        "publication_date": "2025-05-21",
+        "retrieved_at": "2026-09-25T03:40:56.683025+00:00",
+        "source_meta_path": ".cache/historical-universe-followup-20260925/industry-2025.source.json",
+        "source_meta_sha256": "14df7bb8e0e9cc139d44f09d811f6f075396dc13f28d16a272ca872fffa07e14",
+        "source_path": ".cache/historical-universe-followup-20260925/industry-2025.html",
+        "source_sha256": "53cc57c73cbfa2c1e36ef2e6cd77186f4064e756293a2b287cc0e1930992f667",
+        "source_url": "https://www.tpex.org.tw/storage/eb_data/11405/11402010541.html",
+        "verification": {
+          "kind": "html",
+          "snippets": [
+            "股票代號：5348",
+            "證券代號不予變更",
+            "114年6月2日"
+          ],
+          "visual_only": false
+        }
+      },
+      "evidence_kind": "current_official_basic_data_original_listing_date",
+      "market": "TPEx",
+      "original_ipo_announcement_archived": false,
+      "publication_date": null,
+      "replaces_snapshot_start": "2025-06-02",
+      "retrieved_at": "2026-09-24T15:34:16.457675+00:00",
+      "security_class": "ordinary_share",
+      "source_meta_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv.source.json",
+      "source_meta_sha256": "1320aa27577b0060b3328791da73ed0be2394261a4bf1379aeb9bfc38420a442",
+      "source_path": ".cache/isin-date-corrections-20260924/tpex-company-basic.csv",
+      "source_sha256": "50faba9a13d4cd4a384a66dcfdade906c43897007a68f9883276a5beec9c842a",
+      "source_url": "https://mopsfin.twse.com.tw/opendata/t187ap03_O.csv",
+      "start": "1998-04-29",
+      "stock_id": "5348",
+      "verification": {
+        "key_column": "公司代號",
+        "key_value": "5348",
+        "kind": "csv",
+        "values": {
+          "上櫃日期": "19980429",
+          "出表日期": "1150924"
+        },
+        "visual_only": false
+      }
+    }
+  ],
+  "new_http_requests": 3,
+  "schema": "historical_universe_followup_recipe_v1",
+  "suspensions": [
+    {
+      "end": "2022-04-21",
+      "market": "TWSE",
+      "official_publication_time": null,
+      "publication_date": "2022-03-09",
+      "reason": "share_conversion_termination",
+      "retrieved_at": "2026-09-25T03:41:28.314290+00:00",
+      "source_meta_path": ".cache/historical-universe-followup-20260925/1507-termination.source.json",
+      "source_meta_sha256": "9d15e90eeccbaaaf58e22b918b8f1b05d9d171ba08f9e27fc9d5d3a2c0cdf440",
+      "source_path": ".cache/historical-universe-followup-20260925/1507-termination.pdf",
+      "source_sha256": "eb9da639db7201e7a89d8eb57b26971d1a7fcb4f8b87272b5e66bbece16c2b84",
+      "source_url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/ff8080817d22b9cb017f6d9b33a80729.pdf",
+      "start": "2022-04-14",
+      "stock_id": "1507",
+      "verification": {
+        "kind": "pdf",
+        "page": 1,
+        "snippets": [
+          "永大機電工業股份有限公司",
+          "證券代號：1507",
+          "111年4月14日起停止買賣",
+          "111年4月21日起終止上市"
+        ],
+        "visual_only": false
+      }
+    }
+  ]
+}
