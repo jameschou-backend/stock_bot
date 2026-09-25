@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+"""Publish completed attribution only with a matching independent replay proof."""
+from datetime import datetime, timezone
+from pathlib import Path
+import argparse
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from scripts.research_exit_scenarios import read, write, sha
+from skills.backtest_case_cache import file_identities
+from app.execution_factorial_ui import validate, REPORT
+
+
+def publish(source, proof_path):
+    source, proof_path = Path(source).resolve(), Path(proof_path).resolve()
+    if REPORT.exists():
+        raise ValueError('Publication already exists; retain original evidence')
+    proof = read(proof_path)
+    if sha(proof_path) != proof_path.with_suffix('.sha256').read_text().strip():
+        raise ValueError('Offline proof changed')
+    refs = dict(proof['source_sha256'])
+    refs.update(file_identities([Path(__file__), ROOT / 'app/execution_factorial_ui.py',
+        ROOT / 'app/dashboard_v2/pages/11_成交壓力拆解.py', proof_path, proof_path.with_suffix('.sha256')], ROOT))
+    if file_identities([ROOT / p for p in refs], ROOT) != refs:
+        raise ValueError('Source or code changed before publication')
+    report = read(source / 'report.json')
+    report.update(schema='execution_factorial_publication_v1', source_sha256=refs,
+        published_at=datetime.now(timezone.utc).isoformat(),
+        offline_verification=dict(path=str(proof_path.relative_to(ROOT)), sha256=sha(proof_path)),
+        run_manifest=dict(path=str((source / 'manifest.json').relative_to(ROOT)), sha256=sha(source / 'manifest.json')))
+    validate(report, ROOT)
+    write(REPORT, report)
+    REPORT.with_suffix('.sha256').write_text(sha(REPORT) + '\n')
+    return report
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source', type=Path, required=True)
+    parser.add_argument('--proof', type=Path, required=True)
+    args = parser.parse_args()
+    result = publish(args.source, args.proof)
+    print('published', len(result['cases']))

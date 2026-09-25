@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "finmind_requests": 0,
+  "primary_requests": 1,
+  "secondary_sources_used_in_overrides": false,
+  "evidence_sha256": {
+    ".cache/execution-factorial-20260926/primary/1808-20251013-capital-return.pdf": "7792ad600fb1ba8dd5ac6d78c8dd07d990a1b1e107a5ed45ce64cac76a20df8c"
+  },
+  "overrides": {
+    "1808-2025-11-24": {
+      "kind": "capital_reduction",
+      "multiplier": 0.9,
+      "cash_per_share": 1.0,
+      "cash_rounding": "floor_ntd",
+      "pay_date": "2025-11-28",
+      "known_date": "2025-10-13",
+      "cash_flow_nature": "capital_return",
+      "source": "https://www.runlong.com.tw/upload/stakeholder/infor/infor/1141013%E5%85%AC%E5%91%8A%E6%9C%AC%E5%85%AC%E5%8F%B8%E7%8F%BE%E9%87%91%E6%B8%9B%E8%B3%87%E6%8F%9B%E7%99%BC%E8%82%A1%E7%A5%A8%E4%BD%9C%E6%A5%AD%E8%A8%88%E7%95%AB%E5%8F%8A%E6%B8%9B%E8%B3%87%E6%8F%9B%E7%A5%A8%E5%9F%BA%E6%BA%96%E6%97%A5%E7%AD%89%E7%9B%B8%E9%97%9C%E4%BA%8B%E5%AE%9C.pdf",
+      "evidence_files": [
+        ".cache/execution-factorial-20260926/primary/1808-20251013-capital-return.pdf"
+      ],
+      "fractional_policy": "block_noninteger_conversion",
+      "note": "Compose cash entitlement on old shares, followed by exact integer exchange. No fractional split assumption."
+    }
+  }
+}
