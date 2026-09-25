@@ -24,6 +24,38 @@ def test_duplicate_click_starts_only_one_process(store,monkeypatch):
         jobs.submit(jobs.WorkRequest(kind='update_data'))
 
 
+def test_permission_denied_pid_keeps_reservation_and_history_readable(store,monkeypatch):
+    request=jobs.WorkRequest(kind='sector_backtest',sector_preflight=False)
+    job=dict(job_id='a'*32,request=request.model_dump(mode='json'),status='running',
+             created_at=jobs.time.time()-60,message='執行中',pid=123456)
+    jobs.write_job(job)
+    def denied(*args): raise PermissionError('process probe denied')
+    monkeypatch.setattr(jobs.os,'kill',denied)
+    monkeypatch.setattr(jobs.subprocess,'Popen',lambda *a,**kw: pytest.fail('duplicate worker'))
+    current=jobs.recent_jobs()[0]
+    assert current['status']=='running' and current['process_probe']=='permission_denied'
+    assert '避免重複工作' in current['process_probe_note']
+    assert jobs.submit(request)['job_id']==job['job_id']
+    with pytest.raises(ValueError,match='已有工作'):
+        jobs.submit(jobs.WorkRequest(kind='sector_backtest',sector_preflight=True))
+
+
+def test_nonexistent_pid_can_be_replaced(store,monkeypatch):
+    request=jobs.WorkRequest(kind='sector_backtest')
+    jobs.write_job(dict(job_id='a'*32,request=request.model_dump(mode='json'),status='running',
+                       created_at=jobs.time.time()-60,message='執行中',pid=123456))
+    def missing(*args): raise ProcessLookupError('process exited')
+    monkeypatch.setattr(jobs.os,'kill',missing)
+    starts=[]
+    def launch(*args,**kwargs):
+        starts.append(args)
+        return SimpleNamespace(pid=789012)
+    monkeypatch.setattr(jobs.subprocess,'Popen',launch)
+    assert jobs.recent_jobs()[0]['status']=='failed'
+    replacement=jobs.submit(request)
+    assert replacement['job_id']!='a'*32 and len(starts)==1
+
+
 def test_failed_launch_and_result_files_do_not_break_history(store,monkeypatch):
     def fail(*a,**kw): raise OSError('cannot execute')
     monkeypatch.setattr(jobs.subprocess,'Popen',fail)

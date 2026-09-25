@@ -15,6 +15,7 @@ def main(job_id):
         job=read_job(job_id)
         message={'update_data':'更新資料','backtest':'載入資料與驗證策略',
                  'verified_backtest':'核對封存資料並執行所選歷史研究',
+                 'sector_backtest':'核對新族群來源並執行固定帳戶研究',
                  'news_scan':'整理新聞題材','news_review':'重建歷史新聞時間線',
                  'chain_flow':'整理族群成交分布與法人方向'}[job['request']['kind']]
         job.update(status='running',message=message,pid=os.getpid())
@@ -37,7 +38,19 @@ def main(job_id):
                 job.update(message=f'FinMind 達額度暫停，約 {retry} 秒後重試；已完成日期會重用',retry_after_seconds=retry)
         else:
             job.update(status='completed',message='已完成；研究結果仍需資料與策略驗證')
-            if request.kind=='verified_backtest':
+            if request.kind=='sector_backtest':
+                import hashlib
+                from app.backtest_completion_ui import load_sector_job
+                value, report=load_sector_job(output,root=ROOT,request=job['request'])
+                messages={
+                    'preflight_complete':'族群資料預檢完成；尚未計算報酬，請查看來源缺件',
+                    'blocked':'族群研究檢查完成；被阻擋案例不提供中途收益',
+                    'exploratory':'族群日資料帳戶完成；已核對案例與明細指紋，僅供歷史研究',
+                }
+                job.update(message=messages[value['status']],report_status=value['status'],
+                           result_path=str(output),result_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
+                           research_only=True,live_qualified=False,unseen_validation=False)
+            elif request.kind=='verified_backtest':
                 import hashlib
                 from app.backtest_tool_ui import load_report
                 value=load_report(output,root=ROOT)

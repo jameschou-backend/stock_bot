@@ -18,7 +18,7 @@ JOBS_DIR = ROOT / '.cache/workbench/jobs'
 
 
 class WorkRequest(BaseModel):
-    kind: Literal['update_data','backtest','verified_backtest','news_scan','news_review','chain_flow']
+    kind: Literal['update_data','backtest','verified_backtest','sector_backtest','news_scan','news_review','chain_flow']
     months: int = Field(default=12,ge=3,le=120)
     topn: int = Field(default=10,ge=1,le=50)
     quick: bool = False
@@ -34,6 +34,8 @@ class WorkRequest(BaseModel):
     replay_stress: Literal['control','combined','all'] = 'all'
     replay_preflight: bool = True
     replay_fresh: bool = False
+    sector_preflight: bool = True
+    sector_strict_pit: bool = False
 
     @model_validator(mode='after')
     def bounded_news(self):
@@ -80,6 +82,11 @@ def recent_jobs(limit=10):
                     os.kill(job['pid'],0)
                 except ProcessLookupError:
                     job.update(status='failed',message='工作程序已中斷，可以重新執行')
+                except PermissionError:
+                    # EPERM does not prove that a worker exited; keep the
+                    # single-job reservation until its result or PID is known.
+                    job.update(process_probe='permission_denied',
+                               process_probe_note='無權核對程序，暫按仍在執行處理，避免重複工作')
             log=path.with_suffix('.log')
             if log.exists():
                 with log.open('rb') as f:
@@ -92,6 +99,15 @@ def recent_jobs(limit=10):
                            'source_validation':'核對封存來源','case':'計算研究案例'}
                     name,phase=matches[-1]
                     job['message']=names.get(name,'計算策略')+('中' if phase=='start' else '完成，進入下一階段')
+                if job['status']=='running' and job['request']['kind']=='sector_backtest':
+                    cases=re.findall(r'^running (\w+)$',tail,re.MULTILINE)
+                    if cases:
+                        case=cases[-1]
+                        arm=('相對強勢＋同行成交升溫' if case.startswith('strength_with_turnover') else
+                             '相對強勢' if case.startswith('relative_strength') else '0050')
+                        job['message']='計算族群帳戶：'+arm+' · '+(
+                            '一般成本' if '_control_' in case else '加嚴成交')+' · '+(
+                            '只整張' if case.endswith('_board_only') else '整張＋零股')
         result.append(job)
     return result
 
@@ -109,6 +125,8 @@ def submit(request: WorkRequest):
                         alive=True
                     except ProcessLookupError:
                         pass
+                    except PermissionError:
+                        alive=True
                 if alive or time.time()-job['created_at']<10:
                     if job['request']==request.model_dump(mode='json'):
                         return job
@@ -133,6 +151,11 @@ def submit(request: WorkRequest):
 
 
 def command_for(request, output):
+    if request.kind=='sector_backtest':
+        args=[sys.executable,'scripts/run_sector_account_job.py','--output',str(output)]
+        if request.sector_preflight: args.append('--preflight-only')
+        if request.sector_strict_pit: args.append('--strict-pit')
+        return args
     if request.kind=='verified_backtest':
         args=[sys.executable,'scripts/run_verified_backtest.py','--mode',request.replay_mode,
               '--policy',request.replay_policy,'--stress',request.replay_stress,'--output',str(output)]

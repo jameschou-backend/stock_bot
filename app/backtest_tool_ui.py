@@ -146,9 +146,10 @@ def render():
     import pandas as pd
     import streamlit as st
 
-    st.subheader('固定條件回測工具')
+    st.subheader('原封存條件回測工具')
     st.caption('期初 100 萬元 · 2022/1/3～2026/9/9 · 封存 458 筆候選訊號。'
                '閒置資金保留現金；0050 只作比較基準，不配置閒置資金。')
+    st.caption('此區保留補件前的封存結果供重現；本輪公司行動與族群帳戶結果請看上方補齊進度。')
     mode_labels = {'daily': '日資料估算', 'strict': '逐筆成交證據檢查'}
     policy_labels = {'board_only': '整張', 'mixed': '整張加零股', 'all': '全部比較'}
     stress_labels = {'control': '一般成本', 'combined': '加嚴', 'all': '全部比較'}
