@@ -1,0 +1,1350 @@
+{
+  "cases": {
+    "corporate:benchmark_combined_board_only": {
+      "config": {
+        "benchmark": true,
+        "board_only": true,
+        "position_count": 0,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:benchmark_combined_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 24,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "corporate:benchmark_combined_mixed": {
+      "config": {
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:benchmark_combined_mixed",
+      "odd_lot_required_sessions": 16,
+      "ordinary_required_sessions": 1,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "corporate:benchmark_control_board_only": {
+      "config": {
+        "benchmark": true,
+        "board_only": true,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:benchmark_control_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 24,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "corporate:benchmark_control_mixed": {
+      "config": {
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:benchmark_control_mixed",
+      "odd_lot_required_sessions": 15,
+      "ordinary_required_sessions": 1,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "corporate:capacity_combined_board_only": {
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:capacity_combined_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 101,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "corporate:capacity_combined_mixed": {
+      "config": {
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:capacity_combined_mixed",
+      "odd_lot_required_sessions": 248,
+      "ordinary_required_sessions": 144,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "corporate:capacity_control_board_only": {
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:capacity_control_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 148,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "corporate:capacity_control_mixed": {
+      "config": {
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "corporate:capacity_control_mixed",
+      "odd_lot_required_sessions": 215,
+      "ordinary_required_sessions": 164,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:benchmark_combined_board_only": {
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": true,
+        "position_count": 0,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "sector:benchmark_combined_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 24,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "sector:benchmark_combined_mixed": {
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "sector:benchmark_combined_mixed",
+      "odd_lot_required_sessions": 16,
+      "ordinary_required_sessions": 1,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "sector:benchmark_control_board_only": {
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": true,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "sector:benchmark_control_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 24,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "sector:benchmark_control_mixed": {
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": false
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": false
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": false,
+      "live_qualified": false,
+      "name": "sector:benchmark_control_mixed",
+      "odd_lot_required_sessions": 15,
+      "ordinary_required_sessions": 1,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": false
+    },
+    "sector:relative_strength_combined_board_only": {
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:relative_strength_combined_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 127,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:relative_strength_combined_mixed": {
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:relative_strength_combined_mixed",
+      "odd_lot_required_sessions": 243,
+      "ordinary_required_sessions": 82,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:relative_strength_control_board_only": {
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:relative_strength_control_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 142,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:relative_strength_control_mixed": {
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:relative_strength_control_mixed",
+      "odd_lot_required_sessions": 215,
+      "ordinary_required_sessions": 83,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:strength_with_turnover_combined_board_only": {
+      "config": {
+        "arm": "strength_with_turnover",
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:strength_with_turnover_combined_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 145,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:strength_with_turnover_combined_mixed": {
+      "config": {
+        "arm": "strength_with_turnover",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "combined"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:strength_with_turnover_combined_mixed",
+      "odd_lot_required_sessions": 270,
+      "ordinary_required_sessions": 102,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:strength_with_turnover_control_board_only": {
+      "config": {
+        "arm": "strength_with_turnover",
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": false
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:strength_with_turnover_control_board_only",
+      "odd_lot_required_sessions": 0,
+      "ordinary_required_sessions": 149,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    },
+    "sector:strength_with_turnover_control_mixed": {
+      "config": {
+        "arm": "strength_with_turnover",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "corporate_event_evidence_required": true,
+      "dependencies": [
+        {
+          "code": "daily_price_volume_and_adjustments",
+          "reason": "dated prices, traded volume and corporate adjustment factors; also 0050 trend and relative strength",
+          "required": true
+        },
+        {
+          "code": "historical_universe_and_eligibility",
+          "reason": "all candidates and peer denominators, including stocks never purchased",
+          "required": true
+        },
+        {
+          "code": "historical_industry_membership",
+          "reason": "sector common-peer pool in both arms; diffusion groups use past price correlation",
+          "required": true
+        },
+        {
+          "code": "financial_and_news_publication_versions",
+          "reason": "these frozen selectors use prices, turnover and listing/peer identity; no revenue, earnings or news factor",
+          "required": false
+        },
+        {
+          "code": "corporate_event_terms_and_delivery",
+          "reason": "ex-date entitlements, opening references, share availability and cash payment; separate from news factors",
+          "required": true
+        },
+        {
+          "code": "case_dated_market_identity",
+          "reason": "own instrument identity and eligibility remain required for the explicit 0050 benchmark",
+          "required": true
+        },
+        {
+          "code": "ordinary_complete_authenticated_sessions",
+          "reason": "every attempted executable board order on the observed account path",
+          "required": true
+        },
+        {
+          "code": "odd_lot_complete_authenticated_sessions",
+          "reason": "every attempted executable odd-lot order; policy-forbidden remainders are excluded",
+          "required": true
+        }
+      ],
+      "financial_news_archive_required": false,
+      "historical_industry_required": true,
+      "live_qualified": false,
+      "name": "sector:strength_with_turnover_control_mixed",
+      "odd_lot_required_sessions": 229,
+      "ordinary_required_sessions": 98,
+      "prior_generic_publication_gate_split": true,
+      "strict_data_ready": false,
+      "universe_required": true
+    }
+  },
+  "code_sha256": {
+    "app/config.py": "016b26373905eec39abe3d50c18a51c48b8971febe6ea80ac691d5e9f00d834a",
+    "app/exit_research.py": "e5c7debe265c3bbd8e882aff3b5725da0a4ca43da2d680e052a94e885f954954",
+    "app/file_lock.py": "4c8f2ef67b07cfbfb232b6c71fd580617aa13557fda75cae93cdee4ecd59f5a2",
+    "app/finmind.py": "28ae87dba48a313c509a9ce3fc1aac97154ee328141921bdd0d34ef00812ddc3",
+    "app/finmind_cache.py": "2b1b79e04d33f49d5ca61cc1f83212fe3909b658a1082a2f6566b1261a9ce5c9",
+    "app/rate_limiter.py": "b47fde0a0ae98ae042ce6d08f21a18228c82dcfef5386d31c2ece6ddca83464d",
+    "app/twse_client.py": "b967d3757f2122395d6d5eb0ced6d69c4bb2faaec8b584507dc938b5b94b816d",
+    "scripts/audit_backtest_case_dependencies.py": "9da8cf21d295c647cc1768bac3649426cf7062e4aa1d22dc8449f7514ac6574c",
+    "scripts/audit_current_causality_20260925.py": "25e763bd173422fb1892031335c49316c102ce1e5582fc579e942e791cca8dda",
+    "scripts/audit_signal_causality.py": "d5ce6bb360a9da3237bf9d0d5df7ce7798ec06d53d3e5570a8c862a76d9b4732",
+    "scripts/build_official_adj_factors.py": "c028ad868b7a02217b16d9128548c661f55e479b72f762df6eff26719e661cb6",
+    "scripts/prepare_board_only_supplement.py": "05a25c9c8df253304b2437de1b074f91a7c3e79be26a71e8bc4c89feba63a885",
+    "scripts/prepare_cash_allocation_inputs.py": "ee6a29228560892b89f8afcaaa1e971636b8ebdec1ef44a40d5eb6d72f359551",
+    "scripts/prepare_chip_inputs.py": "d73b469c72924ea5430ca776c9270eb37705549e1f21221be1d2e313e3d490a6",
+    "scripts/prepare_event_groups.py": "e7d6cd0b97f2884586a065546ff511b1b3b8283a0d3bddce710fbfabbf7b464e",
+    "scripts/prepare_exit_inputs.py": "989cf9de03640119adbe723a5fa42a623b496c38283ad44b51d5faae492f89d5",
+    "scripts/prepare_five_axis.py": "932073e78111a3328853571705a9e6be634da7f0c97c850c4fe17bed02b02160",
+    "scripts/prepare_million_prices.py": "2671b2790f1d2e2d8624b8d1d5602c5dccf53e7bf7e0eac2098a693beab9e851",
+    "scripts/prepare_million_signals.py": "5aad515778fa4999f27f9ece68e640532a02ad91e9a4e9854f128800c5592040",
+    "scripts/prepare_sector_account_sources.py": "6326b9927a9dd179117b969a2cf790c0ce2887a8b51fb50f676816c9ff393323",
+    "scripts/prepare_technical_inputs.py": "a18da458e73c90ea6f39e2e40ddc1e65003378437a4a308bd1bc965591fd5aa0",
+    "scripts/replay_million.py": "11ff85b5b530fb2a0cccd408dd35480e3bfe3bf5da03cd69af362189352342a7",
+    "scripts/research_backtest_corporate_completion.py": "86189db9c106d7bb235b7af881841c5c163aed2651b67c50342d81d2d9d249c3",
+    "scripts/research_board_only.py": "3e97f523da30f2221fda386a1862cf9081204846ebe8f7f6b985a1852b966af0",
+    "scripts/research_board_only_supplement.py": "37900195b677f95753435f5c381542a81670681b19dd47e8094d316990c1dca7",
+    "scripts/research_cash_allocation.py": "1282bd7a136a966b8bc3e2cabfdc1eea46a27f8fd80db98334344e6813d3ccbd",
+    "scripts/research_cash_risk.py": "4fb879973fcd48bd830fbc9fd136cc75a392640ec5d85fa6045c1fa658afca30",
+    "scripts/research_chip.py": "997f37325192ecf5d11d038baeedfb9f5e7f14bed97a09faee87f37b2eaeb81d",
+    "scripts/research_conservative_diversification.py": "8ece165d8cc05a073dd7c954aa3777f9c25b801dba68deb00579e7908aae6104",
+    "scripts/research_event_groups.py": "5ee1fc9440fe96690cb4c0ba2d94273e75dde0efd9aebea543e1a0a098814acd",
+    "scripts/research_execution_resources.py": "8b148cbea12a57f6bc4b90da49595465fe31ef177457eac563d052bf57a5d10e",
+    "scripts/research_execution_stress.py": "85e442bf7afc92f881c4d2fafbb70ae84b512205084e85399e49200c262f3bc9",
+    "scripts/research_exit_scenarios.py": "87330b78d8e467ad2eb60758eb09010f7940091a7089df68da362d24c7d51af6",
+    "scripts/research_five_axis.py": "2d6b041e07f23d0f64b8f34c889c384401361ad7baa38f492fde018f3755ac38",
+    "scripts/research_flow.py": "eae2aa6a8dacc5ba5b9732771672960325393949f8db4f60bd728e91a7aebbe3",
+    "scripts/research_priority.py": "37e8d21fa1bb4cc199bf2eb9bad43bf06d3a6313d7eb3613e9319f837e4f37ee",
+    "scripts/research_sector_accounts.py": "28da3a358f1382f8a5c18b03f93ebba7fce10cc22e1cf27ca09ac9e26ec989f6",
+    "scripts/research_slot_reuse.py": "f79ed0cd37466ed4c11cccd15c4e2f8c08ac9942d5a7e037af1142a819db27c1",
+    "scripts/research_technical.py": "c887709a1cf70c641fb0e31c105f4272796477af7ee21344919de5ee4a84ac2c",
+    "scripts/run_verified_backtest.py": "a6a17ba032f1e54952062d6000bf66560d919a3c5d33dc5e790a1d39e2bd7dda",
+    "skills/backtest_case_cache.py": "b8c069749b6af09458bbae0923fa6f8bd076f9fdb4c89b781a807f044ebe29f4",
+    "skills/backtest_case_dependencies.py": "6ce888cb755f143caff5e1330705f02c20c57188a302bd0b5aac6885d1f54fd7",
+    "skills/backtest_contract.py": "a8a9b099f52291372ef4bd1b5eee8c51c8df56e3219bfd4d908951459561c5fb",
+    "skills/backtest_corporate_completion.py": "bacc140d46e1983a0a57a144972edb870613390a7f67db69bb786058941c048b",
+    "skills/board_only_replay.py": "39eafb4901c71ab3ee3be166e3644c7041c8e40a451e3b454d215c4458664f4f",
+    "skills/board_only_verified_replay.py": "c1f6227835cc4266e2ea4efd5a24dc42ee99892166542a0c5ae754662ad8445f",
+    "skills/cash_allocation_replay.py": "03b18ce95233edf0ac8d2754f9dac1b1bcda1aa445f0fbc49bdd1f43fc891c40",
+    "skills/cash_risk_replay.py": "93dfdd2ce2c146078eab4001d26542bd699a790dcba58a086622bccf8d792684",
+    "skills/chip_research.py": "589940f25877879e3ba3da23cadcedca7dd7837e5e39295acc32a3941323aa46",
+    "skills/conservative_diversification.py": "6a35d2a1eae1a15dee7e95a116c17a5b0b9def87e182553e198181c1ce813a79",
+    "skills/diffusion_signals.py": "df9f1e8020c0382b049f82fa6cac7a19acfd9d1285fd6dc6d7961788cb53f350",
+    "skills/earnings_expectations.py": "a5f3eaaf9776dc6fd31a5f060d68e0113cb610ca0011c4dec5ac07fe9825fd00",
+    "skills/event_group_research.py": "c6d33c78da92dbe724ab40a315e3d9ad2a5fc2ab517fe1d4d668efa6892b5257",
+    "skills/execution_resources.py": "b644a6ba3aba0acb0ddf6769ad604d8c2508738115ca45fd980b3895a535c8f3",
+    "skills/execution_stress.py": "a88874a9187e1e97fef7417c17d4098915bc0b8548b42ee6b41b6086a472cdf6",
+    "skills/exit_policy.py": "c64fdf8464274dd6104fd72591ffd814be8e0a48bab36a3254bbea0123516a5c",
+    "skills/five_axis_replay.py": "04639707418053ecfc4393e648565620cad11690ca117e7520cc0ce0f43a1365",
+    "skills/flow_research.py": "ff10491b3859ccc299ebaacbbd121ac8384a2a75c78c91f386c8b57e3158cd57",
+    "skills/million_replay.py": "30461dfba114161e5fef0e9913ff3bed7148c0d01ead83717521b3bde39fa807",
+    "skills/news_radar.py": "b8c60724b7a3be820a233b634d4d3b1cfbcc716159764e715953b2c6c67bced5",
+    "skills/official_adj_factors.py": "d89c8c87574fe2dd0af79443785356a77dbbce232e1a52d5887554b1bd83e1a4",
+    "skills/pending_share_entitlements.py": "122a5be20248c572effd93572f28414ac76732c5094e424c58ea79d651afe75f",
+    "skills/priority_replay.py": "ef470286418d44ac4a699f1a7d3bc5e299df80cd289a32e0cb54c7615958cee8",
+    "skills/regime_state.py": "2e5755c018448e9464470b202bb4e675324fe2a30702dee8383b6081404d3a4d",
+    "skills/replay_corporate_actions.py": "815d02e607e7c6030bf8607d61f2bed04fecb71f490dc633d258295afb86bac6",
+    "skills/replay_market_feeds.py": "ba34e645371f8a90be89be01b5df71e19412cb2674ac5a606f8bcb77326bb28b",
+    "skills/reservation_replay.py": "09419b1d235bd9202b949b3ca6d4b0e7c4cef8c1c2a32ce6c66cfcd40cc08912",
+    "skills/rule_research.py": "1789693c6575abcd94bade9ddeced1d94b6cd4a9ca9d43d4153cb1e250913cbc",
+    "skills/scenario_exit_replay.py": "208ab51b0517d6703475830e926d302e23e0bb098cf4377ca9a5c1ae336ccb11",
+    "skills/sector_account_replay.py": "6ab2e400063ff3437e7c14091681a31bdbb1479fdb4ca743632a170b96fba185",
+    "skills/slot_reuse_replay.py": "3081502c4b979506e6a00acd42ffff02b676500e42035b4632fdaed2079ce1c2",
+    "skills/surge_anatomy.py": "0ab4bbddf69abb64847ebfc302a46f5a5c68b821895e29774363678d5bc5f3bb",
+    "skills/surge_sector.py": "bbd643f562424f4c4ed93f3cfaf8f58ba7e219dc1098276a7a4f1561b27dd9f0",
+    "skills/technical_replay.py": "203480fbf96c7d4987ff9f2888ea562b3d0ba6e4c60ec5adf019fd27fdc2425b",
+    "skills/technical_signals.py": "d9c231ed6a4f4466c380fab4335fa8733237430847fabb6a93ac32c415efd133",
+    "skills/verified_backtest_tool.py": "a820e9df841bae44aa1f67ec37f66aa008048b3e19139bdaae1f1f5c30653191",
+    "tests/test_board_only_replay.py": "6311e9091c977fcad6c37a9fc0c7e86504d1585cb7918b0fef57ff0110dc2465",
+    "tests/test_board_only_verified_replay.py": "ad37608569d40c48924780db1b76e328b294de660c721ce776a52fb37355c1dd",
+    "tests/test_current_causality_20260925.py": "579f2646fe47c6394cb1dd0fc768a131c33de888c6f680ac0c1f102be2928da1",
+    "tests/test_pending_share_entitlements.py": "57d69e98f8abfbbc0705ddf40c747938400c78f8238663b85799a6e324c99b19",
+    "tests/test_sector_account_replay.py": "5e9e2f709967a4bf3352d864629b0d40f5e7f3094863de452f4d139354b6da8d"
+  },
+  "input_sha256": {
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/benchmark_combined_board_only.json": "22bea1017c1800294a8c0dbb8850ad74e4d216371b61b15a38690c4db0dabce7",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/benchmark_combined_mixed.json": "4afa1a08bc2c0ff087135a73830161d6367e3ca3052c82ff52c9973a90ad489f",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/benchmark_control_board_only.json": "642eb812c27696bd2ac6d3a7074ffef86f057c29a6a3042174e50dd28b13777e",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/benchmark_control_mixed.json": "147e809d1294272e8cfccd4e0b5307927ec7350801f8ec6c0a9bed51b8b47615",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/capacity_combined_board_only.json": "abc9c7b4091973f7733ca18398bc05c5ea54d518e95c9bc0e7cf3fcc11984a1f",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/capacity_combined_mixed.json": "09548c3ef0657fea356806fb0375802ada3ae4136d477b0768bf76700e5ca6d7",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/capacity_control_board_only.json": "381fe226873864ffd3f1ca0b3841879b82a483255cf101b20e12662082f3f093",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/cases/capacity_control_mixed.json": "bf86e04b5414bf4a591cd151eeca3d9f44ae8d746a8e6dd72a531f10d330e864",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/identity.json": "70a60d58e10979c23f3bee76623556d70cab83b5737b243ee747384057e97cfe",
+    ".cache/backtest-corporate-completion-20260925/probe-v2/manifest.json": "064b51e0cb149fa6b3aab1a652cd354a9b5ede48e8ad0a377e62ba16092fc9cb",
+    ".cache/sector-accounts-20260925/cases/benchmark_combined_board_only.json": "9c72a7eeaed02de03cf3276c9c82b679d9e2810fe85624168619e37f861f0a51",
+    ".cache/sector-accounts-20260925/cases/benchmark_combined_mixed.json": "c96d89c152d89434c140c956b2668c15dea2f38ef4bfa7dc5d9876a8726e0294",
+    ".cache/sector-accounts-20260925/cases/benchmark_control_board_only.json": "563b6a411a937ebcd4f0fa276dcea525c99334abd22cded91dcfcfd356e47eef",
+    ".cache/sector-accounts-20260925/cases/benchmark_control_mixed.json": "ea66bee1241a74b38c66bd3fee9e1ac1f7acae43c124cf563ef1eee909125011",
+    ".cache/sector-accounts-20260925/cases/relative_strength_combined_board_only.json": "71fc620ecb2c37b2a43576cf61d67cc8f033681907980b40574b9cfbf50e8cb0",
+    ".cache/sector-accounts-20260925/cases/relative_strength_combined_mixed.json": "2590332cc8d2e40ea4fdfa9f35f87c11b51ec9cea888a211ff39deb3be7b5588",
+    ".cache/sector-accounts-20260925/cases/relative_strength_control_board_only.json": "ebba1e8bb043de1ab456127ce74da2b74b62486f3ef665d48cbe7b70a9513f56",
+    ".cache/sector-accounts-20260925/cases/relative_strength_control_mixed.json": "6f7f4667a798591a77900bf8590d977d5ce2727348160303bdb5da25ffc26bb3",
+    ".cache/sector-accounts-20260925/cases/strength_with_turnover_combined_board_only.json": "e43f6dea071fc2463ce403fdafa1eb0229159d6854b43fed9ce039e846bd1269",
+    ".cache/sector-accounts-20260925/cases/strength_with_turnover_combined_mixed.json": "dcc28aef9a9b4cb08286904a339eb5edf56c5458e8a4a31af578e6e5fbebfb92",
+    ".cache/sector-accounts-20260925/cases/strength_with_turnover_control_board_only.json": "8d4501fb467d0152eb760f266151ee8847dc71bf1b75d9f1a8f7631b6819bcc8",
+    ".cache/sector-accounts-20260925/cases/strength_with_turnover_control_mixed.json": "7312e7da91c6052ae543674f6b4a7e8160d9cf437e4e9ba2e5b5e5f9438fcdb3",
+    ".cache/sector-accounts-20260925/manifest.json": "c36a0d368e17fe0fb4b2fa72d79d08e90e4f7d434d93cf6e92fa89d6d67019fe",
+    ".cache/sector-accounts-20260925/report.json": "8503c4a641495266d79e80cd2fdbba8e38af58cf8736196e6fd4a8bf24e7cfc1",
+    "artifacts/forward_simulation/backtest_data_completion_20260925.json": "59921a01837a2ae0d72c7164a8d5622fb7357297e471ccd220ca5921100a5375"
+  },
+  "limitations": [
+    "This review is not dynamic taint analysis or proof that all required sources were available at decision time.",
+    "Price-only selection still needs correct dated universe, price inputs and corporate-action accounting.",
+    "No missing corporate announcement or delivery evidence is waived by excluding unrelated financial/news factors.",
+    "Current sector membership remains non-PIT for both sector arms.",
+    "Only known account paths are inventoried; changed fills or signals can create additional data requirements."
+  ],
+  "live_qualified": false,
+  "performance_recomputed": false,
+  "review_method": "source-reviewed dependency contract bound to exact code and account bytes",
+  "schema": "backtest_case_dependencies_v1",
+  "strict_data_ready": false,
+  "summary": {
+    "case_count": 20,
+    "required_case_counts": {
+      "case_dated_market_identity": 20,
+      "corporate_event_terms_and_delivery": 20,
+      "daily_price_volume_and_adjustments": 20,
+      "historical_industry_membership": 8,
+      "historical_universe_and_eligibility": 12,
+      "odd_lot_complete_authenticated_sessions": 10,
+      "ordinary_complete_authenticated_sessions": 20
+    }
+  }
+}
