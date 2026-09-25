@@ -233,10 +233,14 @@ def render_research(status):
     from app.guidance_research_ui import render as render_guidance
     st.subheader('策略能不能用，讓證據回答')
     st.info('目前沒有通過新驗證的實盤策略。下方回測用來檢查假設，不會自動啟用策略。')
+    from app.historical_selector_ui import render as render_historical_selector
+    render_historical_selector()
     from app.backtest_full_pass_ui import render as render_full_pass
-    render_full_pass()
     from app.backtest_completion_ui import render as render_backtest_completion
-    render_backtest_completion()
+    with st.expander('較早的回測與資料稽核紀錄（保留原結果）', expanded=False):
+        st.caption('以下是先前封存的版本；股票池修正後的最新比較請看上方。')
+        render_full_pass()
+        render_backtest_completion()
     from app.backtest_tool_ui import render as render_backtest_tool
     render_backtest_tool()
     st.divider()
