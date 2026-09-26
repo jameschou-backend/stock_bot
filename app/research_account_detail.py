@@ -1,0 +1,82 @@
+"""Inspect exact research accounts and a matched benchmark without a new run."""
+import json
+from pathlib import Path
+
+from app.backtest_tool_ui import verified_bytes
+from skills.account_statistics import monthly_pairs
+from skills.backtest_contract import validate_completed_account
+from skills.exit_policy import REASON_LABELS
+from scripts.replay_million import summarize
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def load_comparison(publication, name, root=ROOT):
+    row = publication['cases'][name]
+    if row.get('completed') is not True:
+        raise ValueError('未完成的帳戶不能顯示全期績效')
+    case = json.loads(verified_bytes(row['result'], root, '.json'))
+    if (case.get('completed') is not True or case.get('live_qualified') is not False
+            or case['config'] != row['config'] or case['summary'] != row['summary']):
+        raise ValueError('帳戶版本與研究摘要不同')
+    original = json.loads(verified_bytes(publication['original_publication'], root, '.json'))
+    key = 'benchmark_combined' if case['config']['factor_mask'] & 1 else 'benchmark_control'
+    benchmark = json.loads(verified_bytes(original['cases'][key]['result'], root, '.json'))
+    if benchmark.get('completed') is not True or benchmark['config'].get('benchmark') is not True:
+        raise ValueError('缺少完整0050對照帳戶')
+    account, comparison = case['account'], benchmark['account']
+    dates = [r['date'] for r in comparison['daily']]
+    for value, expected in ((account, row['summary']), (comparison, benchmark['summary'])):
+        validate_completed_account(value, dates, publication['start'], publication['end'])
+        if summarize(value) != expected or value['settings']['initial_cash'] != publication['initial_cash']:
+            raise ValueError('帳本重算結果與發布摘要不同')
+    monthly_pairs(account, comparison, dates)
+    for key in ('commission', 'minimum_fee', 'slippage', 'participation', 'odd_participation'):
+        if account['settings'][key] != comparison['settings'][key]:
+            raise ValueError('帳戶與0050使用不同成本或成交容量')
+    if benchmark['summary']['total_return'] != row['metrics']['benchmark_return']:
+        raise ValueError('0050帳戶與顯示基準不同')
+    return account, comparison
+
+
+def scenario_label(mask):
+    labels = [label for bit, label in ((1, '滑價加倍'), (2, '進場多晚一天'), (4, '出場多晚一天')) if mask & bit]
+    return '、'.join(labels) if labels else '一般成交'
+
+
+def render(publication, arms):
+    import pandas as pd
+    import streamlit as st
+    if not st.checkbox('查看逐筆買賣與每日資產', key='research_account_detail_enabled'):
+        return
+    arm = st.selectbox('帳戶規則', list(arms), format_func=arms.get, key='research_detail_arm')
+    mask = st.selectbox('成交情境', list(range(8)), format_func=scenario_label, key='research_detail_stress')
+    name = f'{arm}_{mask}'
+    if not publication['cases'][name]['completed']:
+        st.warning('此情境因資料不足停止，不能顯示成完整績效。')
+        return
+    try:
+        account, benchmark = load_comparison(publication, name)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        st.error('帳戶明細驗證未通過：' + str(exc))
+        return
+    daily = pd.DataFrame(account['daily'])
+    daily['benchmark_nav'] = [r['nav'] for r in benchmark['daily']]
+    st.line_chart(daily.set_index('date')[['nav', 'benchmark_nav']].rename(
+        columns={'nav': '策略資產', 'benchmark_nav': '0050資產'}))
+    st.caption('100萬元起始本金、獲利複投。資產包含現金、持股及未交付權利；應收款不等於可買進現金。')
+    labels = dict(date='成交日', signal_date='訊號日', stock_id='代號', name='名稱', side='買賣',
+        qty='股數', reference_price='成交參考價', gross='成交價金', total_cost='費稅滑價',
+        cash_after='成交後現金', reason='原因')
+    trades = pd.DataFrame(account['trades'])
+    shown = trades.reindex(columns=list(labels)).rename(columns=labels)
+    if not shown.empty:
+        shown['買賣'] = shown['買賣'].map({'buy': '買進', 'sell': '賣出'})
+        reasons = dict(REASON_LABELS, leader_entry='符合當日候選及資金規則')
+        shown['原因'] = shown['原因'].map(lambda value: reasons.get(value, value))
+    st.dataframe(shown, hide_index=True, use_container_width=True)
+    st.caption('成交參考價另加帳本中的滑價與費稅；日資料成交估算未重建盤中排隊。所有明細來自所選封存帳戶。')
+    for key, title, frame in [('trades', '全部買賣', trades), ('daily', '每日資產與0050', daily),
+                              ('orders', '委託與未成交原因', pd.DataFrame(account['orders']))]:
+        st.download_button('下載' + title, frame.to_csv(index=False).encode('utf-8-sig'),
+            file_name=f'{name}-{key}.csv', mime='text/csv', key='research_detail_' + key)

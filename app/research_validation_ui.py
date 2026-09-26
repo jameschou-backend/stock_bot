@@ -39,6 +39,9 @@ def load_summary(path, family, arms, root=ROOT):
         sha256=manifest['files_sha256']['report.json']),root,'.json'))
     if value['cases']!=frozen['cases'] or value['all_completed']!=frozen['all_completed']:
         raise ValueError('顯示結果與重播報告不一致')
+    if value.get('settlement_supplement') and any(value.get(k)!=frozen.get(k) for k in (
+            'settlement_supplement','prior_completed_unchanged','repaired_cases')):
+        raise ValueError('補件範圍或原帳戶一致性與重播報告不符')
     if value['all_completed']!=all(r['completed'] is True for r in value['cases'].values()):
         raise ValueError('完成狀態不一致')
     baseline=next(iter(arms))
@@ -124,13 +127,17 @@ def render():
     st.caption('2022/01/03–2026/09/09｜100萬元複利｜5個部位｜整張成交｜閒錢現金｜已計交易成本')
     selected=st.selectbox('查看哪一組實驗',list(FAMILIES),key='research_validation_family')
     family,arms=FAMILIES[selected]
-    path=ROOT/'artifacts/forward_simulation'/f'{family}_20260927.json'
+    version='completed_20260927' if family in ('exit_mechanisms','volatility_budget') else '20260927'
+    path=ROOT/'artifacts/forward_simulation'/f'{family}_{version}.json'
     if not path.exists():
         st.info('這組實驗尚未發布兩輪比對完成的報告。');return
     try:value=load_summary(path,family,arms)
     except (OSError,ValueError,KeyError,TypeError) as exc:
         st.error('報告驗證未通過：'+str(exc));return
     st.dataframe(pd.DataFrame(comparison_rows(value,arms)),hide_index=True,use_container_width=True)
+    if value.get('settlement_supplement'):
+        st.caption(f"配股資料補件後，本組{value['repaired_cases']}個中止案例已完成；"
+                   f"原先{value['prior_completed_unchanged']}個完整帳戶逐欄相同，兩輪重播一致。")
     baseline=next(iter(arms))
     normal=value['cases'][f'{baseline}_0']['metrics']['benchmark_return']
     stress=value['cases'][f'{baseline}_7']['metrics']['benchmark_return']
@@ -140,7 +147,7 @@ def render():
     if blocked:
         with st.expander(f'{len(blocked)}個情境因資料不足停止，沒有補假設報酬'):
             st.dataframe(pd.DataFrame(blocked),hide_index=True,use_container_width=True)
-    statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_20260927.json'
+    statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_completed_20260927.json'
     if family in ('exit_mechanisms','volatility_budget'):
         with st.expander('優勢有多不確定？查看月報酬統計'):
             try:
@@ -150,6 +157,8 @@ def render():
                 st.caption('每6個月成組、配對重抽2,000次。這是既有帳戶的描述統計，未校正所有歷史試驗與挑選偏差；不是未來獲利機率，DSR尚不可確認。')
             except (OSError,ValueError,KeyError,TypeError) as exc:
                 st.error('統計報告驗證未通過：'+str(exc))
+    from app.research_account_detail import render as render_account_detail
+    render_account_detail(value, arms)
     st.download_button('下載完整結果摘要',json.dumps(value,ensure_ascii=False,indent=2),
         file_name=path.name,mime='application/json',key='download_validation_summary')
     st.caption('直接讀取封存且已重跑比對的報告，不會重新抓資料、重跑回測或下單。畫面不重新驗證全部歷史來源；新回測仍會完整核對來源。')
