@@ -105,5 +105,7 @@ def render():
                 cols=['date','signal_date','side','qty','reference_price','total_cost','cash_after']
                 st.dataframe(pd.DataFrame(account['trades'])[cols].rename(columns=dict(zip(cols,['成交日','訊號日','買賣','股數','參考價','費稅滑價','成交後現金']))),hide_index=True,use_container_width=True)
                 st.download_button('下載連續完整帳戶與判斷',json.dumps(case,ensure_ascii=False),file_name=name+'-2016-2026.json',mime='application/json',key='index_continuous_download')
+                from app.index_case_backtest_ui import render as render_case_job
+                render_case_job(arm,mask)
             st.download_button('下載連續資金驗證摘要',json.dumps(value,ensure_ascii=False),file_name='index-continuous.json',mime='application/json',key='index_continuous_summary')
         except (OSError,ValueError,KeyError,TypeError) as exc:st.error('連續資金驗證讀取失敗：'+str(exc))

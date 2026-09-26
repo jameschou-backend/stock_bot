@@ -18,7 +18,7 @@ JOBS_DIR = ROOT / '.cache/workbench/jobs'
 
 
 class WorkRequest(BaseModel):
-    kind: Literal['update_data','backtest','verified_backtest','sector_backtest','news_scan','news_review','chain_flow']
+    kind: Literal['update_data','backtest','verified_backtest','sector_backtest','index_backtest','news_scan','news_review','chain_flow']
     months: int = Field(default=12,ge=3,le=120)
     topn: int = Field(default=10,ge=1,le=50)
     quick: bool = False
@@ -36,6 +36,9 @@ class WorkRequest(BaseModel):
     replay_fresh: bool = False
     sector_preflight: bool = True
     sector_strict_pit: bool = False
+    index_rule: Literal['equal','trend200','trend180','trend220'] = 'equal'
+    index_mask: int = Field(default=0,ge=0,le=7,strict=True)
+    index_fresh: bool = False
 
     @model_validator(mode='after')
     def bounded_news(self):
@@ -151,6 +154,10 @@ def submit(request: WorkRequest):
 
 
 def command_for(request, output):
+    if request.kind=='index_backtest':
+        args=[sys.executable,'scripts/run_index_case.py','--arm',request.index_rule,
+              '--mask',str(request.index_mask),'--output',str(output)]
+        return args+(['--fresh'] if request.index_fresh else [])
     if request.kind=='sector_backtest':
         args=[sys.executable,'scripts/run_sector_account_job.py','--output',str(output)]
         if request.sector_preflight: args.append('--preflight-only')

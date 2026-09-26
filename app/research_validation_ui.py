@@ -200,4 +200,4 @@ def render():
     render_account_detail(value, arms)
     st.download_button('下載完整結果摘要',json.dumps(value,ensure_ascii=False,indent=2),
         file_name=path.name,mime='application/json',key='download_validation_summary')
-    st.caption('直接讀取封存且已重跑比對的報告，不會重新抓資料、重跑回測或下單。畫面不重新驗證全部歷史來源；新回測仍會完整核對來源。')
+    st.caption('瀏覽報告不重新抓資料或計算。連續帳戶的「再次驗證這組回測」會另開一次背景驗證，完整核對來源；不下單、不建立排程。')

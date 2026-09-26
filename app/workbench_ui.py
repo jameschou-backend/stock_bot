@@ -707,6 +707,7 @@ def render_jobs():
     if not running: st.caption('尚未從工作台啟動工作。')
     for job in running:
         kind_names={'update_data':'資料更新','backtest':'策略回測','verified_backtest':'固定條件回測',
+                    'index_backtest':'連續ETF帳戶回測','sector_backtest':'族群帳戶回測',
                     'news_scan':'新聞題材','news_review':'歷史新聞判讀','chain_flow':'族群資金研究'}
         with st.expander(f"{labels[job['status']]} · {kind_names.get(job['request']['kind'],'研究工作')} · {job['job_id'][:8]}",expanded=job['status'] in ('running','failed')):
             st.write(job['message'])

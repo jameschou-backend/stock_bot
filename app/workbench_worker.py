@@ -16,6 +16,7 @@ def main(job_id):
         message={'update_data':'更新資料','backtest':'載入資料與驗證策略',
                  'verified_backtest':'核對封存資料並執行所選歷史研究',
                  'sector_backtest':'核對新族群來源並執行固定帳戶研究',
+                 'index_backtest':'核對封存來源與連續ETF帳戶',
                  'news_scan':'整理新聞題材','news_review':'重建歷史新聞時間線',
                  'chain_flow':'整理族群成交分布與法人方向'}[job['request']['kind']]
         job.update(status='running',message=message,pid=os.getpid())
@@ -38,7 +39,16 @@ def main(job_id):
                 job.update(message=f'FinMind 達額度暫停，約 {retry} 秒後重試；已完成日期會重用',retry_after_seconds=retry)
         else:
             job.update(status='completed',message='已完成；研究結果仍需資料與策略驗證')
-            if request.kind=='sector_backtest':
+            if request.kind=='index_backtest':
+                import hashlib
+                from app.index_case_backtest_ui import load_result
+                value, _=load_result(output,root=ROOT,request=job['request'])
+                reused=value['metrics']['reused_cases']==1
+                job.update(message=('來源核對完成，重用一致帳戶' if reused else '重新計算完成，完整帳戶與封存結果一致')+'；僅供歷史研究',
+                           report_status='exploratory',result_path=str(output),
+                           result_sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
+                           research_only=True,live_qualified=False,unseen_validation=False)
+            elif request.kind=='sector_backtest':
                 import hashlib
                 from app.backtest_completion_ui import load_sector_job
                 value, report=load_sector_job(output,root=ROOT,request=job['request'])
