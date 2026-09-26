@@ -73,10 +73,23 @@ def render(publication, arms):
     if not shown.empty:
         shown['買賣'] = shown['買賣'].map({'buy': '買進', 'sell': '賣出'})
         reasons = dict(REASON_LABELS, leader_entry='符合當日候選及資金規則', support20='前日收盤跌破只上移的20日支撐',
-                       pyramid_add='強勢突破後的本批唯一加碼')
+                       pyramid_add='強勢突破後的本批唯一加碼',trend_off='前日趨勢轉弱，出場指令持續至賣完',
+                       initial_or_monthly_or_reentry='首次配置、月首調整或趨勢重新進場')
         shown['原因'] = shown['原因'].map(lambda value: reasons.get(value, value))
     st.dataframe(shown, hide_index=True, use_container_width=True)
     st.caption('成交參考價另加帳本中的滑價與費稅；日資料成交估算未重建盤中排隊。所有明細來自所選封存帳戶。')
+    if publication['schema']=='index_exposure_publication_v1':
+        case=json.loads(verified_bytes(publication['cases'][name]['result'],ROOT,'.json'))
+        with st.expander('當時的指數趨勢與資金規劃'):
+            frame=pd.json_normalize(case['plans'])
+            columns={'date':'規劃日','signal_date':'訊號日','side':'買賣','qty':'原股數上限',
+                'context.signal_price_date':'0050收盤資料日','context.signal_close':'還原收盤',
+                'context.sma':'固定均價','context.trend':'趨勢允許持有','prior_nav':'事前資產',
+                'available_cash':'可用現金','reference_price':'事前ETF參考價'}
+            st.dataframe(frame.reindex(columns=list(columns)).rename(columns=columns),hide_index=True,use_container_width=True)
+            st.caption('延遲指令不因新價格提高股數；分割依公告另換算22倍單位。未成交、取消和等待都包含在完整判斷紀錄。')
+            st.download_button('下載全部趨勢與委託判斷',json.dumps({'plans':case['plans'],'decisions':case['decisions']},ensure_ascii=False),
+                file_name=f'{name}-index-decisions.json',mime='application/json',key='research_detail_index')
     for key, title, frame in [('trades', '全部買賣', trades), ('daily', '每日資產與0050', daily),
                               ('orders', '委託與未成交原因', pd.DataFrame(account['orders']))]:
         st.download_button('下載' + title, frame.to_csv(index=False).encode('utf-8-sig'),

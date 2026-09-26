@@ -21,6 +21,8 @@ FAMILIES={
         'support_risk2_pattern':'支撐與配置＋收斂突破'}),
     '強勢股加碼':('pyramid_cash',{'support_risk2':'支撐出場＋計畫風險2%',
         'pyramid':'同規則＋每批一次強勢加碼'}),
+    '指數曝險與趨勢':('index_exposure',{'equal':'正二75%月再平衡對照','trend200':'200日趨勢＋正二75%',
+        'trend180':'180日鄰近參數','trend220':'220日鄰近參數'}),
 }
 
 
@@ -132,9 +134,10 @@ def render():
     import streamlit as st
     st.subheader('最新策略驗證')
     st.warning('尚未取得實戰資格。正常回測贏過0050，不代表延遲成交後仍有優勢。')
-    st.caption('2022/01/03–2026/09/09｜100萬元複利｜5個部位｜整張成交｜閒錢現金｜已計交易成本')
     selected=st.selectbox('查看哪一組實驗',list(FAMILIES),key='research_validation_family')
     family,arms=FAMILIES[selected]
+    positions='單一ETF、目標75%資金' if family=='index_exposure' else '5個部位'
+    st.caption(f'2022/01/03–2026/09/09｜100萬元複利｜{positions}｜整張成交｜閒錢現金｜已計交易成本')
     version='completed_20260927' if family in ('exit_mechanisms','volatility_budget') else '20260927'
     path=ROOT/'artifacts/forward_simulation'/f'{family}_{version}.json'
     if not path.exists():
@@ -143,6 +146,13 @@ def render():
     except (OSError,ValueError,KeyError,TypeError) as exc:
         st.error('報告驗證未通過：'+str(exc));return
     st.dataframe(pd.DataFrame(comparison_rows(value,arms)),hide_index=True,use_container_width=True)
+    if family == 'index_exposure':
+        st.warning('00631L是單日兩倍ETF；投入75%資金不代表75%市場曝險。收益包含槓桿效果。歷史上下限由規則推算，尚無交易所逐日原始值，不能據此認定可實戰。')
+        st.caption('主規則固定200日；180／220日只檢查附近參數是否同樣有效，不挑最好看的參數替換。前日0050收盤高於均價才持有，轉弱後下一交易日出場；月首重設75%目標，其餘現金。')
+        checks=value['validation'];middle=checks['arms']['trend200']
+        st.write('200日主規則：滾動一年門檻 '+('通過' if middle['endpoint_rolling252_pass'] else '未通過')+
+                 '；逐年門檻 '+('通過' if middle['endpoint_annual_pass'] else '未通過')+
+                 '；鄰近參數穩定性 '+('通過' if checks['neighbor_stability_pass'] else '未通過')+'。')
     if family == 'support_risk':
         st.caption('初始支撐固定取原訊號日，持有後只上移；跌破後下一交易日提出賣出。計畫風險含來回費稅與本情境滑價，並受整張、現金與名額限制。')
         st.caption('2%是事前配置上限，不保證跳空或未成交後的損失也小於2%。原12%出場基準仍是入場日還原收盤，和事前配置的參考價不同。')
@@ -171,7 +181,9 @@ def render():
         statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_pattern_cash_20260927.json'
     if family == 'pyramid_cash':
         statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_pyramid_cash_20260927.json'
-    if family in ('exit_mechanisms','volatility_budget','support_risk','pattern_cash','pyramid_cash'):
+    if family == 'index_exposure':
+        statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_index_exposure_20260927.json'
+    if family in ('exit_mechanisms','volatility_budget','support_risk','pattern_cash','pyramid_cash','index_exposure'):
         with st.expander('優勢有多不確定？查看月報酬統計'):
             try:
                 study=load_uncertainty(statistics_path,value)
