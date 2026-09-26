@@ -72,7 +72,8 @@ def render(publication, arms):
     shown = trades.reindex(columns=list(labels)).rename(columns=labels)
     if not shown.empty:
         shown['買賣'] = shown['買賣'].map({'buy': '買進', 'sell': '賣出'})
-        reasons = dict(REASON_LABELS, leader_entry='符合當日候選及資金規則', support20='前日收盤跌破只上移的20日支撐')
+        reasons = dict(REASON_LABELS, leader_entry='符合當日候選及資金規則', support20='前日收盤跌破只上移的20日支撐',
+                       pyramid_add='強勢突破後的本批唯一加碼')
         shown['原因'] = shown['原因'].map(lambda value: reasons.get(value, value))
     st.dataframe(shown, hide_index=True, use_container_width=True)
     st.caption('成交參考價另加帳本中的滑價與費稅；日資料成交估算未重建盤中排隊。所有明細來自所選封存帳戶。')
@@ -115,3 +116,20 @@ def render(publication, arms):
                 json.dumps(case['pattern_entries'], ensure_ascii=False, indent=2),
                 file_name=f'{name}-pattern-decisions.json', mime='application/json',
                 key='research_detail_pattern')
+    if publication['cases'][name]['config'].get('pyramid_enabled') is True:
+        case = json.loads(verified_bytes(publication['cases'][name]['result'], ROOT, '.json'))
+        with st.expander('當時的加碼判斷'):
+            decisions = pd.json_normalize(case['pyramid_decisions'])
+            selected = (decisions[decisions.status.isin(['waiting_extra_entry_delay', 'filled', 'unfilled'])]
+                        if not decisions.empty else decisions)
+            columns = {'date': '判斷日', 'stock_id': '代號', 'status': '結果',
+                'created_instruction.signal_date': '新指令訊號日',
+                'pending_before.signal_date': '等待中原訊號日',
+                'execution_capacity.qty': '執行股數上限', 'filled_qty': '成交股數'}
+            shown = selected.reindex(columns=list(columns)).rename(columns=columns)
+            shown['結果'] = shown['結果'].map({'filled': '已成交', 'unfilled': '未成交',
+                                              'waiting_extra_entry_delay': '多等一個交易日'})
+            st.dataframe(shown, hide_index=True, use_container_width=True)
+            st.caption('這裡只列出已建立的加碼指令；所有不符條件、無預算或取消原因都保留在下載紀錄。加碼不重設原持股出場期限。')
+            st.download_button('下載全部加碼判斷', json.dumps(case['pyramid_decisions'], ensure_ascii=False, indent=2),
+                file_name=f'{name}-pyramid-decisions.json', mime='application/json', key='research_detail_pyramid')
