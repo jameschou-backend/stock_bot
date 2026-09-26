@@ -72,7 +72,7 @@ def render(publication, arms):
     shown = trades.reindex(columns=list(labels)).rename(columns=labels)
     if not shown.empty:
         shown['買賣'] = shown['買賣'].map({'buy': '買進', 'sell': '賣出'})
-        reasons = dict(REASON_LABELS, leader_entry='符合當日候選及資金規則')
+        reasons = dict(REASON_LABELS, leader_entry='符合當日候選及資金規則', support20='前日收盤跌破只上移的20日支撐')
         shown['原因'] = shown['原因'].map(lambda value: reasons.get(value, value))
     st.dataframe(shown, hide_index=True, use_container_width=True)
     st.caption('成交參考價另加帳本中的滑價與費稅；日資料成交估算未重建盤中排隊。所有明細來自所選封存帳戶。')
@@ -80,3 +80,21 @@ def render(publication, arms):
                               ('orders', '委託與未成交原因', pd.DataFrame(account['orders']))]:
         st.download_button('下載' + title, frame.to_csv(index=False).encode('utf-8-sig'),
             file_name=f'{name}-{key}.csv', mime='text/csv', key='research_detail_' + key)
+    if publication['cases'][name]['config'].get('technical_mode') not in (None, 'control'):
+        case = json.loads(verified_bytes(publication['cases'][name]['result'], ROOT, '.json'))
+        with st.expander('當時的支撐與股數規劃'):
+            plans = pd.json_normalize(case['technical_entries'])
+            if case['config']['technical_mode'] == 'support20':
+                plans['risk_budget'] = None
+            columns = {'date': '預定買進日', 'signal_date': '原訊號日', 'stock_id': '代號',
+                'context.support_raw': '原訊號支撐價', 'reference_price': '買進規劃參考價',
+                'planned_stop_price': '計畫停損參考價', 'risk_budget': '計畫風險金額',
+                'planned_loss': '上限股數的計畫損失', 'allowed_qty': '規劃股數上限', 'filled_qty': '實際成交股數'}
+            st.dataframe(plans.reindex(columns=list(columns)).rename(columns=columns),
+                         hide_index=True, use_container_width=True)
+            st.caption('支撐及距離固定取原訊號日；買進規劃價只用執行前已知價格。計畫停損價用來算股數，並不是保證成交價或已掛出的停損單。只測支撐的組別不套用2%股數限制。')
+            st.download_button('下載配置與支撐紀錄',
+                json.dumps({'entries': case['technical_entries'], 'support': case['support_decisions']},
+                           ensure_ascii=False, indent=2),
+                file_name=f'{name}-technical-decisions.json', mime='application/json',
+                key='research_detail_technical')

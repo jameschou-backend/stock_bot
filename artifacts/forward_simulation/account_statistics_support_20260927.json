@@ -1,0 +1,967 @@
+{
+  "complete_trial_coverage_verified": false,
+  "historical_trial_base_assumption": 80,
+  "live_qualified": false,
+  "note": "Bootstrap intervals describe these recorded accounts; they do not correct the full strategy selection process",
+  "period": "2022-02 through 2026-08, 55 interior months",
+  "recorded_executions": 434,
+  "recorded_sources": {
+    "candidate_queue_20260927": 32,
+    "corporate_completion_20260927": 176,
+    "exit_mechanisms_20260927": 112,
+    "pead_arm_a": 1,
+    "pead_rank_armB": 1,
+    "pead_rank_gross": 1,
+    "pead_rank_ref_tiered": 1,
+    "run_backtest_cli": 14,
+    "support_risk_current_20260927": 32,
+    "volatility_budget_20260927": 64
+  },
+  "registry_snapshot": {
+    "path": ".cache/account-statistics-20260927/support-v1/trial_registry_snapshot.jsonl",
+    "sha256": "b18d565e645f827300a95425b159e120083de880ce3e0dd2e4aeb4c7be58d4fc"
+  },
+  "report": {
+    "path": ".cache/account-statistics-20260927/support-v1/report.json",
+    "sha256": "83398620b1933ca6ad98d99fc37c9fb9a870d1d2cc68de8c84148a40a67f3265"
+  },
+  "schema": "account_statistics_publication_v1",
+  "selection_adjusted_statistics_verified": false,
+  "studies": {
+    ".cache/support-risk-20260927/final-v1": {
+      "cases": {
+        "control_0": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.928142972276378,
+            "ci_level": 0.95,
+            "ci_low": 0.5486941372987242,
+            "excess_ci_high": 1.138921775351835,
+            "excess_ci_low": -0.27048720390584163,
+            "excess_sharpe_observed": 0.4677496076555713,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.187713854176652
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_1": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.8830155199774552,
+            "ci_level": 0.95,
+            "ci_low": 0.5043088412407164,
+            "excess_ci_high": 1.1365111937388364,
+            "excess_ci_low": -0.3122426678024049,
+            "excess_sharpe_observed": 0.4382599900089577,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.1624812659693375
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_2": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5073926880244537,
+            "ci_level": 0.95,
+            "ci_low": -0.29885889878568744,
+            "excess_ci_high": 0.4461076759854177,
+            "excess_ci_low": -1.3621586764821598,
+            "excess_sharpe_observed": -0.4092049745032787,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.7328741789497665
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_3": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.3918184125106585,
+            "ci_level": 0.95,
+            "ci_low": -0.6123818947572873,
+            "excess_ci_high": 0.49975442085303157,
+            "excess_ci_low": -1.5196441475421076,
+            "excess_sharpe_observed": -0.4480802837197363,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6090897519570599
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_4": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.9204879591837856,
+            "ci_level": 0.95,
+            "ci_low": 0.22697521231733525,
+            "excess_ci_high": 0.868868577384856,
+            "excess_ci_low": -0.7147745930821309,
+            "excess_sharpe_observed": 0.08500647626235658,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.0320898472713271
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_5": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.8288894094209456,
+            "ci_level": 0.95,
+            "ci_low": 0.16094863640399787,
+            "excess_ci_high": 0.8150931885251543,
+            "excess_ci_low": -0.7493910319702579,
+            "excess_sharpe_observed": 0.04411759447890799,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.9643499955913367
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_6": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4479247642834243,
+            "ci_level": 0.95,
+            "ci_low": -0.049163409585063635,
+            "excess_ci_high": 0.5161343188173515,
+            "excess_ci_low": -1.0814255661669374,
+            "excess_sharpe_observed": -0.25460662337112777,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.8022020260748818
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "control_7": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.3761064846646984,
+            "ci_level": 0.95,
+            "ci_low": -0.13580299893638104,
+            "excess_ci_high": 0.45024822479630444,
+            "excess_ci_low": -1.1498154499576538,
+            "excess_sharpe_observed": -0.3083047225613513,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.7328374267566842
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_0": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.745531995065502,
+            "ci_level": 0.95,
+            "ci_low": 0.30342334849518027,
+            "excess_ci_high": 0.5083381884297347,
+            "excess_ci_low": -1.1088262035585874,
+            "excess_sharpe_observed": -0.287833254422859,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.019613190270848
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_1": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.6456459287614336,
+            "ci_level": 0.95,
+            "ci_low": 0.2594755485482001,
+            "excess_ci_high": 0.4618443495582622,
+            "excess_ci_low": -1.1418484854834157,
+            "excess_sharpe_observed": -0.3187527187159639,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.9482037932108633
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_2": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4918348901909295,
+            "ci_level": 0.95,
+            "ci_low": -0.27059617500166144,
+            "excess_ci_high": 0.15130150027094397,
+            "excess_ci_low": -1.8633758748624554,
+            "excess_sharpe_observed": -0.7962977546803278,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.701522599263411
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_3": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4220422082871302,
+            "ci_level": 0.95,
+            "ci_low": -0.39742571494793455,
+            "excess_ci_high": 0.09216743022014379,
+            "excess_ci_low": -1.9503879059662275,
+            "excess_sharpe_observed": -0.8699354163673473,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6209141771395936
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_4": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.8482431744839858,
+            "ci_level": 0.95,
+            "ci_low": 0.33635068258899176,
+            "excess_ci_high": 0.7736777677991095,
+            "excess_ci_low": -0.7263621996364166,
+            "excess_sharpe_observed": 0.022324683673081616,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.0809722678387632
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_5": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.9977963778245327,
+            "ci_level": 0.95,
+            "ci_low": 0.2177648517816619,
+            "excess_ci_high": 0.5551660490276202,
+            "excess_ci_low": -1.2094710973684235,
+            "excess_sharpe_observed": -0.3204926586690608,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.0690975013689632
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_6": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.922964443863622,
+            "ci_level": 0.95,
+            "ci_low": 0.06848340722366715,
+            "excess_ci_high": 0.5706717893529972,
+            "excess_ci_low": -1.184627474098988,
+            "excess_sharpe_observed": -0.29956147943190475,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 1.0818294772421557
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "risk2_7": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.7579455333209801,
+            "ci_level": 0.95,
+            "ci_low": -0.11061261246625767,
+            "excess_ci_high": 0.348072295432874,
+            "excess_ci_low": -1.5072657575438155,
+            "excess_sharpe_observed": -0.5389596535643991,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.8983107917050024
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_0": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5566193344554848,
+            "ci_level": 0.95,
+            "ci_low": 0.14250521253745554,
+            "excess_ci_high": 0.7144293944785628,
+            "excess_ci_low": -0.7133249567926339,
+            "excess_sharpe_observed": 0.004881959583298002,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.9288234093891855
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_1": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.469457362933496,
+            "ci_level": 0.95,
+            "ci_low": -0.2733475111041788,
+            "excess_ci_high": 0.4455789472322268,
+            "excess_ci_low": -1.098287186068503,
+            "excess_sharpe_observed": -0.2732305721309284,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.7459707228860226
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_2": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5995022660508804,
+            "ci_level": 0.95,
+            "ci_low": -0.12578301653431725,
+            "excess_ci_high": 0.6728117833611142,
+            "excess_ci_low": -1.0455696842127193,
+            "excess_sharpe_observed": -0.1625137506540014,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.8260891810163605
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_3": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5978497988030769,
+            "ci_level": 0.95,
+            "ci_low": -0.2530720928642706,
+            "excess_ci_high": 0.6670541434748217,
+            "excess_ci_low": -1.1716241284940132,
+            "excess_sharpe_observed": -0.20012413017910327,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.7669995580585652
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_4": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.795493166520829,
+            "ci_level": 0.95,
+            "ci_low": -0.03318103846143077,
+            "excess_ci_high": 0.794938506082705,
+            "excess_ci_low": -0.9287811863750683,
+            "excess_sharpe_observed": -0.07469350224325813,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.9442717397632996
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_5": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.6041956215503983,
+            "ci_level": 0.95,
+            "ci_low": -0.19016763535086922,
+            "excess_ci_high": 0.6974422036172094,
+            "excess_ci_low": -0.977709368865978,
+            "excess_sharpe_observed": -0.10708432730633141,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.8281605366497372
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_6": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5011493880423827,
+            "ci_level": 0.95,
+            "ci_low": -0.3050479217007678,
+            "excess_ci_high": 0.6020498466039902,
+            "excess_ci_low": -1.2316886354327268,
+            "excess_sharpe_observed": -0.24361726056477653,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.7308958719546254
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support20_7": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.0797082062512748,
+            "ci_level": 0.95,
+            "ci_low": -0.9245938578699436,
+            "excess_ci_high": 0.10251693280411446,
+            "excess_ci_low": -1.8620967137989441,
+            "excess_sharpe_observed": -0.7817782523410391,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.32241700844608767
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_0": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5149709542757692,
+            "ci_level": 0.95,
+            "ci_low": -0.3232744384585103,
+            "excess_ci_high": 0.0970574746306275,
+            "excess_ci_low": -1.8015237279610083,
+            "excess_sharpe_observed": -0.7586128132914388,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6729270490818481
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_1": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.5151604661905191,
+            "ci_level": 0.95,
+            "ci_low": -0.3490795162140616,
+            "excess_ci_high": 0.026731268650162537,
+            "excess_ci_low": -1.7996572784793106,
+            "excess_sharpe_observed": -0.828868787644088,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6210355792868337
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_2": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4659489827493037,
+            "ci_level": 0.95,
+            "ci_low": -0.3911580002448549,
+            "excess_ci_high": 0.2736859310925831,
+            "excess_ci_low": -1.622243116583523,
+            "excess_sharpe_observed": -0.5855768501734603,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.7189561941362821
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_3": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.0305562947325286,
+            "ci_level": 0.95,
+            "ci_low": -0.7071862738925379,
+            "excess_ci_high": -0.1682475361712137,
+            "excess_ci_low": -2.244073735162954,
+            "excess_sharpe_observed": -1.1352027951813848,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.1993569957843888
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_4": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4445061390141112,
+            "ci_level": 0.95,
+            "ci_low": -0.45103015252800943,
+            "excess_ci_high": 0.2544294643853897,
+            "excess_ci_low": -1.4788886563163317,
+            "excess_sharpe_observed": -0.5555619133583423,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6616553086523355
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_5": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4875764118032302,
+            "ci_level": 0.95,
+            "ci_low": -0.3406249050110824,
+            "excess_ci_high": 0.20468876259325727,
+            "excess_ci_low": -1.4919454070104154,
+            "excess_sharpe_observed": -0.600277620821487,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6807759285574815
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_6": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 1.4286641181710518,
+            "ci_level": 0.95,
+            "ci_low": -0.517971458205493,
+            "excess_ci_high": 0.2813877389942166,
+            "excess_ci_low": -1.7533978740375424,
+            "excess_sharpe_observed": -0.6788910354525362,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.6587709206731788
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        },
+        "support_risk2_7": {
+          "available": true,
+          "bootstrap": {
+            "block_size": 6,
+            "ci_high": 0.7549041151441347,
+            "ci_level": 0.95,
+            "ci_low": -0.7532771143804782,
+            "excess_ci_high": -0.2591085455454142,
+            "excess_ci_low": -2.244640955153412,
+            "excess_sharpe_observed": -1.195024067920074,
+            "n_boot": 2000,
+            "n_observations": 55,
+            "seed": 20260927,
+            "sharpe_observed": 0.06486590023188707
+          },
+          "dsr": {
+            "available": false,
+            "reason": "Complete historical trials and their Sharpe dispersion are unverified"
+          },
+          "excess_interval_above_zero": false,
+          "excluded_boundary_months": [
+            "2022-01",
+            "2026-09"
+          ],
+          "live_qualified": false,
+          "method": "paired_circular_monthly_block_bootstrap",
+          "scope": "descriptive_current_account_not_selection_adjusted",
+          "selection_adjusted_statistics_verified": false
+        }
+      },
+      "complete_cases": 32,
+      "positive_excess_interval_lower_bounds": 0
+    }
+  },
+  "unseen_validation": false
+}

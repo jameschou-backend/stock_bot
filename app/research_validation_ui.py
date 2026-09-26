@@ -13,6 +13,9 @@ FAMILIES={
     '部位配置':('volatility_budget',{'equal':'原等額配置','vol30':'波動上限30%',
         'vol40':'波動上限40%','vol50':'波動上限50%'}),
     '候補有效期':('candidate_queue',{'valid1':'原當日有效','valid2':'多候補一天'}),
+    '支撐與風險配置':('support_risk',{'control':'原12%停損＋等額配置',
+        'support20':'加上20日支撐出場','risk2':'每筆計畫風險2%',
+        'support_risk2':'支撐出場＋計畫風險2%'}),
 }
 
 
@@ -135,6 +138,9 @@ def render():
     except (OSError,ValueError,KeyError,TypeError) as exc:
         st.error('報告驗證未通過：'+str(exc));return
     st.dataframe(pd.DataFrame(comparison_rows(value,arms)),hide_index=True,use_container_width=True)
+    if family == 'support_risk':
+        st.caption('初始支撐固定取原訊號日，持有後只上移；跌破後下一交易日提出賣出。計畫風險含來回費稅與本情境滑價，並受整張、現金與名額限制。')
+        st.caption('2%是事前配置上限，不保證跳空或未成交後的損失也小於2%。原12%出場基準仍是入場日還原收盤，和事前配置的參考價不同。')
     if value.get('settlement_supplement'):
         st.caption(f"配股資料補件後，本組{value['repaired_cases']}個中止案例已完成；"
                    f"原先{value['prior_completed_unchanged']}個完整帳戶逐欄相同，兩輪重播一致。")
@@ -148,7 +154,9 @@ def render():
         with st.expander(f'{len(blocked)}個情境因資料不足停止，沒有補假設報酬'):
             st.dataframe(pd.DataFrame(blocked),hide_index=True,use_container_width=True)
     statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_completed_20260927.json'
-    if family in ('exit_mechanisms','volatility_budget'):
+    if family == 'support_risk':
+        statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_support_20260927.json'
+    if family in ('exit_mechanisms','volatility_budget','support_risk'):
         with st.expander('優勢有多不確定？查看月報酬統計'):
             try:
                 study=load_uncertainty(statistics_path,value)
