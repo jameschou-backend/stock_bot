@@ -98,3 +98,20 @@ def render(publication, arms):
                            ensure_ascii=False, indent=2),
                 file_name=f'{name}-technical-decisions.json', mime='application/json',
                 key='research_detail_technical')
+    if publication['cases'][name]['config'].get('pattern_filter') is True:
+        case = json.loads(verified_bytes(publication['cases'][name]['result'], ROOT, '.json'))
+        with st.expander('當時的突破條件'):
+            entries = pd.json_normalize(case['pattern_entries'])
+            columns = {'date': '預定買進日', 'signal_date': '原訊號日', 'stock_id': '代號',
+                'context.breakout20': '突破20日高點', 'context.contraction10': '區間收斂',
+                'context.volume_expansion': '成交量放大', 'allowed_qty': '篩選後股數',
+                'filled_qty': '成交股數'}
+            shown = entries.reindex(columns=list(columns)).rename(columns=columns)
+            for title in ('突破20日高點', '區間收斂', '成交量放大'):
+                shown[title] = shown[title].map({True: '符合', False: '不符'}).fillna('資料不足')
+            st.dataframe(shown, hide_index=True, use_container_width=True)
+            st.caption('三條件都用原訊號日已知資料。篩選後股數仍可能因資金、風險配置或行情限制減少；這張表不代表保證成交。未進到配置階段的候選可另查委託與未成交原因。')
+            st.download_button('下載突破判斷紀錄',
+                json.dumps(case['pattern_entries'], ensure_ascii=False, indent=2),
+                file_name=f'{name}-pattern-decisions.json', mime='application/json',
+                key='research_detail_pattern')

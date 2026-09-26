@@ -16,6 +16,9 @@ FAMILIES={
     '支撐與風險配置':('support_risk',{'control':'原12%停損＋等額配置',
         'support20':'加上20日支撐出場','risk2':'每筆計畫風險2%',
         'support_risk2':'支撐出場＋計畫風險2%'}),
+    '收斂突破篩選':('pattern_cash',{'control':'原12%停損＋等額配置',
+        'pattern':'原規則＋收斂突破','support_risk2':'支撐出場＋計畫風險2%',
+        'support_risk2_pattern':'支撐與配置＋收斂突破'}),
 }
 
 
@@ -141,6 +144,9 @@ def render():
     if family == 'support_risk':
         st.caption('初始支撐固定取原訊號日，持有後只上移；跌破後下一交易日提出賣出。計畫風險含來回費稅與本情境滑價，並受整張、現金與名額限制。')
         st.caption('2%是事前配置上限，不保證跳空或未成交後的損失也小於2%。原12%出場基準仍是入場日還原收盤，和事前配置的參考價不同。')
+    if family == 'pattern_cash':
+        st.caption('只在原訊號日同時突破前20日高點、前10日區間縮至再前10日的75%以內、量達前20日均量1.5倍時，才通過新增篩選。延後成交不重算訊號。')
+        st.caption('對照帳戶核對後重用，新增規則各離線執行兩次。未通過篩選的股票不占買進名額；通過仍須符合現金與成交條件。')
     if value.get('settlement_supplement'):
         st.caption(f"配股資料補件後，本組{value['repaired_cases']}個中止案例已完成；"
                    f"原先{value['prior_completed_unchanged']}個完整帳戶逐欄相同，兩輪重播一致。")
@@ -156,7 +162,9 @@ def render():
     statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_completed_20260927.json'
     if family == 'support_risk':
         statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_support_20260927.json'
-    if family in ('exit_mechanisms','volatility_budget','support_risk'):
+    if family == 'pattern_cash':
+        statistics_path=ROOT/'artifacts/forward_simulation/account_statistics_pattern_cash_20260927.json'
+    if family in ('exit_mechanisms','volatility_budget','support_risk','pattern_cash'):
         with st.expander('優勢有多不確定？查看月報酬統計'):
             try:
                 study=load_uncertainty(statistics_path,value)
