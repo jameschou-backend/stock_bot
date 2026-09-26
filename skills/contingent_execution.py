@@ -7,6 +7,7 @@ since midnight. Equal-time prices cannot fill a newly submitted order.
 """
 from dataclasses import dataclass
 from datetime import date
+from skills.manual_security_ids import valid_manual_security_id
 
 OPEN = (9*3600+60)*1_000_000
 CUTOFF = (13*3600+25*60)*1_000_000
@@ -30,8 +31,7 @@ class Plan:
     signal_date: str
 
     def validate(self, execution_date):
-        if (not self.order_id or not isinstance(self.stock_id, str)
-                or len(self.stock_id) != 4 or not self.stock_id.isdigit()
+        if (not self.order_id or not valid_manual_security_id(self.stock_id)
                 or self.side not in ('buy', 'sell') or self.channel not in ('board', 'odd')
                 or date.fromisoformat(self.signal_date) >= date.fromisoformat(execution_date)):
             raise ValueError('Invalid identity, channel, side or signal date')
@@ -56,7 +56,7 @@ class ConfirmationGate:
             raise ValueError('Duplicate order ID')
         self.holdings = dict(holdings)
         for sid, qty in self.holdings.items():
-            if not isinstance(sid, str) or len(sid) != 4 or not sid.isdigit():
+            if not valid_manual_security_id(sid):
                 raise ValueError('Invalid holding stock ID')
             integer(qty, 1)
         self.available = integer(available_cents)

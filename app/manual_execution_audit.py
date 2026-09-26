@@ -10,6 +10,7 @@ import json
 import re
 
 from skills.contingent_execution import Plan, integer
+from skills.manual_security_ids import valid_manual_security_id
 
 TZ = ZoneInfo('Asia/Taipei')
 
@@ -36,8 +37,8 @@ def audit(document):
     holdings = dict(document['opening_holdings'])
     rights = dict(document['undelivered_stock_rights'])
     for sid,qty in (list(holdings.items())+list(rights.items())):
-        if not re.fullmatch(r'[0-9]{4}',sid):
-            raise ValueError('庫存股票代號需四碼')
+        if not valid_manual_security_id(sid):
+            raise ValueError('庫存股票代號需四碼或00631L')
         integer(qty,1)
     cash = integer(document['opening_cash_cents'])
     slots = integer(document['slots'],1)

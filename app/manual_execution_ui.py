@@ -13,6 +13,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def render_entry():
     st.write('沒有JSON也可以逐筆整理。先填事前計畫，再依實際收到順序加入回報。')
     st.caption('這是人工轉錄，不能證明計畫確實事前存在。草稿只保留在目前瀏覽工作階段，請下載保存；原始證據仍由你保管。')
+    st.caption('可核對四碼台股代號及00631L。接受代號只表示可整理紀錄，不代表已確認商品交易資格；費稅按券商實際回報填寫。')
     draft = st.session_state.get('dahu_entry_draft')
     if draft is None:
         today = datetime.now(TZ).date()
@@ -96,7 +97,7 @@ def render():
     with st.expander('大戶投：賣出／撤單後可以補位嗎？',expanded=False):
         st.write('依序核對：事前買賣計畫 → 成交或撤單成功回報 → 更新可用額度 → 下一筆買進。')
         st.caption('按下刪單不等於已撤單。部分成交、剩1股及待交付股票權利仍占名額；賣款不會自動變成可用買進額度。')
-        st.info('此工具只檢查你提供的紀錄，不操作大戶投。尚未取得你的券商紀錄，因此尚未完成真實執行驗證。')
+        st.info('此工具只檢查你提供的紀錄，不操作大戶投。真實執行驗證仍需完整的事前計畫、成交／撤單時序和可用額度證據；僅有庫存或損益截圖不足以完成。')
         st.markdown('[查看回報準備方式與欄位說明](https://www.sinotrade.com.tw/richclub/manual.pdf)（永豐官方操作手冊）')
         method=st.radio('整理紀錄方式',['中文逐筆填寫','上傳整理好的JSON'],horizontal=True,key='dahu_input_method')
         if method=='中文逐筆填寫':

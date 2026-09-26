@@ -7,6 +7,7 @@ import re
 
 from app.manual_execution_audit import audit
 from skills.contingent_execution import Plan, integer
+from skills.manual_security_ids import valid_manual_security_id
 
 
 def cents(value):
@@ -31,8 +32,8 @@ def holdings(rows):
         sid = str(row.get('股票代號', '')).strip()
         if not sid and str(row.get('股數', '')).strip() in ('', '0', 'None'):
             continue
-        if not re.fullmatch(r'[0-9]{4}', sid) or sid in result:
-            raise ValueError('庫存代號需四碼且不可重複')
+        if not valid_manual_security_id(sid) or sid in result:
+            raise ValueError('庫存代號需四碼或00631L，且不可重複')
         result[sid] = shares(row['股數'], 1)
     return result
 
