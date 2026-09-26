@@ -87,6 +87,8 @@ def render():
             st.write(f"連續同成本0050：一般 {value['benchmarks']['control']['summary']['total_return']:.2%}；滑價加倍 {value['benchmarks']['combined']['summary']['total_return']:.2%}。")
             st.caption('2016/01/04–2026/09/09｜只在第一天投入100萬元｜2,604個市場日｜盈虧和持股直接延續｜整張交易｜其餘現金')
             st.warning('完整期間勝出也不能抹除2016–2021主規則落敗。00631L包含槓桿效果，0050及00631L上下限含明示推算；目前仍未取得實戰資格。')
+            from app.index_dividend_ui import render as render_dividends
+            render_dividends()
             audit=json.loads(verified_bytes(value['limit_reconciliation'],ROOT,'.json'))
             controls=value['reference_controls'];impact=json.loads(verified_bytes(value['reference_impact'],ROOT,'.json'))
             identical=all(r['daily_assets_identical'] and r['trades_identical'] for r in impact['controls'].values())

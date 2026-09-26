@@ -50,6 +50,8 @@ def overview(root=ROOT):
                 families[family]['earlier_period_replication']=earlier_overview(root)
                 from app.index_continuous_ui import overview as continuous_overview
                 families[family]['continuous_capital_replication']=continuous_overview(root)
+                from app.index_dividend_ui import overview as dividend_overview
+                families[family]['issuer_dividend_reconciliation']=dividend_overview(root)
         except (OSError,ValueError,KeyError,TypeError) as exc:
             families[family]=dict(base,available=False,reason='publication_verification_failed',detail=str(exc))
     return dict(schema='current_account_evidence_v1',live_qualified=False,unseen_validation=False,
