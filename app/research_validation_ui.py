@@ -149,6 +149,8 @@ def render():
     if family == 'index_exposure':
         from app.index_earlier_ui import render as render_earlier
         render_earlier()
+        from app.index_continuous_ui import render as render_continuous
+        render_continuous()
         st.warning('00631L是單日兩倍ETF；投入75%資金不代表75%市場曝險。收益包含槓桿效果。歷史上下限由規則推算，尚無交易所逐日原始值，不能據此認定可實戰。')
         st.caption('主規則固定200日；180／220日只檢查附近參數是否同樣有效，不挑最好看的參數替換。前日0050收盤高於均價才持有，轉弱後下一交易日出場；月首重設75%目標，其餘現金。')
         checks=value['validation'];middle=checks['arms']['trend200']
