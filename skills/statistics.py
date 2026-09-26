@@ -2,11 +2,11 @@
 
 防止「100+ 次回測實驗」造成的 selection bias：
 - **Deflated Sharpe Ratio (DSR)**：把觀察到的 Sharpe 折扣掉「N 次試驗中最大值」的期望值，
-  得到「真實 alpha」的單尾顯著性 p-value。
+  得到經試驗次數及偏態修正的統計分數，不能單獨證明未來 alpha。
 - **PBO (Probability of Backtest Overfitting)**：將樣本切 S 段，所有 S/2 vs S/2 組合
   測試「train 期最佳策略在 test 期排名」，計算落到 median 以下的比例。
-- **CPCV (Combinatorial Purged Cross-Validation)**：比 walk-forward 嚴格的 CV，
-  test 區段周圍加 embargo 避免邊界 forward leakage。
+- **CPCV (Combinatorial Purged Cross-Validation)**：組合分割與 embargo；提供標籤
+  結束位置才會清除標籤區間重疊，不能代替依時間前推驗證。
 
 參考文獻：
 - Bailey & López de Prado 2014, "The Deflated Sharpe Ratio"
@@ -21,6 +21,7 @@ import logging
 import math
 from dataclasses import dataclass
 from itertools import combinations
+from numbers import Integral, Real
 from typing import Iterator, List, Optional, Tuple
 
 import numpy as np
@@ -43,7 +44,7 @@ class DSRResult:
     sr_expected_under_null: float  # H0 (no skill) 下 N 次試驗 Sharpe 最大值的期望
     n_trials: int
     n_observations: int
-    p_value: float  # P(true SR > 0)
+    p_value: float  # Legacy field name: normal CDF score (higher is stronger), not a posterior
     is_significant_5pct: bool
 
     def __str__(self) -> str:
@@ -52,8 +53,27 @@ class DSRResult:
             f"DSR: SR_observed={self.sr_observed:.3f}, "
             f"SR_null={self.sr_expected_under_null:.3f}, "
             f"n_trials={self.n_trials}, n_obs={self.n_observations}, "
-            f"p={self.p_value:.4f} → {verdict} @ 5%"
+            f"DSR score={self.p_value:.4f} → {verdict} @ 5%"
         )
+
+
+def _finite_real(value: float, name: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, Real):
+        raise ValueError(f"{name} must be a finite real number")
+    try:
+        result = float(value)
+    except (OverflowError, ValueError) as exc:
+        raise ValueError(f"{name} must be a finite real number") from exc
+    if not math.isfinite(result):
+        raise ValueError(f"{name} must be a finite real number")
+    return result
+
+
+def _positive_count(value: int, name: str, minimum: int) -> int:
+    if isinstance(value, bool) or not isinstance(value, Integral) or value < minimum:
+        raise ValueError(f"{name} must be an integer >= {minimum}")
+    _finite_real(value, name)
+    return int(value)
 
 
 def expected_max_sharpe_under_null(
@@ -66,11 +86,22 @@ def expected_max_sharpe_under_null(
 
     其中 γ = 0.5772... (Euler-Mascheroni)，Φ^-1 是 normal quantile。
     """
-    if n_trials < 1:
-        raise ValueError("n_trials >= 1")
-    z1 = stats.norm.ppf(1 - 1 / n_trials)
-    z2 = stats.norm.ppf(1 - 1 / (n_trials * math.e))
-    return sr_estimates_std * ((1 - EULER_MASCHERONI) * z1 + EULER_MASCHERONI * z2)
+    n_trials = _positive_count(n_trials, "n_trials", 1)
+    sr_estimates_std = _finite_real(sr_estimates_std, "sr_estimates_std")
+    if sr_estimates_std < 0:
+        raise ValueError("sr_estimates_std must be >= 0")
+    # A single zero-mean draw has expected value zero. The asymptotic maximum
+    # approximation is undefined at N=1 (its first quantile is -infinity).
+    if n_trials == 1 or sr_estimates_std == 0:
+        return 0.0
+    tail = 1.0 / n_trials
+    # isf avoids rounding 1 - tiny_tail to 1 for large trial counts.
+    z1 = stats.norm.isf(tail)
+    z2 = stats.norm.isf(tail / math.e)
+    result = sr_estimates_std * ((1 - EULER_MASCHERONI) * z1 + EULER_MASCHERONI * z2)
+    if not math.isfinite(result):
+        raise ValueError("Expected maximum Sharpe must be finite; check trial dispersion")
+    return float(result)
 
 
 def deflated_sharpe_ratio(
@@ -83,30 +114,39 @@ def deflated_sharpe_ratio(
 ) -> DSRResult:
     """Deflated Sharpe Ratio（Bailey & López de Prado 2014, eq 10）。
 
-    在「跑過 N 個策略候選」的事實下，把觀察到的 Sharpe 折扣，得到單尾 p-value
-    （>0.95 = 在 5% 顯著水準下確有正 alpha）。
+    在「跑過 N 個策略候選」的事實下，把觀察到的 Sharpe 折扣，得到 normal CDF
+    分數。分數 >0.95 通過此模型的 5% 單尾檢定；不是未來獲利機率或 alpha 保證。
+    保留歷史輸出欄位名 p_value；一般單尾 p 值是 1 - 此分數。
 
     Args:
-        sr_observed: 觀察到的策略 Sharpe ratio（年化或同單位）
+        sr_observed: 每個觀測期間的未年化 Sharpe，頻率須與 n_observations 相同
         n_trials: 跑過幾個策略候選（用來校正 selection bias）。**這個數字越大，
-                  DSR 折扣越多**。對 stock_bot 來說大約 50-100。
+                  DSR 折扣越多**。不得把未完整記錄的歷史試驗當成已知總數。
         n_observations: 真實樣本數（建議用月頻收益的月數，即 backtest 月份數）
         skewness: returns 的偏度（normal=0）
         kurtosis: returns 的峰度（normal=3，**不是 excess kurtosis**）
-        sr_estimates_std: 所有 trial 的 SR 標準差；不知道時用 1.0 是保守上限
+        sr_estimates_std: 同觀測頻率的 trial SR 標準差；預設 1.0 是假設，非保守上限保證
 
     Returns:
         DSRResult with `p_value` 與 `is_significant_5pct` 旗標
     """
-    if n_observations < 2:
-        raise ValueError("n_observations >= 2")
+    n_observations = _positive_count(n_observations, "n_observations", 2)
+    sr_observed = _finite_real(sr_observed, "sr_observed")
+    skewness = _finite_real(skewness, "skewness")
+    kurtosis = _finite_real(kurtosis, "kurtosis")
+    if kurtosis < 1:
+        raise ValueError("kurtosis must be raw kurtosis >= 1")
 
     sr_0 = expected_max_sharpe_under_null(n_trials, sr_estimates_std)
 
     # DSR 主公式（含非正態修正項）
     numerator = (sr_observed - sr_0) * math.sqrt(n_observations - 1)
-    denom_sq = 1 - skewness * sr_observed + ((kurtosis - 1) / 4) * (sr_observed ** 2)
-    denominator = math.sqrt(max(denom_sq, 1e-12))
+    denom_sq = 1 - skewness * sr_observed + ((kurtosis - 1) / 4) * sr_observed * sr_observed
+    if not math.isfinite(denom_sq) or denom_sq <= 0:
+        raise ValueError("DSR variance correction must be finite and > 0; check return moments")
+    if not math.isfinite(numerator):
+        raise ValueError("DSR numerator must be finite; check Sharpe and trial dispersion")
+    denominator = math.sqrt(denom_sq)
 
     z_dsr = numerator / denominator
     p_value = float(stats.norm.cdf(z_dsr))
@@ -160,11 +200,15 @@ def probability_of_backtest_overfit(
         n_splits: 切 S 段（必為偶數，建議 16）
 
     Returns:
-        PBOResult；pbo < 0.5 = 沒有系統性 overfit
+        PBOResult；此為候選集合上的相對排名診斷，不是未來獲利保證
     """
+    returns_matrix = np.asarray(returns_matrix, dtype=float)
     if returns_matrix.ndim != 2:
         raise ValueError("returns_matrix must be 2-D (T, N)")
-    if n_splits % 2 != 0 or n_splits < 4:
+    if not np.isfinite(returns_matrix).all():
+        raise ValueError("returns_matrix must contain only finite returns")
+    n_splits = _positive_count(n_splits, "n_splits", 4)
+    if n_splits % 2 != 0:
         raise ValueError("n_splits must be even and >= 4")
 
     T, N = returns_matrix.shape
@@ -174,8 +218,8 @@ def probability_of_backtest_overfit(
         raise ValueError(f"need >= 2 strategies, got N={N}")
 
     S = n_splits
-    chunk_size = T // S
-    chunks = [returns_matrix[i * chunk_size : (i + 1) * chunk_size] for i in range(S)]
+    # Keep every observation, including T % S trailing rows.
+    chunks = np.array_split(returns_matrix, S)
 
     overfits = 0
     total = 0
@@ -196,8 +240,11 @@ def probability_of_backtest_overfit(
         test_sharpe = test_mean / test_std
 
         best_idx = int(np.argmax(train_sharpe))
-        test_ranks = stats.rankdata(test_sharpe) / N
-        if test_ranks[best_idx] < 0.5:
+        # Paper section 2.2: omega = rank/(N+1), logit <= 0 is failure.
+        # Dividing by N made the worst of two candidates rank at 0.5 and
+        # therefore incorrectly report zero overfitting for every two-arm run.
+        test_ranks = stats.rankdata(test_sharpe) / (N + 1)
+        if test_ranks[best_idx] <= 0.5:
             overfits += 1
         total += 1
 
@@ -219,11 +266,15 @@ def cpcv_splits(
     n_groups: int = 12,
     n_test_groups: int = 2,
     embargo_pct: float = 0.01,
+    *,
+    label_end_indices: Optional[np.ndarray] = None,
 ) -> Iterator[Tuple[List[int], List[int]]]:
     """CPCV splits（López de Prado 2018, Ch 7）。
 
     將時間序列切 K 等分，從中選 k 組當 test，其餘當 train。每個 test 區段
-    周圍加 embargo（與 train 隔絕一段距離）避免邊界 forward leakage。
+    周圍加 embargo；標籤使用未來區間時，須提供 label_end_indices 才會清除
+    train/test 標籤區間重疊。未提供時只適用點觀測。此組合診斷會使用測試期
+    前後資料訓練，不能代替依時間前推的未見樣本驗證。
 
     Total combinations = C(K, k)。預設 (12, 2) = 66 個 fold。
 
@@ -232,30 +283,48 @@ def cpcv_splits(
         n_groups: 切 K 組
         n_test_groups: 每次 test 用 k 組（典型 1-2）
         embargo_pct: 每側 embargo 區域占總樣本的比例（0.01 = 1%）
+        label_end_indices: 每筆標籤最後用到的位置（含端點），長度 n_samples
 
     Yields:
         (train_indices, test_indices) tuples
     """
+    n_samples = _positive_count(n_samples, "n_samples", 2)
+    n_groups = _positive_count(n_groups, "n_groups", 2)
+    n_test_groups = _positive_count(n_test_groups, "n_test_groups", 1)
+    if n_groups > n_samples:
+        raise ValueError("n_groups must be <= n_samples")
     if n_test_groups >= n_groups:
         raise ValueError("n_test_groups < n_groups")
+    embargo_pct = _finite_real(embargo_pct, "embargo_pct")
     if not (0 <= embargo_pct < 0.5):
         raise ValueError("embargo_pct in [0, 0.5)")
 
-    chunk = n_samples // n_groups
+    ends = np.arange(n_samples)
+    if label_end_indices is not None:
+        raw = np.asarray(label_end_indices)
+        if (raw.shape != (n_samples,) or raw.dtype.kind not in 'iu'
+                or np.any(raw < ends) or np.any(raw >= n_samples)):
+            raise ValueError("label_end_indices must contain valid inclusive integer endpoints")
+        ends = raw
+    groups = np.array_split(np.arange(n_samples), n_groups)
     embargo = max(1, int(n_samples * embargo_pct)) if embargo_pct > 0 else 0
 
     for test_groups in combinations(range(n_groups), n_test_groups):
         test_idx: List[int] = []
         test_boundaries: List[Tuple[int, int]] = []
+        label_intervals: List[Tuple[int, int]] = []
         for g in test_groups:
-            start, end = g * chunk, (g + 1) * chunk
+            start, end = int(groups[g][0]), int(groups[g][-1])+1
             test_idx.extend(range(start, end))
             test_boundaries.append((start, end))
+            label_intervals.append((start, int(ends[start:end].max())))
         test_set = set(test_idx)
 
         train_idx: List[int] = []
         for i in range(n_samples):
             if i in test_set:
+                continue
+            if any(i <= end and ends[i] >= start for start, end in label_intervals):
                 continue
             in_embargo = any(
                 (start - embargo) <= i < start or end <= i < (end + embargo)
@@ -351,17 +420,23 @@ def paired_block_bootstrap_sharpe_ci(
         BootstrapSharpeCI
     """
     returns = np.asarray(returns, dtype=float)
+    if returns.ndim != 1 or not np.isfinite(returns).all():
+        raise ValueError("returns must be a finite 1-D array")
     n = len(returns)
     if n < 2:
         raise ValueError(f"returns 至少需要 2 期（got {n}）")
-    if block_size < 1:
-        raise ValueError("block_size >= 1")
-    if n_boot < 1:
-        raise ValueError("n_boot >= 1")
+    block_size = _positive_count(block_size, "block_size", 1)
+    n_boot = _positive_count(n_boot, "n_boot", 1)
+    periods_per_year = _positive_count(periods_per_year, "periods_per_year", 1)
+    risk_free_rate = _finite_real(risk_free_rate, "risk_free_rate")
+    if risk_free_rate <= -1:
+        raise ValueError("risk_free_rate must be > -1")
     if not (0 < ci_level < 1):
         raise ValueError("ci_level in (0, 1)")
     if benchmark_returns is not None:
         benchmark_returns = np.asarray(benchmark_returns, dtype=float)
+        if benchmark_returns.ndim != 1 or not np.isfinite(benchmark_returns).all():
+            raise ValueError("benchmark_returns must be a finite 1-D array")
         if len(benchmark_returns) != n:
             raise ValueError(
                 f"benchmark_returns 長度 {len(benchmark_returns)} != returns 長度 {n}"

@@ -35,25 +35,26 @@ class TestExpectedMaxUnderNull:
         sr_1000 = expected_max_sharpe_under_null(1000)
         assert sr_10 < sr_100 < sr_1000
 
-    def test_single_trial_is_near_zero(self):
-        """N=1 時 expected max 應該接近 0（沒有 multiple testing）。"""
-        # 實際上 Φ^-1(0) = -inf，但 N=1 corner case，公式內 1 - 1/1 = 0
-        # 我們約定 n_trials >= 2 才有意義；N=1 數學上會炸
-        with pytest.warns() if False else _no_warning():
-            try:
-                v = expected_max_sharpe_under_null(2)
-                assert v > 0
-            except Exception:
-                pass
+    def test_single_trial_has_zero_expected_maximum(self):
+        assert expected_max_sharpe_under_null(1) == 0.0
+        assert expected_max_sharpe_under_null(1, 0.0) == 0.0
 
-    def test_rejects_invalid_n(self):
+    @pytest.mark.parametrize('count', [0, -1, True, 1.5, float('nan'), float('inf'), '2', 10**400])
+    def test_rejects_invalid_n(self, count):
         with pytest.raises(ValueError):
-            expected_max_sharpe_under_null(0)
+            expected_max_sharpe_under_null(count)
 
+    @pytest.mark.parametrize('dispersion', [-1, True, float('nan'), float('inf'), '1'])
+    def test_rejects_invalid_trial_dispersion(self, dispersion):
+        with pytest.raises(ValueError):
+            expected_max_sharpe_under_null(1, dispersion)
 
-class _no_warning:
-    def __enter__(self): return self
-    def __exit__(self, *a): return False
+    def test_large_count_is_finite_and_zero_dispersion_is_zero(self):
+        assert math.isfinite(expected_max_sharpe_under_null(10**20))
+        assert expected_max_sharpe_under_null(100, 0.0) == 0.0
+
+    def test_integer_numpy_count_accepted(self):
+        assert expected_max_sharpe_under_null(np.int64(10)) == expected_max_sharpe_under_null(10)
 
 
 # ──────────────────────────────────────────────
@@ -61,6 +62,30 @@ class _no_warning:
 # ──────────────────────────────────────────────
 
 class TestDeflatedSharpeRatio:
+    def test_one_trial_zero_sharpe_is_not_significant(self):
+        result = deflated_sharpe_ratio(0.0, 1, 120)
+        assert result.sr_expected_under_null == 0.0
+        assert result.p_value == 0.5
+        assert not result.is_significant_5pct
+
+    @pytest.mark.parametrize('field,value', [
+        ('sr_observed', float('nan')), ('sr_observed', float('inf')),
+        ('sr_observed', True), ('sr_observed', 1e308),
+        ('skewness', float('nan')), ('skewness', float('-inf')),
+        ('kurtosis', float('inf')), ('kurtosis', 0),
+        ('n_observations', 1.9), ('n_observations', True),
+        ('n_observations', float('nan')), ('n_observations', 10**400),
+    ])
+    def test_invalid_inputs_fail_explicitly(self, field, value):
+        kwargs = dict(sr_observed=0.1, n_trials=10, n_observations=100)
+        kwargs[field] = value
+        with pytest.raises(ValueError):
+            deflated_sharpe_ratio(**kwargs)
+
+    def test_invalid_moment_variance_is_not_clamped_to_significance(self):
+        with pytest.raises(ValueError, match='variance correction'):
+            deflated_sharpe_ratio(2.0, 1, 100, skewness=4.0, kurtosis=1.0)
+
     def test_high_sr_few_trials_is_significant(self):
         """大 Sharpe + 少 trials → 應該 SIGNIFICANT。"""
         result = deflated_sharpe_ratio(
@@ -122,6 +147,35 @@ class TestDeflatedSharpeRatio:
 # ──────────────────────────────────────────────
 
 class TestProbabilityOfBacktestOverfit:
+    def test_two_candidates_with_reversed_test_ranking_are_overfit(self):
+        # Four two-row blocks: each IS winner loses on the complementary half.
+        a = np.array([.01, .02, .04, .05, .08, .09, -.14, -.15])
+        result = probability_of_backtest_overfit(np.column_stack([a, -a]), n_splits=4)
+        assert result.pbo == 1.0
+        assert result.overfit_count == 6
+
+    def test_ties_at_median_are_not_evidence_of_generalization(self):
+        result = probability_of_backtest_overfit(np.zeros((8, 2)), n_splits=4)
+        assert result.pbo == 1.0
+
+    def test_remainder_observations_are_not_discarded(self):
+        a = np.array([.01, .02, .03, .04, .05, .06, .08, .10, 2.0])
+        matrix = np.column_stack([a, -a])
+        original = probability_of_backtest_overfit(matrix, n_splits=4)
+        changed = matrix.copy(); changed[-1] *= -1
+        assert probability_of_backtest_overfit(changed, n_splits=4).pbo != original.pbo
+
+    @pytest.mark.parametrize('value', [float('nan'), float('inf'), float('-inf')])
+    def test_nonfinite_matrix_rejected(self, value):
+        matrix = np.ones((10, 2)); matrix[-1, 0] = value
+        with pytest.raises(ValueError, match='finite'):
+            probability_of_backtest_overfit(matrix, n_splits=4)
+
+    @pytest.mark.parametrize('value', [True, 4.0, float('inf')])
+    def test_noninteger_splits_rejected(self, value):
+        with pytest.raises(ValueError):
+            probability_of_backtest_overfit(np.ones((10, 2)), n_splits=value)
+
     def test_random_strategies_pbo_near_50pct(self):
         """N 個純 random returns 策略 → PBO 應該接近 50%（無真實 alpha）。"""
         rng = np.random.default_rng(42)
@@ -156,6 +210,36 @@ class TestProbabilityOfBacktestOverfit:
 # ──────────────────────────────────────────────
 
 class TestCPCVSplits:
+    def test_every_observation_including_remainder_is_tested(self):
+        folds = list(cpcv_splits(11, n_groups=4, n_test_groups=1, embargo_pct=0))
+        assert sorted(i for _, test in folds for i in test) == list(range(11))
+        for train, test in folds:
+            assert set(train) | set(test) == set(range(11))
+
+    def test_forward_label_intervals_do_not_overlap_across_train_and_test(self):
+        ends = np.minimum(np.arange(24)+4, 23)
+        folds = list(cpcv_splits(24, n_groups=6, n_test_groups=2,
+                                embargo_pct=0, label_end_indices=ends))
+        assert any(train for train, _ in folds)
+        for train, test in folds:
+            for i in train:
+                for j in test:
+                    assert ends[i] < j or ends[j] < i
+
+    @pytest.mark.parametrize('kwargs', [
+        {'n_samples': 3, 'n_groups': 4}, {'n_groups': 0}, {'n_groups': 2.5},
+        {'n_test_groups': 0}, {'n_samples': True}, {'embargo_pct': float('nan')},
+        {'label_end_indices': np.arange(11)},
+        {'label_end_indices': np.arange(12, dtype=float)},
+        {'label_end_indices': np.arange(12)-1},
+        {'label_end_indices': np.arange(12)+1},
+    ])
+    def test_invalid_split_or_label_endpoints_rejected(self, kwargs):
+        args = dict(n_samples=12, n_groups=4, n_test_groups=1)
+        args.update(kwargs)
+        with pytest.raises(ValueError):
+            list(cpcv_splits(**args))
+
     def test_no_overlap_between_train_and_test(self):
         for train_idx, test_idx in cpcv_splits(n_samples=120, n_groups=12, n_test_groups=2, embargo_pct=0.0):
             assert not (set(train_idx) & set(test_idx)), "train and test must not overlap"

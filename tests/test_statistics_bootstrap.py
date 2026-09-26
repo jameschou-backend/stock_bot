@@ -23,6 +23,21 @@ def _synthetic_returns(n=120, mean=0.02, std=0.06, seed=0):
 
 
 class TestBootstrapShape:
+    @pytest.mark.parametrize('bad', [[.01, float('nan')], [.01, float('inf')], [[.01], [.02]]])
+    def test_invalid_strategy_or_benchmark_arrays_rejected(self, bad):
+        with pytest.raises(ValueError, match='finite 1-D'):
+            paired_block_bootstrap_sharpe_ci(bad, n_boot=2)
+        with pytest.raises(ValueError, match='finite 1-D'):
+            paired_block_bootstrap_sharpe_ci([.01, .02], bad, n_boot=2)
+
+    @pytest.mark.parametrize('bad', [
+        {'periods_per_year': 0}, {'n_boot': 1.5}, {'block_size': True},
+        {'risk_free_rate': -1}, {'risk_free_rate': float('nan')},
+    ])
+    def test_invalid_bootstrap_settings_rejected(self, bad):
+        with pytest.raises(ValueError):
+            paired_block_bootstrap_sharpe_ci([.01, .02], **bad)
+
     def test_returns_dataclass_with_expected_fields(self):
         r = _synthetic_returns()
         res = paired_block_bootstrap_sharpe_ci(r, block_size=6, n_boot=200)
@@ -202,6 +217,14 @@ class TestTrialRegistry:
 
 
 class TestStatisticsBlock:
+    @pytest.mark.parametrize('field', ['return', 'benchmark_return'])
+    def test_missing_return_is_not_dropped_or_replaced_with_zero(self, field):
+        from scripts.run_backtest import compute_statistics_block
+        result = self._fake_result()
+        result['periods'][4][field] = None
+        with pytest.raises(ValueError, match='missing is not zero'):
+            compute_statistics_block(result, 80, .015)
+
     def _fake_result(self, n=60, seed=0):
         rng = np.random.default_rng(seed)
         rets = rng.normal(0.015, 0.06, n)

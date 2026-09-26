@@ -136,7 +136,7 @@ def resolve_round_trip_cost(cli_cost, config) -> tuple:
 # ──────────────────────────────────────────────
 
 def compute_statistics_block(result: dict, n_trials: int, risk_free_rate: float) -> dict | None:
-    """從回測 result 計算統計紀律區塊（bootstrap Sharpe CI + DSR p-value）。
+    """從回測 result 計算統計紀律區塊（bootstrap Sharpe CI + DSR CDF 分數）。
 
     - Sharpe 95% CI：月報酬 paired circular block-bootstrap（block=6、1000 次、
       seed 固定 → deterministic），與 benchmark 同索引重抽，另附 excess Sharpe CI。
@@ -150,9 +150,10 @@ def compute_statistics_block(result: dict, n_trials: int, risk_free_rate: float)
     rets, bench = [], []
     for p in periods:
         r, b = p.get("return"), p.get("benchmark_return")
-        if r is not None:
-            rets.append(float(r))
-            bench.append(float(b) if b is not None else 0.0)
+        if r is None or b is None:
+            raise ValueError("Statistics require aligned strategy and benchmark returns; missing is not zero")
+        rets.append(float(r))
+        bench.append(float(b))
     if len(rets) < 2:
         return None
 
@@ -203,6 +204,9 @@ def compute_statistics_block(result: dict, n_trials: int, risk_free_rate: float)
             "sr_observed_monthly": round(dsr.sr_observed, 4),
             "sr_expected_max_under_null": round(dsr.sr_expected_under_null, 4),
             "p_value": round(dsr.p_value, 4),
+            "score_semantics": "normal_cdf_higher_is_stronger_not_future_profit_probability",
+            "trial_coverage_verified": False,
+            "dispersion_is_assumption": True,
             "is_significant_5pct": dsr.is_significant_5pct,
             "n_trials": dsr.n_trials,
             "n_observations": dsr.n_observations,
@@ -749,7 +753,7 @@ def main():
                           f"[{_ci['ci_low']:.3f}, {_ci['ci_high']:.3f}]")
                     print(f"  Excess Sharpe 95% CI: {_ci['excess_sharpe_observed']:.3f} "
                           f"[{_ci['excess_ci_low']:.3f}, {_ci['excess_ci_high']:.3f}]")
-                    print(f"  DSR p-value: {_dsr['p_value']:.4f} "
+                    print(f"  DSR CDF score: {_dsr['p_value']:.4f} "
                           f"(n_trials={_dsr['n_trials']}, "
                           f"{'SIGNIFICANT' if _dsr['is_significant_5pct'] else 'NOT significant'} @5%)")
             except Exception as _stats_exc:
