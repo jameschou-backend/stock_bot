@@ -222,6 +222,11 @@ def render_fills(book,account):
 
 
 def render_research(status):
+    view=st.radio('研究畫面',['驗證總覽','完整回測工具與歷史研究'],horizontal=True,key='research_view')
+    if view=='驗證總覽':
+        from app.research_validation_ui import render as render_validation
+        render_validation()
+        return
     from app.execution_holder_ui import render as render_execution_holder
     from app.chip_research_ui import render as render_chip
     from app.technical_research import render as render_technical
@@ -237,7 +242,7 @@ def render_research(status):
     render_historical_selector()
     from app.backtest_full_pass_ui import render as render_full_pass
     from app.backtest_completion_ui import render as render_backtest_completion
-    with st.expander('較早的回測與資料稽核紀錄（保留原結果）', expanded=False):
+    if st.checkbox('查看較早的回測與資料稽核紀錄（保留原結果）', key='show_archived_backtest_audits'):
         st.caption('以下是先前封存的版本；股票池修正後的最新比較請看上方。')
         render_full_pass()
         render_backtest_completion()

@@ -124,7 +124,13 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
         submitted.append(request)
         return {'job_id':'b'*32}
     monkeypatch.setattr(ui.jobs,'submit',submit_news)
+    from app import research_validation_ui
+    monkeypatch.setattr(research_validation_ui,'ROOT',tmp_path)
     app=AppTest.from_file(str(Path(__file__).resolve().parents[1]/'app/dashboard_v2/main.py')).run(timeout=20)
+    assert not app.exception
+    assert element(app.radio,'研究畫面').value=='驗證總覽'
+    assert not any(c.label=='展開程式診斷數字（不能作為策略績效）' for c in app.checkbox)
+    element(app.radio,'研究畫面').set_value('完整回測工具與歷史研究').run(timeout=20)
     assert not app.exception
     assert any('新聞日期核對未通過' in e.value for e in app.error)
     assert not any('模擬累積淨報酬' in d.value for d in app.dataframe)
