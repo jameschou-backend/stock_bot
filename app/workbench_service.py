@@ -113,6 +113,7 @@ def portfolio(account_id='paper'):
 
 
 def strategy_evidence():
+    from app.current_account_evidence import overview as current_account_overview
     from app.capacity_research import overview as capacity_overview
     from app.regime_switch_research import overview as regime_switch_overview
     from app.diffusion_research import overview as diffusion_overview
@@ -123,6 +124,8 @@ def strategy_evidence():
     for path in sorted((ROOT/'docs').glob('prereg*.md')):
         docs.append({'name':path.name,'path':str(path),'status':'historical_research'})
     return {'live_qualified':False,'note':'目前沒有通過新驗證的實盤策略。歷史回測不等於實際獲利。',
+            'preferred_comparison':'current_accounts','current_accounts':current_account_overview(ROOT),
+            'legacy_reports_note':'下列舊研究保留供追溯；原帳戶設定可能不同，請先讀current_accounts的現行比較。',
             'documents':docs,'rule_research':rule_research_overview(),
             'flow_research':flow_research_overview(),
             'theme_research':theme_research_overview(),
