@@ -1,0 +1,96 @@
+{
+  "schema": "exit_corporate_completion_v1",
+  "overrides": {
+    "2374-2025-09-17": {
+      "shares_per_share": 0.11979631,
+      "pay_date": "2025-12-03",
+      "fractional_cash_per_share": 0,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "cash_rounding": "floor_ntd",
+      "evidence_files": [
+        ".cache/exit-corporate-20260927/2374-1140902-ajax_t108sb22.html",
+        ".cache/exit-corporate-20260927/2374-1140925-ajax_t59sb09.html",
+        ".cache/exit-corporate-20260927/2374-1141119-ajax_t59sb09.html",
+        ".cache/exit-corporate-20260927/2374-1141125-ajax_t59sb08.html"
+      ],
+      "entitlement_announcement_date": "2025-09-02",
+      "delivery_announcement_date": "2025-11-19",
+      "listing_announcement_date": "2025-11-25",
+      "event_kind": "earnings_capitalization",
+      "source": "Issuer MOPS announcements and exchange listing confirmation",
+      "verification_note": "docs/exit_corporate_completion_20260927.md",
+      "use_scope": "account_settlement_only_not_selection",
+      "certificate_delivery_date": "2025-10-17",
+      "ordinary_share_available_date": "2025-12-03",
+      "certificate_trading_modeled": false,
+      "valuation_basis": "ordinary_share_close_proxy",
+      "fractional_amount_basis": "Zero net receivable: the issuer allocates the entire sub-share cash entitlement to book-entry delivery expenses",
+      "fractional_net_zero_verified": true
+    },
+    "2543-2025-09-02": {
+      "shares_per_share": 0.17,
+      "pay_date": "2025-10-13",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "cash_rounding": "floor_ntd",
+      "evidence_files": [
+        ".cache/exit-corporate-20260927/2543-1140818-ajax_t59sb09.html",
+        ".cache/exit-corporate-20260927/2543-1141003-ajax_t59sb09.html",
+        ".cache/exit-corporate-20260927/2543-1141007-ajax_t59sb08.html",
+        ".cache/exit-corporate-20260927/2543-20250814-ex-date.pdf"
+      ],
+      "entitlement_announcement_date": "2025-08-18",
+      "delivery_announcement_date": "2025-10-03",
+      "listing_announcement_date": "2025-10-07",
+      "event_kind": "earnings_capitalization",
+      "source": "Issuer MOPS announcements and exchange listing confirmation",
+      "verification_note": "docs/exit_corporate_completion_20260927.md",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_amount_basis": "Gross face value NTD10 floored to whole NTD; personal net fee and payment date remain unverified",
+      "fractional_net_zero_verified": false
+    }
+  },
+  "evidence_sha256": {
+    ".cache/exit-corporate-20260927/2374-1140902-ajax_t108sb22.html": "e81bd61175d00cbc2850be9049edef265669b2dd7f20a5c180d3fa4734b545f6",
+    ".cache/exit-corporate-20260927/2374-1140902-ajax_t108sb22.html.source.json": "16c1ae97727cb201aa74472f2def6352644d1610dc6905d0b6658bbfd8c848a4",
+    ".cache/exit-corporate-20260927/2374-1140925-ajax_t59sb09.html": "553b79fad963a6c147947619b189f7dc3347a231ac5fdd86d8696da1c973517a",
+    ".cache/exit-corporate-20260927/2374-1140925-ajax_t59sb09.html.source.json": "4b2a17537cd5596095bf4e04b8e9e3685fdf026e5337f8453e340785248b414a",
+    ".cache/exit-corporate-20260927/2374-1141119-ajax_t59sb09.html": "6e950299c552d16ac29c4c1ce7a587790cc96bf2b31f95787091b9a7b3b12c55",
+    ".cache/exit-corporate-20260927/2374-1141119-ajax_t59sb09.html.source.json": "076150ccf13ac769e26ef03d86dafd8cffa8d174c1098686dfe0aa19f20938b2",
+    ".cache/exit-corporate-20260927/2374-1141125-ajax_t59sb08.html": "0c357136bbb94367642abc52954352a8fe6fee62a84d3ac8e26f61f1566466a1",
+    ".cache/exit-corporate-20260927/2374-1141125-ajax_t59sb08.html.source.json": "8c0e9e98ca037568ad0e639b7bf9bdd250b65088975f13f626ec2929c010f48b",
+    ".cache/exit-corporate-20260927/2543-1140818-ajax_t59sb09.html": "fb1e2e603412d2e6a680c542c804a545848e951e642a7f55eef2ff623637d0da",
+    ".cache/exit-corporate-20260927/2543-1140818-ajax_t59sb09.html.source.json": "1517eaff3d56c59233fcaca3e1c7cefa56d15fa22b8b5dce7174ff02c527dca3",
+    ".cache/exit-corporate-20260927/2543-1141003-ajax_t59sb09.html": "c17b85488045a52226096d13ecfeb42e36cd3174fee30cf6045454ec27966b5d",
+    ".cache/exit-corporate-20260927/2543-1141003-ajax_t59sb09.html.source.json": "5bb1c9a024c0c31ffcb42c202edc970cea172a07c37df255635a6a3da9ffb256",
+    ".cache/exit-corporate-20260927/2543-1141007-ajax_t59sb08.html": "c3716b527f7b668144fedb7b20a9faf5ac3e5a2fe07f519d7569dc77d40b242d",
+    ".cache/exit-corporate-20260927/2543-1141007-ajax_t59sb08.html.source.json": "a0ab51abc9eb9ead85699d9997beb7503eb973a5939960317bea0f59820ea8aa",
+    ".cache/exit-corporate-20260927/2543-20250814-ex-date.pdf": "c62ec925b1007eea37f88a028fc5d158393254c08fdcac6742aea28a5f3f0c83",
+    ".cache/exit-corporate-20260927/2543-20250814-ex-date.pdf.source.json": "9aee9b89eaf3a65a64e9c44452486c846a25f30b05fe42c3b60a334a325177c6",
+    ".cache/exit-corporate-20260927/hcgc-investor-info2.html": "45a7a4f08de901456fe1d013a66ef40663f23a2d5c9350b4ec5a9a1ae5121d3c",
+    ".cache/exit-corporate-20260927/hcgc-investor-info2.html.source.json": "341611a4fc6fc0698fb48c2afbdf4435e01eb9121f8611e2a28275094e929911",
+    ".cache/exit-corporate-20260927/mops-2374-1140801-1140930.json": "6bc29564a0a846210a472e0f174302adfc35868d6926c81168af361511c5d415",
+    ".cache/exit-corporate-20260927/mops-2374-1140801-1140930.json.source.json": "0ff8ac8ca2e58a6c3302638fd77e4e06483ea2f456fb427bd8a226ec8359d254",
+    ".cache/exit-corporate-20260927/mops-2374-1141119-1141120.json": "8eeff534a2c4eeb322d87a7ce233a9609cfa42aa2777cac460f2696a78503a45",
+    ".cache/exit-corporate-20260927/mops-2374-1141119-1141120.json.source.json": "6320e4eaa7199298056d37e0ab6517eaa69e13349e3f9ff627e7ccf5fc648ebf",
+    ".cache/exit-corporate-20260927/mops-2374-1141120-1141203.json": "1a91a1c1689bf3726d2c84e4d85fe1a8e964052acb7369d71487d60870b01c39",
+    ".cache/exit-corporate-20260927/mops-2374-1141120-1141203.json.source.json": "59dd663aa516fa13cd032a09483a516c82c0e4059fc37a81ffc4f485fd44f61f",
+    ".cache/exit-corporate-20260927/mops-2543-1140818-1140819.json": "1d8e9f41b2ee12cb48b11901ae551e1d18a27177fa48f5fbc5ad539e280ac6cc",
+    ".cache/exit-corporate-20260927/mops-2543-1140818-1140819.json.source.json": "1caa25a11b8e159d05b89cb0ffba7d57ae1fc2667e79f34eccc0e6933de1e0cf",
+    ".cache/exit-corporate-20260927/mops-2543-1141003-1141008.json": "b0a92274b35c0cda110aa216211e6553ebce27d05cd2a70d8eec397ef2f7426a",
+    ".cache/exit-corporate-20260927/mops-2543-1141003-1141008.json.source.json": "0edbdf2ad5a5628b544145aba49f47b4a79455e305b1a4bbc46015b24a54eff2"
+  },
+  "secondary_sources_used_in_overrides": false,
+  "finmind_requests": 0,
+  "acquisition": {
+    "total_http_requests": 15,
+    "successful": 14,
+    "failed": 1,
+    "automatic_retries": 0
+  },
+  "failed_sources_excluded": [
+    ".cache/exit-corporate-20260927/2543-1140818-ajax_t108sb22.html"
+  ]
+}
