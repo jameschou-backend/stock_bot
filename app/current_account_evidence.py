@@ -45,6 +45,9 @@ def overview(root=ROOT):
                 publication=dict(path=str(path.relative_to(root)),sha256=path.with_suffix('.sha256').read_text().strip()),
                 offline_verification=report['offline_verification'],arms=rows,
                 data_quality=report.get('data_quality'),limitations=report.get('limitations',[]))
+            if family=='index_exposure':
+                from app.index_earlier_ui import overview as earlier_overview
+                families[family]['earlier_period_replication']=earlier_overview(root)
         except (OSError,ValueError,KeyError,TypeError) as exc:
             families[family]=dict(base,available=False,reason='publication_verification_failed',detail=str(exc))
     return dict(schema='current_account_evidence_v1',live_qualified=False,unseen_validation=False,
