@@ -17,6 +17,21 @@ from scripts.research_exit_scenarios import sha, write
 from scripts.audit_current_causality_20260925 import matrices, BASE
 
 
+def load_complete(output, plan):
+    """A repeat collection must not rewrite a manifest used by frozen research."""
+    path=output/'manifest.json'
+    if not path.exists():return None
+    saved=json.loads(path.read_text())
+    if any(saved.get(k)!=v for k,v in plan.items()) or set(saved['files'])!=set(plan['dates']):
+        raise ValueError('Completed snapshot manifest differs from its plan')
+    for day,record in saved['files'].items():
+        meta=json.loads((output/f'{day}.json').read_text())
+        if sha(output/f'{day}.parquet')!=record['sha256'] or any(
+                record.get(k)!=meta.get(k) for k in ('date','rows','sha256','retrieved_at','cache_hit')):
+            raise ValueError('Completed holder snapshot changed: '+day)
+    return dict(saved,requests_this_run=0,reused_complete=True)
+
+
 def run(output, supplement=None):
     output = Path(output).resolve()
     if not output.is_relative_to(ROOT/'.cache'):
@@ -57,6 +72,8 @@ def run(output, supplement=None):
             plan=original_plan  # Preserve the original registration, including amendments' chronology.
         else:
             write(plan_path, plan)
+        complete=load_complete(output,plan)
+        if complete is not None:return complete
         token = load_config().finmind_token
         def collect(day):
             path = output/f'{day}.parquet'; meta_path = output/f'{day}.json'
