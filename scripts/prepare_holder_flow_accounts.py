@@ -30,8 +30,9 @@ from skills.replay_market_feeds import ReplayDataUnavailable, parse_odd, URLS
 from skills.account_source_preflight import (digest, read, write, merge_sources,
     inventory, source_identity, gate, CachedPreparationFeeds, prepared_case)
 
-DEFAULT = ROOT / '.cache/holder-flow-prepared-20260927'
-CODE = [Path(__file__), ROOT/'skills/account_source_preflight.py', ROOT/'skills/execution_factorial.py']
+DEFAULT = ROOT / '.cache/holder-flow-prepared-20260928'
+CODE = [Path(__file__), ROOT/'skills/account_source_preflight.py',
+        ROOT/'skills/prepared_corporate_settlement.py', ROOT/'skills/corporate_account_audit.py']
 
 
 class ExecutionBudget(Budget):

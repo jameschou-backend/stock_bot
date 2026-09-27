@@ -221,7 +221,9 @@ class SuspensionOrders:
 def prepared_case(data, config, inputs, overrides, **kwargs):
     from unittest.mock import patch
     from skills import sector_account_replay as engine
-    from skills.execution_factorial import CapitalReturnActions
+    from skills import execution_resources, pending_share_entitlements
+    from skills.corporate_account_audit import audit_corporate_account
+    from skills.prepared_corporate_settlement import CapitalSettlementActions, validate_delivery_terms
     document = Path(inputs)/'trading-status.json'
     terms = suspension_terms(read(document), Path(__file__).resolve().parents[1]) if document.exists() else {}
 
@@ -230,9 +232,18 @@ def prepared_case(data, config, inputs, overrides, **kwargs):
 
         def __init__(self, *args, **options):
             super().__init__(*args, **options)
-            self.corporate = CapitalReturnActions(self.corporate)
+            self.corporate = CapitalSettlementActions(self.corporate, self)
+
+        def cash_move(self, day, kind, change, **extra):
+            if extra.get('action_id', '').endswith('-capital-cash'):
+                # The sealed daily bridge groups payments by its legacy kind.
+                # Preserve that algebra; explicitly identify the economic nature.
+                extra['cash_flow_nature'] = 'capital_return'
+            return super().cash_move(day, kind, change, **extra)
 
     # The existing engine, rules, accounting and audits remain in use. This
     # adapter is explicit and separately included in the new source identity.
-    with patch.object(engine, 'SectorMixedReplay', PreparedMixed):
+    with patch.object(engine, 'SectorMixedReplay', PreparedMixed), \
+            patch.object(execution_resources, 'audit_stress', audit_corporate_account), \
+            patch.object(pending_share_entitlements, 'validate_pending_terms', validate_delivery_terms):
         return engine.run_case(data, config, inputs, overrides, **kwargs)

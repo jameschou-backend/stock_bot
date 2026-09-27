@@ -21,7 +21,7 @@ python scripts/prepare_holder_flow_accounts.py --compare \
   .cache/holder-flow-account-replay-a .cache/holder-flow-account-replay-b
 ```
 
-預設資料準備目錄為 `.cache/holder-flow-prepared-20260927`；`--cache` 可指定另一個新版本。不修改原始研究的封存資料與結果，也不刪除舊版失敗證據。
+預設資料準備目錄為 `.cache/holder-flow-prepared-20260928`；`--cache` 可指定另一個新版本。不修改原始研究的封存資料與結果，也不刪除舊版失敗證據。
 
 ## 如何判斷是否能正常回測
 
@@ -43,7 +43,7 @@ python scripts/prepare_holder_flow_accounts.py --compare \
 
 FinMind 官方資料文件：[每日漲跌停價](https://finmind.github.io/tutor/TaiwanMarket/Technical/)。資料集的存在不代表本機已下載，或每檔每個歷史日期皆已通過驗證。
 
-## 2026-09-27 實際執行紀錄
+## 2026-09-27 實際執行紀錄（保留當時狀態）
 
 期間固定為 **2022-01-03～2026-09-09**，本金 100 萬元、個股五個名額、閒置現金不買 ETF。0050 僅作獨立基準。這次沒有重選參數，也沒有將資料準備階段的部分損益發布成全期績效。
 
@@ -65,3 +65,9 @@ FinMind 官方資料文件：[每日漲跌停價](https://finmind.github.io/tuto
 正式來源原件、公司行動參數、停牌條款位於 `.cache/holder-flow-corporate-evidence-20260927/` 與準備目錄；提交的 `artifacts/forward_simulation/holder_flow_preflight_20260927.json` 綁定本次來源與檢查紀錄。前述結論只屬這個資料版本與固定訊號，不代表整套回測永無漏洞或策略已可實戰。
 
 驗收：完整 `make test`、兩次 `make pipeline` 及四個指定 API 端點的結果均記於本次檢查紀錄。TWSE 法人／融資券／本益比仍保留來源停止狀態，不能把 pipeline 程序 exit 0 當作這些資料完整。`make api` 因既有服務占用 8000 而未另起服務，四個指定端點由既有服務核對。
+
+## 2026-09-28 補齊後的執行紀錄
+
+原先兩項公司事件阻塞已由另行綁定的帳務延伸處理補齊，預設準備版本移至 9/28。14/14 固定帳戶通過資料預檢，兩次正式離線回測均完成每組 1,136 個交易日，所有帳戶結果與 manifest 完全一致。完整測試通過 3,935 項。舊版 11/14 紀錄保留，不能混用不同版本的來源指紋。
+
+這批規則在一般與合併壓力情境都沒有跑贏各自 0050 基準。結果、公司事件解釋、待收款估值限制與驗收紀錄詳見 [`holder_flow_completion_20260928.md`](holder_flow_completion_20260928.md)。`ready=true` 僅代表上述固定帳戶可完整回測；不代表全市場資料、當時名冊、實際逐筆成交或實戰資格已全部具備。
