@@ -133,7 +133,10 @@ def render():
     import pandas as pd
     import streamlit as st
     st.subheader('最新策略驗證')
-    selected=st.selectbox('查看哪一組實驗',['第一根帶量進場','題材營運策略','題材與籌碼集中','個股啟動前共同性',*FAMILIES],key='research_validation_family')
+    selected=st.selectbox('查看哪一組實驗',['法人與均線差異','第一根帶量進場','題材營運策略','題材與籌碼集中','個股啟動前共同性',*FAMILIES],key='research_validation_family')
+    if selected=='法人與均線差異':
+        from app.launch_flows_ui import render as render_launch_flows
+        render_launch_flows();return
     if selected=='第一根帶量進場':
         from app.first_bar_ui import render as render_first_bar
         render_first_bar();return
