@@ -1,0 +1,1220 @@
+{
+  "schema_version": 1,
+  "research_date": "2026-09-27",
+  "scope": "Primary operating-disclosure ledger for UMT 3491 augmented case, WNC 6285 and Compeq 2313. No stock prices inspected.",
+  "current_source_dates_are_not_first_publication": true,
+  "signal_eligible_definition": "Allowed only for explicitly labeled document-date proxy research. All rows remain ineligible as proven historical first-publication evidence.",
+  "definitions": {
+    "realized_growth": "Theme-specific realized segment or named theme customer growth >=20%; never corporate growth or forecast.",
+    "material_exposure": "Explicitly LEO revenue share >=10%; Aerospace or Networking cannot be silently substituted.",
+    "order_or_production": "Explicit LEO realized shipments/orders/backlog/production, not product catalog or forecast.",
+    "negative": "Explicit LEO adverse operating disclosure; null when not established.",
+    "corporate_negative": "Company-wide or other-segment weakness retained separately; not a LEO veto.",
+    "null": "Unknown or not established from this disclosure, not false."
+  },
+  "events": [
+    {
+      "event_id": "2313_20250523_15",
+      "stock_id": "2313",
+      "theme": "leo",
+      "source_date": "2025-05-23",
+      "source_url": "https://www.compeq.com.tw/doc/conference/c311d50a-322c-11f0-a9ba-005056a9c86d/20250523_135928_cn.pdf",
+      "title": "Compeq investor presentation 2025 Q1",
+      "page_refs": [
+        1,
+        7
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2025 Q1",
+          "metric": "revenue_share_pct",
+          "value": 23
+        },
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2024",
+          "metric": "revenue_share_pct",
+          "value": 18
+        }
+      ],
+      "caveats": [
+        "Aerospace segment is broader than LEO; cannot automatically assign its entire revenue share to LEO. Share change alone does not prove segment revenue growth."
+      ],
+      "date_basis": "current issuer dated investor-meeting listing; PDF cover undated; historical first publication not verified",
+      "listing_url": "https://www.compeq.com.tw/accomplishments01_4_2.php",
+      "listing_date": "2025-05-23",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "duplicate_group": null,
+      "source_sha256": null,
+      "source_local_path": null
+    },
+    {
+      "event_id": "2313_20250829_16",
+      "stock_id": "2313",
+      "theme": "leo",
+      "source_date": "2025-08-29",
+      "source_url": "https://www.compeq.com.tw/doc/conference/a71c5d79-8489-11f0-a762-005056a9c86d/20250829_134229_cn.pdf",
+      "title": "Compeq investor presentation 2025 Q2",
+      "page_refs": [
+        1,
+        7
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2025 Q2",
+          "metric": "revenue_share_pct",
+          "value": 22
+        },
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2024",
+          "metric": "revenue_share_pct",
+          "value": 18
+        }
+      ],
+      "caveats": [
+        "Aerospace segment is broader than LEO; cannot automatically assign its entire revenue share to LEO. Share change alone does not prove segment revenue growth."
+      ],
+      "date_basis": "current issuer dated investor-meeting listing; PDF cover undated; historical first publication not verified",
+      "listing_url": "https://www.compeq.com.tw/accomplishments01_4_2.php",
+      "listing_date": "2025-08-29",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "duplicate_group": null,
+      "source_sha256": "70ba92747a10617807b8a1c94ee2cdfa9b809aff4c4c7fc44a5b3759d659aa5b",
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/2313_20250829_16.pdf"
+    },
+    {
+      "event_id": "2313_20251125_17",
+      "stock_id": "2313",
+      "theme": "leo",
+      "source_date": "2025-11-25",
+      "source_url": "https://www.compeq.com.tw/doc/conference/8ac589b8-c689-11f0-a762-005056a9c86d/20251121_155159_cn.pdf",
+      "title": "Compeq investor presentation 2025 Q3",
+      "page_refs": [
+        1,
+        9
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2025 Q3",
+          "metric": "revenue_share_pct",
+          "value": 17
+        },
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2024",
+          "metric": "revenue_share_pct",
+          "value": 18
+        }
+      ],
+      "caveats": [
+        "Aerospace segment is broader than LEO; cannot automatically assign its entire revenue share to LEO. Share change alone does not prove segment revenue growth.",
+        "November 24 and 25 listings point to byte-identical documents whose PDF metadata title refers to November 25. Cover is undated. Conservatively use November 25 and deduplicate; do not infer upload date from filename."
+      ],
+      "date_basis": "current issuer dated investor-meeting listing; PDF cover undated; historical first publication not verified",
+      "listing_url": "https://www.compeq.com.tw/accomplishments01_4_2.php",
+      "listing_date": "2025-11-25",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "duplicate_group": "compeq_20251125",
+      "source_sha256": "8ee49c514479bf406808e7179551dfedf587643d41fadd4e8f976e885d031845",
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/2313_20251125_17.pdf"
+    },
+    {
+      "event_id": "2313_20251125_18",
+      "stock_id": "2313",
+      "theme": "leo",
+      "source_date": "2025-11-25",
+      "source_url": "https://www.compeq.com.tw/doc/conference/235724ee-c6af-11f0-a762-005056a9c86d/20251121_155406_cn.pdf",
+      "title": "Compeq investor presentation 2025 Q3",
+      "page_refs": [
+        1,
+        9
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2025 Q3",
+          "metric": "revenue_share_pct",
+          "value": 17
+        },
+        {
+          "scope": "aerospace_not_leo_specific",
+          "period": "2024",
+          "metric": "revenue_share_pct",
+          "value": 18
+        }
+      ],
+      "caveats": [
+        "Aerospace segment is broader than LEO; cannot automatically assign its entire revenue share to LEO. Share change alone does not prove segment revenue growth.",
+        "November 24 and 25 listings point to byte-identical documents whose PDF metadata title refers to November 25. Cover is undated. Conservatively use November 25 and deduplicate; do not infer upload date from filename."
+      ],
+      "date_basis": "current issuer dated investor-meeting listing; PDF cover undated; historical first publication not verified",
+      "listing_url": "https://www.compeq.com.tw/accomplishments01_4_2.php",
+      "listing_date": "2025-11-25",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "duplicate_group": "compeq_20251125",
+      "source_sha256": "8ee49c514479bf406808e7179551dfedf587643d41fadd4e8f976e885d031845",
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/2313_20251125_18.pdf"
+    },
+    {
+      "event_id": "3491_20250108_01",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-01-08",
+      "source_url": "https://www.umt-tw.com/upload/Investors/(3491)_20250108.pdf",
+      "title": "UMT January investor presentation",
+      "page_refs": [
+        9,
+        13,
+        17
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2024 Jan-Nov",
+          "metric": "revenue_share_pct",
+          "value": 42.7
+        },
+        {
+          "scope": "leo_customer_A",
+          "period": "latest disclosed shipments versus prior year; exact interval unspecified",
+          "metric": "shipment_growth_pct",
+          "value": 250
+        }
+      ],
+      "caveats": [
+        "Customer-level growth is not growth of the whole LEO segment; interval unspecified. Forward order multiples are forecasts."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-01-08",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250108_01.pdf",
+      "source_sha256": "0194b8aaad84dc2e7fa172731e0784efd23946e5c210dab8c78197c69e460957",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "42.7",
+          "present": true
+        },
+        {
+          "text": "250%",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20250320_02",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-03-20",
+      "source_url": "https://www.umt-tw.com/upload/Investors/GS20250320.pdf",
+      "title": "UMT March investor presentation GS",
+      "page_refs": [
+        5,
+        9,
+        18
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2024",
+          "metric": "revenue_share_pct",
+          "value": 42.8
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Jan-Feb",
+          "metric": "revenue_share_pct",
+          "value": 54.7
+        },
+        {
+          "scope": "leo_customer_S",
+          "period": "2024",
+          "metric": "shipment_growth_pct",
+          "value": 286
+        },
+        {
+          "scope": "leo_customer_A",
+          "period": "2024",
+          "metric": "shipment_growth_pct",
+          "value": 2840
+        }
+      ],
+      "caveats": [
+        "Customer-specific historical shipments; growth flags do not assert LEO aggregate growth. Two same-day presentations are one information episode."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-03-20",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "duplicate_group": "umt_20250320",
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250320_02.pdf",
+      "source_sha256": "d1f4da9b00bf11378196846a335d7cf8ef7176724d11c2693850345861df9394",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "54.7",
+          "present": true
+        },
+        {
+          "text": "286%",
+          "present": true
+        },
+        {
+          "text": "2840%",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20250320_03",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-03-20",
+      "source_url": "https://www.umt-tw.com/upload/Investors/MEGA20250320.pdf",
+      "title": "UMT March investor presentation MEGA",
+      "page_refs": [
+        5,
+        9,
+        18
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2024",
+          "metric": "revenue_share_pct",
+          "value": 42.8
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Jan-Feb",
+          "metric": "revenue_share_pct",
+          "value": 54.7
+        },
+        {
+          "scope": "leo_customer_S",
+          "period": "2024",
+          "metric": "shipment_growth_pct",
+          "value": 286
+        },
+        {
+          "scope": "leo_customer_A",
+          "period": "2024",
+          "metric": "shipment_growth_pct",
+          "value": 2840
+        }
+      ],
+      "caveats": [
+        "Customer-specific historical shipments; growth flags do not assert LEO aggregate growth. Two same-day presentations are one information episode."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-03-20",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "duplicate_group": "umt_20250320",
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250320_03.pdf",
+      "source_sha256": "447cb26e51f425c79347f5bdc72c897c2ab1e28328517f4816d5f4a26e7ffe04",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "54.7",
+          "present": true
+        },
+        {
+          "text": "286%",
+          "present": true
+        },
+        {
+          "text": "2840%",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20250520_04",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-05-20",
+      "source_url": "https://www.umt-tw.com/upload/Investors/349120250520M001.pdf",
+      "title": "UMT 2025 Q1 financial and operating update",
+      "page_refs": [
+        4,
+        5,
+        6,
+        7,
+        13,
+        14,
+        21
+      ],
+      "realized_growth": null,
+      "material_exposure": true,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 Q1",
+          "metric": "revenue_share_pct",
+          "value": 57.0
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q1",
+          "metric": "revenue_yoy_pct",
+          "value": 43.0
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q1",
+          "metric": "parent_net_income_yoy_pct",
+          "value": 84.3
+        },
+        {
+          "scope": "corporate",
+          "period": "from June 2025",
+          "text": "Telecom engineering subsidiary expected to leave revenue consolidation and use equity method."
+        }
+      ],
+      "caveats": [
+        "Presentation has 56.9% in prose and 57.0% rounded in table. Corporate revenue growth cannot be substituted for LEO growth."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-05-20",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250520_04.pdf",
+      "source_sha256": "0e9575b5735cfe3786f115b4e77e5ceda2d7647fe68291bab6cbb2e1bf1193c8",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "57.0",
+          "present": true
+        },
+        {
+          "text": "84.3%",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20250812_05",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-08-12",
+      "source_url": "https://www.umt-tw.com/upload/Investors/3491_20250812.pdf",
+      "title": "UMT 2025 H1 financial and operating update",
+      "page_refs": [
+        5,
+        6,
+        7,
+        8,
+        18,
+        19
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 H1",
+          "metric": "revenue_yoy_pct",
+          "value": 40.0
+        },
+        {
+          "scope": "leo",
+          "period": "2025 H1",
+          "metric": "revenue_share_pct",
+          "value": 52.7
+        },
+        {
+          "scope": "leo",
+          "period": "at presentation",
+          "metric": "order_backlog_ntd_lower_bound",
+          "value": 400000000
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q2",
+          "metric": "revenue_yoy_pct",
+          "value": -20.7
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q2",
+          "text": "Delayed shipments to a key customer, currency changes and removal of June telecom-engineering revenue affected revenue."
+        }
+      ],
+      "caveats": [
+        "Page 8 calls -17.2% YoY although the comparative table shows it is QoQ; retain the table YoY -20.7%. Delayed customer is not identified as LEO, so negative remains null. Backlog is not recognized revenue."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-08-12",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250812_05.pdf",
+      "source_sha256": "aec3497a79965502585bd8bef65de8ad0257610b9c337488f7d7f71895b507d0",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "52.7",
+          "present": true
+        },
+        {
+          "text": "40%",
+          "present": true
+        },
+        {
+          "text": "訂單超過4億元",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20250822_06",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-08-22",
+      "source_url": "https://www.umt-tw.com/upload/Investors/3491_20250822.pdf",
+      "title": "UMT 2025 H1 financial and operating update",
+      "page_refs": [
+        5,
+        6,
+        7,
+        8,
+        18,
+        19
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 H1",
+          "metric": "revenue_yoy_pct",
+          "value": 40.0
+        },
+        {
+          "scope": "leo",
+          "period": "2025 H1",
+          "metric": "revenue_share_pct",
+          "value": 52.7
+        },
+        {
+          "scope": "leo",
+          "period": "at presentation",
+          "metric": "order_backlog_ntd_lower_bound",
+          "value": 400000000
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q2",
+          "metric": "revenue_yoy_pct",
+          "value": -20.7
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q2",
+          "text": "Delayed shipments to a key customer, currency changes and removal of June telecom-engineering revenue affected revenue."
+        }
+      ],
+      "caveats": [
+        "Page 8 calls -17.2% YoY although the comparative table shows it is QoQ; retain the table YoY -20.7%. Delayed customer is not identified as LEO, so negative remains null. Backlog is not recognized revenue."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-08-22",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250822_06.pdf",
+      "source_sha256": "f673cf06dcff0d7b496a5cc3aa17ea771ac71ff57a49b998b764ae0a2adf83f8",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "52.7",
+          "present": true
+        },
+        {
+          "text": "40%",
+          "present": true
+        },
+        {
+          "text": "訂單超過4億元",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20250909_07",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-09-09",
+      "source_url": "https://www.umt-tw.com/upload/Investors/UMT(3491)_0909.pdf",
+      "title": "UMT September investor presentation",
+      "page_refs": [
+        4,
+        6,
+        14,
+        17
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 H1",
+          "metric": "revenue_share_pct",
+          "value": 52.7
+        },
+        {
+          "scope": "leo",
+          "period": "2025 H1",
+          "metric": "revenue_yoy_pct",
+          "value": 40
+        },
+        {
+          "scope": "cellular_backhaul",
+          "period": "2025 H1",
+          "metric": "revenue_yoy_pct",
+          "value": -37
+        }
+      ],
+      "caveats": [
+        "Repeats H1 LEO data; not a new reporting period. Factory floor-space expansion remains a plan, not new realized LEO production."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-09-09",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20250909_07.pdf",
+      "source_sha256": "279229aa2666e6d3d28b88c06a484b99f80d91f6d8e5654b3db87b7e6dc13173",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "52.7",
+          "present": true
+        },
+        {
+          "text": "40%",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20251111_08",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-11-11",
+      "source_url": "https://www.umt-tw.com/upload/Investors/(3491)_20251111(updated).pdf",
+      "title": "UMT Q3 and October operating update (updated file)",
+      "page_refs": [
+        5,
+        6,
+        7,
+        11,
+        12
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 Jan-Oct",
+          "metric": "revenue_yoy_pct",
+          "value": 26
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Oct",
+          "metric": "revenue_share_pct",
+          "value": 69.7
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Q1-Q3",
+          "metric": "revenue_yoy_pct",
+          "value": 19
+        },
+        {
+          "scope": "leo",
+          "period": "at presentation",
+          "text": "Unshipped orders exceed 2024 LEO shipments; 2024 LEO revenue was NTD 1 billion."
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q3",
+          "metric": "revenue_yoy_pct",
+          "value": -24.3
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q3",
+          "metric": "parent_net_income_yoy_pct",
+          "value": -33.3
+        }
+      ],
+      "caveats": [
+        "The 19% Q1-Q3 growth is below the fixed 20% threshold; later Jan-Oct 26% meets it. Repeated dated decks are not independent information episodes.",
+        "Explicitly updated file: unknown revision time."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php?p=2",
+      "listing_date": "2025-11-11",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": false,
+      "signal_exclusion_reason": "explicitly updated PDF; original publication version not verified",
+      "source_local_path": null
+    },
+    {
+      "event_id": "3491_20251210_09",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-12-10",
+      "source_url": "https://www.umt-tw.com/upload/Investors/(3491)_20251210.pdf",
+      "title": "UMT Q3 and October operating update",
+      "page_refs": [
+        5,
+        6,
+        7,
+        11,
+        12
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 Jan-Oct",
+          "metric": "revenue_yoy_pct",
+          "value": 26
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Oct",
+          "metric": "revenue_share_pct",
+          "value": 69.7
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Q1-Q3",
+          "metric": "revenue_yoy_pct",
+          "value": 19
+        },
+        {
+          "scope": "leo",
+          "period": "at presentation",
+          "text": "Unshipped orders exceed 2024 LEO shipments; 2024 LEO revenue was NTD 1 billion."
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q3",
+          "metric": "revenue_yoy_pct",
+          "value": -24.3
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q3",
+          "metric": "parent_net_income_yoy_pct",
+          "value": -33.3
+        }
+      ],
+      "caveats": [
+        "The 19% Q1-Q3 growth is below the fixed 20% threshold; later Jan-Oct 26% meets it. Repeated dated decks are not independent information episodes."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php",
+      "listing_date": "2025-12-10",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20251210_09.pdf",
+      "source_sha256": "a796ba953d2fd1129678072a6d001097970a9bbc90a896213ee09b78cb2086e6",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "26%",
+          "present": true
+        },
+        {
+          "text": "69.7%",
+          "present": true
+        },
+        {
+          "text": "在手未交訂單",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20251212_10",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2025-12-12",
+      "source_url": "https://www.umt-tw.com/upload/Investors/(3491)_20251212.pdf",
+      "title": "UMT Q3 and October operating update",
+      "page_refs": [
+        5,
+        6,
+        7,
+        11,
+        12
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025 Jan-Oct",
+          "metric": "revenue_yoy_pct",
+          "value": 26
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Oct",
+          "metric": "revenue_share_pct",
+          "value": 69.7
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Q1-Q3",
+          "metric": "revenue_yoy_pct",
+          "value": 19
+        },
+        {
+          "scope": "leo",
+          "period": "at presentation",
+          "text": "Unshipped orders exceed 2024 LEO shipments; 2024 LEO revenue was NTD 1 billion."
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q3",
+          "metric": "revenue_yoy_pct",
+          "value": -24.3
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q3",
+          "metric": "parent_net_income_yoy_pct",
+          "value": -33.3
+        }
+      ],
+      "caveats": [
+        "The 19% Q1-Q3 growth is below the fixed 20% threshold; later Jan-Oct 26% meets it. Repeated dated decks are not independent information episodes."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php",
+      "listing_date": "2025-12-12",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20251212_10.pdf",
+      "source_sha256": "1c4f1fa32ac800f19b6f0527c475526183d36555543273e92db3bb08e36ee0cd",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "26%",
+          "present": true
+        },
+        {
+          "text": "69.7%",
+          "present": true
+        },
+        {
+          "text": "在手未交訂單",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "3491_20260122_11",
+      "stock_id": "3491",
+      "theme": "leo",
+      "source_date": "2026-01-22",
+      "source_url": "https://www.umt-tw.com/upload/Investors/349120260122M001.pdf",
+      "title": "UMT 2025 Q4 preliminary results and 2026 outlook",
+      "page_refs": [
+        5,
+        6,
+        7,
+        9,
+        12,
+        15
+      ],
+      "realized_growth": true,
+      "material_exposure": true,
+      "order_or_production": true,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "leo",
+          "period": "2025",
+          "metric": "revenue_yoy_pct",
+          "value": 45
+        },
+        {
+          "scope": "leo",
+          "period": "2025",
+          "metric": "revenue_share_pct",
+          "value": 59
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Q4",
+          "metric": "revenue_share_pct",
+          "value": 69.9
+        },
+        {
+          "scope": "leo",
+          "period": "2025 Q4",
+          "metric": "revenue_qoq_pct",
+          "value": 120
+        },
+        {
+          "scope": "leo",
+          "period": "at presentation",
+          "metric": "order_backlog_ntd_lower_bound",
+          "value": 1800000000
+        },
+        {
+          "scope": "corporate",
+          "period": "2025",
+          "metric": "parent_net_income_yoy_pct",
+          "value": -5.2
+        }
+      ],
+      "caveats": [
+        "Q4 figures preliminary unaudited. Do not backfill these January disclosures into November or December decisions."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.umt-tw.com/tw/institutional_investors.php",
+      "listing_date": "2026-01-22",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/3491_20260122_11.pdf",
+      "source_sha256": "5d5292bd6a5c9683e5be5252ca44900d1ad6bc860dc77e4f4e2aeed42d909587",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "45%",
+          "present": true
+        },
+        {
+          "text": "59%",
+          "present": true
+        },
+        {
+          "text": "18億",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "6285_20250507_12",
+      "stock_id": "6285",
+      "theme": "leo",
+      "source_date": "2025-05-07",
+      "source_url": "https://www.wnc.com.tw/uploads/files/shares/ir-presentation/IR_Presentation_tc_20250505.pdf",
+      "title": "WNC 2025 Q1",
+      "page_refs": [
+        4,
+        5,
+        8,
+        9
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        {
+          "scope": "corporate",
+          "period": "2025 Q1",
+          "metric": "revenue_yoy_pct",
+          "value": 10.9
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q1",
+          "metric": "net_income_yoy_pct",
+          "value": 22.4
+        },
+        {
+          "scope": "leo",
+          "text": "LEO broadband user equipment and satellite modules shown in product portfolio."
+        }
+      ],
+      "caveats": [
+        "Separate LEO revenue growth/exposure/order realization not quantified. Product listing alone does not prove new orders or production. Source date uses later dated issuer meeting/board listing, not PDF filename; historical availability remains unverified."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.wnc.com.tw/en/investors/financial-information/investor-meetings",
+      "listing_date": "2025-05-07",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/6285_20250507_12.pdf",
+      "source_sha256": "5a68dcb6a140e27f26a0ca7bbf933b7fc9cba56323cf566e6894cc0a6a64635a",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "LEO",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "6285_20250826_13",
+      "stock_id": "6285",
+      "theme": "leo",
+      "source_date": "2025-08-26",
+      "source_url": "https://www.wnc.com.tw/uploads/files/shares/ir-presentation/IR_Presentation_tc_20250826.pdf",
+      "title": "WNC 2025 H1",
+      "page_refs": [
+        3,
+        4
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "corporate",
+          "period": "2025 H1",
+          "metric": "revenue_yoy_pct",
+          "value": -0.8
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 H1",
+          "metric": "net_income_yoy_pct",
+          "value": -26.3
+        }
+      ],
+      "caveats": [
+        "Separate LEO revenue growth/exposure/order realization not quantified. Product listing alone does not prove new orders or production. Source date uses later dated issuer meeting/board listing, not PDF filename; historical availability remains unverified."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.wnc.com.tw/en/investors/financial-information/investor-meetings",
+      "listing_date": "2025-08-26",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/6285_20250826_13.pdf",
+      "source_sha256": "8fd3ea8ecf1e37cea7c5093e1e4ff680371167a0eed64a687de2cc396d054b92",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "27,491",
+          "present": true
+        },
+        {
+          "text": "1,411",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    },
+    {
+      "event_id": "6285_20251106_14",
+      "stock_id": "6285",
+      "theme": "leo",
+      "source_date": "2025-11-06",
+      "source_url": "https://www.wnc.com.tw/uploads/files/shares/ir-presentation/IR_Presentation_en_20251104.pdf",
+      "title": "WNC 2025 Q3",
+      "page_refs": [
+        4,
+        5,
+        8,
+        9
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        {
+          "scope": "corporate",
+          "period": "2025 Q1-Q3",
+          "metric": "revenue_yoy_pct",
+          "value": 1.2
+        },
+        {
+          "scope": "corporate",
+          "period": "2025 Q1-Q3",
+          "metric": "net_income_yoy_pct",
+          "value": -14.7
+        },
+        {
+          "scope": "leo",
+          "text": "LEO satellite broadband UE and outdoor units remain in product portfolio; no separately quantified LEO share or growth in this deck."
+        }
+      ],
+      "caveats": [
+        "Separate LEO revenue growth/exposure/order realization not quantified. Product listing alone does not prove new orders or production. Source date uses later dated issuer meeting/board listing, not PDF filename; historical availability remains unverified."
+      ],
+      "date_basis": "issuer presentation cover and current issuer meeting listing; historical first publication not verified",
+      "listing_url": "https://www.wnc.com.tw/en/investors/financial-information/investor-meetings",
+      "listing_date": "2025-11-06",
+      "first_publication_verified": false,
+      "retrieved_date": "2026-09-27",
+      "signal_eligible": true,
+      "signal_exclusion_reason": null,
+      "source_local_path": "/Users/james.chou/JamesProject/stock_bot/.cache/leo-catalyst-source-documents-20260927/6285_20251106_14.pdf",
+      "source_sha256": "8d40cfe51db4227ba72ca44963b75db073ad998a187370edabd9318756a19395",
+      "observed_at": "2026-09-27T04:16:40+00:00",
+      "snapshot_fact_checks": [
+        {
+          "text": "LEO",
+          "present": true
+        }
+      ],
+      "snapshot_provenance": "New snapshot retrieved in this research run; not verified as the historical first-publication version."
+    }
+  ],
+  "coverage_gaps": [
+    "No historical archive proving first publication/version for any source.",
+    "UMT issuer current listing has two March 20 decks; aggregator Nov 18 date not independently verified on issuer listing, not fabricated.",
+    "WNC access via web parsed official PDFs; direct issuer HTML returned403 and was not bypassed.",
+    "Compeq annual report and sustainability material discovered but not coded as dated catalyst because first availability unverified and quarterly investor disclosures prioritized.",
+    "Aerospace/LEO mapping unresolved for Compeq. Missing LEO figures do not mean no economic exposure."
+  ],
+  "accessed_not_coded": [
+    {
+      "stock_id": "2313",
+      "source_url": "https://www.compeq.com.tw/doc/res_shareholder/79ad2ceb-03a0-11ef-a9ba-005056a9c86d/20250508_160621_cn_4.pdf",
+      "document_date": "2025-03-20",
+      "date_basis": "Cover printing date, directly read with PyMuPDF; May 8 filename is not printing date.",
+      "title": "Compeq 2024 annual report",
+      "facts": [
+        "Management plans pursue satellite communications, AI server, data center and optics business. This is not evidence of new realized orders."
+      ],
+      "signal_eligible": false,
+      "reason": "Outside fixed cohort operating-document window; first publication not verified.",
+      "source_local_path": null
+    },
+    {
+      "stock_id": "2313",
+      "source_url": "https://www.compeq.com.tw/doc/ent_csr/54373379-849a-11f0-a762-005056a9c86d/20251126_141856_cn.pdf",
+      "document_date": null,
+      "title": "Compeq 2024 sustainability report",
+      "facts": [
+        "Business plans discuss satellite-communications products and development; no separately verified LEO segment growth."
+      ],
+      "signal_eligible": false,
+      "reason": "Exact disclosure date unverified; filename date cannot establish first public availability.",
+      "source_local_path": null
+    }
+  ]
+}

@@ -1,0 +1,526 @@
+{
+  "schema_version": 1,
+  "study": "fixed_leo_cohort_primary_source_review",
+  "observed_at": "2026-09-27",
+  "window_start": "2025-04-15",
+  "window_end": "2025-12-31",
+  "classification_policy": {
+    "realized_growth": "true only for realized LEO-specific segment revenue growth >=20%; null if mixed segments or forecasts",
+    "material_exposure": "true only for demonstrable LEO revenue >=10% of company revenue; null if undivided broader category",
+    "order_or_production": "true only for explicit actual LEO orders or production; demos, technical readiness and general expansion are not sufficient",
+    "negative": "explicit LEO-specific adverse evidence only; no mention is null",
+    "corporate_negative": "documented company-level weakness; not a LEO veto",
+    "signal_eligible": "dated original content reviewed with no detected revision claim; exploratory historical use only; not proof of first availability"
+  },
+  "selection_basis": {
+    "url": "https://www.trendforce.com/news/2025/04/15/【computex-2025】taiwanese-national-space-team-mobilizes-heavy-major-forces-in-establishing-b5g-national-defense-starlink/",
+    "date": "2025-04-15",
+    "note": "Parent preregistered cohort membership only; article is not evidence of company economic contribution. All five assigned members are retained, independent of subsequent outcomes."
+  },
+  "method_notes": [
+    "No stock price or return outcomes were inspected or used for selection/classification.",
+    "Company earnings weakness is kept separately from LEO-specific adverse information.",
+    "All data are retrospective source review, not timestamp-archived historical first publications.",
+    "Coverage is not an exhaustive news archive; documents without quantifiable LEO evidence are retained.",
+    "All 11 events have unknown LEO economic flags, so none by themselves qualify for the economic-evidence entry gate."
+  ],
+  "coverage": [
+    {
+      "stock_id": "2454",
+      "name": "聯發科",
+      "cohort_member_retained": true,
+      "reviewed_event_ids": [
+        "leo_peer_2454_20250430_q1",
+        "leo_peer_2454_20250730_q2",
+        "leo_peer_2454_20251031_q3"
+      ],
+      "status": "primary_documents_reviewed_leo_economics_unknown",
+      "coverage_complete": false,
+      "notes": "Q1/Q2/Q3 官方逐字稿已取；未證明單獨 LEO 經濟門檻。"
+    },
+    {
+      "stock_id": "3105",
+      "name": "穩懋",
+      "cohort_member_retained": true,
+      "reviewed_event_ids": [
+        "leo_peer_3105_20250430_q1",
+        "leo_peer_3105_20250731_q2",
+        "leo_peer_3105_20251030_q3"
+      ],
+      "status": "primary_documents_reviewed_leo_economics_unknown",
+      "coverage_complete": false,
+      "notes": "Q1/Q2/Q3 官方簡報已取。Q2 提低軌衛星，仍與航太、AI 混合在 Infra。"
+    },
+    {
+      "stock_id": "2392",
+      "name": "正崴",
+      "cohort_member_retained": true,
+      "reviewed_event_ids": [
+        "leo_peer_2392_20250611_q2"
+      ],
+      "status": "primary_documents_reviewed_leo_economics_unknown",
+      "coverage_complete": false,
+      "notes": "取得 6/11 MOPS 原文；公司舊活動表格損坏，未找到 Q3 獨立法說原文。"
+    },
+    {
+      "stock_id": "6282",
+      "name": "康舒",
+      "cohort_member_retained": true,
+      "reviewed_event_ids": [
+        "leo_peer_6282_20251113_q3"
+      ],
+      "status": "primary_documents_reviewed_leo_economics_unknown",
+      "coverage_complete": false,
+      "notes": "公司官網 403；取得 11/13 MOPS 原文及官方活動日期。未找到 Q2 獨立法說原文。"
+    },
+    {
+      "stock_id": "2383",
+      "name": "台光電",
+      "cohort_member_retained": true,
+      "reviewed_event_ids": [
+        "leo_peer_2383_20250502_q1",
+        "leo_peer_2383_20250731_q2",
+        "leo_peer_2383_20251031_q3"
+      ],
+      "status": "primary_documents_reviewed_leo_economics_unknown",
+      "coverage_complete": false,
+      "notes": "Q1/Q2/Q3 官方簡報已取；AI 基礎設施成長不視作 LEO 成長。"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "leo_peer_2383_20250502_q1",
+      "stock_id": "2383",
+      "theme": "leo",
+      "source_date": "2025-05-02",
+      "source_url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Presentation_Materials/CH/114/Investor%20Conference%20Presentation_202505-Chinese.pdf",
+      "title": "台光電 2025 年 5 月法說簡報",
+      "page_refs": [
+        1,
+        4,
+        6,
+        9
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        "Q1 集團營收年增 68%、基礎設施類別年增 99%；未提供 LEO 收入細分。",
+        "高階 CCL 市場與公司成長展望不等於 LEO 已實現業績。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "官方法說簡報列表日期；檔名及封面僅作交叉核對，不以較早檔名日期視作公開日",
+      "date_verification_url": "https://www.emctw.com/zh-TW/presentation_materials/index",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "fb0d7a6ca097b9812befe32dbbbf7f65a6d1c59d6b4a2fa18beca89054dbd97f",
+      "document_pages": 13,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2383_q1.pdf"
+    },
+    {
+      "event_id": "leo_peer_2383_20250731_q2",
+      "stock_id": "2383",
+      "theme": "leo",
+      "source_date": "2025-07-31",
+      "source_url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Presentation_Materials/CH/114/Investor%20Conference%20Presentation_20250730%20Final%20Chinese.pdf",
+      "title": "台光電 2025 年 7 月法說簡報",
+      "page_refs": [
+        1,
+        4,
+        6,
+        10,
+        12
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        "Q2 集團營收年增 45.7%、基礎設施類別年增約 70%；未提供 LEO 收入細分。",
+        "成長優勢頁明列 AI 基礎設施設計；CCL 擴產未識別為 LEO 專屬訂單／量產。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "官方法說簡報列表日期；檔名及封面僅作交叉核對，不以較早檔名日期視作公開日",
+      "date_verification_url": "https://www.emctw.com/zh-TW/presentation_materials/index",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "823331003592d807bdfc3f3c0c5d3fa7eb6f61f7fe34c9982dec710e151bcf21",
+      "document_pages": 14,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2383_q2.pdf"
+    },
+    {
+      "event_id": "leo_peer_2383_20251031_q3",
+      "stock_id": "2383",
+      "theme": "leo",
+      "source_date": "2025-10-31",
+      "source_url": "https://www.emctw.com/upload/media/New_Investors/Financial_Information/Presentation_Materials/CH/114/Investor%20Conference%20Presentation_20251030%20final%20CH.pdf",
+      "title": "台光電 2025 年 10 月法說簡報",
+      "page_refs": [
+        1,
+        4,
+        6,
+        10,
+        12
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        "Q3 集團營收年增 44%、基礎設施類別年增約 68%；未提供 LEO 收入細分。",
+        "AI 基礎設施與高階基材的優勢不能轉寫成 LEO 營收成長。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "官方法說簡報列表日期；檔名及封面僅作交叉核對，不以較早檔名日期視作公開日",
+      "date_verification_url": "https://www.emctw.com/zh-TW/presentation_materials/index",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "12bac339033e0347f53736df3743a01203523ed5fbfb332f9d45ec6cd00912bf",
+      "document_pages": 14,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2383_q3.pdf"
+    },
+    {
+      "event_id": "leo_peer_2392_20250611_q2",
+      "stock_id": "2392",
+      "theme": "leo",
+      "source_date": "2025-06-11",
+      "source_url": "https://mopsov.twse.com.tw/nas/STR/239220250611M001.pdf",
+      "title": "正崴 2025-06-11 法人說明會",
+      "page_refs": [
+        1,
+        4,
+        6,
+        13
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "1–5 月能源事業營收年增 56%；這是能源事業，不能列作 LEO 已實現成長。",
+        "產品展望包括 AI 線材、電力模組、AI 視訊、風電與 AI 運算中心，未提供可獨立驗證的 LEO 收入／量產指標。",
+        "Q1 歸母淨利年減 67.1%；不得推論為 LEO 逆風。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "MOPS 原始 PDF 封面明列 2025 年 6 月 11 日",
+      "date_verification_url": "https://mopsov.twse.com.tw/nas/STR/239220250611M001.pdf",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "c4af9cba5e8270d436eae8028df17995f7ed905fe343a16bedc45759be18b07a",
+      "document_pages": 14,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2392_q2.pdf"
+    },
+    {
+      "event_id": "leo_peer_2454_20250430_q1",
+      "stock_id": "2454",
+      "theme": "leo",
+      "source_date": "2025-04-30",
+      "source_url": "https://www.mediatek.com/hubfs/MediaTek%20Assets/Pdfs/Quarterly%20Earnings%20Release/2025/Quarterly%20Earnings%20Release-2025Q1/Transcript.pdf",
+      "title": "聯發科 2025 Q1 法說逐字稿",
+      "page_refs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "Smart Edge Platforms 年增 32%、占總營收 39%，但涵蓋多種連網與運算產品，未拆出 LEO。",
+        "公司說明 AI、Wi-Fi 7、手機與車用產品；Q1 淨利年減 6.7%，不是 LEO 業務逆風證據。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "PDF 逐字稿首頁列明會議日期",
+      "date_verification_url": "https://www.mediatek.com/investor-relations/ir-events",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "f943e71a77998e945a2626355ba0b098f4ba493545c017ea4c2c3e611b91b8cc",
+      "document_pages": 14,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2454_q1.pdf"
+    },
+    {
+      "event_id": "leo_peer_2454_20250730_q2",
+      "stock_id": "2454",
+      "theme": "leo",
+      "source_date": "2025-07-30",
+      "source_url": "https://www.mediatek.com/hubfs/MediaTek%20Assets/Pdfs/Quarterly%20Earnings%20Release/2025/Quarterly%20Earnings%20Release-2025Q2/Transcript.pdf",
+      "title": "聯發科 2025 Q2 法說逐字稿",
+      "page_refs": [
+        1,
+        3,
+        4
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": null,
+      "facts": [
+        "Smart Edge Platforms 年增 26%、占總營收 43%，不等於 LEO 收入。",
+        "AI 平板、GB10、車用及 ASIC 的成長或量產展望不能改標成 LEO 訂單／量產。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "PDF 逐字稿首頁列明會議日期",
+      "date_verification_url": "https://www.mediatek.com/investor-relations/ir-events",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "e2bd5d181ba0c3521f6c19769d8b65e563faf5413fbf94eb512b07e049480c99",
+      "document_pages": 14,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2454_q2.pdf"
+    },
+    {
+      "event_id": "leo_peer_2454_20251031_q3",
+      "stock_id": "2454",
+      "theme": "leo",
+      "source_date": "2025-10-31",
+      "source_url": "https://www.mediatek.com/hubfs/MediaTek%20Assets/Pdfs/Quarterly%20Earnings%20Release/2025/Quarterly%20Earnings%20Release-2025Q3/Transcript.pdf",
+      "title": "聯發科 2025 Q3 法說逐字稿",
+      "page_refs": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "Smart Edge Platforms 年增 14%、占總營收 42%；未拆出 LEO 收入。",
+        "GB10 開始量產屬 AI 產品；雲端 ASIC 2026 年收入是預期，不是 LEO 已實現收入。",
+        "集團營業利益年減 7%、淨利年減 0.5%，未歸因 LEO。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "PDF 逐字稿首頁列明會議日期",
+      "date_verification_url": "https://www.mediatek.com/investor-relations/ir-events",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "16ff74518283a580c964889ea648cdd6f50805c3e27222bc8b76b505d0cc6c30",
+      "document_pages": 15,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/2454_q3.pdf"
+    },
+    {
+      "event_id": "leo_peer_3105_20250430_q1",
+      "stock_id": "3105",
+      "theme": "leo",
+      "source_date": "2025-04-30",
+      "source_url": "https://www.winfoundry.com/zh-TW/Base/DownLoadFile/505?filename=1Q%202025%20%E6%B3%95%E8%AA%AA%E6%9C%83%20%E2%80%93%20%E7%B0%A1%E5%A0%B1.pdf&TargetTable=QuarterlyAttachment",
+      "title": "穩懋 2025 Q1 法說簡報",
+      "page_refs": [
+        1,
+        5,
+        7,
+        8
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "Q1 Infra 占比 30–35%；未拆出低軌衛星在 Infra 中的收入。",
+        "集團營收年減 20%，不等於 LEO 營收年減。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "PDF 封面日期與官方法說行事曆交叉核對",
+      "date_verification_url": "https://www.winfoundry.com/zh-CN/Invest/invest_activity?isOpen=True&page=1&year=2025",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "140ff917c0c4e5a0aedf7f1de69388f6709ca859b17eda8392452849614502a0",
+      "document_pages": 13,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/3105_q1.pdf"
+    },
+    {
+      "event_id": "leo_peer_3105_20250731_q2",
+      "stock_id": "3105",
+      "theme": "leo",
+      "source_date": "2025-07-31",
+      "source_url": "https://www.winfoundry.com/zh-TW/Base/DownLoadFile/511?filename=2Q%202025%20%E6%B3%95%E8%AA%AA%E6%9C%83%20%E2%80%93%20%E7%B0%A1%E5%A0%B1.pdf&TargetTable=QuarterlyAttachment",
+      "title": "穩懋 2025 Q2 法說簡報",
+      "page_refs": [
+        1,
+        5,
+        7
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "Infra 營收增加，應用包括低軌衛星、航太與 AI 資料中心；2025 上半年 Infra 收入占比與 Cellular 相當。",
+        "資料未提供獨立 LEO 收入占比、數值成長率或明確 LEO 訂單／量產數量。",
+        "同期新聞稿：集團 Q2 營收年減 24%、歸母淨損 4.21 億元；不視作 LEO 逆風。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "PDF 封面日期與官方法說行事曆交叉核對",
+      "date_verification_url": "https://www.winfoundry.com/zh-CN/Invest/invest_activity?isOpen=True&page=1&year=2025",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "c57be09d00381d93b5e07841ffec9208d2bb4b081cd7d8836266d0d4c71e6ea7",
+      "document_pages": 18,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "supporting_sources": [
+        {
+          "source_url": "https://www.winfoundry.com/zh-TW/Base/DownLoadFile/508?filename=2Q%202025%20%E6%B3%95%E8%AA%AA%E6%9C%83%20%E2%80%93%20%E6%96%B0%E8%81%9E%E7%A8%BF.pdf&TargetTable=QuarterlyAttachment",
+          "source_date": "2025-07-31",
+          "title": "穩懋 2025 Q2 自結財務報告新聞稿",
+          "page_refs": [
+            1
+          ]
+        }
+      ],
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/3105_q2.pdf"
+    },
+    {
+      "event_id": "leo_peer_3105_20251030_q3",
+      "stock_id": "3105",
+      "theme": "leo",
+      "source_date": "2025-10-30",
+      "source_url": "https://www.winfoundry.com/zh-TW/Base/DownLoadFile/517?filename=3Q%202025%20%E6%B3%95%E8%AA%AA%E6%9C%83%20%E2%80%93%20%E7%B0%A1%E5%A0%B1.pdf&TargetTable=QuarterlyAttachment",
+      "title": "穩懋 2025 Q3 法說簡報",
+      "page_refs": [
+        1,
+        5,
+        7,
+        11
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "Q3 Infra 占比 30–35%，未拆出 LEO。",
+        "Q3 集團營收年增 3%、季增 19%，公司主要解釋手機旺季與 Wi-Fi 7；不能全部歸因 LEO。",
+        "前三季集團營收年減 14%、歸母淨利年減 41%；不是 LEO 專屬逆風證據。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "PDF 封面日期與官方法說行事曆交叉核對",
+      "date_verification_url": "https://www.winfoundry.com/zh-CN/Invest/invest_activity?isOpen=True&page=1&year=2025",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "a8fd07b2fede7e4f12c26ec1e771d245fb2c6b8866c82adb5e127140630ad844",
+      "document_pages": 14,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/3105_q3.pdf"
+    },
+    {
+      "event_id": "leo_peer_6282_20251113_q3",
+      "stock_id": "6282",
+      "theme": "leo",
+      "source_date": "2025-11-13",
+      "source_url": "https://mopsov.twse.com.tw/nas/STR/628220251113M001.pdf",
+      "title": "康舒 2025 年 11 月法說簡報",
+      "page_refs": [
+        1,
+        8,
+        9,
+        10,
+        11
+      ],
+      "realized_growth": null,
+      "material_exposure": null,
+      "order_or_production": null,
+      "negative": null,
+      "corporate_negative": true,
+      "facts": [
+        "Q3 電信電源營收年增 55%、占營收 37%，但產品說明為基地台與電信機房，不可將全部電信收入視作低軌衛星。",
+        "Q3 集團營收年減 4%、前三季 EPS -0.38；未說明為 LEO 業務惡化。",
+        "未量化 LEO 收入、獨立成長率或 LEO 訂單／量產。"
+      ],
+      "caveats": [
+        "資料未拆分 LEO 經濟貢獻，未知不可當成零或未受惠。",
+        "這是現在取得的歷史文件；未取得首次發布的歷史存檔或版本時間戳。",
+        "signal_eligible 只表示具日期與已讀原文可作探索性事件，不代表有合格正向訊號。"
+      ],
+      "date_basis": "MOPS PDF 封面為 November 2025；臺灣指數官方法說行事曆列 2025/11/13 14:00",
+      "date_verification_url": "https://irengage.taiwanindex.com.tw/ConferenceList?Month=11&Year=2025",
+      "observed_at": "2026-09-27",
+      "first_publication_verified": false,
+      "signal_eligible": true,
+      "source_sha256": "c188953bbd3ecb64200a80b8562c57ac70c90c6c7005dd9c2d5c693f1cc0d134",
+      "document_pages": 15,
+      "original_document_retrieved": true,
+      "review_status": "reviewed_no_quantified_leo_economic_evidence",
+      "source_local_path": ".cache/leo-peer-source-documents-20260927/6282_q3.pdf"
+    }
+  ]
+}
