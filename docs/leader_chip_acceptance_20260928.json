@@ -1,0 +1,37 @@
+{
+  "api": {
+    "command": "make api",
+    "curl_status": {
+      "health": 200,
+      "jobs?limit=10": 200,
+      "models": 200,
+      "picks": 200
+    },
+    "existing_service_preserved": true,
+    "exit_code": 2,
+    "reason": "Existing server occupies port 8000"
+  },
+  "logs_sha256": {
+    ".cache/leader-chip-final-api.log": "6e31f8de7ca258a9483d46636d47786e1ec13a8eca7a4b1f731eb6086cbbd0aa",
+    ".cache/leader-chip-final-test.log": "129623a7d8eab2fe1ffe27bd2d2fc4185e61e6949d5e9db754aebdaa71e96cb0",
+    ".cache/leader-chip-implementation-pipeline.log": "f6fbebe798813ed6f26f3a0584de19787cbca9b8d919ccb977b58d1d34f8b1d9",
+    ".cache/leader-chip-prereg-pipeline.log": "eebc95b15098a84668b8680169d96cea9813176f1a8ace2dbadebb8254769854",
+    ".cache/leader-chip-prereg-test.log": "a0950ef92ef399965431b2ae6bc87ace827d9a5989d3ff058ad1605ae2143e08"
+  },
+  "pipeline": {
+    "command": "make pipeline",
+    "exit_codes": [
+      0,
+      0
+    ],
+    "guard": ".cache/historical-selector-validation-guard",
+    "limitation": "TWSE held origins were blocked before HTTP; success is not source freshness certification"
+  },
+  "schema": 1,
+  "tests": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 3951,
+    "warnings": 36
+  }
+}

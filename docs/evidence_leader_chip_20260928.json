@@ -1,0 +1,50 @@
+{
+  "acquisition": "web search and open; structured factual transcription, not a raw HTTP archive",
+  "checked_at": "2026-09-28",
+  "historical_first_publication_verified": false,
+  "schema": 1,
+  "sources": [
+    {
+      "additional_facts": {
+        "dividend_year": 2025,
+        "ex_date": "2026-07-21",
+        "record_date": "2026-07-27",
+        "share_distribution_date": "2026-08-19",
+        "stock_dividend_ntd_per_share": 0.1
+      },
+      "facts": {
+        "cash_dividend_per_share": 0.59999999,
+        "dividend_year": 2023,
+        "ex_date": "2024-08-06",
+        "record_date": "2024-08-12",
+        "share_distribution_date": "2024-08-29",
+        "stock_dividend_ntd_per_share": 0.4000000003,
+        "stock_id": "2887"
+      },
+      "publisher": "TS Holdings",
+      "url": "https://www.tsholdings.com.tw/tsh/relations/shareholders/policy/distribute.html?__locale=en"
+    },
+    {
+      "facts": {
+        "final_ratio_may_be_adjusted": true,
+        "fractional_cash_basis": "par value less registration costs; floor to whole TWD",
+        "par_value": 10,
+        "proposed_shares_per_1000": 40
+      },
+      "page_label": 5,
+      "publisher": "Taishin Financial Holding",
+      "url": "https://www.taishinholdings.com.tw/tsh/relations/files/shareholders/meeting/Meeting-Manual-2024-Shareholders-Annual-General-Meeting_c.pdf"
+    },
+    {
+      "facts": {
+        "final_ratio_may_be_adjusted": true,
+        "fractional_cash_basis": "par value less registration costs; floor to whole TWD",
+        "par_value": 10,
+        "proposed_shares_per_1000": 10
+      },
+      "page_label": 6,
+      "publisher": "TS Holdings",
+      "url": "https://www.tsholdings.com.tw/tsh/relations/files/shareholders/Meeting-Manual-2026-Shareholders-Annual-General-Meeting_c.pdf"
+    }
+  ]
+}

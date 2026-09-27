@@ -1,0 +1,28 @@
+{
+  "evidence_sha256": {
+    "docs/evidence_leader_chip_20260928.json": "f33fccfdb7dc730c93e838360c62ea0af9c3153b381e0e15bd6e47ef5673e42a"
+  },
+  "limitations": [
+    "Delivery dates from current official historical table, not archived first-publication snapshots.",
+    "Subshare gross cash is floored to whole TWD and held unavailable with unknown payment date and net fees; uncertainty range zero to gross."
+  ],
+  "overrides": {
+    "2887-2024-08-06": {
+      "fractional_cash_pay_date": null,
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "pay_date": "2024-08-29",
+      "shares_per_share": 0.04000000003,
+      "source": "Company dividend distribution table and 2024 shareholder manual page 5; final ratio divided by par value"
+    },
+    "2887-2026-07-21": {
+      "fractional_cash_pay_date": null,
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "pay_date": "2026-08-19",
+      "shares_per_share": 0.01,
+      "source": "Company dividend distribution table and 2026 shareholder manual page 6; stock dividend divided by par value"
+    }
+  },
+  "schema": 1
+}
