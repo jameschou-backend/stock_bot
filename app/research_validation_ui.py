@@ -133,8 +133,11 @@ def render():
     import pandas as pd
     import streamlit as st
     st.subheader('最新策略驗證')
+    selected=st.selectbox('查看哪一組實驗',['個股啟動前共同性',*FAMILIES],key='research_validation_family')
+    if selected=='個股啟動前共同性':
+        from app.stock_launch_ui import render as render_stock_launch
+        render_stock_launch();return
     st.warning('尚未取得實戰資格。正常回測贏過0050，不代表延遲成交後仍有優勢。')
-    selected=st.selectbox('查看哪一組實驗',list(FAMILIES),key='research_validation_family')
     family,arms=FAMILIES[selected]
     positions='單一ETF、目標75%資金' if family=='index_exposure' else '5個部位'
     st.caption(f'2022/01/03–2026/09/09｜100萬元複利｜{positions}｜整張成交｜閒錢現金｜已計交易成本')
