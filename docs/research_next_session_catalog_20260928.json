@@ -1,0 +1,5481 @@
+{
+  "schema": "next-session-research-catalog-v1",
+  "date": "2026-09-28",
+  "new_strategy_runs": 0,
+  "new_finmind_requests": 0,
+  "scope": "existing results; no additional entry or exit delay; separate generations and incomplete accounts",
+  "live_qualified": false,
+  "completed_normal_accounts": [
+    {
+      "group": "A",
+      "case": "benchmark_control",
+      "label": "0050同條件獨立基準",
+      "publication": "artifacts/forward_simulation/residual_slots_20260926.json",
+      "result": {
+        "path": ".cache/residual-slots-20260926/final-v1/cases/benchmark_control.json",
+        "sha256": "907ddc7d70a94fa8f9638bdaca3d4ca45ef606b3daa744acb177555c006e8992"
+      },
+      "config": {
+        "benchmark": true,
+        "board_only": true,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3338745.0,
+        "total_return": 2.338745,
+        "cagr": 0.2937058595821509,
+        "max_drawdown": -0.3259720243680687,
+        "trade_count": 4,
+        "buy_count": 4,
+        "sell_count": 0,
+        "costs": {
+          "commission": 1586.0,
+          "tax": 0.0,
+          "slippage": 5009.0,
+          "total_cost": 6595.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 787667.0,
+            "profit": -212333.0,
+            "total_return": -0.212333,
+            "max_drawdown": -0.3259720243680687,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 787667.0,
+            "end_nav": 995916.9999999999,
+            "profit": 208249.99999999988,
+            "total_return": 0.26438837732188847,
+            "max_drawdown": -0.06706817313169833,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 995916.9999999999,
+            "end_nav": 1446017.0,
+            "profit": 450100.0000000001,
+            "total_return": 0.45194529262980776,
+            "max_drawdown": -0.20228263521182888,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1446017.0,
+            "end_nav": 1969244.9999999998,
+            "profit": 523227.99999999977,
+            "total_return": 0.36184083589612004,
+            "max_drawdown": -0.25787104058432186,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1969244.9999999998,
+            "end_nav": 3338745.0,
+            "profit": 1369500.0000000002,
+            "total_return": 0.6954441930790736,
+            "max_drawdown": -0.15197229736655626,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "keep_0",
+      "label": "餘股仍占名額（舊名額規則）",
+      "publication": "artifacts/forward_simulation/residual_slots_20260926.json",
+      "result": {
+        "path": ".cache/residual-slots-20260926/final-v1/cases/keep_0.json",
+        "sha256": "655192119e8fc1dc524b91615b188ed5e0f0b7d39ce6a86328108020b739e7e9"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "residual_policy": "keep"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 4806742.1899999995,
+        "total_return": 3.8067421899999996,
+        "cagr": 0.39843068437359563,
+        "max_drawdown": -0.18709228999176675,
+        "trade_count": 158,
+        "buy_count": 81,
+        "sell_count": 77,
+        "costs": {
+          "commission": 68979.0,
+          "tax": 72597.0,
+          "slippage": 217876.0,
+          "total_cost": 359452.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 880482.0,
+            "profit": -119518.0,
+            "total_return": -0.11951800000000001,
+            "max_drawdown": -0.12251800000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 880482.0,
+            "end_nav": 1349770.01,
+            "profit": 469288.01,
+            "total_return": 0.5329898964430846,
+            "max_drawdown": -0.1068965557382684,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1349770.01,
+            "end_nav": 1661030.51,
+            "profit": 311260.5,
+            "total_return": 0.23060261947885485,
+            "max_drawdown": -0.12722254358121543,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1661030.51,
+            "end_nav": 2215576.01,
+            "profit": 554545.4999999998,
+            "total_return": 0.3338562998460515,
+            "max_drawdown": -0.14443338081703838,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2215576.01,
+            "end_nav": 4806742.1899999995,
+            "profit": 2591166.1799999997,
+            "total_return": 1.1695225838810197,
+            "max_drawdown": -0.18308333889420325,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "release_0",
+      "label": "族群領先＋成交金額排序＋12%停損（現行對照）",
+      "publication": "artifacts/forward_simulation/residual_slots_20260926.json",
+      "result": {
+        "path": ".cache/residual-slots-20260926/final-v1/cases/release_0.json",
+        "sha256": "011eb3985abdcf0a763dd9209e3ece70136ddc111501d7fbc39731aa81c8e492"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "residual_policy": "release"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 5157949.629999999,
+        "total_return": 4.157949629999999,
+        "cagr": 0.419654318715561,
+        "max_drawdown": -0.20835178371690566,
+        "trade_count": 177,
+        "buy_count": 91,
+        "sell_count": 86,
+        "costs": {
+          "commission": 83932.0,
+          "tax": 87644.0,
+          "slippage": 265104.0,
+          "total_cost": 436680.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 880482.0,
+            "profit": -119518.0,
+            "total_return": -0.11951800000000001,
+            "max_drawdown": -0.12251800000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 880482.0,
+            "end_nav": 1349770.01,
+            "profit": 469288.01,
+            "total_return": 0.5329898964430846,
+            "max_drawdown": -0.1068965557382684,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1349770.01,
+            "end_nav": 1656590.51,
+            "profit": 306820.5,
+            "total_return": 0.22731317018963848,
+            "max_drawdown": -0.12722254358121543,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1656590.51,
+            "end_nav": 2392639.8099999996,
+            "profit": 736049.2999999996,
+            "total_return": 0.44431577722849536,
+            "max_drawdown": -0.14577235034857572,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2392639.8099999996,
+            "end_nav": 5157949.629999999,
+            "profit": 2765309.8199999994,
+            "total_return": 1.1557568374656442,
+            "max_drawdown": -0.20835178371690566,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "valid2_0",
+      "label": "候補保留兩日：T+1未買到可於T+2重試",
+      "publication": "artifacts/forward_simulation/candidate_queue_20260927.json",
+      "result": {
+        "path": ".cache/candidate-queue-20260927/final-v1/cases/valid2_0.json",
+        "sha256": "b1af4ec97b11390add238e749ab9fdf16c49130faf4381e76162dfeff4685a8f"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "validity_sessions": 2
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 6134125.78,
+        "total_return": 5.134125780000001,
+        "cagr": 0.47319829565541105,
+        "max_drawdown": -0.2551824028384393,
+        "trade_count": 183,
+        "buy_count": 94,
+        "sell_count": 89,
+        "costs": {
+          "commission": 101904.0,
+          "tax": 106904.0,
+          "slippage": 321854.0,
+          "total_cost": 530662.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 897129.0,
+            "profit": -102871.0,
+            "total_return": -0.10287100000000005,
+            "max_drawdown": -0.106271,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 897129.0,
+            "end_nav": 1450190.92,
+            "profit": 553061.9199999999,
+            "total_return": 0.6164798150544681,
+            "max_drawdown": -0.20971754459959158,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1450190.92,
+            "end_nav": 1791101.92,
+            "profit": 340911.0,
+            "total_return": 0.23508008173158323,
+            "max_drawdown": -0.21391282658527377,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1791101.92,
+            "end_nav": 3106494.4699999997,
+            "profit": 1315392.5499999998,
+            "total_return": 0.7344040756764973,
+            "max_drawdown": -0.10219981862097016,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 3106494.4699999997,
+            "end_nav": 6134125.78,
+            "profit": 3027631.3100000005,
+            "total_return": 0.9746134555327248,
+            "max_drawdown": -0.19189472096947402,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "vol30_0",
+      "label": "依30%年化波動目標縮倉",
+      "publication": "artifacts/forward_simulation/volatility_budget_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/volatility-final-v1/cases/vol30_0.json",
+        "sha256": "fc76ced3a47af4419fb279cc35d770aba6227ca18a24109e53ee32165a800237"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "volatility_target": 0.3
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2369186.59,
+        "total_return": 1.36918659,
+        "cagr": 0.20230066907357025,
+        "max_drawdown": -0.15566973951296736,
+        "trade_count": 170,
+        "buy_count": 87,
+        "sell_count": 83,
+        "costs": {
+          "commission": 37844.0,
+          "tax": 39102.0,
+          "slippage": 119580.0,
+          "total_cost": 196526.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 970627.0,
+            "profit": -29373.0,
+            "total_return": -0.029372999999999982,
+            "max_drawdown": -0.07626568906357645,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 970627.0,
+            "end_nav": 1329087.0,
+            "profit": 358460.0,
+            "total_return": 0.3693076743177348,
+            "max_drawdown": -0.0664639349242736,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1329087.0,
+            "end_nav": 1291763.0,
+            "profit": -37324.0,
+            "total_return": -0.02808243553657508,
+            "max_drawdown": -0.14366694465031737,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1291763.0,
+            "end_nav": 1911935.9300000002,
+            "profit": 620172.9300000002,
+            "total_return": 0.4800980752661286,
+            "max_drawdown": -0.06374017727401016,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1911935.9300000002,
+            "end_nav": 2369186.59,
+            "profit": 457250.6599999997,
+            "total_return": 0.23915584870043194,
+            "max_drawdown": -0.07896104443853524,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "vol40_0",
+      "label": "依40%年化波動目標縮倉",
+      "publication": "artifacts/forward_simulation/volatility_budget_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/volatility-final-v1/cases/vol40_0.json",
+        "sha256": "639f9d3b4a54d26a5ed4ac21fdf2825f3d49b0b0800d101f9408be81bd5e8aec"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "volatility_target": 0.4
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2610571.15,
+        "total_return": 1.6105711499999997,
+        "cagr": 0.22747667398863158,
+        "max_drawdown": -0.1469217838865351,
+        "trade_count": 172,
+        "buy_count": 88,
+        "sell_count": 84,
+        "costs": {
+          "commission": 42821.0,
+          "tax": 44099.0,
+          "slippage": 135286.0,
+          "total_cost": 222206.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 903502.0,
+            "profit": -96498.0,
+            "total_return": -0.09649799999999997,
+            "max_drawdown": -0.09889800000000004,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 903502.0,
+            "end_nav": 1243250.01,
+            "profit": 339748.01,
+            "total_return": 0.3760345964923155,
+            "max_drawdown": -0.08004560482521705,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1243250.01,
+            "end_nav": 1298005.01,
+            "profit": 54755.0,
+            "total_return": 0.04404182550539448,
+            "max_drawdown": -0.12008325398420272,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1298005.01,
+            "end_nav": 1671782.21,
+            "profit": 373777.19999999995,
+            "total_return": 0.287962833055629,
+            "max_drawdown": -0.11250612315476327,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1671782.21,
+            "end_nav": 2610571.15,
+            "profit": 938788.94,
+            "total_return": 0.5615497846456925,
+            "max_drawdown": -0.1450106224507154,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "vol50_0",
+      "label": "依50%年化波動目標縮倉",
+      "publication": "artifacts/forward_simulation/volatility_budget_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/volatility-final-v1/cases/vol50_0.json",
+        "sha256": "411e963007887111ac8729c906c129e6fa3a188d08072f2132e44193bbc16a2b"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "volatility_target": 0.5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2801000.4600000004,
+        "total_return": 1.8010004600000005,
+        "cagr": 0.24607598385204654,
+        "max_drawdown": -0.1945113006703495,
+        "trade_count": 176,
+        "buy_count": 90,
+        "sell_count": 86,
+        "costs": {
+          "commission": 54838.0,
+          "tax": 56898.0,
+          "slippage": 173228.0,
+          "total_cost": 284964.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 892637.0,
+            "profit": -107363.0,
+            "total_return": -0.10736299999999999,
+            "max_drawdown": -0.11036299999999999,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 892637.0,
+            "end_nav": 1348708.01,
+            "profit": 456071.01,
+            "total_return": 0.510925504992511,
+            "max_drawdown": -0.09911309357778386,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1348708.01,
+            "end_nav": 1370070.01,
+            "profit": 21362.0,
+            "total_return": 0.015838861963902717,
+            "max_drawdown": -0.13716868411615835,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1370070.01,
+            "end_nav": 1966831.81,
+            "profit": 596761.8,
+            "total_return": 0.4355702961485888,
+            "max_drawdown": -0.09895121037864929,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1966831.81,
+            "end_nav": 2801000.4600000004,
+            "profit": 834168.6500000004,
+            "total_return": 0.4241179371610837,
+            "max_drawdown": -0.1945113006703495,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "fixed63_0",
+      "label": "只持有63日，不加12%停損",
+      "publication": "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/fixed63_0.json",
+        "sha256": "adafedfcafe9b6f86d50ed3a3b636f24e2ff7eeedac40280f8d2978ce8dc560a"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "exit_mode": "fixed63",
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2575250.6900000004,
+        "total_return": 1.5752506900000003,
+        "cagr": 0.2239103469646777,
+        "max_drawdown": -0.2962614239544902,
+        "trade_count": 140,
+        "buy_count": 72,
+        "sell_count": 68,
+        "costs": {
+          "commission": 50102.0,
+          "tax": 51938.0,
+          "slippage": 158248.0,
+          "total_cost": 260288.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 950030.0,
+            "profit": -49970.0,
+            "total_return": -0.04996999999999996,
+            "max_drawdown": -0.107958,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 950030.0,
+            "end_nav": 1456586.31,
+            "profit": 506556.31000000006,
+            "total_return": 0.5332003305158786,
+            "max_drawdown": -0.10060172094374009,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1456586.31,
+            "end_nav": 1401009.42,
+            "profit": -55576.89000000013,
+            "total_return": -0.038155576239076505,
+            "max_drawdown": -0.19349480814282838,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1401009.42,
+            "end_nav": 1779309.27,
+            "profit": 378299.8500000001,
+            "total_return": 0.27001949066124054,
+            "max_drawdown": -0.14065568479811352,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1779309.27,
+            "end_nav": 2575250.6900000004,
+            "profit": 795941.4200000004,
+            "total_return": 0.4473316884366034,
+            "max_drawdown": -0.2962614239544902,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "trail20_12_0",
+      "label": "漲20%後回落12%出場／63日",
+      "publication": "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/trail20_12_0.json",
+        "sha256": "53aa3548a790f5ede79b386c74dc9e46b68ce24efab90823e1886680768f3063"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "exit_mode": "trail20_12",
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3073165.32,
+        "total_return": 2.0731653199999998,
+        "cagr": 0.2710031955561887,
+        "max_drawdown": -0.26376731145335464,
+        "trade_count": 166,
+        "buy_count": 85,
+        "sell_count": 81,
+        "costs": {
+          "commission": 69445.0,
+          "tax": 72320.0,
+          "slippage": 219368.0,
+          "total_cost": 361133.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 948784.0,
+            "profit": -51216.0,
+            "total_return": -0.05121600000000004,
+            "max_drawdown": -0.107958,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 948784.0,
+            "end_nav": 1378189.31,
+            "profit": 429405.31000000006,
+            "total_return": 0.4525848981433076,
+            "max_drawdown": -0.18327166303175513,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1378189.31,
+            "end_nav": 1520043.66,
+            "profit": 141854.34999999986,
+            "total_return": 0.10292805855532272,
+            "max_drawdown": -0.14291694910326003,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1520043.66,
+            "end_nav": 2366434.94,
+            "profit": 846391.28,
+            "total_return": 0.5568203744884539,
+            "max_drawdown": -0.09604185472008742,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2366434.94,
+            "end_nav": 3073165.32,
+            "profit": 706730.3799999999,
+            "total_return": 0.29864771181919747,
+            "max_drawdown": -0.26376731145335464,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "weak20_0",
+      "label": "連續兩日跌破20日線且弱於0050／63日",
+      "publication": "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/weak20_0.json",
+        "sha256": "0b89e5ce3a6c9f15ba9d60c21e89ef96b2e4287070d09881056e18ecdf4c53f6"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "exit_mode": "weak20",
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2914133.31,
+        "total_return": 1.91413331,
+        "cagr": 0.25665939143726857,
+        "max_drawdown": -0.2298639849207308,
+        "trade_count": 287,
+        "buy_count": 146,
+        "sell_count": 141,
+        "costs": {
+          "commission": 87303.0,
+          "tax": 91419.0,
+          "slippage": 275798.0,
+          "total_cost": 454520.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 868426.0,
+            "profit": -131574.0,
+            "total_return": -0.13157399999999997,
+            "max_drawdown": -0.134359,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 868426.0,
+            "end_nav": 944486.23,
+            "profit": 76060.22999999998,
+            "total_return": 0.08758400830928603,
+            "max_drawdown": -0.22358897430277858,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 944486.23,
+            "end_nav": 1290990.77,
+            "profit": 346504.54000000004,
+            "total_return": 0.366870928335292,
+            "max_drawdown": -0.12042171575779037,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1290990.77,
+            "end_nav": 1507475.67,
+            "profit": 216484.8999999999,
+            "total_return": 0.16768896031688896,
+            "max_drawdown": -0.1461232743778098,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1507475.67,
+            "end_nav": 2914133.31,
+            "profit": 1406657.6400000001,
+            "total_return": 0.9331212887833873,
+            "max_drawdown": -0.13446038433637408,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "market_weak_0",
+      "label": "大盤與個股同步轉弱出場／63日",
+      "publication": "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/market_weak_0.json",
+        "sha256": "0614794b0d8b90a71a23699208b9ae3ed4e9fe3573ef0d514c01ef920dfbc341"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "exit_mode": "market_weak",
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2510348.97,
+        "total_return": 1.5103489700000003,
+        "cagr": 0.21725565485082,
+        "max_drawdown": -0.2882862657179359,
+        "trade_count": 146,
+        "buy_count": 75,
+        "sell_count": 71,
+        "costs": {
+          "commission": 47553.0,
+          "tax": 49341.0,
+          "slippage": 150222.0,
+          "total_cost": 247116.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 920135.0,
+            "profit": -79865.0,
+            "total_return": -0.07986499999999996,
+            "max_drawdown": -0.107958,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 920135.0,
+            "end_nav": 1172340.22,
+            "profit": 252205.21999999997,
+            "total_return": 0.27409588810337615,
+            "max_drawdown": -0.12289989628392184,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1172340.22,
+            "end_nav": 1327734.65,
+            "profit": 155394.42999999993,
+            "total_return": 0.13255062596078115,
+            "max_drawdown": -0.18770903456034527,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1327734.65,
+            "end_nav": 1722421.9000000001,
+            "profit": 394687.25000000023,
+            "total_return": 0.29726365128755217,
+            "max_drawdown": -0.11286784842349085,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1722421.9000000001,
+            "end_nav": 2510348.97,
+            "profit": 787927.0700000001,
+            "total_return": 0.4574530026586401,
+            "max_drawdown": -0.2882862657179359,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "trend126_0",
+      "label": "強勢延長至最多126日",
+      "publication": "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/trend126_0.json",
+        "sha256": "5d29661cd100b907b16cca85bfbdc44d939219658d1445eebbadff77b8c983c8"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "exit_mode": "trend126",
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2591474.6,
+        "total_return": 1.5914746000000002,
+        "cagr": 0.22555322990446247,
+        "max_drawdown": -0.3409644233075021,
+        "trade_count": 133,
+        "buy_count": 68,
+        "sell_count": 65,
+        "costs": {
+          "commission": 45137.0,
+          "tax": 47132.0,
+          "slippage": 142585.0,
+          "total_cost": 234854.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 950030.0,
+            "profit": -49970.0,
+            "total_return": -0.04996999999999996,
+            "max_drawdown": -0.107958,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 950030.0,
+            "end_nav": 1282418.01,
+            "profit": 332388.01,
+            "total_return": 0.3498710672294558,
+            "max_drawdown": -0.13607953947837215,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1282418.01,
+            "end_nav": 1226392.77,
+            "profit": -56025.23999999999,
+            "total_return": -0.043687190575247725,
+            "max_drawdown": -0.19967386723807434,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1226392.77,
+            "end_nav": 1692313.7,
+            "profit": 465920.92999999993,
+            "total_return": 0.3799116738106667,
+            "max_drawdown": -0.182524309224252,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1692313.7,
+            "end_nav": 2591474.6,
+            "profit": 899160.9000000001,
+            "total_return": 0.5313204638123536,
+            "max_drawdown": -0.2702607954753732,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "adaptive_0",
+      "label": "停損＋移動停利＋轉弱＋強勢延長",
+      "publication": "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json",
+      "result": {
+        "path": ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/adaptive_0.json",
+        "sha256": "2c2b424594e2925d73c40f51c69d041b56231befa1bdb8e03dd73aa1d7f22b28"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "exit_mode": "adaptive",
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1980073.54,
+        "total_return": 0.98007354,
+        "cagr": 0.15709785638921714,
+        "max_drawdown": -0.2437551732113682,
+        "trade_count": 311,
+        "buy_count": 158,
+        "sell_count": 153,
+        "costs": {
+          "commission": 87891.0,
+          "tax": 91950.0,
+          "slippage": 277699.0,
+          "total_cost": 457540.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 874983.0,
+            "profit": -125017.0,
+            "total_return": -0.12501700000000004,
+            "max_drawdown": -0.13075800000000004,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 874983.0,
+            "end_nav": 902500.01,
+            "profit": 27517.01000000001,
+            "total_return": 0.031448622430378714,
+            "max_drawdown": -0.2372789319015991,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 902500.01,
+            "end_nav": 1204126.55,
+            "profit": 301626.54000000004,
+            "total_return": 0.3342122289837981,
+            "max_drawdown": -0.1321502222587294,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1204126.55,
+            "end_nav": 1471341.05,
+            "profit": 267214.5,
+            "total_return": 0.22191562838640166,
+            "max_drawdown": -0.12186833684549181,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1471341.05,
+            "end_nav": 1980073.54,
+            "profit": 508732.49,
+            "total_return": 0.34576109325570714,
+            "max_drawdown": -0.17030931404801442,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "support20_0",
+      "label": "20日低點支撐失效出場",
+      "publication": "artifacts/forward_simulation/support_risk_20260927.json",
+      "result": {
+        "path": ".cache/support-risk-20260927/final-v1/cases/support20_0.json",
+        "sha256": "9f6d1fe3452d125780abccb376bdbc27a827d3fb5b63566e0db11d832ebea1b8"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "technical_mode": "support20"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2950599.97,
+        "total_return": 1.9505999700000003,
+        "cagr": 0.2600018955217127,
+        "max_drawdown": -0.2541580565933116,
+        "trade_count": 223,
+        "buy_count": 114,
+        "sell_count": 109,
+        "costs": {
+          "commission": 66468.0,
+          "tax": 68979.0,
+          "slippage": 209993.0,
+          "total_cost": 345440.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 868270.0,
+            "profit": -131730.0,
+            "total_return": -0.13173,
+            "max_drawdown": -0.13473000000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 868270.0,
+            "end_nav": 1030057.74,
+            "profit": 161787.74,
+            "total_return": 0.1863334446658298,
+            "max_drawdown": -0.19564371382851098,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1030057.74,
+            "end_nav": 1172731.78,
+            "profit": 142674.04000000004,
+            "total_return": 0.13851072076794457,
+            "max_drawdown": -0.1940721064231924,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1172731.78,
+            "end_nav": 1510738.9300000002,
+            "profit": 338007.15000000014,
+            "total_return": 0.28822204340706126,
+            "max_drawdown": -0.15426509050459503,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1510738.9300000002,
+            "end_nav": 2950599.97,
+            "profit": 1439861.04,
+            "total_return": 0.9530839587221069,
+            "max_drawdown": -0.14284932122617433,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "risk2_0",
+      "label": "每筆計畫風險2%配置",
+      "publication": "artifacts/forward_simulation/support_risk_20260927.json",
+      "result": {
+        "path": ".cache/support-risk-20260927/final-v1/cases/risk2_0.json",
+        "sha256": "16517ea4052f726bededc4fc7c6c7a5705b024cdd113a2b19f8e98e296c66194"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "technical_mode": "risk2"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2325964.5300000003,
+        "total_return": 1.3259645300000003,
+        "cagr": 0.1975816508344821,
+        "max_drawdown": -0.1755181168174601,
+        "trade_count": 184,
+        "buy_count": 94,
+        "sell_count": 90,
+        "costs": {
+          "commission": 43751.0,
+          "tax": 45676.0,
+          "slippage": 138234.0,
+          "total_cost": 227661.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 915418.0,
+            "profit": -84582.0,
+            "total_return": -0.08458200000000005,
+            "max_drawdown": -0.09120864033682674,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 915418.0,
+            "end_nav": 1309144.0,
+            "profit": 393726.0,
+            "total_return": 0.43010515414815953,
+            "max_drawdown": -0.07166996494009892,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1309144.0,
+            "end_nav": 1205915.0,
+            "profit": -103229.0,
+            "total_return": -0.0788522882127558,
+            "max_drawdown": -0.1565279991043801,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1205915.0,
+            "end_nav": 1575014.9,
+            "profit": 369099.8999999999,
+            "total_return": 0.3060745574936874,
+            "max_drawdown": -0.11724245961081492,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1575014.9,
+            "end_nav": 2325964.5300000003,
+            "profit": 750949.6300000004,
+            "total_return": 0.4767889052986105,
+            "max_drawdown": -0.17146472298886328,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "support_risk2_0",
+      "label": "支撐失效＋每筆計畫風險2%",
+      "publication": "artifacts/forward_simulation/support_risk_20260927.json",
+      "result": {
+        "path": ".cache/support-risk-20260927/final-v1/cases/support_risk2_0.json",
+        "sha256": "923646ba8db01499cc8bb107a674122de8799ae36fafc4843b72a2b4c4ded2b7"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "technical_mode": "support_risk2"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1527125.55,
+        "total_return": 0.52712555,
+        "cagr": 0.09464929071309713,
+        "max_drawdown": -0.26128371423242736,
+        "trade_count": 212,
+        "buy_count": 108,
+        "sell_count": 104,
+        "costs": {
+          "commission": 38319.0,
+          "tax": 39582.0,
+          "slippage": 121109.0,
+          "total_cost": 199010.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 907041.0,
+            "profit": -92959.0,
+            "total_return": -0.09295900000000001,
+            "max_drawdown": -0.09490900000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 907041.0,
+            "end_nav": 958479.0,
+            "profit": 51438.0,
+            "total_return": 0.05670967464535792,
+            "max_drawdown": -0.15402472616152707,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 958479.0,
+            "end_nav": 887455.27,
+            "profit": -71023.72999999998,
+            "total_return": -0.0741004549917108,
+            "max_drawdown": -0.1351139319458724,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 887455.27,
+            "end_nav": 1162471.8,
+            "profit": 275016.53,
+            "total_return": 0.30989339890899514,
+            "max_drawdown": -0.10532485963453564,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1162471.8,
+            "end_nav": 1527125.55,
+            "profit": 364653.75,
+            "total_return": 0.3136882546312092,
+            "max_drawdown": -0.09750040838599872,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "pyramid_0",
+      "label": "支撐＋2%配置，再加一次強勢加碼",
+      "publication": "artifacts/forward_simulation/pyramid_cash_20260927.json",
+      "result": {
+        "path": ".cache/pyramid-cash-20260927/final-v1/cases/pyramid_0.json",
+        "sha256": "0d1d403be991f03e385ac9494f70879343ae7e8038a79a8d1990a2fc2aed90b4"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "position_count": 5,
+        "pyramid_enabled": true,
+        "technical_mode": "support_risk2"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1531238.55,
+        "total_return": 0.5312385500000001,
+        "cagr": 0.09527835300399978,
+        "max_drawdown": -0.26128371423242736,
+        "trade_count": 213,
+        "buy_count": 109,
+        "sell_count": 104,
+        "costs": {
+          "commission": 38376.0,
+          "tax": 39582.0,
+          "slippage": 121289.0,
+          "total_cost": 199247.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 907041.0,
+            "profit": -92959.0,
+            "total_return": -0.09295900000000001,
+            "max_drawdown": -0.09490900000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 907041.0,
+            "end_nav": 958479.0,
+            "profit": 51438.0,
+            "total_return": 0.05670967464535792,
+            "max_drawdown": -0.15402472616152707,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 958479.0,
+            "end_nav": 887455.27,
+            "profit": -71023.72999999998,
+            "total_return": -0.0741004549917108,
+            "max_drawdown": -0.1351139319458724,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 887455.27,
+            "end_nav": 1162471.8,
+            "profit": 275016.53,
+            "total_return": 0.30989339890899514,
+            "max_drawdown": -0.10532485963453564,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1162471.8,
+            "end_nav": 1531238.55,
+            "profit": 368766.75,
+            "total_return": 0.3172264049760174,
+            "max_drawdown": -0.09750040838599872,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "pattern_0",
+      "label": "原策略加收斂突破篩選",
+      "publication": "artifacts/forward_simulation/pattern_cash_20260927.json",
+      "result": {
+        "path": ".cache/pattern-cash-20260927/final-v1/cases/pattern_0.json",
+        "sha256": "52e28ee747ac9f3ed9e332b8304c25115fb949874bfdb9501f4435c983a60337"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "pattern_filter": true,
+        "position_count": 5,
+        "technical_mode": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1531786.8499999999,
+        "total_return": 0.5317868499999998,
+        "cagr": 0.09536211227175673,
+        "max_drawdown": -0.27727502903080825,
+        "trade_count": 84,
+        "buy_count": 43,
+        "sell_count": 41,
+        "costs": {
+          "commission": 23135.0,
+          "tax": 24015.0,
+          "slippage": 73095.0,
+          "total_cost": 120245.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 911193.0,
+            "profit": -88807.0,
+            "total_return": -0.08880699999999997,
+            "max_drawdown": -0.10030700000000004,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 911193.0,
+            "end_nav": 1348392.0,
+            "profit": 437199.0,
+            "total_return": 0.47980943663965814,
+            "max_drawdown": -0.056957611397953634,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1348392.0,
+            "end_nav": 1164999.0,
+            "profit": -183393.0,
+            "total_return": -0.13600866810245094,
+            "max_drawdown": -0.21025423056664472,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1164999.0,
+            "end_nav": 1129974.25,
+            "profit": -35024.75,
+            "total_return": -0.03006418889629947,
+            "max_drawdown": -0.0898499062602417,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1129974.25,
+            "end_nav": 1531786.8499999999,
+            "profit": 401812.59999999986,
+            "total_return": 0.35559447482984674,
+            "max_drawdown": -0.11404292015459605,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "support_risk2_pattern_0",
+      "label": "支撐＋2%配置，再加收斂突破篩選",
+      "publication": "artifacts/forward_simulation/pattern_cash_20260927.json",
+      "result": {
+        "path": ".cache/pattern-cash-20260927/final-v1/cases/support_risk2_pattern_0.json",
+        "sha256": "a5946e020a3c5083b24458fab8f14427fba4500e755d503a5ea95a48141be8da"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "factors": {
+          "entry_delay": false,
+          "exit_delay": false,
+          "slippage": false
+        },
+        "pattern_filter": true,
+        "position_count": 5,
+        "technical_mode": "support_risk2"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1203121.85,
+        "total_return": 0.20312185000000005,
+        "cagr": 0.04028862991823323,
+        "max_drawdown": -0.12981764516556304,
+        "trade_count": 65,
+        "buy_count": 33,
+        "sell_count": 32,
+        "costs": {
+          "commission": 12416.0,
+          "tax": 12987.0,
+          "slippage": 39234.0,
+          "total_cost": 64637.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 947356.0,
+            "profit": -52644.0,
+            "total_return": -0.052644000000000024,
+            "max_drawdown": -0.06184400000000001,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 947356.0,
+            "end_nav": 1209576.0,
+            "profit": 262220.0,
+            "total_return": 0.27679140682066716,
+            "max_drawdown": -0.03267982468855335,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1209576.0,
+            "end_nav": 1111888.5,
+            "profit": -97687.5,
+            "total_return": -0.0807617710668862,
+            "max_drawdown": -0.0807617710668862,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1111888.5,
+            "end_nav": 1079886.15,
+            "profit": -32002.350000000093,
+            "total_return": -0.02878197768930979,
+            "max_drawdown": -0.042307625440828445,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1079886.15,
+            "end_nav": 1203121.85,
+            "profit": 123235.70000000019,
+            "total_return": 0.11411915969104713,
+            "max_drawdown": -0.0858731581612504,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "rank_main_0",
+      "label": "籌碼集中＋外資投信同買：優先排序",
+      "publication": "artifacts/forward_simulation/leader_chip_20260928.json",
+      "result": {
+        "path": ".cache/leader-chip-accounts-20260928/run-a/cases/rank_main_0.json",
+        "sha256": "efad3afc63fc8320aa6b6596d3e90088d3a20c3d4d1280fc41acc9e2210d2c09"
+      },
+      "config": {
+        "arm": "rank",
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "position_count": 5,
+        "timing": "main"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 4691315.25,
+        "total_return": 3.6913152499999997,
+        "cagr": 0.3911891277695605,
+        "max_drawdown": -0.2076794749336256,
+        "trade_count": 169,
+        "buy_count": 87,
+        "sell_count": 82,
+        "costs": {
+          "commission": 82784.0,
+          "tax": 86276.0,
+          "slippage": 261478.0,
+          "total_cost": 430538.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 893089.0,
+            "profit": -106911.0,
+            "total_return": -0.10691099999999998,
+            "max_drawdown": -0.11362579429610498,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 893089.0,
+            "end_nav": 1444330.01,
+            "profit": 551241.01,
+            "total_return": 0.6172296490047464,
+            "max_drawdown": -0.1074764505092507,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1444330.01,
+            "end_nav": 1733609.51,
+            "profit": 289279.5,
+            "total_return": 0.2002862905271905,
+            "max_drawdown": -0.1260554837046889,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1733609.51,
+            "end_nav": 2363237.94,
+            "profit": 629628.4299999999,
+            "total_return": 0.36318930322434606,
+            "max_drawdown": -0.09765320298717928,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2363237.94,
+            "end_nav": 4691315.25,
+            "profit": 2328077.31,
+            "total_return": 0.9851218409264368,
+            "max_drawdown": -0.2076794749336256,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "rank_delayed_0",
+      "label": "同上，較晚可用籌碼資料",
+      "publication": "artifacts/forward_simulation/leader_chip_20260928.json",
+      "result": {
+        "path": ".cache/leader-chip-accounts-20260928/run-a/cases/rank_delayed_0.json",
+        "sha256": "dd34a388de5311d1779d1950e9e10c4584056f8171754657053f5f215093b41d"
+      },
+      "config": {
+        "arm": "rank",
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "position_count": 5,
+        "timing": "delayed"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 4683141.78,
+        "total_return": 3.6831417800000006,
+        "cagr": 0.39067105607110464,
+        "max_drawdown": -0.25540307482646296,
+        "trade_count": 180,
+        "buy_count": 92,
+        "sell_count": 88,
+        "costs": {
+          "commission": 86154.0,
+          "tax": 90006.0,
+          "slippage": 272116.0,
+          "total_cost": 448276.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 893089.0,
+            "profit": -106911.0,
+            "total_return": -0.10691099999999998,
+            "max_drawdown": -0.11362579429610498,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 893089.0,
+            "end_nav": 1564349.01,
+            "profit": 671260.01,
+            "total_return": 0.7516160315489273,
+            "max_drawdown": -0.08970354814508885,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1564349.01,
+            "end_nav": 1686643.92,
+            "profit": 122294.90999999992,
+            "total_return": 0.07817623127463103,
+            "max_drawdown": -0.19306678356593587,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1686643.92,
+            "end_nav": 2295582.05,
+            "profit": 608938.1299999999,
+            "total_return": 0.36103538084078823,
+            "max_drawdown": -0.10877492800866706,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2295582.05,
+            "end_nav": 4683141.78,
+            "profit": 2387559.7300000004,
+            "total_return": 1.0400672587590587,
+            "max_drawdown": -0.21103925170822968,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "filter_main_0",
+      "label": "籌碼集中＋外資投信同買：必備門檻",
+      "publication": "artifacts/forward_simulation/leader_chip_20260928.json",
+      "result": {
+        "path": ".cache/leader-chip-accounts-20260928/run-a/cases/filter_main_0.json",
+        "sha256": "12f9fa02458972c02ceb876efce270a233d293f114d1c05d9e834fa4a043c6cc"
+      },
+      "config": {
+        "arm": "filter",
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "position_count": 5,
+        "timing": "main"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1574499.51,
+        "total_return": 0.5744995100000001,
+        "cagr": 0.1018156903773435,
+        "max_drawdown": -0.17627092535845434,
+        "trade_count": 73,
+        "buy_count": 38,
+        "sell_count": 35,
+        "costs": {
+          "commission": 19054.0,
+          "tax": 19869.0,
+          "slippage": 60207.0,
+          "total_cost": 99130.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 1006406.0,
+            "profit": 6406.0,
+            "total_return": 0.006405999999999912,
+            "max_drawdown": -0.046916267275676105,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 1006406.0,
+            "end_nav": 1094036.2,
+            "profit": 87630.19999999995,
+            "total_return": 0.08707241411517819,
+            "max_drawdown": -0.06043465450367225,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1094036.2,
+            "end_nav": 1111547.2,
+            "profit": 17511.0,
+            "total_return": 0.016005868910004883,
+            "max_drawdown": -0.1579784534246378,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1111547.2,
+            "end_nav": 1141266.2,
+            "profit": 29719.0,
+            "total_return": 0.026736606416713604,
+            "max_drawdown": -0.09572089222563807,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1141266.2,
+            "end_nav": 1574499.51,
+            "profit": 433233.31000000006,
+            "total_return": 0.37960758848373866,
+            "max_drawdown": -0.06722430835419724,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "filter_delayed_0",
+      "label": "同上，較晚可用籌碼資料",
+      "publication": "artifacts/forward_simulation/leader_chip_20260928.json",
+      "result": {
+        "path": ".cache/leader-chip-accounts-20260928/run-a/cases/filter_delayed_0.json",
+        "sha256": "f4f895c2f1351223e91a2c193456c7ded0453d9820bd7ef3ec0eb3088bef1ccc"
+      },
+      "config": {
+        "arm": "filter",
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "position_count": 5,
+        "timing": "delayed"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 969263.2999999999,
+        "total_return": -0.03073670000000006,
+        "cagr": -0.006646081169435214,
+        "max_drawdown": -0.21666867140689883,
+        "trade_count": 49,
+        "buy_count": 25,
+        "sell_count": 24,
+        "costs": {
+          "commission": 11708.0,
+          "tax": 11931.0,
+          "slippage": 36988.0,
+          "total_cost": 60627.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 1026272.0,
+            "profit": 26272.0,
+            "total_return": 0.026272000000000073,
+            "max_drawdown": -0.04641333638604406,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 1026272.0,
+            "end_nav": 1061420.2,
+            "profit": 35148.19999999995,
+            "total_return": 0.0342484253687132,
+            "max_drawdown": -0.0786285525654774,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1061420.2,
+            "end_nav": 1020295.2,
+            "profit": -41125.0,
+            "total_return": -0.0387452584753899,
+            "max_drawdown": -0.11318015378488433,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1020295.2,
+            "end_nav": 935616.3999999999,
+            "profit": -84678.80000000005,
+            "total_return": -0.08299441181336542,
+            "max_drawdown": -0.10569863098707333,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 935616.3999999999,
+            "end_nav": 969263.2999999999,
+            "profit": 33646.90000000002,
+            "total_return": 0.03596228112290478,
+            "max_drawdown": -0.05432988967642105,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "coverage_main_0",
+      "label": "只保留籌碼資料齊全的對照",
+      "publication": "artifacts/forward_simulation/leader_chip_20260928.json",
+      "result": {
+        "path": ".cache/leader-chip-accounts-20260928/run-a/cases/coverage_main_0.json",
+        "sha256": "e7b23b230ce0c4651edf8750ed92f79bec19eef77787b3bddc245c42f68a5f76"
+      },
+      "config": {
+        "arm": "coverage",
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "position_count": 5,
+        "timing": "main"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2521449.2,
+        "total_return": 1.5214492000000002,
+        "cagr": 0.21840333279283564,
+        "max_drawdown": -0.20336141707668076,
+        "trade_count": 172,
+        "buy_count": 88,
+        "sell_count": 84,
+        "costs": {
+          "commission": 53342.0,
+          "tax": 54921.0,
+          "slippage": 168520.0,
+          "total_cost": 276783.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 961312.0,
+            "profit": -38688.0,
+            "total_return": -0.038687999999999945,
+            "max_drawdown": -0.1476026346336018,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 961312.0,
+            "end_nav": 1058580.01,
+            "profit": 97268.01000000001,
+            "total_return": 0.10118256091674716,
+            "max_drawdown": -0.1800654509158236,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1058580.01,
+            "end_nav": 1065931.51,
+            "profit": 7351.5,
+            "total_return": 0.006944680544269888,
+            "max_drawdown": -0.15275056876972093,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1065931.51,
+            "end_nav": 1446651.06,
+            "profit": 380719.55000000005,
+            "total_return": 0.3571707435499303,
+            "max_drawdown": -0.135901356565447,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1446651.06,
+            "end_nav": 2521449.2,
+            "profit": 1074798.1400000001,
+            "total_return": 0.7429560380649085,
+            "max_drawdown": -0.20336141707668076,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "A",
+      "case": "coverage_delayed_0",
+      "label": "資料齊全對照：較晚可用籌碼",
+      "publication": "artifacts/forward_simulation/leader_chip_20260928.json",
+      "result": {
+        "path": ".cache/leader-chip-accounts-20260928/run-a/cases/coverage_delayed_0.json",
+        "sha256": "a8b875b74b3d05bad8f79ba6222f65ba19d1082410484970434c26d2488815f3"
+      },
+      "config": {
+        "arm": "coverage",
+        "benchmark": false,
+        "board_only": true,
+        "factor_mask": 0,
+        "position_count": 5,
+        "timing": "delayed"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2425728.7600000002,
+        "total_return": 1.4257287600000002,
+        "cagr": 0.2083728296545897,
+        "max_drawdown": -0.2506219820572153,
+        "trade_count": 174,
+        "buy_count": 89,
+        "sell_count": 85,
+        "costs": {
+          "commission": 56761.0,
+          "tax": 58869.0,
+          "slippage": 179316.0,
+          "total_cost": 294946.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 961312.0,
+            "profit": -38688.0,
+            "total_return": -0.038687999999999945,
+            "max_drawdown": -0.1476026346336018,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 961312.0,
+            "end_nav": 1173662.01,
+            "profit": 212350.01,
+            "total_return": 0.22089603583435968,
+            "max_drawdown": -0.15039664653151452,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1173662.01,
+            "end_nav": 1220985.51,
+            "profit": 47323.5,
+            "total_return": 0.040321233538094914,
+            "max_drawdown": -0.18673918747926366,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1220985.51,
+            "end_nav": 1460366.6600000001,
+            "profit": 239381.15000000014,
+            "total_return": 0.1960556845592707,
+            "max_drawdown": -0.13509570259338666,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1460366.6600000001,
+            "end_nav": 2425728.7600000002,
+            "profit": 965362.1000000001,
+            "total_return": 0.6610409059872675,
+            "max_drawdown": -0.2260556128584762,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "H",
+      "case": "original_control",
+      "label": "原股票池458候選",
+      "publication": "artifacts/forward_simulation/historical_selector_replay_20260925.json",
+      "result": {
+        "path": ".cache/historical-selector-replay-20260925/final-v7/cases/original_control.json",
+        "sha256": "393fd3fc1ca34cd763f432feb3ed42ff6a3ba5e4d75a6326d4bb6a421e9a305b"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3499418.21,
+        "total_return": 2.49941821,
+        "cagr": 0.30675931405008816,
+        "max_drawdown": -0.19867400579509586,
+        "trade_count": 139,
+        "buy_count": 71,
+        "sell_count": 68,
+        "costs": {
+          "commission": 50047.0,
+          "tax": 53349.0,
+          "slippage": 158085.0,
+          "total_cost": 261481.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 865867.0,
+            "profit": -134133.0,
+            "total_return": -0.13413299999999995,
+            "max_drawdown": -0.135733,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 865867.0,
+            "end_nav": 1446941.94,
+            "profit": 581074.94,
+            "total_return": 0.671090294467857,
+            "max_drawdown": -0.17858685134263574,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1446941.94,
+            "end_nav": 1427560.26,
+            "profit": -19381.679999999935,
+            "total_return": -0.013394925853071893,
+            "max_drawdown": -0.12451633192251654,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1427560.26,
+            "end_nav": 2027620.18,
+            "profit": 600059.9199999999,
+            "total_return": 0.4203394678414485,
+            "max_drawdown": -0.08165139933763399,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2027620.18,
+            "end_nav": 3499418.21,
+            "profit": 1471798.03,
+            "total_return": 0.725874621153159,
+            "max_drawdown": -0.19867400579509586,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "H",
+      "case": "identity_control",
+      "label": "只修正身分／停牌／轉板",
+      "publication": "artifacts/forward_simulation/historical_selector_replay_20260925.json",
+      "result": {
+        "path": ".cache/historical-selector-replay-20260925/final-v7/cases/identity_control.json",
+        "sha256": "4e96c61492c7ddf9a80578d31b60b285c868470e0165d39b0629de6d591e36c7"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 4037455.56,
+        "total_return": 3.0374555599999997,
+        "cagr": 0.3472943539260922,
+        "max_drawdown": -0.1869837820721223,
+        "trade_count": 121,
+        "buy_count": 62,
+        "sell_count": 59,
+        "costs": {
+          "commission": 49984.0,
+          "tax": 53494.0,
+          "slippage": 157871.0,
+          "total_cost": 261349.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 899101.0,
+            "profit": -100899.0,
+            "total_return": -0.10089899999999996,
+            "max_drawdown": -0.10932799999999998,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 899101.0,
+            "end_nav": 1355553.18,
+            "profit": 456452.17999999993,
+            "total_return": 0.5076762010052263,
+            "max_drawdown": -0.1324082976329346,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1355553.18,
+            "end_nav": 1601861.0,
+            "profit": 246307.82000000007,
+            "total_return": 0.1817028085906598,
+            "max_drawdown": -0.13697058723846967,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1601861.0,
+            "end_nav": 2229066.42,
+            "profit": 627205.4199999999,
+            "total_return": 0.3915479682694065,
+            "max_drawdown": -0.08289006932272913,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2229066.42,
+            "end_nav": 4037455.56,
+            "profit": 1808389.1400000001,
+            "total_return": 0.8112764715194087,
+            "max_drawdown": -0.1869837820721223,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "H",
+      "case": "omitted_control",
+      "label": "只補遺漏股票",
+      "publication": "artifacts/forward_simulation/historical_selector_replay_20260925.json",
+      "result": {
+        "path": ".cache/historical-selector-replay-20260925/final-v7/cases/omitted_control.json",
+        "sha256": "f36eae03d3e67460ab1c8e674d83a51d6a1a7bb9a8b7feba18ff5210816baa6a"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 4268956.33,
+        "total_return": 3.26895633,
+        "cagr": 0.3634352125837952,
+        "max_drawdown": -0.20214214196225933,
+        "trade_count": 139,
+        "buy_count": 71,
+        "sell_count": 68,
+        "costs": {
+          "commission": 55789.0,
+          "tax": 59892.0,
+          "slippage": 176217.0,
+          "total_cost": 291898.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 880482.0,
+            "profit": -119518.0,
+            "total_return": -0.11951800000000001,
+            "max_drawdown": -0.12251800000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 880482.0,
+            "end_nav": 1351238.0,
+            "profit": 470756.0,
+            "total_return": 0.5346571536953624,
+            "max_drawdown": -0.11700282857405031,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1351238.0,
+            "end_nav": 1500956.5,
+            "profit": 149718.5,
+            "total_return": 0.1108009839865367,
+            "max_drawdown": -0.13261936575280842,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1500956.5,
+            "end_nav": 2048177.6,
+            "profit": 547221.1000000001,
+            "total_return": 0.3645815851425409,
+            "max_drawdown": -0.10489663692756757,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2048177.6,
+            "end_nav": 4268956.33,
+            "profit": 2220778.73,
+            "total_return": 1.0842705876677883,
+            "max_drawdown": -0.20214214196225933,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "H",
+      "case": "combined_control",
+      "label": "身分＋遺漏股票一起修正",
+      "publication": "artifacts/forward_simulation/historical_selector_replay_20260925.json",
+      "result": {
+        "path": ".cache/historical-selector-replay-20260925/final-v7/cases/combined_control.json",
+        "sha256": "b8bac3355bddc95bbba89ddbb5b87ddee8f9b8da833f9e1072fdb073bc1a5b47"
+      },
+      "config": {
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 4806742.1899999995,
+        "total_return": 3.8067421899999996,
+        "cagr": 0.39843068437359563,
+        "max_drawdown": -0.18709228999176675,
+        "trade_count": 158,
+        "buy_count": 81,
+        "sell_count": 77,
+        "costs": {
+          "commission": 68979.0,
+          "tax": 72597.0,
+          "slippage": 217876.0,
+          "total_cost": 359452.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 880482.0,
+            "profit": -119518.0,
+            "total_return": -0.11951800000000001,
+            "max_drawdown": -0.12251800000000002,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 880482.0,
+            "end_nav": 1349770.01,
+            "profit": 469288.01,
+            "total_return": 0.5329898964430846,
+            "max_drawdown": -0.1068965557382684,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1349770.01,
+            "end_nav": 1661030.51,
+            "profit": 311260.5,
+            "total_return": 0.23060261947885485,
+            "max_drawdown": -0.12722254358121543,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1661030.51,
+            "end_nav": 2215576.01,
+            "profit": 554545.4999999998,
+            "total_return": 0.3338562998460515,
+            "max_drawdown": -0.14443338081703838,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2215576.01,
+            "end_nav": 4806742.1899999995,
+            "profit": 2591166.1799999997,
+            "total_return": 1.1695225838810197,
+            "max_drawdown": -0.18308333889420325,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "benchmark_control",
+      "label": "0050同條件獨立基準",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/benchmark_control.json",
+        "sha256": "9b080b103e1dd1884f3d7930bf08716fa1d8f81488f39466456e726c79f20caa"
+      },
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3423350.99,
+        "total_return": 2.4233509900000003,
+        "cagr": 0.3006395319831825,
+        "max_drawdown": -0.33891916061205296,
+        "trade_count": 16,
+        "buy_count": 16,
+        "sell_count": 0,
+        "costs": {
+          "commission": 1762.0,
+          "tax": 0.0,
+          "slippage": 5269.0,
+          "total_cost": 7031.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 777538.85,
+            "profit": -222461.15000000002,
+            "total_return": -0.22246115,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 777538.85,
+            "end_nav": 990859.7999999998,
+            "profit": 213320.94999999984,
+            "total_return": 0.27435407246853294,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 990859.7999999998,
+            "end_nav": 1469935.95,
+            "profit": 479076.15000000014,
+            "total_return": 0.48349539460577584,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1469935.95,
+            "end_nav": 2010644.9399999997,
+            "profit": 540708.9899999998,
+            "total_return": 0.3678452724419725,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2010644.9399999997,
+            "end_nav": 3423350.99,
+            "profit": 1412706.0500000005,
+            "total_return": 0.7026133863296624,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "concentrated_strength_control",
+      "label": "相對強勢＋籌碼集中",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/concentrated_strength_control.json",
+        "sha256": "666cef572589e710d0902f013f08765e6657b3abb330c2034ad9b1e52f2c7166"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1273517.85,
+        "total_return": 0.2735178500000002,
+        "cagr": 0.05300081511218813,
+        "max_drawdown": -0.5024491999999999,
+        "trade_count": 294,
+        "buy_count": 146,
+        "sell_count": 148,
+        "costs": {
+          "commission": 43822.0,
+          "tax": 45195.0,
+          "slippage": 137612.0,
+          "total_cost": 226629.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 498204.19999999995,
+            "profit": -501795.80000000005,
+            "total_return": -0.5017958,
+            "max_drawdown": -0.5024491999999999,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 498204.19999999995,
+            "end_nav": 742053.6599999999,
+            "profit": 243849.45999999996,
+            "total_return": 0.4894568532340755,
+            "max_drawdown": -0.15698612456049377,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 742053.6599999999,
+            "end_nav": 983773.87,
+            "profit": 241720.21000000008,
+            "total_return": 0.32574491984851894,
+            "max_drawdown": -0.15304892143632576,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 983773.87,
+            "end_nav": 965067.95,
+            "profit": -18705.920000000042,
+            "total_return": -0.019014450953042772,
+            "max_drawdown": -0.2276036912553081,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 965067.95,
+            "end_nav": 1273517.85,
+            "profit": 308449.90000000014,
+            "total_return": 0.31961469656100405,
+            "max_drawdown": -0.2372573646606677,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "cs_both_buy_control",
+      "label": "強勢＋集中＋外資投信同買",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/cs_both_buy_control.json",
+        "sha256": "c2cbd70e59260f0f8136430113b001582d5ec114bf1d433ecb4e1f63641b26b4"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3348811.0199999996,
+        "total_return": 2.3488110199999994,
+        "cagr": 0.294537987271158,
+        "max_drawdown": -0.3353344199999999,
+        "trade_count": 292,
+        "buy_count": 142,
+        "sell_count": 150,
+        "costs": {
+          "commission": 62680.0,
+          "tax": 65277.0,
+          "slippage": 196820.0,
+          "total_cost": 324777.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 695608.9299999999,
+            "profit": -304391.07000000007,
+            "total_return": -0.3043910700000001,
+            "max_drawdown": -0.3353344199999999,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 695608.9299999999,
+            "end_nav": 1100941.2000000002,
+            "profit": 405332.27000000025,
+            "total_return": 0.5827013606625209,
+            "max_drawdown": -0.086907775153509,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1100941.2000000002,
+            "end_nav": 1468252.7,
+            "profit": 367311.49999999977,
+            "total_return": 0.3336340760069654,
+            "max_drawdown": -0.12682257202297997,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1468252.7,
+            "end_nav": 2067573.29,
+            "profit": 599320.5900000001,
+            "total_return": 0.4081862679360304,
+            "max_drawdown": -0.2114516152104634,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2067573.29,
+            "end_nav": 3348811.0199999996,
+            "profit": 1281237.7299999995,
+            "total_return": 0.6196818928725856,
+            "max_drawdown": -0.18236021052360318,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "cs_both_sell_control",
+      "label": "強勢＋集中＋外資投信同賣",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/cs_both_sell_control.json",
+        "sha256": "d022733621e28285e1e69e03dcdea45767f4db83ce092011d793c8d6949acef0"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1935603.71,
+        "total_return": 0.9356037099999999,
+        "cagr": 0.1514974656659589,
+        "max_drawdown": -0.2529148046283547,
+        "trade_count": 234,
+        "buy_count": 113,
+        "sell_count": 121,
+        "costs": {
+          "commission": 41524.0,
+          "tax": 43216.0,
+          "slippage": 130354.0,
+          "total_cost": 215094.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 771392.3500000001,
+            "profit": -228607.6499999999,
+            "total_return": -0.22860764999999994,
+            "max_drawdown": -0.22860764999999994,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 771392.3500000001,
+            "end_nav": 1091132.43,
+            "profit": 319740.07999999984,
+            "total_return": 0.4144973436669417,
+            "max_drawdown": -0.10029879983330303,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1091132.43,
+            "end_nav": 1293437.01,
+            "profit": 202304.58000000007,
+            "total_return": 0.18540790690273967,
+            "max_drawdown": -0.2529148046283547,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1293437.01,
+            "end_nav": 1372142.44,
+            "profit": 78705.42999999993,
+            "total_return": 0.06084983605038485,
+            "max_drawdown": -0.14903595097211741,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1372142.44,
+            "end_nav": 1935603.71,
+            "profit": 563461.27,
+            "total_return": 0.41064342416229027,
+            "max_drawdown": -0.2194598330712908,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "cs_foreign_buy_trust_sell_control",
+      "label": "強勢＋集中＋外資買／投信賣",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/cs_foreign_buy_trust_sell_control.json",
+        "sha256": "241055f8be2b2d540ed20bc0a8cfbbcbdbcb31fbdb8049483e7b0c1def7bb787"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1191052.1099999999,
+        "total_return": 0.19105210999999978,
+        "cagr": 0.03805064949571246,
+        "max_drawdown": -0.2932430145279682,
+        "trade_count": 279,
+        "buy_count": 130,
+        "sell_count": 149,
+        "costs": {
+          "commission": 45045.0,
+          "tax": 45687.0,
+          "slippage": 140195.0,
+          "total_cost": 230927.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 762504.15,
+            "profit": -237495.84999999998,
+            "total_return": -0.23749584999999995,
+            "max_drawdown": -0.24376154999999988,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 762504.15,
+            "end_nav": 1137162.43,
+            "profit": 374658.2799999999,
+            "total_return": 0.49135244706536985,
+            "max_drawdown": -0.09217488121665462,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1137162.43,
+            "end_nav": 1044163.5,
+            "profit": -92998.92999999993,
+            "total_return": -0.08178157099333638,
+            "max_drawdown": -0.19058843625290867,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1044163.5,
+            "end_nav": 1554088.7,
+            "profit": 509925.19999999995,
+            "total_return": 0.4883576183231839,
+            "max_drawdown": -0.20458107336728415,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1554088.7,
+            "end_nav": 1191052.1099999999,
+            "profit": -363036.5900000001,
+            "total_return": -0.2336009456860475,
+            "max_drawdown": -0.2932430145279682,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "cs_foreign_sell_trust_buy_control",
+      "label": "強勢＋集中＋外資賣／投信買",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/cs_foreign_sell_trust_buy_control.json",
+        "sha256": "9b36429a1389baa330f5182914fd4ec94751c0f1fc6c1d0a3ad1563e60c2f576"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1188666.73,
+        "total_return": 0.18866673,
+        "cagr": 0.03760624162347592,
+        "max_drawdown": -0.3930461254444306,
+        "trade_count": 306,
+        "buy_count": 150,
+        "sell_count": 156,
+        "costs": {
+          "commission": 42133.0,
+          "tax": 43161.0,
+          "slippage": 131782.0,
+          "total_cost": 217076.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 728299.2,
+            "profit": -271700.80000000005,
+            "total_return": -0.2717008000000001,
+            "max_drawdown": -0.33107189999999986,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 728299.2,
+            "end_nav": 921670.47,
+            "profit": 193371.27000000002,
+            "total_return": 0.26551075437128047,
+            "max_drawdown": -0.18057691350145166,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 921670.47,
+            "end_nav": 860841.21,
+            "profit": -60829.26000000001,
+            "total_return": -0.06599892475669744,
+            "max_drawdown": -0.16842977954681015,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 860841.21,
+            "end_nav": 870994.73,
+            "profit": 10153.520000000019,
+            "total_return": 0.011794881427667825,
+            "max_drawdown": -0.2907037090687863,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 870994.73,
+            "end_nav": 1188666.73,
+            "profit": 317672.0,
+            "total_return": 0.3647232170968475,
+            "max_drawdown": -0.11930454897459641,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "B",
+      "case": "relative_strength_control",
+      "label": "相對強勢",
+      "publication": "artifacts/forward_simulation/holder_flow_completed_20260928.json",
+      "result": {
+        "path": ".cache/holder-flow-completed-20260928-a/relative_strength_control.json",
+        "sha256": "7afd3e7d9ee3c163e4e2710f420b24431bad3fefbd55bfbed36829a993aaadd0"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 631149.6900000001,
+        "total_return": -0.3688503099999999,
+        "cagr": -0.09362279178147948,
+        "max_drawdown": -0.6237243800000001,
+        "trade_count": 237,
+        "buy_count": 119,
+        "sell_count": 118,
+        "costs": {
+          "commission": 29889.0,
+          "tax": 29935.0,
+          "slippage": 94103.0,
+          "total_cost": 153927.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 495378.08,
+            "profit": -504621.92,
+            "total_return": -0.50462192,
+            "max_drawdown": -0.51176092,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 495378.08,
+            "end_nav": 580495.52,
+            "profit": 85117.44,
+            "total_return": 0.17182318604004432,
+            "max_drawdown": -0.23478690464015306,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 580495.52,
+            "end_nav": 506353.82,
+            "profit": -74141.70000000001,
+            "total_return": -0.12772139912466507,
+            "max_drawdown": -0.22089655812923503,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 506353.82,
+            "end_nav": 511668.26,
+            "profit": 5314.440000000002,
+            "total_return": 0.010495506876989635,
+            "max_drawdown": -0.2766512461455586,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 511668.26,
+            "end_nav": 631149.6900000001,
+            "profit": 119481.43000000005,
+            "total_return": 0.23351346827727792,
+            "max_drawdown": -0.13938729418907336,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "C",
+      "case": "benchmark_control_mixed",
+      "label": "0050持有 · 整張＋零股 · 一般成本",
+      "publication": ".cache/sector-accounts-20260925/report.json",
+      "result": {
+        "path": ".cache/sector-accounts-20260925/cases/benchmark_control_mixed.json",
+        "sha256": "ea66bee1241a74b38c66bd3fee9e1ac1f7acae43c124cf563ef1eee909125011"
+      },
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3423350.99,
+        "total_return": 2.4233509900000003,
+        "cagr": 0.3006395319831825,
+        "max_drawdown": -0.33891916061205296,
+        "trade_count": 16,
+        "buy_count": 16,
+        "sell_count": 0,
+        "costs": {
+          "commission": 1762.0,
+          "tax": 0.0,
+          "slippage": 5269.0,
+          "total_cost": 7031.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 777538.85,
+            "profit": -222461.15000000002,
+            "total_return": -0.22246115,
+            "max_drawdown": -0.33891916061205296,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 777538.85,
+            "end_nav": 990859.7999999998,
+            "profit": 213320.94999999984,
+            "total_return": 0.27435407246853294,
+            "max_drawdown": -0.07006221662246503,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 990859.7999999998,
+            "end_nav": 1469935.95,
+            "profit": 479076.15000000014,
+            "total_return": 0.48349539460577584,
+            "max_drawdown": -0.21206813040643502,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1469935.95,
+            "end_nav": 2010644.9399999997,
+            "profit": 540708.9899999998,
+            "total_return": 0.3678452724419725,
+            "max_drawdown": -0.27502826263374913,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 2010644.9399999997,
+            "end_nav": 3423350.99,
+            "profit": 1412706.0500000005,
+            "total_return": 0.7026133863296624,
+            "max_drawdown": -0.15339291528340093,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "C",
+      "case": "relative_strength_control_mixed",
+      "label": "相對強勢 · 整張＋零股 · 一般成本",
+      "publication": ".cache/sector-accounts-20260925/report.json",
+      "result": {
+        "path": ".cache/sector-accounts-20260925/cases/relative_strength_control_mixed.json",
+        "sha256": "6f7f4667a798591a77900bf8590d977d5ce2727348160303bdb5da25ffc26bb3"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1015536.21,
+        "total_return": 0.01553621000000005,
+        "cagr": 0.0032983933347727756,
+        "max_drawdown": -0.45052245999999996,
+        "trade_count": 285,
+        "buy_count": 144,
+        "sell_count": 141,
+        "costs": {
+          "commission": 43469.0,
+          "tax": 44200.0,
+          "slippage": 136666.0,
+          "total_cost": 224335.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 605443.95,
+            "profit": -394556.05000000005,
+            "total_return": -0.39455605000000005,
+            "max_drawdown": -0.40315705,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 605443.95,
+            "end_nav": 774733.96,
+            "profit": 169290.01,
+            "total_return": 0.279613017852437,
+            "max_drawdown": -0.27708881245699446,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 774733.96,
+            "end_nav": 733397.8400000001,
+            "profit": -41336.11999999988,
+            "total_return": -0.05335524468296171,
+            "max_drawdown": -0.2260790916744544,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 733397.8400000001,
+            "end_nav": 979028.19,
+            "profit": 245630.34999999986,
+            "total_return": 0.3349210164022296,
+            "max_drawdown": -0.2900454200863779,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 979028.19,
+            "end_nav": 1015536.21,
+            "profit": 36508.02000000002,
+            "total_return": 0.03729006005434843,
+            "max_drawdown": -0.2864310586214036,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "C",
+      "case": "strength_with_turnover_control_mixed",
+      "label": "相對強勢＋同行成交升溫 · 整張＋零股 · 一般成本",
+      "publication": ".cache/sector-accounts-20260925/report.json",
+      "result": {
+        "path": ".cache/sector-accounts-20260925/cases/strength_with_turnover_control_mixed.json",
+        "sha256": "7312e7da91c6052ae543674f6b4a7e8160d9cf437e4e9ba2e5b5e5f9438fcdb3"
+      },
+      "config": {
+        "arm": "strength_with_turnover",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1481615.81,
+        "total_return": 0.4816158100000001,
+        "cagr": 0.08759831447897182,
+        "max_drawdown": -0.45384502000000004,
+        "trade_count": 308,
+        "buy_count": 151,
+        "sell_count": 157,
+        "costs": {
+          "commission": 45023.0,
+          "tax": 46351.0,
+          "slippage": 141603.0,
+          "total_cost": 232977.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 640759.2,
+            "profit": -359240.80000000005,
+            "total_return": -0.3592408,
+            "max_drawdown": -0.36034959999999994,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 640759.2,
+            "end_nav": 677462.86,
+            "profit": 36703.66000000003,
+            "total_return": 0.057281518548621735,
+            "max_drawdown": -0.20339612140344798,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 677462.86,
+            "end_nav": 843329.7799999999,
+            "profit": 165866.91999999993,
+            "total_return": 0.24483544382049205,
+            "max_drawdown": -0.26481109154127325,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 843329.7799999999,
+            "end_nav": 1196131.82,
+            "profit": 352802.04000000015,
+            "total_return": 0.4183441025881953,
+            "max_drawdown": -0.3687120379662123,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1196131.82,
+            "end_nav": 1481615.81,
+            "profit": 285483.99,
+            "total_return": 0.23867268241388317,
+            "max_drawdown": -0.30814144246363884,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "C",
+      "case": "benchmark_control_board_only",
+      "label": "0050持有 · 只整張 · 一般成本",
+      "publication": ".cache/sector-accounts-20260925/report.json",
+      "result": {
+        "path": ".cache/sector-accounts-20260925/cases/benchmark_control_board_only.json",
+        "sha256": "563b6a411a937ebcd4f0fa276dcea525c99334abd22cded91dcfcfd356e47eef"
+      },
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": true,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 3338745.0,
+        "total_return": 2.338745,
+        "cagr": 0.2937058595821509,
+        "max_drawdown": -0.3259720243680687,
+        "trade_count": 4,
+        "buy_count": 4,
+        "sell_count": 0,
+        "costs": {
+          "commission": 1586.0,
+          "tax": 0.0,
+          "slippage": 5009.0,
+          "total_cost": 6595.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 787667.0,
+            "profit": -212333.0,
+            "total_return": -0.212333,
+            "max_drawdown": -0.3259720243680687,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 787667.0,
+            "end_nav": 995916.9999999999,
+            "profit": 208249.99999999988,
+            "total_return": 0.26438837732188847,
+            "max_drawdown": -0.06706817313169833,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 995916.9999999999,
+            "end_nav": 1446017.0,
+            "profit": 450100.0000000001,
+            "total_return": 0.45194529262980776,
+            "max_drawdown": -0.20228263521182888,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 1446017.0,
+            "end_nav": 1969244.9999999998,
+            "profit": 523227.99999999977,
+            "total_return": 0.36184083589612004,
+            "max_drawdown": -0.25787104058432186,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1969244.9999999998,
+            "end_nav": 3338745.0,
+            "profit": 1369500.0000000002,
+            "total_return": 0.6954441930790736,
+            "max_drawdown": -0.15197229736655626,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "C",
+      "case": "relative_strength_control_board_only",
+      "label": "相對強勢 · 只整張 · 一般成本",
+      "publication": ".cache/sector-accounts-20260925/report.json",
+      "result": {
+        "path": ".cache/sector-accounts-20260925/cases/relative_strength_control_board_only.json",
+        "sha256": "ebba1e8bb043de1ab456127ce74da2b74b62486f3ef665d48cbe7b70a9513f56"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1173758.9300000002,
+        "total_return": 0.1737589300000002,
+        "cagr": 0.03481284498671555,
+        "max_drawdown": -0.3198016031374262,
+        "trade_count": 131,
+        "buy_count": 66,
+        "sell_count": 65,
+        "costs": {
+          "commission": 28307.0,
+          "tax": 29840.0,
+          "slippage": 89441.0,
+          "total_cost": 147588.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 688632.78,
+            "profit": -311367.22,
+            "total_return": -0.31136721999999994,
+            "max_drawdown": -0.31716721999999997,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 688632.78,
+            "end_nav": 1031404.22,
+            "profit": 342771.43999999994,
+            "total_return": 0.49775649657572196,
+            "max_drawdown": -0.09544938872406372,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 1031404.22,
+            "end_nav": 958289.27,
+            "profit": -73114.94999999995,
+            "total_return": -0.07088874427913427,
+            "max_drawdown": -0.1281054760683037,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 958289.27,
+            "end_nav": 1108885.76,
+            "profit": 150596.49,
+            "total_return": 0.15715138916248117,
+            "max_drawdown": -0.22658511136298043,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1108885.76,
+            "end_nav": 1173758.9300000002,
+            "profit": 64873.17000000016,
+            "total_return": 0.05850302379209937,
+            "max_drawdown": -0.22289954968413872,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "C",
+      "case": "strength_with_turnover_control_board_only",
+      "label": "相對強勢＋同行成交升溫 · 只整張 · 一般成本",
+      "publication": ".cache/sector-accounts-20260925/report.json",
+      "result": {
+        "path": ".cache/sector-accounts-20260925/cases/strength_with_turnover_control_board_only.json",
+        "sha256": "8d4501fb467d0152eb760f266151ee8847dc71bf1b75d9f1a8f7631b6819bcc8"
+      },
+      "config": {
+        "arm": "strength_with_turnover",
+        "benchmark": false,
+        "board_only": true,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2022-01-03",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1179179.26,
+        "total_return": 0.17917925999999995,
+        "cagr": 0.035831707563829696,
+        "max_drawdown": -0.2560968163052755,
+        "trade_count": 139,
+        "buy_count": 70,
+        "sell_count": 69,
+        "costs": {
+          "commission": 28076.0,
+          "tax": 29742.0,
+          "slippage": 88717.0,
+          "total_cost": 146535.0
+        },
+        "annual": [
+          {
+            "year": "2022",
+            "start_nav": 1000000.0,
+            "end_nav": 752667.36,
+            "profit": -247332.64,
+            "total_return": -0.24733264,
+            "max_drawdown": -0.25302486,
+            "partial_year": false
+          },
+          {
+            "year": "2023",
+            "start_nav": 752667.36,
+            "end_nav": 871228.64,
+            "profit": 118561.28000000003,
+            "total_return": 0.15752148465691418,
+            "max_drawdown": -0.1302180502691902,
+            "partial_year": false
+          },
+          {
+            "year": "2024",
+            "start_nav": 871228.64,
+            "end_nav": 956361.64,
+            "profit": 85133.0,
+            "total_return": 0.09771602549704972,
+            "max_drawdown": -0.1840025774842775,
+            "partial_year": false
+          },
+          {
+            "year": "2025",
+            "start_nav": 956361.64,
+            "end_nav": 1149888.6400000001,
+            "profit": 193527.00000000012,
+            "total_return": 0.2023575516893381,
+            "max_drawdown": -0.17867709287450573,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1149888.6400000001,
+            "end_nav": 1179179.26,
+            "profit": 29290.61999999988,
+            "total_return": 0.02547257097869915,
+            "max_drawdown": -0.09146684953207906,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "D",
+      "case": "augmented_delay0_confirmed_catalyst_control",
+      "label": "七檔另加昇達科＋營運證據＋突破",
+      "publication": "artifacts/forward_simulation/theme_catalyst_20260927.json",
+      "result": {
+        "path": ".cache/theme-catalyst-20260927-v4/augmented_delay0_confirmed_catalyst_control.json",
+        "sha256": "d4940d6483101d59e0ed79b99d8303f792fc2c0a15bd2a805010cdf211606625"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2025-04-16",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1357134.0,
+        "total_return": 0.35713400000000006,
+        "cagr": 0.24392846513808264,
+        "max_drawdown": -0.13457258749122347,
+        "trade_count": 6,
+        "buy_count": 3,
+        "sell_count": 3,
+        "costs": {
+          "commission": 2501.0,
+          "tax": 3188.0,
+          "slippage": 7903.0,
+          "total_cost": 13592.0
+        },
+        "annual": [
+          {
+            "year": "2025",
+            "start_nav": 1000000.0,
+            "end_nav": 1090654.0,
+            "profit": 90654.0,
+            "total_return": 0.09065400000000001,
+            "max_drawdown": -0.025534662681517162,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1090654.0,
+            "end_nav": 1357134.0,
+            "profit": 266480.0,
+            "total_return": 0.24433046594061913,
+            "max_drawdown": -0.13457258749122347,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "D",
+      "case": "augmented_delay5_confirmed_catalyst_control",
+      "label": "七檔另加昇達科＋營運證據＋突破（文件多延五日可用）",
+      "publication": "artifacts/forward_simulation/theme_catalyst_20260927.json",
+      "result": {
+        "path": ".cache/theme-catalyst-20260927-v4/augmented_delay5_confirmed_catalyst_control.json",
+        "sha256": "27a5c4dfd05df373fa5378f43c3bb50498cd9c0e3ec0d882c3e64dded1a7f3c3"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2025-04-16",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1357134.0,
+        "total_return": 0.35713400000000006,
+        "cagr": 0.24392846513808264,
+        "max_drawdown": -0.13457258749122347,
+        "trade_count": 6,
+        "buy_count": 3,
+        "sell_count": 3,
+        "costs": {
+          "commission": 2501.0,
+          "tax": 3188.0,
+          "slippage": 7903.0,
+          "total_cost": 13592.0
+        },
+        "annual": [
+          {
+            "year": "2025",
+            "start_nav": 1000000.0,
+            "end_nav": 1090654.0,
+            "profit": 90654.0,
+            "total_return": 0.09065400000000001,
+            "max_drawdown": -0.025534662681517162,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1090654.0,
+            "end_nav": 1357134.0,
+            "profit": 266480.0,
+            "total_return": 0.24433046594061913,
+            "max_drawdown": -0.13457258749122347,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "D",
+      "case": "benchmark_control",
+      "label": "0050同期間獨立基準",
+      "publication": "artifacts/forward_simulation/theme_catalyst_20260927.json",
+      "result": {
+        "path": ".cache/theme-catalyst-20260927-v4/benchmark_control.json",
+        "sha256": "64ab6b59acb5b6cdf978e00fa56dab5438b2a435b7297af4b53d1bfd0858653a"
+      },
+      "config": {
+        "arm": "benchmark",
+        "benchmark": true,
+        "board_only": false,
+        "position_count": 0,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2025-04-16",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 2754253.48,
+        "total_return": 1.75425348,
+        "cagr": 1.0630215804631673,
+        "max_drawdown": -0.1533951851739438,
+        "trade_count": 7,
+        "buy_count": 7,
+        "sell_count": 0,
+        "costs": {
+          "commission": 1529.0,
+          "tax": 0.0,
+          "slippage": 4694.0,
+          "total_cost": 6223.0
+        },
+        "annual": [
+          {
+            "year": "2025",
+            "start_nav": 1000000.0,
+            "end_nav": 1617657.73,
+            "profit": 617657.73,
+            "total_return": 0.6176577299999999,
+            "max_drawdown": -0.08030750569559952,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1617657.73,
+            "end_nav": 2754253.48,
+            "profit": 1136595.75,
+            "total_return": 0.702618192292136,
+            "max_drawdown": -0.1533951851739438,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "D",
+      "case": "primary_delay0_confirmed_catalyst_control",
+      "label": "原始七檔＋營運證據＋突破",
+      "publication": "artifacts/forward_simulation/theme_catalyst_20260927.json",
+      "result": {
+        "path": ".cache/theme-catalyst-20260927-v4/primary_delay0_confirmed_catalyst_control.json",
+        "sha256": "6d87fe5ef6613d341dad5ac1cda20703c0ab5b7d5c20e02c76c54302f4dbf938"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2025-04-16",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1000000.0,
+        "total_return": 0.0,
+        "cagr": 0.0,
+        "max_drawdown": 0.0,
+        "trade_count": 0,
+        "buy_count": 0,
+        "sell_count": 0,
+        "costs": {
+          "commission": 0,
+          "tax": 0,
+          "slippage": 0,
+          "total_cost": 0
+        },
+        "annual": [
+          {
+            "year": "2025",
+            "start_nav": 1000000.0,
+            "end_nav": 1000000.0,
+            "profit": 0.0,
+            "total_return": 0.0,
+            "max_drawdown": 0.0,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1000000.0,
+            "end_nav": 1000000.0,
+            "profit": 0.0,
+            "total_return": 0.0,
+            "max_drawdown": 0.0,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    },
+    {
+      "group": "D",
+      "case": "primary_delay5_confirmed_catalyst_control",
+      "label": "原始七檔＋營運證據＋突破（文件多延五日可用）",
+      "publication": "artifacts/forward_simulation/theme_catalyst_20260927.json",
+      "result": {
+        "path": ".cache/theme-catalyst-20260927-v4/primary_delay5_confirmed_catalyst_control.json",
+        "sha256": "de575cbda5dbd59bc4ba5bf575f5d572bb8ec3c511dbdec886129d2c1428f979"
+      },
+      "config": {
+        "arm": "relative_strength",
+        "benchmark": false,
+        "board_only": false,
+        "position_count": 5,
+        "stress": "control"
+      },
+      "summary": {
+        "start": "2025-04-16",
+        "end": "2026-09-09",
+        "initial_cash": 1000000.0,
+        "final_nav": 1000000.0,
+        "total_return": 0.0,
+        "cagr": 0.0,
+        "max_drawdown": 0.0,
+        "trade_count": 0,
+        "buy_count": 0,
+        "sell_count": 0,
+        "costs": {
+          "commission": 0,
+          "tax": 0,
+          "slippage": 0,
+          "total_cost": 0
+        },
+        "annual": [
+          {
+            "year": "2025",
+            "start_nav": 1000000.0,
+            "end_nav": 1000000.0,
+            "profit": 0.0,
+            "total_return": 0.0,
+            "max_drawdown": 0.0,
+            "partial_year": false
+          },
+          {
+            "year": "2026",
+            "start_nav": 1000000.0,
+            "end_nav": 1000000.0,
+            "profit": 0.0,
+            "total_return": 0.0,
+            "max_drawdown": 0.0,
+            "partial_year": true
+          }
+        ]
+      },
+      "integrity_verified": true,
+      "summary_recomputed": true,
+      "journal_reconciled": true,
+      "live_qualified": false
+    }
+  ],
+  "blocked_normal_accounts": [
+    {
+      "family": "theme_catalyst",
+      "case": "augmented_delay0_watchlist_breakout_control",
+      "reason": "Offline replay is missing odd-lot evidence: odd:twse:2025-05-05",
+      "source": {
+        "path": ".cache/theme-catalyst-20260927-v4/report.json",
+        "sha256": "4be02cf00b7b6dfe00f9c91769cb8497bda1e440d5f5a78887b9e7641f53940f"
+      }
+    },
+    {
+      "family": "theme_catalyst",
+      "case": "augmented_delay5_watchlist_breakout_control",
+      "reason": "Offline replay is missing odd-lot evidence: odd:twse:2025-05-05",
+      "source": {
+        "path": ".cache/theme-catalyst-20260927-v4/report.json",
+        "sha256": "4be02cf00b7b6dfe00f9c91769cb8497bda1e440d5f5a78887b9e7641f53940f"
+      }
+    },
+    {
+      "family": "theme_catalyst",
+      "case": "primary_delay0_watchlist_breakout_control",
+      "reason": "Offline replay is missing odd-lot evidence: odd:twse:2025-05-05",
+      "source": {
+        "path": ".cache/theme-catalyst-20260927-v4/report.json",
+        "sha256": "4be02cf00b7b6dfe00f9c91769cb8497bda1e440d5f5a78887b9e7641f53940f"
+      }
+    },
+    {
+      "family": "theme_catalyst",
+      "case": "primary_delay5_watchlist_breakout_control",
+      "reason": "Offline replay is missing odd-lot evidence: odd:twse:2025-05-05",
+      "source": {
+        "path": ".cache/theme-catalyst-20260927-v4/report.json",
+        "sha256": "4be02cf00b7b6dfe00f9c91769cb8497bda1e440d5f5a78887b9e7641f53940f"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "first_lag15_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 9919",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "first_lag15_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 1477",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "first_lag8_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 3317",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "first_lag8_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 1477",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "wait_lag15_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 9919",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "wait_lag15_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 9919",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "wait_lag8_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 2385",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "first_bar_20260927",
+      "case": "wait_lag8_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 3406",
+      "source": {
+        "path": ".cache/first-bar-20260927-v2/report.json",
+        "sha256": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "all_confirm3_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 2201",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "all_confirm3_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 2330",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "all_first_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 5471",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "all_first_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 2330",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "all_retest5_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 2385",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "all_retest5_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 6121",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "turn_confirm3_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 5880",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "turn_confirm3_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 6491",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "turn_first_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 3317",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "turn_first_mixed_control",
+      "reason": "Offline replay is missing price-limit evidence: 6414",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "turn_retest5_board_control",
+      "reason": "Offline replay is missing price-limit evidence: 4721",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    },
+    {
+      "family": "early_strength_20260927",
+      "case": "turn_retest5_mixed_control",
+      "reason": "Offline replay is missing odd-lot evidence: odd:twse:2022-03-08",
+      "source": {
+        "path": ".cache/early-strength-20260927-v2/report.json",
+        "sha256": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826"
+      }
+    }
+  ],
+  "archive_tables": [
+    {
+      "direction": "閒錢配置／先前700%版本",
+      "source": "docs/research_cash_allocation_20260910.md",
+      "note": "2022-01-03～2026-09-09；舊三股帳戶，表內部分配置閒錢買0050。",
+      "headers": [
+        "配置",
+        "扣成本總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "剩餘資金買0050",
+          "+710.81%",
+          "-35.89%"
+        ],
+        [
+          "剩餘資金留現金",
+          "+541.90%",
+          "-25.52%"
+        ],
+        [
+          "趨勢向上才買0050",
+          "+705.92%",
+          "-37.81%"
+        ],
+        [
+          "只持有0050",
+          "+242.07%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "持股名額及大盤校正排序",
+      "source": "docs/research_capacity_20260910.md",
+      "note": "2022-01-03～2026-06-23；舊合成價格試算，非現行現金帳本。",
+      "headers": [
+        "方法",
+        "累積試算淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "原排序・3個部位",
+          "706.00%",
+          "-46.42%"
+        ],
+        [
+          "原排序・6個部位",
+          "622.51%",
+          "-35.37%"
+        ],
+        [
+          "可評分子集・原排序3個部位",
+          "558.96%",
+          "-46.42%"
+        ],
+        [
+          "同子集・大盤校正排序3個部位",
+          "554.31%",
+          "-46.64%"
+        ],
+        [
+          "0050持有",
+          "240.61%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "族群領先、擴散與接力股",
+      "source": "docs/research_diffusion_20260910.md",
+      "note": "2022-01-03～2026-06-23；舊合成價格试算及閒錢0050。",
+      "headers": [
+        "方法",
+        "累積淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "領先出現就買",
+          "326.50%",
+          "-39.92%"
+        ],
+        [
+          "擴散後買原領先股",
+          "15.78%",
+          "-64.30%"
+        ],
+        [
+          "擴散後買接力股",
+          "99.16%",
+          "-52.35%"
+        ],
+        [
+          "擴散後同群整籃持有",
+          "70.68%",
+          "-47.90%"
+        ],
+        [
+          "0050持有",
+          "240.61%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "大盤情境切換／閒置ETF／共同退出",
+      "source": "docs/research_regime_switch_20260910.md",
+      "note": "2022-01-03～2026-06-23；舊合成價格與ETF配置。",
+      "headers": [
+        "方法",
+        "累積試算淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "所有領先訊號",
+          "326.50%",
+          "-39.92%"
+        ],
+        [
+          "趨勢只管進場",
+          "706.00%",
+          "-46.42%"
+        ],
+        [
+          "轉弱只收回閒置0050",
+          "702.56%",
+          "-46.46%"
+        ],
+        [
+          "轉弱連個股一起退出",
+          "57.84%",
+          "-50.74%"
+        ],
+        [
+          "初始一半領先策略、一半0050",
+          "283.55%",
+          "-33.50%"
+        ],
+        [
+          "初始一半趨勢進場、一半0050",
+          "473.30%",
+          "-39.12%"
+        ],
+        [
+          "0050持有",
+          "240.61%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "七種出場（舊三股＋閒錢0050）",
+      "source": "docs/research_exit_scenarios_20260910.md",
+      "note": "2022-01-03～2026-09-09；A已有現金五名額新版，不得沿用舊值。",
+      "headers": [
+        "方法",
+        "累積淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "固定持有63日",
+          "+659.48%",
+          "-45.42%"
+        ],
+        [
+          "跌12%停損",
+          "+710.81%",
+          "-35.89%"
+        ],
+        [
+          "漲20%後回落12%停利",
+          "-22.68%",
+          "-61.13%"
+        ],
+        [
+          "個股趨勢轉弱出場",
+          "+142.17%",
+          "-48.16%"
+        ],
+        [
+          "大盤與個股同步轉弱出場",
+          "+117.16%",
+          "-54.83%"
+        ],
+        [
+          "強勢延長，最長126日",
+          "+64.70%",
+          "-61.40%"
+        ],
+        [
+          "依虧損、趨勢與大盤調整出場",
+          "+43.70%",
+          "-50.58%"
+        ],
+        [
+          "0050持有",
+          "+242.07%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "支撐、2%風險、加碼、收斂突破（舊底座）",
+      "source": "docs/research_technical_20260910.md",
+      "note": "2022-01-03～2026-09-09；A已有新版；此表含閒錢0050。",
+      "headers": [
+        "策略",
+        "累積報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "原策略",
+          "+710.81%",
+          "-35.89%"
+        ],
+        [
+          "支撐出場",
+          "+62.04%",
+          "-63.73%"
+        ],
+        [
+          "2%風險配置",
+          "+321.61%",
+          "-33.94%"
+        ],
+        [
+          "支撐＋2%配置",
+          "+168.99%",
+          "-43.75%"
+        ],
+        [
+          "支撐＋2%＋加碼",
+          "+149.51%",
+          "-43.48%"
+        ],
+        [
+          "支撐＋2%＋收斂突破",
+          "+188.07%",
+          "-38.34%"
+        ],
+        [
+          "0050持有",
+          "+242.07%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "投信／外資加速、不追高、大戶、融資、借券、分點、族群、法人轉賣",
+      "source": "docs/research_chip_20260911.md",
+      "note": "2022-01-03～2026-09-09；舊底座與部分資料延遲假設，含閒錢0050。",
+      "headers": [
+        "方法",
+        "總淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "0050持有",
+          "+242.07%",
+          "-33.96%"
+        ],
+        [
+          "原策略",
+          "+710.81%",
+          "-35.89%"
+        ],
+        [
+          "投信買超加速",
+          "+109.00%",
+          "-43.04%"
+        ],
+        [
+          "外資買超加速",
+          "+208.96%",
+          "-49.14%"
+        ],
+        [
+          "不追高（距20日線≤10%）",
+          "+96.19%",
+          "-42.15%"
+        ],
+        [
+          "投信加速＋不追高",
+          "+66.15%",
+          "-42.16%"
+        ],
+        [
+          "外資加速＋不追高",
+          "+13.66%",
+          "-45.64%"
+        ],
+        [
+          "大戶持股增加",
+          "+246.19%",
+          "-35.50%"
+        ],
+        [
+          "融資減少",
+          "+36.05%",
+          "-44.80%"
+        ],
+        [
+          "大戶增加＋融資減少",
+          "+71.63%",
+          "-52.37%"
+        ],
+        [
+          "大戶延後14日＋融資減少",
+          "+72.10%",
+          "-39.30%"
+        ],
+        [
+          "借券賣出餘額減少＊",
+          "+415.75%",
+          "-35.99%"
+        ],
+        [
+          "分點買超集中",
+          "+690.40%",
+          "-40.54%"
+        ],
+        [
+          "同族群成交占比增加",
+          "+76.90%",
+          "-50.09%"
+        ],
+        [
+          "法人轉賣後全出",
+          "-19.06%",
+          "-51.36%"
+        ],
+        [
+          "法人轉賣後減半",
+          "+194.39%",
+          "-39.60%"
+        ]
+      ]
+    },
+    {
+      "direction": "限價、回測突破位、排序、分散、族群重疊與分批加碼",
+      "source": "docs/research_five_axis_20260913.md",
+      "note": "2022-01-03～2026-09-09；舊資金／名額規則。限價3天與回測策略不是全在原訊號T+1買到。",
+      "headers": [
+        "規則",
+        "原條件費後總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "0050同條件基準",
+          "+242.07%",
+          "-33.96%"
+        ],
+        [
+          "原現金版",
+          "+541.90%",
+          "-25.52%"
+        ],
+        [
+          "限價等待3天",
+          "+202.39%",
+          "-38.35%"
+        ],
+        [
+          "回測突破位後進場",
+          "+254.35%",
+          "-35.27%"
+        ],
+        [
+          "前20日成交金額排序",
+          "+1111.00%",
+          "-26.10%"
+        ],
+        [
+          "成交金額除以波動排序",
+          "+1142.93%",
+          "-23.36%"
+        ],
+        [
+          "訊號族群不重疊",
+          "+852.42%",
+          "-37.04%"
+        ],
+        [
+          "分散至5檔",
+          "+510.36%",
+          "-25.35%"
+        ],
+        [
+          "先買一半再確認加碼",
+          "+591.02%",
+          "-23.97%"
+        ],
+        [
+          "限價＋成交金額排序＋族群限制",
+          "+211.41%",
+          "-35.48%"
+        ]
+      ]
+    },
+    {
+      "direction": "營收超預期與毛利／獲利改善",
+      "source": "docs/research_five_axis_20260913.md",
+      "note": "2022-01-03～2026-09-09；公告15／30日與季報120／150日僅可用時間假設，不是已核實歷史公告時序。",
+      "headers": [
+        "規則",
+        "原條件費後總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "營收同覆蓋對照，延遲情境15",
+          "+505.30%",
+          "-33.08%"
+        ],
+        [
+          "營收超預期10%，延遲情境15",
+          "+229.35%",
+          "-34.66%"
+        ],
+        [
+          "營收及財報同覆蓋對照，延遲情境15",
+          "+730.33%",
+          "-37.09%"
+        ],
+        [
+          "超預期＋毛利改善及獲利為正，延遲情境15",
+          "+79.22%",
+          "-38.31%"
+        ],
+        [
+          "營收同覆蓋對照，延遲情境30",
+          "+505.30%",
+          "-33.08%"
+        ],
+        [
+          "營收超預期10%，延遲情境30",
+          "+85.83%",
+          "-45.97%"
+        ],
+        [
+          "營收及財報同覆蓋對照，延遲情境30",
+          "+730.33%",
+          "-37.09%"
+        ],
+        [
+          "超預期＋毛利改善及獲利為正，延遲情境30",
+          "+81.05%",
+          "-34.57%"
+        ]
+      ]
+    },
+    {
+      "direction": "分點買超集中與5日／20日持續性",
+      "source": "docs/research_broker_persistence_20260924.md",
+      "note": "2022-01-03～2026-09-09；舊底座，資料已知範圍對照與完整母體不能混比。",
+      "headers": [
+        "方法",
+        "候選數",
+        "正常淨報酬"
+      ],
+      "rows": [
+        [
+          "完整成交金額對照",
+          "458",
+          "1111.00%"
+        ],
+        [
+          "5日已知範圍對照",
+          "251",
+          "1060.02%"
+        ],
+        [
+          "5日持續性排序",
+          "251",
+          "738.13%"
+        ],
+        [
+          "5日持續性篩選",
+          "208",
+          "482.95%"
+        ],
+        [
+          "20日已知範圍對照",
+          "125",
+          "219.24%"
+        ],
+        [
+          "20日持續性排序",
+          "125",
+          "252.43%"
+        ],
+        [
+          "20日持續性篩選",
+          "53",
+          "311.93%"
+        ],
+        [
+          "0050基準",
+          "—",
+          "242.07%"
+        ]
+      ]
+    },
+    {
+      "direction": "同日候選：原順序／成交金額／族群領先幅度",
+      "source": "docs/research_priority_20260924.md",
+      "note": "2022-01-03～2026-09-09；舊資源重用與名額規則，1111%不是現行版本。",
+      "headers": [
+        "方法",
+        "正常累積淨報酬"
+      ],
+      "rows": [
+        [
+          "原順序",
+          "541.90%"
+        ],
+        [
+          "成交金額排序",
+          "1111.00%"
+        ],
+        [
+          "族群領先幅度排序",
+          "378.82%"
+        ],
+        [
+          "0050",
+          "242.07%"
+        ]
+      ]
+    },
+    {
+      "direction": "前日現金、未用預算、賣出資金、名額鎖定",
+      "source": "docs/research_execution_resources_20260924.md",
+      "note": "2022-01-03～2026-09-09；執行假設消融；包含已被後續更嚴格規則替代的結果。",
+      "headers": [
+        "開啟限制",
+        "正常淨報酬"
+      ],
+      "rows": [
+        [
+          "無（舊日模型）",
+          "1111.00%"
+        ],
+        [
+          "U：鎖未用預算",
+          "1193.66%"
+        ],
+        [
+          "S：鎖名額",
+          "874.57%"
+        ],
+        [
+          "S＋U",
+          "637.16%"
+        ],
+        [
+          "C：限前日現金",
+          "725.02%"
+        ],
+        [
+          "C＋U",
+          "837.76%"
+        ],
+        [
+          "C＋S",
+          "874.57%"
+        ],
+        [
+          "C＋S＋U",
+          "637.16%"
+        ]
+      ]
+    },
+    {
+      "direction": "日內補位與未成交名額釋放",
+      "source": "docs/research_slot_reuse_20260924.md",
+      "note": "2022-01-03～2026-09-09；舊執行版本的2×2×2消融。",
+      "headers": [
+        "資金背景",
+        "名額政策",
+        "正常報酬"
+      ],
+      "rows": [
+        [
+          "允許資金重用",
+          "可補位；未成交可釋放",
+          "1111.00%"
+        ],
+        [
+          "允許資金重用",
+          "可補位；未成交占位（F）",
+          "1100.16%"
+        ],
+        [
+          "允許資金重用",
+          "當天不可補位（R）；未成交可釋放",
+          "874.57%"
+        ],
+        [
+          "允許資金重用",
+          "當天不可補位；未成交占位（R＋F）",
+          "874.57%"
+        ],
+        [
+          "前日現金＋鎖未用預算",
+          "可補位；未成交可釋放",
+          "837.76%"
+        ],
+        [
+          "前日現金＋鎖未用預算",
+          "可補位；未成交占位（F）",
+          "801.90%"
+        ],
+        [
+          "前日現金＋鎖未用預算",
+          "當天不可補位（R）；未成交可釋放",
+          "637.16%"
+        ],
+        [
+          "前日現金＋鎖未用預算",
+          "當天不可補位；未成交占位（R＋F）",
+          "637.16%"
+        ]
+      ]
+    },
+    {
+      "direction": "更嚴格資源鎖定後：三檔／五檔",
+      "source": "docs/research_conservative_diversification_20260924.md",
+      "note": "2022-01-03～2026-09-09；458候選、整張加零股；A已更新歷史身分與整張政策。",
+      "headers": [
+        "帳戶",
+        "正常淨報酬",
+        "正常最大回撤"
+      ],
+      "rows": [
+        [
+          "3檔",
+          "637.16%",
+          "-37.76%"
+        ],
+        [
+          "5檔",
+          "552.49%",
+          "-29.20%"
+        ],
+        [
+          "同條件0050",
+          "242.34%",
+          "-33.89%"
+        ]
+      ]
+    },
+    {
+      "direction": "候選保留兩日（舊混合成交）",
+      "source": "docs/research_deferred_entry_20260924.md",
+      "note": "2022-01-03～2026-09-09；三檔混合帳戶，和A整張五檔兩日候補不是相同策略。",
+      "headers": [
+        "帳戶",
+        "正常淨報酬",
+        "正常最大回撤"
+      ],
+      "rows": [
+        [
+          "原1日候選",
+          "637.16%",
+          "-37.76%"
+        ],
+        [
+          "保留2日候選",
+          "380.83%",
+          "-31.58%"
+        ],
+        [
+          "同資金規則0050",
+          "242.34%",
+          "-33.89%"
+        ]
+      ]
+    },
+    {
+      "direction": "零股容量／對手價／滑價條件與帳戶風險",
+      "source": "docs/research_cash_risk_20260913.md",
+      "note": "2022-01-03～2026-09-09；此處排除額外進出場延遲和合併壓力列。",
+      "headers": [
+        "情境",
+        "費後總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "原現金版",
+          "+541.90%",
+          "-25.52%"
+        ],
+        [
+          "零股加日末對手量限制",
+          "+337.77%",
+          "-37.36%"
+        ],
+        [
+          "零股按對手價",
+          "+534.70%",
+          "-25.79%"
+        ],
+        [
+          "每邊滑價0.90%",
+          "+705.98%",
+          "-26.15%"
+        ]
+      ]
+    },
+    {
+      "direction": "零股容量／對手價／滑價條件與帳戶風險",
+      "source": "docs/research_cash_risk_20260913.md",
+      "note": "2022-01-03～2026-09-09；此處排除額外進出場延遲和合併壓力列。",
+      "headers": [
+        "情境",
+        "費後總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "原現金版",
+          "+541.90%",
+          "-25.52%"
+        ],
+        [
+          "60日均線減碼",
+          "+180.58%",
+          "-28.15%"
+        ],
+        [
+          "急跌／波動減碼",
+          "+473.73%",
+          "-22.47%"
+        ]
+      ]
+    },
+    {
+      "direction": "同日隨機排序與漏買獲利股的敏感性",
+      "source": "docs/research_cash_risk_20260913.md",
+      "note": "除另標2023／2024／2025起跑外，為2022-01-03～2026-09-09；敏感性診斷，不是按種子挑策略。",
+      "headers": [
+        "情境",
+        "費後總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "同日排序 seed 11",
+          "+1032.64%",
+          "-30.16%"
+        ],
+        [
+          "同日排序 seed 29",
+          "+341.72%",
+          "-45.21%"
+        ],
+        [
+          "同日排序 seed 47",
+          "+379.23%",
+          "-38.17%"
+        ],
+        [
+          "移除事後最賺的4958",
+          "+446.12%",
+          "-24.12%"
+        ],
+        [
+          "移除事後最賺的4958及6739",
+          "+505.30%",
+          "-33.08%"
+        ],
+        [
+          "2023起跑",
+          "+430.87%",
+          "-36.55%"
+        ],
+        [
+          "2024起跑",
+          "+299.20%",
+          "-26.58%"
+        ],
+        [
+          "2025起跑",
+          "+121.51%",
+          "-26.87%"
+        ]
+      ]
+    },
+    {
+      "direction": "60日線、急跌／波動減碼及有效收盤修正",
+      "source": "docs/research_observed_risk_20260913.md",
+      "note": "2022-01-03～2026-09-09；價格風控代理，不是用事後戰爭或升息標籤。",
+      "headers": [
+        "規則",
+        "原成交條件總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "原現金版",
+          "+541.90%",
+          "-25.52%"
+        ],
+        [
+          "原60市場日風控",
+          "+180.58%",
+          "-28.15%"
+        ],
+        [
+          "新60有效收盤風控",
+          "+231.00%",
+          "-26.90%"
+        ],
+        [
+          "原急跌／波動風控",
+          "+473.73%",
+          "-22.47%"
+        ],
+        [
+          "新急跌／波動風控",
+          "+589.98%",
+          "-25.46%"
+        ],
+        [
+          "獨立0050",
+          "+242.07%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "買入預算及名額事前預留",
+      "source": "docs/research_reservation_bridge_20260914.md",
+      "note": "2022-01-03～2026-09-09；只列一般成本；後续整張版另見A。",
+      "headers": [
+        "帳戶",
+        "條件",
+        "流程",
+        "費後總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "成交金額排序",
+          "一般",
+          "原流程",
+          "+1111.00%",
+          "-26.10%"
+        ],
+        [
+          "成交金額排序",
+          "一般",
+          "事前預留",
+          "+637.16%",
+          "-37.76%"
+        ],
+        [
+          "0050",
+          "一般",
+          "原流程",
+          "+242.07%",
+          "-33.96%"
+        ],
+        [
+          "0050",
+          "一般",
+          "事前預留",
+          "+242.37%",
+          "-33.89%"
+        ]
+      ]
+    },
+    {
+      "direction": "次日預設限價／盤中條件成交",
+      "source": "docs/research_intraday_limit_20260914.md",
+      "note": "2022-01-03～2026-09-09；這是另套盤中條件假設，不能當A次日開盤結果。",
+      "headers": [
+        "策略",
+        "條件",
+        "扣成本總報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "原排序",
+          "一般",
+          "+60.25%",
+          "-34.26%"
+        ],
+        [
+          "成交金額排序",
+          "一般",
+          "+100.12%",
+          "-30.19%"
+        ],
+        [
+          "0050 基準",
+          "一般",
+          "+233.95%",
+          "-31.27%"
+        ]
+      ]
+    },
+    {
+      "direction": "中期動能、波動調整動能、接近一年新高",
+      "source": "docs/research_rules_20260909.md",
+      "note": "2018-01-02～2026-06-23；十檔、月末訊號次日收盤；原文表採每邊0.45%滑價，並未多延成交日。",
+      "headers": [
+        "方式",
+        "全期累積報酬",
+        "全期最大回撤"
+      ],
+      "rows": [
+        [
+          "中期動能",
+          "+12.57%",
+          "-65.50%"
+        ],
+        [
+          "波動調整動能",
+          "-28.20%",
+          "-69.43%"
+        ],
+        [
+          "接近一年新高",
+          "+245.39%",
+          "-60.23%"
+        ],
+        [
+          "0050 買入持有",
+          "+591.76%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "价格強勢＋投信持續買超／上漲放量",
+      "source": "docs/research_flow_20260909.md",
+      "note": "2018-01-02～2026-06-23；舊十檔月頻合成組合，非2022起完整資金帳戶。",
+      "headers": [
+        "方法",
+        "累積淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "價格強勢",
+          "+49.44%",
+          "-60.84%"
+        ],
+        [
+          "加投信持續買超",
+          "+17.70%",
+          "-41.64%"
+        ],
+        [
+          "加上漲放量",
+          "-11.84%",
+          "-62.33%"
+        ],
+        [
+          "投信與放量都加",
+          "+0.68%",
+          "-28.69%"
+        ],
+        [
+          "0050 買入持有",
+          "+591.76%",
+          "-33.96%"
+        ]
+      ]
+    },
+    {
+      "direction": "價格＋營收加速、投信與營收優先",
+      "source": "docs/research_revenue_20260909.md",
+      "note": "2018-01-02～2026-06-23；舊十檔月頻及公告時間假設。",
+      "headers": [
+        "規則",
+        "累積淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "價格強勢",
+          "+49.44%",
+          "-60.84%"
+        ],
+        [
+          "價格＋營收齊全",
+          "+46.27%",
+          "-60.45%"
+        ],
+        [
+          "價格＋營收加速",
+          "+5.33%",
+          "-63.20%"
+        ],
+        [
+          "價格＋營收加速＋投信",
+          "-25.41%",
+          "-40.76%"
+        ],
+        [
+          "營收優先",
+          "+15.18%",
+          "-55.91%"
+        ],
+        [
+          "0050 買入持有",
+          "**+591.76%**",
+          "**-33.96%**"
+        ]
+      ]
+    },
+    {
+      "direction": "新聞營運事件、題材群轉強及合併",
+      "source": "docs/research_event_groups_20260909.md",
+      "note": "2022-01-03～2026-06-23；供應商新聞日期已知不可靠，以下是作廢資格的診斷數字，不能作有效T+1績效。",
+      "headers": [
+        "規則",
+        "最多持有日",
+        "官方參考價：模擬淨報酬"
+      ],
+      "rows": [
+        [
+          "營運事件",
+          "63",
+          "-5.59%"
+        ],
+        [
+          "題材群轉強",
+          "63",
+          "48.39%"
+        ],
+        [
+          "營運事件＋題材群",
+          "63",
+          "56.87%"
+        ],
+        [
+          "營運事件",
+          "126",
+          "11.40%"
+        ],
+        [
+          "題材群轉強",
+          "126",
+          "152.24%"
+        ],
+        [
+          "營運事件＋題材群",
+          "126",
+          "18.27%"
+        ]
+      ]
+    },
+    {
+      "direction": "台積電實績超指引、展望上修、價量確認",
+      "source": "docs/research_guidance_20260910.md",
+      "note": "2023-01-03～2026-06-23；單公司合成組合，含0050；文件首次版本及時序限制。",
+      "headers": [
+        "規則",
+        "累積淨報酬",
+        "最大回撤"
+      ],
+      "rows": [
+        [
+          "實績超過指引",
+          "335.76%",
+          "-27.48%"
+        ],
+        [
+          "實績超標＋價量確認",
+          "330.82%",
+          "-27.64%"
+        ],
+        [
+          "全年展望上修（時間診斷）",
+          "338.33%",
+          "-27.48%"
+        ],
+        [
+          "兩者同時成立（時間診斷）",
+          "335.48%",
+          "-27.69%"
+        ],
+        [
+          "0050 持有",
+          "333.72%",
+          "-27.48%"
+        ],
+        [
+          "70% 0050＋30%2330 固定持有",
+          "376.08%",
+          "-28.51%"
+        ]
+      ]
+    }
+  ],
+  "source_sha256": {
+    "artifacts/forward_simulation/residual_slots_20260926.json": "cb77a9dbe55e27f8e43f3dd8065785f2bf68011f32718ebb22a77aa2ae068bca",
+    ".cache/residual-slots-20260926/final-v1/cases/benchmark_control.json": "907ddc7d70a94fa8f9638bdaca3d4ca45ef606b3daa744acb177555c006e8992",
+    ".cache/residual-slots-20260926/final-v1/cases/keep_0.json": "655192119e8fc1dc524b91615b188ed5e0f0b7d39ce6a86328108020b739e7e9",
+    ".cache/residual-slots-20260926/final-v1/cases/release_0.json": "011eb3985abdcf0a763dd9209e3ece70136ddc111501d7fbc39731aa81c8e492",
+    "artifacts/forward_simulation/candidate_queue_20260927.json": "96d36a28a1962aa0ba30b2410702f221c201e11d2ce9aa2a3b742ca12fcc61e6",
+    ".cache/candidate-queue-20260927/final-v1/cases/valid2_0.json": "b1af4ec97b11390add238e749ab9fdf16c49130faf4381e76162dfeff4685a8f",
+    "artifacts/forward_simulation/volatility_budget_completed_20260927.json": "ff5e542ac29a8ea166b7d1a2465f7736423a62898d7dc6991cd33b1f201363df",
+    ".cache/completed-corporate-studies-20260927/volatility-final-v1/cases/vol30_0.json": "fc76ced3a47af4419fb279cc35d770aba6227ca18a24109e53ee32165a800237",
+    ".cache/completed-corporate-studies-20260927/volatility-final-v1/cases/vol40_0.json": "639f9d3b4a54d26a5ed4ac21fdf2825f3d49b0b0800d101f9408be81bd5e8aec",
+    ".cache/completed-corporate-studies-20260927/volatility-final-v1/cases/vol50_0.json": "411e963007887111ac8729c906c129e6fa3a188d08072f2132e44193bbc16a2b",
+    "artifacts/forward_simulation/exit_mechanisms_completed_20260927.json": "fe119b93d22be18c595490d4a7f107421f972e30182849fd404801e6ca7c1b0f",
+    ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/fixed63_0.json": "adafedfcafe9b6f86d50ed3a3b636f24e2ff7eeedac40280f8d2978ce8dc560a",
+    ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/trail20_12_0.json": "53aa3548a790f5ede79b386c74dc9e46b68ce24efab90823e1886680768f3063",
+    ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/weak20_0.json": "0b89e5ce3a6c9f15ba9d60c21e89ef96b2e4287070d09881056e18ecdf4c53f6",
+    ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/market_weak_0.json": "0614794b0d8b90a71a23699208b9ae3ed4e9fe3573ef0d514c01ef920dfbc341",
+    ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/trend126_0.json": "5d29661cd100b907b16cca85bfbdc44d939219658d1445eebbadff77b8c983c8",
+    ".cache/completed-corporate-studies-20260927/exits-final-v1/cases/adaptive_0.json": "2c2b424594e2925d73c40f51c69d041b56231befa1bdb8e03dd73aa1d7f22b28",
+    "artifacts/forward_simulation/support_risk_20260927.json": "0cd0cea4f2e31548206280dd26f903c009903e22dfa083eeb58d16715e804a9e",
+    ".cache/support-risk-20260927/final-v1/cases/support20_0.json": "9f6d1fe3452d125780abccb376bdbc27a827d3fb5b63566e0db11d832ebea1b8",
+    ".cache/support-risk-20260927/final-v1/cases/risk2_0.json": "16517ea4052f726bededc4fc7c6c7a5705b024cdd113a2b19f8e98e296c66194",
+    ".cache/support-risk-20260927/final-v1/cases/support_risk2_0.json": "923646ba8db01499cc8bb107a674122de8799ae36fafc4843b72a2b4c4ded2b7",
+    "artifacts/forward_simulation/pyramid_cash_20260927.json": "1b7213ef45463088003f5a30674b977edac2a7ad5bc77c35ce3ea538b1cf0d9e",
+    ".cache/pyramid-cash-20260927/final-v1/cases/pyramid_0.json": "0d1d403be991f03e385ac9494f70879343ae7e8038a79a8d1990a2fc2aed90b4",
+    "artifacts/forward_simulation/pattern_cash_20260927.json": "541e19e10281170d7d2a545978d45f125cb857bdc8583a74fe8e3cdbbb7a63b9",
+    ".cache/pattern-cash-20260927/final-v1/cases/pattern_0.json": "52e28ee747ac9f3ed9e332b8304c25115fb949874bfdb9501f4435c983a60337",
+    ".cache/pattern-cash-20260927/final-v1/cases/support_risk2_pattern_0.json": "a5946e020a3c5083b24458fab8f14427fba4500e755d503a5ea95a48141be8da",
+    "artifacts/forward_simulation/leader_chip_20260928.json": "54492634b2344cb9f72dbd732b6929f4c6fd0d8f4be1fccad53bc122c84b62ea",
+    ".cache/leader-chip-accounts-20260928/run-a/cases/rank_main_0.json": "efad3afc63fc8320aa6b6596d3e90088d3a20c3d4d1280fc41acc9e2210d2c09",
+    ".cache/leader-chip-accounts-20260928/run-a/cases/rank_delayed_0.json": "dd34a388de5311d1779d1950e9e10c4584056f8171754657053f5f215093b41d",
+    ".cache/leader-chip-accounts-20260928/run-a/cases/filter_main_0.json": "12f9fa02458972c02ceb876efce270a233d293f114d1c05d9e834fa4a043c6cc",
+    ".cache/leader-chip-accounts-20260928/run-a/cases/filter_delayed_0.json": "f4f895c2f1351223e91a2c193456c7ded0453d9820bd7ef3ec0eb3088bef1ccc",
+    ".cache/leader-chip-accounts-20260928/run-a/cases/coverage_main_0.json": "e7b23b230ce0c4651edf8750ed92f79bec19eef77787b3bddc245c42f68a5f76",
+    ".cache/leader-chip-accounts-20260928/run-a/cases/coverage_delayed_0.json": "a8b875b74b3d05bad8f79ba6222f65ba19d1082410484970434c26d2488815f3",
+    "artifacts/forward_simulation/historical_selector_replay_20260925.json": "f8ce1ca2b37234c13d2d58b89256aedd99b771ffa2e71d88136f520a57fa5210",
+    ".cache/historical-selector-replay-20260925/final-v7/cases/original_control.json": "393fd3fc1ca34cd763f432feb3ed42ff6a3ba5e4d75a6326d4bb6a421e9a305b",
+    ".cache/historical-selector-replay-20260925/final-v7/cases/identity_control.json": "4e96c61492c7ddf9a80578d31b60b285c868470e0165d39b0629de6d591e36c7",
+    ".cache/historical-selector-replay-20260925/final-v7/cases/omitted_control.json": "f36eae03d3e67460ab1c8e674d83a51d6a1a7bb9a8b7feba18ff5210816baa6a",
+    ".cache/historical-selector-replay-20260925/final-v7/cases/combined_control.json": "b8bac3355bddc95bbba89ddbb5b87ddee8f9b8da833f9e1072fdb073bc1a5b47",
+    "artifacts/forward_simulation/holder_flow_completed_20260928.json": "aebe61604ec6df8bbfe9db2c2c2b8751b65dc59800c0f99e3581981f60f38836",
+    ".cache/holder-flow-completed-20260928-a/benchmark_control.json": "9b080b103e1dd1884f3d7930bf08716fa1d8f81488f39466456e726c79f20caa",
+    ".cache/holder-flow-completed-20260928-a/concentrated_strength_control.json": "666cef572589e710d0902f013f08765e6657b3abb330c2034ad9b1e52f2c7166",
+    ".cache/holder-flow-completed-20260928-a/cs_both_buy_control.json": "c2cbd70e59260f0f8136430113b001582d5ec114bf1d433ecb4e1f63641b26b4",
+    ".cache/holder-flow-completed-20260928-a/cs_both_sell_control.json": "d022733621e28285e1e69e03dcdea45767f4db83ce092011d793c8d6949acef0",
+    ".cache/holder-flow-completed-20260928-a/cs_foreign_buy_trust_sell_control.json": "241055f8be2b2d540ed20bc0a8cfbbcbdbcb31fbdb8049483e7b0c1def7bb787",
+    ".cache/holder-flow-completed-20260928-a/cs_foreign_sell_trust_buy_control.json": "9b36429a1389baa330f5182914fd4ec94751c0f1fc6c1d0a3ad1563e60c2f576",
+    ".cache/holder-flow-completed-20260928-a/relative_strength_control.json": "7afd3e7d9ee3c163e4e2710f420b24431bad3fefbd55bfbed36829a993aaadd0",
+    ".cache/sector-accounts-20260925/report.json": "8503c4a641495266d79e80cd2fdbba8e38af58cf8736196e6fd4a8bf24e7cfc1",
+    ".cache/sector-accounts-20260925/cases/benchmark_control_mixed.json": "ea66bee1241a74b38c66bd3fee9e1ac1f7acae43c124cf563ef1eee909125011",
+    ".cache/sector-accounts-20260925/cases/relative_strength_control_mixed.json": "6f7f4667a798591a77900bf8590d977d5ce2727348160303bdb5da25ffc26bb3",
+    ".cache/sector-accounts-20260925/cases/strength_with_turnover_control_mixed.json": "7312e7da91c6052ae543674f6b4a7e8160d9cf437e4e9ba2e5b5e5f9438fcdb3",
+    ".cache/sector-accounts-20260925/cases/benchmark_control_board_only.json": "563b6a411a937ebcd4f0fa276dcea525c99334abd22cded91dcfcfd356e47eef",
+    ".cache/sector-accounts-20260925/cases/relative_strength_control_board_only.json": "ebba1e8bb043de1ab456127ce74da2b74b62486f3ef665d48cbe7b70a9513f56",
+    ".cache/sector-accounts-20260925/cases/strength_with_turnover_control_board_only.json": "8d4501fb467d0152eb760f266151ee8847dc71bf1b75d9f1a8f7631b6819bcc8",
+    "artifacts/forward_simulation/theme_catalyst_20260927.json": "72cb19f0339ea70d7037b4ab9e6bf79cb38c519a7c7b1a689e72dfb4ba4a68bc",
+    ".cache/theme-catalyst-20260927-v4/report.json": "4be02cf00b7b6dfe00f9c91769cb8497bda1e440d5f5a78887b9e7641f53940f",
+    ".cache/theme-catalyst-20260927-v4/augmented_delay0_confirmed_catalyst_control.json": "d4940d6483101d59e0ed79b99d8303f792fc2c0a15bd2a805010cdf211606625",
+    ".cache/theme-catalyst-20260927-v4/augmented_delay5_confirmed_catalyst_control.json": "27a5c4dfd05df373fa5378f43c3bb50498cd9c0e3ec0d882c3e64dded1a7f3c3",
+    ".cache/theme-catalyst-20260927-v4/benchmark_control.json": "64ab6b59acb5b6cdf978e00fa56dab5438b2a435b7297af4b53d1bfd0858653a",
+    ".cache/theme-catalyst-20260927-v4/primary_delay0_confirmed_catalyst_control.json": "6d87fe5ef6613d341dad5ac1cda20703c0ab5b7d5c20e02c76c54302f4dbf938",
+    ".cache/theme-catalyst-20260927-v4/primary_delay5_confirmed_catalyst_control.json": "de575cbda5dbd59bc4ba5bf575f5d572bb8ec3c511dbdec886129d2c1428f979",
+    "artifacts/forward_simulation/first_bar_20260927.json": "b86acb635e9e25c18db6a37b58e2bc361f45175ced0732537317edb221511f33",
+    ".cache/first-bar-20260927-v2/report.json": "fa9b02123ce21ed6b7a82c6a4b293b5c0838a22c966576dd5654da4ce765bae1",
+    ".cache/first-bar-20260927-v2/first_lag15_board_control.json": "8657bb0661c472c440014ee54e53774f08e8ccb1eb29f489010670826975109d",
+    ".cache/first-bar-20260927-v2/first_lag15_mixed_control.json": "76f15b89f3e935b27836ac343b74fe12de81980fc2c1c72a76cb3d46ccde30c2",
+    ".cache/first-bar-20260927-v2/first_lag8_board_control.json": "53fb6110bc7db3ef7c086546d2337361f80acddecd625e6c37b3a2928c089fd6",
+    ".cache/first-bar-20260927-v2/first_lag8_mixed_control.json": "cf685a839290aaa1705b817d700c6adc1a5321b717eb09b59932d65ee98268cd",
+    ".cache/first-bar-20260927-v2/wait_lag15_board_control.json": "d1e24ca2b85a4e3bdbf81b469a3ecb958551a1c0630a061f05691b3149fee8ad",
+    ".cache/first-bar-20260927-v2/wait_lag15_mixed_control.json": "a4ae52a60548cd7ddad5d7c319acad68063c426743db972c2eccfc101773b8d6",
+    ".cache/first-bar-20260927-v2/wait_lag8_board_control.json": "9f5acca5f70aaba122345372e9c879c77d3490ba0236a24d5ff83fa3f57fa618",
+    ".cache/first-bar-20260927-v2/wait_lag8_mixed_control.json": "d38f13175862b88b1e941d408f2db998046b683d7be8221e029c4718027ded50",
+    "artifacts/forward_simulation/early_strength_20260927.json": "621110c3c499e862c70fa42e830a6490eb4ad6ea60a4313604d3776d7f9d893a",
+    ".cache/early-strength-20260927-v2/report.json": "4e3e4987cfba754a74214ba943098007ca303ddf1094618a081e984d9a125826",
+    ".cache/early-strength-20260927-v2/all_confirm3_board_control.json": "af1bad6239a5f73488f4f2d8f0b3d4ec63e719a3f9713a19d5557b02ac933dab",
+    ".cache/early-strength-20260927-v2/all_confirm3_mixed_control.json": "645d72fd1adf8e38ef5d74b015837f4ab500ccc829a4113c3b8c5fd646e0726b",
+    ".cache/early-strength-20260927-v2/all_first_board_control.json": "3a4bf8690775fe49418f8042ecfe4b6cf2cc0b5b89e0cd8188b3c285cdc2612a",
+    ".cache/early-strength-20260927-v2/all_first_mixed_control.json": "471c0a5a27ea015076ff9037411d7645d0d133f7fe0990a7619699815c472cd3",
+    ".cache/early-strength-20260927-v2/all_retest5_board_control.json": "7595c24c545738f7b8ab81d9f3f9bd28e2210b0a49d080a450012c0c77e5e963",
+    ".cache/early-strength-20260927-v2/all_retest5_mixed_control.json": "b041e609ca07144d454f631afbeb10f76ce568bf62afa1e609f79bc0896429f5",
+    ".cache/early-strength-20260927-v2/turn_confirm3_board_control.json": "5ea27105711161809a989455f070284df7b635eba49c7ca1395cef1cec012b6e",
+    ".cache/early-strength-20260927-v2/turn_confirm3_mixed_control.json": "658575d3213d502b75eff20d426f7e68e497aca45a0c9392fb08bc36cdb0af75",
+    ".cache/early-strength-20260927-v2/turn_first_board_control.json": "abd53fa236d92fb0c9a014e6bfe1b4367111a1fcaaa3082b9cf5cc197894abdf",
+    ".cache/early-strength-20260927-v2/turn_first_mixed_control.json": "de29ee0cfe75257348798fa8a83ea455e3fefd777d43882c9b25be4a080d602b",
+    ".cache/early-strength-20260927-v2/turn_retest5_board_control.json": "4d248057fc132b8ef3ef08da73f52f9c3b7a9a6087b82426a96824a4e1649601",
+    ".cache/early-strength-20260927-v2/turn_retest5_mixed_control.json": "4fc88c29970ce8c8202a44890d290adfef65c32393cf52d3925785fcc4c19cf1",
+    "docs/research_cash_allocation_20260910.md": "a50c4e60f605cd1fd45c10a79f0f0996857f7d2d59fd91d87974e3f9105b36f6",
+    "docs/research_capacity_20260910.md": "28068a219c5a9fb0f979b3fb87ae6639546279d2bf7a926ecf3ea379a8763a2a",
+    "docs/research_diffusion_20260910.md": "dc0b32ba7c9289a47b5452177375ed0e6f2dba7dd161657fbdcda50b486ec461",
+    "docs/research_regime_switch_20260910.md": "a5a66925292c772fa4d3cb2362dffb59929b8012a0c53e6c58d02601b9a97455",
+    "docs/research_exit_scenarios_20260910.md": "e8575692dcce6c670df5df7dffb50aff6fc700c543c6f1694b6ceedd1eadf443",
+    "docs/research_technical_20260910.md": "32d2dc30de5021616db67f2ea67f029de80841b9b65aa92527955c8e4a47bb47",
+    "docs/research_chip_20260911.md": "dfbe3987ad3d9bc3a1e5f43d446060b2e862a8c06884a3c9909df592e0f33ef7",
+    "docs/research_five_axis_20260913.md": "e191e14831625f1e68485706b16a1a11768a80004ad95846945a26e06ba549b3",
+    "docs/research_broker_persistence_20260924.md": "ec9291bc822b796a0658f3c74ece8106ca15b7d9202a8f59fb9a90fcb3bf7759",
+    "docs/research_priority_20260924.md": "52e59097ad06b4f88864c5488c8051a1436c4e730e362e45b9c7601a6f77af8e",
+    "docs/research_execution_resources_20260924.md": "45a60883a0da3b9886e9c927d2a5ace9eda56133f074e4355a4dafda357652e6",
+    "docs/research_slot_reuse_20260924.md": "675c043a3ea18728591235f336538d75b6ca852c66997e9b8a9aa0cfcf64f516",
+    "docs/research_conservative_diversification_20260924.md": "e677a698119cb5d194e2aef17b0f73056aa25529a280db8eb1d13625c08fcdea",
+    "docs/research_deferred_entry_20260924.md": "988fbb16feb9d108e00039f0f69572a666dffdb8b86c4eddfebcc8a628eab086",
+    "docs/research_cash_risk_20260913.md": "94a0eb43d3dfb8c989495fd7450ed82bff13a889616ea01e6d27f955549096a5",
+    "docs/research_observed_risk_20260913.md": "bf593ff3fd09a028b571afe2a0cd6792e988e6a814f9bcfb44e2bda753dc4d11",
+    "docs/research_reservation_bridge_20260914.md": "f4cd99aa3af434b4e8c0b8bae1f2dde2e4d7e9297ea75bac697f1f57c8f3ba4a",
+    "docs/research_intraday_limit_20260914.md": "1e1b751c60608ee54df4abe74a10a438ff5519cea587f5eb4610b5b8a63b5d64",
+    "docs/research_rules_20260909.md": "e780b8ea78f8c0822ccab261cf01c4f186e5a3349e087ebc4a51cd535ac8f9c3",
+    "docs/research_flow_20260909.md": "5ebbeee61f2dd20cb00fc7ca148894cfa2a4bd3bce2c3485c62d425f0f56abea",
+    "docs/research_revenue_20260909.md": "46a185006d89368bd1385230da15ab1e82293dc7f1ba3cb1eedb8a7578ea8ead",
+    "docs/research_event_groups_20260909.md": "782686c6a3368835bb11739e60b4ca335915606d1a27f90caa15ea5846654044",
+    "docs/research_guidance_20260910.md": "be1db9d5fa36a71d7d0e89741ee6e4ef1bebf913f08339a8ba5fd65233f315eb",
+    ".cache/build_next_session_catalog.py": "601875d99c39ea6b2aa6faec30738830a5c52bcbcfa1516e815580845e605ef6",
+    "scripts/replay_million.py": "11ff85b5b530fb2a0cccd408dd35480e3bfe3bf5da03cd69af362189352342a7",
+    "skills/corporate_account_audit.py": "b2d5cb374737ac2bdcee82e3f474d3e196dded72dfbf4e5670aa48a9c9e3a00d"
+  },
+  "verification": {
+    "completed_rows": 47,
+    "unique_result_files": 47,
+    "all_result_hashes_match": true,
+    "all_summaries_match": true,
+    "all_journals_reconciled": true,
+    "raw_market_provenance_revalidated": false
+  },
+  "acceptance": {
+    "make_test": {
+      "exit_code": 0,
+      "passed": 3951,
+      "warnings": 36,
+      "seconds": 83.81
+    },
+    "make_pipeline": {
+      "exit_code": 0,
+      "twse_origin_hold_preserved": true,
+      "does_not_prove_data_complete": true
+    },
+    "make_api": {
+      "exit_code": 2,
+      "reason": "port_8000_already_in_use"
+    },
+    "existing_api_http_status": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs": 200
+    }
+  }
+}
