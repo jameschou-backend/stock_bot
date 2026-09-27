@@ -63,6 +63,16 @@ api:
 test:
 	python scripts/run_tests.py
 
+.PHONY: prepare-holder-flow check-holder-flow backtest-holder-flow
+prepare-holder-flow:
+	python scripts/prepare_holder_flow_accounts.py --prepare --fetch
+
+check-holder-flow:
+	python scripts/prepare_holder_flow_accounts.py --check
+
+backtest-holder-flow:
+	python scripts/prepare_holder_flow_accounts.py --run $(or $(OUTPUT),.cache/holder-flow-account-replay)
+
 .PHONY: prepare-guidance research-guidance
 prepare-guidance:
 	python scripts/research_guidance.py --prepare-inputs
