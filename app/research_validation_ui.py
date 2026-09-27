@@ -133,7 +133,10 @@ def render():
     import pandas as pd
     import streamlit as st
     st.subheader('最新策略驗證')
-    selected=st.selectbox('查看哪一組實驗',['個股啟動前共同性',*FAMILIES],key='research_validation_family')
+    selected=st.selectbox('查看哪一組實驗',['題材與籌碼集中','個股啟動前共同性',*FAMILIES],key='research_validation_family')
+    if selected=='題材與籌碼集中':
+        from app.theme_chips_ui import render as render_theme_chips
+        render_theme_chips();return
     if selected=='個股啟動前共同性':
         from app.stock_launch_ui import render as render_stock_launch
         render_stock_launch();return

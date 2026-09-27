@@ -1,0 +1,21 @@
+{
+  "schema": "theme_chip_case_sources_v1",
+  "reviewed_at": "2026-09-27",
+  "historical_first_publication_verified": false,
+  "complete_news_coverage": false,
+  "events": [
+    {"id":"delta_20250529","stock_id":"2308","source_date":"2025-05-29","date_verified":true,"kind":"公司營運說明","title":"2025股東會議事錄：AI液冷產品認證與生產","url":"https://filecenter.deltaww.com/ir/download/calendar/20250529_Minutes%20of%202025AGM_Eng.pdf","finding":"公司表示液冷方案經CSP與ODM認可並進入生產，預期出貨擴大。","caveat":"會議日期不是議事錄首次上網日期；僅作背景，不視為當日可交易訊號。"},
+    {"id":"holystone_20260324","stock_id":"3026","source_date":"2026-03-24","date_verified":true,"kind":"法說／供應鏈布局","title":"2025全年營運法說：AI電源與高壓高容MLCC","url":"https://www.holystone.com.tw/downloads/files/Investor%20Forum/20260324%20Investor%20Forum_CH.pdf","finding":"頁12、16、22說明AI電源用量與高壓高容NP0，公司表示已切入高階AI電源供應鏈。","caveat":"早於4/1事件，晚於3/3事件；未核對首次上網及修訂時刻。"},
+    {"id":"yageo_2026q2","stock_id":"2327","source_date":null,"date_verified":false,"kind":"後續確認","title":"2026Q2法說","url":"https://yageogroup.com/content/Resource%20Library/Financial/YAGEO%202Q26_Earnings%20Conference%20Presentation_CH.pdf","finding":"季度材料屬後续資訊。","caveat":"本輪未驗證首次發表日期及較早材料，不回填4/14起漲事件。"},
+    {"id":"walsin_20260409","stock_id":"2492","source_date":"2026-04-09","date_verified":true,"kind":"營收／補庫存","title":"2026年3月營收公告","url":"https://www.passivecomponent.com/zh-hant/about/news/","finding":"官方新聞列表載明季末經銷商與OEM回補庫存、AI伺服器與電源需求穩定。","caveat":"不是已證實全面漲價；4/9公告不能當作4/2已知資訊。"},
+    {"id":"winbond_20260505","stock_id":"2344","source_date":"2026-05-05","date_verified":true,"kind":"財報／供需展望","title":"2026Q1法說：利用率與記憶體供需","url":"https://www.winbond.com/export/sites/winbond/about-winbond/investor/investor-conference/1Q26-investor-conference_EN_Final.pdf","finding":"記憶體利用率約100%；DDR4/LPDDR4供給缺口與後續價格展望。","caveat":"5/5早於5/14，晚於4/14；展望與已實現獲利須分開。"},
+    {"id":"nanya_20260119","stock_id":"2408","source_date":"2026-01-19","date_verified":true,"kind":"財報／售價與出貨","title":"2025Q4法說：售價與出貨改善","url":"https://www.nanya.com/Content/InvestorCalendar/5680_20260119_4Q25_Investor%20Conference_EG.pdf","finding":"Q4售價與出貨較前季提高，材料亦有2026供需展望。","caveat":"早於4/10，但不能解釋2025年最早啟動；資料為未查核季度數。"},
+    {"id":"npc_20260609","stock_id":"1303","source_date":"2026-06-09","date_verified":true,"kind":"營收／產品組合","title":"2026年5月營收說明","url":"https://www.npc.com.tw/npcfile/public/revenue/20260609122321918.pdf","finding":"電子材料價量增加，塑膠與聚酯另有壓力，不能將南亞等同南亞科。","caveat":"早於6/15續漲，晚於5/15事件。"},
+    {"id":"umc_20260313","stock_id":"2303","source_date":"2026-03-13","date_verified":true,"kind":"技術合作","title":"聯電與HyperLight之TFLN合作","url":"https://www.umc.com/en/News/press_release/Content/corporate/20260313","finding":"薄膜鈮酸鋰光子技術合作，屬產品與供應鏈事件。","caveat":"早於3/20；合作不等於訂單金額或已實現獲利。"},
+    {"id":"innolux_20250314","stock_id":"3481","source_date":"2025-03-14","date_verified":false,"kind":"待核對","title":"2025上半年法說搜尋線索","url":"https://www.innolux.com/Uploads/InvestorEarningMeetings/%28%E4%B8%8B%E8%BC%89%E7%89%88%29%20CN%202025H1%20investor%20conference%20V2_1_7855dc.pdf","finding":"官方搜尋摘要提及FOPLP，但本文讀取未成功。","caveat":"保留未確認，不當作2026年已量產或已獲利證據。"}
+  ],
+  "data_sources": [
+    {"url":"https://www.tdcc.com.tw/portal/zh/smWeb/qryStock","finding":"週末存摺持股餘額按ID歸戶；部分特殊帳戶按該帳戶股數。不是交易流量或買進意圖。"},
+    {"url":"https://finmind.github.io/tutor/TaiwanMarket/Chip/","finding":"Sponsor可按特定日期讀全市場持股分級；原始觀察日不等於經核實的歷史發布時間。"}
+  ]
+}
