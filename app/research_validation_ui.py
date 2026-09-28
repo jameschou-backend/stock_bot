@@ -135,7 +135,9 @@ def render():
     st.subheader('最新策略驗證')
     selected=st.selectbox('查看哪一組實驗',['五檔次日限價實測','法人與均線差異','第一根帶量進場','題材營運策略','題材與籌碼集中','個股啟動前共同性',*FAMILIES],key='research_validation_family')
     if selected=='五檔次日限價實測':
+        from app.limit_band_ui import render as render_limit_bands
         from app.residual_ticks_ui import render as render_residual_ticks
+        render_limit_bands()
         render_residual_ticks();return
     if selected=='法人與均線差異':
         from app.launch_flows_ui import render as render_launch_flows
