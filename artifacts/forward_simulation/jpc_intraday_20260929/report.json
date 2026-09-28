@@ -1,0 +1,575 @@
+{
+  "stock_id": "6197",
+  "window": "2026-07-07..2026-08-10",
+  "peak_intraday": 405,
+  "trough_intraday": 260.0,
+  "high_to_low_drawdown": -0.3580246913580247,
+  "peak_close": 372.5,
+  "close_drawdown": -0.28724832214765106,
+  "rebound_next_close": 0.08851224105461397,
+  "rebound_to_aug6_close": 0.192090395480226,
+  "institutional_net_shares": {
+    "2026-07-08..2026-07-30": {
+      "foreign": -716596.0,
+      "trust": -12000.0,
+      "dealer": -164348.0,
+      "total": -892944.0
+    },
+    "2026-07-24..2026-07-30": {
+      "foreign": 264673.0,
+      "trust": 3000.0,
+      "dealer": -74634.0,
+      "total": 193039.0
+    },
+    "2026-07-07..2026-07-09": {
+      "foreign": -1425314.0,
+      "trust": 7000.0,
+      "dealer": -125941.0,
+      "total": -1544255.0
+    }
+  },
+  "weekly_holders": [
+    {
+      "stock_id": "6197",
+      "date": "2026-06-26 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 123439128.0,
+      "large_units": 49327500.0,
+      "small_units": 53295637.0,
+      "large_pct": 0.3996099194738317,
+      "small_pct": 0.4317564281562326,
+      "total_people": 47283.0,
+      "large_pct_delta4": 0.006449889717074,
+      "small_pct_delta4": 0.0206112557766777,
+      "large_units_delta4": 1328211.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-07-04 00:00:00",
+      "assumed_available_lag15": "2026-07-11 00:00:00"
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-03 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 123439128.0,
+      "large_units": 48841726.0,
+      "small_units": 54361927.0,
+      "large_pct": 0.3956745870725853,
+      "small_pct": 0.4403946129625932,
+      "total_people": 48435.0,
+      "large_pct_delta4": -0.0026408727506997,
+      "small_pct_delta4": 0.0073360703179993,
+      "large_units_delta4": -205450.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-07-11 00:00:00",
+      "assumed_available_lag15": "2026-07-18 00:00:00"
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-09 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 123897452.0,
+      "large_units": 48876870.0,
+      "small_units": 55288622.0,
+      "large_pct": 0.3944945534473138,
+      "small_pct": 0.4462450285095451,
+      "total_people": 48637.0,
+      "large_pct_delta4": -0.003268301779596,
+      "small_pct_delta4": 0.0067089034649806,
+      "large_units_delta4": -222630.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-07-17 00:00:00",
+      "assumed_available_lag15": "2026-07-24 00:00:00"
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-17 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 124566798.0,
+      "large_units": 48980568.0,
+      "small_units": 56751860.0,
+      "large_pct": 0.39320724933461,
+      "small_pct": 0.4555937931390032,
+      "total_people": 49887.0,
+      "large_pct_delta4": -0.0064318748173363,
+      "small_pct_delta4": 0.0188730962786041,
+      "large_units_delta4": -350537.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-07-25 00:00:00",
+      "assumed_available_lag15": "2026-08-01 00:00:00"
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-24 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 125621221.0,
+      "large_units": 48774579.0,
+      "small_units": 57430230.0,
+      "large_pct": 0.3882670349144274,
+      "small_pct": 0.457169812097273,
+      "total_people": 50146.0,
+      "large_pct_delta4": -0.0113428845594042,
+      "small_pct_delta4": 0.0254133839410403,
+      "large_units_delta4": -552921.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-08-01 00:00:00",
+      "assumed_available_lag15": "2026-08-08 00:00:00"
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-31 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 125757643.0,
+      "large_units": 47772810.0,
+      "small_units": 56881268.0,
+      "large_pct": 0.3798799727822507,
+      "small_pct": 0.4523086362234063,
+      "total_people": 49778.0,
+      "large_pct_delta4": -0.0157946142903345,
+      "small_pct_delta4": 0.0119140232608131,
+      "large_units_delta4": -1068916.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-08-08 00:00:00",
+      "assumed_available_lag15": "2026-08-15 00:00:00"
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-07 00:00:00",
+      "valid": true,
+      "reason": "ok",
+      "total_units": 125791243.0,
+      "large_units": 47557810.0,
+      "small_units": 56886442.0,
+      "large_pct": 0.3780693223613348,
+      "small_pct": 0.4522289520582923,
+      "total_people": 49936.0,
+      "large_pct_delta4": -0.016425231085979,
+      "small_pct_delta4": 0.0059839235487472,
+      "large_units_delta4": -1319060.0,
+      "change_known": true,
+      "change_reason": "ok",
+      "assumed_available_lag8": "2026-08-15 00:00:00",
+      "assumed_available_lag15": "2026-08-22 00:00:00"
+    }
+  ],
+  "margin": [
+    {
+      "date": "2026-07-07 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5114
+    },
+    {
+      "date": "2026-07-08 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5139
+    },
+    {
+      "date": "2026-07-09 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5229
+    },
+    {
+      "date": "2026-07-13 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5180
+    },
+    {
+      "date": "2026-07-14 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5137
+    },
+    {
+      "date": "2026-07-15 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5266
+    },
+    {
+      "date": "2026-07-16 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5307
+    },
+    {
+      "date": "2026-07-17 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5015
+    },
+    {
+      "date": "2026-07-20 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5002
+    },
+    {
+      "date": "2026-07-21 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5242
+    },
+    {
+      "date": "2026-07-22 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5324
+    },
+    {
+      "date": "2026-07-23 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5354
+    },
+    {
+      "date": "2026-07-24 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5290
+    },
+    {
+      "date": "2026-07-27 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5332
+    },
+    {
+      "date": "2026-07-28 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5289
+    },
+    {
+      "date": "2026-07-29 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5296
+    },
+    {
+      "date": "2026-07-30 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5285
+    },
+    {
+      "date": "2026-07-31 00:00:00",
+      "stock_id": "6197",
+      "margin_purchase_balance": 5320
+    }
+  ],
+  "price_rows": [
+    {
+      "stock_id": "6197",
+      "date": "2026-07-07 00:00:00",
+      "open": 388.5,
+      "high": 405.0,
+      "low": 355.5,
+      "close": 360.0,
+      "volume": 6637208.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-08 00:00:00",
+      "open": 368.0,
+      "high": 369.5,
+      "low": 348.0,
+      "close": 369.0,
+      "volume": 3734933.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-09 00:00:00",
+      "open": 370.5,
+      "high": 376.0,
+      "low": 358.0,
+      "close": 358.5,
+      "volume": 3333535.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-13 00:00:00",
+      "open": 364.0,
+      "high": 364.0,
+      "low": 324.5,
+      "close": 328.5,
+      "volume": 4809830.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-14 00:00:00",
+      "open": 328.0,
+      "high": 331.5,
+      "low": 307.5,
+      "close": 322.0,
+      "volume": 3313997.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-15 00:00:00",
+      "open": 330.0,
+      "high": 334.5,
+      "low": 322.0,
+      "close": 334.5,
+      "volume": 2313979.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-16 00:00:00",
+      "open": 329.0,
+      "high": 334.5,
+      "low": 323.5,
+      "close": 325.5,
+      "volume": 1573321.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-17 00:00:00",
+      "open": 312.0,
+      "high": 320.5,
+      "low": 302.5,
+      "close": 304.5,
+      "volume": 2735728.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-20 00:00:00",
+      "open": 304.5,
+      "high": 308.5,
+      "low": 283.0,
+      "close": 301.0,
+      "volume": 2950601.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-21 00:00:00",
+      "open": 305.0,
+      "high": 309.5,
+      "low": 297.5,
+      "close": 307.5,
+      "volume": 2714919.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-22 00:00:00",
+      "open": 323.0,
+      "high": 326.0,
+      "low": 314.0,
+      "close": 315.0,
+      "volume": 2178904.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-23 00:00:00",
+      "open": 316.5,
+      "high": 318.5,
+      "low": 310.0,
+      "close": 315.5,
+      "volume": 1586672.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-24 00:00:00",
+      "open": 314.5,
+      "high": 326.5,
+      "low": 309.0,
+      "close": 310.0,
+      "volume": 2121015.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-27 00:00:00",
+      "open": 312.0,
+      "high": 315.5,
+      "low": 304.0,
+      "close": 312.0,
+      "volume": 1508764.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-28 00:00:00",
+      "open": 301.0,
+      "high": 304.5,
+      "low": 289.5,
+      "close": 290.0,
+      "volume": 2013060.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-29 00:00:00",
+      "open": 293.0,
+      "high": 295.5,
+      "low": 266.5,
+      "close": 277.5,
+      "volume": 3038240.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-30 00:00:00",
+      "open": 274.5,
+      "high": 282.0,
+      "low": 260.0,
+      "close": 265.5,
+      "volume": 2103320.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-07-31 00:00:00",
+      "open": 288.0,
+      "high": 291.0,
+      "low": 283.0,
+      "close": 289.0,
+      "volume": 1458246.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-03 00:00:00",
+      "open": 286.0,
+      "high": 308.0,
+      "low": 285.5,
+      "close": 302.5,
+      "volume": 1873548.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-04 00:00:00",
+      "open": 303.0,
+      "high": 313.0,
+      "low": 299.0,
+      "close": 308.0,
+      "volume": 2286877.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-05 00:00:00",
+      "open": 313.5,
+      "high": 321.0,
+      "low": 311.5,
+      "close": 312.5,
+      "volume": 1873019.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-06 00:00:00",
+      "open": 312.5,
+      "high": 321.0,
+      "low": 307.0,
+      "close": 316.5,
+      "volume": 1757834.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-07 00:00:00",
+      "open": 307.0,
+      "high": 307.0,
+      "low": 293.0,
+      "close": 293.5,
+      "volume": 3762119.0
+    },
+    {
+      "stock_id": "6197",
+      "date": "2026-08-10 00:00:00",
+      "open": 294.5,
+      "high": 309.0,
+      "low": 293.0,
+      "close": 309.0,
+      "volume": 2187808.0
+    }
+  ],
+  "intraday_board_exit": {
+    "trigger": {
+      "at": "2026-07-13T09:28:16.294953+08:00",
+      "peak": 405.0,
+      "threshold": 344.25,
+      "observed_low": 344.0,
+      "fill_price": null
+    },
+    "orders": [
+      {
+        "order_id": "6197:board:2026-07-13",
+        "stock_id": "6197",
+        "venue": "board",
+        "side": "sell",
+        "created_at": "2026-07-13T09:28:16.294953+08:00",
+        "qty": 2000,
+        "limit_price": 323.0,
+        "reason": "intraday_peak_stop15",
+        "trigger_at": "2026-07-13T09:28:16.294953+08:00",
+        "state": "research_intent_only",
+        "broker_submitted": false
+      }
+    ],
+    "fills": [
+      {
+        "at": "2026-07-13T09:31:24.979468+08:00",
+        "stock_id": "6197",
+        "venue": "board",
+        "qty": 1000,
+        "price": 343.5,
+        "order_id": "6197:board:2026-07-13",
+        "gross": 343500.0,
+        "commission": 489.0,
+        "tax": 1030.0,
+        "slippage": 1546.0,
+        "total_cost": 3065.0,
+        "cash_change": 340435.0
+      },
+      {
+        "at": "2026-07-13T09:34:29.103724+08:00",
+        "stock_id": "6197",
+        "venue": "board",
+        "qty": 1000,
+        "price": 344.0,
+        "order_id": "6197:board:2026-07-13",
+        "gross": 344000.0,
+        "commission": 490.0,
+        "tax": 1032.0,
+        "slippage": 1548.0,
+        "total_cost": 3070.0,
+        "cash_change": 340930.0
+      }
+    ],
+    "initial_qty": 2000,
+    "remaining_qty": 0,
+    "peak": 405.0,
+    "status": "closed_proxy",
+    "net_sell_proceeds": 681365.0,
+    "live_qualified": false,
+    "actual_fill_verified": false,
+    "fill_model": "post_trigger_tape_participation_proxy",
+    "broker_submitted": false
+  },
+  "limitation": [
+    "Only this known 2000-share board position is replayed; no portfolio return claim",
+    "Odd-lot timestamp tape absent: remaining odd shares not assumed filled",
+    "8/15-day holder publication lags are assumptions; historical first releases unverified",
+    "Net institutional trades and account-size tiers do not identify retail panic or hidden ownership",
+    "Tape participation is a fill estimate, not queue or brokerage execution evidence"
+  ],
+  "live_qualified": false,
+  "unseen_validation": false,
+  "actual_fill_verified": false,
+  "research_tick_acquisition_requests": 1,
+  "replay_network_requests": 0,
+  "source_sha256": {
+    ".cache/historical-cohort-supplement-20260925/verified-snapshot/quotes.parquet": "52d75419f712a85136534d663d6260a53ce3d7b8df1023e40591e9ee7733a3d1",
+    ".cache/historical-listing-prefix-v2-20260925/quotes.parquet": "d64461c63239d655c047fc0cd3251f3605820f48b6f57043b1f0483397069ba5",
+    ".cache/historical-universe-followup-v2-20260925/twse-suspend-2021.json": "40537d733bbdc43db0d7031a6d5cbe0ad8a7ead7514f1a37085ce1b3fe8ccb79",
+    ".cache/historical-universe-followup-v2-20260925/twse-suspend-2022.json": "83253acf25934f7485430f6000bb38102a3685ded96c5489734e0dff54ca9a5f",
+    ".cache/historical-universe-followup-v2-20260925/twse-suspend-2024-retry.json": "1a65df626ad0f7896d937e53032666b62d99d2e1cc972f39f04476c6a0d1e152",
+    ".cache/historical-universe-followup-v2-20260925/twse-suspend-2025.json": "353096ebfc88524c646d0025436fc440c42b071090c9a3e051e9d6225db12852",
+    ".cache/historical-universe-followup-v2-20260925/twse-suspend-2026.json": "9d81a16b749affe64d3b866fb645184959353a86aad791cf7544817b484a46b1",
+    ".cache/million-replay-inputs/quotes.parquet": "b34724813f81ef780d61eacaac1f3e4c30b3c74a2b46ba08ec93cd670fcfa466",
+    ".cache/readiness-continuation-20260914/0050-split-notice.pdf": "33a58af2b6377f381d250406ed750999756508c2d96f7a2f45443201d50cbcb7",
+    "docs/benchmark_split_evidence_20260914.json": "b969e443b75cf2cf7ed14a5c8314379982d6aa3fabb9d44e46e4f650c48e4742",
+    ".cache/leader-chip-inputs-20260928/flows.parquet": "652b479814fdb1a98d5c9c134cb38783a20009c598ea8bc366b458f2e6aca289",
+    ".cache/leader-chip-inputs-20260928/weekly.parquet": "3b70b53dc48f6aa8be579e51f204dc3ca568ba47098a3e9e7a7bf995ae8d731e",
+    ".cache/chip-inputs/margin_verified.parquet": "9a496373f3cd763464ea0ea71ac64eafcba19b667c7e300f2271cf2a99d18762",
+    ".cache/chip-inputs/dividends/6197.parquet": "71d50dfc60a3c3f3438728fe4a97d90c6505657b09e0b00af0a50443d2a9b614",
+    ".cache/jpc-intraday-20260929/6197-2026-07-13.parquet": "1f47562221f141ba374df9101272dd177b77cbe0511ae83bf7a0f98986ab4fe8",
+    ".cache/jpc-intraday-20260929/6197-2026-07-13.json": "28bf80cf6c60290aa09f3d990d25730d8712a2e501bc80af89c5764e3dd08e92",
+    ".cache/leader-chip-prepared-20260928/inputs/execution-feeds/limits-6197.rows.json": "f39fc6739e8a8810b5b4cd4742b3a08a8adf0e841b845d096bab5f3785163f0a",
+    ".cache/leader-chip-prepared-20260928/inputs/execution-feeds/limits-6197.raw.json": "1326a791b9900383647d3e69f6bbad35f0276d0517ac8aea89519e63af7f2f4d",
+    "scripts/research_jpc_intraday.py": "f02203c9efbeb68966980f523a5d13d6c0d7431c229486fbfa22a1d1f7445900",
+    "skills/intraday_peak_exit.py": "366d3c8370edd97b95d530f17d44f76c7711537cf39a9b3e25551a0c422434ef",
+    ".cache/leader-chip-inputs-20260928/manifest.json": "5b067db9854c2b9e6e59b3f989885e45198157b705710563e2f59c94b38c603b",
+    "artifacts/forward_simulation/historical_selector_replay_20260925.json": "f8ce1ca2b37234c13d2d58b89256aedd99b771ffa2e71d88136f520a57fa5210"
+  }
+}
