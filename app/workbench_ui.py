@@ -272,8 +272,10 @@ def render_research(status):
         render_forward()
     st.divider()
     from app.residual_ticks_ui import render as render_residual_ticks
+    from app.mixed_odd_ui import render as render_mixed_odd
     from app.opening_entry_ui import render as render_opening_entry
     from app.limit_band_ui import render as render_limit_bands
+    render_mixed_odd()
     render_opening_entry()
     render_limit_bands()
     render_residual_ticks()
