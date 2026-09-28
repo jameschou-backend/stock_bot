@@ -1,0 +1,945 @@
+{
+  "barriers": {
+    "admitted_to_execution": 36,
+    "already_broad": 304,
+    "cluster_size_or_variance": 1113,
+    "group_already_used": 285,
+    "missing_peer_or_benchmark_prices": 11,
+    "monthly_excluded": 2040,
+    "opening_slots_locked": 108,
+    "outside_monthly_top300": 1788,
+    "residual_exposure_cap": 1,
+    "same_day_other_leader": 21
+  },
+  "causality_checks": [
+    {
+      "cutoff": "2022-12-30",
+      "future_mutation": true,
+      "truncation": true
+    },
+    {
+      "cutoff": "2024-12-31",
+      "future_mutation": true,
+      "truncation": true
+    },
+    {
+      "cutoff": "2026-06-30",
+      "future_mutation": true,
+      "truncation": true
+    }
+  ],
+  "completed": true,
+  "database_writes": 0,
+  "elapsed_seconds": 19.329467749921605,
+  "end": "2026-09-09",
+  "finmind_requests": 0,
+  "limitations": [
+    "Known reconstructed cohort; incomplete historical market, not an unseen sample.",
+    "Named best windows are hindsight-selected examples, never signal inputs.",
+    "Adjusted next-session board opening is a price proxy, not a verified order or odd-lot fill.",
+    "No costs, capital limits, exits or portfolio NAV simulated; conditional forward returns only.",
+    "Matched-date eligible comparator is descriptive; overlapping stocks and dates are not independent.",
+    "Labels missing raw opens or conflicting price versions remain unknown.",
+    "No verified news, institutional flows or concentration features added."
+  ],
+  "live_qualified": false,
+  "named_cases": [
+    {
+      "anchor_signal_date": "2025-06-20",
+      "benchmark_return": 0.23230107086233476,
+      "best_window_return": 1.2525252525252526,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [],
+      "entry_proxy_date": "2025-06-23",
+      "exit_proxy_date": "2025-09-18",
+      "held_at_anchor": false,
+      "name": "台達電",
+      "original_barriers": [
+        {
+          "reason": "cluster_size_or_variance",
+          "signal_date": "2025-07-03"
+        },
+        {
+          "reason": "cluster_size_or_variance",
+          "signal_date": "2025-07-16"
+        }
+      ],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [
+          {
+            "entry_date": "2025-07-04",
+            "return_to_same_end": 0.975636766334441,
+            "sampled_after_cooldown": true,
+            "signal_date": "2025-07-03"
+          },
+          {
+            "entry_date": "2025-07-17",
+            "return_to_same_end": 0.8056680161943319,
+            "sampled_after_cooldown": false,
+            "signal_date": "2025-07-16"
+          }
+        ],
+        "first_expansion": [
+          {
+            "entry_date": "2025-07-04",
+            "return_to_same_end": 0.975636766334441,
+            "sampled_after_cooldown": true,
+            "signal_date": "2025-07-03"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "2308"
+    },
+    {
+      "anchor_signal_date": "2026-03-27",
+      "benchmark_return": 0.4918144611186903,
+      "best_window_return": 3.5293168370091452,
+      "earlier_original_trades": [
+        {
+          "channel": "odd",
+          "date": "2023-09-13",
+          "qty": 215,
+          "reason": "leader_entry",
+          "reference_price": 512.0,
+          "side": "buy"
+        },
+        {
+          "channel": "odd",
+          "date": "2023-12-14",
+          "qty": 215,
+          "reason": "time63",
+          "reference_price": 617.0,
+          "side": "sell"
+        }
+      ],
+      "early_signal_failed_breakout60": [
+        "2026-04-09"
+      ],
+      "entry_proxy_date": "2026-03-30",
+      "exit_proxy_date": "2026-07-01",
+      "held_at_anchor": false,
+      "name": "國巨*",
+      "original_barriers": [
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-13"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-14"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-15"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-16"
+        }
+      ],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [
+          {
+            "entry_date": "2026-04-14",
+            "return_to_same_end": 2.6859769444039108,
+            "sampled_after_cooldown": true,
+            "signal_date": "2026-04-13"
+          },
+          {
+            "entry_date": "2026-04-15",
+            "return_to_same_end": 2.5713275837692633,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-14"
+          },
+          {
+            "entry_date": "2026-04-16",
+            "return_to_same_end": 2.5880681818181817,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-15"
+          },
+          {
+            "entry_date": "2026-04-17",
+            "return_to_same_end": 2.4793388429752072,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-16"
+          }
+        ],
+        "first_expansion": [
+          {
+            "entry_date": "2026-04-10",
+            "return_to_same_end": 2.9592476489028217,
+            "sampled_after_cooldown": true,
+            "signal_date": "2026-04-09"
+          },
+          {
+            "entry_date": "2026-04-14",
+            "return_to_same_end": 2.6859769444039108,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-13"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "2327"
+    },
+    {
+      "anchor_signal_date": "2026-03-27",
+      "benchmark_return": 0.4918144611186903,
+      "best_window_return": 3.8433734939759034,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [
+        "2026-03-17",
+        "2026-04-14"
+      ],
+      "entry_proxy_date": "2026-03-30",
+      "exit_proxy_date": "2026-07-01",
+      "held_at_anchor": false,
+      "name": "華新科",
+      "original_barriers": [],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [],
+        "first_expansion": [
+          {
+            "entry_date": "2026-03-18",
+            "return_to_same_end": 3.1875,
+            "sampled_after_cooldown": true,
+            "signal_date": "2026-03-17"
+          },
+          {
+            "entry_date": "2026-04-15",
+            "return_to_same_end": 3.1020408163265314,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-14"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "2492"
+    },
+    {
+      "anchor_signal_date": "2026-03-16",
+      "benchmark_return": 0.38652714192282533,
+      "best_window_return": 7.220183486238531,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [
+        "2026-03-18"
+      ],
+      "entry_proxy_date": "2026-03-17",
+      "exit_proxy_date": "2026-06-17",
+      "held_at_anchor": false,
+      "name": "禾伸堂",
+      "original_barriers": [
+        {
+          "reason": "outside_monthly_top300",
+          "signal_date": "2026-03-19"
+        },
+        {
+          "reason": "outside_monthly_top300",
+          "signal_date": "2026-03-27"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-07"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-08"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-09"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-10"
+        },
+        {
+          "reason": "group_already_used:2472",
+          "signal_date": "2026-04-14"
+        }
+      ],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [
+          {
+            "entry_date": "2026-03-20",
+            "return_to_same_end": 6.2550607287449385,
+            "sampled_after_cooldown": true,
+            "signal_date": "2026-03-19"
+          },
+          {
+            "entry_date": "2026-03-30",
+            "return_to_same_end": 4.953488372093023,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-03-27"
+          },
+          {
+            "entry_date": "2026-04-08",
+            "return_to_same_end": 4.365269461077844,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-07"
+          },
+          {
+            "entry_date": "2026-04-09",
+            "return_to_same_end": 4.270588235294117,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-08"
+          },
+          {
+            "entry_date": "2026-04-10",
+            "return_to_same_end": 3.8042895442359237,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-09"
+          },
+          {
+            "entry_date": "2026-04-13",
+            "return_to_same_end": 3.402948402948402,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-10"
+          },
+          {
+            "entry_date": "2026-04-15",
+            "return_to_same_end": 2.9298245614035086,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-14"
+          }
+        ],
+        "first_expansion": [
+          {
+            "entry_date": "2026-03-19",
+            "return_to_same_end": 6.724137931034482,
+            "sampled_after_cooldown": true,
+            "signal_date": "2026-03-18"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "3026"
+    },
+    {
+      "anchor_signal_date": "2025-08-07",
+      "benchmark_return": 0.19695528068506185,
+      "best_window_return": 2.850746268656716,
+      "earlier_original_trades": [
+        {
+          "channel": "board",
+          "date": "2025-06-26",
+          "qty": 12000,
+          "reason": "leader_entry",
+          "reference_price": 20.75,
+          "side": "buy"
+        },
+        {
+          "channel": "odd",
+          "date": "2025-06-26",
+          "qty": 878,
+          "reason": "leader_entry",
+          "reference_price": 21.5,
+          "side": "buy"
+        },
+        {
+          "channel": "board",
+          "date": "2025-07-15",
+          "qty": 12000,
+          "reason": "loss12",
+          "reference_price": 18.25,
+          "side": "sell"
+        },
+        {
+          "channel": "odd",
+          "date": "2025-07-15",
+          "qty": 878,
+          "reason": "loss12",
+          "reference_price": 17.8,
+          "side": "sell"
+        }
+      ],
+      "early_signal_failed_breakout60": [
+        "2025-08-18",
+        "2025-08-27"
+      ],
+      "entry_proxy_date": "2025-08-08",
+      "exit_proxy_date": "2025-11-11",
+      "held_at_anchor": false,
+      "name": "華邦電",
+      "original_barriers": [],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [],
+        "first_expansion": [
+          {
+            "entry_date": "2025-08-19",
+            "return_to_same_end": 2.3681462140992164,
+            "sampled_after_cooldown": true,
+            "signal_date": "2025-08-18"
+          },
+          {
+            "entry_date": "2025-08-28",
+            "return_to_same_end": 2.2412060301507535,
+            "sampled_after_cooldown": false,
+            "signal_date": "2025-08-27"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "2344"
+    },
+    {
+      "anchor_signal_date": "2025-08-07",
+      "benchmark_return": 0.19695528068506185,
+      "best_window_return": 2.870588235294117,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [
+        "2025-09-04"
+      ],
+      "entry_proxy_date": "2025-08-08",
+      "exit_proxy_date": "2025-11-11",
+      "held_at_anchor": false,
+      "name": "南亞科",
+      "original_barriers": [],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [],
+        "first_expansion": [
+          {
+            "entry_date": "2025-09-05",
+            "return_to_same_end": 2.329959514170041,
+            "sampled_after_cooldown": true,
+            "signal_date": "2025-09-04"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "2408"
+    },
+    {
+      "anchor_signal_date": "2026-04-13",
+      "benchmark_return": 0.30030581039755333,
+      "best_window_return": 1.6095704400591928,
+      "earlier_original_trades": [
+        {
+          "channel": "board",
+          "date": "2022-02-08",
+          "qty": 1000,
+          "reason": "leader_entry",
+          "reference_price": 89.8,
+          "side": "buy"
+        },
+        {
+          "channel": "odd",
+          "date": "2022-02-08",
+          "qty": 345,
+          "reason": "leader_entry",
+          "reference_price": 89.3,
+          "side": "buy"
+        },
+        {
+          "channel": "odd",
+          "date": "2022-05-12",
+          "qty": 345,
+          "reason": "time63",
+          "reference_price": 82.9,
+          "side": "sell"
+        },
+        {
+          "channel": "board",
+          "date": "2022-05-13",
+          "qty": 1000,
+          "reason": "time63",
+          "reference_price": 82.1,
+          "side": "sell"
+        }
+      ],
+      "early_signal_failed_breakout60": [],
+      "entry_proxy_date": "2026-04-14",
+      "exit_proxy_date": "2026-07-15",
+      "held_at_anchor": false,
+      "name": "南亞",
+      "original_barriers": [],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [],
+        "first_expansion": [],
+        "original": []
+      },
+      "stock_id": "1303"
+    },
+    {
+      "anchor_signal_date": "2026-03-20",
+      "benchmark_return": 0.45782312925170077,
+      "best_window_return": 2.178571428571429,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [
+        "2026-04-16"
+      ],
+      "entry_proxy_date": "2026-03-23",
+      "exit_proxy_date": "2026-06-24",
+      "held_at_anchor": false,
+      "name": "聯電",
+      "original_barriers": [
+        {
+          "reason": "cluster_size_or_variance",
+          "signal_date": "2026-04-20"
+        }
+      ],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [
+          {
+            "entry_date": "2026-04-21",
+            "return_to_same_end": 1.282051282051282,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-20"
+          }
+        ],
+        "first_expansion": [
+          {
+            "entry_date": "2026-04-17",
+            "return_to_same_end": 1.6061493411420207,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-04-16"
+          }
+        ],
+        "original": []
+      },
+      "stock_id": "2303"
+    },
+    {
+      "anchor_signal_date": "2026-03-26",
+      "benchmark_return": 0.44795164539959687,
+      "best_window_return": 1.85717906832648,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [],
+      "entry_proxy_date": "2026-03-27",
+      "exit_proxy_date": "2026-06-30",
+      "held_at_anchor": false,
+      "name": "群創",
+      "original_barriers": [
+        {
+          "reason": "already_broad",
+          "signal_date": "2026-03-12"
+        }
+      ],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [
+          {
+            "entry_date": "2026-03-13",
+            "return_to_same_end": 1.3235241349035176,
+            "sampled_after_cooldown": false,
+            "signal_date": "2026-03-12"
+          }
+        ],
+        "first_expansion": [],
+        "original": []
+      },
+      "stock_id": "3481"
+    },
+    {
+      "anchor_signal_date": "2025-11-18",
+      "benchmark_return": 0.35468139812782806,
+      "best_window_return": 2.850446428571428,
+      "earlier_original_trades": [
+        {
+          "channel": "odd",
+          "date": "2023-10-18",
+          "qty": 222,
+          "reason": "leader_entry",
+          "reference_price": 173.0,
+          "side": "buy"
+        },
+        {
+          "channel": "odd",
+          "date": "2024-01-16",
+          "qty": 52,
+          "reason": "time63",
+          "reference_price": 160.5,
+          "side": "sell"
+        },
+        {
+          "channel": "odd",
+          "date": "2024-01-17",
+          "qty": 100,
+          "reason": "time63",
+          "reference_price": 157.0,
+          "side": "sell"
+        },
+        {
+          "channel": "odd",
+          "date": "2024-01-18",
+          "qty": 70,
+          "reason": "time63",
+          "reference_price": 153.5,
+          "side": "sell"
+        }
+      ],
+      "early_signal_failed_breakout60": [],
+      "entry_proxy_date": "2025-11-19",
+      "exit_proxy_date": "2026-03-02",
+      "held_at_anchor": false,
+      "name": "昇達科",
+      "original_barriers": [
+        {
+          "reason": "cluster_size_or_variance",
+          "signal_date": "2025-12-08"
+        },
+        {
+          "reason": "cluster_size_or_variance",
+          "signal_date": "2025-12-12"
+        },
+        {
+          "reason": "cluster_size_or_variance",
+          "signal_date": "2025-12-15"
+        }
+      ],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [
+          {
+            "entry_date": "2025-12-09",
+            "return_to_same_end": 1.9386712095400345,
+            "sampled_after_cooldown": true,
+            "signal_date": "2025-12-08"
+          },
+          {
+            "entry_date": "2025-12-15",
+            "return_to_same_end": 1.804878048780488,
+            "sampled_after_cooldown": false,
+            "signal_date": "2025-12-12"
+          },
+          {
+            "entry_date": "2025-12-16",
+            "return_to_same_end": 1.7251184834123223,
+            "sampled_after_cooldown": false,
+            "signal_date": "2025-12-15"
+          }
+        ],
+        "first_expansion": [],
+        "original": []
+      },
+      "stock_id": "3491"
+    },
+    {
+      "anchor_signal_date": "2026-04-07",
+      "benchmark_return": 0.3578745198463509,
+      "best_window_return": 1.3323170731707314,
+      "earlier_original_trades": [],
+      "early_signal_failed_breakout60": [],
+      "entry_proxy_date": "2026-04-08",
+      "exit_proxy_date": "2026-07-08",
+      "held_at_anchor": false,
+      "name": "藥華藥",
+      "original_barriers": [],
+      "original_trades": [],
+      "retrospective_example": true,
+      "signals": {
+        "breakout_unrestricted": [],
+        "first_expansion": [],
+        "original": []
+      },
+      "stock_id": "6446"
+    }
+  ],
+  "network_calls": 0,
+  "observations_sha256": "3300508c9daed0ebed0c8cb34d7a7f277cc51827c4164cf3595ddd29f65a2507",
+  "offline_verification": {
+    "independent_runs": [
+      {
+        "path": ".cache/rally-recall-20260928/run-b/report.json",
+        "sha256": "756bffd532302363ed0c1d6f379553886087228a9c1d5eb7d688092e5c117373"
+      },
+      {
+        "path": ".cache/rally-recall-20260928/run-c/report.json",
+        "sha256": "cda1a7cf858ffe6f79d2fafe73594e1365982a3cc6c59e44cf9c5b90a9965907"
+      }
+    ],
+    "observations_identical": true,
+    "reports_identical_except_elapsed": true
+  },
+  "original_signals_contained": 454,
+  "portfolio_returns_computed": false,
+  "raw_signal_counts": {
+    "breakout_unrestricted": 23878,
+    "first_expansion": 11139,
+    "original": 454
+  },
+  "schema": "rally_recall_v1",
+  "source_sha256": {
+    ".cache/historical-selector-replay-20260925/final-v7/combined/close-official.parquet": "b852badeb2c664f9723e93fd386598e8427fc20dc8a1c7aabfae3c99914df758",
+    ".cache/historical-selector-replay-20260925/final-v7/combined/close-quality.parquet": "bc65460c0a49c109845beebff5b2b2dbadb44926b9f34d212dfd7aa305410495",
+    ".cache/historical-selector-replay-20260925/final-v7/combined/companies.parquet": "3e31e6dd4d380334ac8999603e5d409d58662ef6dc1e3de70bc7ce278849f3ec",
+    ".cache/historical-selector-replay-20260925/final-v7/combined/eligibility.parquet": "401e64fafd0fc72f35e2103657dc358636fcf5bc02111f33f5a974be0989cf8f",
+    ".cache/historical-selector-replay-20260925/final-v7/combined/raw-close.parquet": "21ae3808c8e28f07b1b77b33e36a1c97c7dca6a1b569e3963fbde7eb2d14e42b",
+    ".cache/historical-selector-replay-20260925/final-v7/combined/raw-volume.parquet": "ee61f700744a725f39162d0c4d71c2f06da53ba673ddcce8d7db86134f78b2cf",
+    ".cache/historical-selector-replay-20260925/final-v7/combined/signals.json": "3349d280ee174ffd2709e45bfceff59704744215139462ad6c1d28134f5d9886",
+    ".cache/historical-selector-replay-20260925/final-v7/manifest.json": "2074bcecc01db0c32db38a285bf88bf70ec84f9f129f3dca5c153d27e5dd94ce",
+    ".cache/million-replay-inputs/quotes.parquet": "b34724813f81ef780d61eacaac1f3e4c30b3c74a2b46ba08ec93cd670fcfa466",
+    ".cache/mixed-odd-20260928/full-a/cases/strategy_normal.json": "7498e0da1099a12ce13b5871126637b2a2410bcab0327103c95656ff679d79af",
+    "artifacts/forward_simulation/historical_selector_replay_20260925.json": "f8ce1ca2b37234c13d2d58b89256aedd99b771ffa2e71d88136f520a57fa5210",
+    "artifacts/forward_simulation/mixed_odd_full_20260928.json": "ae83f7987584abb76036fbca527ab9e5dfe134aead0b09d47126a69fa941c492",
+    "docs/prereg_rally_recall_20260928.md": "5d7a3a3384bf29a491d757403c731c48623b67e1f4755b20172a476703733d2e",
+    "scripts/research_rally_recall.py": "5199a90ca0d4d97ceaadb0a98b5403065518420567fbc81c72f63bd34d1d55a7",
+    "skills/diffusion_signals.py": "df9f1e8020c0382b049f82fa6cac7a19acfd9d1285fd6dc6d7961788cb53f350",
+    "skills/rally_recall.py": "7dfd25ead15fe4bd4a1c8281d18dda60bffdf066aa79a1c29a7de2864ff547ae",
+    "skills/regime_state.py": "2e5755c018448e9464470b202bb4e675324fe2a30702dee8383b6081404d3a4d",
+    "tests/test_rally_recall.py": "8734dd8acbde9b7703b653f0d952499969d49acb0ce3fcf583f9b4c656a99152"
+  },
+  "source_start": "2021-01-04",
+  "statistics": [
+    {
+      "arm": "breakout_unrestricted",
+      "group": "named",
+      "known": 32,
+      "loss_fraction": 0.53125,
+      "mean_excess": -0.02809943231441821,
+      "mean_return": 0.01708125835488139,
+      "mean_vs_same_date_eligible": -0.018340109647235186,
+      "median_return": -0.03599481058255466,
+      "phase": "2022_2024",
+      "signals": 35,
+      "stocks": 10,
+      "surge_fraction": 0.03125,
+      "unknown": 3
+    },
+    {
+      "arm": "breakout_unrestricted",
+      "group": "named",
+      "known": 37,
+      "loss_fraction": 0.16216216216216217,
+      "mean_excess": 0.41409351562631913,
+      "mean_return": 0.5673504249055796,
+      "mean_vs_same_date_eligible": 0.4886403289858901,
+      "median_return": 0.3271604938271606,
+      "phase": "2025_2026",
+      "signals": 40,
+      "stocks": 11,
+      "surge_fraction": 0.40540540540540543,
+      "unknown": 3
+    },
+    {
+      "arm": "breakout_unrestricted",
+      "group": "named",
+      "known": 1,
+      "loss_fraction": 1.0,
+      "mean_excess": 0.0008362437909459342,
+      "mean_return": -0.04854368932038822,
+      "mean_vs_same_date_eligible": -0.019469408686128065,
+      "median_return": -0.04854368932038822,
+      "phase": "boundary",
+      "signals": 1,
+      "stocks": 1,
+      "surge_fraction": 0.0,
+      "unknown": 0
+    },
+    {
+      "arm": "breakout_unrestricted",
+      "group": "other",
+      "known": 3058,
+      "loss_fraction": 0.5055591890124265,
+      "mean_excess": -0.01680996406819076,
+      "mean_return": 0.05292729695609261,
+      "mean_vs_same_date_eligible": 0.010685990474331853,
+      "median_return": -0.002433219664677355,
+      "phase": "2022_2024",
+      "signals": 3137,
+      "stocks": 1180,
+      "surge_fraction": 0.06115107913669065,
+      "unknown": 79
+    },
+    {
+      "arm": "breakout_unrestricted",
+      "group": "other",
+      "known": 1832,
+      "loss_fraction": 0.5251091703056768,
+      "mean_excess": -0.082754086007789,
+      "mean_return": 0.09404383327085124,
+      "mean_vs_same_date_eligible": -0.004840818681080677,
+      "median_return": -0.018971394754568827,
+      "phase": "2025_2026",
+      "signals": 2161,
+      "stocks": 1002,
+      "surge_fraction": 0.11353711790393013,
+      "unknown": 329
+    },
+    {
+      "arm": "breakout_unrestricted",
+      "group": "other",
+      "known": 328,
+      "loss_fraction": 0.7012195121951219,
+      "mean_excess": -0.05393936452137619,
+      "mean_return": -0.07196406122866653,
+      "mean_vs_same_date_eligible": -0.016303090525373702,
+      "median_return": -0.09814385150812066,
+      "phase": "boundary",
+      "signals": 333,
+      "stocks": 333,
+      "surge_fraction": 0.021341463414634148,
+      "unknown": 5
+    },
+    {
+      "arm": "first_expansion",
+      "group": "named",
+      "known": 29,
+      "loss_fraction": 0.4827586206896552,
+      "mean_excess": -0.032340204716200784,
+      "mean_return": 0.012949780498906402,
+      "mean_vs_same_date_eligible": -0.021834803334415308,
+      "median_return": 0.009668508287292488,
+      "phase": "2022_2024",
+      "signals": 33,
+      "stocks": 10,
+      "surge_fraction": 0.0,
+      "unknown": 4
+    },
+    {
+      "arm": "first_expansion",
+      "group": "named",
+      "known": 28,
+      "loss_fraction": 0.17857142857142858,
+      "mean_excess": 0.6387191832447341,
+      "mean_return": 0.8039868097296292,
+      "mean_vs_same_date_eligible": 0.711645972202171,
+      "median_return": 0.3320012995451592,
+      "phase": "2025_2026",
+      "signals": 35,
+      "stocks": 11,
+      "surge_fraction": 0.39285714285714285,
+      "unknown": 7
+    },
+    {
+      "arm": "first_expansion",
+      "group": "other",
+      "known": 2659,
+      "loss_fraction": 0.5208725084618278,
+      "mean_excess": -0.025936584250102236,
+      "mean_return": 0.044914636340495195,
+      "mean_vs_same_date_eligible": 0.0031041700934314235,
+      "median_return": -0.008968609865470767,
+      "phase": "2022_2024",
+      "signals": 2719,
+      "stocks": 1070,
+      "surge_fraction": 0.05791650996615269,
+      "unknown": 60
+    },
+    {
+      "arm": "first_expansion",
+      "group": "other",
+      "known": 1479,
+      "loss_fraction": 0.5185936443542934,
+      "mean_excess": -0.06996101836421771,
+      "mean_return": 0.11259706279132628,
+      "mean_vs_same_date_eligible": 0.0083509707138565,
+      "median_return": -0.015037593984962405,
+      "phase": "2025_2026",
+      "signals": 1871,
+      "stocks": 874,
+      "surge_fraction": 0.1271129141311697,
+      "unknown": 392
+    },
+    {
+      "arm": "first_expansion",
+      "group": "other",
+      "known": 313,
+      "loss_fraction": 0.6773162939297125,
+      "mean_excess": -0.03791535969941787,
+      "mean_return": -0.056612612981961345,
+      "mean_vs_same_date_eligible": -0.0004970622421453385,
+      "median_return": -0.0822429906542056,
+      "phase": "boundary",
+      "signals": 317,
+      "stocks": 317,
+      "surge_fraction": 0.025559105431309903,
+      "unknown": 4
+    },
+    {
+      "arm": "original",
+      "group": "named",
+      "known": 5,
+      "loss_fraction": 0.6,
+      "mean_excess": 0.03421924332951798,
+      "mean_return": 0.03970698766182605,
+      "mean_vs_same_date_eligible": 0.0033484572711298564,
+      "median_return": -0.05813953488372081,
+      "phase": "2022_2024",
+      "signals": 5,
+      "stocks": 5,
+      "surge_fraction": 0.0,
+      "unknown": 0
+    },
+    {
+      "arm": "original",
+      "group": "named",
+      "known": 4,
+      "loss_fraction": 0.0,
+      "mean_excess": 0.1751832168683224,
+      "mean_return": 0.4403433034617373,
+      "mean_vs_same_date_eligible": 0.2709637554367567,
+      "median_return": 0.4705712337700835,
+      "phase": "2025_2026",
+      "signals": 4,
+      "stocks": 4,
+      "surge_fraction": 0.5,
+      "unknown": 0
+    },
+    {
+      "arm": "original",
+      "group": "other",
+      "known": 184,
+      "loss_fraction": 0.46195652173913043,
+      "mean_excess": 0.028873174587367465,
+      "mean_return": 0.08536352339527327,
+      "mean_vs_same_date_eligible": 0.047910660045807414,
+      "median_return": 0.02464662401372253,
+      "phase": "2022_2024",
+      "signals": 194,
+      "stocks": 161,
+      "surge_fraction": 0.07608695652173914,
+      "unknown": 10
+    },
+    {
+      "arm": "original",
+      "group": "other",
+      "known": 140,
+      "loss_fraction": 0.42857142857142855,
+      "mean_excess": 0.0058310183514112945,
+      "mean_return": 0.1701390569238938,
+      "mean_vs_same_date_eligible": 0.0731790833665129,
+      "median_return": 0.031136755932972382,
+      "phase": "2025_2026",
+      "signals": 162,
+      "stocks": 143,
+      "surge_fraction": 0.16428571428571428,
+      "unknown": 22
+    },
+    {
+      "arm": "original",
+      "group": "other",
+      "known": 29,
+      "loss_fraction": 0.6551724137931034,
+      "mean_excess": -0.027520272007904703,
+      "mean_return": -0.04669551300199676,
+      "mean_vs_same_date_eligible": -0.01021150677000288,
+      "median_return": -0.06407766990291253,
+      "phase": "boundary",
+      "signals": 30,
+      "stocks": 30,
+      "surge_fraction": 0.034482758620689655,
+      "unknown": 1
+    }
+  ],
+  "unseen_validation": false
+}
