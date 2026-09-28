@@ -9,7 +9,7 @@ from scripts.research_exit_scenarios import sha,summarize
 from scripts.research_mixed_odd import CASES,analyze
 
 ROOT=Path(__file__).resolve().parents[1]
-REPORT=ROOT/'artifacts/forward_simulation/mixed_odd_20260928.json'
+REPORT=ROOT/'artifacts/forward_simulation/mixed_odd_completion_20260928.json'
 _CACHE={};_LOCK=threading.RLock()
 
 

@@ -24,6 +24,16 @@ CASES={f'{"benchmark" if benchmark else "strategy"}_{mode}':dict(benchmark=bench
        for mode in ('normal','stress') for benchmark in (False,True)}
 
 
+def market_routes(queries):
+    routes={}
+    for row in queries:
+        key=(row['stock_id'],row['date']);market=row['market'].upper()
+        if market not in ('TWSE','TPEX') or (key in routes and routes[key]!=market):
+            raise ValueError('Conflicting mixed-channel dated market identity')
+        routes[key]=market
+    return routes
+
+
 def case(data,inputs,identity,additions,*,benchmark,stress,ticks=None,odds=None):
     ticks=ticks or strict.AdditionalTicks()
     feeds=old.ReplayMarketFeeds(inputs/'execution-feeds',offline=True)
@@ -46,7 +56,7 @@ def case(data,inputs,identity,additions,*,benchmark,stress,ticks=None,odds=None)
         else:
             audit=audit_mixed_resources(account,engine.resource_plans,engine.slot_decisions,
                 engine.board_decisions,engine.residual_days,data.quotes)
-        markets={(r['stock_id'],r['date']):r['market'] for r in [*ticks.queries,*odds.queries]}
+        markets=market_routes([*ticks.queries,*odds.queries])
         audit.update(audit_mixed_execution(account,ticks,odds,markets,data.quotes,data.days,corp,feeds))
         audit['unknown_liquidity_rejected']=True
         result=dict(completed=True,summary=old.summarize(account),account=account,audit=audit)
