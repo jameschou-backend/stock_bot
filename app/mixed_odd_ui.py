@@ -9,7 +9,7 @@ from scripts.research_exit_scenarios import sha,summarize
 from scripts.research_mixed_odd import CASES,analyze
 
 ROOT=Path(__file__).resolve().parents[1]
-REPORT=ROOT/'artifacts/forward_simulation/mixed_odd_completion_20260928.json'
+REPORT=ROOT/'artifacts/forward_simulation/mixed_odd_full_20260928.json'
 _CACHE={};_LOCK=threading.RLock()
 
 
@@ -67,10 +67,18 @@ def render():
         for name,row in v['cases'].items():
             s=row['summary'];label=('0050 基準' if name.startswith('benchmark') else '五檔個股')+('／一般' if name.endswith('normal') else '／壓力')
             rows.append({'帳戶':label,'結果':'完整日行情估算' if row['completed'] else '缺資料，中止',
-                         '淨報酬':f"{s['total_return']:+.2%}" if s else '尚無完整報酬','缺少的資料':row.get('reason') or ''})
+                         '淨報酬':f"{s['total_return']:+.2%}" if s else '尚無完整報酬',
+                         '最大回撤':f"{s['max_drawdown']:.2%}" if s else '—',
+                         '期末資產':f"{s['final_nav']:,.0f} 元" if s else '—','缺少的資料':row.get('reason') or ''})
         st.dataframe(pd.DataFrame(rows),hide_index=True,use_container_width=True)
         if not v['all_completed']:st.info('零股規則與核帳已加入；缺官方零股日表的帳戶不以普通盤資料代替，也不把中途資產當最終報酬。')
-        name=st.selectbox('查看零股計畫與資料缺口',list(v['cases']),key='mixed_odd_case')
+        if v['all_completed']:
+            st.caption('四組均完成 2022/01/03～2026/09/09，兩次離線重播一致；本金 100 萬複利，閒錢留現金。')
+            for mode,label in (('normal','一般成本'),('stress','壓力情境')):
+                excess=v['analysis']['strategy_'+mode]['excess_return']*100
+                st.write(f'{label}：個股策略相對 0050 的報酬差為 {excess:+.2f} 個百分點。')
+        labels={k:('0050 基準' if k.startswith('benchmark') else '五檔個股')+('／一般' if k.endswith('normal') else '／壓力') for k in v['cases']}
+        name=st.selectbox('查看零股計畫與核對紀錄',list(v['cases']),format_func=labels.get,key='mixed_odd_case')
         result=json.loads(verified_bytes(v['cases'][name]['result'],ROOT,'.json'))
         st.download_button('下載零股計畫與核對紀錄',json.dumps(result,ensure_ascii=False,indent=2),
             name+'_mixed_odd.json','application/json',key='mixed_odd_download')
