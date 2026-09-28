@@ -9,7 +9,7 @@ from app.backtest_full_pass_ui import _file_signature
 from scripts.research_exit_scenarios import sha, summarize
 
 ROOT=Path(__file__).resolve().parents[1]
-REPORT=ROOT/'artifacts/forward_simulation/residual_ticks_20260928.json'
+REPORT=ROOT/'artifacts/forward_simulation/strict_ticks_20260928.json'
 LABELS={'strategy_normal':'五檔個股｜一般', 'benchmark_normal':'0050基準｜一般',
         'strategy_stress':'五檔個股｜較低量與較高成本', 'benchmark_stress':'0050基準｜較低量與較高成本'}
 _CACHE={}
@@ -21,8 +21,9 @@ def _validate(path=REPORT,root=ROOT):
     if sha(path)!=path.with_suffix('.sha256').read_text().strip():
         raise ValueError('逐筆研究報告雜湊不符')
     value=json.loads(path.read_text())
-    if (value.get('schema')!='residual_ticks_v1' or value.get('offline_identical') is not True
-            or value.get('baseline_reproduced') is not True or value.get('compared_cases')!=4
+    if (value.get('schema') not in ('residual_ticks_v1','strict_ticks_v1') or value.get('offline_identical') is not True
+            or (value['schema']=='residual_ticks_v1' and value.get('baseline_reproduced') is not True)
+            or value.get('compared_cases')!=4
             or value.get('live_qualified') is not False or value.get('unseen_validation') is not False
             or value.get('network_calls')!=0 or set(value['cases'])!=set(LABELS)):
         raise ValueError('缺少同版本完整重播證據')
@@ -35,6 +36,11 @@ def _validate(path=REPORT,root=ROOT):
         if row['completed']!=result['completed'] or row['summary']!=result['summary']:
             raise ValueError('研究狀態與完整結果不同')
         if row['completed']:
+            if value['schema']=='strict_ticks_v1' and result['audit'].get('unknown_liquidity_rejected') is not True:
+                raise ValueError('缺少未知資料中止的驗證')
+            if any(r.get('failure')=='missing_previous_price_or_adv' and r.get('requested_qty',0)>0
+                   for r in result['account']['orders']):
+                raise ValueError('舊結果含資料未知卻當成未成交的委託，須修正後重驗')
             if row['summary']!=summarize(result['account']) or not result['audit']['tick_fills_rebuilt']:
                 raise ValueError('逐筆績效尚未核對')
         elif row['summary'] is not None or 'account' in result:
@@ -77,6 +83,8 @@ def render():
         st.write('本金100萬元、5檔個股、整張、閒錢保留現金。買單隔天09:01起有效，'
                  '13:25截止；用前日調整後參考價掛單，同價不算成交，未成交買單當天取消。')
         st.warning('逐筆成交仍是估計；本輪不授予實戰資格。缺資料的組別不顯示報酬。')
+        if value['schema']=='strict_ticks_v1':
+            st.caption(f"已核對 {len(value['repairs'])} 筆官方停牌零量；無法解釋的資料缺漏會中止回測。")
         rows=[]
         for name,row in value['cases'].items():
             summary=row['summary']
@@ -97,4 +105,4 @@ def render():
             st.dataframe(shown,hide_index=True,use_container_width=True)
         st.download_button('下載本輪計畫、成交與核對結果',json.dumps(result,ensure_ascii=False,indent=2),
                            name+'.json','application/json',key='residual_tick_download')
-        st.caption('四組各重跑兩次、原五檔日線帳戶逐欄重現；離線重現包含相同的中止原因，並不表示資料已齊全。')
+        st.caption('四組各重跑兩次，核對完整計畫、成交、現金與淨值；已知停牌與資料未知分開處理。')

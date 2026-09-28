@@ -52,3 +52,14 @@ def test_modified_sources_block_display(tmp_path):
     source.write_text('changed')
     with pytest.raises(ValueError,match='來源已變更'):
         load(path,tmp_path)
+
+
+def test_unknown_liquidity_in_old_completed_account_withdraws_publication(tmp_path):
+    value=publication(tmp_path)
+    row=value['cases']['strategy_normal'];path=tmp_path/row['result']['path']
+    result=dict(completed=True,summary={},account=dict(orders=[dict(
+        failure='missing_previous_price_or_adv',requested_qty=1000)]))
+    write(path,result)
+    row.update(completed=True,summary={},result=dict(path=path.name,sha256=sha(path)))
+    with pytest.raises(ValueError,match='資料未知'):
+        load(save(tmp_path,value),tmp_path)
