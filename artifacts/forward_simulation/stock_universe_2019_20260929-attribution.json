@@ -1,0 +1,756 @@
+{
+  "source_path": ".cache/stock-universe-2019-20260929/final-a/liquid_universe.json",
+  "source_sha256": "235c7cf459330710675a5163dce8e24d88695cc662285cee4dc849ef907ac3b9",
+  "stocks": [
+    {
+      "stock_id": "5386",
+      "name": "青雲",
+      "net_profit": 8083749.0,
+      "cost": 116776.0
+    },
+    {
+      "stock_id": "2408",
+      "name": "南亞科",
+      "net_profit": 2003315.5,
+      "cost": 42947.0
+    },
+    {
+      "stock_id": "5314",
+      "name": "世紀*",
+      "net_profit": 1601115.0,
+      "cost": 28164.0
+    },
+    {
+      "stock_id": "6588",
+      "name": "東典光電",
+      "net_profit": 1452084.2,
+      "cost": 27145.0
+    },
+    {
+      "stock_id": "2344",
+      "name": "華邦電",
+      "net_profit": 1349982.32,
+      "cost": 29414.0
+    },
+    {
+      "stock_id": "8358",
+      "name": "金居",
+      "net_profit": 1270288.8,
+      "cost": 26727.0
+    },
+    {
+      "stock_id": "4562",
+      "name": "穎漢",
+      "net_profit": 1144640.9,
+      "cost": 19994.0
+    },
+    {
+      "stock_id": "3228",
+      "name": "金麗科",
+      "net_profit": 1142827.5,
+      "cost": 19355.0
+    },
+    {
+      "stock_id": "8299",
+      "name": "群聯",
+      "net_profit": 968630.34,
+      "cost": 24065.0
+    },
+    {
+      "stock_id": "3230",
+      "name": "錦明",
+      "net_profit": 638727.6,
+      "cost": 19245.0
+    },
+    {
+      "stock_id": "6443",
+      "name": "元晶",
+      "net_profit": 599648.43,
+      "cost": 42162.0
+    },
+    {
+      "stock_id": "5608",
+      "name": "四維航",
+      "net_profit": 400750.52,
+      "cost": 8183.0
+    },
+    {
+      "stock_id": "2417",
+      "name": "圓剛",
+      "net_profit": 399488.81,
+      "cost": 6777.0
+    },
+    {
+      "stock_id": "2615",
+      "name": "萬海",
+      "net_profit": 211589.0,
+      "cost": 5291.0
+    },
+    {
+      "stock_id": "2722",
+      "name": "夏都",
+      "net_profit": 206777.4,
+      "cost": 7933.0
+    },
+    {
+      "stock_id": "6584",
+      "name": "南俊國際",
+      "net_profit": 150662.0,
+      "cost": 12429.0
+    },
+    {
+      "stock_id": "1309",
+      "name": "台達化",
+      "net_profit": 144308.4,
+      "cost": 4650.0
+    },
+    {
+      "stock_id": "3680",
+      "name": "家登",
+      "net_profit": 131517.77,
+      "cost": 4680.0
+    },
+    {
+      "stock_id": "8085",
+      "name": "福華",
+      "net_profit": 118797.7,
+      "cost": 7164.0
+    },
+    {
+      "stock_id": "3049",
+      "name": "精金",
+      "net_profit": 104987.7,
+      "cost": 5446.0
+    },
+    {
+      "stock_id": "6233",
+      "name": "旺玖",
+      "net_profit": 103548.0,
+      "cost": 5652.0
+    },
+    {
+      "stock_id": "6104",
+      "name": "創惟",
+      "net_profit": 94048.3,
+      "cost": 7262.0
+    },
+    {
+      "stock_id": "6568",
+      "name": "宏觀",
+      "net_profit": 90670.0,
+      "cost": 4445.0
+    },
+    {
+      "stock_id": "6219",
+      "name": "富旺",
+      "net_profit": 84227.8,
+      "cost": 8134.0
+    },
+    {
+      "stock_id": "1605",
+      "name": "華新",
+      "net_profit": 66531.0,
+      "cost": 6599.0
+    },
+    {
+      "stock_id": "6472",
+      "name": "保瑞",
+      "net_profit": 52343.25,
+      "cost": 4004.0
+    },
+    {
+      "stock_id": "6283",
+      "name": "淳安",
+      "net_profit": 50471.0,
+      "cost": 5137.0
+    },
+    {
+      "stock_id": "8930",
+      "name": "青鋼",
+      "net_profit": 43842.43,
+      "cost": 7105.0
+    },
+    {
+      "stock_id": "6170",
+      "name": "統振",
+      "net_profit": 34027.41,
+      "cost": 10015.0
+    },
+    {
+      "stock_id": "5289",
+      "name": "宜鼎",
+      "net_profit": 29463.0,
+      "cost": 6442.0
+    },
+    {
+      "stock_id": "8289",
+      "name": "泰藝",
+      "net_profit": 26599.96,
+      "cost": 6838.0
+    },
+    {
+      "stock_id": "3672",
+      "name": "康聯訊",
+      "net_profit": 22296.86,
+      "cost": 7722.0
+    },
+    {
+      "stock_id": "2520",
+      "name": "冠德",
+      "net_profit": 20489.6,
+      "cost": 4873.0
+    },
+    {
+      "stock_id": "6781",
+      "name": "AES-KY",
+      "net_profit": 17762.5,
+      "cost": 710.0
+    },
+    {
+      "stock_id": "6510",
+      "name": "精測",
+      "net_profit": 8708.0,
+      "cost": 318.0
+    },
+    {
+      "stock_id": "6113",
+      "name": "亞矽",
+      "net_profit": 6192.88,
+      "cost": 6034.0
+    },
+    {
+      "stock_id": "3293",
+      "name": "鈊象",
+      "net_profit": 2547.5,
+      "cost": 206.0
+    },
+    {
+      "stock_id": "3558",
+      "name": "神準",
+      "net_profit": 150.25,
+      "cost": 4976.0
+    },
+    {
+      "stock_id": "3027",
+      "name": "盛達",
+      "net_profit": -1546.77,
+      "cost": 2463.0
+    },
+    {
+      "stock_id": "8046",
+      "name": "南電",
+      "net_profit": -13650.0,
+      "cost": 1900.0
+    },
+    {
+      "stock_id": "3686",
+      "name": "達能",
+      "net_profit": -15360.4,
+      "cost": 2349.0
+    },
+    {
+      "stock_id": "5269",
+      "name": "祥碩",
+      "net_profit": -16943.0,
+      "cost": 2098.0
+    },
+    {
+      "stock_id": "2367",
+      "name": "燿華",
+      "net_profit": -17829.9,
+      "cost": 3737.0
+    },
+    {
+      "stock_id": "3227",
+      "name": "原相",
+      "net_profit": -20744.68,
+      "cost": 3719.0
+    },
+    {
+      "stock_id": "6188",
+      "name": "廣明",
+      "net_profit": -22376.9,
+      "cost": 3750.0
+    },
+    {
+      "stock_id": "4755",
+      "name": "三福化",
+      "net_profit": -22710.4,
+      "cost": 2284.0
+    },
+    {
+      "stock_id": "6811",
+      "name": "宏碁資訊",
+      "net_profit": -22876.25,
+      "cost": 3234.0
+    },
+    {
+      "stock_id": "3693",
+      "name": "營邦",
+      "net_profit": -23177.0,
+      "cost": 3471.0
+    },
+    {
+      "stock_id": "2009",
+      "name": "第一銅",
+      "net_profit": -25509.45,
+      "cost": 10780.0
+    },
+    {
+      "stock_id": "1799",
+      "name": "易威",
+      "net_profit": -25562.45,
+      "cost": 2914.0
+    },
+    {
+      "stock_id": "4707",
+      "name": "磐亞",
+      "net_profit": -27019.9,
+      "cost": 3660.0
+    },
+    {
+      "stock_id": "3276",
+      "name": "宇環",
+      "net_profit": -28776.87,
+      "cost": 7210.0
+    },
+    {
+      "stock_id": "6667",
+      "name": "信紘科",
+      "net_profit": -29158.0,
+      "cost": 4358.0
+    },
+    {
+      "stock_id": "3552",
+      "name": "同致",
+      "net_profit": -29728.0,
+      "cost": 2362.0
+    },
+    {
+      "stock_id": "3178",
+      "name": "公準",
+      "net_profit": -31022.35,
+      "cost": 3639.0
+    },
+    {
+      "stock_id": "4991",
+      "name": "環宇-KY",
+      "net_profit": -31574.25,
+      "cost": 15900.0
+    },
+    {
+      "stock_id": "4192",
+      "name": "杏國",
+      "net_profit": -31824.5,
+      "cost": 2012.0
+    },
+    {
+      "stock_id": "3556",
+      "name": "禾瑞亞",
+      "net_profit": -32419.2,
+      "cost": 3028.0
+    },
+    {
+      "stock_id": "6207",
+      "name": "雷科",
+      "net_profit": -33594.55,
+      "cost": 11095.0
+    },
+    {
+      "stock_id": "4976",
+      "name": "佳凌",
+      "net_profit": -35807.9,
+      "cost": 4315.0
+    },
+    {
+      "stock_id": "6231",
+      "name": "系微",
+      "net_profit": -36637.5,
+      "cost": 3130.0
+    },
+    {
+      "stock_id": "6547",
+      "name": "高端疫苗",
+      "net_profit": -37127.75,
+      "cost": 3527.0
+    },
+    {
+      "stock_id": "8024",
+      "name": "佑華",
+      "net_profit": -37570.7,
+      "cost": 4194.0
+    },
+    {
+      "stock_id": "6185",
+      "name": "幃翔",
+      "net_profit": -38104.2,
+      "cost": 4491.0
+    },
+    {
+      "stock_id": "2492",
+      "name": "華新科",
+      "net_profit": -38347.5,
+      "cost": 3761.0
+    },
+    {
+      "stock_id": "6492",
+      "name": "生華科",
+      "net_profit": -39674.0,
+      "cost": 3924.0
+    },
+    {
+      "stock_id": "3221",
+      "name": "台嘉碩",
+      "net_profit": -40130.05,
+      "cost": 4209.0
+    },
+    {
+      "stock_id": "4979",
+      "name": "華星光",
+      "net_profit": -40898.94,
+      "cost": 23619.0
+    },
+    {
+      "stock_id": "6485",
+      "name": "點序",
+      "net_profit": -43768.8,
+      "cost": 3284.0
+    },
+    {
+      "stock_id": "1732",
+      "name": "毛寶",
+      "net_profit": -44393.8,
+      "cost": 3492.0
+    },
+    {
+      "stock_id": "2206",
+      "name": "三陽工業",
+      "net_profit": -46208.53,
+      "cost": 4702.0
+    },
+    {
+      "stock_id": "3669",
+      "name": "圓展",
+      "net_profit": -46867.0,
+      "cost": 4126.0
+    },
+    {
+      "stock_id": "5905",
+      "name": "南仁湖",
+      "net_profit": -47266.25,
+      "cost": 4678.0
+    },
+    {
+      "stock_id": "2841",
+      "name": "台開",
+      "net_profit": -47745.45,
+      "cost": 4195.0
+    },
+    {
+      "stock_id": "2543",
+      "name": "皇昌",
+      "net_profit": -47835.4,
+      "cost": 7835.0
+    },
+    {
+      "stock_id": "3260",
+      "name": "威剛",
+      "net_profit": -48120.8,
+      "cost": 3727.0
+    },
+    {
+      "stock_id": "6117",
+      "name": "迎廣",
+      "net_profit": -49470.52,
+      "cost": 6651.0
+    },
+    {
+      "stock_id": "6129",
+      "name": "普誠",
+      "net_profit": -49811.85,
+      "cost": 5209.0
+    },
+    {
+      "stock_id": "3219",
+      "name": "倚強科",
+      "net_profit": -51481.0,
+      "cost": 5518.0
+    },
+    {
+      "stock_id": "1760",
+      "name": "寶齡富錦",
+      "net_profit": -54079.5,
+      "cost": 3252.0
+    },
+    {
+      "stock_id": "5603",
+      "name": "陸海",
+      "net_profit": -57500.74,
+      "cost": 5644.0
+    },
+    {
+      "stock_id": "9955",
+      "name": "佳龍",
+      "net_profit": -58115.49,
+      "cost": 7290.0
+    },
+    {
+      "stock_id": "3356",
+      "name": "奇偶",
+      "net_profit": -63172.2,
+      "cost": 4001.0
+    },
+    {
+      "stock_id": "6556",
+      "name": "勝品",
+      "net_profit": -65146.75,
+      "cost": 5325.0
+    },
+    {
+      "stock_id": "2906",
+      "name": "高林",
+      "net_profit": -74255.9,
+      "cost": 6434.0
+    },
+    {
+      "stock_id": "3036",
+      "name": "文曄",
+      "net_profit": -75920.35,
+      "cost": 6250.0
+    },
+    {
+      "stock_id": "3379",
+      "name": "彬台",
+      "net_profit": -82903.6,
+      "cost": 9687.0
+    },
+    {
+      "stock_id": "2392",
+      "name": "正崴",
+      "net_profit": -84233.0,
+      "cost": 10124.0
+    },
+    {
+      "stock_id": "6838",
+      "name": "台新藥",
+      "net_profit": -86353.11,
+      "cost": 9876.0
+    },
+    {
+      "stock_id": "5706",
+      "name": "鳳凰",
+      "net_profit": -89298.75,
+      "cost": 5821.0
+    },
+    {
+      "stock_id": "2382",
+      "name": "廣達",
+      "net_profit": -89459.5,
+      "cost": 7166.0
+    },
+    {
+      "stock_id": "6112",
+      "name": "邁達特",
+      "net_profit": -96310.0,
+      "cost": 8358.0
+    },
+    {
+      "stock_id": "5210",
+      "name": "寶碩",
+      "net_profit": -107447.82,
+      "cost": 5531.0
+    },
+    {
+      "stock_id": "1540",
+      "name": "喬福",
+      "net_profit": -118311.9,
+      "cost": 9435.0
+    },
+    {
+      "stock_id": "2540",
+      "name": "愛山林",
+      "net_profit": -119683.87,
+      "cost": 8612.0
+    },
+    {
+      "stock_id": "1721",
+      "name": "國慶科技",
+      "net_profit": -120506.39,
+      "cost": 20766.0
+    },
+    {
+      "stock_id": "2207",
+      "name": "和泰車",
+      "net_profit": -131158.0,
+      "cost": 14303.0
+    },
+    {
+      "stock_id": "3297",
+      "name": "杭特",
+      "net_profit": -136250.25,
+      "cost": 14387.0
+    },
+    {
+      "stock_id": "1325",
+      "name": "恆大",
+      "net_profit": -153739.37,
+      "cost": 10817.0
+    },
+    {
+      "stock_id": "4571",
+      "name": "鈞興-KY",
+      "net_profit": -156950.0,
+      "cost": 11222.0
+    },
+    {
+      "stock_id": "2364",
+      "name": "倫飛",
+      "net_profit": -158407.8,
+      "cost": 14629.0
+    },
+    {
+      "stock_id": "3706",
+      "name": "神達",
+      "net_profit": -160036.8,
+      "cost": 14747.0
+    },
+    {
+      "stock_id": "4722",
+      "name": "國精化",
+      "net_profit": -160136.4,
+      "cost": 16618.0
+    },
+    {
+      "stock_id": "2527",
+      "name": "宏璟",
+      "net_profit": -163074.4,
+      "cost": 11597.0
+    },
+    {
+      "stock_id": "1595",
+      "name": "川寶",
+      "net_profit": -163875.05,
+      "cost": 11273.0
+    },
+    {
+      "stock_id": "3024",
+      "name": "憶聲",
+      "net_profit": -164605.93,
+      "cost": 12459.0
+    },
+    {
+      "stock_id": "1453",
+      "name": "大將",
+      "net_profit": -186561.72,
+      "cost": 10164.0
+    },
+    {
+      "stock_id": "9906",
+      "name": "欣巴巴",
+      "net_profit": -200530.14,
+      "cost": 10948.0
+    },
+    {
+      "stock_id": "1618",
+      "name": "合機",
+      "net_profit": -215072.2,
+      "cost": 10538.0
+    },
+    {
+      "stock_id": "6206",
+      "name": "飛捷",
+      "net_profit": -224071.0,
+      "cost": 18767.0
+    },
+    {
+      "stock_id": "2429",
+      "name": "銘旺科",
+      "net_profit": -228489.25,
+      "cost": 14867.0
+    },
+    {
+      "stock_id": "9921",
+      "name": "巨大",
+      "net_profit": -277198.79,
+      "cost": 19206.0
+    },
+    {
+      "stock_id": "4741",
+      "name": "泓瀚",
+      "net_profit": -295408.31,
+      "cost": 12447.0
+    },
+    {
+      "stock_id": "4533",
+      "name": "協易機",
+      "net_profit": -529904.0,
+      "cost": 37877.0
+    },
+    {
+      "stock_id": "1476",
+      "name": "儒鴻",
+      "net_profit": -560905.5,
+      "cost": 44427.0
+    },
+    {
+      "stock_id": "7751",
+      "name": "竑騰",
+      "net_profit": -794525.0,
+      "cost": 53145.0
+    },
+    {
+      "stock_id": "1597",
+      "name": "直得",
+      "net_profit": -1030045.5,
+      "cost": 65514.0
+    },
+    {
+      "stock_id": "2356",
+      "name": "英業達",
+      "net_profit": -1039757.95,
+      "cost": 69394.0
+    },
+    {
+      "stock_id": "2478",
+      "name": "大毅",
+      "net_profit": -1050456.0,
+      "cost": 62180.0
+    },
+    {
+      "stock_id": "8039",
+      "name": "台虹",
+      "net_profit": -1070583.0,
+      "cost": 46091.0
+    },
+    {
+      "stock_id": "3149",
+      "name": "正達",
+      "net_profit": -1315066.05,
+      "cost": 64391.0
+    }
+  ],
+  "reconciled_profit": 9497628.59,
+  "positive_profit_total": 22877808.629999995,
+  "top3_share_of_positive_profit": 0.5108959380258616,
+  "top3_share_of_net_profit": 1.230641879627344,
+  "rolling": {
+    "252": {
+      "windows": 1615,
+      "positive_fraction": 0.686687306501548,
+      "median_excess": 0.14745724885002565,
+      "minimum_excess": -0.5319083286540642,
+      "maximum_excess": 2.4066412032189177,
+      "overlapping_windows_not_independent": true
+    },
+    "756": {
+      "windows": 1111,
+      "positive_fraction": 0.7992799279927992,
+      "median_excess": 0.7823259887698448,
+      "minimum_excess": -0.6620077427284174,
+      "maximum_excess": 9.458337326253837,
+      "overlapping_windows_not_independent": true
+    }
+  },
+  "live_qualified": false,
+  "unseen_validation": false
+}

@@ -1,0 +1,100 @@
+{
+  "overrides": {
+    "2348-2024-07-30": {
+      "shares_per_share": 0.297498813,
+      "pay_date": "2024-09-02",
+      "fractional_cash_per_share": 10,
+      "fractional_rounding": "floor_ntd",
+      "source": "Issuer 2024-07-12 announcement and TWSE 2024-08-28 listing announcement reproduced by E.Sun Securities / Cnyes"
+    },
+    "1309-2020-07-23": {
+      "shares_per_share": 0.03,
+      "pay_date": "2020-08-28",
+      "fractional_cash_per_share": 10,
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer 2020 AGM agenda pp40-44; TWSE 2020-08-26 listing disclosure reproduced by Cnyes: https://news.cnyes.com/news/id/4518684"
+    },
+    "5314-2025-03-31": {
+      "kind": "split",
+      "multiplier": 20,
+      "source": "https://www.tpex.org.tw/storage/eb_data/11403/11400008901.html"
+    },
+    "2364-2024-08-29": {
+      "shares_per_share": 0.3,
+      "pay_date": "2024-10-18",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer 2024 AGM book PDF page11: fractional cash offsets book-entry fees; TWSE 2024-10-08 listing announcement reproduced at https://news.cnyes.com/news/id/5735551"
+    },
+    "9906-2024-09-10": {
+      "shares_per_share": 0.0207799,
+      "pay_date": "2024-10-31",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer 2024-08-26 and 2024-10-18 issue announcements reproduced by nStock, TWSE 2024-10-23 listing disclosure https://news.cnyes.com/news/id/5750580; fractional proceeds offset book-entry fees"
+    },
+    "5904-2026-08-10": {
+      "kind": "split",
+      "multiplier": 10,
+      "source": "https://www.tpex.org.tw/storage/eb_data/11507/11500046541.html"
+    }
+  },
+  "source_sha256": {
+    ".cache/stock-universe-2019-20260929/official/2348-20240712-announcement.html": "2cb96e004c0fe62fd7792c91158d4c25cac518074b70eabf437ed2ed45cc12e1",
+    ".cache/stock-universe-2019-20260929/official/2348-20240712-announcement.source.json": "5a874d8ae5945a03040bb8f153c9e0b3c657cd33f8bc12c953076586c81b2cf9",
+    ".cache/stock-universe-2019-20260929/official/2348-20240828-listing.html": "6ec85002aad2c58688bea1feded5ee48d1e3413f1034bcaf6cefa59a52bbd78a",
+    ".cache/stock-universe-2019-20260929/official/2348-20240828-listing.source.json": "df7892f57a3d80ffc6cf42d8cb2589206d3c9c40321944ee4be98d42570285d8",
+    ".cache/stock-universe-2019-20260929/official/1309-20200618-agenda.pdf": "6ebab1d6dc89568ae07801d2e99c06ab2c8ac5cd753105e3d1a4fed82ce12ef9",
+    ".cache/stock-universe-2019-20260929/official/1309-20200618-agenda.source.json": "d716ae76aa0f1fe36b8446bb0d8d8f0cce07e1a2eb7362faa3161411994bbbc0",
+    ".cache/stock-universe-2019-20260929/official/1309-20200826-listing.html": "a9547b9b79c1a1c8dbbb9a580618d1a139b7af12eea7e90687d84b8d98246adc",
+    ".cache/stock-universe-2019-20260929/official/1309-20200826-listing.source.json": "0cedc59eacf5af5834e116301516859e97338463019ced3e7e8938b7d5a032bd",
+    ".cache/stock-universe-2019-20260929/official/5314-20250312-split.html": "35d3db611d179795847b59a854f4be6f07a336386172baae899ec1a72cea0a7d",
+    ".cache/stock-universe-2019-20260929/official/5314-20250312-split.source.json": "6e835e9f4be02878328f4de0d405c1e1437466fc52bce1dc57fd5d817ce8b4c8",
+    ".cache/stock-universe-2019-20260929/official/2364-2024-meeting-book.pdf": "c49ecfc7b41f66e6a96b7edc2463058520549399c2cdc42d3c7d1c8fce906f4f",
+    ".cache/stock-universe-2019-20260929/official/2364-2024-meeting-book.source.json": "91ba2b447e6f7c62ae0f3090ce025ecfa10d244fd2d68aa9cfada8920fab7db2",
+    ".cache/stock-universe-2019-20260929/official/2364-202410-listing.html": "d98a9d9d2ad318f9a0e9768681582fd9674b7ce22e7aba8207175c295b4d12f6",
+    ".cache/stock-universe-2019-20260929/official/2364-202410-listing.source.json": "ab82b10eca982319b225a656b748999f3a6da04ef2148053c61fc95293830616",
+    ".cache/stock-universe-2019-20260929/official/9906-20240826-rate.html": "b21d468c1c852e581898e4bb24373d48023bd406035c8f43309abb5fbda77b90",
+    ".cache/stock-universe-2019-20260929/official/9906-20240826-rate.source.json": "9ca7b93221f99df77228d0e4e285c5ff813ad94a4968affdf529acaead053ecc",
+    ".cache/stock-universe-2019-20260929/official/9906-20241018-issue.html": "5bfb14b4b4fb63d52bfae058e3b2af1d750d9fbf3b707941c2a3b55a45a85dd7",
+    ".cache/stock-universe-2019-20260929/official/9906-20241018-issue.source.json": "4ef7aa06ae7b78088905c0299193a311fe94c941b3d0a9a0dc87a037f40a778b",
+    ".cache/stock-universe-2019-20260929/official/9906-20241023-listing.html": "6c1aca39f37a211f33826b563e4ff19fa2e437e1c20e5abe666dae326f60e351",
+    ".cache/stock-universe-2019-20260929/official/9906-20241023-listing.source.json": "84dfc0a326ad557aa329a84dec4bfed40d7af9bb7baa7ce35f6f783ce93c3382",
+    ".cache/stock-universe-2019-20260929/official/5904-20260714-split.html": "f0f91641e67cf1a6320eccd11414a6d364dd7dbeca60d1f6e3b3e54d4fa77196",
+    ".cache/stock-universe-2019-20260929/official/5904-20260714-split.source.json": "aaa460f78d87960a0c9e448785da6f432faa2ea679c7a71fb818cae4c7288422"
+  },
+  "scope": "Corporate accounting only; never an entry feature",
+  "known_by": {
+    "share_rate": "2024-07-12",
+    "ordinary_share_delivery": "2024-08-28",
+    "1309_share_rate": "2020-06-18",
+    "1309_ordinary_share_delivery": "2020-08-26",
+    "5314_split": "2025-03-12",
+    "2364_share_rate": "2024-06-14",
+    "2364_ordinary_share_listing": "2024-10-08",
+    "9906_share_rate": "2024-08-26",
+    "9906_ordinary_share_listing": "2024-10-23",
+    "5904_split": "2026-07-14"
+  },
+  "fraction_payment_timing": "For both supplements, assumed same day as ordinary share delivery; exact fractional-cash credit date not separately verified. 1309 fractional cents retain existing engine cash rounding; no issuer rounding rule was located for that fraction.",
+  "verified_halts": [
+    {
+      "stock_id": "5314",
+      "kind": "trading_suspension",
+      "start": "2025-03-20",
+      "end": "2025-03-31",
+      "announcement_date": "2025-03-12",
+      "source_path": ".cache/stock-universe-2019-20260929/official/5314-20250312-split.html",
+      "source_sha256": "35d3db611d179795847b59a854f4be6f07a336386172baae899ec1a72cea0a7d",
+      "market": "TPEx"
+    },
+    {
+      "stock_id": "5904",
+      "market": "TPEx",
+      "kind": "trading_suspension",
+      "start": "2026-07-30",
+      "end": "2026-08-10",
+      "announcement_date": "2026-07-14",
+      "source_path": ".cache/stock-universe-2019-20260929/official/5904-20260714-split.html",
+      "source_sha256": "f0f91641e67cf1a6320eccd11414a6d364dd7dbeca60d1f6e3b3e54d4fa77196"
+    }
+  ]
+}

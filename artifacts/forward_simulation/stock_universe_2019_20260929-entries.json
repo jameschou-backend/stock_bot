@@ -1,0 +1,3283 @@
+{
+  "source_path": ".cache/stock-universe-2019-20260929/final-a/liquid_universe.json",
+  "source_sha256": "235c7cf459330710675a5163dce8e24d88695cc662285cee4dc849ef907ac3b9",
+  "cohorts": [
+    {
+      "bought_qty": 6012,
+      "due_date": "2019-05-29",
+      "due_index": 340,
+      "entry_date": "2019-02-22",
+      "event_id": "liquid_universe-2019-02-21-6188",
+      "exit_date": "2019-05-30",
+      "group_cutoff_date": "2019-01-30",
+      "group_id": "liquid_universe-2019-02",
+      "group_members": [
+        "6188"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05075865410824054,
+        "leader_return20": 0.6055555555555556,
+        "leader_volume_ratio": 2.037124606183273
+      },
+      "members": [
+        "6188"
+      ],
+      "name": "廣明",
+      "priority": 0.5547969014473151,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-02-21",
+      "stock_id": "6188"
+    },
+    {
+      "bought_qty": 30090,
+      "due_date": "2019-05-29",
+      "due_index": 340,
+      "entry_date": "2019-02-22",
+      "event_id": "liquid_universe-2019-02-21-3049",
+      "exit_date": "2019-05-30",
+      "group_cutoff_date": "2019-01-30",
+      "group_id": "liquid_universe-2019-02",
+      "group_members": [
+        "3049"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05075865410824054,
+        "leader_return20": 0.40140845070422526,
+        "leader_volume_ratio": 14.661239172516611
+      },
+      "members": [
+        "3049"
+      ],
+      "name": "精金",
+      "priority": 0.3506497965959847,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-02-21",
+      "stock_id": "3049"
+    },
+    {
+      "bought_qty": 8024,
+      "due_date": "2019-05-29",
+      "due_index": 340,
+      "entry_date": "2019-02-22",
+      "event_id": "liquid_universe-2019-02-21-3356",
+      "exit_date": "2019-05-13",
+      "group_cutoff_date": "2019-01-30",
+      "group_id": "liquid_universe-2019-02",
+      "group_members": [
+        "3356"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05075865410824054,
+        "leader_return20": 0.28350515463917536,
+        "leader_volume_ratio": 2.4317484105522857
+      },
+      "members": [
+        "3356"
+      ],
+      "name": "奇偶",
+      "priority": 0.23274650053093482,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-02-21",
+      "stock_id": "3356"
+    },
+    {
+      "bought_qty": 2084,
+      "due_date": "2019-08-12",
+      "due_index": 391,
+      "entry_date": "2019-05-13",
+      "event_id": "liquid_universe-2019-05-10-3227",
+      "exit_date": "2019-08-20",
+      "group_cutoff_date": "2019-04-30",
+      "group_id": "liquid_universe-2019-05",
+      "group_members": [
+        "3227"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.004313000616142926,
+        "leader_return20": 0.3459399332591768,
+        "leader_volume_ratio": 2.2376694106777273
+      },
+      "members": [
+        "3227"
+      ],
+      "name": "原相",
+      "priority": 0.3416269326430339,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-05-10",
+      "stock_id": "3227"
+    },
+    {
+      "bought_qty": 11023,
+      "due_date": "2019-08-30",
+      "due_index": 405,
+      "entry_date": "2019-05-31",
+      "event_id": "liquid_universe-2019-05-30-2520",
+      "exit_date": "2019-09-11",
+      "group_cutoff_date": "2019-04-30",
+      "group_id": "liquid_universe-2019-05",
+      "group_members": [
+        "2520"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.06746987951807215,
+        "leader_return20": 0.33651551312649164,
+        "leader_volume_ratio": 2.1762717325804726
+      },
+      "members": [
+        "2520"
+      ],
+      "name": "冠德",
+      "priority": 0.4039853926445638,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-05-30",
+      "stock_id": "2520"
+    },
+    {
+      "bought_qty": 30038,
+      "due_date": "2019-08-30",
+      "due_index": 405,
+      "entry_date": "2019-05-31",
+      "event_id": "liquid_universe-2019-05-30-2841",
+      "exit_date": "2019-08-08",
+      "group_cutoff_date": "2019-04-30",
+      "group_id": "liquid_universe-2019-05",
+      "group_members": [
+        "2841"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.06746987951807215,
+        "leader_return20": 0.1707035755478663,
+        "leader_volume_ratio": 2.097512283230799
+      },
+      "members": [
+        "2841"
+      ],
+      "name": "台開",
+      "priority": 0.23817345506593846,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-05-30",
+      "stock_id": "2841"
+    },
+    {
+      "bought_qty": 3027,
+      "due_date": "2019-11-12",
+      "due_index": 453,
+      "entry_date": "2019-08-08",
+      "event_id": "liquid_universe-2019-08-07-3680",
+      "exit_date": "2019-11-13",
+      "group_cutoff_date": "2019-07-31",
+      "group_id": "liquid_universe-2019-08",
+      "group_members": [
+        "3680"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.02213666844697637,
+        "leader_return20": 0.6415929203539823,
+        "leader_volume_ratio": 2.2536902823667195
+      },
+      "members": [
+        "3680"
+      ],
+      "name": "家登",
+      "priority": 0.6637295888009587,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-08-07",
+      "stock_id": "3680"
+    },
+    {
+      "bought_qty": 24,
+      "due_date": "2019-11-14",
+      "due_index": 455,
+      "entry_date": "2019-08-13",
+      "event_id": "liquid_universe-2019-08-12-6510",
+      "exit_date": "2019-11-18",
+      "group_cutoff_date": "2019-07-31",
+      "group_id": "liquid_universe-2019-08",
+      "group_members": [
+        "6510"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.017667084223712104,
+        "leader_return20": 0.4623655913978497,
+        "leader_volume_ratio": 4.065948636513464
+      },
+      "members": [
+        "6510"
+      ],
+      "name": "精測",
+      "priority": 0.4800326756215618,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-08-12",
+      "stock_id": "6510"
+    },
+    {
+      "bought_qty": 3005,
+      "due_date": "2019-12-04",
+      "due_index": 469,
+      "entry_date": "2019-09-02",
+      "event_id": "liquid_universe-2019-08-30-6231",
+      "exit_date": "2019-09-05",
+      "group_cutoff_date": "2019-07-31",
+      "group_id": "liquid_universe-2019-08",
+      "group_members": [
+        "6231"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.005467800729040073,
+        "leader_return20": 0.8446601941747574,
+        "leader_volume_ratio": 1.64837601860682
+      },
+      "members": [
+        "6231"
+      ],
+      "name": "系微",
+      "priority": 0.8501279949037974,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-08-30",
+      "stock_id": "6231"
+    },
+    {
+      "bought_qty": 7384,
+      "due_date": "2019-12-10",
+      "due_index": 473,
+      "entry_date": "2019-09-06",
+      "event_id": "liquid_universe-2019-09-05-2367",
+      "exit_date": "2019-12-16",
+      "group_cutoff_date": "2019-08-30",
+      "group_id": "liquid_universe-2019-09",
+      "group_members": [
+        "2367"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.04140526976160608,
+        "leader_return20": 0.6027088036117385,
+        "leader_volume_ratio": 3.397258940020239
+      },
+      "members": [
+        "2367"
+      ],
+      "name": "燿華",
+      "priority": 0.5613035338501324,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-09-05",
+      "stock_id": "2367"
+    },
+    {
+      "bought_qty": 21043,
+      "due_date": "2020-02-20",
+      "due_index": 517,
+      "entry_date": "2019-11-13",
+      "event_id": "liquid_universe-2019-11-12-5905",
+      "exit_date": "2019-12-02",
+      "group_cutoff_date": "2019-10-31",
+      "group_id": "liquid_universe-2019-11",
+      "group_members": [
+        "5905"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.04903078677308992,
+        "leader_return20": 0.5531475748194017,
+        "leader_volume_ratio": 2.708098934095835
+      },
+      "members": [
+        "5905"
+      ],
+      "name": "南仁湖",
+      "priority": 0.5041167880463118,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-11-12",
+      "stock_id": "5905"
+    },
+    {
+      "bought_qty": 4000,
+      "due_date": "2020-02-24",
+      "due_index": 519,
+      "entry_date": "2019-11-15",
+      "event_id": "liquid_universe-2019-11-14-6667",
+      "exit_date": "2019-12-31",
+      "group_cutoff_date": "2019-10-31",
+      "group_id": "liquid_universe-2019-11",
+      "group_members": [
+        "6667"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.036868973340896005,
+        "leader_return20": 0.9759358288770057,
+        "leader_volume_ratio": 3.7357317666791205
+      },
+      "members": [
+        "6667"
+      ],
+      "name": "信紘科",
+      "priority": 0.9390668555361097,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-11-14",
+      "stock_id": "6667"
+    },
+    {
+      "bought_qty": 11016,
+      "due_date": "2020-03-03",
+      "due_index": 524,
+      "entry_date": "2019-11-22",
+      "event_id": "liquid_universe-2019-11-21-3221",
+      "exit_date": "2020-02-05",
+      "group_cutoff_date": "2019-10-31",
+      "group_id": "liquid_universe-2019-11",
+      "group_members": [
+        "3221"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.04166666666666674,
+        "leader_return20": 0.24829157175398642,
+        "leader_volume_ratio": 8.425325654216909
+      },
+      "members": [
+        "3221"
+      ],
+      "name": "台嘉碩",
+      "priority": 0.20662490508731968,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-11-21",
+      "stock_id": "3221"
+    },
+    {
+      "bought_qty": 11429,
+      "due_date": "2020-03-20",
+      "due_index": 537,
+      "entry_date": "2019-12-11",
+      "event_id": "liquid_universe-2019-12-10-6185",
+      "exit_date": "2019-12-20",
+      "group_cutoff_date": "2019-11-29",
+      "group_id": "liquid_universe-2019-12",
+      "group_members": [
+        "6185"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.010869565217391353,
+        "leader_return20": 0.37984496124030986,
+        "leader_volume_ratio": 1.8190354433894727
+      },
+      "members": [
+        "6185"
+      ],
+      "name": "幃翔",
+      "priority": 0.3689753960229185,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-12-10",
+      "stock_id": "6185"
+    },
+    {
+      "bought_qty": 4043,
+      "due_date": "2020-03-27",
+      "due_index": 542,
+      "entry_date": "2019-12-18",
+      "event_id": "liquid_universe-2019-12-17-3260",
+      "exit_date": "2020-03-17",
+      "group_cutoff_date": "2019-11-29",
+      "group_id": "liquid_universe-2019-12",
+      "group_members": [
+        "3260"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.04861111111111138,
+        "leader_return20": 0.2541436464088398,
+        "leader_volume_ratio": 2.1330279910640515
+      },
+      "members": [
+        "3260"
+      ],
+      "name": "威剛",
+      "priority": 0.2055325352977284,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-12-17",
+      "stock_id": "3260"
+    },
+    {
+      "bought_qty": 1137,
+      "due_date": "2020-04-14",
+      "due_index": 552,
+      "entry_date": "2020-01-02",
+      "event_id": "liquid_universe-2019-12-31-2492",
+      "exit_date": "2020-02-03",
+      "group_cutoff_date": "2019-11-29",
+      "group_id": "liquid_universe-2019-12",
+      "group_members": [
+        "2492"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05323193916349811,
+        "leader_return20": 0.3502824858757061,
+        "leader_volume_ratio": 2.409704747000922
+      },
+      "members": [
+        "2492"
+      ],
+      "name": "華新科",
+      "priority": 0.297050546712208,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2019-12-31",
+      "stock_id": "2492"
+    },
+    {
+      "bought_qty": 23,
+      "due_date": "2020-04-23",
+      "due_index": 559,
+      "entry_date": "2020-01-13",
+      "event_id": "liquid_universe-2020-01-10-3293",
+      "exit_date": "2020-04-24",
+      "group_cutoff_date": "2019-12-31",
+      "group_id": "liquid_universe-2020-01",
+      "group_members": [
+        "3293"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.015127803860198297,
+        "leader_return20": 0.2448979591836733,
+        "leader_volume_ratio": 5.149719340077793
+      },
+      "members": [
+        "3293"
+      ],
+      "name": "鈊象",
+      "priority": 0.229770155323475,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-01-10",
+      "stock_id": "3293"
+    },
+    {
+      "bought_qty": 5001,
+      "due_date": "2020-05-06",
+      "due_index": 567,
+      "entry_date": "2020-02-03",
+      "event_id": "liquid_universe-2020-01-31-3178",
+      "exit_date": "2020-02-12",
+      "group_cutoff_date": "2019-12-31",
+      "group_id": "liquid_universe-2020-01",
+      "group_members": [
+        "3178"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.04451908335350596,
+        "leader_return20": 0.5384615384615383,
+        "leader_volume_ratio": 1.6298594770834562
+      },
+      "members": [
+        "3178"
+      ],
+      "name": "公準",
+      "priority": 0.5829806218150443,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-01-31",
+      "stock_id": "3178"
+    },
+    {
+      "bought_qty": 19133,
+      "due_date": "2020-05-18",
+      "due_index": 575,
+      "entry_date": "2020-02-13",
+      "event_id": "liquid_universe-2020-02-12-4707",
+      "exit_date": "2020-03-31",
+      "group_cutoff_date": "2020-01-31",
+      "group_id": "liquid_universe-2020-02",
+      "group_members": [
+        "4707"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.007671408812487734,
+        "leader_return20": 0.3510747185261003,
+        "leader_volume_ratio": 4.9576368739355186
+      },
+      "members": [
+        "4707"
+      ],
+      "name": "磐亞",
+      "priority": 0.358746127338588,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-02-12",
+      "stock_id": "4707"
+    },
+    {
+      "bought_qty": 3008,
+      "due_date": "2020-09-03",
+      "due_index": 651,
+      "entry_date": "2020-06-04",
+      "event_id": "liquid_universe-2020-06-03-3693",
+      "exit_date": "2020-06-16",
+      "group_cutoff_date": "2020-05-29",
+      "group_id": "liquid_universe-2020-06",
+      "group_members": [
+        "3693"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.03952095808383227,
+        "leader_return20": 1.2686567164179108,
+        "leader_volume_ratio": 2.5032945375932196
+      },
+      "members": [
+        "3693"
+      ],
+      "name": "營邦",
+      "priority": 1.2291357583340785,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-06-03",
+      "stock_id": "3693"
+    },
+    {
+      "bought_qty": 15077,
+      "due_date": "2020-09-03",
+      "due_index": 651,
+      "entry_date": "2020-06-04",
+      "event_id": "liquid_universe-2020-06-03-1309",
+      "exit_date": "2020-09-04",
+      "group_cutoff_date": "2020-05-29",
+      "group_id": "liquid_universe-2020-06",
+      "group_members": [
+        "1309"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.03952095808383227,
+        "leader_return20": 0.5237134207870835,
+        "leader_volume_ratio": 2.1741440055066654
+      },
+      "members": [
+        "1309"
+      ],
+      "name": "台達化",
+      "priority": 0.4841924627032512,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-06-03",
+      "stock_id": "1309"
+    },
+    {
+      "bought_qty": 3082,
+      "due_date": "2020-09-03",
+      "due_index": 651,
+      "entry_date": "2020-06-04",
+      "event_id": "liquid_universe-2020-06-03-3556",
+      "exit_date": "2020-06-15",
+      "group_cutoff_date": "2020-05-29",
+      "group_id": "liquid_universe-2020-06",
+      "group_members": [
+        "3556"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.03952095808383227,
+        "leader_return20": 0.42885375494071143,
+        "leader_volume_ratio": 2.7070155331095096
+      },
+      "members": [
+        "3556"
+      ],
+      "name": "禾瑞亞",
+      "priority": 0.38933279685687916,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-06-03",
+      "stock_id": "3556"
+    },
+    {
+      "bought_qty": 10000,
+      "due_date": "2020-09-11",
+      "due_index": 657,
+      "entry_date": "2020-06-12",
+      "event_id": "liquid_universe-2020-06-11-2417",
+      "exit_date": "2020-09-11",
+      "group_cutoff_date": "2020-05-29",
+      "group_id": "liquid_universe-2020-06",
+      "group_members": [
+        "2417"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06902761104441768,
+        "leader_return20": 0.625,
+        "leader_volume_ratio": 5.4477482806196145
+      },
+      "members": [
+        "2417"
+      ],
+      "name": "圓剛",
+      "priority": 0.5559723889555823,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-06-11",
+      "stock_id": "2417"
+    },
+    {
+      "bought_qty": 8015,
+      "due_date": "2020-09-16",
+      "due_index": 660,
+      "entry_date": "2020-06-17",
+      "event_id": "liquid_universe-2020-06-16-1799",
+      "exit_date": "2020-07-01",
+      "group_cutoff_date": "2020-05-29",
+      "group_id": "liquid_universe-2020-06",
+      "group_members": [
+        "1799"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05959475566150174,
+        "leader_return20": 0.9185185185185183,
+        "leader_volume_ratio": 2.1877123047285534
+      },
+      "members": [
+        "1799"
+      ],
+      "name": "易威",
+      "priority": 0.8589237628570165,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-06-16",
+      "stock_id": "1799"
+    },
+    {
+      "bought_qty": 2005,
+      "due_date": "2020-09-22",
+      "due_index": 664,
+      "entry_date": "2020-06-23",
+      "event_id": "liquid_universe-2020-06-22-4192",
+      "exit_date": "2020-07-31",
+      "group_cutoff_date": "2020-05-29",
+      "group_id": "liquid_universe-2020-06",
+      "group_members": [
+        "4192"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06646706586826334,
+        "leader_return20": 1.1103253182461104,
+        "leader_volume_ratio": 1.6665977359434556
+      },
+      "members": [
+        "4192"
+      ],
+      "name": "杏國",
+      "priority": 1.043858252377847,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-06-22",
+      "stock_id": "4192"
+    },
+    {
+      "bought_qty": 2006,
+      "due_date": "2020-10-30",
+      "due_index": 689,
+      "entry_date": "2020-07-30",
+      "event_id": "liquid_universe-2020-07-29-4755",
+      "exit_date": "2020-08-17",
+      "group_cutoff_date": "2020-06-30",
+      "group_id": "liquid_universe-2020-07",
+      "group_members": [
+        "4755"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.14138170287310037,
+        "leader_return20": 0.6369047619047619,
+        "leader_volume_ratio": 1.9112276305273603
+      },
+      "members": [
+        "4755"
+      ],
+      "name": "三福化",
+      "priority": 0.4955230590316615,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-07-29",
+      "stock_id": "4755"
+    },
+    {
+      "bought_qty": 1000,
+      "due_date": "2020-11-16",
+      "due_index": 700,
+      "entry_date": "2020-08-14",
+      "event_id": "liquid_universe-2020-08-13-8046",
+      "exit_date": "2020-08-31",
+      "group_cutoff_date": "2020-07-31",
+      "group_id": "liquid_universe-2020-08",
+      "group_members": [
+        "8046"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.09268881284468988,
+        "leader_return20": 0.6014669926650364,
+        "leader_volume_ratio": 2.694164251657354
+      },
+      "members": [
+        "8046"
+      ],
+      "name": "南電",
+      "priority": 0.5087781798203466,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-08-13",
+      "stock_id": "8046"
+    },
+    {
+      "bought_qty": 7155,
+      "due_date": "2020-12-02",
+      "due_index": 712,
+      "entry_date": "2020-09-01",
+      "event_id": "liquid_universe-2020-08-31-3027",
+      "exit_date": "2020-12-22",
+      "group_cutoff_date": "2020-07-31",
+      "group_id": "liquid_universe-2020-08",
+      "group_members": [
+        "3027"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.0019607843137255943,
+        "leader_return20": 0.7966101694915255,
+        "leader_volume_ratio": 1.698941290795772
+      },
+      "members": [
+        "3027"
+      ],
+      "name": "盛達",
+      "priority": 0.7985709538052511,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-08-31",
+      "stock_id": "3027"
+    },
+    {
+      "bought_qty": 2026,
+      "due_date": "2020-12-07",
+      "due_index": 715,
+      "entry_date": "2020-09-04",
+      "event_id": "liquid_universe-2020-09-03-3669",
+      "exit_date": "2020-09-09",
+      "group_cutoff_date": "2020-08-31",
+      "group_id": "liquid_universe-2020-09",
+      "group_members": [
+        "3669"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.019924098671726842,
+        "leader_return20": 1.0936639118457303,
+        "leader_volume_ratio": 2.577939190556551
+      },
+      "members": [
+        "3669"
+      ],
+      "name": "圓展",
+      "priority": 1.1135880105174571,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-09-03",
+      "stock_id": "3669"
+    },
+    {
+      "bought_qty": 1000,
+      "due_date": "2020-12-11",
+      "due_index": 719,
+      "entry_date": "2020-09-10",
+      "event_id": "liquid_universe-2020-09-09-6492",
+      "exit_date": "2020-09-16",
+      "group_cutoff_date": "2020-08-31",
+      "group_id": "liquid_universe-2020-09",
+      "group_members": [
+        "6492"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.00920096852300234,
+        "leader_return20": 0.7518213317344171,
+        "leader_volume_ratio": 2.469449121567877
+      },
+      "members": [
+        "6492"
+      ],
+      "name": "生華科",
+      "priority": 0.7610223002574195,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-09-09",
+      "stock_id": "6492"
+    },
+    {
+      "bought_qty": 10019,
+      "due_date": "2020-12-15",
+      "due_index": 721,
+      "entry_date": "2020-09-14",
+      "event_id": "liquid_universe-2020-09-11-3686",
+      "exit_date": "2020-09-30",
+      "group_cutoff_date": "2020-08-31",
+      "group_id": "liquid_universe-2020-09",
+      "group_members": [
+        "3686"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.011961722488038395,
+        "leader_return20": 0.7572815533980584,
+        "leader_volume_ratio": 2.650354368019253
+      },
+      "members": [
+        "3686"
+      ],
+      "name": "達能",
+      "priority": 0.7692432758860968,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-09-11",
+      "stock_id": "3686"
+    },
+    {
+      "bought_qty": 13000,
+      "due_date": "2020-12-18",
+      "due_index": 724,
+      "entry_date": "2020-09-17",
+      "event_id": "liquid_universe-2020-09-16-6233",
+      "exit_date": "2020-12-18",
+      "group_cutoff_date": "2020-08-31",
+      "group_id": "liquid_universe-2020-09",
+      "group_members": [
+        "6233"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.022062350119903984,
+        "leader_return20": 0.6081081081081081,
+        "leader_volume_ratio": 6.957703548031319
+      },
+      "members": [
+        "6233"
+      ],
+      "name": "旺玖",
+      "priority": 0.5860457579882041,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-09-16",
+      "stock_id": "6233"
+    },
+    {
+      "bought_qty": 9006,
+      "due_date": "2021-01-04",
+      "due_index": 734,
+      "entry_date": "2020-10-05",
+      "event_id": "liquid_universe-2020-09-30-6283",
+      "exit_date": "2021-01-04",
+      "group_cutoff_date": "2020-08-31",
+      "group_id": "liquid_universe-2020-09",
+      "group_members": [
+        "6283"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.0,
+        "leader_return20": 0.4666666666666668,
+        "leader_volume_ratio": 3.463613919513487
+      },
+      "members": [
+        "6283"
+      ],
+      "name": "淳安",
+      "priority": 0.4666666666666668,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-09-30",
+      "stock_id": "6283"
+    },
+    {
+      "bought_qty": 9281,
+      "due_date": "2021-03-15",
+      "due_index": 776,
+      "entry_date": "2020-12-03",
+      "event_id": "liquid_universe-2020-12-02-2206",
+      "exit_date": "2021-03-25",
+      "group_cutoff_date": "2020-11-30",
+      "group_id": "liquid_universe-2020-12",
+      "group_members": [
+        "2206"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.08714083843617537,
+        "leader_return20": 0.6339869281045754,
+        "leader_volume_ratio": 3.3433439445771977
+      },
+      "members": [
+        "2206"
+      ],
+      "name": "三陽工業",
+      "priority": 0.5468460896684,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-12-02",
+      "stock_id": "2206"
+    },
+    {
+      "bought_qty": 15000,
+      "due_date": "2021-03-31",
+      "due_index": 788,
+      "entry_date": "2020-12-21",
+      "event_id": "liquid_universe-2020-12-18-2009",
+      "exit_date": "2021-01-28",
+      "group_cutoff_date": "2020-11-30",
+      "group_id": "liquid_universe-2020-12",
+      "group_members": [
+        "2009"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.03684210526315779,
+        "leader_return20": 1.1196172248803826,
+        "leader_volume_ratio": 3.1627655401148345
+      },
+      "members": [
+        "2009"
+      ],
+      "name": "第一銅",
+      "priority": 1.0827751196172248,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2020-12-18",
+      "stock_id": "2009"
+    },
+    {
+      "bought_qty": 20059,
+      "due_date": "2021-04-16",
+      "due_index": 798,
+      "entry_date": "2021-01-05",
+      "event_id": "liquid_universe-2021-01-04-6129",
+      "exit_date": "2021-01-19",
+      "group_cutoff_date": "2020-12-31",
+      "group_id": "liquid_universe-2021-01",
+      "group_members": [
+        "6129"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06010230179028131,
+        "leader_return20": 1.1599999999999997,
+        "leader_volume_ratio": 1.9043111459755984
+      },
+      "members": [
+        "6129"
+      ],
+      "name": "普誠",
+      "priority": 1.0998976982097184,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-01-04",
+      "stock_id": "6129"
+    },
+    {
+      "bought_qty": 3162,
+      "due_date": "2021-04-28",
+      "due_index": 806,
+      "entry_date": "2021-01-15",
+      "event_id": "liquid_universe-2021-01-14-4976",
+      "exit_date": "2021-01-28",
+      "group_cutoff_date": "2020-12-31",
+      "group_id": "liquid_universe-2021-01",
+      "group_members": [
+        "4976"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.12410901467505253,
+        "leader_return20": 0.7509433962264149,
+        "leader_volume_ratio": 1.59636876456395
+      },
+      "members": [
+        "4976"
+      ],
+      "name": "佳凌",
+      "priority": 0.6268343815513624,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-01-14",
+      "stock_id": "4976"
+    },
+    {
+      "bought_qty": 514,
+      "due_date": "2021-05-12",
+      "due_index": 815,
+      "entry_date": "2021-01-28",
+      "event_id": "liquid_universe-2021-01-27-3552",
+      "exit_date": "2021-03-18",
+      "group_cutoff_date": "2020-12-31",
+      "group_id": "liquid_universe-2021-01",
+      "group_members": [
+        "3552"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.13385842256900427,
+        "leader_return20": 0.905292479108635,
+        "leader_volume_ratio": 2.142118256373526
+      },
+      "members": [
+        "3552"
+      ],
+      "name": "同致",
+      "priority": 0.7714340565396307,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-01-27",
+      "stock_id": "3552"
+    },
+    {
+      "bought_qty": 12025,
+      "due_date": "2021-05-13",
+      "due_index": 816,
+      "entry_date": "2021-01-29",
+      "event_id": "liquid_universe-2021-01-28-8024",
+      "exit_date": "2021-05-18",
+      "group_cutoff_date": "2020-12-31",
+      "group_id": "liquid_universe-2021-01",
+      "group_members": [
+        "8024"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.09531893439386252,
+        "leader_return20": 0.9370078740157479,
+        "leader_volume_ratio": 1.924819821674451
+      },
+      "members": [
+        "8024"
+      ],
+      "name": "佑華",
+      "priority": 0.8416889396218854,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-01-28",
+      "stock_id": "8024"
+    },
+    {
+      "bought_qty": 2105,
+      "due_date": "2021-06-18",
+      "due_index": 841,
+      "entry_date": "2021-03-17",
+      "event_id": "liquid_universe-2021-03-16-6485",
+      "exit_date": "2021-05-17",
+      "group_cutoff_date": "2021-02-26",
+      "group_id": "liquid_universe-2021-03",
+      "group_members": [
+        "6485"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.01347809809060263,
+        "leader_return20": 1.0930232558139537,
+        "leader_volume_ratio": 3.6252940070006208
+      },
+      "members": [
+        "6485"
+      ],
+      "name": "點序",
+      "priority": 1.079545157723351,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-03-16",
+      "stock_id": "6485"
+    },
+    {
+      "bought_qty": 213,
+      "due_date": "2021-06-18",
+      "due_index": 841,
+      "entry_date": "2021-03-17",
+      "event_id": "liquid_universe-2021-03-16-3228",
+      "exit_date": "2021-04-14",
+      "group_cutoff_date": "2021-02-26",
+      "group_id": "liquid_universe-2021-03",
+      "group_members": [
+        "3228"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.01347809809060263,
+        "leader_return20": 0.9795081967213113,
+        "leader_volume_ratio": 1.8968255701908672
+      },
+      "members": [
+        "3228"
+      ],
+      "name": "金麗科",
+      "priority": 0.9660300986307087,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-03-16",
+      "stock_id": "3228"
+    },
+    {
+      "bought_qty": 13281,
+      "due_date": "2021-07-15",
+      "due_index": 860,
+      "entry_date": "2021-04-15",
+      "event_id": "liquid_universe-2021-04-14-5608",
+      "exit_date": "2021-07-15",
+      "group_cutoff_date": "2021-03-31",
+      "group_id": "liquid_universe-2021-04",
+      "group_members": [
+        "5608"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.02223869532987388,
+        "leader_return20": 0.8039215686274508,
+        "leader_volume_ratio": 5.234411279203928
+      },
+      "members": [
+        "5608"
+      ],
+      "name": "四維航",
+      "priority": 0.7816828732975769,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-04-14",
+      "stock_id": "5608"
+    },
+    {
+      "bought_qty": 631,
+      "due_date": "2021-08-13",
+      "due_index": 881,
+      "entry_date": "2021-05-17",
+      "event_id": "liquid_universe-2021-05-14-6547",
+      "exit_date": "2021-05-20",
+      "group_cutoff_date": "2021-04-29",
+      "group_id": "liquid_universe-2021-05",
+      "group_members": [
+        "6547"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.07263574253865535,
+        "leader_return20": 0.31770833333333326,
+        "leader_volume_ratio": 2.7838510100079934
+      },
+      "members": [
+        "6547"
+      ],
+      "name": "高端疫苗",
+      "priority": 0.3903440758719886,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-05-14",
+      "stock_id": "6547"
+    },
+    {
+      "bought_qty": 5280,
+      "due_date": "2021-08-17",
+      "due_index": 883,
+      "entry_date": "2021-05-19",
+      "event_id": "liquid_universe-2021-05-18-1732",
+      "exit_date": "2021-05-26",
+      "group_cutoff_date": "2021-04-29",
+      "group_id": "liquid_universe-2021-05",
+      "group_members": [
+        "1732"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.05161290322580636,
+        "leader_return20": 0.9860557768924301,
+        "leader_volume_ratio": 5.049452668218333
+      },
+      "members": [
+        "1732"
+      ],
+      "name": "毛寶",
+      "priority": 1.0376686801182364,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-05-18",
+      "stock_id": "1732"
+    },
+    {
+      "bought_qty": 2271,
+      "due_date": "2021-08-19",
+      "due_index": 885,
+      "entry_date": "2021-05-21",
+      "event_id": "liquid_universe-2021-05-20-1760",
+      "exit_date": "2021-07-20",
+      "group_cutoff_date": "2021-04-29",
+      "group_id": "liquid_universe-2021-05",
+      "group_members": [
+        "1760"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.05434782608695643,
+        "leader_return20": 0.4312977099236641,
+        "leader_volume_ratio": 4.685397509196838
+      },
+      "members": [
+        "1760"
+      ],
+      "name": "寶齡富錦",
+      "priority": 0.48564553601062055,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-05-20",
+      "stock_id": "1760"
+    },
+    {
+      "bought_qty": 1832,
+      "due_date": "2021-08-23",
+      "due_index": 887,
+      "entry_date": "2021-05-25",
+      "event_id": "liquid_universe-2021-05-24-2615",
+      "exit_date": "2021-08-23",
+      "group_cutoff_date": "2021-04-29",
+      "group_id": "liquid_universe-2021-05",
+      "group_members": [
+        "2615"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.05030542579949693,
+        "leader_return20": 0.524390243902439,
+        "leader_volume_ratio": 2.0374498020231475
+      },
+      "members": [
+        "2615"
+      ],
+      "name": "萬海",
+      "priority": 0.574695669701936,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-05-24",
+      "stock_id": "2615"
+    },
+    {
+      "bought_qty": 4252,
+      "due_date": "2021-10-15",
+      "due_index": 923,
+      "entry_date": "2021-07-15",
+      "event_id": "liquid_universe-2021-07-14-6170",
+      "exit_date": "2021-08-06",
+      "group_cutoff_date": "2021-06-30",
+      "group_id": "liquid_universe-2021-07",
+      "group_members": [
+        "6170"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.012977649603460817,
+        "leader_return20": 0.849762576314756,
+        "leader_volume_ratio": 1.5790245747088352
+      },
+      "members": [
+        "6170"
+      ],
+      "name": "統振",
+      "priority": 0.8367849267112952,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-07-14",
+      "stock_id": "6170"
+    },
+    {
+      "bought_qty": 4394,
+      "due_date": "2021-10-18",
+      "due_index": 924,
+      "entry_date": "2021-07-16",
+      "event_id": "liquid_universe-2021-07-15-6104",
+      "exit_date": "2021-10-19",
+      "group_cutoff_date": "2021-06-30",
+      "group_id": "liquid_universe-2021-07",
+      "group_members": [
+        "6104"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.025307302964569844,
+        "leader_return20": 0.47846889952153115,
+        "leader_volume_ratio": 4.240579960008952
+      },
+      "members": [
+        "6104"
+      ],
+      "name": "創惟",
+      "priority": 0.4531615965569613,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-07-15",
+      "stock_id": "6104"
+    },
+    {
+      "bought_qty": 14179,
+      "due_date": "2021-11-01",
+      "due_index": 934,
+      "entry_date": "2021-07-30",
+      "event_id": "liquid_universe-2021-07-29-8289",
+      "exit_date": "2021-11-08",
+      "group_cutoff_date": "2021-06-30",
+      "group_id": "liquid_universe-2021-07",
+      "group_members": [
+        "8289"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.010490926541322998,
+        "leader_return20": 0.5698924731182795,
+        "leader_volume_ratio": 3.898256623579398
+      },
+      "members": [
+        "8289"
+      ],
+      "name": "泰藝",
+      "priority": 0.5803833996596025,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-07-29",
+      "stock_id": "8289"
+    },
+    {
+      "bought_qty": 1017,
+      "due_date": "2021-11-26",
+      "due_index": 953,
+      "entry_date": "2021-08-26",
+      "event_id": "liquid_universe-2021-08-25-6568",
+      "exit_date": "2021-11-26",
+      "group_cutoff_date": "2021-07-30",
+      "group_id": "liquid_universe-2021-08",
+      "group_members": [
+        "6568"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.013407821229050487,
+        "leader_return20": 0.39497210942603833,
+        "leader_volume_ratio": 1.590803496142232
+      },
+      "members": [
+        "6568"
+      ],
+      "name": "宏觀",
+      "priority": 0.38156428819698784,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-08-25",
+      "stock_id": "6568"
+    },
+    {
+      "bought_qty": 33,
+      "due_date": "2022-01-18",
+      "due_index": 989,
+      "entry_date": "2021-10-20",
+      "event_id": "liquid_universe-2021-10-19-6781",
+      "exit_date": "2022-01-19",
+      "group_cutoff_date": "2021-09-30",
+      "group_id": "liquid_universe-2021-10",
+      "group_members": [
+        "6781"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.02248394004282661,
+        "leader_return20": 0.3545568039950062,
+        "leader_volume_ratio": 1.5537888483262523
+      },
+      "members": [
+        "6781"
+      ],
+      "name": "AES-KY",
+      "priority": 0.37704074403783283,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-10-19",
+      "stock_id": "6781"
+    },
+    {
+      "bought_qty": 24394,
+      "due_date": "2022-02-15",
+      "due_index": 1002,
+      "entry_date": "2021-11-08",
+      "event_id": "liquid_universe-2021-11-05-1721",
+      "exit_date": "2022-02-24",
+      "group_cutoff_date": "2021-10-29",
+      "group_id": "liquid_universe-2021-11",
+      "group_members": [
+        "1721"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.020317694865164437,
+        "leader_return20": 0.8443396226415094,
+        "leader_volume_ratio": 1.821706959661045
+      },
+      "members": [
+        "1721"
+      ],
+      "name": "國慶科技",
+      "priority": 0.824021927776345,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-11-05",
+      "stock_id": "1721"
+    },
+    {
+      "bought_qty": 13036,
+      "due_date": "2022-03-09",
+      "due_index": 1017,
+      "entry_date": "2021-11-29",
+      "event_id": "liquid_universe-2021-11-26-3672",
+      "exit_date": "2022-04-22",
+      "group_cutoff_date": "2021-10-29",
+      "group_id": "liquid_universe-2021-11",
+      "group_members": [
+        "3672"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.01730486008836518,
+        "leader_return20": 0.5932914046121591,
+        "leader_volume_ratio": 5.392079505602952
+      },
+      "members": [
+        "3672"
+      ],
+      "name": "康聯訊",
+      "priority": 0.5759865445237939,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2021-11-26",
+      "stock_id": "3672"
+    },
+    {
+      "bought_qty": 5299,
+      "due_date": "2022-05-03",
+      "due_index": 1053,
+      "entry_date": "2022-01-19",
+      "event_id": "liquid_universe-2022-01-18-3036",
+      "exit_date": "2022-04-25",
+      "group_cutoff_date": "2021-12-30",
+      "group_id": "liquid_universe-2022-01",
+      "group_members": [
+        "3036"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06861002488446499,
+        "leader_return20": 0.3919753086419753,
+        "leader_volume_ratio": 1.8798931506606031
+      },
+      "members": [
+        "3036"
+      ],
+      "name": "文曄",
+      "priority": 0.3233652837575103,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-01-18",
+      "stock_id": "3036"
+    },
+    {
+      "bought_qty": 3013,
+      "due_date": "2022-05-20",
+      "due_index": 1066,
+      "entry_date": "2022-02-16",
+      "event_id": "liquid_universe-2022-02-15-3219",
+      "exit_date": "2022-02-25",
+      "group_cutoff_date": "2022-01-26",
+      "group_id": "liquid_universe-2022-02",
+      "group_members": [
+        "3219"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.00978472986506107,
+        "leader_return20": 0.4492753623188406,
+        "leader_volume_ratio": 2.2317380464389966
+      },
+      "members": [
+        "3219"
+      ],
+      "name": "倚強科",
+      "priority": 0.45906009218390165,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-02-15",
+      "stock_id": "3219"
+    },
+    {
+      "bought_qty": 17959,
+      "due_date": "2022-05-30",
+      "due_index": 1072,
+      "entry_date": "2022-02-24",
+      "event_id": "liquid_universe-2022-02-23-9955",
+      "exit_date": "2022-03-17",
+      "group_cutoff_date": "2022-01-26",
+      "group_id": "liquid_universe-2022-02",
+      "group_members": [
+        "9955"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.04361878178997891,
+        "leader_return20": 0.5558823529411763,
+        "leader_volume_ratio": 14.90092082673756
+      },
+      "members": [
+        "9955"
+      ],
+      "name": "佳龍",
+      "priority": 0.5995011347311552,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-02-23",
+      "stock_id": "9955"
+    },
+    {
+      "bought_qty": 18087,
+      "due_date": "2022-06-06",
+      "due_index": 1076,
+      "entry_date": "2022-03-03",
+      "event_id": "liquid_universe-2022-03-02-2906",
+      "exit_date": "2022-03-10",
+      "group_cutoff_date": "2022-02-25",
+      "group_id": "liquid_universe-2022-03",
+      "group_members": [
+        "2906"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.02103049421661407,
+        "leader_return20": 0.6447368421052633,
+        "leader_volume_ratio": 1.680589452737883
+      },
+      "members": [
+        "2906"
+      ],
+      "name": "高林",
+      "priority": 0.6657673363218773,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-03-02",
+      "stock_id": "2906"
+    },
+    {
+      "bought_qty": 8192,
+      "due_date": "2022-07-04",
+      "due_index": 1096,
+      "entry_date": "2022-03-31",
+      "event_id": "liquid_universe-2022-03-30-5603",
+      "exit_date": "2022-06-20",
+      "group_cutoff_date": "2022-02-25",
+      "group_id": "liquid_universe-2022-03",
+      "group_members": [
+        "5603"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.007876834944504085,
+        "leader_return20": 0.48664688427299696,
+        "leader_volume_ratio": 2.8173612321871144
+      },
+      "members": [
+        "5603"
+      ],
+      "name": "陸海",
+      "priority": 0.49452371921750105,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-03-30",
+      "stock_id": "5603"
+    },
+    {
+      "bought_qty": 2084,
+      "due_date": "2022-07-04",
+      "due_index": 1096,
+      "entry_date": "2022-03-31",
+      "event_id": "liquid_universe-2022-03-30-3558",
+      "exit_date": "2022-07-05",
+      "group_cutoff_date": "2022-02-25",
+      "group_id": "liquid_universe-2022-03",
+      "group_members": [
+        "3558"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.007876834944504085,
+        "leader_return20": 0.33609958506224036,
+        "leader_volume_ratio": 6.570737553587835
+      },
+      "members": [
+        "3558"
+      ],
+      "name": "神準",
+      "priority": 0.34397642000674444,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-03-30",
+      "stock_id": "3558"
+    },
+    {
+      "bought_qty": 11156,
+      "due_date": "2023-02-24",
+      "due_index": 1254,
+      "entry_date": "2022-11-16",
+      "event_id": "liquid_universe-2022-11-15-2009",
+      "exit_date": "2023-03-01",
+      "group_cutoff_date": "2022-10-31",
+      "group_id": "liquid_universe-2022-11",
+      "group_members": [
+        "2009"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.13452027695351143,
+        "leader_return20": 0.6208530805687205,
+        "leader_volume_ratio": 2.9838446983164415
+      },
+      "members": [
+        "2009"
+      ],
+      "name": "第一銅",
+      "priority": 0.48633280361520903,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-11-15",
+      "stock_id": "2009"
+    },
+    {
+      "bought_qty": 569,
+      "due_date": "2023-02-24",
+      "due_index": 1254,
+      "entry_date": "2022-11-16",
+      "event_id": "liquid_universe-2022-11-15-6472",
+      "exit_date": "2023-03-06",
+      "group_cutoff_date": "2022-10-31",
+      "group_id": "liquid_universe-2022-11",
+      "group_members": [
+        "6472"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.13452027695351143,
+        "leader_return20": 0.3844827586206898,
+        "leader_volume_ratio": 2.5542234493862392
+      },
+      "members": [
+        "6472"
+      ],
+      "name": "保瑞",
+      "priority": 0.24996248166717838,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-11-15",
+      "stock_id": "6472"
+    },
+    {
+      "bought_qty": 8300,
+      "due_date": "2023-02-24",
+      "due_index": 1254,
+      "entry_date": "2022-11-16",
+      "event_id": "liquid_universe-2022-11-15-1605",
+      "exit_date": "2023-02-24",
+      "group_cutoff_date": "2022-10-31",
+      "group_id": "liquid_universe-2022-11",
+      "group_members": [
+        "1605"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.13452027695351143,
+        "leader_return20": 0.3600562587904361,
+        "leader_volume_ratio": 3.4341638775762813
+      },
+      "members": [
+        "1605"
+      ],
+      "name": "華新",
+      "priority": 0.2255359818369247,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2022-11-15",
+      "stock_id": "1605"
+    },
+    {
+      "bought_qty": 2053,
+      "due_date": "2023-06-07",
+      "due_index": 1321,
+      "entry_date": "2023-03-06",
+      "event_id": "liquid_universe-2023-03-03-6556",
+      "exit_date": "2023-04-10",
+      "group_cutoff_date": "2023-02-24",
+      "group_id": "liquid_universe-2023-03",
+      "group_members": [
+        "6556"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.002941176470588225,
+        "leader_return20": 0.7129186602870814,
+        "leader_volume_ratio": 2.8676081594344174
+      },
+      "members": [
+        "6556"
+      ],
+      "name": "勝品",
+      "priority": 0.7099774838164932,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-03-03",
+      "stock_id": "6556"
+    },
+    {
+      "bought_qty": 8048,
+      "due_date": "2023-06-07",
+      "due_index": 1321,
+      "entry_date": "2023-03-06",
+      "event_id": "liquid_universe-2023-03-03-2722",
+      "exit_date": "2023-06-07",
+      "group_cutoff_date": "2023-02-24",
+      "group_id": "liquid_universe-2023-03",
+      "group_members": [
+        "2722"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.002941176470588225,
+        "leader_return20": 0.5242424242424242,
+        "leader_volume_ratio": 6.109193648638572
+      },
+      "members": [
+        "2722"
+      ],
+      "name": "夏都",
+      "priority": 0.521301247771836,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-03-03",
+      "stock_id": "2722"
+    },
+    {
+      "bought_qty": 1075,
+      "due_date": "2023-06-07",
+      "due_index": 1321,
+      "entry_date": "2023-03-06",
+      "event_id": "liquid_universe-2023-03-03-6811",
+      "exit_date": "2023-03-21",
+      "group_cutoff_date": "2023-02-24",
+      "group_id": "liquid_universe-2023-03",
+      "group_members": [
+        "6811"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.002941176470588225,
+        "leader_return20": 0.4666666666666668,
+        "leader_volume_ratio": 5.156510327295352
+      },
+      "members": [
+        "6811"
+      ],
+      "name": "宏碁資訊",
+      "priority": 0.46372549019607856,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-03-03",
+      "stock_id": "6811"
+    },
+    {
+      "bought_qty": 120,
+      "due_date": "2023-06-21",
+      "due_index": 1331,
+      "entry_date": "2023-03-20",
+      "event_id": "liquid_universe-2023-03-17-5269",
+      "exit_date": "2023-05-09",
+      "group_cutoff_date": "2023-02-24",
+      "group_id": "liquid_universe-2023-03",
+      "group_members": [
+        "5269"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.0008413967185527671,
+        "leader_return20": 0.4181614349775786,
+        "leader_volume_ratio": 2.218347374069602
+      },
+      "members": [
+        "5269"
+      ],
+      "name": "祥碩",
+      "priority": 0.41732003825902586,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-03-17",
+      "stock_id": "5269"
+    },
+    {
+      "bought_qty": 1276,
+      "due_date": "2023-07-06",
+      "due_index": 1340,
+      "entry_date": "2023-03-31",
+      "event_id": "liquid_universe-2023-03-30-5289",
+      "exit_date": "2023-07-07",
+      "group_cutoff_date": "2023-02-24",
+      "group_id": "liquid_universe-2023-03",
+      "group_members": [
+        "5289"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.01635220125786163,
+        "leader_return20": 0.45495495495495475,
+        "leader_volume_ratio": 2.459849563789434
+      },
+      "members": [
+        "5289"
+      ],
+      "name": "宜鼎",
+      "priority": 0.4386027536970931,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-03-30",
+      "stock_id": "5289"
+    },
+    {
+      "bought_qty": 11118,
+      "due_date": "2023-08-09",
+      "due_index": 1363,
+      "entry_date": "2023-05-09",
+      "event_id": "liquid_universe-2023-05-08-8085",
+      "exit_date": "2023-08-25",
+      "group_cutoff_date": "2023-04-28",
+      "group_id": "liquid_universe-2023-05",
+      "group_members": [
+        "8085"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.020247933884297464,
+        "leader_return20": 0.7543859649122806,
+        "leader_volume_ratio": 5.56100858911483
+      },
+      "members": [
+        "8085"
+      ],
+      "name": "福華",
+      "priority": 0.7746338987965781,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-05-08",
+      "stock_id": "8085"
+    },
+    {
+      "bought_qty": 3556,
+      "due_date": "2023-09-08",
+      "due_index": 1385,
+      "entry_date": "2023-06-08",
+      "event_id": "liquid_universe-2023-06-07-5706",
+      "exit_date": "2023-07-12",
+      "group_cutoff_date": "2023-05-31",
+      "group_id": "liquid_universe-2023-06",
+      "group_members": [
+        "5706"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.08743633276740237,
+        "leader_return20": 0.9967532467532467,
+        "leader_volume_ratio": 2.7967763955520915
+      },
+      "members": [
+        "5706"
+      ],
+      "name": "鳳凰",
+      "priority": 0.9093169139858444,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-06-07",
+      "stock_id": "5706"
+    },
+    {
+      "bought_qty": 3622,
+      "due_date": "2023-10-06",
+      "due_index": 1404,
+      "entry_date": "2023-07-07",
+      "event_id": "liquid_universe-2023-07-06-4979",
+      "exit_date": "2023-10-12",
+      "group_cutoff_date": "2023-06-30",
+      "group_id": "liquid_universe-2023-07",
+      "group_members": [
+        "4979"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.009471191791633693,
+        "leader_return20": 0.9389312977099236,
+        "leader_volume_ratio": 1.5900461198056048
+      },
+      "members": [
+        "4979"
+      ],
+      "name": "華星光",
+      "priority": 0.9294601059182899,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-07-06",
+      "stock_id": "4979"
+    },
+    {
+      "bought_qty": 18140,
+      "due_date": "2023-10-11",
+      "due_index": 1405,
+      "entry_date": "2023-07-10",
+      "event_id": "liquid_universe-2023-07-07-6117",
+      "exit_date": "2023-07-25",
+      "group_cutoff_date": "2023-06-30",
+      "group_id": "liquid_universe-2023-07",
+      "group_members": [
+        "6117"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.0031225604996095724,
+        "leader_return20": 0.6869009584664536,
+        "leader_volume_ratio": 9.812006783738953
+      },
+      "members": [
+        "6117"
+      ],
+      "name": "迎廣",
+      "priority": 0.6900235189660632,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-07-07",
+      "stock_id": "6117"
+    },
+    {
+      "bought_qty": 2074,
+      "due_date": "2023-10-26",
+      "due_index": 1416,
+      "entry_date": "2023-07-25",
+      "event_id": "liquid_universe-2023-07-24-2382",
+      "exit_date": "2023-08-04",
+      "group_cutoff_date": "2023-06-30",
+      "group_id": "liquid_universe-2023-07",
+      "group_members": [
+        "2382"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.0049450622686860735,
+        "leader_return20": 0.696245733788396,
+        "leader_volume_ratio": 1.629797082288371
+      },
+      "members": [
+        "2382"
+      ],
+      "name": "廣達",
+      "priority": 0.7011907960570821,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-07-24",
+      "stock_id": "2382"
+    },
+    {
+      "bought_qty": 9041,
+      "due_date": "2023-11-07",
+      "due_index": 1424,
+      "entry_date": "2023-08-07",
+      "event_id": "liquid_universe-2023-08-04-6170",
+      "exit_date": "2023-11-09",
+      "group_cutoff_date": "2023-07-31",
+      "group_id": "liquid_universe-2023-08",
+      "group_members": [
+        "6170"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.009447835579655672,
+        "leader_return20": 0.23354647730390932,
+        "leader_volume_ratio": 2.155369148058379
+      },
+      "members": [
+        "6170"
+      ],
+      "name": "統振",
+      "priority": 0.22409864172425364,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-08-04",
+      "stock_id": "6170"
+    },
+    {
+      "bought_qty": 15083,
+      "due_date": "2023-11-13",
+      "due_index": 1428,
+      "entry_date": "2023-08-11",
+      "event_id": "liquid_universe-2023-08-10-8930",
+      "exit_date": "2023-11-23",
+      "group_cutoff_date": "2023-07-31",
+      "group_id": "liquid_universe-2023-08",
+      "group_members": [
+        "8930"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.009301161509597144,
+        "leader_return20": 0.2118644067796609,
+        "leader_volume_ratio": 1.733584043937554
+      },
+      "members": [
+        "8930"
+      ],
+      "name": "青鋼",
+      "priority": 0.22116556828925804,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-08-10",
+      "stock_id": "8930"
+    },
+    {
+      "bought_qty": 21009,
+      "due_date": "2024-01-10",
+      "due_index": 1469,
+      "entry_date": "2023-10-12",
+      "event_id": "liquid_universe-2023-10-11-3276",
+      "exit_date": "2024-01-12",
+      "group_cutoff_date": "2023-09-28",
+      "group_id": "liquid_universe-2023-10",
+      "group_members": [
+        "3276"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.015687851971037725,
+        "leader_return20": 0.5862068965517242,
+        "leader_volume_ratio": 1.6601948639476432
+      },
+      "members": [
+        "3276"
+      ],
+      "name": "宇環",
+      "priority": 0.5705190445806865,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-10-11",
+      "stock_id": "3276"
+    },
+    {
+      "bought_qty": 3166,
+      "due_date": "2024-02-19",
+      "due_index": 1490,
+      "entry_date": "2023-11-10",
+      "event_id": "liquid_universe-2023-11-09-3228",
+      "exit_date": "2024-02-19",
+      "group_cutoff_date": "2023-10-31",
+      "group_id": "liquid_universe-2023-11",
+      "group_members": [
+        "3228"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.00039277297721918014,
+        "leader_return20": 0.39269406392694073,
+        "leader_volume_ratio": 2.3706968473322623
+      },
+      "members": [
+        "3228"
+      ],
+      "name": "金麗科",
+      "priority": 0.3930868369041599,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-11-09",
+      "stock_id": "3228"
+    },
+    {
+      "bought_qty": 17278,
+      "due_date": "2024-02-26",
+      "due_index": 1495,
+      "entry_date": "2023-11-17",
+      "event_id": "liquid_universe-2023-11-16-2543",
+      "exit_date": "2023-12-11",
+      "group_cutoff_date": "2023-10-31",
+      "group_id": "liquid_universe-2023-11",
+      "group_members": [
+        "2543"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.046055266319583454,
+        "leader_return20": 0.8881987577639749,
+        "leader_volume_ratio": 1.9619783315055945
+      },
+      "members": [
+        "2543"
+      ],
+      "name": "皇昌",
+      "priority": 0.8421434914443915,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-11-16",
+      "stock_id": "2543"
+    },
+    {
+      "bought_qty": 8136,
+      "due_date": "2024-03-19",
+      "due_index": 1510,
+      "entry_date": "2023-12-08",
+      "event_id": "liquid_universe-2023-12-07-5210",
+      "exit_date": "2024-01-08",
+      "group_cutoff_date": "2023-11-30",
+      "group_id": "liquid_universe-2023-12",
+      "group_members": [
+        "5210"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.021611001964636722,
+        "leader_return20": 1.129277566539924,
+        "leader_volume_ratio": 1.598532811011251
+      },
+      "members": [
+        "5210"
+      ],
+      "name": "寶碩",
+      "priority": 1.1076665645752872,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2023-12-07",
+      "stock_id": "5210"
+    },
+    {
+      "bought_qty": 13207,
+      "due_date": "2024-04-18",
+      "due_index": 1530,
+      "entry_date": "2024-01-08",
+      "event_id": "liquid_universe-2024-01-05-6113",
+      "exit_date": "2024-04-25",
+      "group_cutoff_date": "2023-12-29",
+      "group_id": "liquid_universe-2024-01",
+      "group_members": [
+        "6113"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.016538461538461613,
+        "leader_return20": 0.8030769230769232,
+        "leader_volume_ratio": 10.871027598473367
+      },
+      "members": [
+        "6113"
+      ],
+      "name": "亞矽",
+      "priority": 0.7865384615384616,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-01-05",
+      "stock_id": "6113"
+    },
+    {
+      "bought_qty": 14579,
+      "due_date": "2024-04-25",
+      "due_index": 1535,
+      "entry_date": "2024-01-15",
+      "event_id": "liquid_universe-2024-01-12-6219",
+      "exit_date": "2024-04-30",
+      "group_cutoff_date": "2023-12-29",
+      "group_id": "liquid_universe-2024-01",
+      "group_members": [
+        "6219"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.0037551633496056835,
+        "leader_return20": 0.46308724832214754,
+        "leader_volume_ratio": 2.511985454022337
+      },
+      "members": [
+        "6219"
+      ],
+      "name": "富旺",
+      "priority": 0.4668424116717532,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-01-12",
+      "stock_id": "6219"
+    },
+    {
+      "bought_qty": 4250,
+      "due_date": "2024-05-23",
+      "due_index": 1554,
+      "entry_date": "2024-02-20",
+      "event_id": "liquid_universe-2024-02-19-6584",
+      "exit_date": "2024-05-24",
+      "group_cutoff_date": "2024-01-31",
+      "group_id": "liquid_universe-2024-02",
+      "group_members": [
+        "6584"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.08686731336578957,
+        "leader_return20": 1.126909518213866,
+        "leader_volume_ratio": 2.2477911598142866
+      },
+      "members": [
+        "6584"
+      ],
+      "name": "南俊國際",
+      "priority": 1.0400422048480764,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-02-19",
+      "stock_id": "6584"
+    },
+    {
+      "bought_qty": 13007,
+      "due_date": "2024-07-22",
+      "due_index": 1595,
+      "entry_date": "2024-04-22",
+      "event_id": "liquid_universe-2024-04-19-1618",
+      "exit_date": "2024-05-06",
+      "group_cutoff_date": "2024-03-29",
+      "group_id": "liquid_universe-2024-04",
+      "group_members": [
+        "1618"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.015013054830287142,
+        "leader_return20": 0.8581765557163534,
+        "leader_volume_ratio": 2.45609449860266
+      },
+      "members": [
+        "1618"
+      ],
+      "name": "合機",
+      "priority": 0.8731896105466406,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-04-19",
+      "stock_id": "1618"
+    },
+    {
+      "bought_qty": 11408,
+      "due_date": "2024-07-30",
+      "due_index": 1599,
+      "entry_date": "2024-04-26",
+      "event_id": "liquid_universe-2024-04-25-6207",
+      "exit_date": "2024-08-01",
+      "group_cutoff_date": "2024-03-29",
+      "group_id": "liquid_universe-2024-04",
+      "group_members": [
+        "6207"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.02601522842639592,
+        "leader_return20": 0.6605166051660516,
+        "leader_volume_ratio": 2.027246193899948
+      },
+      "members": [
+        "6207"
+      ],
+      "name": "雷科",
+      "priority": 0.6865318335924475,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-04-25",
+      "stock_id": "6207"
+    },
+    {
+      "bought_qty": 25428,
+      "due_date": "2024-08-07",
+      "due_index": 1605,
+      "entry_date": "2024-05-07",
+      "event_id": "liquid_universe-2024-05-06-1453",
+      "exit_date": "2024-05-16",
+      "group_cutoff_date": "2024-04-30",
+      "group_id": "liquid_universe-2024-05",
+      "group_members": [
+        "1453"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.00409965310627558,
+        "leader_return20": 0.980392156862745,
+        "leader_volume_ratio": 2.729042087909633
+      },
+      "members": [
+        "1453"
+      ],
+      "name": "大將",
+      "priority": 0.9762925037564694,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-05-06",
+      "stock_id": "1453"
+    },
+    {
+      "bought_qty": 22154,
+      "due_date": "2024-08-14",
+      "due_index": 1610,
+      "entry_date": "2024-05-14",
+      "event_id": "liquid_universe-2024-05-13-4562",
+      "exit_date": "2024-08-14",
+      "group_cutoff_date": "2024-04-30",
+      "group_id": "liquid_universe-2024-05",
+      "group_members": [
+        "4562"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.007402837754472813,
+        "leader_return20": 0.6638418079096045,
+        "leader_volume_ratio": 10.776973009180495
+      },
+      "members": [
+        "4562"
+      ],
+      "name": "穎漢",
+      "priority": 0.6564389701551316,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-05-13",
+      "stock_id": "4562"
+    },
+    {
+      "bought_qty": 10084,
+      "due_date": "2024-08-26",
+      "due_index": 1618,
+      "entry_date": "2024-05-24",
+      "event_id": "liquid_universe-2024-05-23-2392",
+      "exit_date": "2024-08-07",
+      "group_cutoff_date": "2024-04-30",
+      "group_id": "liquid_universe-2024-05",
+      "group_members": [
+        "2392"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.09561880396546218,
+        "leader_return20": 0.6004366812227073,
+        "leader_volume_ratio": 6.149830025246859
+      },
+      "members": [
+        "2392"
+      ],
+      "name": "正崴",
+      "priority": 0.5048178772572451,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-05-23",
+      "stock_id": "2392"
+    },
+    {
+      "bought_qty": 4358,
+      "due_date": "2024-11-04",
+      "due_index": 1663,
+      "entry_date": "2024-07-31",
+      "event_id": "liquid_universe-2024-07-30-9906",
+      "exit_date": "2024-11-01",
+      "group_cutoff_date": "2024-06-28",
+      "group_id": "liquid_universe-2024-07",
+      "group_members": [
+        "9906"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.02642616742670556,
+        "leader_return20": 1.185730464326161,
+        "leader_volume_ratio": 3.608808875973989
+      },
+      "members": [
+        "9906"
+      ],
+      "name": "欣巴巴",
+      "priority": 1.2121566317528667,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-07-30",
+      "stock_id": "9906"
+    },
+    {
+      "bought_qty": 16131,
+      "due_date": "2024-11-12",
+      "due_index": 1669,
+      "entry_date": "2024-08-08",
+      "event_id": "liquid_universe-2024-08-07-1540",
+      "exit_date": "2024-08-26",
+      "group_cutoff_date": "2024-07-31",
+      "group_id": "liquid_universe-2024-08",
+      "group_members": [
+        "1540"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.11528995464658465,
+        "leader_return20": 0.8225566678486675,
+        "leader_volume_ratio": 3.343568518544956
+      },
+      "members": [
+        "1540"
+      ],
+      "name": "喬福",
+      "priority": 0.9378466224952522,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-08-07",
+      "stock_id": "1540"
+    },
+    {
+      "bought_qty": 29216,
+      "due_date": "2024-11-19",
+      "due_index": 1674,
+      "entry_date": "2024-08-15",
+      "event_id": "liquid_universe-2024-08-14-3230",
+      "exit_date": "2024-11-25",
+      "group_cutoff_date": "2024-07-31",
+      "group_id": "liquid_universe-2024-08",
+      "group_members": [
+        "3230"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.0763924374041901,
+        "leader_return20": 0.8085106382978726,
+        "leader_volume_ratio": 2.2265949607938715
+      },
+      "members": [
+        "3230"
+      ],
+      "name": "錦明",
+      "priority": 0.8849030757020627,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-08-14",
+      "stock_id": "3230"
+    },
+    {
+      "bought_qty": 8161,
+      "due_date": "2024-11-28",
+      "due_index": 1681,
+      "entry_date": "2024-08-26",
+      "event_id": "liquid_universe-2024-08-23-2364",
+      "exit_date": "2024-11-18",
+      "group_cutoff_date": "2024-07-31",
+      "group_id": "liquid_universe-2024-08",
+      "group_members": [
+        "2364"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.010893854748603271,
+        "leader_return20": 0.5398335315101073,
+        "leader_volume_ratio": 4.245379504840016
+      },
+      "members": [
+        "2364"
+      ],
+      "name": "倫飛",
+      "priority": 0.528939676761504,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-08-23",
+      "stock_id": "2364"
+    },
+    {
+      "bought_qty": 37531,
+      "due_date": "2024-12-26",
+      "due_index": 1701,
+      "entry_date": "2024-09-24",
+      "event_id": "liquid_universe-2024-09-23-1721",
+      "exit_date": "2024-10-15",
+      "group_cutoff_date": "2024-08-30",
+      "group_id": "liquid_universe-2024-09",
+      "group_members": [
+        "1721"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.012710693561757358,
+        "leader_return20": 0.5435435435435436,
+        "leader_volume_ratio": 10.634903171251848
+      },
+      "members": [
+        "1721"
+      ],
+      "name": "國慶科技",
+      "priority": 0.5308328499817863,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-09-23",
+      "stock_id": "1721"
+    },
+    {
+      "bought_qty": 14198,
+      "due_date": "2025-01-14",
+      "due_index": 1713,
+      "entry_date": "2024-10-15",
+      "event_id": "liquid_universe-2024-10-14-1595",
+      "exit_date": "2024-12-03",
+      "group_cutoff_date": "2024-09-30",
+      "group_id": "liquid_universe-2024-10",
+      "group_members": [
+        "1595"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.11575282854656233,
+        "leader_return20": 0.6816326530612247,
+        "leader_volume_ratio": 6.934187166130659
+      },
+      "members": [
+        "1595"
+      ],
+      "name": "川寶",
+      "priority": 0.5658798245146623,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-10-14",
+      "stock_id": "1595"
+    },
+    {
+      "bought_qty": 3146,
+      "due_date": "2025-02-19",
+      "due_index": 1732,
+      "entry_date": "2024-11-12",
+      "event_id": "liquid_universe-2024-11-11-5314",
+      "exit_date": "2025-02-20",
+      "group_cutoff_date": "2024-10-30",
+      "group_id": "liquid_universe-2024-11",
+      "group_members": [
+        "5314"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.03616965912047876,
+        "leader_return20": 0.39761904761904754,
+        "leader_volume_ratio": 2.3966183975177375
+      },
+      "members": [
+        "5314"
+      ],
+      "name": "世紀*",
+      "priority": 0.3614493884985688,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-11-11",
+      "stock_id": "5314"
+    },
+    {
+      "bought_qty": 12748,
+      "due_date": "2025-03-04",
+      "due_index": 1740,
+      "entry_date": "2024-11-22",
+      "event_id": "liquid_universe-2024-11-21-3706",
+      "exit_date": "2024-12-23",
+      "group_cutoff_date": "2024-10-30",
+      "group_id": "liquid_universe-2024-11",
+      "group_members": [
+        "3706"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.03392857142857142,
+        "leader_return20": 0.7109207708779444,
+        "leader_volume_ratio": 2.2608059364024955
+      },
+      "members": [
+        "3706"
+      ],
+      "name": "神達",
+      "priority": 0.7448493423065158,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-11-21",
+      "stock_id": "3706"
+    },
+    {
+      "bought_qty": 6235,
+      "due_date": "2025-03-11",
+      "due_index": 1745,
+      "entry_date": "2024-11-29",
+      "event_id": "liquid_universe-2024-11-28-4979",
+      "exit_date": "2025-03-11",
+      "group_cutoff_date": "2024-10-30",
+      "group_id": "liquid_universe-2024-11",
+      "group_members": [
+        "4979"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.026068821689259725,
+        "leader_return20": 0.24014336917562717,
+        "leader_volume_ratio": 1.6570931028174194
+      },
+      "members": [
+        "4979"
+      ],
+      "name": "華星光",
+      "priority": 0.2662121908648869,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-11-28",
+      "stock_id": "4979"
+    },
+    {
+      "bought_qty": 3276,
+      "due_date": "2025-04-07",
+      "due_index": 1762,
+      "entry_date": "2024-12-24",
+      "event_id": "liquid_universe-2024-12-23-4571",
+      "exit_date": "2025-01-13",
+      "group_cutoff_date": "2024-11-29",
+      "group_id": "liquid_universe-2024-12",
+      "group_members": [
+        "4571"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.025474395632960833,
+        "leader_return20": 0.45272206303724927,
+        "leader_volume_ratio": 2.393986459253443
+      },
+      "members": [
+        "4571"
+      ],
+      "name": "鈞興-KY",
+      "priority": 0.42724766740428843,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2024-12-23",
+      "stock_id": "4571"
+    },
+    {
+      "bought_qty": 20289,
+      "due_date": "2025-04-24",
+      "due_index": 1775,
+      "entry_date": "2025-01-13",
+      "event_id": "liquid_universe-2025-01-10-1325",
+      "exit_date": "2025-01-22",
+      "group_cutoff_date": "2024-12-31",
+      "group_id": "liquid_universe-2025-01",
+      "group_members": [
+        "1325"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.019728414040481645,
+        "leader_return20": 0.4442413162705665,
+        "leader_volume_ratio": 12.845664063495393
+      },
+      "members": [
+        "1325"
+      ],
+      "name": "恆大",
+      "priority": 0.42451290223008487,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-01-10",
+      "stock_id": "1325"
+    },
+    {
+      "bought_qty": 11446,
+      "due_date": "2025-05-02",
+      "due_index": 1780,
+      "entry_date": "2025-01-20",
+      "event_id": "liquid_universe-2025-01-17-3379",
+      "exit_date": "2025-02-11",
+      "group_cutoff_date": "2024-12-31",
+      "group_id": "liquid_universe-2025-01",
+      "group_members": [
+        "3379"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.023730094027708093,
+        "leader_return20": 0.7402985074626864,
+        "leader_volume_ratio": 5.36703650341624
+      },
+      "members": [
+        "3379"
+      ],
+      "name": "彬台",
+      "priority": 0.7165684134349783,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-01-17",
+      "stock_id": "3379"
+    },
+    {
+      "bought_qty": 8818,
+      "due_date": "2025-05-12",
+      "due_index": 1786,
+      "entry_date": "2025-02-06",
+      "event_id": "liquid_universe-2025-02-05-6112",
+      "exit_date": "2025-03-06",
+      "group_cutoff_date": "2025-01-22",
+      "group_id": "liquid_universe-2025-02",
+      "group_members": [
+        "6112"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.003117350186712997,
+        "leader_return20": 0.3660000000000001,
+        "leader_volume_ratio": 14.100312278011954
+      },
+      "members": [
+        "6112"
+      ],
+      "name": "邁達特",
+      "priority": 0.3628826498132871,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-02-05",
+      "stock_id": "6112"
+    },
+    {
+      "bought_qty": 8208,
+      "due_date": "2025-05-26",
+      "due_index": 1796,
+      "entry_date": "2025-02-20",
+      "event_id": "liquid_universe-2025-02-19-6206",
+      "exit_date": "2025-03-06",
+      "group_cutoff_date": "2025-01-22",
+      "group_id": "liquid_universe-2025-02",
+      "group_members": [
+        "6206"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.028945224409917536,
+        "leader_return20": 0.8337004405286343,
+        "leader_volume_ratio": 2.3766313304934497
+      },
+      "members": [
+        "6206"
+      ],
+      "name": "飛捷",
+      "priority": 0.8047552161187168,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-02-19",
+      "stock_id": "6206"
+    },
+    {
+      "bought_qty": 15169,
+      "due_date": "2025-09-08",
+      "due_index": 1870,
+      "entry_date": "2025-06-11",
+      "event_id": "liquid_universe-2025-06-10-2429",
+      "exit_date": "2025-07-08",
+      "group_cutoff_date": "2025-05-29",
+      "group_id": "liquid_universe-2025-06",
+      "group_members": [
+        "2429"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06762874929258667,
+        "leader_return20": 0.4555555555555555,
+        "leader_volume_ratio": 8.0631195229943
+      },
+      "members": [
+        "2429"
+      ],
+      "name": "銘旺科",
+      "priority": 0.3879268062629688,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-06-10",
+      "stock_id": "2429"
+    },
+    {
+      "bought_qty": 20123,
+      "due_date": "2025-09-08",
+      "due_index": 1870,
+      "entry_date": "2025-06-11",
+      "event_id": "liquid_universe-2025-06-10-6838",
+      "exit_date": "2025-09-18",
+      "group_cutoff_date": "2025-05-29",
+      "group_id": "liquid_universe-2025-06",
+      "group_members": [
+        "6838"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06762874929258667,
+        "leader_return20": 0.41922290388548067,
+        "leader_volume_ratio": 8.801507914830024
+      },
+      "members": [
+        "6838"
+      ],
+      "name": "台新藥",
+      "priority": 0.351594154592894,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-06-10",
+      "stock_id": "6838"
+    },
+    {
+      "bought_qty": 16002,
+      "due_date": "2025-09-08",
+      "due_index": 1870,
+      "entry_date": "2025-06-11",
+      "event_id": "liquid_universe-2025-06-10-4722",
+      "exit_date": "2025-07-04",
+      "group_cutoff_date": "2025-05-29",
+      "group_id": "liquid_universe-2025-06",
+      "group_members": [
+        "4722"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06762874929258667,
+        "leader_return20": 0.4003379020735889,
+        "leader_volume_ratio": 3.5449342812418343
+      },
+      "members": [
+        "4722"
+      ],
+      "name": "國精化",
+      "priority": 0.3327091527810022,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-06-10",
+      "stock_id": "4722"
+    },
+    {
+      "bought_qty": 7536,
+      "due_date": "2025-10-03",
+      "due_index": 1888,
+      "entry_date": "2025-07-07",
+      "event_id": "liquid_universe-2025-07-04-4991",
+      "exit_date": "2025-10-07",
+      "group_cutoff_date": "2025-06-30",
+      "group_id": "liquid_universe-2025-07",
+      "group_members": [
+        "4991"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.07414124759549323,
+        "leader_return20": 0.9041278295605859,
+        "leader_volume_ratio": 1.9631029717058477
+      },
+      "members": [
+        "4991"
+      ],
+      "name": "環宇-KY",
+      "priority": 0.8299865819650927,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-07-04",
+      "stock_id": "4991"
+    },
+    {
+      "bought_qty": 15400,
+      "due_date": "2025-10-07",
+      "due_index": 1889,
+      "entry_date": "2025-07-08",
+      "event_id": "liquid_universe-2025-07-07-3297",
+      "exit_date": "2025-07-28",
+      "group_cutoff_date": "2025-06-30",
+      "group_id": "liquid_universe-2025-07",
+      "group_members": [
+        "3297"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05759390310288515,
+        "leader_return20": 0.7435897435897436,
+        "leader_volume_ratio": 1.804071592357556
+      },
+      "members": [
+        "3297"
+      ],
+      "name": "杭特",
+      "priority": 0.6859958404868585,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-07-07",
+      "stock_id": "3297"
+    },
+    {
+      "bought_qty": 10532,
+      "due_date": "2025-10-28",
+      "due_index": 1902,
+      "entry_date": "2025-07-25",
+      "event_id": "liquid_universe-2025-07-24-8358",
+      "exit_date": "2025-10-28",
+      "group_cutoff_date": "2025-06-30",
+      "group_id": "liquid_universe-2025-07",
+      "group_members": [
+        "8358"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.0646634706678002,
+        "leader_return20": 0.7117476584484859,
+        "leader_volume_ratio": 2.6166449313659954
+      },
+      "members": [
+        "8358"
+      ],
+      "name": "金居",
+      "priority": 0.6470841877806857,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-07-24",
+      "stock_id": "8358"
+    },
+    {
+      "bought_qty": 34481,
+      "due_date": "2025-12-23",
+      "due_index": 1942,
+      "entry_date": "2025-09-19",
+      "event_id": "liquid_universe-2025-09-18-2344",
+      "exit_date": "2025-12-23",
+      "group_cutoff_date": "2025-08-29",
+      "group_id": "liquid_universe-2025-09",
+      "group_members": [
+        "2344"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.0951923076923078,
+        "leader_return20": 0.7554347826086956,
+        "leader_volume_ratio": 2.2416287407414544
+      },
+      "members": [
+        "2344"
+      ],
+      "name": "華邦電",
+      "priority": 0.6602424749163878,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-09-18",
+      "stock_id": "2344"
+    },
+    {
+      "bought_qty": 1195,
+      "due_date": "2026-01-08",
+      "due_index": 1952,
+      "entry_date": "2025-10-07",
+      "event_id": "liquid_universe-2025-10-03-8299",
+      "exit_date": "2026-01-08",
+      "group_cutoff_date": "2025-09-30",
+      "group_id": "liquid_universe-2025-10",
+      "group_members": [
+        "8299"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.14818355640535374,
+        "leader_return20": 0.7252861602497398,
+        "leader_volume_ratio": 2.2706267445422705
+      },
+      "members": [
+        "8299"
+      ],
+      "name": "群聯",
+      "priority": 0.577102603844386,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-10-03",
+      "stock_id": "8299"
+    },
+    {
+      "bought_qty": 12690,
+      "due_date": "2026-01-28",
+      "due_index": 1966,
+      "entry_date": "2025-10-29",
+      "event_id": "liquid_universe-2025-10-28-2408",
+      "exit_date": "2026-01-28",
+      "group_cutoff_date": "2025-09-30",
+      "group_id": "liquid_universe-2025-10",
+      "group_members": [
+        "2408"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.08476027397260277,
+        "leader_return20": 0.7105263157894737,
+        "leader_volume_ratio": 1.943647806894011
+      },
+      "members": [
+        "2408"
+      ],
+      "name": "南亞科",
+      "priority": 0.6257660418168709,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-10-28",
+      "stock_id": "2408"
+    },
+    {
+      "bought_qty": 18108,
+      "due_date": "2026-04-08",
+      "due_index": 2006,
+      "entry_date": "2025-12-24",
+      "event_id": "liquid_universe-2025-12-23-6588",
+      "exit_date": "2026-04-08",
+      "group_cutoff_date": "2025-11-28",
+      "group_id": "liquid_universe-2025-12",
+      "group_members": [
+        "6588"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.05550952775476392,
+        "leader_return20": 0.8535714285714284,
+        "leader_volume_ratio": 1.6938452122347978
+      },
+      "members": [
+        "6588"
+      ],
+      "name": "東典光電",
+      "priority": 0.7980619008166645,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2025-12-23",
+      "stock_id": "6588"
+    },
+    {
+      "bought_qty": 79319,
+      "due_date": "2026-04-22",
+      "due_index": 2016,
+      "entry_date": "2026-01-09",
+      "event_id": "liquid_universe-2026-01-08-6443",
+      "exit_date": "2026-04-23",
+      "group_cutoff_date": "2025-12-31",
+      "group_id": "liquid_universe-2026-01",
+      "group_members": [
+        "6443"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.10220125786163492,
+        "leader_return20": 1.08,
+        "leader_volume_ratio": 1.8145833366776123
+      },
+      "members": [
+        "6443"
+      ],
+      "name": "元晶",
+      "priority": 0.9777987421383652,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-01-08",
+      "stock_id": "6443"
+    },
+    {
+      "bought_qty": 71386,
+      "due_date": "2026-05-13",
+      "due_index": 2030,
+      "entry_date": "2026-01-29",
+      "event_id": "liquid_universe-2026-01-28-4533",
+      "exit_date": "2026-02-10",
+      "group_cutoff_date": "2025-12-31",
+      "group_id": "liquid_universe-2026-01",
+      "group_members": [
+        "4533"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.15498515721008643,
+        "leader_return20": 0.9009216589861753,
+        "leader_volume_ratio": 3.9685405584420135
+      },
+      "members": [
+        "4533"
+      ],
+      "name": "協易機",
+      "priority": 0.7459365017760888,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-01-28",
+      "stock_id": "4533"
+    },
+    {
+      "bought_qty": 19525,
+      "due_date": "2026-05-26",
+      "due_index": 2039,
+      "entry_date": "2026-02-11",
+      "event_id": "liquid_universe-2026-02-10-5386",
+      "exit_date": "2026-05-26",
+      "group_cutoff_date": "2026-01-30",
+      "group_id": "liquid_universe-2026-02",
+      "group_members": [
+        "5386"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.08296508650764278,
+        "leader_return20": 0.774785801713586,
+        "leader_volume_ratio": 4.391305309980287
+      },
+      "members": [
+        "5386"
+      ],
+      "name": "青雲",
+      "priority": 0.6918207152059432,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-02-10",
+      "stock_id": "5386"
+    },
+    {
+      "bought_qty": 2004,
+      "due_date": "2026-07-09",
+      "due_index": 2070,
+      "entry_date": "2026-04-09",
+      "event_id": "liquid_universe-2026-04-08-7751",
+      "exit_date": "2026-05-14",
+      "group_cutoff_date": "2026-03-31",
+      "group_id": "liquid_universe-2026-04",
+      "group_members": [
+        "7751"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.07608695652173925,
+        "leader_return20": 0.8649722597091019,
+        "leader_volume_ratio": 3.722893259921903
+      },
+      "members": [
+        "7751"
+      ],
+      "name": "竑騰",
+      "priority": 0.7888853031873626,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-04-08",
+      "stock_id": "7751"
+    },
+    {
+      "bought_qty": 16204,
+      "due_date": "2026-07-27",
+      "due_index": 2081,
+      "entry_date": "2026-04-24",
+      "event_id": "liquid_universe-2026-04-23-4741",
+      "exit_date": "2026-08-04",
+      "group_cutoff_date": "2026-03-31",
+      "group_id": "liquid_universe-2026-04",
+      "group_members": [
+        "4741"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.16061827956989227,
+        "leader_return20": 1.464929859719439,
+        "leader_volume_ratio": 3.5855630516436245
+      },
+      "members": [
+        "4741"
+      ],
+      "name": "泓瀚",
+      "priority": 1.3043115801495466,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-04-23",
+      "stock_id": "4741"
+    },
+    {
+      "bought_qty": 54208,
+      "due_date": "2026-08-14",
+      "due_index": 2095,
+      "entry_date": "2026-05-15",
+      "event_id": "liquid_universe-2026-05-14-3024",
+      "exit_date": "2026-06-02",
+      "group_cutoff_date": "2026-04-30",
+      "group_id": "liquid_universe-2026-05",
+      "group_members": [
+        "3024"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.14141414141414121,
+        "leader_return20": 0.6467661691542288,
+        "leader_volume_ratio": 2.174582042867838
+      },
+      "members": [
+        "3024"
+      ],
+      "name": "憶聲",
+      "priority": 0.5053520277400876,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-05-14",
+      "stock_id": "3024"
+    },
+    {
+      "bought_qty": 24114,
+      "due_date": "2026-08-26",
+      "due_index": 2103,
+      "entry_date": "2026-05-27",
+      "event_id": "liquid_universe-2026-05-26-1597",
+      "exit_date": "2026-06-03",
+      "group_cutoff_date": "2026-04-30",
+      "group_id": "liquid_universe-2026-05",
+      "group_members": [
+        "1597"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.07634408602150522,
+        "leader_return20": 1.0,
+        "leader_volume_ratio": 2.334759168864667
+      },
+      "members": [
+        "1597"
+      ],
+      "name": "直得",
+      "priority": 0.9236559139784948,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-05-26",
+      "stock_id": "1597"
+    },
+    {
+      "bought_qty": 61973,
+      "due_date": "2026-09-02",
+      "due_index": 2108,
+      "entry_date": "2026-06-03",
+      "event_id": "liquid_universe-2026-06-02-2356",
+      "exit_date": "2026-06-09",
+      "group_cutoff_date": "2026-05-29",
+      "group_id": "liquid_universe-2026-06",
+      "group_members": [
+        "2356"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.11733615221987326,
+        "leader_return20": 0.7167199148029817,
+        "leader_volume_ratio": 3.393549289023751
+      },
+      "members": [
+        "2356"
+      ],
+      "name": "英業達",
+      "priority": 0.5993837625831084,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-06-02",
+      "stock_id": "2356"
+    },
+    {
+      "bought_qty": 54667,
+      "due_date": "2026-09-03",
+      "due_index": 2109,
+      "entry_date": "2026-06-04",
+      "event_id": "liquid_universe-2026-06-03-3149",
+      "exit_date": "2026-07-23",
+      "group_cutoff_date": "2026-05-29",
+      "group_id": "liquid_universe-2026-06",
+      "group_members": [
+        "3149"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.12375979112271529,
+        "leader_return20": 0.8343434343434344,
+        "leader_volume_ratio": 1.9117662730535632
+      },
+      "members": [
+        "3149"
+      ],
+      "name": "正達",
+      "priority": 0.7105836432207191,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-06-03",
+      "stock_id": "3149"
+    },
+    {
+      "bought_qty": 27737,
+      "due_date": "2026-09-09",
+      "due_index": 2113,
+      "entry_date": "2026-06-10",
+      "event_id": "liquid_universe-2026-06-09-2478",
+      "exit_date": "2026-07-21",
+      "group_cutoff_date": "2026-05-29",
+      "group_id": "liquid_universe-2026-06",
+      "group_members": [
+        "2478"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.06866288074341775,
+        "leader_return20": 1.0875,
+        "leader_volume_ratio": 3.0875484494723078
+      },
+      "members": [
+        "2478"
+      ],
+      "name": "大毅",
+      "priority": 1.0188371192565822,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-06-09",
+      "stock_id": "2478"
+    },
+    {
+      "bought_qty": 17167,
+      "due_date": null,
+      "due_index": 2140,
+      "entry_date": "2026-07-21",
+      "event_id": "liquid_universe-2026-07-20-2527",
+      "exit_date": "2026-07-30",
+      "group_cutoff_date": "2026-06-30",
+      "group_id": "liquid_universe-2026-07",
+      "group_members": [
+        "2527"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.07548928238583408,
+        "leader_return20": 0.26633165829145744,
+        "leader_volume_ratio": 2.007552240830838
+      },
+      "members": [
+        "2527"
+      ],
+      "name": "宏璟",
+      "priority": 0.3418209406772915,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-07-20",
+      "stock_id": "2527"
+    },
+    {
+      "bought_qty": 15104,
+      "due_date": null,
+      "due_index": 2143,
+      "entry_date": "2026-07-24",
+      "event_id": "liquid_universe-2026-07-23-8039",
+      "exit_date": "2026-07-30",
+      "group_cutoff_date": "2026-06-30",
+      "group_id": "liquid_universe-2026-07",
+      "group_members": [
+        "8039"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.024430690421855528,
+        "leader_return20": 0.7552607958512019,
+        "leader_volume_ratio": 2.614140427852312
+      },
+      "members": [
+        "8039"
+      ],
+      "name": "台虹",
+      "priority": 0.7796914862730574,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-07-23",
+      "stock_id": "8039"
+    },
+    {
+      "bought_qty": 4334,
+      "due_date": null,
+      "due_index": 2148,
+      "entry_date": "2026-07-31",
+      "event_id": "liquid_universe-2026-07-30-2207",
+      "exit_date": null,
+      "group_cutoff_date": "2026-06-30",
+      "group_id": "liquid_universe-2026-07",
+      "group_members": [
+        "2207"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.13974425681535074,
+        "leader_return20": 0.1849462365591399,
+        "leader_volume_ratio": 4.015537526534648
+      },
+      "members": [
+        "2207"
+      ],
+      "name": "和泰車",
+      "priority": 0.32469049337449063,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-07-30",
+      "stock_id": "2207"
+    },
+    {
+      "bought_qty": 9387,
+      "due_date": null,
+      "due_index": 2148,
+      "entry_date": "2026-07-31",
+      "event_id": "liquid_universe-2026-07-30-1476",
+      "exit_date": "2026-09-09",
+      "group_cutoff_date": "2026-06-30",
+      "group_id": "liquid_universe-2026-07",
+      "group_members": [
+        "1476"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.13974425681535074,
+        "leader_return20": 0.130016051364366,
+        "leader_volume_ratio": 2.5968088915597187
+      },
+      "members": [
+        "1476"
+      ],
+      "name": "儒鴻",
+      "priority": 0.26976030817971675,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-07-30",
+      "stock_id": "1476"
+    },
+    {
+      "bought_qty": 11446,
+      "due_date": null,
+      "due_index": 2148,
+      "entry_date": "2026-07-31",
+      "event_id": "liquid_universe-2026-07-30-2540",
+      "exit_date": "2026-08-12",
+      "group_cutoff_date": "2026-06-30",
+      "group_id": "liquid_universe-2026-07",
+      "group_members": [
+        "2540"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": -0.13974425681535074,
+        "leader_return20": 0.09276437847866426,
+        "leader_volume_ratio": 3.5993955311706984
+      },
+      "members": [
+        "2540"
+      ],
+      "name": "愛山林",
+      "priority": 0.232508635294015,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-07-30",
+      "stock_id": "2540"
+    },
+    {
+      "bought_qty": 29739,
+      "due_date": null,
+      "due_index": 2156,
+      "entry_date": "2026-08-12",
+      "event_id": "liquid_universe-2026-08-11-9921",
+      "exit_date": null,
+      "group_cutoff_date": "2026-07-31",
+      "group_id": "liquid_universe-2026-08",
+      "group_members": [
+        "9921"
+      ],
+      "leader_evidence": {
+        "benchmark_return20": 0.008012558967304795,
+        "leader_return20": 0.3714637146371462,
+        "leader_volume_ratio": 2.6809050692491345
+      },
+      "members": [
+        "9921"
+      ],
+      "name": "巨大",
+      "priority": 0.36345115566984143,
+      "selection_reason": "causal breakout and volume expansion; liquid_universe",
+      "signal_date": "2026-08-11",
+      "stock_id": "9921"
+    }
+  ],
+  "live_qualified": false
+}

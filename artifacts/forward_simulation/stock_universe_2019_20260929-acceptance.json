@@ -1,0 +1,65 @@
+{
+  "tests": {
+    "passed": 4182,
+    "warnings": 36,
+    "seconds": 85.0
+  },
+  "pipeline": {
+    "exit_code": 0,
+    "earlier_failures": [
+      "tpex TLS",
+      "partial current-day market coverage",
+      "TAIEX total return index not yet published"
+    ]
+  },
+  "api": [
+    {
+      "port": 8000,
+      "path": "/health",
+      "valid_json": true
+    },
+    {
+      "port": 8000,
+      "path": "/picks",
+      "valid_json": true
+    },
+    {
+      "port": 8000,
+      "path": "/models",
+      "valid_json": true
+    },
+    {
+      "port": 8000,
+      "path": "/jobs?limit=10",
+      "valid_json": true
+    },
+    {
+      "port": 8001,
+      "path": "/health",
+      "valid_json": true
+    },
+    {
+      "port": 8001,
+      "path": "/picks",
+      "valid_json": true
+    },
+    {
+      "port": 8001,
+      "path": "/models",
+      "valid_json": true
+    },
+    {
+      "port": 8001,
+      "path": "/jobs?limit=10",
+      "valid_json": true
+    }
+  ],
+  "evidence_sha256": {
+    "/tmp/stock-universe-tests-release-v8.log": "ce142b24a75650276c165c47acfd62ed5234fc40435684be51316c73f5541670",
+    "/tmp/stock-universe-pipeline-index-arrived.log": "e69bacffa177c0cfd596914bd41b1baae2ff3baa440f472a9eb825d543956801",
+    "/tmp/stock-universe-api-checks-with-halts.json": "35b7cd521ced0fd14e9925edbf1ffd77055d107fd09376bc9cbbe892bc2ce75b"
+  },
+  "historical_accounts_identical": true,
+  "historical_end": "2026-09-09",
+  "live_qualified": false
+}
