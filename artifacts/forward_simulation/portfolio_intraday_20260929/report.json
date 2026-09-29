@@ -1,0 +1,1900 @@
+{
+  "start": "2025-01-02",
+  "end": "2026-09-09",
+  "initial_cash": 1000000,
+  "summaries": {
+    "control": {
+      "annual": [
+        {
+          "end_nav": 1230497.16,
+          "max_drawdown": -0.23962630000000007,
+          "partial_year": false,
+          "profit": 230497.15999999992,
+          "start_nav": 1000000.0,
+          "total_return": 0.23049715999999987,
+          "year": "2025"
+        },
+        {
+          "end_nav": 2462667.77,
+          "max_drawdown": -0.3183155753078234,
+          "partial_year": true,
+          "profit": 1232170.61,
+          "start_nav": 1230497.16,
+          "total_return": 1.0013599787585044,
+          "year": "2026"
+        }
+      ],
+      "buy_count": 48,
+      "cagr": 0.7078781213934249,
+      "cash": 123710.87,
+      "costs": {
+        "commission": 31370.0,
+        "slippage": 98124.0,
+        "tax": 31528.0,
+        "total_cost": 161022.0
+      },
+      "end": "2026-09-09",
+      "final_holdings": [
+        {
+          "date": "2026-09-09",
+          "event_id": "2026-08-g018-2026-08-04-2834",
+          "mark_date": "2026-09-09",
+          "market_value": 672083.9,
+          "name": "臺企銀",
+          "price": 17.95,
+          "qty": 37442,
+          "stale": false,
+          "stock_id": "2834"
+        },
+        {
+          "date": "2026-09-09",
+          "event_id": "2026-08-g013-2026-08-10-2615",
+          "mark_date": "2026-09-09",
+          "market_value": 829980.0,
+          "name": "萬海",
+          "price": 116.0,
+          "qty": 7155,
+          "stale": false,
+          "stock_id": "2615"
+        },
+        {
+          "date": "2026-09-09",
+          "event_id": "2026-08-g004-2026-08-21-1815",
+          "mark_date": "2026-09-09",
+          "market_value": 794052.0,
+          "name": "富喬",
+          "price": 126.0,
+          "qty": 6302,
+          "stale": false,
+          "stock_id": "1815"
+        }
+      ],
+      "final_nav": 2462667.77,
+      "final_receivables": [
+        {
+          "action_id": "1815-2026-09-09-stock",
+          "event_id": "2026-08-g004-2026-08-21-1815",
+          "ex_date": "2026-09-09",
+          "fraction": 0.11078221784,
+          "fractional_cash_per_share": 0,
+          "kind": "shares",
+          "pay_date": "2026-10-13",
+          "qty": 315,
+          "stock_id": "1815"
+        },
+        {
+          "action_id": "1815-cash-2026-09-09",
+          "amount": 3151.0,
+          "event_id": "2026-08-g004-2026-08-21-1815",
+          "ex_date": "2026-09-09",
+          "kind": "cash",
+          "pay_date": "2026-10-13",
+          "stock_id": "1815"
+        }
+      ],
+      "initial_cash": 1000000.0,
+      "market_value": 2296115.9,
+      "max_drawdown": -0.3183155753078234,
+      "minimum_cash": 18458.19,
+      "partial_or_rejected_orders": {
+        "midpoint_limit_not_crossed": 1,
+        "overlapping_member": 3,
+        "partial_midpoint_daily_capacity": 20,
+        "resource_slots_locked": 11,
+        "slots_full": 149
+      },
+      "profit": 1462667.77,
+      "receivable": 42841.0,
+      "sell_count": 58,
+      "stale_final_holdings": 0,
+      "start": "2025-01-02",
+      "stock_cohorts": 27,
+      "total_return": 1.46266777,
+      "trade_count": 106,
+      "trading_days": 409
+    },
+    "intraday15": {
+      "annual": [
+        {
+          "end_nav": 1387717.69,
+          "max_drawdown": -0.15792817000000003,
+          "partial_year": false,
+          "profit": 387717.68999999994,
+          "start_nav": 1000000.0,
+          "total_return": 0.3877176899999999,
+          "year": "2025"
+        },
+        {
+          "end_nav": 1986628.2000000002,
+          "max_drawdown": -0.2660542704210568,
+          "partial_year": true,
+          "profit": 598910.5100000002,
+          "start_nav": 1387717.69,
+          "total_return": 0.43157950231217446,
+          "year": "2026"
+        }
+      ],
+      "buy_count": 96,
+      "cagr": 0.5033225550975222,
+      "cash": 806694.85,
+      "costs": {
+        "commission": 67016.0,
+        "slippage": 210469.0,
+        "tax": 70169.0,
+        "total_cost": 347654.0
+      },
+      "end": "2026-09-09",
+      "final_holdings": [
+        {
+          "date": "2026-09-09",
+          "event_id": "2026-08-g018-2026-08-04-2834",
+          "mark_date": "2026-09-09",
+          "market_value": 558657.85,
+          "name": "臺企銀",
+          "price": 17.95,
+          "qty": 31123,
+          "stale": false,
+          "stock_id": "2834"
+        },
+        {
+          "date": "2026-09-09",
+          "event_id": "2026-08-g009-2026-08-31-3006",
+          "mark_date": "2026-09-09",
+          "market_value": 621275.5,
+          "name": "晶豪科",
+          "price": 306.5,
+          "qty": 2027,
+          "stale": false,
+          "stock_id": "3006"
+        }
+      ],
+      "final_nav": 1986628.2000000002,
+      "final_receivables": [],
+      "initial_cash": 1000000.0,
+      "market_value": 1179933.35,
+      "max_drawdown": -0.2660542704210568,
+      "minimum_cash": 33749.04,
+      "partial_or_rejected_orders": {
+        "deferred_to_next_session_no_odd_tape": 47,
+        "midpoint_limit_not_crossed": 6,
+        "overlapping_member": 2,
+        "partial_midpoint_daily_capacity": 26,
+        "residual_exposure_cap": 13,
+        "resource_slots_locked": 2,
+        "slots_full": 119
+      },
+      "profit": 986628.2000000002,
+      "receivable": 0.0,
+      "sell_count": 259,
+      "stale_final_holdings": 0,
+      "start": "2025-01-02",
+      "stock_cohorts": 53,
+      "total_return": 0.9866282000000002,
+      "trade_count": 355,
+      "trading_days": 409
+    },
+    "benchmark": {
+      "annual": [
+        {
+          "end_nav": 1367387.15,
+          "max_drawdown": -0.27500281083957845,
+          "partial_year": false,
+          "profit": 367387.1499999999,
+          "start_nav": 1000000.0,
+          "total_return": 0.3673871499999999,
+          "year": "2025"
+        },
+        {
+          "end_nav": 2327830.8200000003,
+          "max_drawdown": -0.15339382693205472,
+          "partial_year": true,
+          "profit": 960443.6700000004,
+          "start_nav": 1367387.15,
+          "total_return": 0.7023933711824046,
+          "year": "2026"
+        }
+      ],
+      "buy_count": 17,
+      "cagr": 0.6517082563783871,
+      "cash": 70.97,
+      "costs": {
+        "commission": 1693.0,
+        "slippage": 4726.0,
+        "tax": 0.0,
+        "total_cost": 6419.0
+      },
+      "end": "2026-09-09",
+      "final_holdings": [
+        {
+          "date": "2026-09-09",
+          "event_id": "benchmark",
+          "mark_date": "2026-09-09",
+          "market_value": 2327759.85,
+          "name": "元大台灣50",
+          "price": 109.65,
+          "qty": 21229,
+          "stale": false,
+          "stock_id": "0050"
+        }
+      ],
+      "final_nav": 2327830.8200000003,
+      "final_receivables": [],
+      "initial_cash": 1000000.0,
+      "market_value": 2327759.85,
+      "max_drawdown": -0.27500281083957845,
+      "minimum_cash": 20.75,
+      "partial_or_rejected_orders": {},
+      "profit": 1327830.8200000003,
+      "receivable": 0.0,
+      "sell_count": 0,
+      "stale_final_holdings": 0,
+      "start": "2025-01-02",
+      "stock_cohorts": 0,
+      "total_return": 1.3278308200000004,
+      "trade_count": 17,
+      "trading_days": 409
+    }
+  },
+  "cohort_differences": [
+    {
+      "event_id": "2025-01-g001-2025-01-22-6770",
+      "stock_id": "6770",
+      "name": "力積電",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-01-g001-2025-01-22-6770",
+        "stock_id": "6770",
+        "name": "力積電",
+        "entry_date": "2025-02-03",
+        "buy_qty": 13676,
+        "sell_qty": 13676,
+        "first_sell": "2025-02-07",
+        "exit_date": "2025-02-10",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -36951.89999999999,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -36951.89999999999
+    },
+    {
+      "event_id": "2025-01-g007-2025-01-02-3694",
+      "stock_id": "3694",
+      "name": "海華",
+      "control": {
+        "event_id": "2025-01-g007-2025-01-02-3694",
+        "stock_id": "3694",
+        "name": "海華",
+        "entry_date": "2025-01-03",
+        "buy_qty": 4360,
+        "sell_qty": 4360,
+        "first_sell": "2025-01-14",
+        "exit_date": "2025-01-16",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -41769.6,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-01-g007-2025-01-02-3694",
+        "stock_id": "3694",
+        "name": "海華",
+        "entry_date": "2025-01-03",
+        "buy_qty": 4360,
+        "sell_qty": 4360,
+        "first_sell": "2025-01-09",
+        "exit_date": "2025-01-14",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -36423.299999999996,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 5346.300000000003
+    },
+    {
+      "event_id": "2025-01-g011-2025-01-02-3594",
+      "stock_id": "3594",
+      "name": "磐儀",
+      "control": {
+        "event_id": "2025-01-g011-2025-01-02-3594",
+        "stock_id": "3594",
+        "name": "磐儀",
+        "entry_date": "2025-01-03",
+        "buy_qty": 5127,
+        "sell_qty": 5127,
+        "first_sell": "2025-02-03",
+        "exit_date": "2025-02-05",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -44188.149999999994,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-01-g011-2025-01-02-3594",
+        "stock_id": "3594",
+        "name": "磐儀",
+        "entry_date": "2025-01-03",
+        "buy_qty": 5127,
+        "sell_qty": 5127,
+        "first_sell": "2025-01-13",
+        "exit_date": "2025-01-15",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -24883.51999999999,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 19304.630000000005
+    },
+    {
+      "event_id": "2025-01-g015-2025-01-02-6689",
+      "stock_id": "6689",
+      "name": "伊雲谷",
+      "control": {
+        "event_id": "2025-01-g015-2025-01-02-6689",
+        "stock_id": "6689",
+        "name": "伊雲谷",
+        "entry_date": "2025-01-03",
+        "buy_qty": 2392,
+        "sell_qty": 2392,
+        "first_sell": "2025-03-04",
+        "exit_date": "2025-03-10",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -51989.05,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-01-g015-2025-01-02-6689",
+        "stock_id": "6689",
+        "name": "伊雲谷",
+        "entry_date": "2025-01-03",
+        "buy_qty": 2392,
+        "sell_qty": 2392,
+        "first_sell": "2025-01-13",
+        "exit_date": "2025-01-22",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -34799.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 17190.050000000003
+    },
+    {
+      "event_id": "2025-01-g021-2025-01-22-6139",
+      "stock_id": "6139",
+      "name": "亞翔",
+      "control": {
+        "event_id": "2025-01-g021-2025-01-22-6139",
+        "stock_id": "6139",
+        "name": "亞翔",
+        "entry_date": "2025-02-03",
+        "buy_qty": 1091,
+        "sell_qty": 1091,
+        "first_sell": "2025-04-08",
+        "exit_date": "2025-04-09",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -66677.0,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-01-g021-2025-01-22-6139",
+        "stock_id": "6139",
+        "name": "亞翔",
+        "entry_date": "2025-02-03",
+        "buy_qty": 1089,
+        "sell_qty": 1089,
+        "first_sell": "2025-03-11",
+        "exit_date": "2025-03-12",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 880.25,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 67557.25
+    },
+    {
+      "event_id": "2025-02-g007-2025-02-14-8234",
+      "stock_id": "8234",
+      "name": "新漢",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-02-g007-2025-02-14-8234",
+        "stock_id": "8234",
+        "name": "新漢",
+        "entry_date": "2025-02-17",
+        "buy_qty": 3250,
+        "sell_qty": 3250,
+        "first_sell": "2025-03-03",
+        "exit_date": "2025-03-05",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 12470.8,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 12470.8
+    },
+    {
+      "event_id": "2025-02-g019-2025-02-03-3008",
+      "stock_id": "3008",
+      "name": "大立光",
+      "control": {
+        "event_id": "2025-02-g019-2025-02-03-3008",
+        "stock_id": "3008",
+        "name": "大立光",
+        "entry_date": "2025-02-04",
+        "buy_qty": 95,
+        "sell_qty": 95,
+        "first_sell": "2025-04-01",
+        "exit_date": "2025-04-01",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -30956.5,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-02-g019-2025-02-03-3008",
+        "stock_id": "3008",
+        "name": "大立光",
+        "entry_date": "2025-02-04",
+        "buy_qty": 97,
+        "sell_qty": 97,
+        "first_sell": "2025-04-01",
+        "exit_date": "2025-04-01",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -31608.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -652.0
+    },
+    {
+      "event_id": "2025-06-g006-2025-06-10-3044",
+      "stock_id": "3044",
+      "name": "健鼎",
+      "control": {
+        "event_id": "2025-06-g006-2025-06-10-3044",
+        "stock_id": "3044",
+        "name": "健鼎",
+        "entry_date": "2025-06-11",
+        "buy_qty": 1038,
+        "sell_qty": 1038,
+        "first_sell": "2025-09-08",
+        "exit_date": "2025-09-08",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 89301.9,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-06-g006-2025-06-10-3044",
+        "stock_id": "3044",
+        "name": "健鼎",
+        "entry_date": "2025-06-11",
+        "buy_qty": 1152,
+        "sell_qty": 1152,
+        "first_sell": "2025-09-08",
+        "exit_date": "2025-09-08",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 99068.6,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 9766.700000000012
+    },
+    {
+      "event_id": "2025-06-g007-2025-06-10-6223",
+      "stock_id": "6223",
+      "name": "旺矽",
+      "control": {
+        "event_id": "2025-06-g007-2025-06-10-6223",
+        "stock_id": "6223",
+        "name": "旺矽",
+        "entry_date": "2025-06-11",
+        "buy_qty": 262,
+        "sell_qty": 262,
+        "first_sell": "2025-09-08",
+        "exit_date": "2025-09-08",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 172513.56,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-06-g007-2025-06-10-6223",
+        "stock_id": "6223",
+        "name": "旺矽",
+        "entry_date": "2025-06-11",
+        "buy_qty": 291,
+        "sell_qty": 291,
+        "first_sell": "2025-09-08",
+        "exit_date": "2025-09-08",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 191609.46,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 19095.899999999994
+    },
+    {
+      "event_id": "2025-06-g020-2025-06-25-6739",
+      "stock_id": "6739",
+      "name": "竹陞科技",
+      "control": {
+        "event_id": "2025-06-g020-2025-06-25-6739",
+        "stock_id": "6739",
+        "name": "竹陞科技",
+        "entry_date": "2025-06-26",
+        "buy_qty": 257,
+        "sell_qty": 257,
+        "first_sell": "2025-09-23",
+        "exit_date": "2025-09-23",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 113924.0,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-06-g020-2025-06-25-6739",
+        "stock_id": "6739",
+        "name": "竹陞科技",
+        "entry_date": "2025-06-26",
+        "buy_qty": 257,
+        "sell_qty": 257,
+        "first_sell": "2025-07-30",
+        "exit_date": "2025-07-31",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 9252.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -104672.0
+    },
+    {
+      "event_id": "2025-08-g009-2025-08-01-2374",
+      "stock_id": "2374",
+      "name": "佳能",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-08-g009-2025-08-01-2374",
+        "stock_id": "2374",
+        "name": "佳能",
+        "entry_date": "2025-08-04",
+        "buy_qty": 4691,
+        "sell_qty": 5252,
+        "first_sell": "2025-09-19",
+        "exit_date": "2025-12-04",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 158743.84999999998,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 158743.84999999998
+    },
+    {
+      "event_id": "2025-09-g005-2025-09-08-5309",
+      "stock_id": "5309",
+      "name": "系統電",
+      "control": {
+        "event_id": "2025-09-g005-2025-09-08-5309",
+        "stock_id": "5309",
+        "name": "系統電",
+        "entry_date": "2025-09-09",
+        "buy_qty": 5102,
+        "sell_qty": 5102,
+        "first_sell": "2025-09-30",
+        "exit_date": "2025-09-30",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -21086.00000000001,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-09-g005-2025-09-08-5309",
+        "stock_id": "5309",
+        "name": "系統電",
+        "entry_date": "2025-09-09",
+        "buy_qty": 5872,
+        "sell_qty": 5872,
+        "first_sell": "2025-09-15",
+        "exit_date": "2025-09-16",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 785.7999999999884,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 21871.8
+    },
+    {
+      "event_id": "2025-09-g014-2025-09-15-2324",
+      "stock_id": "2324",
+      "name": "仁寶",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-09-g014-2025-09-15-2324",
+        "stock_id": "2324",
+        "name": "仁寶",
+        "entry_date": "2025-09-16",
+        "buy_qty": 12224,
+        "sell_qty": 12224,
+        "first_sell": "2025-10-01",
+        "exit_date": "2025-10-02",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 14584.000000000011,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 14584.000000000011
+    },
+    {
+      "event_id": "2025-09-g015-2025-09-08-3213",
+      "stock_id": "3213",
+      "name": "茂訊",
+      "control": {
+        "event_id": "2025-09-g015-2025-09-08-3213",
+        "stock_id": "3213",
+        "name": "茂訊",
+        "entry_date": "2025-09-09",
+        "buy_qty": 2553,
+        "sell_qty": 2553,
+        "first_sell": "2025-09-30",
+        "exit_date": "2025-10-13",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -56618.25,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-09-g015-2025-09-08-3213",
+        "stock_id": "3213",
+        "name": "茂訊",
+        "entry_date": "2025-09-09",
+        "buy_qty": 2553,
+        "sell_qty": 2553,
+        "first_sell": "2025-09-25",
+        "exit_date": "2025-10-08",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -51831.25,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 4787.0
+    },
+    {
+      "event_id": "2025-10-g006-2025-10-07-1605",
+      "stock_id": "1605",
+      "name": "華新",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-10-g006-2025-10-07-1605",
+        "stock_id": "1605",
+        "name": "華新",
+        "entry_date": "2025-10-08",
+        "buy_qty": 13195,
+        "sell_qty": 13195,
+        "first_sell": "2025-10-14",
+        "exit_date": "2025-10-15",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -23297.37,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -23297.37
+    },
+    {
+      "event_id": "2025-10-g008-2025-10-14-2059",
+      "stock_id": "2059",
+      "name": "川湖",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-10-g008-2025-10-14-2059",
+        "stock_id": "2059",
+        "name": "川湖",
+        "entry_date": "2025-10-15",
+        "buy_qty": 95,
+        "sell_qty": 95,
+        "first_sell": "2025-11-17",
+        "exit_date": "2025-11-17",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -16049.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -16049.5
+    },
+    {
+      "event_id": "2025-10-g010-2025-10-01-6290",
+      "stock_id": "6290",
+      "name": "良維",
+      "control": {
+        "event_id": "2025-10-g010-2025-10-01-6290",
+        "stock_id": "6290",
+        "name": "良維",
+        "entry_date": "2025-10-02",
+        "buy_qty": 2346,
+        "sell_qty": 2346,
+        "first_sell": "2026-01-06",
+        "exit_date": "2026-01-06",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 110585.0,
+        "remaining_value": 0.0
+      },
+      "candidate": null,
+      "pnl_difference": -110585.0
+    },
+    {
+      "event_id": "2025-10-g014-2025-10-15-4967",
+      "stock_id": "4967",
+      "name": "十銓",
+      "control": {
+        "event_id": "2025-10-g014-2025-10-15-4967",
+        "stock_id": "4967",
+        "name": "十銓",
+        "entry_date": "2025-10-16",
+        "buy_qty": 2423,
+        "sell_qty": 2423,
+        "first_sell": "2026-01-16",
+        "exit_date": "2026-01-16",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 175226.75,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2025-10-g014-2025-10-15-4967",
+        "stock_id": "4967",
+        "name": "十銓",
+        "entry_date": "2025-10-16",
+        "buy_qty": 2896,
+        "sell_qty": 2896,
+        "first_sell": "2025-11-05",
+        "exit_date": "2025-11-06",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -13222.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -188448.75
+    },
+    {
+      "event_id": "2025-10-g017-2025-10-02-6138",
+      "stock_id": "6138",
+      "name": "茂達",
+      "control": {
+        "event_id": "2025-10-g017-2025-10-02-6138",
+        "stock_id": "6138",
+        "name": "茂達",
+        "entry_date": "2025-10-03",
+        "buy_qty": 1277,
+        "sell_qty": 1277,
+        "first_sell": "2026-01-07",
+        "exit_date": "2026-01-08",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": -19570.0,
+        "remaining_value": 0.0
+      },
+      "candidate": null,
+      "pnl_difference": 19570.0
+    },
+    {
+      "event_id": "2025-10-g022-2025-10-02-3450",
+      "stock_id": "3450",
+      "name": "聯鈞",
+      "control": {
+        "event_id": "2025-10-g022-2025-10-02-3450",
+        "stock_id": "3450",
+        "name": "聯鈞",
+        "entry_date": "2025-10-03",
+        "buy_qty": 1020,
+        "sell_qty": 1020,
+        "first_sell": "2025-10-15",
+        "exit_date": "2025-10-15",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -61892.0,
+        "remaining_value": 0.0
+      },
+      "candidate": null,
+      "pnl_difference": 61892.0
+    },
+    {
+      "event_id": "2025-10-g023-2025-10-15-2481",
+      "stock_id": "2481",
+      "name": "強茂",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-10-g023-2025-10-15-2481",
+        "stock_id": "2481",
+        "name": "強茂",
+        "entry_date": "2025-10-16",
+        "buy_qty": 4288,
+        "sell_qty": 4288,
+        "first_sell": "2025-10-29",
+        "exit_date": "2025-10-30",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -11909.200000000012,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -11909.200000000012
+    },
+    {
+      "event_id": "2025-11-g001-2025-11-06-6505",
+      "stock_id": "6505",
+      "name": "台塑化",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-11-g001-2025-11-06-6505",
+        "stock_id": "6505",
+        "name": "台塑化",
+        "entry_date": "2025-11-07",
+        "buy_qty": 7741,
+        "sell_qty": 7741,
+        "first_sell": "2025-12-11",
+        "exit_date": "2025-12-16",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -7099.129999999994,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -7099.129999999994
+    },
+    {
+      "event_id": "2025-11-g004-2025-11-03-6209",
+      "stock_id": "6209",
+      "name": "今國光",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-11-g004-2025-11-03-6209",
+        "stock_id": "6209",
+        "name": "今國光",
+        "entry_date": "2025-11-04",
+        "buy_qty": 8160,
+        "sell_qty": 8160,
+        "first_sell": "2026-01-08",
+        "exit_date": "2026-01-09",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 105403.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 105403.0
+    },
+    {
+      "event_id": "2025-11-g009-2025-11-20-6173",
+      "stock_id": "6173",
+      "name": "信昌電",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-11-g009-2025-11-20-6173",
+        "stock_id": "6173",
+        "name": "信昌電",
+        "entry_date": "2025-11-21",
+        "buy_qty": 5240,
+        "sell_qty": 5240,
+        "first_sell": "2026-02-02",
+        "exit_date": "2026-02-03",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -22611.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -22611.0
+    },
+    {
+      "event_id": "2025-12-g005-2025-12-15-8110",
+      "stock_id": "8110",
+      "name": "華東",
+      "control": null,
+      "candidate": {
+        "event_id": "2025-12-g005-2025-12-15-8110",
+        "stock_id": "8110",
+        "name": "華東",
+        "entry_date": "2025-12-16",
+        "buy_qty": 7056,
+        "sell_qty": 7056,
+        "first_sell": "2026-01-09",
+        "exit_date": "2026-01-12",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 101962.40000000002,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 101962.40000000002
+    },
+    {
+      "event_id": "2026-01-g002-2026-01-09-8074",
+      "stock_id": "8074",
+      "name": "鉅橡",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-01-g002-2026-01-09-8074",
+        "stock_id": "8074",
+        "name": "鉅橡",
+        "entry_date": "2026-01-12",
+        "buy_qty": 7426,
+        "sell_qty": 7426,
+        "first_sell": "2026-01-23",
+        "exit_date": "2026-01-26",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 49083.39999999998,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 49083.39999999998
+    },
+    {
+      "event_id": "2026-01-g004-2026-01-26-2408",
+      "stock_id": "2408",
+      "name": "南亞科",
+      "control": {
+        "event_id": "2026-01-g004-2026-01-26-2408",
+        "stock_id": "2408",
+        "name": "南亞科",
+        "entry_date": "2026-01-27",
+        "buy_qty": 1513,
+        "sell_qty": 1513,
+        "first_sell": "2026-03-05",
+        "exit_date": "2026-03-05",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -40804.0,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-01-g004-2026-01-26-2408",
+        "stock_id": "2408",
+        "name": "南亞科",
+        "entry_date": "2026-01-27",
+        "buy_qty": 1718,
+        "sell_qty": 1718,
+        "first_sell": "2026-02-03",
+        "exit_date": "2026-02-04",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -5127.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 35676.5
+    },
+    {
+      "event_id": "2026-01-g010-2026-01-08-3105",
+      "stock_id": "3105",
+      "name": "穩懋",
+      "control": {
+        "event_id": "2026-01-g010-2026-01-08-3105",
+        "stock_id": "3105",
+        "name": "穩懋",
+        "entry_date": "2026-01-09",
+        "buy_qty": 1613,
+        "sell_qty": 1613,
+        "first_sell": "2026-04-22",
+        "exit_date": "2026-04-22",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 642625.25,
+        "remaining_value": 0.0
+      },
+      "candidate": null,
+      "pnl_difference": -642625.25
+    },
+    {
+      "event_id": "2026-01-g017-2026-01-08-6443",
+      "stock_id": "6443",
+      "name": "元晶",
+      "control": {
+        "event_id": "2026-01-g017-2026-01-08-6443",
+        "stock_id": "6443",
+        "name": "元晶",
+        "entry_date": "2026-01-09",
+        "buy_qty": 12477,
+        "sell_qty": 12477,
+        "first_sell": "2026-04-22",
+        "exit_date": "2026-04-22",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 101494.27999999998,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-01-g017-2026-01-08-6443",
+        "stock_id": "6443",
+        "name": "元晶",
+        "entry_date": "2026-01-09",
+        "buy_qty": 13616,
+        "sell_qty": 13616,
+        "first_sell": "2026-01-30",
+        "exit_date": "2026-02-02",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 89506.80000000002,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -11987.479999999967
+    },
+    {
+      "event_id": "2026-02-g003-2026-02-06-5475",
+      "stock_id": "5475",
+      "name": "德宏",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-02-g003-2026-02-06-5475",
+        "stock_id": "5475",
+        "name": "德宏",
+        "entry_date": "2026-02-09",
+        "buy_qty": 3352,
+        "sell_qty": 3352,
+        "first_sell": "2026-03-04",
+        "exit_date": "2026-03-06",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 131995.75,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 131995.75
+    },
+    {
+      "event_id": "2026-02-g005-2026-02-11-2337",
+      "stock_id": "2337",
+      "name": "旺宏",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-02-g005-2026-02-11-2337",
+        "stock_id": "2337",
+        "name": "旺宏",
+        "entry_date": "2026-02-23",
+        "buy_qty": 4868,
+        "sell_qty": 4868,
+        "first_sell": "2026-03-04",
+        "exit_date": "2026-03-05",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -39589.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -39589.0
+    },
+    {
+      "event_id": "2026-02-g007-2026-02-09-2464",
+      "stock_id": "2464",
+      "name": "盟立",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-02-g007-2026-02-09-2464",
+        "stock_id": "2464",
+        "name": "盟立",
+        "entry_date": "2026-02-10",
+        "buy_qty": 6181,
+        "sell_qty": 6181,
+        "first_sell": "2026-03-09",
+        "exit_date": "2026-03-10",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -68519.25000000001,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -68519.25000000001
+    },
+    {
+      "event_id": "2026-03-g006-2026-03-17-1711",
+      "stock_id": "1711",
+      "name": "永光",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-03-g006-2026-03-17-1711",
+        "stock_id": "1711",
+        "name": "永光",
+        "entry_date": "2026-03-18",
+        "buy_qty": 11682,
+        "sell_qty": 11682,
+        "first_sell": "2026-03-23",
+        "exit_date": "2026-03-24",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -24559.850000000024,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -24559.850000000024
+    },
+    {
+      "event_id": "2026-03-g007-2026-03-10-5340",
+      "stock_id": "5340",
+      "name": "建榮",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-03-g007-2026-03-10-5340",
+        "stock_id": "5340",
+        "name": "建榮",
+        "entry_date": "2026-03-11",
+        "buy_qty": 4121,
+        "sell_qty": 4121,
+        "first_sell": "2026-03-23",
+        "exit_date": "2026-03-24",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -90482.8,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -90482.8
+    },
+    {
+      "event_id": "2026-03-g017-2026-03-26-2455",
+      "stock_id": "2455",
+      "name": "全新",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-03-g017-2026-03-26-2455",
+        "stock_id": "2455",
+        "name": "全新",
+        "entry_date": "2026-03-27",
+        "buy_qty": 1594,
+        "sell_qty": 1594,
+        "first_sell": "2026-04-24",
+        "exit_date": "2026-04-27",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 82574.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 82574.5
+    },
+    {
+      "event_id": "2026-03-g018-2026-03-16-2605",
+      "stock_id": "2605",
+      "name": "新興",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-03-g018-2026-03-16-2605",
+        "stock_id": "2605",
+        "name": "新興",
+        "entry_date": "2026-03-17",
+        "buy_qty": 12148,
+        "sell_qty": 12148,
+        "first_sell": "2026-03-23",
+        "exit_date": "2026-03-24",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -8506.300000000023,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -8506.300000000023
+    },
+    {
+      "event_id": "2026-03-g023-2026-03-26-4958",
+      "stock_id": "4958",
+      "name": "臻鼎-KY",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-03-g023-2026-03-26-4958",
+        "stock_id": "4958",
+        "name": "臻鼎-KY",
+        "entry_date": "2026-03-27",
+        "buy_qty": 1986,
+        "sell_qty": 1986,
+        "first_sell": "2026-05-15",
+        "exit_date": "2026-05-18",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 324956.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 324956.0
+    },
+    {
+      "event_id": "2026-03-g024-2026-03-06-3081",
+      "stock_id": "3081",
+      "name": "聯亞",
+      "control": {
+        "event_id": "2026-03-g024-2026-03-06-3081",
+        "stock_id": "3081",
+        "name": "聯亞",
+        "entry_date": "2026-03-09",
+        "buy_qty": 302,
+        "sell_qty": 302,
+        "first_sell": "2026-06-09",
+        "exit_date": "2026-06-09",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 324565.0,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-03-g024-2026-03-06-3081",
+        "stock_id": "3081",
+        "name": "聯亞",
+        "entry_date": "2026-03-09",
+        "buy_qty": 315,
+        "sell_qty": 315,
+        "first_sell": "2026-03-16",
+        "exit_date": "2026-03-16",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 20883.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -303681.5
+    },
+    {
+      "event_id": "2026-04-g004-2026-04-01-5475",
+      "stock_id": "5475",
+      "name": "德宏",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-04-g004-2026-04-01-5475",
+        "stock_id": "5475",
+        "name": "德宏",
+        "entry_date": "2026-04-02",
+        "buy_qty": 1908,
+        "sell_qty": 1908,
+        "first_sell": "2026-04-24",
+        "exit_date": "2026-04-27",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 158722.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 158722.0
+    },
+    {
+      "event_id": "2026-04-g013-2026-04-30-3167",
+      "stock_id": "3167",
+      "name": "大量",
+      "control": {
+        "event_id": "2026-04-g013-2026-04-30-3167",
+        "stock_id": "3167",
+        "name": "大量",
+        "entry_date": "2026-05-04",
+        "buy_qty": 819,
+        "sell_qty": 819,
+        "first_sell": "2026-05-11",
+        "exit_date": "2026-05-11",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -135174.0,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-04-g013-2026-04-30-3167",
+        "stock_id": "3167",
+        "name": "大量",
+        "entry_date": "2026-05-04",
+        "buy_qty": 716,
+        "sell_qty": 716,
+        "first_sell": "2026-05-07",
+        "exit_date": "2026-05-07",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -52536.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 82638.0
+    },
+    {
+      "event_id": "2026-04-g020-2026-04-27-6488",
+      "stock_id": "6488",
+      "name": "環球晶",
+      "control": {
+        "event_id": "2026-04-g020-2026-04-27-6488",
+        "stock_id": "6488",
+        "name": "環球晶",
+        "entry_date": "2026-04-28",
+        "buy_qty": 1126,
+        "sell_qty": 1126,
+        "first_sell": "2026-07-29",
+        "exit_date": "2026-07-29",
+        "exit_reasons": [
+          "time63"
+        ],
+        "pnl": 354504.2,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-04-g020-2026-04-27-6488",
+        "stock_id": "6488",
+        "name": "環球晶",
+        "entry_date": "2026-04-28",
+        "buy_qty": 945,
+        "sell_qty": 945,
+        "first_sell": "2026-05-14",
+        "exit_date": "2026-05-14",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 188539.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -165965.2
+    },
+    {
+      "event_id": "2026-05-g003-2026-05-14-3707",
+      "stock_id": "3707",
+      "name": "漢磊",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-05-g003-2026-05-14-3707",
+        "stock_id": "3707",
+        "name": "漢磊",
+        "entry_date": "2026-05-15",
+        "buy_qty": 8625,
+        "sell_qty": 8625,
+        "first_sell": "2026-06-02",
+        "exit_date": "2026-06-03",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -16680.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -16680.5
+    },
+    {
+      "event_id": "2026-05-g004-2026-05-08-6278",
+      "stock_id": "6278",
+      "name": "台表科",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-05-g004-2026-05-08-6278",
+        "stock_id": "6278",
+        "name": "台表科",
+        "entry_date": "2026-05-11",
+        "buy_qty": 2833,
+        "sell_qty": 2833,
+        "first_sell": "2026-05-18",
+        "exit_date": "2026-05-19",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 2365.75,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 2365.75
+    },
+    {
+      "event_id": "2026-05-g007-2026-05-19-2355",
+      "stock_id": "2355",
+      "name": "敬鵬",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-05-g007-2026-05-19-2355",
+        "stock_id": "2355",
+        "name": "敬鵬",
+        "entry_date": "2026-05-20",
+        "buy_qty": 9734,
+        "sell_qty": 9734,
+        "first_sell": "2026-05-28",
+        "exit_date": "2026-05-29",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -11741.900000000045,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -11741.900000000045
+    },
+    {
+      "event_id": "2026-05-g014-2026-05-20-2455",
+      "stock_id": "2455",
+      "name": "全新",
+      "control": {
+        "event_id": "2026-05-g014-2026-05-20-2455",
+        "stock_id": "2455",
+        "name": "全新",
+        "entry_date": "2026-05-21",
+        "buy_qty": 1514,
+        "sell_qty": 1514,
+        "first_sell": "2026-06-12",
+        "exit_date": "2026-06-12",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -102652.5,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-05-g014-2026-05-20-2455",
+        "stock_id": "2455",
+        "name": "全新",
+        "entry_date": "2026-05-21",
+        "buy_qty": 1520,
+        "sell_qty": 1520,
+        "first_sell": "2026-06-05",
+        "exit_date": "2026-06-09",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -43203.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 59449.5
+    },
+    {
+      "event_id": "2026-05-g015-2026-05-12-3583",
+      "stock_id": "3583",
+      "name": "辛耘",
+      "control": {
+        "event_id": "2026-05-g015-2026-05-12-3583",
+        "stock_id": "3583",
+        "name": "辛耘",
+        "entry_date": "2026-05-13",
+        "buy_qty": 720,
+        "sell_qty": 720,
+        "first_sell": "2026-05-20",
+        "exit_date": "2026-05-20",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -86013.0,
+        "remaining_value": 0.0
+      },
+      "candidate": null,
+      "pnl_difference": 86013.0
+    },
+    {
+      "event_id": "2026-05-g022-2026-05-29-8358",
+      "stock_id": "8358",
+      "name": "金居",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-05-g022-2026-05-29-8358",
+        "stock_id": "8358",
+        "name": "金居",
+        "entry_date": "2026-06-01",
+        "buy_qty": 1000,
+        "sell_qty": 1000,
+        "first_sell": "2026-06-04",
+        "exit_date": "2026-06-04",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -76085.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -76085.0
+    },
+    {
+      "event_id": "2026-06-g002-2026-06-10-8021",
+      "stock_id": "8021",
+      "name": "尖點",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-06-g002-2026-06-10-8021",
+        "stock_id": "8021",
+        "name": "尖點",
+        "entry_date": "2026-06-11",
+        "buy_qty": 1000,
+        "sell_qty": 1000,
+        "first_sell": "2026-06-12",
+        "exit_date": "2026-06-12",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -16954.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -16954.0
+    },
+    {
+      "event_id": "2026-06-g008-2026-06-12-8112",
+      "stock_id": "8112",
+      "name": "至上",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-06-g008-2026-06-12-8112",
+        "stock_id": "8112",
+        "name": "至上",
+        "entry_date": "2026-06-15",
+        "buy_qty": 5591,
+        "sell_qty": 5591,
+        "first_sell": "2026-07-02",
+        "exit_date": "2026-07-03",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -68575.6,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -68575.6
+    },
+    {
+      "event_id": "2026-06-g011-2026-06-09-6197",
+      "stock_id": "6197",
+      "name": "佳必琪",
+      "control": {
+        "event_id": "2026-06-g011-2026-06-09-6197",
+        "stock_id": "6197",
+        "name": "佳必琪",
+        "entry_date": "2026-06-10",
+        "buy_qty": 2024,
+        "sell_qty": 2024,
+        "first_sell": "2026-07-30",
+        "exit_date": "2026-07-30",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -130557.32,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-06-g011-2026-06-09-6197",
+        "stock_id": "6197",
+        "name": "佳必琪",
+        "entry_date": "2026-06-10",
+        "buy_qty": 1642,
+        "sell_qty": 1642,
+        "first_sell": "2026-07-13",
+        "exit_date": "2026-07-14",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -3194.01,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 127363.31000000001
+    },
+    {
+      "event_id": "2026-06-g012-2026-06-02-3450",
+      "stock_id": "3450",
+      "name": "聯鈞",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-06-g012-2026-06-02-3450",
+        "stock_id": "3450",
+        "name": "聯鈞",
+        "entry_date": "2026-06-03",
+        "buy_qty": 1115,
+        "sell_qty": 1115,
+        "first_sell": "2026-06-08",
+        "exit_date": "2026-06-09",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -127507.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -127507.0
+    },
+    {
+      "event_id": "2026-06-g015-2026-06-12-4958",
+      "stock_id": "4958",
+      "name": "臻鼎-KY",
+      "control": {
+        "event_id": "2026-06-g015-2026-06-12-4958",
+        "stock_id": "4958",
+        "name": "臻鼎-KY",
+        "entry_date": "2026-06-15",
+        "buy_qty": 1019,
+        "sell_qty": 1019,
+        "first_sell": "2026-07-21",
+        "exit_date": "2026-07-21",
+        "exit_reasons": [
+          "loss12"
+        ],
+        "pnl": -98765.5,
+        "remaining_value": 0.0
+      },
+      "candidate": {
+        "event_id": "2026-06-g015-2026-06-12-4958",
+        "stock_id": "4958",
+        "name": "臻鼎-KY",
+        "entry_date": "2026-06-15",
+        "buy_qty": 999,
+        "sell_qty": 999,
+        "first_sell": "2026-07-08",
+        "exit_date": "2026-07-08",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -31503.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 67262.5
+    },
+    {
+      "event_id": "2026-07-g005-2026-07-02-6719",
+      "stock_id": "6719",
+      "name": "力智",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-07-g005-2026-07-02-6719",
+        "stock_id": "6719",
+        "name": "力智",
+        "entry_date": "2026-07-03",
+        "buy_qty": 1743,
+        "sell_qty": 1743,
+        "first_sell": "2026-07-08",
+        "exit_date": "2026-07-09",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": -48251.5,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -48251.5
+    },
+    {
+      "event_id": "2026-07-g018-2026-07-14-8039",
+      "stock_id": "8039",
+      "name": "台虹",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-07-g018-2026-07-14-8039",
+        "stock_id": "8039",
+        "name": "台虹",
+        "entry_date": "2026-07-15",
+        "buy_qty": 2760,
+        "sell_qty": 2760,
+        "first_sell": "2026-07-27",
+        "exit_date": "2026-07-30",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 42678.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": 42678.0
+    },
+    {
+      "event_id": "2026-08-g004-2026-08-21-1815",
+      "stock_id": "1815",
+      "name": "富喬",
+      "control": {
+        "event_id": "2026-08-g004-2026-08-21-1815",
+        "stock_id": "1815",
+        "name": "富喬",
+        "entry_date": "2026-08-24",
+        "buy_qty": 6302,
+        "sell_qty": 0,
+        "first_sell": null,
+        "exit_date": null,
+        "exit_reasons": [],
+        "pnl": 131640.5,
+        "remaining_value": 836893.0
+      },
+      "candidate": {
+        "event_id": "2026-08-g004-2026-08-21-1815",
+        "stock_id": "1815",
+        "name": "富喬",
+        "entry_date": "2026-08-24",
+        "buy_qty": 5239,
+        "sell_qty": 5239,
+        "first_sell": "2026-09-03",
+        "exit_date": "2026-09-04",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 29918.0,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -101722.5
+    },
+    {
+      "event_id": "2026-08-g009-2026-08-31-3006",
+      "stock_id": "3006",
+      "name": "晶豪科",
+      "control": null,
+      "candidate": {
+        "event_id": "2026-08-g009-2026-08-31-3006",
+        "stock_id": "3006",
+        "name": "晶豪科",
+        "entry_date": "2026-09-01",
+        "buy_qty": 2027,
+        "sell_qty": 0,
+        "first_sell": null,
+        "exit_date": null,
+        "exit_reasons": [],
+        "pnl": 35199.5,
+        "remaining_value": 621275.5
+      },
+      "pnl_difference": 35199.5
+    },
+    {
+      "event_id": "2026-08-g013-2026-08-10-2615",
+      "stock_id": "2615",
+      "name": "萬海",
+      "control": {
+        "event_id": "2026-08-g013-2026-08-10-2615",
+        "stock_id": "2615",
+        "name": "萬海",
+        "entry_date": "2026-08-11",
+        "buy_qty": 7155,
+        "sell_qty": 0,
+        "first_sell": null,
+        "exit_date": null,
+        "exit_reasons": [],
+        "pnl": 199478.25,
+        "remaining_value": 829980.0
+      },
+      "candidate": {
+        "event_id": "2026-08-g013-2026-08-10-2615",
+        "stock_id": "2615",
+        "name": "萬海",
+        "entry_date": "2026-08-11",
+        "buy_qty": 5948,
+        "sell_qty": 5948,
+        "first_sell": "2026-08-26",
+        "exit_date": "2026-08-27",
+        "exit_reasons": [
+          "intraday_peak_stop15"
+        ],
+        "pnl": 149612.8,
+        "remaining_value": 0.0
+      },
+      "pnl_difference": -49865.45000000001
+    },
+    {
+      "event_id": "2026-08-g018-2026-08-04-2834",
+      "stock_id": "2834",
+      "name": "臺企銀",
+      "control": {
+        "event_id": "2026-08-g018-2026-08-04-2834",
+        "stock_id": "2834",
+        "name": "臺企銀",
+        "entry_date": "2026-08-05",
+        "buy_qty": 37442,
+        "sell_qty": 0,
+        "first_sell": null,
+        "exit_date": null,
+        "exit_reasons": [],
+        "pnl": 35521.95000000007,
+        "remaining_value": 672083.9
+      },
+      "candidate": {
+        "event_id": "2026-08-g018-2026-08-04-2834",
+        "stock_id": "2834",
+        "name": "臺企銀",
+        "entry_date": "2026-08-05",
+        "buy_qty": 31123,
+        "sell_qty": 0,
+        "first_sell": null,
+        "exit_date": null,
+        "exit_reasons": [],
+        "pnl": 29534.919999999925,
+        "remaining_value": 558657.85
+      },
+      "pnl_difference": -5987.030000000144
+    }
+  ],
+  "audits": {
+    "control": {
+      "active_slots_rebuilt": true,
+      "actual_fill_verified": false,
+      "all_daily_nav_reconciled": true,
+      "capacity_and_order_limits": true,
+      "cash_ledger_reconciled": true,
+      "cash_movements": 112,
+      "daily_capacity_rebuilt": true,
+      "daily_shares_reconstructed": true,
+      "fees_recomputed": true,
+      "integer_shares": true,
+      "midpoint_prices_rebuilt": true,
+      "no_overdraft": true,
+      "opening_nav_continuity": true,
+      "price_proxy_only": true,
+      "prior_only_plans_rebuilt": true,
+      "residual_assets_retained": true,
+      "residual_classification_rebuilt": true,
+      "residual_risk_budget_rebuilt": true,
+      "resource_policy_reconciled": true,
+      "separate_channel_costs_rebuilt": true,
+      "trade_cash_reconciled": true,
+      "trading_days": 409
+    },
+    "intraday15": {
+      "active_slots_rebuilt": true,
+      "all_daily_nav_reconciled": true,
+      "all_trade_prices_and_source_capacity_rebuilt": true,
+      "capacity_and_order_limits": true,
+      "cash_ledger_reconciled": true,
+      "cash_movements": 362,
+      "daily_shares_reconstructed": true,
+      "entry_session_stop_excluded": true,
+      "fees_recomputed": true,
+      "integer_shares": true,
+      "intraday_exit_rows_checked": 256,
+      "no_overdraft": true,
+      "odd_exits_strictly_after_trigger_day": true,
+      "opening_nav_continuity": true,
+      "prior_peaks_rebuilt": true,
+      "residual_assets_retained": true,
+      "residual_classification_rebuilt": true,
+      "residual_risk_budget_rebuilt": true,
+      "resource_policy_reconciled": true,
+      "source_stop_tapes_rebuilt": 49,
+      "trade_cash_reconciled": true,
+      "trading_days": 409
+    }
+  },
+  "offline_identical": true,
+  "account_and_cohort_reconciled": true,
+  "policy": "entry_next_session_activation_board_intraday_odd_next_session_HL2",
+  "actual_fill_verified": false,
+  "live_qualified": false,
+  "unseen_validation": false,
+  "source_sha256": {
+    ".cache/portfolio-intraday-20260929/final-a/report.json": "2d993a2f7fe9de0fb107871c46ac5409bb4ff393b46fb6d05be4d82365ace109",
+    ".cache/portfolio-intraday-20260929/final-a/control.json": "751b7df18ed3d01c7adebeee838944818968dfc220d85167146f059c072dcb21",
+    ".cache/portfolio-intraday-20260929/final-a/intraday15.json": "fffdb16b9e317f34d33cbd16f5bee128def1ef013af91057f9e090fbf19ee147",
+    ".cache/portfolio-intraday-20260929/final-b/report.json": "045e5c403daabffb6ad4fde9059a3d274d6993a4061e055147ff90fc75286aa3",
+    ".cache/portfolio-intraday-20260929/final-b/control.json": "751b7df18ed3d01c7adebeee838944818968dfc220d85167146f059c072dcb21",
+    ".cache/portfolio-intraday-20260929/final-b/intraday15.json": "fffdb16b9e317f34d33cbd16f5bee128def1ef013af91057f9e090fbf19ee147",
+    ".cache/midpoint-since-2025-20260928/final-a/benchmark.json": "c4f7700c8552b8bcd896c7343f0b7b8a82b12efd225080b830dcc619130a41fb",
+    "scripts/publish_portfolio_intraday.py": "781b1c68f7d620ff7c1a96d75b5c19c53a5891f524f47d9384cc13fa4e7c035d"
+  }
+}
