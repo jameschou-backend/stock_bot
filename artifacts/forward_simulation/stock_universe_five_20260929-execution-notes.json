@@ -1,0 +1,358 @@
+{
+  "sources_attempts": {
+    "odd": 91,
+    "finmind": 140,
+    "announcement": 9
+  },
+  "maximum": 300,
+  "preparation_runs": [
+    {
+      "report": ".cache/stock-universe-five-20260929/prepare-v1/report.json",
+      "sha256": "0604276bdf72222cc2eaba5dcba02c236d2159be68313f0498ea78281d578e61",
+      "cases": {
+        "liquid_universe": {
+          "completed": false,
+          "completed_sessions": 421,
+          "deferred_corporate_preparations": 221,
+          "last_date": "2020-09-25",
+          "path": ".cache/stock-universe-five-20260929/prepare-v1/liquid_universe.json",
+          "reason": "Unresolved corporate action: 6244 2020-09-28 unresolved_capital_reduction",
+          "sha256": "39d4b9409dcd55dfc7268128a340576edad72a4794ed4afaf05ef0216418fe0b",
+          "summary": null
+        }
+      }
+    },
+    {
+      "report": ".cache/stock-universe-five-20260929/prepare-v2/report.json",
+      "sha256": "8592461b26f52c6bb40a7d7ea1219381f4063d566236b8b736b8886ddb15863f",
+      "cases": {
+        "liquid_universe": {
+          "completed": false,
+          "completed_sessions": 638,
+          "deferred_corporate_preparations": 433,
+          "last_date": "2021-08-18",
+          "path": ".cache/stock-universe-five-20260929/prepare-v2/liquid_universe.json",
+          "reason": "Stock dividend data missing or invalid: 6568 2021-08-19; pay_date",
+          "sha256": "207cf0178a1cd38a47c37791fd0585744e5032c51e3fbe6f56547d17d37453a9",
+          "summary": null
+        }
+      }
+    },
+    {
+      "report": ".cache/stock-universe-five-20260929/prepare-v3/report.json",
+      "sha256": "960293b14ffd14ca1557f230187ec45816398fb1a544dc2ca1641d36aec6bf57",
+      "cases": {
+        "liquid_universe": {
+          "completed": false,
+          "completed_sessions": 645,
+          "deferred_corporate_preparations": 433,
+          "last_date": "2021-08-27",
+          "path": ".cache/stock-universe-five-20260929/prepare-v3/liquid_universe.json",
+          "reason": "Stock dividend data missing or invalid: 6469 2021-08-30; pay_date",
+          "sha256": "21c615052f66d80b79f446becee05db493cf1b2ae53c385b3f7d3f964468e382",
+          "summary": null
+        }
+      }
+    },
+    {
+      "report": ".cache/stock-universe-five-20260929/prepare-v4/report.json",
+      "sha256": "d8984affd316ab246eba64966e5c36e4cd5ec07640ea9bf1916f06cdff7768c1",
+      "cases": {
+        "liquid_universe": {
+          "completed": false,
+          "completed_sessions": 668,
+          "deferred_corporate_preparations": 433,
+          "last_date": "2021-10-01",
+          "path": ".cache/stock-universe-five-20260929/prepare-v4/liquid_universe.json",
+          "reason": "Stock dividend data missing or invalid: 2915 2021-10-04; shares_per_share, pay_date",
+          "sha256": "8267dad827bbc42c9f8aef3425579e2b8f2bfc5df716f419175ff31cdc50ebc7",
+          "summary": null
+        }
+      }
+    },
+    {
+      "report": ".cache/stock-universe-five-20260929/prepare-v5/report.json",
+      "sha256": "20056c143fea22baa966cca7c6fda1ad84be1d9595e0e1f904e867c69daf5ec4",
+      "cases": {
+        "liquid_universe": {
+          "completed": true,
+          "deferred_corporate_preparations": 1338,
+          "path": ".cache/stock-universe-five-20260929/prepare-v5/liquid_universe.json",
+          "sha256": "6f522e979120bb379c0bbb5dfc2f2ff95e12ecb908743c276ed8b6b1c5e63e7b",
+          "summary": null
+        }
+      }
+    }
+  ],
+  "slot_cases": {
+    "5386": {
+      "execution_date": "2026-02-11",
+      "prior_holdings": [
+        {
+          "date": "2026-02-10",
+          "event_id": "liquid_universe-2026-01-02-6265",
+          "mark_date": "2026-02-10",
+          "market_value": 632678.4,
+          "name": "方土昶",
+          "price": 38.4,
+          "qty": 16476,
+          "stale": false,
+          "stock_id": "6265"
+        },
+        {
+          "date": "2026-02-10",
+          "event_id": "liquid_universe-2026-01-14-6443",
+          "mark_date": "2026-02-10",
+          "market_value": 534699.1000000001,
+          "name": "元晶",
+          "price": 37.7,
+          "qty": 14183,
+          "stale": false,
+          "stock_id": "6443"
+        },
+        {
+          "date": "2026-02-10",
+          "event_id": "liquid_universe-2026-01-30-2337",
+          "mark_date": "2026-02-10",
+          "market_value": 666444.7999999999,
+          "name": "旺宏",
+          "price": 89.6,
+          "qty": 7438,
+          "stale": false,
+          "stock_id": "2337"
+        },
+        {
+          "date": "2026-02-10",
+          "event_id": "liquid_universe-2026-02-06-3576",
+          "mark_date": "2026-02-10",
+          "market_value": 567393.7,
+          "name": "聯合再生",
+          "price": 14.45,
+          "qty": 39266,
+          "stale": false,
+          "stock_id": "3576"
+        },
+        {
+          "date": "2026-02-10",
+          "event_id": "liquid_universe-2026-02-06-6152",
+          "mark_date": "2026-02-10",
+          "market_value": 539797.5,
+          "name": "百一",
+          "price": 14.85,
+          "qty": 36350,
+          "stale": false,
+          "stock_id": "6152"
+        }
+      ],
+      "orders": [
+        {
+          "channel": "event",
+          "date": "2026-02-11",
+          "event_id": "liquid_universe-2026-02-10-5386",
+          "failure": "slots_full",
+          "filled_qty": 0,
+          "name": "青雲",
+          "reason": "leader_entry",
+          "requested_qty": 0,
+          "side": "buy",
+          "signal_date": "2026-02-10",
+          "stock_id": "5386"
+        }
+      ],
+      "same_day_trades": []
+    },
+    "2221": {
+      "execution_date": "2026-05-18",
+      "prior_holdings": [
+        {
+          "date": "2026-05-15",
+          "event_id": "liquid_universe-2026-02-06-3576",
+          "mark_date": "2026-05-15",
+          "market_value": 667522.0,
+          "name": "聯合再生",
+          "price": 17.0,
+          "qty": 39266,
+          "stale": false,
+          "stock_id": "3576"
+        },
+        {
+          "date": "2026-05-15",
+          "event_id": "liquid_universe-2026-04-28-7750",
+          "mark_date": "2026-05-15",
+          "market_value": 656635.0,
+          "name": "新代",
+          "price": 2555.0,
+          "qty": 257,
+          "stale": false,
+          "stock_id": "7750"
+        },
+        {
+          "date": "2026-05-15",
+          "event_id": "liquid_universe-2026-05-04-4958",
+          "mark_date": "2026-05-15",
+          "market_value": 330023.0,
+          "name": "臻鼎-KY",
+          "price": 401.0,
+          "qty": 823,
+          "stale": false,
+          "stock_id": "4958"
+        },
+        {
+          "date": "2026-05-15",
+          "event_id": "liquid_universe-2026-05-14-3024",
+          "mark_date": "2026-05-15",
+          "market_value": 640350.55,
+          "name": "憶聲",
+          "price": 16.85,
+          "qty": 38003,
+          "stale": false,
+          "stock_id": "3024"
+        }
+      ],
+      "orders": [
+        {
+          "channel": "event",
+          "date": "2026-05-18",
+          "event_id": "liquid_universe-2026-05-15-2221",
+          "failure": "slots_full",
+          "filled_qty": 0,
+          "name": "大甲",
+          "reason": "leader_entry",
+          "requested_qty": 0,
+          "side": "buy",
+          "signal_date": "2026-05-15",
+          "stock_id": "2221"
+        }
+      ],
+      "same_day_trades": [
+        {
+          "capacity_qty": 41000,
+          "cash_after": 671018.51,
+          "cash_change": -587460.0,
+          "channel": "board",
+          "commission": 832.0,
+          "date": "2026-05-18",
+          "day_participation": 0.0004144381979398277,
+          "event_id": "liquid_universe-2026-05-15-3498",
+          "execution_evidence": "daily_high_low_midpoint_proxy",
+          "expires_at": "13:30:00",
+          "gross": 584000.0,
+          "limit_price": 163.5,
+          "name": "陽程",
+          "order_time": "08:59:00",
+          "participation_limit": 0.01,
+          "prior_avg_amount20": 412462160.71999997,
+          "prior_avg_volume20": 4130411.5,
+          "qty": 4000,
+          "reason": "leader_entry",
+          "reference_price": 146.0,
+          "remaining_shares": 4000,
+          "requested_qty": 4000,
+          "sequence": 1119,
+          "side": "buy",
+          "signal_date": "2026-05-15",
+          "slippage": 2628.0,
+          "source_high": 153.5,
+          "source_low": 138.5,
+          "source_volume": 9651620.0,
+          "stock_id": "3498",
+          "tax": 0.0,
+          "total_cost": 3460.0
+        },
+        {
+          "capacity_qty": 783,
+          "cash_after": 624182.51,
+          "cash_change": -46836.0,
+          "channel": "odd",
+          "commission": 66.0,
+          "date": "2026-05-18",
+          "day_participation": 0.0040846023256704495,
+          "event_id": "liquid_universe-2026-05-15-3498",
+          "execution_evidence": "daily_high_low_midpoint_proxy",
+          "expires_at": "13:30:00",
+          "gross": 46560.0,
+          "limit_price": 163.5,
+          "name": "陽程",
+          "order_time": "09:00:00",
+          "participation_limit": 0.01,
+          "prior_avg_amount20": 412462160.71999997,
+          "prior_avg_volume20": 4130411.5,
+          "qty": 320,
+          "reason": "leader_entry",
+          "reference_price": 145.5,
+          "remaining_shares": 4320,
+          "requested_qty": 320,
+          "sequence": 1120,
+          "side": "buy",
+          "signal_date": "2026-05-15",
+          "slippage": 210.0,
+          "source_high": 152.0,
+          "source_low": 139.0,
+          "source_volume": 78343,
+          "stock_id": "3498",
+          "tax": 0.0,
+          "total_cost": 276.0
+        }
+      ]
+    }
+  },
+  "validation": {
+    "make_test": "4191 passed, 36 warnings; exit 0",
+    "make_pipeline": "exit 0",
+    "api": [
+      {
+        "port": 8000,
+        "path": "health",
+        "valid_json": true,
+        "type": "dict"
+      },
+      {
+        "port": 8000,
+        "path": "picks",
+        "valid_json": true,
+        "type": "list"
+      },
+      {
+        "port": 8000,
+        "path": "models",
+        "valid_json": true,
+        "type": "list"
+      },
+      {
+        "port": 8000,
+        "path": "jobs?limit=10",
+        "valid_json": true,
+        "type": "list"
+      },
+      {
+        "port": 8001,
+        "path": "health",
+        "valid_json": true,
+        "type": "dict"
+      },
+      {
+        "port": 8001,
+        "path": "picks",
+        "valid_json": true,
+        "type": "list"
+      },
+      {
+        "port": 8001,
+        "path": "models",
+        "valid_json": true,
+        "type": "list"
+      },
+      {
+        "port": 8001,
+        "path": "jobs?limit=10",
+        "valid_json": true,
+        "type": "list"
+      }
+    ],
+    "initial_sandbox_test_failure": "Local MySQL connection denied; rerun with local-network permission passed"
+  },
+  "local_logs_sha256": {
+    "/tmp/stock-five-tests-final-network.log": "b572bce845fc6f1c6b890307170ed265693320476ae70cc041ba69e9ae6ff2e0",
+    "/tmp/stock-five-pipeline-final.log": "a0c144bf1164518304e20db76e60946f144bf7fa4262e71829544955f5c3ca34"
+  }
+}

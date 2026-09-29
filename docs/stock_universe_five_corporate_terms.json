@@ -1,0 +1,80 @@
+{
+  "overrides": {
+    "6244-2020-09-28": {
+      "kind": "capital_reduction",
+      "multiplier": 0.6569357943,
+      "cash_per_share": 0,
+      "pay_date": "2020-09-28",
+      "known_date": "2020-07-20",
+      "cash_rounding": "floor_ntd",
+      "fractional_policy": "face_value_gross_receivable",
+      "fractional_face_value": 10,
+      "fractional_reference_date": "2020-07-20",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "evidence_files": [
+        ".cache/stock-universe-five-20260929/official/6244-exchange.html",
+        ".cache/stock-universe-five-20260929/official/6244-exchange.source.json",
+        ".cache/stock-universe-five-20260929/official/6244-listing.html",
+        ".cache/stock-universe-five-20260929/official/6244-listing.source.json"
+      ],
+      "source": "TPEx 2020-09-07 listing notice; issuer 2020-07-20 exchange plan reproduced by MoneyDJ; fractional face-value cash floor NTD remains unavailable pending verified payment."
+    },
+    "6568-2021-08-19": {
+      "shares_per_share": 0.2024009795,
+      "pay_date": "2021-09-30",
+      "fractional_cash_per_share": 10,
+      "fractional_rounding": "floor_ntd",
+      "source": "Issuer 2021-08-02 share terms and TPEx 2021-09-23 ordinary-share listing notice reproduced by Cnyes; adjusted rate from frozen FinMind 5,074,820 / 25,073,100.",
+      "fractional_cash_payment_timing": "Assumed share delivery day; independently unverified, same convention as three-slot control"
+    },
+    "6469-2021-08-30": {
+      "shares_per_share": 0.297053428,
+      "pay_date": "2021-10-08",
+      "fractional_cash_per_share": 10,
+      "fractional_rounding": "floor_ntd",
+      "source": "Issuer 2021-08-12 entitlement and 2021-09-24 delivery notices reproduced by Cnyes; fractional face-value cash floor NTD.",
+      "fractional_cash_payment_timing": "Assumed share delivery day; independently unverified, same convention as three-slot control"
+    },
+    "2915-2021-10-04": {
+      "shares_per_share": 0.3,
+      "pay_date": "2021-11-22",
+      "fractional_cash_per_share": 10,
+      "fractional_rounding": "floor_ntd",
+      "source": "Issuer 2021-09-15 entitlement and 2021-11-04 scheduled delivery announcements reproduced by Cnyes/MoneyDJ, historical Yahoo dividend date agrees. Separate final TWSE listing notice not located.",
+      "fractional_cash_payment_timing": "Assumed share delivery day; independently unverified, same convention as three-slot control"
+    }
+  },
+  "source_sha256": {
+    ".cache/stock-universe-five-20260929/official/6244-exchange.html": "b461e07454a3183d7392be5370de335cfbf858d7380f5e0329e93e5910c5e683",
+    ".cache/stock-universe-five-20260929/official/6244-exchange.source.json": "9bb4ad32eb9e64662bd4aa68920552d04292b02ded43c73028ab9acb9eaf9387",
+    ".cache/stock-universe-five-20260929/official/6244-listing.html": "d406ce0b400a7324b93b694addd123db6e908ec93b1dcf380bd1d986e684e95c",
+    ".cache/stock-universe-five-20260929/official/6244-listing.source.json": "250d7726db80ad57f4dbab345e78ee17b3b5e63cc9c0396a2009866724bccfc2",
+    ".cache/stock-universe-five-20260929/official/6568-issue.html": "e7257a25532c2954fe3dc4b1ca090738ecfa320548e1a1277c8de9a3c56f5353",
+    ".cache/stock-universe-five-20260929/official/6568-issue.source.json": "0ef8b8261c79c27d7d853ff686b6f65407cd73138a7065a1164a658f29daad28",
+    ".cache/stock-universe-five-20260929/official/6568-listing.html": "c5c825fc3455d9b46908f1de35b7113c9a108556a06d9362749c8c58d3c6450a",
+    ".cache/stock-universe-five-20260929/official/6568-listing.source.json": "52d5ac0147dc54383ef4c13b76f9a5b89a4a5e8e92f37f50c73082abadae5bd0",
+    ".cache/stock-universe-five-20260929/official/6469-issue.source.json": "94743f7128bef99cabae1d4bc3b8b4c6ac8c2a20a7b7a9397f254dbaf1a4bb3c",
+    ".cache/stock-universe-five-20260929/official/6469-issue.html": "b8c5b97ed35835413efc9874b63896da230b3ac2c34768eb56aab61b61d14ce7",
+    ".cache/stock-universe-five-20260929/official/6469-delivery.source.json": "0614b6fd1f548a54608219cb0c3a0d778f80211bc614421d11b613751417c43f",
+    ".cache/stock-universe-five-20260929/official/6469-delivery.html": "2757496f986ca5ef8c98c385aa87225db340c99e1f68f5c45207698d9f7c010a",
+    ".cache/stock-universe-five-20260929/official/2915-issue.source.json": "76a0997f4496f19b41253ccd5fe4d473eac1b674b3e7466ff9ddee2680521310",
+    ".cache/stock-universe-five-20260929/official/2915-issue.html": "95e156d3e0346c499d6759e89d1077f69fba3f2a235b63e806dd5cc1d070107d",
+    ".cache/stock-universe-five-20260929/official/2915-delivery.html": "6449f648974b569723d99af4c83acbb8dc4e4890681d4927ff4fd95b4f23e9ee",
+    ".cache/stock-universe-five-20260929/official/2915-delivery.source.json": "a98054e54731155cc50cddd4ed0c8f742e8af772cd28dd7be425195623a29b27"
+  },
+  "verified_halts": [
+    {
+      "stock_id": "6244",
+      "market": "TPEx",
+      "kind": "trading_suspension",
+      "start": "2020-09-17",
+      "end": "2020-09-28",
+      "announcement_date": "2020-09-07",
+      "source_path": ".cache/stock-universe-five-20260929/official/6244-listing.html",
+      "source_sha256": "d406ce0b400a7324b93b694addd123db6e908ec93b1dcf380bd1d986e684e95c"
+    }
+  ],
+  "scope": "Corporate accounting only; no selection changes",
+  "fractional_cash_date_verified": false
+}
