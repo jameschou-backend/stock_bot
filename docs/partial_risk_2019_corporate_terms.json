@@ -1,0 +1,42 @@
+{
+  "overrides": {
+    "8462-2019-07-08": {
+      "shares_per_share": 0.098874268,
+      "pay_date": "2019-08-30",
+      "fractional_cash_per_share": 10,
+      "source": "Issuer announcements March12/June20/Aug26 2019; reviewed terms in official/8462-2019-reviewed-terms.json",
+      "fractional_rounding": "floor_ntd"
+    },
+    "2801-2019-08-06": {
+      "shares_per_share": 0.02,
+      "pay_date": "2019-09-06",
+      "fractional_cash_per_share": 10,
+      "fractional_rounding": "floor_ntd",
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer 2019 AGM manual pp8,11; official 2019 annual p49; fractional payment timing modeled on delivery date"
+    },
+    "9945-2021-09-23": {
+      "shares_per_share": 0.4,
+      "pay_date": "2021-11-09",
+      "fractional_cash_per_share": 10,
+      "fractional_rounding": "floor_ntd",
+      "source": "Issuer 2021 AGM manual p10 and dividend history; fractional payment modeled on delivery date"
+    }
+  },
+  "source_sha256": {
+    ".cache/partial-risk-2019-20260929/official/8462-2019-manual.pdf": "f0f25aab1ad2372faece53da008a4410927ecb3ef1f23f518a785080e6379628",
+    ".cache/partial-risk-2019-20260929/official/8462-2019-manual.source.json": "4893f3d78cf1c3568c1b4ca6622bfe8a17d2028f8a6a67090831da89a98fb8b0",
+    ".cache/partial-risk-2019-20260929/official/2801-2019-manual.pdf": "2ab6d02edc1049f2022e14a7c4666eb5acd8246ba531656f324b492a93a5e6e2",
+    ".cache/partial-risk-2019-20260929/official/2801-2019-manual.source.json": "45c56ea5bbdaeb3642e27a12091591fedcb606094ea103a0d1cbdf8bef280239",
+    ".cache/partial-risk-2019-20260929/official/2801-2019-annual.pdf": "84166e46ee82891df4e0c33c051315689228cfbc6b9452d4ade6b02cdede7907",
+    ".cache/partial-risk-2019-20260929/official/2801-2019-annual.source.json": "5aa053b3882f8507729287df6dae1faa756a62e70a2e930aea84f1869f17e3a9",
+    ".cache/partial-risk-2019-20260929/official/9945-2021-manual.pdf": "f309e70cd486f46eee6ab0049fe69ae8fa872f6b7d8126ba418e1ad562db5fff",
+    ".cache/partial-risk-2019-20260929/official/9945-2021-manual.source.json": "67c48372e7ae6071b79d5522e454af5cdf45abe6244f6fdc0184e3234dc44bae",
+    ".cache/partial-risk-2019-20260929/official/9945-dividend-history.pdf": "28e2effce0ebb652777249bdd23374eb14d766d9f5dee31f860916995e342ef2",
+    ".cache/partial-risk-2019-20260929/official/9945-dividend-history.source.json": "30e4f89b33330f1a5dbd73c31e4bfad0f493877173c267940375969a42d3c1d5",
+    ".cache/partial-risk-2019-20260929/official/8462-2019-reviewed-terms.json": "395363822ff575c7c43e89c553ac7f8e3cd9938515e30cd1a8d5c751879e6702",
+    ".cache/partial-risk-2019-20260929/official/8462-announcement-20190826.html": "8db4e5383c1476d9896cd81ff86a69ad8e34a20bafd4c1980a1fec274adacfe7"
+  },
+  "fractional_payment_date_is_assumed": true,
+  "scope": "Only explicit share entitlements; never a selection signal. Dividend cash is credited only on payment day."
+}
