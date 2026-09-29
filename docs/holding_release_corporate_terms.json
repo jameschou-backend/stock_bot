@@ -1,0 +1,70 @@
+{
+  "overrides": {
+    "8927-2023-09-04": {
+      "shares_per_share": 0.09457650373,
+      "pay_date": "2023-10-30",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "source": "2023-06-21 issuer AGM page 13: fractional shares paid at face value, floor NTD; 2023-08-29 updated ratio announcement; 2023-10-24 TPEx listing announcement reproduced by MoneyDJ. Unknown fractional payment remains unavailable receivable.",
+      "fractional_cash_payment_date_verified": false
+    },
+    "2515-2025-11-10": {
+      "shares_per_share": 0.0503,
+      "pay_date": "2025-12-31",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer 2025-10-27 ex-rights notice: 50.3 per 1000, fractional proceeds offset book-entry fees; issuer 2025-12-23 delivery notice: 2025-12-31."
+    },
+    "6877-2024-07-31": {
+      "shares_per_share": 0.10059017941,
+      "pay_date": "2024-09-05",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer 2024-07-15 ratio announcement; 2024-09-03 new-share delivery announcement; 113 AGM book-entry application: fractional proceeds offset transfer fees."
+    },
+    "3284-2024-08-26": {
+      "shares_per_share": 0.04,
+      "pay_date": "2024-09-30",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer 2024-08-13 ratio and fractional fee notice; 2024-09-24 new-share delivery announcement: 2024-09-30."
+    }
+  },
+  "verified_halts": [
+    {
+      "stock_id": "5478",
+      "market": "TPEx",
+      "kind": "trading_suspension",
+      "start": "2023-12-21",
+      "end": "2023-12-22",
+      "announcement_date": "2023-12-20",
+      "source_path": ".cache/holding-release-20260929/official/5478-2023-halt.html",
+      "source_sha256": "322f406f50cf3c1c3a23b3e968a8d74992001ac9c213ac1e8c9d68ba22fe3ed4"
+    }
+  ],
+  "source_sha256": {
+    ".cache/holding-release-20260929/official/8927-2023-listing.html": "3fa6667c7368de033b9907febd9d7249802c3d59edefb7f3c473d2cdbc03fc46",
+    ".cache/holding-release-20260929/official/8927-2023-terms.html": "29f7d5353006b76320d42c61aec97147b116bf80d5cec5dfa3eb11d16205c210",
+    ".cache/holding-release-20260929/official/8927-2023-agm.pdf": "e6537837c19e8e892fca2f6664583c7cf3fb064c768dbf558acf50ef38125a27",
+    ".cache/holding-release-20260929/official/8927-2023-listing.source.json": "08f42c6842fed718772505bf0abfe322335c70647aefe2a048a96f34949c0c85",
+    ".cache/holding-release-20260929/official/8927-2023-agm.source.json": "ddc4fee1cca39f3388b476167429149e8ce45de27b706d4a616ccf9197d223b7",
+    ".cache/holding-release-20260929/official/8927-2023-terms.source.json": "9ca254c736e2addcfcd7b38a09d26732d4002b26ee28a3f8c5fd5b8174e5cdf6",
+    ".cache/holding-release-20260929/official/2515-2025-listing.html": "ba1a3d6154940ace961afced3127abbec7682302adebbcc2ff46d0e67d9b8a54",
+    ".cache/holding-release-20260929/official/2515-2025-terms.html": "216a0660bf42eb38e80f5b3d653c2c72dfde996588da9ad127da1acf31a6401d",
+    ".cache/holding-release-20260929/official/5478-2023-halt.source.json": "8de19a0467600b0052eb0a2d76560429bdb639a1d2b44bd7d9e60e560c377b7e",
+    ".cache/holding-release-20260929/official/2515-2025-listing.source.json": "540421f321ddfbdd8826570840f787b16bab3611ffaaf59e9885cc0a38a2cf87",
+    ".cache/holding-release-20260929/official/5478-2023-halt.html": "322f406f50cf3c1c3a23b3e968a8d74992001ac9c213ac1e8c9d68ba22fe3ed4",
+    ".cache/holding-release-20260929/official/5478-2023-resume.source.json": "968accc586f591a8caf8628ea2db4a4d4121c7eba567b66a8da2adc43c34559a",
+    ".cache/holding-release-20260929/official/2515-2025-terms.source.json": "dd62af4789e00794e91720c261b3f296dff641383559abd91f71a6df1a110a08",
+    ".cache/holding-release-20260929/official/5478-2023-resume.html": "189552a18ce8c878c4c217df47d10cd97b1f8c24bf774caf9e497e4c42d8ca31",
+    ".cache/holding-release-20260929/official/6877-2024-listing.html": "322a3876da967c964eddd7bf8ad79193546df5c10758ae0dfea717fa651a4187",
+    ".cache/holding-release-20260929/official/6877-2024-fraction.source.json": "a57c407da9c84fb67b7528ea691d8b35ab3c1544b4e17293d7cf346f44db3af7",
+    ".cache/holding-release-20260929/official/6877-2024-terms.source.json": "9e45f6b4712b14ee124c29b5be80cade23450c9346416a6e921beb81446403c6",
+    ".cache/holding-release-20260929/official/6877-2024-terms.html": "3cb9f42c32813bd1698d602af7aed57ac4bb43628424f4314357fd55b4422715",
+    ".cache/holding-release-20260929/official/6877-2024-fraction.pdf": "154f52407588187d2888c438dafdb25eb86a8e07c75a03df3abc760cb5e61ac7",
+    ".cache/holding-release-20260929/official/6877-2024-listing.source.json": "faa4c69ea4cb6376005f6763f004cb19934f2a591398070b6ef5e2ba0594e48b",
+    ".cache/holding-release-20260929/official/3284-2024-terms.source.json": "346424d4cd95df7bd4973da8f9675f4c624473904c6dcc8db54310a7c7caf7ff",
+    ".cache/holding-release-20260929/official/3284-2024-listing.source.json": "22bb93adb0c2c8180924a8835213264acd61bde8161787844a3ec845e079ead0",
+    ".cache/holding-release-20260929/official/3284-2024-terms.html": "2dd367d45548ab921fb628b5dfa298f6d846a35f23f3a29366b36d145a06d044",
+    ".cache/holding-release-20260929/official/3284-2024-listing.html": "d24d739c63877e6adb48584e90843cdacc3c717a0965493992d629e440f6508e"
+  },
+  "scope": "Accounting-only additions; selection frozen"
+}

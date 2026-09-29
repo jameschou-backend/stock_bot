@@ -1,0 +1,105 @@
+{
+  "completed_at": "2026-09-29T16:14:26.291764+00:00",
+  "source_reports": [
+    {
+      "path": ".cache/holding-release-20260929/final-a/report.json",
+      "sha256": "6eee5f05bd352294b435eab7651b18de3e3dabd83c0c332f8605e371c4aa1244"
+    },
+    {
+      "path": ".cache/holding-release-20260929/final-b/report.json",
+      "sha256": "a8df74f50dabbcc8b8e188cc8fff6eaf229d9ce969eeb771e6aac61512246e88"
+    }
+  ],
+  "case_sha256": {
+    "control3": "51f33e89c2544c265abc8a5056e250be69087e223892eb64feaf12371ff66115",
+    "control5": "3c35c96d0412a81c7fd2de099ff7dcde83b389feab807aaaf711fbf4f4ad1be7",
+    "stagnant3": "3f87b91f79818eb00ec2c8779b2056a468609ac6aeed7e1155aa7a921968ab45",
+    "stagnant5": "fb9599f8fccac26dd7e065f5022df6cdc9b4f91a44273958e8fb3fd0b5803464",
+    "stronger3": "26372118b3bc3109aadfd51897d704cc8e9783cc94cf66be618a326d39a8ece3",
+    "stronger5": "c717b28dc9ee0329cce8411ed7b34bd068086e9ab6f32efa07b6f3c39d309263"
+  },
+  "all_sources_verified": true,
+  "source_count": 38729,
+  "all_exports_verified": true,
+  "controls_exact_old_accounts": true,
+  "checks": {
+    "make_test": {
+      "passed": 4197,
+      "warnings": 36,
+      "seconds": 95.21,
+      "exit_code": 0
+    },
+    "make_pipeline": {
+      "exit_code": 0
+    },
+    "make_api": {
+      "startup_succeeded": true,
+      "endpoints_passed": true,
+      "validation_port": 8001,
+      "stopped_after_check": true,
+      "termination": "SIGTERM sent to own validation server after successful curls",
+      "make_exit_code_after_requested_stop": 2
+    },
+    "endpoints": [
+      {
+        "port": 8000,
+        "path": "health",
+        "valid_json": true
+      },
+      {
+        "port": 8000,
+        "path": "picks",
+        "valid_json": true
+      },
+      {
+        "port": 8000,
+        "path": "models",
+        "valid_json": true
+      },
+      {
+        "port": 8000,
+        "path": "jobs?limit=10",
+        "valid_json": true
+      },
+      {
+        "port": 8001,
+        "path": "health",
+        "valid_json": true
+      },
+      {
+        "port": 8001,
+        "path": "picks",
+        "valid_json": true
+      },
+      {
+        "port": 8001,
+        "path": "models",
+        "valid_json": true
+      },
+      {
+        "port": 8001,
+        "path": "jobs?limit=10",
+        "valid_json": true
+      }
+    ]
+  },
+  "files_sha256": {
+    "artifacts/forward_simulation/holding_release_20260929-preparation.json": "fc562066301f05cd9662190f06bd75288d38c9c803330862f87d9ddc5bd86a50",
+    "artifacts/forward_simulation/holding_release_20260929-diagnosis.json": "7e37fb4d5af64e46969273527a3045bf8d4312ec86840032b2cd11a797d1290d",
+    "artifacts/forward_simulation/holding_release_20260929.json": "e993c6ce25d9b66e195968414f4578fba18a2ff33184a5ca84d4f24a9d726bce",
+    "artifacts/forward_simulation/holding_release_20260929-attribution.json": "8d682bc44b211e7fb2b48263844d5970a26f20a074d45a13b0bdbe6f755bb913",
+    "scripts/research_holding_release.py": "74cb65a5d846a5a6474f7e8e1f6f23eea5c83fe25fb405b626ae3e1dc90c9ad9",
+    "scripts/analyze_holding_release.py": "b75253044b991df7166372f15dfb1a5b9411ba606172ea054a0f9974182a4c66",
+    "scripts/export_holding_release.py": "2f0fbcede96035446eed9b1853b5f395fbd533357c36675bb56d29b3fcb6f18d",
+    "scripts/diagnose_holding_slots.py": "7ca3540d870b8ac2c0149aca2bb5fa4a7191273f2c685be2ebdb243dd9cbf43d",
+    "skills/holding_release.py": "14b7c1a074ac9be8bfb0d86ffad5cafa2b96be067e05ccbacddae9da95ecb7f9",
+    "tests/test_holding_release.py": "14b99a675b2450aa842956f28bf1c8466419b1b4947f29a1cc3a735cfc00ba83",
+    "docs/research_holding_release_20260929.md": "a83fdb632e2290d539a3a78ee0d8ab4b9ed3d41c7693f4acdd65d5033073b1b0",
+    "docs/holding_release_corporate_terms.json": "aba884143994967cd7a0e3bf5da362331661b04f72a417a84e749f5bc1fd3296",
+    "docs/prereg_holding_release_20260929.md": "435de8a451ae3dc56dc2c5c39e0d68aba351cdd7b96eae1e327daba17aea523f",
+    "docs/prereg_holding_release_budget_addendum_20260929.md": "5bf1940fec191140255af3297e07e4ef81933d5e52528464b249d1e70eebcdc5"
+  },
+  "live_qualified": false,
+  "unseen_validation": false,
+  "actual_fill_verified": false
+}
