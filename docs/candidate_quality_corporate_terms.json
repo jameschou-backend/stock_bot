@@ -1,0 +1,32 @@
+{
+  "overrides": {
+    "1815-2026-09-09": {
+      "shares_per_share": 0.05000171092,
+      "pay_date": "2026-10-13",
+      "fractional_cash_per_share": 0,
+      "cash_rounding": "floor_ntd",
+      "source": "Issuer announcement 2026-08-24 reproduced by MoneyDJ: https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=034e582a-3854-4745-b98f-982f17e0ca73"
+    }
+  },
+  "cash_supplements": [
+    {
+      "stock_id": "1815",
+      "date": "2026-09-09",
+      "pay_date": "2026-10-13",
+      "cash_per_share": 0.50001709,
+      "cash_rounding": "floor_ntd",
+      "announcement_date": "2026-08-24",
+      "source": "Issuer announcement 2026-08-24 reproduced by MoneyDJ: https://www.moneydj.com/kmdj/news/newsviewer.aspx?a=034e582a-3854-4745-b98f-982f17e0ca73"
+    }
+  ],
+  "source_sha256": {
+    ".cache/candidate-quality-20260929/official/1815-20260824-announcement.html": "8a1fec9fcf8b3f6ca7a2b2f94235bb2458cce818fa8bd85d357ffed2b71af7b2",
+    ".cache/candidate-quality-20260929/official/1815-20260824-announcement.source.json": "704eebc38f47cb22e3e1f6bcc4660242ee505e50081b5639f6b191d238256873"
+  },
+  "source_scope": "Full issuer disclosure reproduction; not direct MOPS response. Cross-checked with archived TPEx ex-rights row.",
+  "certificate_delivery_date": "2026-10-13",
+  "ordinary_share_delivery_verified": false,
+  "latest_supported_account_end": "2026-09-09",
+  "fraction_policy": "Announcement says sub-share proceeds offset book-entry charges; no cash right credited.",
+  "scope": "Ex-date cash/share receivables only. Account ends before certificate delivery. Do not reuse for post-delivery trading."
+}
