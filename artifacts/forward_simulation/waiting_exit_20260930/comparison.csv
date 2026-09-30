@@ -1,0 +1,6 @@
+﻿arm,total_return,max_drawdown,final_nav,profit,trade_count,stock_cohorts,costs,closed_cohorts,median_closed_holding_sessions,max_closed_holding_sessions
+control3,9.49762859,-0.42820459086728535,10497628.59,9497628.59,792,126,"{'commission': 303958.0, 'slippage': 939937.0, 'tax': 321254.0, 'total_cost': 1565149.0}",124,44.0,94.0
+stall53,5.76129709,-0.451360350201093,6761297.09,5761297.09,1242,207,"{'commission': 512271.0, 'slippage': 1590135.0, 'tax': 531994.0, 'total_cost': 2634400.0}",204,9.0,87.0
+stall103,2.3406219700000004,-0.6801589849202447,3340621.97,2340621.97,988,159,"{'commission': 461780.0, 'slippage': 1437492.0, 'tax': 484470.0, 'total_cost': 2383742.0}",157,16.0,94.0
+stall5weak3,2.66646181,-0.5969674950884795,3666461.81,2666461.81,879,138,"{'commission': 279818.0, 'slippage': 863130.0, 'tax': 288022.0, 'total_cost': 1430970.0}",135,26.0,94.0
+benchmark,6.43313981,-0.3390680994372489,7433139.8100000005,6433139.8100000005,54,0,"{'commission': 2753.0, 'slippage': 6831.0, 'tax': 0.0, 'total_cost': 9584.0}",0,,

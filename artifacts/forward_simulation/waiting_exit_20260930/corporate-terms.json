@@ -1,0 +1,23 @@
+{
+  "overrides": {
+    "2543-2024-05-30": {
+      "shares_per_share": 0.14,
+      "pay_date": "2024-07-08",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "source": "Issuer 2024 AGM minutes page 3: 140 shares per 1000; fractional shares paid at face value, floor NTD. Issuer 2024-05-15 ex-rights notice reproduced by nStock confirms ratio and 2024-05-30 ex-date. Issuer 2024-07-03 listing notice reproduced by MoneyDJ confirms whole-share delivery on 2024-07-08. Unknown fractional cash payment remains unavailable receivable."
+    }
+  },
+  "verified_halts": [],
+  "source_sha256": {
+    ".cache/waiting-exit-20260930/official/2543-2024-distribution.html": "5c77e5aa5e6ffaac83368a90275a902bad651b8895fe7cae3f24f15b4fcc484f",
+    ".cache/waiting-exit-20260930/official/2543-2024-distribution.source.json": "1e1f95938097ae302e15850bbe20f60d07574d54ab27a8c5e8442514a7891ffd",
+    ".cache/waiting-exit-20260930/official/2543-2024-listing.html": "ac1fd912911b19663b54ffb1e4ed743d83f5dd3aa84ce7f7003ffabea3f93f89",
+    ".cache/waiting-exit-20260930/official/2543-2024-listing.source.json": "9b1bcb62d1803f7ba98082f17c24765212d2c338a0dc5c21c4a43d04bfd698e2",
+    ".cache/waiting-exit-20260930/official/2543-2024-minutes.pdf": "a2f8214ce81327cb49b64e657b3f9f071959aa5f48a39b9d0ecb0516913b8e3b",
+    ".cache/waiting-exit-20260930/official/2543-2024-minutes.source.json": "c38f289f16c263895bce550a265c4201f23196c5b42459155e4ca5f4ae776c70"
+  },
+  "scope": "Accounting-only addition; all waiting thresholds and entry rules remain frozen"
+}

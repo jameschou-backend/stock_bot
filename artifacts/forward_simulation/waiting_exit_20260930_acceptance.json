@@ -1,0 +1,44 @@
+{
+  "tests_passed": 4221,
+  "warnings": 36,
+  "pipeline_passes": 3,
+  "api": {
+    "health": {
+      "status": 200,
+      "type": "dict",
+      "size": 1
+    },
+    "picks": {
+      "status": 200,
+      "type": "list",
+      "size": 20
+    },
+    "models": {
+      "status": 200,
+      "type": "list",
+      "size": 10
+    },
+    "jobs?limit=10": {
+      "status": 200,
+      "type": "list",
+      "size": 10
+    }
+  },
+  "two_replays_identical": true,
+  "baseline_exact": true,
+  "source_files": 37000,
+  "export_files": 45,
+  "trial_count": 16,
+  "new_waiting_arm_count": 3,
+  "finmind_requests": 50,
+  "exchange_requests": 112,
+  "live_qualified": false,
+  "unseen_validation": false,
+  "log_sha256": {
+    ".cache/waiting-exit-make-test-verified.log": "e9fa8de45b6f568ab8c031e4197319e570b5874882bf5302816b269a920c5d7f",
+    ".cache/waiting-exit-pipeline.log": "b2e2fe5cebc15f6b1a3fd1f8d8fb42bea31f7c5b054fac426d736728672e8e74",
+    ".cache/waiting-exit-pipeline-repeat.log": "d94fbf9f97035cff7de3b9828df7688ae2c2de8765eb5e519493ad376190e500",
+    ".cache/waiting-exit-pipeline-final.log": "4c571b57b6dec64cb42b0e12cc8f5c2944350ed3a3408a6aa6a3c0cf524a370f",
+    ".cache/waiting-exit-api-check-final.json": "6eb70fb03f146a2600906ca81e5d5bf42c66196c1f93f6cca68045133521028b"
+  }
+}
