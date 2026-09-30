@@ -1,0 +1,41 @@
+{
+  "tests_passed": 4214,
+  "warnings": 36,
+  "pipeline_passes": 2,
+  "api": {
+    "health": {
+      "status": 200,
+      "type": "dict",
+      "size": 1
+    },
+    "picks": {
+      "status": 200,
+      "type": "list",
+      "size": 20
+    },
+    "models": {
+      "status": 200,
+      "type": "list",
+      "size": 10
+    },
+    "jobs?limit=10": {
+      "status": 200,
+      "type": "list",
+      "size": 10
+    }
+  },
+  "two_replays_identical": true,
+  "baseline_exact": true,
+  "source_files": 37308,
+  "trial_count": 13,
+  "filter_arm_count": 3,
+  "finmind_requests": 132,
+  "exchange_requests": 66,
+  "live_qualified": false,
+  "log_sha256": {
+    ".cache/entry-filters-make-test-verified.log": "505643cf0185729bee2df90890faa767268b30400eb2b8ddc1df879728ffa64d",
+    ".cache/entry-filters-pipeline.log": "05375b4214ba4c002f906c8b0b7f760792d689b63d305150354a00e75dcd28f1",
+    ".cache/entry-filters-pipeline-verified.log": "ae18d094e1d368e8b3e047be9c05c401a88ef03584ef02f5a8a440091c7aea02",
+    ".cache/entry-filters-api-check-verified.json": "edf469890c8a267008daa78d298cbf40dafbef4bc6eb956b64285c98489bca24"
+  }
+}

@@ -1,0 +1,3 @@
+# Keep the archived issuer evidence byte-for-byte, including original whitespace.
+artifacts/forward_simulation/entry_filters_20260930/corporate-*.pdf binary
+artifacts/forward_simulation/entry_filters_20260930/corporate-*.html -text -whitespace

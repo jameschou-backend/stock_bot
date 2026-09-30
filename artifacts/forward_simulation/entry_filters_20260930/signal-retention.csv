@@ -1,0 +1,5 @@
+﻿arm,baseline_cohorts_retained,known,negative,negative_rate,signals,surge,surge_rate,unknown,unknown_filter_features,rejected_baseline_categories_never_above_5pct,rejected_baseline_categories_open,rejected_baseline_categories_positive_at_exit_decision,rejected_baseline_categories_rose15_then_nonpositive,rejected_baseline_categories_small_rise_then_nonpositive,rejected_baseline_categories_unknown
+control3,126,36269,18160,0.5007030797650887,37993,2923,0.08059224130800408,1724,0,,,,,,
+not_extended3,7,17468,8402,0.48099381726585755,18166,965,0.05524387451339592,698,0,41.0,1.0,41.0,19.0,16.0,1.0
+strong_close3,79,21543,10627,0.49329248479784615,22632,1841,0.08545699299076266,1089,94,17.0,,15.0,8.0,7.0,
+breadth3,47,18468,9216,0.49902534113060426,19249,1549,0.08387481048299762,781,0,28.0,1.0,26.0,14.0,9.0,1.0

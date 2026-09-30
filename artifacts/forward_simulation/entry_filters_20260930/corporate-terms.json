@@ -1,0 +1,24 @@
+{
+  "overrides": {
+    "2236-2024-09-25": {
+      "shares_per_share": 0.021397789,
+      "pay_date": "2024-10-23",
+      "fractional_cash_per_share": 0,
+      "source": "Issuer 2024-09-09 final distribution ratio and TWSE 2024-10-15 listing notice reproduced by nStock/Cnyes. Issuer 2024 AGM minutes PDF page 2: book-entry fractional proceeds offset transfer fees."
+    }
+  },
+  "verified_halts": [],
+  "source_sha256": {
+    ".cache/entry-filters-20260930/official/2236-2024-agm.pdf": "24fcc4011e6262453f80602687d440dec1a887402c18694e7daac51ec01fb6eb",
+    ".cache/entry-filters-20260930/official/2236-2024-listing.source.json": "1d5a2bb19df55283e1a0287cdc821676d06b3fada712476533d1edad5adb2cda",
+    ".cache/entry-filters-20260930/official/2236-2024-minutes.source.json": "6e71cac803d97d09450860744a4d382cc54fd498bad2d01d516456815d1fca0a",
+    ".cache/entry-filters-20260930/official/2236-2024-index.source.json": "c65eacb02715b0104a03232b4998f8739e7c5b02db0bbb0b648a6fff2459c443",
+    ".cache/entry-filters-20260930/official/2236-2024-ratio.html": "841a158387b1f6dd75d5f2c3a2d8bd9fca59cb0c633ae378aec51381a541f668",
+    ".cache/entry-filters-20260930/official/2236-2024-index.html": "a7107d3df41a2e7449fe784739d2fc9037e2f9f345636b1373e1167be05edb22",
+    ".cache/entry-filters-20260930/official/2236-2024-listing.html": "0a8f91bfdf892675c4a39127caa2d289ab396dc6d574f72dcf0e491a64a33d54",
+    ".cache/entry-filters-20260930/official/2236-2024-minutes.pdf": "418afb3fa5aa7c5c1a292e607e20baeb507ccb1be756b1e00eae05dec1f5fbb5",
+    ".cache/entry-filters-20260930/official/2236-2024-ratio.source.json": "05fa835a9d20faf342f399dc09867c057cad462c35ac05ce455b636c8a7a0e09",
+    ".cache/entry-filters-20260930/official/2236-2024-agm.source.json": "7003b730c13e4ded1d407789ebb7f97a9d1028d80a5ea26fadf8d74faa0a48c3"
+  },
+  "scope": "Accounting-only additions; all entry filters and exit rules remain frozen"
+}
