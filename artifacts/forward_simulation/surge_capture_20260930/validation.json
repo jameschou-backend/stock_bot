@@ -1,0 +1,46 @@
+{
+  "research_reproducible": true,
+  "independent_runs": [
+    ".cache/surge-capture-20260930-b",
+    ".cache/surge-capture-20260930-c"
+  ],
+  "make_test": {
+    "exit_code": 0,
+    "passed": 4209,
+    "warnings": 36
+  },
+  "make_pipeline": {
+    "first_exit_code": 0,
+    "repeat_exit_code": 0
+  },
+  "api": {
+    "health": {
+      "http_status": 200,
+      "bytes": 15
+    },
+    "picks": {
+      "http_status": 200,
+      "bytes": 22672
+    },
+    "models": {
+      "http_status": 200,
+      "bytes": 13875
+    },
+    "jobs": {
+      "http_status": 200,
+      "bytes": 6594
+    }
+  },
+  "limitations": {
+    "complete_historical_universe": false,
+    "live_qualified": false,
+    "unseen_validation": false,
+    "new_backtest": false
+  },
+  "logs_sha256": {
+    ".cache/surge-capture-final-test.log": "7c938b8aa91c757f9848cc9a8f301efe80fc48c7f66823a3143a91aef40f6be8",
+    ".cache/surge-capture-pipeline.log": "5980679279d82b91733082933f6590640063dca16cb5201254b2b0fc0fdb2079",
+    ".cache/surge-capture-pipeline-repeat.log": "d0c157c1853d9418d9814a01b288d7300ebcd409f49daf0bdd24119c879c7007",
+    ".cache/surge-capture-final-api-checks.json": "2cb30393633c0df1388967f1f734173906e4de070323a6a3cfa0ee5e24ad13f5"
+  }
+}
