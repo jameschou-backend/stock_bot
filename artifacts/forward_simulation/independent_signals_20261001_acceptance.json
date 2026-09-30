@@ -1,0 +1,113 @@
+{
+  "tests_passed": 4230,
+  "warnings": 36,
+  "two_final_replays_identical": true,
+  "earlier_results_unchanged": true,
+  "source_files": 12,
+  "exports_sha256": {
+    "index.html": "0724418488fe3e941f656438b7c862490f86c3c5ae6530e809914d83866a9f3b",
+    "report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+    "trials.json": "0a8ed0f6143229b03c9c94a552bcd309a2e5efea098f5b40fce1fe530381988d",
+    "first-signals.csv": "216d00fc0505741794f41b4c9b0a84dd03c59686704b9e71c34753014ee9977f",
+    "signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+    "signals.csv": "2177bbb6682b1f22b034f0e11477a8d4553909825008c33b7660c11227e3886c",
+    "stocks.csv": "6eeb685edbedaac07ab1378c0ca3130e7d259eada2d7381935d22f8355eb479c"
+  },
+  "trial_count": 4,
+  "baseline_exit_checks": [
+    "liquid_universe-2024-01-05-6113",
+    "liquid_universe-2024-01-12-6219",
+    "liquid_universe-2024-02-19-6584",
+    "liquid_universe-2024-04-19-1618",
+    "liquid_universe-2024-04-25-6207",
+    "liquid_universe-2024-05-06-1453",
+    "liquid_universe-2024-05-13-4562",
+    "liquid_universe-2024-05-23-2392",
+    "liquid_universe-2024-07-30-9906",
+    "liquid_universe-2024-08-07-1540",
+    "liquid_universe-2024-08-14-3230",
+    "liquid_universe-2024-08-23-2364",
+    "liquid_universe-2024-09-23-1721",
+    "liquid_universe-2024-10-14-1595",
+    "liquid_universe-2024-11-11-5314",
+    "liquid_universe-2024-11-21-3706",
+    "liquid_universe-2024-11-28-4979",
+    "liquid_universe-2024-12-23-4571",
+    "liquid_universe-2025-01-10-1325",
+    "liquid_universe-2025-01-17-3379",
+    "liquid_universe-2025-02-05-6112",
+    "liquid_universe-2025-02-19-6206",
+    "liquid_universe-2025-06-10-2429",
+    "liquid_universe-2025-06-10-6838",
+    "liquid_universe-2025-06-10-4722",
+    "liquid_universe-2025-07-04-4991",
+    "liquid_universe-2025-07-07-3297",
+    "liquid_universe-2025-07-24-8358",
+    "liquid_universe-2025-09-18-2344",
+    "liquid_universe-2025-10-03-8299",
+    "liquid_universe-2025-10-28-2408",
+    "liquid_universe-2025-12-23-6588",
+    "liquid_universe-2026-01-08-6443",
+    "liquid_universe-2026-01-28-4533",
+    "liquid_universe-2026-02-10-5386",
+    "liquid_universe-2026-04-08-7751",
+    "liquid_universe-2026-04-23-4741",
+    "liquid_universe-2026-05-14-3024",
+    "liquid_universe-2026-05-26-1597",
+    "liquid_universe-2026-06-02-2356",
+    "liquid_universe-2026-06-03-3149",
+    "liquid_universe-2026-06-09-2478",
+    "liquid_universe-2026-07-20-2527",
+    "liquid_universe-2026-07-23-8039",
+    "liquid_universe-2026-07-30-1476",
+    "liquid_universe-2026-07-30-2540"
+  ],
+  "proportional_cost_algebra_verified_rows": 15141,
+  "api": {
+    "health": {
+      "status": 200,
+      "type": "dict",
+      "size": 1
+    },
+    "picks": {
+      "status": 200,
+      "type": "list",
+      "size": 20
+    },
+    "models": {
+      "status": 200,
+      "type": "list",
+      "size": 10
+    },
+    "jobs?limit=10": {
+      "status": 200,
+      "type": "list",
+      "size": 10
+    }
+  },
+  "pipeline_successful_runs": 2,
+  "initial_pipeline_failure": "2026-09-30 missing TWSE prices; existing FinMind ingest repaired 1087 TWSE rows; both markets coverage passed",
+  "pipeline_configuration": {
+    "INGEST_PRICES_SOURCE": "finmind",
+    "SPONSOR_INGEST": "off",
+    "env_file_modified": false
+  },
+  "initial_test_failure": "sandbox localhost sockets prohibited; unrestricted test runs passed",
+  "browser_checks": [
+    "stock search",
+    "first signal toggle",
+    "year and unknown filtering",
+    "pagination"
+  ],
+  "research_network_requests": 0,
+  "actual_fill_verified": false,
+  "live_qualified": false,
+  "unseen_validation": false,
+  "log_sha256": {
+    ".cache/independent-signals-make-test-final.log": "494c867e735e193f5efe02884f783780f2b3eae093e0df5b107debd8e855e18b",
+    ".cache/independent-signals-pipeline.log": "7eb417cda21435cf21738b5533ca1dfec1929ad58ac8def8eafbe5096417c400",
+    ".cache/independent-signals-pipeline-finmind.log": "b3cfbc2dd62f6f6d125b4673f41f4121ab555e086fc51b70d22c824dd79d5df6",
+    ".cache/independent-signals-pipeline-repeat.log": "da018294bc77661e082bcb6b7ce12669f2759b2f9d48a698ac613f88f0527036",
+    ".cache/independent-signals-api-check.json": "edf469890c8a267008daa78d298cbf40dafbef4bc6eb956b64285c98489bca24"
+  }
+}
