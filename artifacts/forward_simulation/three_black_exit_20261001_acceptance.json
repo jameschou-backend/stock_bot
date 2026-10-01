@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-01",
+  "make_test": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 4273,
+    "warnings": 36,
+    "duration_seconds": 93.94,
+    "log": ".cache/three-black-20261001/tests-readonly-final.log"
+  },
+  "pipeline": [
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "log": ".cache/three-black-20261001/pipeline-1.log",
+      "exit_code": 0,
+      "after_final_code_integration": false
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "log": ".cache/three-black-20261001/pipeline-2.log",
+      "exit_code": 0,
+      "after_final_code_integration": false
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "log": ".cache/three-black-20261001/pipeline-final.log",
+      "exit_code": 0,
+      "after_final_code_integration": false
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "log": ".cache/three-black-20261001/pipeline-readonly-final.log",
+      "exit_code": 0,
+      "after_final_code_integration": true
+    }
+  ],
+  "api": {
+    "command": "API_PORT=8001 make api",
+    "results": {
+      "8001": {
+        "health": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8001-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8001-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8001-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8001-jobs.json",
+          "sha256": "a7ae1dbf0ee65e1fe6f6f748b2e2f34f7b0e88ac166df32c2648d72ff836a62e"
+        }
+      },
+      "8000": {
+        "health": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8000-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8000-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8000-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/three-black-20261001/api-readonly-final-8000-jobs.json",
+          "sha256": "a7ae1dbf0ee65e1fe6f6f748b2e2f34f7b0e88ac166df32c2648d72ff836a62e"
+        }
+      }
+    },
+    "existing8000_preserved": true,
+    "pid": 93184,
+    "fresh_process_stopped": true
+  },
+  "focused_tests": {
+    "count": 18,
+    "duration_seconds": 0.44
+  },
+  "source_sha256": {
+    ".cache/three-black-20261001/tests-readonly-final.log": "1854169029871f61971d2a1de43d7a51c5923521bf7e17442ee44a8ada53a796",
+    ".cache/three-black-20261001/api-readonly-final-checks.json": "17fc0052ce6e61b695f147358d3fa6e7a6dbf5aceab0714612d6be1091264714",
+    ".cache/three-black-20261001/api-readonly-final.log": "60794bc8bbfafdecdbd6fd80f339838a883e688b361dcda1ad47e76f705c371e",
+    ".cache/three-black-20261001/verify_api_readonly.py": "309181ecb96cfec346602e7153ac33a881b6d678b64b6aaa748d6b249734a0b1",
+    ".cache/three-black-20261001/pipeline-1.log": "0a85eec9845f7fce087e2f902d96d9d9a08cf373324468721525c201ff8da86b",
+    ".cache/three-black-20261001/pipeline-2.log": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c",
+    ".cache/three-black-20261001/pipeline-final.log": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c",
+    ".cache/three-black-20261001/pipeline-readonly-final.log": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c",
+    ".cache/three-black-20261001/api-readonly-final-8001-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/three-black-20261001/api-readonly-final-8001-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/three-black-20261001/api-readonly-final-8001-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/three-black-20261001/api-readonly-final-8001-jobs.json": "a7ae1dbf0ee65e1fe6f6f748b2e2f34f7b0e88ac166df32c2648d72ff836a62e",
+    ".cache/three-black-20261001/api-readonly-final-8000-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/three-black-20261001/api-readonly-final-8000-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/three-black-20261001/api-readonly-final-8000-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/three-black-20261001/api-readonly-final-8000-jobs.json": "a7ae1dbf0ee65e1fe6f6f748b2e2f34f7b0e88ac166df32c2648d72ff836a62e"
+  },
+  "live_qualified": false,
+  "schedules_started": false,
+  "real_orders_submitted": false
+}

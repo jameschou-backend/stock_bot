@@ -1,0 +1,4 @@
+﻿arm,label,total_return,excess_return,final_nav,max_drawdown,trade_count,stock_cohorts,total_cost,winning_years,years
+control,中位數原版,14.72773991,8.2946001,15727739.91,-0.48870210016132953,742,130,2711059.0,4,8
+three_black,三黑K且收盤逐日降低,25.15742444,18.72428463,26157424.44,-0.4137884479032723,1380,248,6635640.0,6,8
+benchmark,0050 含息再投入,6.43313981,0.0,7433139.8100000005,-0.3390680994372489,54,0,9584.0,0,8

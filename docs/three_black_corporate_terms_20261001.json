@@ -1,0 +1,24 @@
+{
+  "schema": "three_black_corporate_terms_20261001",
+  "overrides": {
+    "6409-2019-09-02": {
+      "shares_per_share": 0.05000000635,
+      "pay_date": "2019-10-25",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "source": "Issuer dividend table: 2019-09-02 ex-date, 2019-10-25 delivery; issuer 2019-02-25 MOPS notice: NTD10 face fractional cash truncated to whole NTD. Exact ratio retained from frozen FinMind final distribution; fractional cash payment date remains unknown and unavailable. Current path owns 1 share, yielding 0 whole shares and NTD0 fractional cash.",
+      "urls": [
+        "https://voltronicpower.com/zh-TW/Investors/Financial-Information",
+        "https://tw.stock.yahoo.com/news/%E6%97%AD%E9%9A%BC%E8%91%A3%E4%BA%8B%E6%9C%83%E6%B1%BA%E8%AD%B0%E7%9B%88%E9%A4%98%E8%BD%89%E5%A2%9E%E8%B3%87%E7%99%BC%E8%A1%8C%E6%96%B0%E8%82%A1%E6%A1%883-934-262%E8%82%A1-221728699.html"
+      ],
+      "use_scope": "account_settlement_only_not_selection"
+    }
+  },
+  "rescheduled": [],
+  "source_sha256": {
+    ".cache/three-black-20261001/corporate-evidence/6409-issuer-sources.web.json": "a85325ebfdfab727c35937283de679d168485b90e9f9069e7d692a3ca2052401",
+    ".cache/three-black-20261001/corporate-evidence/6409-fraction-indexed.web.json": "5888486ef3f098d97a8d881b2d0a8b4d2ee67052cf928277683b04325c72a1f2"
+  },
+  "source_retrieval_note": "Direct issuer HTML returned HTTP520 once; exact web-tool issuer-page and indexed issuer-announcement snapshots retained. Yahoo direct web-open error also retained; no automatic retries."
+}
