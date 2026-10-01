@@ -1,0 +1,66 @@
+{
+  "rescheduled": [
+    {
+      "stock_id": "3293",
+      "scheduled_date": "2024-07-24",
+      "effective_date": "2024-07-26",
+      "reference_price": 715.0,
+      "lower": 644.0,
+      "upper": 786.0,
+      "expected_finmind_limits": {
+        "lower": 1320.0,
+        "upper": 1610.0
+      },
+      "source": "TPEx exDailyQ July 2024 frozen official result, first session after Gaemi closure",
+      "official_url": "https://www.tpex.org.tw/www/zh-tw/bulletin/exDailyQ",
+      "official_row": [
+        "113/07/24",
+        "3293",
+        "鈊象              ",
+        "1465.00",
+        "715.00",
+        "715.000000",
+        "35.000000",
+        "750.000000",
+        "除權息",
+        "786.00",
+        "644.00",
+        "715.00",
+        "715.00",
+        "35.00000000",
+        "1000.00000000",
+        "0",
+        "0.00",
+        "0",
+        "0",
+        "0",
+        "0.00000000"
+      ],
+      "ex_date_recognition": "Apply scheduled closed-day entitlement on first accounted market session; keep scheduled date and action ids"
+    }
+  ],
+  "overrides": {
+    "3293-2024-07-24": {
+      "shares_per_share": 1.0,
+      "pay_date": "2024-08-28",
+      "source": "TPEx ordinary share listing announcement published 2024-08-15, reproduced by Cnyes; issuer dividend table agrees",
+      "fractional_cash_per_share": null
+    }
+  },
+  "source_sha256": {
+    "artifacts/adj_official/checkpoints/tpex_ex_rights_20240701_20240731.json": "0e0b71a2dd645618c86fbcfc83d8bf3ab925fdacdf5b3ed72d31342ca14acc27",
+    ".cache/liquidity-universe-20261001/official/3293-listing.source.json": "b947dfa30e711510883403afe50b5285bdcf80b274191951d79dc586408f7223",
+    ".cache/liquidity-universe-20261001/official/3293-listing.html": "fa7e35ddd3e418008c0096d6601b6a5058adf87848149b0fb374509692a7c4ba",
+    ".cache/liquidity-universe-20261001/official/closure25.source.json": "8ad857a5459330edfbd069885f1d5e9731c0815b8a579014e571243de857dbfe",
+    ".cache/liquidity-universe-20261001/official/closure24.source.json": "19e5411d973d40d5152341c14fc08797163d90e21353bc0a3383fd638718e8a8",
+    ".cache/liquidity-universe-20261001/official/3293-issuer.source.json": "1b68d7fe9ef9d6818a766bee14bb77b9461c383ffb18c37c0206046c497d77e1",
+    ".cache/liquidity-universe-20261001/official/closure24.pdf": "d5f52fc6670b50da79fd5c45af9cfcf3c138ee687046d30a2c6588e24ffc56c0",
+    ".cache/liquidity-universe-20261001/official/closure25.pdf": "8b692c24c8b7a0877206f06278ea953b70ba8155d90244bd15595b4efd820e8c",
+    ".cache/liquidity-universe-20261001/official/3293-issuer.html": "8001e5703648ef1779b12d10af71644e56da7978d3f670039da2a7d86fb2612c"
+  },
+  "notes": [
+    "No fractional cash assumption for 1:1 whole-share dividend.",
+    "Delivery date is settlement evidence, never an entry-selection input.",
+    "Unreviewed closed-day corporate events stop the account instead of disappearing."
+  ]
+}
