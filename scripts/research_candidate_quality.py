@@ -31,8 +31,15 @@ from skills.candidate_corporate import complete_cash_dividends
 from skills.candidate_execution_context import load_context
 from skills.historical_odd_regime import HistoricalOddEra, normalized_era_account, parse_after_hours
 BEFORE='2020-10-26';AFTER={'twse':'https://www.twse.com.tw/rwd/zh/afterTrading/TWT53U','tpex':'https://www.tpex.org.tw/www/zh-tw/afterTrading/odd'}
-parser=argparse.ArgumentParser();parser.add_argument('--prepare',action='store_true');parser.add_argument('--output',required=True);parser.add_argument('--arms',default=','.join(ARMS));parser.add_argument('--retry-source',action='append',default=[]);a=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--prepare',action='store_true');parser.add_argument('--output',required=True);parser.add_argument('--arms');parser.add_argument('--retry-source',action='append',default=[])
+parser.add_argument('--study',choices=('candidate_quality','liquidity'),default='candidate_quality');a=parser.parse_args()
+SOURCE='candidate_quality_20260929'
+if a.study=='liquidity':
+ from skills.liquidity_candidates import ARMS
+ B=ROOT/'.cache/liquidity-account-20261001';C=B/'execution-v1';SOURCE='liquidity_account_20261001'
+if a.arms is None:a.arms=','.join(ARMS)
 output=B/a.output
+output.resolve().relative_to(B.resolve())
 if output.exists():raise ValueError('Choose new output')
 if any(arm not in ARMS for arm in a.arms.split(',')):raise ValueError('Unregistered arm')
 PREP=a.prepare; C.mkdir(parents=True,exist_ok=True); refs={};token=load_config().finmind_token if PREP else None
@@ -49,7 +56,7 @@ def reserve(key):
 def mark(p):refs[str(p.relative_to(ROOT))]=sha(p)
 def finmind(sid,dataset):
  p=C/(sid+'-'+dataset+'.parquet')
- for cached in (OLD/'execution-v1', ROOT/'.cache/rotation-2024-20260929/execution-v1'):
+ for cached in (OLD/'execution-v1', ROOT/'.cache/rotation-2024-20260929/execution-v1',ROOT/'.cache/candidate-quality-20260929/execution-v1'):
   if not p.exists() and (cached/p.name).exists():p=cached/p.name
  meta=p.with_suffix('.json')
  if p.exists():
@@ -86,7 +93,7 @@ class Odds:
    result=self.base.get_odd(day,sid,market);self.files.update(self.base.files);return result
   if key not in self.loaded:
    p=C/(key.replace(':','-')+'.json')
-   for cached in (OLD/'execution-v1', ROOT/'.cache/rotation-2024-20260929/execution-v1'):
+   for cached in (OLD/'execution-v1', ROOT/'.cache/rotation-2024-20260929/execution-v1',ROOT/'.cache/candidate-quality-20260929/execution-v1'):
     if not p.exists() and (cached/p.name).exists():p=cached/p.name
    if not p.exists():
     reserve(key);time.sleep(max(0,2-(time.monotonic()-self.last)))
@@ -191,7 +198,7 @@ def replay():
   cls=Benchmark if arm=='benchmark' else Cap if arm=='cap40' else Original
   opts={} if arm=='benchmark' else dict(ordering='original',position_count=3,factor_mask=0,residual_policy='release',identity_report=identity,exit_signals=data.features,action_dates=list(zip(events.stock_id,events.event_date)))
   if arm=='cap40':opts.update(stop_events=events,risk_arm='cap40')
-  elif arm!='benchmark':opts.update(candidate_arm=arm)
+  elif arm!='benchmark':opts.update(candidate_arm='original' if a.study=='liquidity' else arm)
   selected=entries if arm=='benchmark' else prepared['entries'][arm]
   engine=cls(quotes,companies,days,selected,feeds,corp,start=data.start,end=data.end,ticks=ticks,participation=.01,liquidity_identity=identity,odd_feeds=odds,**opts)
   print('start',arm,flush=True)
@@ -214,7 +221,8 @@ def replay():
   refs.update(odds.files)
   path=output/(arm+'.json');write(path,value);cases[arm]={k:v for k,v in value.items() if k not in ('account','audit')}
   cases[arm].update(path=str(path.relative_to(ROOT)),sha256=sha(path))
-  append_trial_registry(dict(timestamp=datetime.now().isoformat(timespec='seconds'),source='candidate_quality_20260929',params=dict(arm=arm,start=data.start,end=data.end),preparation=PREP,completed=value['completed'],result_path=str(path.relative_to(ROOT)),live_qualified=False))
+  record=dict(timestamp=datetime.now().isoformat(timespec='seconds'),source=SOURCE,params=dict(arm=arm,start=data.start,end=data.end),preparation=PREP,completed=value['completed'],result_path=str(path.relative_to(ROOT)),live_qualified=False)
+  append_trial_registry(record,registry_path=output/'trials.jsonl');append_trial_registry(record)
   print(arm,{k:value['summary'][k] for k in ('total_return','max_drawdown','final_nav')} if value.get('summary') else cases[arm],flush=True)
 if PREP:replay()
 else:
