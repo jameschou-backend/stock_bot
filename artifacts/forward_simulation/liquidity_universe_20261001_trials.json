@@ -1,0 +1,2473 @@
+{
+  "trials": [
+    {
+      "timestamp": "2026-10-01T14:37:34",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "liquid_universe",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/preflight-a/liquid_universe.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:37:47",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "median50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/preflight-a/median50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:38:08",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "prior50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/preflight-a/prior50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:38:17",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "persistent50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/preflight-a/persistent50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:38:32",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "benchmark",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/preflight-a/benchmark.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:44:20",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "median50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-a/median50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:46:25",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "prior50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-a/prior50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:48:17",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "persistent50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-a/persistent50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:57:03",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "median50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-b/median50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T14:58:12",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "prior50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-b/prior50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:00:14",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "persistent50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": false,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-b/persistent50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:07:03",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "median50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-c/median50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:11:38",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "prior50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-c/prior50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:15:32",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "persistent50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": true,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/prepare-c/persistent50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:26:16",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "liquid_universe",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-a/liquid_universe.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:29:41",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "median50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-a/median50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:34:00",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "prior50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-a/prior50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:37:51",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "persistent50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-a/persistent50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:38:08",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "benchmark",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-a/benchmark.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:26:17",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "liquid_universe",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-b/liquid_universe.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:29:43",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "median50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-b/median50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:34:02",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "prior50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-b/prior50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:37:53",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "persistent50m",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-b/persistent50m.json",
+      "live_qualified": false
+    },
+    {
+      "timestamp": "2026-10-01T15:38:09",
+      "source": "liquidity_universe_20261001",
+      "params": {
+        "arm": "benchmark",
+        "start": "2019-01-02",
+        "end": "2026-09-09"
+      },
+      "preparation": false,
+      "completed": true,
+      "result_path": ".cache/liquidity-universe-20261001/final-b/benchmark.json",
+      "live_qualified": false
+    }
+  ],
+  "runs": [
+    {
+      "name": "preflight-a",
+      "preparation": false,
+      "all_completed": false,
+      "validated": false,
+      "cases": {
+        "benchmark": {
+          "completed": true,
+          "deferred_corporate_preparations": 0,
+          "path": ".cache/liquidity-universe-20261001/preflight-a/benchmark.json",
+          "sha256": "9c5d707f66c15eb80b2ebf3dba2ee225e414118d678cbec403975fa3ddf5eaca",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 1340096.4000000001,
+                "max_drawdown": -0.08357377375385533,
+                "partial_year": false,
+                "profit": 340096.40000000014,
+                "start_nav": 1000000.0,
+                "total_return": 0.3400964000000002,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1757705.05,
+                "max_drawdown": -0.2815996329011602,
+                "partial_year": false,
+                "profit": 417608.6499999999,
+                "start_nav": 1340096.4000000001,
+                "total_return": 0.31162582781358106,
+                "year": "2020"
+              },
+              {
+                "end_nav": 2145343.46,
+                "max_drawdown": -0.10442347734053392,
+                "partial_year": false,
+                "profit": 387638.4099999999,
+                "start_nav": 1757705.05,
+                "total_return": 0.22053666512478864,
+                "year": "2021"
+              },
+              {
+                "end_nav": 1688046.5000000002,
+                "max_drawdown": -0.3390680994372489,
+                "partial_year": false,
+                "profit": -457296.95999999973,
+                "start_nav": 2145343.46,
+                "total_return": -0.2131579248387574,
+                "year": "2022"
+              },
+              {
+                "end_nav": 2151319.87,
+                "max_drawdown": -0.0700997273921774,
+                "partial_year": false,
+                "profit": 463273.3699999999,
+                "start_nav": 1688046.5000000002,
+                "total_return": 0.2744434883754683,
+                "year": "2023"
+              },
+              {
+                "end_nav": 3191689.82,
+                "max_drawdown": -0.2120740658824264,
+                "partial_year": false,
+                "profit": 1040369.9499999997,
+                "start_nav": 2151319.87,
+                "total_return": 0.48359612371357863,
+                "year": "2024"
+              },
+              {
+                "end_nav": 4366132.84,
+                "max_drawdown": -0.2749849340752484,
+                "partial_year": false,
+                "profit": 1174443.02,
+                "start_nav": 3191689.82,
+                "total_return": 0.367969034033514,
+                "year": "2025"
+              },
+              {
+                "end_nav": 7433139.8100000005,
+                "max_drawdown": -0.15339509427828035,
+                "partial_year": true,
+                "profit": 3067006.9700000007,
+                "start_nav": 4366132.84,
+                "total_return": 0.7024538836523355,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 54,
+            "cagr": 0.29824877239052205,
+            "cash": 75.96,
+            "costs": {
+              "commission": 2753.0,
+              "slippage": 6831.0,
+              "tax": 0.0,
+              "total_cost": 9584.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "benchmark",
+                "mark_date": "2026-09-09",
+                "market_value": 7433063.850000001,
+                "name": "元大台灣50",
+                "price": 109.65,
+                "qty": 67789,
+                "stale": false,
+                "stock_id": "0050"
+              }
+            ],
+            "final_nav": 7433139.8100000005,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 7433063.850000001,
+            "max_drawdown": -0.3390680994372489,
+            "minimum_cash": 24.39,
+            "partial_or_rejected_orders": {
+              "partial_midpoint_daily_capacity": 4
+            },
+            "profit": 6433139.8100000005,
+            "receivable": 0.0,
+            "sell_count": 0,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 0,
+            "total_return": 6.43313981,
+            "trade_count": 54,
+            "trading_days": 1867
+          }
+        },
+        "liquid_universe": {
+          "completed": true,
+          "deferred_corporate_preparations": 1003,
+          "path": ".cache/liquidity-universe-20261001/preflight-a/liquid_universe.json",
+          "sha256": "235c7cf459330710675a5163dce8e24d88695cc662285cee4dc849ef907ac3b9",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 933865.5900000001,
+                "max_drawdown": -0.24007035549181244,
+                "partial_year": false,
+                "profit": -66134.40999999992,
+                "start_nav": 1000000.0,
+                "total_return": -0.06613440999999987,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1226672.25,
+                "max_drawdown": -0.2742034099304992,
+                "partial_year": false,
+                "profit": 292806.6599999999,
+                "start_nav": 933865.5900000001,
+                "total_return": 0.3135426159132815,
+                "year": "2020"
+              },
+              {
+                "end_nav": 1857847.74,
+                "max_drawdown": -0.3216525069286924,
+                "partial_year": false,
+                "profit": 631175.49,
+                "start_nav": 1226672.25,
+                "total_return": 0.5145428944039454,
+                "year": "2021"
+              },
+              {
+                "end_nav": 1277149.88,
+                "max_drawdown": -0.3270964282573555,
+                "partial_year": false,
+                "profit": -580697.8600000001,
+                "start_nav": 1857847.74,
+                "total_return": -0.31256482837501,
+                "year": "2022"
+              },
+              {
+                "end_nav": 1902115.9000000001,
+                "max_drawdown": -0.16219871010053166,
+                "partial_year": false,
+                "profit": 624966.0200000003,
+                "start_nav": 1277149.88,
+                "total_return": 0.4893443046794166,
+                "year": "2023"
+              },
+              {
+                "end_nav": 4755396.78,
+                "max_drawdown": -0.24043500744627333,
+                "partial_year": false,
+                "profit": 2853280.88,
+                "start_nav": 1902115.9000000001,
+                "total_return": 1.5000562689161052,
+                "year": "2024"
+              },
+              {
+                "end_nav": 7323021.96,
+                "max_drawdown": -0.33891276837609896,
+                "partial_year": false,
+                "profit": 2567625.1799999997,
+                "start_nav": 4755396.78,
+                "total_return": 0.5399392098675728,
+                "year": "2025"
+              },
+              {
+                "end_nav": 10497628.59,
+                "max_drawdown": -0.4156887711371884,
+                "partial_year": true,
+                "profit": 3174606.63,
+                "start_nav": 7323021.96,
+                "total_return": 0.43351046157452733,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 238,
+            "cagr": 0.35789296043012886,
+            "cash": 5217235.13,
+            "costs": {
+              "commission": 303958.0,
+              "slippage": 939937.0,
+              "tax": 321254.0,
+              "total_cost": 1565149.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2297020.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4334,
+                "stale": false,
+                "stock_id": "2207"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-08-11-9921",
+                "mark_date": "2026-09-09",
+                "market_value": 2929291.5,
+                "name": "巨大",
+                "price": 98.5,
+                "qty": 29739,
+                "stale": false,
+                "stock_id": "9921"
+              }
+            ],
+            "final_nav": 10497628.59,
+            "final_receivables": [
+              {
+                "action_id": "9921-cash-2026-08-25",
+                "amount": 54081.96,
+                "event_id": "liquid_universe-2026-08-11-9921",
+                "ex_date": "2026-08-25",
+                "kind": "cash",
+                "pay_date": "2026-09-17",
+                "stock_id": "9921"
+              }
+            ],
+            "initial_cash": 1000000.0,
+            "market_value": 5226311.5,
+            "max_drawdown": -0.42820459086728535,
+            "minimum_cash": 31268.97,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 29,
+              "midpoint_limit_not_crossed": 11,
+              "official_full_session_halt": 1,
+              "official_zero_volume": 5,
+              "overlapping_member": 318,
+              "partial_midpoint_daily_capacity": 413,
+              "residual_exposure_cap": 323,
+              "resource_cash_locked": 40,
+              "resource_slots_locked": 1169,
+              "slots_full": 36015
+            },
+            "profit": 9497628.59,
+            "receivable": 54081.96,
+            "sell_count": 554,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 126,
+            "total_return": 9.49762859,
+            "trade_count": 792,
+            "trading_days": 1867
+          }
+        },
+        "median50m": {
+          "completed": false,
+          "completed_sessions": 141,
+          "deferred_corporate_preparations": 0,
+          "last_date": "2019-08-05",
+          "path": ".cache/liquidity-universe-20261001/preflight-a/median50m.json",
+          "reason": "Offline input missing odd:tpex:2019-08-06",
+          "sha256": "344839b75e506eb4609367cdd21e35eb5af1b9a042e67911d973d6c4275694f6",
+          "summary": null
+        },
+        "persistent50m": {
+          "completed": false,
+          "completed_sessions": 141,
+          "deferred_corporate_preparations": 0,
+          "last_date": "2019-08-05",
+          "path": ".cache/liquidity-universe-20261001/preflight-a/persistent50m.json",
+          "reason": "Offline input missing odd:tpex:2019-08-06",
+          "sha256": "344839b75e506eb4609367cdd21e35eb5af1b9a042e67911d973d6c4275694f6",
+          "summary": null
+        },
+        "prior50m": {
+          "completed": false,
+          "completed_sessions": 224,
+          "deferred_corporate_preparations": 13,
+          "last_date": "2019-12-05",
+          "path": ".cache/liquidity-universe-20261001/preflight-a/prior50m.json",
+          "reason": "Offline input missing odd:tpex:2019-12-06",
+          "sha256": "8dffc9289967f31e3a92a93c71458548dc242b2e85db5e14d2a63dbe482f25c8",
+          "summary": null
+        }
+      },
+      "report_path": ".cache/liquidity-universe-20261001/preflight-a/report.json",
+      "report_sha256": "95bd3fdf07370710f77140a058390dc720f74bde36cc9f8da5c1ef8d38252888",
+      "source_file_count": 35433,
+      "source_manifest_sha256": "3276126e3bef944ae3ed6467f67d39b13a93e6c89e4b0d4df015a67c994b203b"
+    },
+    {
+      "name": "prepare-a",
+      "preparation": true,
+      "all_completed": false,
+      "validated": false,
+      "cases": {
+        "median50m": {
+          "completed": false,
+          "completed_sessions": 1350,
+          "deferred_corporate_preparations": 502,
+          "last_date": "2024-07-23",
+          "path": ".cache/liquidity-universe-20261001/prepare-a/median50m.json",
+          "reason": "Midpoint range conflicts with legal limits",
+          "sha256": "3e3decc302b6d215579e84bf57aa0e1543a87983dbfd07abb93b16bf533336f5",
+          "summary": null
+        },
+        "persistent50m": {
+          "completed": false,
+          "completed_sessions": 1350,
+          "deferred_corporate_preparations": 501,
+          "last_date": "2024-07-23",
+          "path": ".cache/liquidity-universe-20261001/prepare-a/persistent50m.json",
+          "reason": "Midpoint range conflicts with legal limits",
+          "sha256": "dae375ff0fdc7879a3a6f870f2a65d69d49fb87eee83772d94fc4924c8ea75ec",
+          "summary": null
+        },
+        "prior50m": {
+          "completed": false,
+          "completed_sessions": 645,
+          "deferred_corporate_preparations": 240,
+          "last_date": "2021-08-27",
+          "path": ".cache/liquidity-universe-20261001/prepare-a/prior50m.json",
+          "reason": "Stock dividend data missing or invalid: 6469 2021-08-30; pay_date",
+          "sha256": "8c05d95793f543eae1a8bbb14baf8e83917c422abfa3ffe6767e29593eb9017b",
+          "summary": null
+        }
+      },
+      "report_path": ".cache/liquidity-universe-20261001/prepare-a/report.json",
+      "report_sha256": "4097595e08f4935804e14b5dc9ba8dba26b416f0b4986d54563c1fe0617ab1c9",
+      "source_file_count": 35139,
+      "source_manifest_sha256": "92cc074af6d2bc18cf9d8c14025d8b496c32adcb91a5435d2ef2840aec7cb5b4"
+    },
+    {
+      "name": "prepare-b",
+      "preparation": true,
+      "all_completed": false,
+      "validated": false,
+      "cases": {
+        "median50m": {
+          "completed": false,
+          "completed_sessions": 1350,
+          "deferred_corporate_preparations": 502,
+          "last_date": "2024-07-23",
+          "path": ".cache/liquidity-universe-20261001/prepare-b/median50m.json",
+          "reason": "Unreviewed non-session corporate action: 6442 2024-07-25 -> 2024-07-26",
+          "sha256": "b28458b5daea5849e5d25411130dd0ce5585fb246ff4bb3089d368306fe50768",
+          "summary": null
+        },
+        "persistent50m": {
+          "completed": false,
+          "completed_sessions": 1350,
+          "deferred_corporate_preparations": 501,
+          "last_date": "2024-07-23",
+          "path": ".cache/liquidity-universe-20261001/prepare-b/persistent50m.json",
+          "reason": "Unreviewed non-session corporate action: 6442 2024-07-25 -> 2024-07-26",
+          "sha256": "4e1d9c23f11b87e55da9d66d0c651ec33cb46b515e0cdf7f30a33e7273145f7f",
+          "summary": null
+        },
+        "prior50m": {
+          "completed": false,
+          "completed_sessions": 668,
+          "deferred_corporate_preparations": 240,
+          "last_date": "2021-10-01",
+          "path": ".cache/liquidity-universe-20261001/prepare-b/prior50m.json",
+          "reason": "Stock dividend data missing or invalid: 2915 2021-10-04; shares_per_share, pay_date",
+          "sha256": "c0c7b6d4c8e4fd66aa8cf0338fbb75de36b5bb3bd559cdc6e685cef0f132484f",
+          "summary": null
+        }
+      },
+      "report_path": ".cache/liquidity-universe-20261001/prepare-b/report.json",
+      "report_sha256": "43f50c11f552e9795685a6f07d1eb09ae8c3a0b163900b8ae8e0251d7f4fc169",
+      "source_file_count": 35169,
+      "source_manifest_sha256": "d5b96e2249dc884a8ceb423719d19a4d4c6660c14d16fd064a478cd9db9ac468"
+    },
+    {
+      "name": "prepare-c",
+      "preparation": true,
+      "all_completed": true,
+      "validated": false,
+      "cases": {
+        "median50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 934,
+          "path": ".cache/liquidity-universe-20261001/prepare-c/median50m.json",
+          "sha256": "d4cdbe23961d6ee28978f170dd57605c08c6086d1eafbaa5fe56d2c1b94f8bf7",
+          "summary": null
+        },
+        "persistent50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 932,
+          "path": ".cache/liquidity-universe-20261001/prepare-c/persistent50m.json",
+          "sha256": "31fd7ea9e2ba29da3c6804955eef6e276a944751f8b2c59f9f342d3baba6cd3d",
+          "summary": null
+        },
+        "prior50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 676,
+          "path": ".cache/liquidity-universe-20261001/prepare-c/prior50m.json",
+          "sha256": "6ea0271c4849bf0c4b68f57f794302042516b7ab4482c0273774d9d8067fc5a4",
+          "summary": null
+        }
+      },
+      "report_path": ".cache/liquidity-universe-20261001/prepare-c/report.json",
+      "report_sha256": "b5ea35c6da41424165c12de400c8274b9d40624446322ab7496baabc71b0b239",
+      "source_file_count": 36361,
+      "source_manifest_sha256": "896fe3870522bbeed911eda528677582b8ed2e5d39f22815ac34de1f44f7e3c0"
+    },
+    {
+      "name": "final-a",
+      "preparation": false,
+      "all_completed": true,
+      "validated": true,
+      "cases": {
+        "benchmark": {
+          "completed": true,
+          "deferred_corporate_preparations": 0,
+          "path": ".cache/liquidity-universe-20261001/final-a/benchmark.json",
+          "sha256": "9c5d707f66c15eb80b2ebf3dba2ee225e414118d678cbec403975fa3ddf5eaca",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 1340096.4000000001,
+                "max_drawdown": -0.08357377375385533,
+                "partial_year": false,
+                "profit": 340096.40000000014,
+                "start_nav": 1000000.0,
+                "total_return": 0.3400964000000002,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1757705.05,
+                "max_drawdown": -0.2815996329011602,
+                "partial_year": false,
+                "profit": 417608.6499999999,
+                "start_nav": 1340096.4000000001,
+                "total_return": 0.31162582781358106,
+                "year": "2020"
+              },
+              {
+                "end_nav": 2145343.46,
+                "max_drawdown": -0.10442347734053392,
+                "partial_year": false,
+                "profit": 387638.4099999999,
+                "start_nav": 1757705.05,
+                "total_return": 0.22053666512478864,
+                "year": "2021"
+              },
+              {
+                "end_nav": 1688046.5000000002,
+                "max_drawdown": -0.3390680994372489,
+                "partial_year": false,
+                "profit": -457296.95999999973,
+                "start_nav": 2145343.46,
+                "total_return": -0.2131579248387574,
+                "year": "2022"
+              },
+              {
+                "end_nav": 2151319.87,
+                "max_drawdown": -0.0700997273921774,
+                "partial_year": false,
+                "profit": 463273.3699999999,
+                "start_nav": 1688046.5000000002,
+                "total_return": 0.2744434883754683,
+                "year": "2023"
+              },
+              {
+                "end_nav": 3191689.82,
+                "max_drawdown": -0.2120740658824264,
+                "partial_year": false,
+                "profit": 1040369.9499999997,
+                "start_nav": 2151319.87,
+                "total_return": 0.48359612371357863,
+                "year": "2024"
+              },
+              {
+                "end_nav": 4366132.84,
+                "max_drawdown": -0.2749849340752484,
+                "partial_year": false,
+                "profit": 1174443.02,
+                "start_nav": 3191689.82,
+                "total_return": 0.367969034033514,
+                "year": "2025"
+              },
+              {
+                "end_nav": 7433139.8100000005,
+                "max_drawdown": -0.15339509427828035,
+                "partial_year": true,
+                "profit": 3067006.9700000007,
+                "start_nav": 4366132.84,
+                "total_return": 0.7024538836523355,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 54,
+            "cagr": 0.29824877239052205,
+            "cash": 75.96,
+            "costs": {
+              "commission": 2753.0,
+              "slippage": 6831.0,
+              "tax": 0.0,
+              "total_cost": 9584.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "benchmark",
+                "mark_date": "2026-09-09",
+                "market_value": 7433063.850000001,
+                "name": "元大台灣50",
+                "price": 109.65,
+                "qty": 67789,
+                "stale": false,
+                "stock_id": "0050"
+              }
+            ],
+            "final_nav": 7433139.8100000005,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 7433063.850000001,
+            "max_drawdown": -0.3390680994372489,
+            "minimum_cash": 24.39,
+            "partial_or_rejected_orders": {
+              "partial_midpoint_daily_capacity": 4
+            },
+            "profit": 6433139.8100000005,
+            "receivable": 0.0,
+            "sell_count": 0,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 0,
+            "total_return": 6.43313981,
+            "trade_count": 54,
+            "trading_days": 1867
+          }
+        },
+        "liquid_universe": {
+          "completed": true,
+          "deferred_corporate_preparations": 1003,
+          "path": ".cache/liquidity-universe-20261001/final-a/liquid_universe.json",
+          "sha256": "235c7cf459330710675a5163dce8e24d88695cc662285cee4dc849ef907ac3b9",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 933865.5900000001,
+                "max_drawdown": -0.24007035549181244,
+                "partial_year": false,
+                "profit": -66134.40999999992,
+                "start_nav": 1000000.0,
+                "total_return": -0.06613440999999987,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1226672.25,
+                "max_drawdown": -0.2742034099304992,
+                "partial_year": false,
+                "profit": 292806.6599999999,
+                "start_nav": 933865.5900000001,
+                "total_return": 0.3135426159132815,
+                "year": "2020"
+              },
+              {
+                "end_nav": 1857847.74,
+                "max_drawdown": -0.3216525069286924,
+                "partial_year": false,
+                "profit": 631175.49,
+                "start_nav": 1226672.25,
+                "total_return": 0.5145428944039454,
+                "year": "2021"
+              },
+              {
+                "end_nav": 1277149.88,
+                "max_drawdown": -0.3270964282573555,
+                "partial_year": false,
+                "profit": -580697.8600000001,
+                "start_nav": 1857847.74,
+                "total_return": -0.31256482837501,
+                "year": "2022"
+              },
+              {
+                "end_nav": 1902115.9000000001,
+                "max_drawdown": -0.16219871010053166,
+                "partial_year": false,
+                "profit": 624966.0200000003,
+                "start_nav": 1277149.88,
+                "total_return": 0.4893443046794166,
+                "year": "2023"
+              },
+              {
+                "end_nav": 4755396.78,
+                "max_drawdown": -0.24043500744627333,
+                "partial_year": false,
+                "profit": 2853280.88,
+                "start_nav": 1902115.9000000001,
+                "total_return": 1.5000562689161052,
+                "year": "2024"
+              },
+              {
+                "end_nav": 7323021.96,
+                "max_drawdown": -0.33891276837609896,
+                "partial_year": false,
+                "profit": 2567625.1799999997,
+                "start_nav": 4755396.78,
+                "total_return": 0.5399392098675728,
+                "year": "2025"
+              },
+              {
+                "end_nav": 10497628.59,
+                "max_drawdown": -0.4156887711371884,
+                "partial_year": true,
+                "profit": 3174606.63,
+                "start_nav": 7323021.96,
+                "total_return": 0.43351046157452733,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 238,
+            "cagr": 0.35789296043012886,
+            "cash": 5217235.13,
+            "costs": {
+              "commission": 303958.0,
+              "slippage": 939937.0,
+              "tax": 321254.0,
+              "total_cost": 1565149.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2297020.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4334,
+                "stale": false,
+                "stock_id": "2207"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-08-11-9921",
+                "mark_date": "2026-09-09",
+                "market_value": 2929291.5,
+                "name": "巨大",
+                "price": 98.5,
+                "qty": 29739,
+                "stale": false,
+                "stock_id": "9921"
+              }
+            ],
+            "final_nav": 10497628.59,
+            "final_receivables": [
+              {
+                "action_id": "9921-cash-2026-08-25",
+                "amount": 54081.96,
+                "event_id": "liquid_universe-2026-08-11-9921",
+                "ex_date": "2026-08-25",
+                "kind": "cash",
+                "pay_date": "2026-09-17",
+                "stock_id": "9921"
+              }
+            ],
+            "initial_cash": 1000000.0,
+            "market_value": 5226311.5,
+            "max_drawdown": -0.42820459086728535,
+            "minimum_cash": 31268.97,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 29,
+              "midpoint_limit_not_crossed": 11,
+              "official_full_session_halt": 1,
+              "official_zero_volume": 5,
+              "overlapping_member": 318,
+              "partial_midpoint_daily_capacity": 413,
+              "residual_exposure_cap": 323,
+              "resource_cash_locked": 40,
+              "resource_slots_locked": 1169,
+              "slots_full": 36015
+            },
+            "profit": 9497628.59,
+            "receivable": 54081.96,
+            "sell_count": 554,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 126,
+            "total_return": 9.49762859,
+            "trade_count": 792,
+            "trading_days": 1867
+          }
+        },
+        "median50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 934,
+          "path": ".cache/liquidity-universe-20261001/final-a/median50m.json",
+          "sha256": "59f602816210bbc26bcffba3319162b8dc1086d31001082392c1ea3be1027617",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 785142.17,
+                "max_drawdown": -0.29563711273334126,
+                "partial_year": false,
+                "profit": -214857.82999999996,
+                "start_nav": 1000000.0,
+                "total_return": -0.21485782999999992,
+                "year": "2019"
+              },
+              {
+                "end_nav": 2476886.32,
+                "max_drawdown": -0.2829443155470347,
+                "partial_year": false,
+                "profit": 1691744.15,
+                "start_nav": 785142.17,
+                "total_return": 2.154697855548887,
+                "year": "2020"
+              },
+              {
+                "end_nav": 3009331.1799999997,
+                "max_drawdown": -0.3643378916955805,
+                "partial_year": false,
+                "profit": 532444.8599999999,
+                "start_nav": 2476886.32,
+                "total_return": 0.2149654005921433,
+                "year": "2021"
+              },
+              {
+                "end_nav": 3072652.33,
+                "max_drawdown": -0.21521822494326337,
+                "partial_year": false,
+                "profit": 63321.15000000037,
+                "start_nav": 3009331.1799999997,
+                "total_return": 0.021041602340358123,
+                "year": "2022"
+              },
+              {
+                "end_nav": 3095251.05,
+                "max_drawdown": -0.48870210016132953,
+                "partial_year": false,
+                "profit": 22598.71999999974,
+                "start_nav": 3072652.33,
+                "total_return": 0.007354792398526877,
+                "year": "2023"
+              },
+              {
+                "end_nav": 5661832.99,
+                "max_drawdown": -0.18476775594457695,
+                "partial_year": false,
+                "profit": 2566581.9400000004,
+                "start_nav": 3095251.05,
+                "total_return": 0.8291999254793889,
+                "year": "2024"
+              },
+              {
+                "end_nav": 12271092.16,
+                "max_drawdown": -0.22979132634588129,
+                "partial_year": false,
+                "profit": 6609259.17,
+                "start_nav": 5661832.99,
+                "total_return": 1.167335592850117,
+                "year": "2025"
+              },
+              {
+                "end_nav": 15727739.91,
+                "max_drawdown": -0.45016643048241434,
+                "partial_year": true,
+                "profit": 3456647.75,
+                "start_nav": 12271092.16,
+                "total_return": 0.28169030962603414,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 246,
+            "cagr": 0.4312370446561291,
+            "cash": 3658143.61,
+            "costs": {
+              "commission": 522719.0,
+              "slippage": 1635661.0,
+              "tax": 552679.0,
+              "total_cost": 2711059.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-21-2634",
+                "mark_date": "2026-09-09",
+                "market_value": 5010860.8,
+                "name": "漢翔",
+                "price": 65.3,
+                "qty": 76736,
+                "stale": false,
+                "stock_id": "2634"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-28-1101",
+                "mark_date": "2026-09-09",
+                "market_value": 4771255.5,
+                "name": "台泥",
+                "price": 24.75,
+                "qty": 192778,
+                "stale": false,
+                "stock_id": "1101"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2287480.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4316,
+                "stale": false,
+                "stock_id": "2207"
+              }
+            ],
+            "final_nav": 15727739.91,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 12069596.3,
+            "max_drawdown": -0.48870210016132953,
+            "minimum_cash": 20509.39,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 6,
+              "midpoint_limit_not_crossed": 16,
+              "official_full_session_halt": 1,
+              "overlapping_member": 302,
+              "partial_midpoint_daily_capacity": 338,
+              "residual_exposure_cap": 39,
+              "resource_slots_locked": 1047,
+              "slots_full": 28411
+            },
+            "profit": 14727739.91,
+            "receivable": 0.0,
+            "sell_count": 496,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 130,
+            "total_return": 14.72773991,
+            "trade_count": 742,
+            "trading_days": 1867
+          }
+        },
+        "persistent50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 932,
+          "path": ".cache/liquidity-universe-20261001/final-a/persistent50m.json",
+          "sha256": "dcc3f424c3ad81a67f8c2e684a0d43cf6461eec198d9753bb645b6facf374280",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 785142.17,
+                "max_drawdown": -0.29563711273334126,
+                "partial_year": false,
+                "profit": -214857.82999999996,
+                "start_nav": 1000000.0,
+                "total_return": -0.21485782999999992,
+                "year": "2019"
+              },
+              {
+                "end_nav": 2476886.32,
+                "max_drawdown": -0.2829443155470347,
+                "partial_year": false,
+                "profit": 1691744.15,
+                "start_nav": 785142.17,
+                "total_return": 2.154697855548887,
+                "year": "2020"
+              },
+              {
+                "end_nav": 3009331.1799999997,
+                "max_drawdown": -0.3643378916955805,
+                "partial_year": false,
+                "profit": 532444.8599999999,
+                "start_nav": 2476886.32,
+                "total_return": 0.2149654005921433,
+                "year": "2021"
+              },
+              {
+                "end_nav": 3072652.33,
+                "max_drawdown": -0.21521822494326337,
+                "partial_year": false,
+                "profit": 63321.15000000037,
+                "start_nav": 3009331.1799999997,
+                "total_return": 0.021041602340358123,
+                "year": "2022"
+              },
+              {
+                "end_nav": 3095251.05,
+                "max_drawdown": -0.48870210016132953,
+                "partial_year": false,
+                "profit": 22598.71999999974,
+                "start_nav": 3072652.33,
+                "total_return": 0.007354792398526877,
+                "year": "2023"
+              },
+              {
+                "end_nav": 5661832.99,
+                "max_drawdown": -0.18476775594457695,
+                "partial_year": false,
+                "profit": 2566581.9400000004,
+                "start_nav": 3095251.05,
+                "total_return": 0.8291999254793889,
+                "year": "2024"
+              },
+              {
+                "end_nav": 12271092.16,
+                "max_drawdown": -0.22979132634588129,
+                "partial_year": false,
+                "profit": 6609259.17,
+                "start_nav": 5661832.99,
+                "total_return": 1.167335592850117,
+                "year": "2025"
+              },
+              {
+                "end_nav": 15727739.91,
+                "max_drawdown": -0.45016643048241434,
+                "partial_year": true,
+                "profit": 3456647.75,
+                "start_nav": 12271092.16,
+                "total_return": 0.28169030962603414,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 246,
+            "cagr": 0.4312370446561291,
+            "cash": 3658143.61,
+            "costs": {
+              "commission": 522719.0,
+              "slippage": 1635661.0,
+              "tax": 552679.0,
+              "total_cost": 2711059.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-21-2634",
+                "mark_date": "2026-09-09",
+                "market_value": 5010860.8,
+                "name": "漢翔",
+                "price": 65.3,
+                "qty": 76736,
+                "stale": false,
+                "stock_id": "2634"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-28-1101",
+                "mark_date": "2026-09-09",
+                "market_value": 4771255.5,
+                "name": "台泥",
+                "price": 24.75,
+                "qty": 192778,
+                "stale": false,
+                "stock_id": "1101"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2287480.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4316,
+                "stale": false,
+                "stock_id": "2207"
+              }
+            ],
+            "final_nav": 15727739.91,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 12069596.3,
+            "max_drawdown": -0.48870210016132953,
+            "minimum_cash": 20509.39,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 6,
+              "midpoint_limit_not_crossed": 16,
+              "official_full_session_halt": 1,
+              "overlapping_member": 302,
+              "partial_midpoint_daily_capacity": 338,
+              "residual_exposure_cap": 39,
+              "resource_slots_locked": 1045,
+              "slots_full": 28389
+            },
+            "profit": 14727739.91,
+            "receivable": 0.0,
+            "sell_count": 496,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 130,
+            "total_return": 14.72773991,
+            "trade_count": 742,
+            "trading_days": 1867
+          }
+        },
+        "prior50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 676,
+          "path": ".cache/liquidity-universe-20261001/final-a/prior50m.json",
+          "sha256": "539e778a53efd318a2f756b2445080a4caebf722ae80e6ad43a46ef2e81e1130",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 729953.32,
+                "max_drawdown": -0.3267123118783529,
+                "partial_year": false,
+                "profit": -270046.68000000005,
+                "start_nav": 1000000.0,
+                "total_return": -0.2700466800000001,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1095849.0799999998,
+                "max_drawdown": -0.3228125651481285,
+                "partial_year": false,
+                "profit": 365895.7599999999,
+                "start_nav": 729953.32,
+                "total_return": 0.5012591216106803,
+                "year": "2020"
+              },
+              {
+                "end_nav": 710612.77,
+                "max_drawdown": -0.503044174865658,
+                "partial_year": false,
+                "profit": -385236.3099999998,
+                "start_nav": 1095849.0799999998,
+                "total_return": -0.3515413910827939,
+                "year": "2021"
+              },
+              {
+                "end_nav": 629160.05,
+                "max_drawdown": -0.20777882870700926,
+                "partial_year": false,
+                "profit": -81452.71999999997,
+                "start_nav": 710612.77,
+                "total_return": -0.11462321455326507,
+                "year": "2022"
+              },
+              {
+                "end_nav": 989241.45,
+                "max_drawdown": -0.1912926675402824,
+                "partial_year": false,
+                "profit": 360081.3999999999,
+                "start_nav": 629160.05,
+                "total_return": 0.5723208267912114,
+                "year": "2023"
+              },
+              {
+                "end_nav": 1212414.1400000001,
+                "max_drawdown": -0.3840118978260627,
+                "partial_year": false,
+                "profit": 223172.69000000018,
+                "start_nav": 989241.45,
+                "total_return": 0.22559981691021957,
+                "year": "2024"
+              },
+              {
+                "end_nav": 2153023.15,
+                "max_drawdown": -0.23291748312998073,
+                "partial_year": false,
+                "profit": 940609.0099999998,
+                "start_nav": 1212414.1400000001,
+                "total_return": 0.7758149455432775,
+                "year": "2025"
+              },
+              {
+                "end_nav": 1095810.22,
+                "max_drawdown": -0.6582131377613869,
+                "partial_year": true,
+                "profit": -1057212.93,
+                "start_nav": 2153023.15,
+                "total_return": -0.4910364897841437,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 247,
+            "cagr": 0.011976454651310364,
+            "cash": 108832.22,
+            "costs": {
+              "commission": 114074.0,
+              "slippage": 341212.0,
+              "tax": 112766.0,
+              "total_cost": 568052.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 325950.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 615,
+                "stale": false,
+                "stock_id": "2207"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-08-04-3231",
+                "mark_date": "2026-09-09",
+                "market_value": 350028.0,
+                "name": "緯創",
+                "price": 189.0,
+                "qty": 1852,
+                "stale": false,
+                "stock_id": "3231"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-09-02-3234",
+                "mark_date": "2026-09-09",
+                "market_value": 311000.0,
+                "name": "光環",
+                "price": 200.0,
+                "qty": 1555,
+                "stale": false,
+                "stock_id": "3234"
+              }
+            ],
+            "final_nav": 1095810.22,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 986978.0,
+            "max_drawdown": -0.6582131377613869,
+            "minimum_cash": 23776.28,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 10,
+              "midpoint_limit_not_crossed": 15,
+              "official_full_session_halt": 1,
+              "official_zero_volume": 1,
+              "overlapping_member": 294,
+              "partial_midpoint_daily_capacity": 354,
+              "residual_exposure_cap": 891,
+              "resource_cash_locked": 50,
+              "resource_slots_locked": 1005,
+              "slots_full": 33064
+            },
+            "profit": 95810.21999999997,
+            "receivable": 0.0,
+            "sell_count": 520,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 134,
+            "total_return": 0.09581021999999995,
+            "trade_count": 767,
+            "trading_days": 1867
+          }
+        }
+      },
+      "report_path": ".cache/liquidity-universe-20261001/final-a/report.json",
+      "report_sha256": "703f496cf43e7739829773a4369c284f64688f64b0a0956bbbde422f9373aa70",
+      "source_file_count": 36746,
+      "source_manifest_sha256": "4e3a5d47b6ed2a9e889fe71c367504b815686090dad1205f2d74d10060f74803"
+    },
+    {
+      "name": "final-b",
+      "preparation": false,
+      "all_completed": true,
+      "validated": true,
+      "cases": {
+        "benchmark": {
+          "completed": true,
+          "deferred_corporate_preparations": 0,
+          "path": ".cache/liquidity-universe-20261001/final-b/benchmark.json",
+          "sha256": "9c5d707f66c15eb80b2ebf3dba2ee225e414118d678cbec403975fa3ddf5eaca",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 1340096.4000000001,
+                "max_drawdown": -0.08357377375385533,
+                "partial_year": false,
+                "profit": 340096.40000000014,
+                "start_nav": 1000000.0,
+                "total_return": 0.3400964000000002,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1757705.05,
+                "max_drawdown": -0.2815996329011602,
+                "partial_year": false,
+                "profit": 417608.6499999999,
+                "start_nav": 1340096.4000000001,
+                "total_return": 0.31162582781358106,
+                "year": "2020"
+              },
+              {
+                "end_nav": 2145343.46,
+                "max_drawdown": -0.10442347734053392,
+                "partial_year": false,
+                "profit": 387638.4099999999,
+                "start_nav": 1757705.05,
+                "total_return": 0.22053666512478864,
+                "year": "2021"
+              },
+              {
+                "end_nav": 1688046.5000000002,
+                "max_drawdown": -0.3390680994372489,
+                "partial_year": false,
+                "profit": -457296.95999999973,
+                "start_nav": 2145343.46,
+                "total_return": -0.2131579248387574,
+                "year": "2022"
+              },
+              {
+                "end_nav": 2151319.87,
+                "max_drawdown": -0.0700997273921774,
+                "partial_year": false,
+                "profit": 463273.3699999999,
+                "start_nav": 1688046.5000000002,
+                "total_return": 0.2744434883754683,
+                "year": "2023"
+              },
+              {
+                "end_nav": 3191689.82,
+                "max_drawdown": -0.2120740658824264,
+                "partial_year": false,
+                "profit": 1040369.9499999997,
+                "start_nav": 2151319.87,
+                "total_return": 0.48359612371357863,
+                "year": "2024"
+              },
+              {
+                "end_nav": 4366132.84,
+                "max_drawdown": -0.2749849340752484,
+                "partial_year": false,
+                "profit": 1174443.02,
+                "start_nav": 3191689.82,
+                "total_return": 0.367969034033514,
+                "year": "2025"
+              },
+              {
+                "end_nav": 7433139.8100000005,
+                "max_drawdown": -0.15339509427828035,
+                "partial_year": true,
+                "profit": 3067006.9700000007,
+                "start_nav": 4366132.84,
+                "total_return": 0.7024538836523355,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 54,
+            "cagr": 0.29824877239052205,
+            "cash": 75.96,
+            "costs": {
+              "commission": 2753.0,
+              "slippage": 6831.0,
+              "tax": 0.0,
+              "total_cost": 9584.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "benchmark",
+                "mark_date": "2026-09-09",
+                "market_value": 7433063.850000001,
+                "name": "元大台灣50",
+                "price": 109.65,
+                "qty": 67789,
+                "stale": false,
+                "stock_id": "0050"
+              }
+            ],
+            "final_nav": 7433139.8100000005,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 7433063.850000001,
+            "max_drawdown": -0.3390680994372489,
+            "minimum_cash": 24.39,
+            "partial_or_rejected_orders": {
+              "partial_midpoint_daily_capacity": 4
+            },
+            "profit": 6433139.8100000005,
+            "receivable": 0.0,
+            "sell_count": 0,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 0,
+            "total_return": 6.43313981,
+            "trade_count": 54,
+            "trading_days": 1867
+          }
+        },
+        "liquid_universe": {
+          "completed": true,
+          "deferred_corporate_preparations": 1003,
+          "path": ".cache/liquidity-universe-20261001/final-b/liquid_universe.json",
+          "sha256": "235c7cf459330710675a5163dce8e24d88695cc662285cee4dc849ef907ac3b9",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 933865.5900000001,
+                "max_drawdown": -0.24007035549181244,
+                "partial_year": false,
+                "profit": -66134.40999999992,
+                "start_nav": 1000000.0,
+                "total_return": -0.06613440999999987,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1226672.25,
+                "max_drawdown": -0.2742034099304992,
+                "partial_year": false,
+                "profit": 292806.6599999999,
+                "start_nav": 933865.5900000001,
+                "total_return": 0.3135426159132815,
+                "year": "2020"
+              },
+              {
+                "end_nav": 1857847.74,
+                "max_drawdown": -0.3216525069286924,
+                "partial_year": false,
+                "profit": 631175.49,
+                "start_nav": 1226672.25,
+                "total_return": 0.5145428944039454,
+                "year": "2021"
+              },
+              {
+                "end_nav": 1277149.88,
+                "max_drawdown": -0.3270964282573555,
+                "partial_year": false,
+                "profit": -580697.8600000001,
+                "start_nav": 1857847.74,
+                "total_return": -0.31256482837501,
+                "year": "2022"
+              },
+              {
+                "end_nav": 1902115.9000000001,
+                "max_drawdown": -0.16219871010053166,
+                "partial_year": false,
+                "profit": 624966.0200000003,
+                "start_nav": 1277149.88,
+                "total_return": 0.4893443046794166,
+                "year": "2023"
+              },
+              {
+                "end_nav": 4755396.78,
+                "max_drawdown": -0.24043500744627333,
+                "partial_year": false,
+                "profit": 2853280.88,
+                "start_nav": 1902115.9000000001,
+                "total_return": 1.5000562689161052,
+                "year": "2024"
+              },
+              {
+                "end_nav": 7323021.96,
+                "max_drawdown": -0.33891276837609896,
+                "partial_year": false,
+                "profit": 2567625.1799999997,
+                "start_nav": 4755396.78,
+                "total_return": 0.5399392098675728,
+                "year": "2025"
+              },
+              {
+                "end_nav": 10497628.59,
+                "max_drawdown": -0.4156887711371884,
+                "partial_year": true,
+                "profit": 3174606.63,
+                "start_nav": 7323021.96,
+                "total_return": 0.43351046157452733,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 238,
+            "cagr": 0.35789296043012886,
+            "cash": 5217235.13,
+            "costs": {
+              "commission": 303958.0,
+              "slippage": 939937.0,
+              "tax": 321254.0,
+              "total_cost": 1565149.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2297020.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4334,
+                "stale": false,
+                "stock_id": "2207"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-08-11-9921",
+                "mark_date": "2026-09-09",
+                "market_value": 2929291.5,
+                "name": "巨大",
+                "price": 98.5,
+                "qty": 29739,
+                "stale": false,
+                "stock_id": "9921"
+              }
+            ],
+            "final_nav": 10497628.59,
+            "final_receivables": [
+              {
+                "action_id": "9921-cash-2026-08-25",
+                "amount": 54081.96,
+                "event_id": "liquid_universe-2026-08-11-9921",
+                "ex_date": "2026-08-25",
+                "kind": "cash",
+                "pay_date": "2026-09-17",
+                "stock_id": "9921"
+              }
+            ],
+            "initial_cash": 1000000.0,
+            "market_value": 5226311.5,
+            "max_drawdown": -0.42820459086728535,
+            "minimum_cash": 31268.97,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 29,
+              "midpoint_limit_not_crossed": 11,
+              "official_full_session_halt": 1,
+              "official_zero_volume": 5,
+              "overlapping_member": 318,
+              "partial_midpoint_daily_capacity": 413,
+              "residual_exposure_cap": 323,
+              "resource_cash_locked": 40,
+              "resource_slots_locked": 1169,
+              "slots_full": 36015
+            },
+            "profit": 9497628.59,
+            "receivable": 54081.96,
+            "sell_count": 554,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 126,
+            "total_return": 9.49762859,
+            "trade_count": 792,
+            "trading_days": 1867
+          }
+        },
+        "median50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 934,
+          "path": ".cache/liquidity-universe-20261001/final-b/median50m.json",
+          "sha256": "59f602816210bbc26bcffba3319162b8dc1086d31001082392c1ea3be1027617",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 785142.17,
+                "max_drawdown": -0.29563711273334126,
+                "partial_year": false,
+                "profit": -214857.82999999996,
+                "start_nav": 1000000.0,
+                "total_return": -0.21485782999999992,
+                "year": "2019"
+              },
+              {
+                "end_nav": 2476886.32,
+                "max_drawdown": -0.2829443155470347,
+                "partial_year": false,
+                "profit": 1691744.15,
+                "start_nav": 785142.17,
+                "total_return": 2.154697855548887,
+                "year": "2020"
+              },
+              {
+                "end_nav": 3009331.1799999997,
+                "max_drawdown": -0.3643378916955805,
+                "partial_year": false,
+                "profit": 532444.8599999999,
+                "start_nav": 2476886.32,
+                "total_return": 0.2149654005921433,
+                "year": "2021"
+              },
+              {
+                "end_nav": 3072652.33,
+                "max_drawdown": -0.21521822494326337,
+                "partial_year": false,
+                "profit": 63321.15000000037,
+                "start_nav": 3009331.1799999997,
+                "total_return": 0.021041602340358123,
+                "year": "2022"
+              },
+              {
+                "end_nav": 3095251.05,
+                "max_drawdown": -0.48870210016132953,
+                "partial_year": false,
+                "profit": 22598.71999999974,
+                "start_nav": 3072652.33,
+                "total_return": 0.007354792398526877,
+                "year": "2023"
+              },
+              {
+                "end_nav": 5661832.99,
+                "max_drawdown": -0.18476775594457695,
+                "partial_year": false,
+                "profit": 2566581.9400000004,
+                "start_nav": 3095251.05,
+                "total_return": 0.8291999254793889,
+                "year": "2024"
+              },
+              {
+                "end_nav": 12271092.16,
+                "max_drawdown": -0.22979132634588129,
+                "partial_year": false,
+                "profit": 6609259.17,
+                "start_nav": 5661832.99,
+                "total_return": 1.167335592850117,
+                "year": "2025"
+              },
+              {
+                "end_nav": 15727739.91,
+                "max_drawdown": -0.45016643048241434,
+                "partial_year": true,
+                "profit": 3456647.75,
+                "start_nav": 12271092.16,
+                "total_return": 0.28169030962603414,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 246,
+            "cagr": 0.4312370446561291,
+            "cash": 3658143.61,
+            "costs": {
+              "commission": 522719.0,
+              "slippage": 1635661.0,
+              "tax": 552679.0,
+              "total_cost": 2711059.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-21-2634",
+                "mark_date": "2026-09-09",
+                "market_value": 5010860.8,
+                "name": "漢翔",
+                "price": 65.3,
+                "qty": 76736,
+                "stale": false,
+                "stock_id": "2634"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-28-1101",
+                "mark_date": "2026-09-09",
+                "market_value": 4771255.5,
+                "name": "台泥",
+                "price": 24.75,
+                "qty": 192778,
+                "stale": false,
+                "stock_id": "1101"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2287480.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4316,
+                "stale": false,
+                "stock_id": "2207"
+              }
+            ],
+            "final_nav": 15727739.91,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 12069596.3,
+            "max_drawdown": -0.48870210016132953,
+            "minimum_cash": 20509.39,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 6,
+              "midpoint_limit_not_crossed": 16,
+              "official_full_session_halt": 1,
+              "overlapping_member": 302,
+              "partial_midpoint_daily_capacity": 338,
+              "residual_exposure_cap": 39,
+              "resource_slots_locked": 1047,
+              "slots_full": 28411
+            },
+            "profit": 14727739.91,
+            "receivable": 0.0,
+            "sell_count": 496,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 130,
+            "total_return": 14.72773991,
+            "trade_count": 742,
+            "trading_days": 1867
+          }
+        },
+        "persistent50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 932,
+          "path": ".cache/liquidity-universe-20261001/final-b/persistent50m.json",
+          "sha256": "dcc3f424c3ad81a67f8c2e684a0d43cf6461eec198d9753bb645b6facf374280",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 785142.17,
+                "max_drawdown": -0.29563711273334126,
+                "partial_year": false,
+                "profit": -214857.82999999996,
+                "start_nav": 1000000.0,
+                "total_return": -0.21485782999999992,
+                "year": "2019"
+              },
+              {
+                "end_nav": 2476886.32,
+                "max_drawdown": -0.2829443155470347,
+                "partial_year": false,
+                "profit": 1691744.15,
+                "start_nav": 785142.17,
+                "total_return": 2.154697855548887,
+                "year": "2020"
+              },
+              {
+                "end_nav": 3009331.1799999997,
+                "max_drawdown": -0.3643378916955805,
+                "partial_year": false,
+                "profit": 532444.8599999999,
+                "start_nav": 2476886.32,
+                "total_return": 0.2149654005921433,
+                "year": "2021"
+              },
+              {
+                "end_nav": 3072652.33,
+                "max_drawdown": -0.21521822494326337,
+                "partial_year": false,
+                "profit": 63321.15000000037,
+                "start_nav": 3009331.1799999997,
+                "total_return": 0.021041602340358123,
+                "year": "2022"
+              },
+              {
+                "end_nav": 3095251.05,
+                "max_drawdown": -0.48870210016132953,
+                "partial_year": false,
+                "profit": 22598.71999999974,
+                "start_nav": 3072652.33,
+                "total_return": 0.007354792398526877,
+                "year": "2023"
+              },
+              {
+                "end_nav": 5661832.99,
+                "max_drawdown": -0.18476775594457695,
+                "partial_year": false,
+                "profit": 2566581.9400000004,
+                "start_nav": 3095251.05,
+                "total_return": 0.8291999254793889,
+                "year": "2024"
+              },
+              {
+                "end_nav": 12271092.16,
+                "max_drawdown": -0.22979132634588129,
+                "partial_year": false,
+                "profit": 6609259.17,
+                "start_nav": 5661832.99,
+                "total_return": 1.167335592850117,
+                "year": "2025"
+              },
+              {
+                "end_nav": 15727739.91,
+                "max_drawdown": -0.45016643048241434,
+                "partial_year": true,
+                "profit": 3456647.75,
+                "start_nav": 12271092.16,
+                "total_return": 0.28169030962603414,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 246,
+            "cagr": 0.4312370446561291,
+            "cash": 3658143.61,
+            "costs": {
+              "commission": 522719.0,
+              "slippage": 1635661.0,
+              "tax": 552679.0,
+              "total_cost": 2711059.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-21-2634",
+                "mark_date": "2026-09-09",
+                "market_value": 5010860.8,
+                "name": "漢翔",
+                "price": 65.3,
+                "qty": 76736,
+                "stale": false,
+                "stock_id": "2634"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-28-1101",
+                "mark_date": "2026-09-09",
+                "market_value": 4771255.5,
+                "name": "台泥",
+                "price": 24.75,
+                "qty": 192778,
+                "stale": false,
+                "stock_id": "1101"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 2287480.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 4316,
+                "stale": false,
+                "stock_id": "2207"
+              }
+            ],
+            "final_nav": 15727739.91,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 12069596.3,
+            "max_drawdown": -0.48870210016132953,
+            "minimum_cash": 20509.39,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 6,
+              "midpoint_limit_not_crossed": 16,
+              "official_full_session_halt": 1,
+              "overlapping_member": 302,
+              "partial_midpoint_daily_capacity": 338,
+              "residual_exposure_cap": 39,
+              "resource_slots_locked": 1045,
+              "slots_full": 28389
+            },
+            "profit": 14727739.91,
+            "receivable": 0.0,
+            "sell_count": 496,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 130,
+            "total_return": 14.72773991,
+            "trade_count": 742,
+            "trading_days": 1867
+          }
+        },
+        "prior50m": {
+          "completed": true,
+          "deferred_corporate_preparations": 676,
+          "path": ".cache/liquidity-universe-20261001/final-b/prior50m.json",
+          "sha256": "539e778a53efd318a2f756b2445080a4caebf722ae80e6ad43a46ef2e81e1130",
+          "summary": {
+            "annual": [
+              {
+                "end_nav": 729953.32,
+                "max_drawdown": -0.3267123118783529,
+                "partial_year": false,
+                "profit": -270046.68000000005,
+                "start_nav": 1000000.0,
+                "total_return": -0.2700466800000001,
+                "year": "2019"
+              },
+              {
+                "end_nav": 1095849.0799999998,
+                "max_drawdown": -0.3228125651481285,
+                "partial_year": false,
+                "profit": 365895.7599999999,
+                "start_nav": 729953.32,
+                "total_return": 0.5012591216106803,
+                "year": "2020"
+              },
+              {
+                "end_nav": 710612.77,
+                "max_drawdown": -0.503044174865658,
+                "partial_year": false,
+                "profit": -385236.3099999998,
+                "start_nav": 1095849.0799999998,
+                "total_return": -0.3515413910827939,
+                "year": "2021"
+              },
+              {
+                "end_nav": 629160.05,
+                "max_drawdown": -0.20777882870700926,
+                "partial_year": false,
+                "profit": -81452.71999999997,
+                "start_nav": 710612.77,
+                "total_return": -0.11462321455326507,
+                "year": "2022"
+              },
+              {
+                "end_nav": 989241.45,
+                "max_drawdown": -0.1912926675402824,
+                "partial_year": false,
+                "profit": 360081.3999999999,
+                "start_nav": 629160.05,
+                "total_return": 0.5723208267912114,
+                "year": "2023"
+              },
+              {
+                "end_nav": 1212414.1400000001,
+                "max_drawdown": -0.3840118978260627,
+                "partial_year": false,
+                "profit": 223172.69000000018,
+                "start_nav": 989241.45,
+                "total_return": 0.22559981691021957,
+                "year": "2024"
+              },
+              {
+                "end_nav": 2153023.15,
+                "max_drawdown": -0.23291748312998073,
+                "partial_year": false,
+                "profit": 940609.0099999998,
+                "start_nav": 1212414.1400000001,
+                "total_return": 0.7758149455432775,
+                "year": "2025"
+              },
+              {
+                "end_nav": 1095810.22,
+                "max_drawdown": -0.6582131377613869,
+                "partial_year": true,
+                "profit": -1057212.93,
+                "start_nav": 2153023.15,
+                "total_return": -0.4910364897841437,
+                "year": "2026"
+              }
+            ],
+            "buy_count": 247,
+            "cagr": 0.011976454651310364,
+            "cash": 108832.22,
+            "costs": {
+              "commission": 114074.0,
+              "slippage": 341212.0,
+              "tax": 112766.0,
+              "total_cost": 568052.0
+            },
+            "end": "2026-09-09",
+            "final_holdings": [
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-07-30-2207",
+                "mark_date": "2026-09-09",
+                "market_value": 325950.0,
+                "name": "和泰車",
+                "price": 530.0,
+                "qty": 615,
+                "stale": false,
+                "stock_id": "2207"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-08-04-3231",
+                "mark_date": "2026-09-09",
+                "market_value": 350028.0,
+                "name": "緯創",
+                "price": 189.0,
+                "qty": 1852,
+                "stale": false,
+                "stock_id": "3231"
+              },
+              {
+                "date": "2026-09-09",
+                "event_id": "liquid_universe-2026-09-02-3234",
+                "mark_date": "2026-09-09",
+                "market_value": 311000.0,
+                "name": "光環",
+                "price": 200.0,
+                "qty": 1555,
+                "stale": false,
+                "stock_id": "3234"
+              }
+            ],
+            "final_nav": 1095810.22,
+            "final_receivables": [],
+            "initial_cash": 1000000.0,
+            "market_value": 986978.0,
+            "max_drawdown": -0.6582131377613869,
+            "minimum_cash": 23776.28,
+            "partial_or_rejected_orders": {
+              "midpoint_daily_capacity_zero": 10,
+              "midpoint_limit_not_crossed": 15,
+              "official_full_session_halt": 1,
+              "official_zero_volume": 1,
+              "overlapping_member": 294,
+              "partial_midpoint_daily_capacity": 354,
+              "residual_exposure_cap": 891,
+              "resource_cash_locked": 50,
+              "resource_slots_locked": 1005,
+              "slots_full": 33064
+            },
+            "profit": 95810.21999999997,
+            "receivable": 0.0,
+            "sell_count": 520,
+            "stale_final_holdings": 0,
+            "start": "2019-01-02",
+            "stock_cohorts": 134,
+            "total_return": 0.09581021999999995,
+            "trade_count": 767,
+            "trading_days": 1867
+          }
+        }
+      },
+      "report_path": ".cache/liquidity-universe-20261001/final-b/report.json",
+      "report_sha256": "87e867d4e42c5960247b7b89f8cbf85770c8439f404e7b509e2ca632e0e875ab",
+      "source_file_count": 36746,
+      "source_manifest_sha256": "4e3a5d47b6ed2a9e889fe71c367504b815686090dad1205f2d74d10060f74803"
+    }
+  ],
+  "execution_records": 24,
+  "unique_market_histories": 1,
+  "source_attempts": 204,
+  "source_budget": 500,
+  "source_attempt_types": {
+    "odd": 64,
+    "finmind": 136,
+    "notice": 4
+  },
+  "source_attempt_ledger": {
+    "attempts": [
+      "odd:tpex:2019-08-06",
+      "finmind:9935:TaiwanStockPriceLimit",
+      "finmind:9935:TaiwanStockDividend",
+      "odd:twse:2019-08-29",
+      "odd:tpex:2019-11-08",
+      "odd:twse:2019-12-02",
+      "odd:twse:2019-12-03",
+      "odd:twse:2019-12-04",
+      "odd:tpex:2020-07-08",
+      "finmind:1903:TaiwanStockPriceLimit",
+      "odd:tpex:2020-07-09",
+      "finmind:1903:TaiwanStockDividend",
+      "odd:twse:2020-07-31",
+      "finmind:3666:TaiwanStockPriceLimit",
+      "finmind:3666:TaiwanStockDividend",
+      "odd:twse:2020-10-30",
+      "odd:twse:2020-11-02",
+      "odd:twse:2020-11-20",
+      "odd:twse:2020-11-23",
+      "odd:twse:2020-11-24",
+      "odd:twse:2020-11-25",
+      "odd:twse:2020-11-26",
+      "odd:twse:2020-11-27",
+      "odd:tpex:2020-12-16",
+      "odd:tpex:2020-12-28",
+      "odd:twse:2021-01-11",
+      "finmind:3704:TaiwanStockPriceLimit",
+      "finmind:3704:TaiwanStockDividend",
+      "odd:twse:2021-01-13",
+      "odd:tpex:2021-01-21",
+      "odd:tpex:2021-01-22",
+      "odd:tpex:2021-01-25",
+      "odd:twse:2021-03-02",
+      "odd:tpex:2021-06-03",
+      "finmind:4121:TaiwanStockPriceLimit",
+      "odd:tpex:2021-06-04",
+      "finmind:4121:TaiwanStockDividend",
+      "odd:tpex:2021-06-16",
+      "odd:twse:2021-06-17",
+      "odd:tpex:2021-06-18",
+      "odd:tpex:2021-06-21",
+      "finmind:2643:TaiwanStockPriceLimit",
+      "finmind:2643:TaiwanStockDividend",
+      "odd:tpex:2021-07-14",
+      "finmind:1727:TaiwanStockPriceLimit",
+      "finmind:1727:TaiwanStockDividend",
+      "odd:twse:2021-09-17",
+      "odd:twse:2021-09-27",
+      "finmind:5321:TaiwanStockPriceLimit",
+      "odd:tpex:2021-09-28",
+      "finmind:2497:TaiwanStockPriceLimit",
+      "finmind:2497:TaiwanStockDividend",
+      "odd:tpex:2021-12-27",
+      "odd:tpex:2021-12-28",
+      "odd:tpex:2021-12-29",
+      "odd:tpex:2021-12-30",
+      "odd:tpex:2022-01-12",
+      "finmind:2101:TaiwanStockPriceLimit",
+      "finmind:8440:TaiwanStockPriceLimit",
+      "finmind:8440:TaiwanStockDividend",
+      "odd:tpex:2022-05-20",
+      "finmind:2230:TaiwanStockPriceLimit",
+      "finmind:6625:TaiwanStockPriceLimit",
+      "finmind:6625:TaiwanStockDividend",
+      "odd:tpex:2023-06-07",
+      "finmind:3515:TaiwanStockPriceLimit",
+      "finmind:3308:TaiwanStockPriceLimit",
+      "finmind:6585:TaiwanStockPriceLimit",
+      "finmind:8068:TaiwanStockPriceLimit",
+      "finmind:8068:TaiwanStockDividend",
+      "finmind:6530:TaiwanStockPriceLimit",
+      "finmind:6593:TaiwanStockPriceLimit",
+      "finmind:6593:TaiwanStockDividend",
+      "finmind:3055:TaiwanStockPriceLimit",
+      "odd:tpex:2019-12-06",
+      "odd:tpex:2019-12-09",
+      "odd:tpex:2019-12-10",
+      "odd:tpex:2019-12-12",
+      "odd:tpex:2019-12-13",
+      "finmind:3712:TaiwanStockPriceLimit",
+      "finmind:3712:TaiwanStockDividend",
+      "odd:twse:2020-06-23",
+      "odd:twse:2020-09-25",
+      "odd:twse:2020-10-12",
+      "odd:twse:2020-10-13",
+      "odd:twse:2020-10-14",
+      "odd:twse:2020-10-15",
+      "odd:twse:2021-01-14",
+      "finmind:1533:TaiwanStockPriceLimit",
+      "finmind:1533:TaiwanStockDividend",
+      "odd:twse:2021-01-29",
+      "odd:twse:2021-04-28",
+      "finmind:3060:TaiwanStockDividend",
+      "finmind:8277:TaiwanStockDividend",
+      "finmind:1806:TaiwanStockDividend",
+      "finmind:2440:TaiwanStockDividend",
+      "finmind:2612:TaiwanStockDividend",
+      "finmind:2029:TaiwanStockDividend",
+      "finmind:2012:TaiwanStockDividend",
+      "finmind:1612:TaiwanStockDividend",
+      "finmind:6026:TaiwanStockDividend",
+      "finmind:8105:TaiwanStockDividend",
+      "finmind:3031:TaiwanStockDividend",
+      "finmind:1809:TaiwanStockDividend",
+      "finmind:1702:TaiwanStockDividend",
+      "finmind:4952:TaiwanStockDividend",
+      "finmind:1717:TaiwanStockDividend",
+      "finmind:8464:TaiwanStockDividend",
+      "finmind:5392:TaiwanStockDividend",
+      "finmind:4934:TaiwanStockDividend",
+      "finmind:1471:TaiwanStockPriceLimit",
+      "finmind:1471:TaiwanStockDividend",
+      "finmind:8044:TaiwanStockPriceLimit",
+      "finmind:8044:TaiwanStockDividend",
+      "finmind:2642:TaiwanStockPriceLimit",
+      "finmind:2642:TaiwanStockDividend",
+      "odd:twse:2021-05-27",
+      "notice:closure24.pdf",
+      "notice:closure25.pdf",
+      "notice:3293-listing.html",
+      "notice:3293-issuer.html",
+      "finmind:3447:TaiwanStockPriceLimit",
+      "finmind:3447:TaiwanStockDividend",
+      "finmind:2208:TaiwanStockPriceLimit",
+      "finmind:2208:TaiwanStockDividend",
+      "finmind:7734:TaiwanStockPriceLimit",
+      "finmind:7734:TaiwanStockDividend",
+      "odd:tpex:2026-05-25",
+      "finmind:4939:TaiwanStockPriceLimit",
+      "finmind:2634:TaiwanStockPriceLimit",
+      "finmind:1101:TaiwanStockPriceLimit",
+      "finmind:5607:TaiwanStockDividend",
+      "finmind:1710:TaiwanStockDividend",
+      "finmind:4128:TaiwanStockDividend",
+      "finmind:1718:TaiwanStockDividend",
+      "finmind:1709:TaiwanStockDividend",
+      "finmind:3508:TaiwanStockDividend",
+      "finmind:4739:TaiwanStockDividend",
+      "finmind:5522:TaiwanStockDividend",
+      "finmind:6509:TaiwanStockDividend",
+      "finmind:3207:TaiwanStockDividend",
+      "finmind:3138:TaiwanStockDividend",
+      "finmind:3062:TaiwanStockDividend",
+      "finmind:4551:TaiwanStockDividend",
+      "finmind:6603:TaiwanStockDividend",
+      "finmind:4927:TaiwanStockDividend",
+      "finmind:4960:TaiwanStockDividend",
+      "finmind:1711:TaiwanStockDividend",
+      "finmind:6190:TaiwanStockDividend",
+      "finmind:6592:TaiwanStockDividend",
+      "finmind:6118:TaiwanStockDividend",
+      "finmind:3058:TaiwanStockDividend",
+      "finmind:6756:TaiwanStockDividend",
+      "finmind:3010:TaiwanStockDividend",
+      "finmind:3033:TaiwanStockDividend",
+      "finmind:6205:TaiwanStockDividend",
+      "finmind:1725:TaiwanStockDividend",
+      "finmind:3122:TaiwanStockDividend",
+      "finmind:3025:TaiwanStockDividend",
+      "finmind:8070:TaiwanStockDividend",
+      "finmind:3455:TaiwanStockDividend",
+      "finmind:2823:TaiwanStockDividend",
+      "finmind:8182:TaiwanStockDividend",
+      "finmind:3041:TaiwanStockDividend",
+      "finmind:4137:TaiwanStockDividend",
+      "finmind:6208:TaiwanStockDividend",
+      "finmind:5388:TaiwanStockDividend",
+      "finmind:3419:TaiwanStockDividend",
+      "finmind:4961:TaiwanStockDividend",
+      "finmind:8011:TaiwanStockDividend",
+      "finmind:6005:TaiwanStockDividend",
+      "finmind:1611:TaiwanStockDividend",
+      "finmind:8201:TaiwanStockDividend",
+      "finmind:4714:TaiwanStockDividend",
+      "finmind:3419:TaiwanStockPriceLimit",
+      "finmind:4916:TaiwanStockPriceLimit",
+      "odd:twse:2021-11-23",
+      "finmind:4916:TaiwanStockDividend",
+      "finmind:6446:TaiwanStockPriceLimit",
+      "odd:tpex:2021-12-08",
+      "finmind:6266:TaiwanStockPriceLimit",
+      "finmind:4174:TaiwanStockDividend",
+      "finmind:3714:TaiwanStockPriceLimit",
+      "finmind:3714:TaiwanStockDividend",
+      "finmind:2707:TaiwanStockPriceLimit",
+      "finmind:1539:TaiwanStockDividend",
+      "finmind:2070:TaiwanStockDividend",
+      "finmind:3511:TaiwanStockDividend",
+      "finmind:3430:TaiwanStockDividend",
+      "finmind:3581:TaiwanStockDividend",
+      "finmind:3605:TaiwanStockDividend",
+      "finmind:4716:TaiwanStockDividend",
+      "finmind:6548:TaiwanStockDividend",
+      "finmind:6134:TaiwanStockDividend",
+      "finmind:2062:TaiwanStockDividend",
+      "odd:tpex:2024-10-08",
+      "odd:twse:2024-10-18",
+      "odd:tpex:2024-11-04",
+      "finmind:2250:TaiwanStockPriceLimit",
+      "finmind:2250:TaiwanStockDividend",
+      "odd:twse:2024-12-30",
+      "finmind:5426:TaiwanStockPriceLimit",
+      "finmind:6243:TaiwanStockPriceLimit",
+      "finmind:6243:TaiwanStockDividend"
+    ],
+    "maximum": 500
+  },
+  "archived_code": {
+    ".cache/liquidity-universe-20261001/preflight-runner.py": "1580a762a001e33b8b09874a1eb4b938857d7b5223bd8027c6c99b0f57fa43d0",
+    ".cache/liquidity-universe-20261001/prepare-a-runner.py": "700df6e5df4d8182db93152dcfe23748a69e1c8e264c663796891d9b3f9e505b",
+    ".cache/liquidity-universe-20261001/prepare-b-runner.py": "a5ce0c13c737ae458fd7eed1e6c9267ce426a6e4e980911c63768f7e1899775b",
+    ".cache/liquidity-universe-20261001/prepare-b-calendar.py": "7a7b842b53cdaf33d5ac24aeae2d7c918cd8dda2d6a173fdd158452b7de8e1d3"
+  },
+  "attempts_are_not_billed_requests": true,
+  "selection_changed_during_preparation": false,
+  "live_qualified": false,
+  "unseen_validation": false
+}

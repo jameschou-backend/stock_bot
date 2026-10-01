@@ -1,0 +1,145 @@
+{
+  "tests": {
+    "command": "make test",
+    "passed": 4248,
+    "warnings": 36,
+    "seconds": 103.24,
+    "exit_code": 0,
+    "log_file": {
+      "path": ".cache/liquidity-universe-20261001/tests-final2.log",
+      "sha256": "917422203db2f51a384ac619834feabc0353bc8d9d7655984eb6e5c2cc257561"
+    }
+  },
+  "api": {
+    "command": "make api; curl /health, /picks, /models, /jobs?limit=10",
+    "checks": {
+      "health": {
+        "http_status": 200,
+        "valid_json": true,
+        "keys": [
+          "status"
+        ],
+        "items": null
+      },
+      "picks": {
+        "http_status": 200,
+        "valid_json": true,
+        "keys": [
+          "array"
+        ],
+        "items": 20
+      },
+      "models": {
+        "http_status": 200,
+        "valid_json": true,
+        "keys": [
+          "array"
+        ],
+        "items": 10
+      },
+      "jobs?limit=10": {
+        "http_status": 200,
+        "valid_json": true,
+        "keys": [
+          "array"
+        ],
+        "items": 10
+      }
+    }
+  },
+  "pipeline": {
+    "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+    "status": "FinMind 尚未更新 2026/10/1 TAIEX 報酬指數，資料新鮮度檢查正確停止；完整每日驗收未通過",
+    "completed": false,
+    "idempotent_full_run_verified": false,
+    "checks_not_bypassed": true,
+    "attempts": [
+      {
+        "path": ".cache/liquidity-universe-20261001/pipeline-1.log",
+        "sha256": "8e606046f688429f721e3d7e3664139a5808bde558d98d11f49e320b53781814",
+        "exit_code": 2,
+        "completed": false,
+        "reason": "ValueError: 上市／上櫃行情不完整：2026-10-01；請先補齊兩市場行情，再建置特徵、訓練與選股"
+      },
+      {
+        "path": ".cache/liquidity-universe-20261001/pipeline-2.log",
+        "sha256": "f6263d5fb7088f106adfde1796508e1fcb090379567a2ad7f75e613f83e7756a",
+        "exit_code": 2,
+        "completed": false,
+        "reason": "ValueError: 上市／上櫃行情不完整：2026-10-01；請先補齊兩市場行情，再建置特徵、訓練與選股"
+      },
+      {
+        "path": ".cache/liquidity-universe-20261001/pipeline-official.log",
+        "sha256": "0624e7820d3c6b6297eb00cf3421498100515f8032e9208a0b35e40c5accce30",
+        "exit_code": 2,
+        "completed": false,
+        "reason": "ValueError: 上市／上櫃行情不完整：2026-10-01；請先補齊兩市場行情，再建置特徵、訓練與選股"
+      },
+      {
+        "path": ".cache/liquidity-universe-20261001/pipeline-3.log",
+        "sha256": "243aacd1eddf3ade31202d19e4980fbe7cda6215d17d23481abdc26748137bba",
+        "exit_code": 2,
+        "completed": false,
+        "reason": "app.finmind.FinMindError: TAIEX 報酬指數尚未更新至 2026-10-01"
+      },
+      {
+        "path": ".cache/liquidity-universe-20261001/pipeline-4.log",
+        "sha256": "4d10e0654145cb031d8fbf56b7200d6f3f2e044e0005a9b5de607fcea56fffc2",
+        "exit_code": 2,
+        "completed": false,
+        "reason": "app.finmind.FinMindError: TAIEX 報酬指數尚未更新至 2026-10-01"
+      }
+    ],
+    "latest_source_probe": {
+      "checked_at": "2026-10-01T15:41:24.853920+08:00",
+      "source": "FinMind TaiwanStockTotalReturnIndex",
+      "target_date": "2026-10-01",
+      "last_date": "2026-09-30",
+      "rows": 265
+    }
+  },
+  "local_today_tpex_catchup": {
+    "source_url": "https://www.tpex.org.tw/www/zh-tw/afterTrading/dailyQuotes",
+    "source_date": "2026-10-01",
+    "source_sha256": "2f06fdc74ed5d9dcde1aa1ee16f057ce12884828b8d6e89337cf7be88aaffb13",
+    "database": "stock_bot",
+    "normalized_rows": 864,
+    "accepted": 864,
+    "existing_identical": 0,
+    "missing": 864,
+    "excluded": [],
+    "apply": true,
+    "inserted": 864,
+    "frozen_study_unchanged": true,
+    "post_read_verified": 864
+  },
+  "frozen_historical_replay": {
+    "final-a": {
+      "path": ".cache/liquidity-universe-20261001/final-a/report.json",
+      "sha256": "703f496cf43e7739829773a4369c284f64688f64b0a0956bbbde422f9373aa70",
+      "cases": 5,
+      "all_completed": true,
+      "offline": true,
+      "log_file": {
+        "path": ".cache/liquidity-universe-20261001/final-a.log",
+        "sha256": "30d5f10802b0c8b7d7099e9efd0431ffb5ca3844ca92c373aabec25e9250d5f5"
+      }
+    },
+    "final-b": {
+      "path": ".cache/liquidity-universe-20261001/final-b/report.json",
+      "sha256": "87e867d4e42c5960247b7b89f8cbf85770c8439f404e7b509e2ca632e0e875ab",
+      "cases": 5,
+      "all_completed": true,
+      "offline": true,
+      "log_file": {
+        "path": ".cache/liquidity-universe-20261001/final-b.log",
+        "sha256": "30d5f10802b0c8b7d7099e9efd0431ffb5ca3844ca92c373aabec25e9250d5f5"
+      }
+    }
+  },
+  "production_ingest_code_changed": false,
+  "production_pipeline_code_changed": false,
+  "live_orders_sent": false,
+  "schedules_enabled": false,
+  "live_qualified": false
+}
