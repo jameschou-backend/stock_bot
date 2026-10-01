@@ -1,0 +1,53 @@
+{
+  "diagnosis_sha256": "a2c2502af595afc38b5e5f399dc09cf8ce00008e20ec48fe58f9ce172eaac812",
+  "descriptive_only": true,
+  "new_backtest": false,
+  "parameters_changed": false,
+  "repeat_output_byte_identical": true,
+  "test": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 4230,
+    "warnings": 36,
+    "duration_seconds": 123.76
+  },
+  "pipeline": {
+    "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+    "exit_code": 0,
+    "runs_this_change": 1
+  },
+  "api": {
+    "command": "make api",
+    "checks": [
+      {
+        "endpoint": "/health",
+        "status": 200,
+        "json_valid": true
+      },
+      {
+        "endpoint": "/picks",
+        "status": 200,
+        "json_valid": true
+      },
+      {
+        "endpoint": "/models",
+        "status": 200,
+        "json_valid": true
+      },
+      {
+        "endpoint": "/jobs?limit=10",
+        "status": 200,
+        "json_valid": true
+      }
+    ],
+    "terminated_owned_pid_after_success": 21122,
+    "termination_signal": "SIGTERM"
+  },
+  "compile_check": {
+    "command": "python -m py_compile scripts/diagnose_signal_losses.py",
+    "exit_code": 0
+  },
+  "env_file_modified": false,
+  "scheduler_enabled": false,
+  "live_qualified": false
+}
