@@ -1,0 +1,62 @@
+{
+  "test": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 4234,
+    "warnings": 36,
+    "seconds": 98.7
+  },
+  "pipeline": {
+    "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+    "exit_code": 0
+  },
+  "api": {
+    "command": "make api",
+    "checks": [
+      {
+        "endpoint": "/health",
+        "status": 200,
+        "json_valid": true
+      },
+      {
+        "endpoint": "/picks",
+        "status": 200,
+        "json_valid": true
+      },
+      {
+        "endpoint": "/models",
+        "status": 200,
+        "json_valid": true
+      },
+      {
+        "endpoint": "/jobs?limit=10",
+        "status": 200,
+        "json_valid": true
+      }
+    ],
+    "owned_server_pid": 23852
+  },
+  "independent_runs_byte_identical": [
+    "report.json",
+    "signals.parquet"
+  ],
+  "engine_elapsed_seconds": [
+    2.9955383338965476,
+    3.4049942090641707
+  ],
+  "market_requests_in_new_study": 0,
+  "comparisons_per_run": 5,
+  "recorded_trials": 10,
+  "report_sha256": "3e6169925d6f7b7702f0948c4afc8f72faacee5f55df759e2a5246f7011bb2e2",
+  "causal_tests_passed": 4,
+  "real_data_prefix_cutoff": "2025-12-31",
+  "external_repo": {
+    "url": "https://github.com/whchien/ai-trader",
+    "commit": "7681fe331fb638beab1ae20d3552c802bbaa9174",
+    "executed": false
+  },
+  "strategy_changed": false,
+  "env_file_changed": false,
+  "scheduler_enabled": false,
+  "live_qualified": false
+}

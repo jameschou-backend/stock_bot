@@ -1,0 +1,212 @@
+[
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "all",
+    "output": ".cache/liquidity-screen-20261001/run-a",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "median50m",
+    "output": ".cache/liquidity-screen-20261001/run-a",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "prior50m",
+    "output": ".cache/liquidity-screen-20261001/run-a",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "persistent50m",
+    "output": ".cache/liquidity-screen-20261001/run-a",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "breadth_rising",
+    "output": ".cache/liquidity-screen-20261001/run-a",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "all",
+    "output": ".cache/liquidity-screen-20261001/run-b",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "median50m",
+    "output": ".cache/liquidity-screen-20261001/run-b",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "prior50m",
+    "output": ".cache/liquidity-screen-20261001/run-b",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "persistent50m",
+    "output": ".cache/liquidity-screen-20261001/run-b",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  },
+  {
+    "source": "liquidity_screen_association_20261001",
+    "arm": "breadth_rising",
+    "output": ".cache/liquidity-screen-20261001/run-b",
+    "completed": true,
+    "portfolio_backtest": false,
+    "descriptive_only": true,
+    "source_sha256": {
+      ".cache/partial-risk-2019-20260929/inputs-final/close-official.parquet": "de37a0b40c3069108b846a9ba0cf8c5db7f291b4b5bd5025e47adc664970d5e6",
+      ".cache/partial-risk-2019-20260929/inputs-final/eligibility.parquet": "1c49635bfae3c05bf037c74f705f10e3f8c92ae91478e5cf186a6b8886ccf481",
+      ".cache/partial-risk-2019-20260929/inputs-final/quotes-unmasked.parquet": "42e364d930b139cb37c4cb633a5e78247103a1d16a79aa237027ee00ea419a13",
+      "artifacts/forward_simulation/independent_signals_20261001/signals.parquet": "69a44df6742e63997a2c944bbead8dd0c2c0589d270619dba0fbb8cde1ca7a11",
+      "artifacts/forward_simulation/independent_signals_20261001/report.json": "8ef450f782f730b7a5289ffef6745681c9370e8833dc1dea3a201310af433ee5",
+      "docs/prereg_liquidity_screen_20261001.md": "63d497f5d3118e122ac3ea60cb2be8049b9aa86b4afe7c9de2ea4bbd894853bd",
+      "skills/liquidity_diagnostics.py": "467d065b658045a479edd1afceed809c1d4550f8c13eee090e5436823dea9c09",
+      "scripts/research_liquidity_screen.py": "b56083c4dba57b93528f45e441d29f1a7652b7237d3901d8581d2d867e4f1bdd",
+      "scripts/diagnose_signal_losses.py": "afd0bc84eab8946fa781ae3f1d7160850424588ebdd79dd7dc52fee481e3cff8"
+    },
+    "unseen_validation": false,
+    "live_qualified": false
+  }
+]
