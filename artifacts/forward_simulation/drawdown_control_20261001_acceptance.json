@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-01",
+  "make_test": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 4255,
+    "warnings": 36,
+    "duration_seconds": 99.11
+  },
+  "pipeline": [
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "log": ".cache/drawdown-control-20261001/pipeline-accepted-1.log"
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "log": ".cache/drawdown-control-20261001/pipeline-accepted-2.log"
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "log": ".cache/drawdown-control-20261001/pipeline-final.log",
+      "after_final_code_integration": true
+    }
+  ],
+  "api": {
+    "default_launch": {
+      "command": "make api",
+      "result": "port8000 already occupied; existing server preserved"
+    },
+    "port8000": {
+      "health": {
+        "status": "200",
+        "path": ".cache/drawdown-control-20261001/api-health.json",
+        "sha256": "d37208a9be5dfe712a7ee54fdce2f1b0a006ec021754f2c3b70e2d55d6fb585e",
+        "top_keys": [
+          "status"
+        ]
+      },
+      "picks": {
+        "status": "200",
+        "path": ".cache/drawdown-control-20261001/api-picks.json",
+        "sha256": "767d996ec7b16a13ab6b2621aef4f57f9f92a60c93132a1cfcd71ed111f85d38",
+        "top_keys": "list"
+      },
+      "models": {
+        "status": "200",
+        "path": ".cache/drawdown-control-20261001/api-models.json",
+        "sha256": "0506638d9698c6d57a3e00eb6a7c51140aaff9799559a24f4027558b0a6d6ab4",
+        "top_keys": "list"
+      },
+      "jobs?limit=10": {
+        "status": "200",
+        "path": ".cache/drawdown-control-20261001/api-jobs.json",
+        "sha256": "98061d0eabea443ec7879c09f9b60435f161828387949d084287e520262989fd",
+        "top_keys": "list"
+      }
+    },
+    "fresh_process": {
+      "command": "API_PORT=8001 make api",
+      "verified": {
+        "port": 8001,
+        "results": {
+          "health": {
+            "status": 200,
+            "body_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+          },
+          "picks": {
+            "status": 200,
+            "body_sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+          },
+          "models": {
+            "status": 200,
+            "body_sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+          },
+          "jobs?limit=10": {
+            "status": 200,
+            "body_sha256": "7df577c01410a465165e885f2321ba3d56f0e8908da1fd11ca51587f53151140"
+          }
+        }
+      },
+      "stopped_after_validation": true
+    },
+    "final_checks": {
+      "command": "API_PORT=8001 make api",
+      "pid": 70109,
+      "results": {
+        "8001": {
+          "health": {
+            "status": 200,
+            "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+            "path": ".cache/drawdown-control-20261001/api-final-8001-health.json"
+          },
+          "picks": {
+            "status": 200,
+            "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+            "path": ".cache/drawdown-control-20261001/api-final-8001-picks.json"
+          },
+          "models": {
+            "status": 200,
+            "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+            "path": ".cache/drawdown-control-20261001/api-final-8001-models.json"
+          },
+          "jobs?limit=10": {
+            "status": 200,
+            "sha256": "ce5a6b3551a863d90fe1ce35d72a53ab34e5165df2a6d70519e2ec2550d1c831",
+            "path": ".cache/drawdown-control-20261001/api-final-8001-jobs.json"
+          }
+        },
+        "8000": {
+          "health": {
+            "status": 200,
+            "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+            "path": ".cache/drawdown-control-20261001/api-final-8000-health.json"
+          },
+          "picks": {
+            "status": 200,
+            "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+            "path": ".cache/drawdown-control-20261001/api-final-8000-picks.json"
+          },
+          "models": {
+            "status": 200,
+            "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+            "path": ".cache/drawdown-control-20261001/api-final-8000-models.json"
+          },
+          "jobs?limit=10": {
+            "status": 200,
+            "sha256": "ce5a6b3551a863d90fe1ce35d72a53ab34e5165df2a6d70519e2ec2550d1c831",
+            "path": ".cache/drawdown-control-20261001/api-final-8000-jobs.json"
+          }
+        }
+      },
+      "existing8000_preserved": true
+    },
+    "final_test_process_stopped": true
+  },
+  "historical_gap_note": "Prior 2026-10-01 TAIEX freshness failure is resolved by these two completed pipeline runs. Historical research and live qualification remain separate.",
+  "source_sha256": {
+    ".cache/drawdown-control-20261001/tests-accepted.log": "f7e6cef55d45fb075a676ffa29284ca36e6d07ea6105a92e2da1bdfb7e6f25e8",
+    ".cache/drawdown-control-20261001/pipeline-accepted-1.log": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c",
+    ".cache/drawdown-control-20261001/pipeline-accepted-2.log": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c",
+    ".cache/drawdown-control-20261001/api.log": "104037a0a7553c2f121037b4d949978833c9783e402dc447dbe6dc102b2a8642",
+    ".cache/drawdown-control-20261001/api-checks.json": "578ac9d28e093fbf765543dca87ae1a7b5657331d827fd49535918f42ad810c2",
+    ".cache/drawdown-control-20261001/api-fresh-process.json": "f4cd161e7525eb4cb91ecd6b082ae21c6b6ffbbccf4856f4eb2220d7e52535f1",
+    ".cache/drawdown-control-20261001/tests-final.log": "81b90322ce73703a46a05e602145ffba9822964096ba7b978ebe447dae7b50e6",
+    ".cache/drawdown-control-20261001/pipeline-final.log": "6fafebb926f9866049387a6c2a06f876f1b6b5be6b230b85129d9bc88b8c3cef",
+    ".cache/drawdown-control-20261001/api-final.log": "9138822dc7f86d053070ff62ad511999c8b949375958db8c9c687da282d689ef",
+    ".cache/drawdown-control-20261001/api-final-checks.json": "10837abdc4092d5bd7136830dfb5430232af25fa615b1dd95524c51305d8c277",
+    ".cache/drawdown-control-20261001/api-final-8001-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/drawdown-control-20261001/api-final-8001-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/drawdown-control-20261001/api-final-8001-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/drawdown-control-20261001/api-final-8000-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/drawdown-control-20261001/api-final-8000-jobs.json": "ce5a6b3551a863d90fe1ce35d72a53ab34e5165df2a6d70519e2ec2550d1c831",
+    ".cache/drawdown-control-20261001/api-final-8000-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/drawdown-control-20261001/api-final-8000-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/drawdown-control-20261001/api-final-8001-jobs.json": "ce5a6b3551a863d90fe1ce35d72a53ab34e5165df2a6d70519e2ec2550d1c831"
+  },
+  "live_qualified": false,
+  "schedules_started": false,
+  "real_orders_submitted": false,
+  "focused_tests": {
+    "count": 42,
+    "duration_seconds": 1.83,
+    "pending_delivery_boundary": "2026-09-09 accepted;2026-09-10 rejected"
+  }
+}
