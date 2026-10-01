@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-02",
+  "make_test": {
+    "command": "make test",
+    "passed": 4291,
+    "warnings": 36,
+    "duration_seconds": 85.21,
+    "exit_code": 0
+  },
+  "pipeline": [
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "log": ".cache/three-black-return-audit-20261002/pipeline-1.log",
+      "exit_code": 0
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "log": ".cache/three-black-return-audit-20261002/pipeline-2.log",
+      "exit_code": 0
+    }
+  ],
+  "api": {
+    "command": "API_PORT=8001 make api",
+    "results": {
+      "8001": {
+        "health": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8001-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8001-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8001-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8001-jobs.json",
+          "sha256": "afe6e6b32262cc8a4ee141af41baf2fefc02f9820a8b0420e32dada77e55d230"
+        }
+      },
+      "8000": {
+        "health": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8000-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8000-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8000-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/three-black-return-audit-20261002/api-readonly-final-8000-jobs.json",
+          "sha256": "afe6e6b32262cc8a4ee141af41baf2fefc02f9820a8b0420e32dada77e55d230"
+        }
+      }
+    },
+    "existing8000_preserved": true,
+    "pid": 8903,
+    "fresh_process_stopped": true
+  },
+  "focused_tests": 18,
+  "scope": "Independent audit of existing fixed trades; no new strategy hypothesis or production execution change",
+  "audit": {
+    "ledger_reconciled": true,
+    "strict_decimal_costs_match": false,
+    "monetary_precision_findings": 4,
+    "fixed_fills_final_nav_unchanged": true
+  },
+  "source_sha256": {
+    ".cache/three-black-return-audit-20261002/make-test-final.log": "0f4dd6bce04538a4cdfacd264044096a64829ac3f78febf9cb151ff4126a92e8",
+    ".cache/three-black-return-audit-20261002/pipeline-1.log": "80ea1d56e916bb9fbeab5364048cda1a2bda154236cc0df4ddd636c305d76cdd",
+    ".cache/three-black-return-audit-20261002/pipeline-2.log": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c",
+    ".cache/three-black-return-audit-20261002/final-audit.log": "1a669bb6fb9ce69dbc4fa95d5ce1dfcc206bc0a0ba78a2ff9ef22a1816dd553c",
+    ".cache/three-black-return-audit-20261002/verify_api.py": "de73a584a6cf4f8515405aa872ac4efa7fef9295ef2f8e8bb3de100b9897a7f5",
+    ".cache/three-black-return-audit-20261002/api-readonly-final-checks.json": "14f97be566c05791a8a941ec35089f4259a2e0d07bba76c4a956c3a20cedde9d",
+    "artifacts/forward_simulation/three_black_return_audit_20261002.json": "4286876762e480512dbeac243665a3c735c8c5c188cafee6077e6b8de98a0365",
+    "skills/return_claim_audit.py": "8a88abd8f09bee6b262e0d2ae3c2699cdf07d696986ea7280d1f57873fd8ad88",
+    "scripts/audit_three_black_return.py": "2ea15a67b38c8a975b7e7beb26604c41a9d181e0063eec7617d53df895788dd9",
+    "tests/test_return_claim_audit.py": "ce729de641a51fe109ae5a012e2049a90d1eddf9efaae1f110e0e3b3a8e4d7bf",
+    "docs/three_black_return_audit_20261002.md": "ce23f5c2796bbe3bdf668252ecf3909894b48b062c8e4a03cf51fe43ab7b3595"
+  },
+  "live_qualified": false,
+  "actual_fill_verified": false
+}
