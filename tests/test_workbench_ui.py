@@ -73,6 +73,10 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
             s.commit()
     monkeypatch.setattr(ui,'get_session',session)
     monkeypatch.setattr(service,'get_session',session)
+    # strategy_evidence() reads report overviews independently of the render
+    # functions patched below. Keep both paths off machine-local sealed data;
+    # source verification belongs to the dedicated research-report tests.
+    monkeypatch.setattr(service,'ROOT',tmp_path)
     monkeypatch.setattr(ui,'status_data',lambda:{'price_date':'2026-09-08',
         'quota':{'requests_in_window':20,'remaining_requests':5380,'retry_after_seconds':0},
         'problems':[],'data_ready':True,'markets':[],'adjustment_note':'待對帳'})
