@@ -1,0 +1,55 @@
+{
+  "schema": "official_nonordinary_classification_v1",
+  "entries": [
+    {
+      "stock_id": "9157",
+      "name": "陽光能源",
+      "market": "TWSE",
+      "category": "臺灣存託憑證(TDR)",
+      "start": "2009-12-11",
+      "end": "2019-11-12",
+      "interval": "start_inclusive_end_exclusive",
+      "classification_basis": "visually_reviewed_official_annual_report_and_official_delisting_table",
+      "listing": {
+        "raw_path": ".cache/listing-continuation-20260924/twse/annual98.pdf",
+        "raw_sha256": "47a4def2d2bfe7cea08aaa52cefa113a8babce9db9870d7926c6287b4b6f4bfc",
+        "receipt_path": ".cache/listing-continuation-20260924/twse/annual98.source.json",
+        "receipt_sha256": "bb2e0045ac7e3f267ccc8d20f531626fc698cc3e6e16c72a75c74f8547f2727e",
+        "http_status_evidence": "recorded_http_200",
+        "pdf_page": 18,
+        "printed_page": 33,
+        "table_title": "上市臺灣存託憑證（合計10家）",
+        "source_row": [
+          "9157",
+          "陽光能源",
+          "Solargiga Energy Holdings limited",
+          "98/12/11"
+        ]
+      },
+      "delisting": {
+        "raw_path": ".cache/readiness-remediation-20260914/twse-delisted.json",
+        "raw_sha256": "b5e2c7a94e40503482d9d74e8be9c0e7ed9df58fd14805b90d63e7c3f47bcd50",
+        "receipt_path": ".cache/readiness-remediation-20260914/twse-delisted-source.json",
+        "receipt_sha256": "6ed72f5807d48562c5a351d8fd502597f6074f1b3f1c1d9f6e3a73e40a370edc",
+        "http_status_evidence": "legacy_status_unknown",
+        "end_basis": "official_DelistingDate_exclusive",
+        "source_row": {
+          "DelistingDate": "108/11/12",
+          "Company": "陽光能源-DR",
+          "Code": "9157"
+        }
+      }
+    }
+  ],
+  "source_sha256": {
+    ".cache/listing-continuation-20260924/twse/annual98.pdf": "47a4def2d2bfe7cea08aaa52cefa113a8babce9db9870d7926c6287b4b6f4bfc",
+    ".cache/listing-continuation-20260924/twse/annual98.source.json": "bb2e0045ac7e3f267ccc8d20f531626fc698cc3e6e16c72a75c74f8547f2727e",
+    ".cache/readiness-remediation-20260914/twse-delisted.json": "b5e2c7a94e40503482d9d74e8be9c0e7ed9df58fd14805b90d63e7c3f47bcd50",
+    ".cache/readiness-remediation-20260914/twse-delisted-source.json": "6ed72f5807d48562c5a351d8fd502597f6074f1b3f1c1d9f6e3a73e40a370edc"
+  },
+  "live_qualified": false,
+  "complete_historical_universe": false,
+  "publication_time_archive_complete": false,
+  "scope": "Retrospective nonordinary classification only; preserve original frozen identity, prices and observations.",
+  "boundary_note": "The start is the listing date printed under the annual report TDR table. The exclusive end is the official DelistingDate. No classification is inferred before listing, on or after delisting, for reused codes, or for other instruments."
+}

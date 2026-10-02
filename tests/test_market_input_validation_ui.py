@@ -70,3 +70,19 @@ def test_read_only_panel_keeps_incomplete_scope_visible(tmp_path):
 
 def test_missing_sources_are_unavailable_not_an_empty_success(tmp_path):
     assert not ui.overview(tmp_path)['available']
+
+
+def test_supplement_counts_render_without_promoting_qualification(tmp_path):
+    value, _ = fixture_report(tmp_path)
+    value.update(schema='market_input_validation_v2', supplement=dict(
+        added_source_days=3, source_count=3, legacy_status_unknown=1))
+    save(tmp_path/ui.REPORT, value)
+    app = AppTest.from_string(
+        'from pathlib import Path\nfrom app.market_input_validation_ui import render\n'
+        f'render(Path({str(tmp_path)!r}))').run()
+    assert not app.exception
+    assert any('新增核對 3 張' in item.value for item in app.info)
+    assert any('不能因此視為可實戰' in item.value for item in app.warning)
+    value['supplement']['added_source_days'] = 4
+    save(tmp_path/ui.REPORT, value)
+    assert not ui.overview(tmp_path)['available']

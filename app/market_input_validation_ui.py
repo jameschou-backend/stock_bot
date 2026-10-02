@@ -42,12 +42,18 @@ def load(root=ROOT,path=REPORT):
         signatures = {p:_file_signature(p,root) for p in (path,sidecar)}
         require(_digest(path) == sidecar.read_text().strip(), '核對報告內容變動，須重新核對')
         value = json.loads(path.read_text())
-        require(value.get('schema') == 'market_input_validation_v1', '不支援此資料核對版本')
+        require(value.get('schema') in ('market_input_validation_v1', 'market_input_validation_v2'), '不支援此資料核對版本')
         require(all(value.get(k) is False for k in ('live_qualified','actual_fill_verified','unseen_validation','return_recomputed')),
                 '資料核對不得提升實戰資格或冒稱重算報酬')
         require(set(value['checks']) == set(CHECK_NAMES) and all(type(v) is bool for v in value['checks'].values()),
                 '核對項目不完整')
         require(value['complete_verified_data'] is all(value['checks'].values()), '資料完整狀態不一致')
+        if value['schema'] == 'market_input_validation_v2':
+            supplement = value.get('supplement', {})
+            require(all(type(supplement.get(k)) is int and supplement[k] >= 0 for k in (
+                'added_source_days', 'source_count', 'legacy_status_unknown'))
+                and supplement['added_source_days'] <= supplement['source_count']
+                and supplement['legacy_status_unknown'] <= supplement['source_count'], '補件數量不一致')
         for c in value['coverage'].values():
             if 'verified' in c:
                 require(type(c['required']) is int and type(c['verified']) is int
@@ -77,6 +83,7 @@ def overview(root=ROOT):
         missing_market_days=value['requests_lower_bound'],checks=value['checks'],repair_summary=value['repair_summary'],
         candidate_count=value['identity']['candidate_count'],
         candidate_identity_issues=len(value['identity']['candidate_issues']),
+        supplement=value.get('supplement') if value['schema'] == 'market_input_validation_v2' else None,
         observed_price_conflicts=len(value['price_conflicts']),report=str(REPORT))
 
 
@@ -88,6 +95,11 @@ def render(root=ROOT):
         st.warning(value['note'])
         return
     st.caption(f"三黑K策略來源：{value['start']} ～ {value['end']}；這是資料核對，不是新的績效回測。")
+    if value['supplement']:
+        supplement = value['supplement']
+        st.info(f"本次新增核對 {supplement['added_source_days']:,} 張官方市場日表。")
+        if supplement['legacy_status_unknown']:
+            st.caption(f"其中 {supplement['legacy_status_unknown']} 張沿用早期官方快取，已核對原始檔與來源；舊收據未記錄 HTTP 狀態。")
     if not value['complete_verified_data']:
         st.warning('部分官方資料已核對，尚未完成全期間驗證。不能因此視為可實戰。')
     repairs = value['repair_summary']
