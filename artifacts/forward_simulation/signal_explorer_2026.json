@@ -1,0 +1,70 @@
+{
+  "schema": "signal_explorer_publication_v1",
+  "created_at": "2026-10-02T17:45:15.331933+00:00",
+  "output_html": "artifacts/reports/signal_explorer_2026.html",
+  "output_html_sha256": "51e6d1b4a9f5e74be2e03af7e05a8c4bcff6085119c2026cb8e963f013ff3b8c",
+  "html_bytes": 23208860,
+  "date_start": "2026-01-02",
+  "date_end": "2026-10-02",
+  "signal_count": 4612,
+  "stock_count": 771,
+  "market_day_count": 181,
+  "price_rows": 232071,
+  "invalid_price_rows": 1090,
+  "source_sha256": {
+    ".cache/signal-explorer-20261003/receipt.json": "7380a4ce00a23bfd388b13e5fe8b5ebd39fde98caac0860606ae9c75acc20d9b",
+    ".cache/signal-explorer-20261003/receipt.sha256": "e484b841eda7f148ab4eab9b0a943aec87324edaffaf65a880887440794c4ad6",
+    ".cache/signal-explorer-20261003/review/final-review.json": "37276d2acc18974b5d6c15ff5929ff3e8840443b3b63d1a784c37af6b5bfc859",
+    ".cache/signal-explorer-20261003/review/final-review.sha256": "76bf4d1730e72af34e1f45a21393474ebabf518e725aa106c2500e1e2fe8f068",
+    ".cache/signal-explorer-20261003/browser-qa.json": "c6d2617a21678120ece92a18bbb5115452b5ddcace1e97c067af4d97108d316f",
+    ".cache/signal-explorer-20261003/make-test.log": "8bb45aebea71f136cc5764e3905c632e3412a281cb151768d0889e2a04a43219",
+    ".cache/signal-explorer-20261003/pipeline-build.log": "2114773f6137c646139a3ac9bdbcf8c6813cafb66d144e26b328c3da2c527606",
+    ".cache/signal-explorer-20261003/pipeline-full-guarded.log": "60ddcbab174325b1716ccf542668408f87ab249cd1ce39d1cde6b4c2c92c99b3",
+    ".cache/signal-explorer-20261003/api-start.log": "e423d85cdb24e803d7ca901db1fef0f692ac44ad7f3930a917d9af5eaf990519",
+    ".cache/signal-explorer-20261003/api-checks.json": "bf6dfbda3c87ef26d8b80326d7a28ef06f2b57e0ea904ab083c1dd70934601f5",
+    "scripts/export_signal_explorer.py": "6458ea34f11f03721cd5c0be51df870e8ceb2fb804390434d072966071e30c51",
+    "tests/test_signal_explorer_data.py": "426e18a6cf197188669efef36a7fcaca89df1e36f38284961231614108809a39",
+    "ui/signal_explorer.html": "03d53c1edcc2b415d47c9e997697d7e542909d32758797a439f877f1d67a69ec",
+    "docs/signal_explorer_2026.md": "e3450a67a34608c4085eedbcb7cd4f8bf82e31284a67cb4fa59350e860b20bf9"
+  },
+  "validation": {
+    "tests_passed": 4802,
+    "test_warnings": 37,
+    "focused_data_tests": 11,
+    "pipeline_build": "passed",
+    "full_pipeline": "blocked_before_http_by_local_guard_to_preserve_official_source_holds",
+    "api_start": "existing_port_in_use",
+    "existing_api_http_checks": {
+      "health": {
+        "http_status": "200",
+        "exit_code": 0,
+        "bytes": 15
+      },
+      "picks": {
+        "http_status": "200",
+        "exit_code": 0,
+        "bytes": 11311
+      },
+      "models": {
+        "http_status": "200",
+        "exit_code": 0,
+        "bytes": 13875
+      },
+      "jobs?limit=10": {
+        "http_status": "200",
+        "exit_code": 0,
+        "bytes": 6921
+      }
+    },
+    "independent_review": "passed",
+    "browser_qa": "passed_desktop"
+  },
+  "publication": {
+    "generated_html_ignored": true,
+    "source_template_exporter_and_tests_tracked": true,
+    "push": "deferred_existing_ahead_ingest_commits_require_full_pipeline_gate"
+  },
+  "live_qualified": false,
+  "cash_account": false,
+  "performance_recomputed": false
+}
