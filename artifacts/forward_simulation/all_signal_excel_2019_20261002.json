@@ -1,0 +1,319 @@
+{
+  "schema": "independent_signal_excel_acceptance_v1",
+  "created_at": "2026-10-02T09:52:58.280408+00:00",
+  "metadata": {
+    "strategy_name": "60日突破＋出量＋成交值中位數5,000萬＋三黑K出場",
+    "requested_start": "2019-01-01",
+    "requested_end": "2026-10-02",
+    "data_through": "2026-10-02",
+    "first_signal": "2019-02-21",
+    "last_signal": "2026-10-02",
+    "entry_price_method": "下一交易日日高低中點（HL2）假設成交",
+    "exit_price_method": "出場訊號隔交易日日高低中點（HL2）假設成交",
+    "entry_rule": [
+      "四碼個股，排除ETF與正二；使用本次固定歷史股票池及當時上市、可交易身分。",
+      "至少126個交易日的上市與品質觀察，至少100個有效基準共同報酬日。",
+      "最近20交易日估算成交值（原始收盤價×成交股數）的平均、中位數均至少5,000萬元，含訊號日。",
+      "當日還原收盤嚴格突破前60交易日的最高還原收盤，不含當日。",
+      "個股20日漲幅大於0，且高於0050同期漲幅。",
+      "當日成交股數至少為前20交易日平均的1.5倍，均量不含當日。",
+      "0050當日還原收盤高於最近120個有效觀察收盤的平均。",
+      "收盤資料完成後確認訊號；下一市場交易日以日高低中點假設買入。",
+      "本版本未直接使用新聞題材、基本面、法人連買或籌碼集中條件。"
+    ],
+    "exit_rule": [
+      "第一順位：還原收盤相對買進當日的還原收盤下跌至少12%，隔交易日賣出。停損錨點不是高低中點買價。",
+      "第二順位：買進索引+62日收盤確認到期，買進索引+63日賣出。經過63交易日，含買賣日共64日。",
+      "第三順位：連續三根原始收盤低於開盤的黑K，且各日還原收盤都低於前日；三根K均須在持有期間，下一交易日賣出。",
+      "以上最先成立的原因鎖定；不使用未收盤資料，不以最後一天強制賣出未到期訊號。"
+    ],
+    "fee_rule": "每邊佣金0.1425%、滑價0.45%，賣出稅0.3%。比例單位試算，未計最低手續費及整股／零股捨入。",
+    "win_rate_definition": "扣費後獲利筆數／資料可判定且已出場筆數；未出場、待賣、未買、資料不足不列分母。",
+    "mfe_definition": "日線最高漲幅上界包含買賣日，無法判斷當日高點在成交前或後，不代表可實得報酬。最高收盤排除賣出日；完整持有日最高價另排除買进日。",
+    "limitations": [
+      "同一股票不同訊號日各自獨立買入，允許重疊。取消資金、名額、重複持股限制，並未驗證每筆理想成交。",
+      "這是選股訊號研究，單筆平均報酬不可加總或複利成帳戶績效。",
+      "原始價用於呈現買賣點；報酬以還原價比例處理除權息與分割，沒有重建股利付款、配股交付或資金可用日。",
+      "歷史股票池不是完整歷史全市場；歷史來源也不是當年首次發布版本，不能宣稱無存活者偏誤或未見期間驗證。",
+      "9/10之後使用FinMind還原價銜接封存尺度，尚未完成同期間官方公司行動與行情交叉核對。",
+      "日線中點可成交、漲跌停排隊、普通盤／零股容量均未逐筆驗證。資料不足保留明細並不計勝率。"
+    ],
+    "source_bundle": ".cache/all-signals-2019-20261002/inputs",
+    "fee_commission": 0.001425,
+    "fee_slippage": 0.0045,
+    "fee_sell_tax": 0.003,
+    "no_capital_limit": true,
+    "no_position_limit": true,
+    "live_qualified": false,
+    "actual_fill_verified": false
+  },
+  "summary": {
+    "total": 30188,
+    "stocks": 1329,
+    "closed": 29749,
+    "win": 9832,
+    "loss": 19917,
+    "flat": 0,
+    "win_rate": 0.33049850415140003,
+    "mean_net_return": 0.009480209440021233,
+    "median_net_return": -0.04442895337990871,
+    "mean_holding_days": 17.812397055363206,
+    "open": 259,
+    "pending_exit": 7,
+    "unresolved": 152,
+    "not_entered": 21,
+    "exits": {
+      "loss12": 4451,
+      "time63": 1139,
+      "three_black": 24159
+    }
+  },
+  "annual": {
+    "2019": {
+      "total": 2498,
+      "stocks": 432,
+      "closed": 2468,
+      "win": 790,
+      "loss": 1678,
+      "flat": 0,
+      "win_rate": 0.320097244732577,
+      "mean_net_return": -0.009310318298744902,
+      "median_net_return": -0.03586557623514447,
+      "mean_holding_days": 21.671799027552673,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 30,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 261,
+        "time63": 146,
+        "three_black": 2061
+      }
+    },
+    "2020": {
+      "total": 3374,
+      "stocks": 589,
+      "closed": 3353,
+      "win": 1190,
+      "loss": 2163,
+      "flat": 0,
+      "win_rate": 0.35490605427974947,
+      "mean_net_return": 0.017272052450526498,
+      "median_net_return": -0.03888632086385069,
+      "mean_holding_days": 19.514166418133016,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 21,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 479,
+        "time63": 189,
+        "three_black": 2685
+      }
+    },
+    "2021": {
+      "total": 5125,
+      "stocks": 760,
+      "closed": 5105,
+      "win": 1572,
+      "loss": 3533,
+      "flat": 0,
+      "win_rate": 0.3079333986287953,
+      "mean_net_return": -0.003757747978751224,
+      "median_net_return": -0.0529231381529226,
+      "mean_holding_days": 17.525367286973555,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 20,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 1009,
+        "time63": 170,
+        "three_black": 3926
+      }
+    },
+    "2022": {
+      "total": 814,
+      "stocks": 299,
+      "closed": 811,
+      "win": 203,
+      "loss": 608,
+      "flat": 0,
+      "win_rate": 0.25030826140567203,
+      "mean_net_return": -0.0306931977864914,
+      "median_net_return": -0.057422298653672765,
+      "mean_holding_days": 20.048088779284832,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 3,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 127,
+        "time63": 76,
+        "three_black": 608
+      }
+    },
+    "2023": {
+      "total": 5315,
+      "stocks": 740,
+      "closed": 5302,
+      "win": 1833,
+      "loss": 3469,
+      "flat": 0,
+      "win_rate": 0.34571859675594113,
+      "mean_net_return": 0.01608677597996936,
+      "median_net_return": -0.03475984074574351,
+      "mean_holding_days": 18.771407016220294,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 13,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 424,
+        "time63": 254,
+        "three_black": 4624
+      }
+    },
+    "2024": {
+      "total": 5077,
+      "stocks": 828,
+      "closed": 5041,
+      "win": 1614,
+      "loss": 3427,
+      "flat": 0,
+      "win_rate": 0.3201745685379885,
+      "mean_net_return": -0.00767104830325138,
+      "median_net_return": -0.04868141201519782,
+      "mean_holding_days": 15.828208688752232,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 36,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 754,
+        "time63": 113,
+        "three_black": 4174
+      }
+    },
+    "2025": {
+      "total": 3373,
+      "stocks": 624,
+      "closed": 3351,
+      "win": 1134,
+      "loss": 2217,
+      "flat": 0,
+      "win_rate": 0.3384064458370636,
+      "mean_net_return": 0.01753361627046371,
+      "median_net_return": -0.04426601334461722,
+      "mean_holding_days": 17.019397194867203,
+      "open": 0,
+      "pending_exit": 0,
+      "unresolved": 22,
+      "not_entered": 0,
+      "exits": {
+        "loss12": 402,
+        "time63": 84,
+        "three_black": 2865
+      }
+    },
+    "2026": {
+      "total": 4612,
+      "stocks": 771,
+      "closed": 4318,
+      "win": 1496,
+      "loss": 2822,
+      "flat": 0,
+      "win_rate": 0.3464566929133858,
+      "mean_net_return": 0.04302673258240319,
+      "median_net_return": -0.05444366769039122,
+      "mean_holding_days": 15.95877721167207,
+      "open": 259,
+      "pending_exit": 7,
+      "unresolved": 7,
+      "not_entered": 21,
+      "exits": {
+        "loss12": 995,
+        "time63": 107,
+        "three_black": 3216
+      }
+    }
+  },
+  "tests": {
+    "passed": 4728,
+    "warnings": 37,
+    "seconds": 98.34,
+    "initial_failure": "paper-ledger UI test read actual local research archives and timed out; fixture ROOT isolated without raising timeout"
+  },
+  "independent_actual_row_oracle_checks": 1007,
+  "repeat_byte_identical": true,
+  "finmind_requests": 31,
+  "finmind_cache_hits": 1,
+  "pipeline": {
+    "rerun": false,
+    "reason": "Existing official-source acquisition holds remain active; this change is independent offline analysis, no DB or daily pipeline edits",
+    "prior_acceptance": "artifacts/forward_simulation/market_input_repair_acceptance_20261002.json"
+  },
+  "live_qualified": false,
+  "actual_fill_verified": false,
+  "cash_account": false,
+  "source_sha256": {
+    ".cache/all-signals-2019-20261002/inputs/manifest.json": "6cd6ef3cbf9ebfced4741b2e60fea34212a2dc5605c6b6b5895c003a34bb65bf",
+    ".cache/all-signals-2019-20261002/inputs/manifest.sha256": "d10e3c05bc9786b20de270a6964753e356889d8b1509c96a54098b6c1f4bea83",
+    ".cache/all-signals-2019-20261002/extension-audit.json": "5c50c4db5b4168cad419bb0d3c68bf93105c9b84da26b8d0d82a1c0e110dcc3a",
+    ".cache/all-signals-2019-20261002/research-v1/report.json": "e7441e3536ba7e6f4bf93705b6036233fd0fed997ab2fc3922c003c0886a7e05",
+    ".cache/all-signals-2019-20261002/research-v1/report.sha256": "5ba0447bb360b0283147b874e763db11aa26ad9a3cad296699f8dc0c3126f75a",
+    ".cache/all-signals-2019-20261002/research-v1/workbook-data.json": "ee7d2e6ffdcd8ba620419f0a9dabb2eb8a45c829d8e1cc13c2d6db52e66d476c",
+    ".cache/all-signals-2019-20261002/repeat-verification.json": "def1f5cdfab75a7b65e30a5bb6b60bac86785e040076d6ad8ffe2839b5086859",
+    ".cache/all-signals-2019-20261002/review/oracle-report.json": "dcff32cbdfca0f68d920c62b22ff5c03373e6d78fbd2f452c10577c9b7c7c186",
+    ".cache/all-signals-2019-20261002/review/oracle.py": "0affd40da748df74d6078c01ca0996c20b0b48c47f32c94b720fbf6dea39a65a",
+    ".cache/all-signals-2019-20261002/api-validation.json": "2b3e6c1e30d2bb72203f88fce25b4bf6bb77b7e2eeec42291786d695c8b6362a",
+    ".cache/all-signals-2019-20261002/make-test.log": "b2db7be9a2f3b242d0fbc6ddef86caaa316be34cc1389a9fed7d05828044245c",
+    ".cache/all-signals-2019-20261002/make-test-final.log": "4b108c36d88f965a7fdfc19520f5ce92211346c28001a02a660dde78f55705de",
+    ".cache/all-signals-2019-20261002/workbench-ui-stack.log": "78916669ad916dbe6572889e579177b0f36862105eb3b44ff3e360e0c4d8e9c0",
+    ".cache/all-signals-2019-20261002/workbench-ui-fixed.log": "f86026bb2bb897e23c399f40c940bbdbf7f03c74f1e644681ace81b34cb32fa4",
+    ".cache/all-signals-2019-20261002/workbench-ui-fixed-repeat.log": "0cffd68639c234fce59bbd08b14092ea7e30d809903bdddea946c8a3c4c22667",
+    "scripts/export_all_signal_research.py": "cade721ef8f0a3f66c71aa2f31d9d32b35ff67b3a9ed351424450c88d7c6f2aa",
+    "skills/independent_three_black.py": "e377b60ae255042cbe799ff443e2181031e724db76e8aee13fb2378ae6af1b58",
+    "tests/test_independent_three_black.py": "ed92ad79063dc71caf7ca65605dc014a1b01213aa8bbe2b5823fbd53e642ee17",
+    "tests/test_workbench_ui.py": "14c842c54f02278ac655b99bb758127f1cc1f648aa18418a96241d72d2425409",
+    ".cache/all-signals-2019-20261002/workbook/export-validation.json": "3cadc2c1c585fe2212733efffdcd17ed19b7a2f0c28ed9fc911c9a7cf5cee50b",
+    ".cache/all-signals-2019-20261002/workbook/validation.json": "bee7fa4f097e83dfce9e11db76119a8a4175e821a7ac05f55cadb0533ec6a63e",
+    ".cache/all-signals-2019-20261002/workbook/build.mjs": "31541791572a70d1b3993286a6edbce60e7950fde1b43712bbeec63c3898e14d",
+    ".cache/all-signals-2019-20261002/workbook/verify_export.py": "02bdaddb830639e92ac4a1f84bdd95055135cef0745edb0b001d339fe452c440",
+    ".cache/all-signals-2019-20261002/workbook/formula-inspection.ndjson": "820faf750614913b51371f2f66aae5501d1d199f625e7d4b962a039a6f0a3115",
+    ".cache/all-signals-2019-20261002/workbook/formula-errors.ndjson": "acc0111e19cf44d2753fc9ecd164bf1b27fbd65597463a25cf48bd1c65e90146"
+  },
+  "workbook": {
+    "path": "artifacts/reports/all_signals_2019_20261002.xlsx",
+    "sha256": "e0b8c01e98701115a41a1edd0460ec4eb6b85086ecef2f395b8d88e106e27338",
+    "bytes": 8660432,
+    "sheets": [
+      "總覽與規則",
+      "全部訊號"
+    ],
+    "detail_columns": 38,
+    "ooxml_validation": {
+      "output": "/Users/james.chou/JamesProject/stock_bot/artifacts/reports/all_signals_2019_20261002.xlsx",
+      "output_sha256": "e0b8c01e98701115a41a1edd0460ec4eb6b85086ecef2f395b8d88e106e27338",
+      "input_sha256": "ee7d2e6ffdcd8ba620419f0a9dabb2eb8a45c829d8e1cc13c2d6db52e66d476c",
+      "rows": 30188,
+      "columns": 38,
+      "unique_signal_ids": 30188,
+      "typed_signal_dates": 30188,
+      "all_typed_dates_checked": 240067,
+      "all_numeric_detail_fields_reconciled": true,
+      "table_ref": "A4:AL30192",
+      "frozen_panes": {
+        "xSplit": "2",
+        "ySplit": "4",
+        "topLeftCell": "C5",
+        "activePane": "bottomRight",
+        "state": "frozen"
+      },
+      "annual_and_total_formulas_reconciled": true,
+      "formula_errors": []
+    },
+    "previews_visually_reviewed": true
+  },
+  "completed_at": "2026-10-02T10:21:34.412944+00:00"
+}
