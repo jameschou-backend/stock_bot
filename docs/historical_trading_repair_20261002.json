@@ -1,0 +1,418 @@
+{
+  "schema": "historical_trading_repair_v1",
+  "created_at": "2026-10-02T07:43:38.446170+00:00",
+  "live_qualified": false,
+  "publication_time_archive_complete": false,
+  "complete_historical_universe": false,
+  "performance_recomputed": false,
+  "source_sha256": {
+    ".cache/market-input-repair-20261002/classification-followup/4415-taifex.web-extraction.json": "fc85ad93d5528d9248f973e6ac20183a4642d1d74feb43b30136e7eb143dc3d9",
+    ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190703/response.bin": "1f931b51bcc71b78117457f66148a2e11690c7905b406e34f8398fc364777a1f",
+    ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190703/receipt.json": "48e4f1a1a4eeee02f7d5f6e8552cc4d35161f43dc7db0135246e0e85b69495ae",
+    ".cache/market-input-repair-20261002/7780-halt-mops/response.bin": "8d781df6511ef4f9b6ee43d192d5a329519d766a106c2dbeabbcc476c0327a9c",
+    ".cache/market-input-repair-20261002/7780-halt-mops/receipt.json": "f5dea20fd67aeba31a64f33c040e292564b378f5bc8679e9e2d1d7e11ae70cbb",
+    ".cache/readiness-remediation-20260914/actions-verified/checkpoints/twse_par_value_change_20260101_20260909.json": "d6439d0e1c14d7300dbe1b3af8a4a18f64b586f3d356d408eee7ea916bc28b90",
+    ".cache/readiness-remediation-20260914/actions-verified/summary.json": "a89c001553fb9410d7d197995abc8710b645227c71019aefa04e2dd52a74d521",
+    ".cache/official-market-days-20261002/acquisition/raw/ec7e862d2425ee300efc179f02e51942ef7e05f40f0f149cd279d1f6ecd3cdfe.bin": "9d09c88b0c54e833ba1832f00bfad85e5eeacb395c829d3320b8a506db5e38ce",
+    ".cache/official-market-days-20261002/acquisition/receipts/ec7e862d2425ee300efc179f02e51942ef7e05f40f0f149cd279d1f6ecd3cdfe.json": "bea28a5aea01a15aa1246a7665cec8d89fe64ecc1660288d1a94f7dce0e3e8a8",
+    ".cache/official-market-days-20261002/acquisition/raw/60cd3c8139c1f39c33b41d16334de34df0ee1ab53d787c66911168de686cd562.bin": "213ffeeffc9dd72218c7d6277a40e747bce5a491721b58b6a82ae7a40d369f72",
+    ".cache/official-market-days-20261002/acquisition/receipts/60cd3c8139c1f39c33b41d16334de34df0ee1ab53d787c66911168de686cd562.json": "ef5a7e45122685d49f3bb3945d14a8970685ab8a139afcbbf817386a9410ca96",
+    ".cache/official-market-days-20261002/acquisition/raw/e86e9a72e85ddbe425840179531ec951a30c47aa41268a345c2e869a9bf45d67.bin": "f4352feea6fc1f78edf08a70e2c6d8fcfaa6c28f117f998a20218f247f723571",
+    ".cache/official-market-days-20261002/acquisition/receipts/e86e9a72e85ddbe425840179531ec951a30c47aa41268a345c2e869a9bf45d67.json": "64793addec524357b01c3b7f795bbd1622942ba091e19b7b4f88770f16e3851e",
+    ".cache/official-market-days-20261002/acquisition/raw/fe0ebc720d6d2babe96d154f7a1834ae772fc383904ced1f0cec2aaee888aaad.bin": "2d5b587de4697582b308b5b5d0f7c67aca84a70a40dad3a40771f677aa87ba4e",
+    ".cache/official-market-days-20261002/acquisition/receipts/fe0ebc720d6d2babe96d154f7a1834ae772fc383904ced1f0cec2aaee888aaad.json": "8b70556e20bcb9928876ebbd3f2ce42006caac63bd6a8f2058af5a870838c6c9",
+    ".cache/official-market-days-20261002/acquisition/raw/590724478bbaef45b8cce7aadd9fbf4b32746d0eb50a4cfddc3eb9246f44272a.bin": "d23f15ca7314a20bc6d53f0a8f6fe5a2b529250a39a89a09ab46dbec033fd2f4",
+    ".cache/official-market-days-20261002/acquisition/receipts/590724478bbaef45b8cce7aadd9fbf4b32746d0eb50a4cfddc3eb9246f44272a.json": "7f562c9e052251ccfcb499696e1c71365ed6ceeb50529c3cc386795a104d14cf",
+    ".cache/official-market-days-20261002/acquisition/raw/08ee22e7517d87ba61f007bc41b0d47924123b761c6fc92226ec78448054020b.bin": "1299262b76463e4b075843b365bc51d9d722adb12bcefa863a7391006c4c40cb",
+    ".cache/official-market-days-20261002/acquisition/receipts/08ee22e7517d87ba61f007bc41b0d47924123b761c6fc92226ec78448054020b.json": "806559c2ebb193dc9a70ffd7230576a3f534484d51736f7419b9d1b5909bd7a8",
+    ".cache/official-market-days-20261002/acquisition/raw/c4212887ab175fa7789cea43bae8516cb7198ed8bff34e3b2d0c7ea4d8bba0ec.bin": "0bf87096a73859401b12412549bd4f2c23a23d621b14ad9e918b17a1d1475752",
+    ".cache/official-market-days-20261002/acquisition/receipts/c4212887ab175fa7789cea43bae8516cb7198ed8bff34e3b2d0c7ea4d8bba0ec.json": "a747abb3a815a30ee0739e219050043ea19f83bc80e4588bd9bea2e39a836e8a",
+    ".cache/official-market-days-20261002/acquisition/raw/0060dc1b914ad23d9721d36054a3754dff8134b26ced6bffcfcc6f41b988fee4.bin": "b6c1c34e3d0a3794bbce47548f903c3b49f0736b24221d9d8ee8a3cd8d891905",
+    ".cache/official-market-days-20261002/acquisition/receipts/0060dc1b914ad23d9721d36054a3754dff8134b26ced6bffcfcc6f41b988fee4.json": "dbb80c5a8845849930a313900598119e6b69e7edf77edbca094575165fa765db",
+    ".cache/official-market-days-20261002/acquisition/raw/8aa22716f9b20e1f1b9828cab8499f1fd989bb8663fa94fe2c6101e626bf7b85.bin": "7672a4ebd9ae53876261531e2e862fa77a7f479faffc5e2d6a14fa9e51302408",
+    ".cache/official-market-days-20261002/acquisition/receipts/8aa22716f9b20e1f1b9828cab8499f1fd989bb8663fa94fe2c6101e626bf7b85.json": "35abd55332d5f4bafcf10e15fdc96b189f7fe413454b8a6163699c101820d91b",
+    ".cache/market-input-repair-20261002/tpex-total/attempt.json": "5ca11023e279958eb892d674e01d1bac10a695df2ea0d3bc3314db5f48acb6df",
+    ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190614/attempt.json": "45b608160e6f0ae2eb494b39c2cf35efadf0f6b79d07caefb0266c5ba779462c",
+    ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190614/failure.json": "1eae199b4162a8c20fc5a7f5c37be7f92500b6e787ca1329aa55f3b41b347b4d",
+    ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190703/attempt.json": "1d15e1a0e604982c51e8f55216a7ba22b76b062a4d874fc5321f3c16dbdfb11a",
+    ".cache/market-input-repair-20261002/tpex-total/official-main-js/attempt.json": "cff592f537941ecfa80ce36a404c6c04bd6ab4e20d20e32200558236c95f5bc1",
+    ".cache/market-input-repair-20261002/tpex-total/official-main-js/receipt.json": "9fd536c151b5fd4e4947ce2be1325b99eeca103385d28d8fb5fa457cbe40ae7f",
+    ".cache/market-input-repair-20261002/tpex-total/official-main-js/response.bin": "cfbd8c64c748149f039f1d4f1c5b3ba4511039b9c9e60d8ed53fd9624edc587a",
+    ".cache/market-input-repair-20261002/tpex-total/pricing-page/attempt.json": "967f8f3902b41ec43175c481143f517a256380ac007e4b236f07c0992e63dc2d",
+    ".cache/market-input-repair-20261002/tpex-total/pricing-page/failure.json": "dd03eb3d4c42273d313dccbd91ecabe8257e3cf2aac9246214e3cd85622124bc",
+    ".cache/market-input-repair-20261002/tpex-total/pricing-page-network-approved/attempt.json": "ea9842eb1fd0c018fd1df33215536b368966810d6eadfc4b066e0a4901b87340",
+    ".cache/market-input-repair-20261002/tpex-total/pricing-page-network-approved/receipt.json": "72faab07592b0d00f686906c973a9d6881528341e377a4d9851fbfaac90d109e",
+    ".cache/market-input-repair-20261002/tpex-total/pricing-page-network-approved/response.bin": "246661598a3563e723dae29bb2d7b5be7c2dbe9ecfa9f0fa093650b57a12b244",
+    ".cache/market-input-repair-20261002/tpex-total/probe-2019-06-14.bin": "151a2db8dffae1a08d390bb66dc0909fe45fe03948ed2edbe0e25496d3a2c4fd",
+    ".cache/market-input-repair-20261002/tpex-total/probe-2019-06-14.json": "4ac2dbf237fa48149e0a2e999c15b6e647d0198e90d632b4d7b2452d606eebf0",
+    ".cache/market-input-repair-20261002/tpex-total/web-scope-403.json": "0cc54e87d7325d83281dd92e2354e26a18b68873de4e14ff01911d51e89ff48c",
+    ".cache/market-input-repair-20261002/7780-halt-mops/attempt.json": "ad05b0ce953ffd9d6c48835049a7e189604c8a9200fe8d268b2827c3eaa1cccc",
+    ".cache/official-origin-holds/www.tpex.org.tw.json": "665e18d8701c8bb73aedb4090ed66b844fefbfa56815764b5eeeac5965d7708e",
+    ".cache/official-market-days-20261002/final-issues.json": "c23ac39301495d826edeca8978dad99071b1d303ff68e1ef0d2c933b6caee827",
+    ".cache/market-input-repair-20261002/classification-followup/tpex-scope-search-excerpt.json": "100ba9c9918751a13684cd15a330bc572c0a6bf910690fa43e3a95dc3d60417d"
+  },
+  "sources": {
+    "managed_period": {
+      "path": ".cache/market-input-repair-20261002/classification-followup/4415-taifex.web-extraction.json",
+      "sha256": "fc85ad93d5528d9248f973e6ac20183a4642d1d74feb43b30136e7eb143dc3d9"
+    },
+    "managed_daily": {
+      "path": ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190703/response.bin",
+      "sha256": "1f931b51bcc71b78117457f66148a2e11690c7905b406e34f8398fc364777a1f"
+    },
+    "managed_daily_receipt": {
+      "path": ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190703/receipt.json",
+      "sha256": "48e4f1a1a4eeee02f7d5f6e8552cc4d35161f43dc7db0135246e0e85b69495ae"
+    },
+    "face_announcement": {
+      "path": ".cache/market-input-repair-20261002/7780-halt-mops/response.bin",
+      "sha256": "8d781df6511ef4f9b6ee43d192d5a329519d766a106c2dbeabbcc476c0327a9c"
+    },
+    "face_announcement_receipt": {
+      "path": ".cache/market-input-repair-20261002/7780-halt-mops/receipt.json",
+      "sha256": "f5dea20fd67aeba31a64f33c040e292564b378f5bc8679e9e2d1d7e11ae70cbb"
+    },
+    "face_restore": {
+      "path": ".cache/readiness-remediation-20260914/actions-verified/checkpoints/twse_par_value_change_20260101_20260909.json",
+      "sha256": "d6439d0e1c14d7300dbe1b3af8a4a18f64b586f3d356d408eee7ea916bc28b90"
+    },
+    "face_summary": {
+      "path": ".cache/readiness-remediation-20260914/actions-verified/summary.json",
+      "sha256": "a89c001553fb9410d7d197995abc8710b645227c71019aefa04e2dd52a74d521"
+    },
+    "ordinary_gap_audit": {
+      "path": ".cache/official-market-days-20261002/final-issues.json",
+      "sha256": "c23ac39301495d826edeca8978dad99071b1d303ff68e1ef0d2c933b6caee827"
+    },
+    "daily_scope_excerpt": {
+      "path": ".cache/market-input-repair-20261002/classification-followup/tpex-scope-search-excerpt.json",
+      "sha256": "100ba9c9918751a13684cd15a330bc572c0a6bf910690fa43e3a95dc3d60417d"
+    }
+  },
+  "entries": [
+    {
+      "stock_id": "4415",
+      "market": "TPEx",
+      "kind": "managed_board",
+      "start": "2017-11-21",
+      "end": "2019-12-16",
+      "interval": "start_inclusive_end_exclusive",
+      "legal_security_type": "ordinary_share",
+      "publication_date": "2019-11-29",
+      "knowledge_basis": "retrospective_explicit_historical_classification; not a June/July 2019 captured announcement",
+      "source_path": ".cache/market-input-repair-20261002/classification-followup/4415-taifex.web-extraction.json",
+      "source_pages_1based": [
+        1
+      ],
+      "reason": "Official TAIFEX states managed trading began 2017-11-21 and terminates 2019-12-16; preserved legal ordinary listing, excluded from general-board strategy"
+    },
+    {
+      "stock_id": "7780",
+      "market": "TWSE",
+      "kind": "trading_suspension",
+      "start": "2026-01-09",
+      "end": "2026-01-19",
+      "interval": "start_inclusive_end_exclusive",
+      "announcement_at": "2025-12-22T17:51:30+08:00",
+      "announcement_date": "2025-12-22",
+      "known_by": "2025-12-23",
+      "announced_last_old_trading_date": "2026-01-08",
+      "announced_suspension_last_date_inclusive": "2026-01-17",
+      "announced_new_trading_date": "2026-01-19",
+      "source_path": ".cache/market-input-repair-20261002/7780-halt-mops/response.bin",
+      "knowledge_basis": "public issuer announcement published before halt; archive retrieved retrospectively",
+      "reason": "Face value change suspension; next listed trading session is 2026-01-19. Do not create price/volume records"
+    }
+  ],
+  "quote_gaps_4415": [
+    {
+      "date": "2019-06-14",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 2000,
+      "ordinary_source": {
+        "date": "2019-06-14",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/ec7e862d2425ee300efc179f02e51942ef7e05f40f0f149cd279d1f6ecd3cdfe.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/ec7e862d2425ee300efc179f02e51942ef7e05f40f0f149cd279d1f6ecd3cdfe.json",
+        "receipt_sha256": "bea28a5aea01a15aa1246a7665cec8d89fe64ecc1660288d1a94f7dce0e3e8a8",
+        "retrieved_at": "2026-10-02T04:49:25.969156+00:00",
+        "rows": 773,
+        "sha256": "9d09c88b0c54e833ba1832f00bfad85e5eeacb395c829d3320b8a506db5e38ce",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-06-25",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 1000,
+      "ordinary_source": {
+        "date": "2019-06-25",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/60cd3c8139c1f39c33b41d16334de34df0ee1ab53d787c66911168de686cd562.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/60cd3c8139c1f39c33b41d16334de34df0ee1ab53d787c66911168de686cd562.json",
+        "receipt_sha256": "ef5a7e45122685d49f3bb3945d14a8970685ab8a139afcbbf817386a9410ca96",
+        "retrieved_at": "2026-10-02T04:49:47.653029+00:00",
+        "rows": 773,
+        "sha256": "213ffeeffc9dd72218c7d6277a40e747bce5a491721b58b6a82ae7a40d369f72",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-06-27",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 2000,
+      "ordinary_source": {
+        "date": "2019-06-27",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/e86e9a72e85ddbe425840179531ec951a30c47aa41268a345c2e869a9bf45d67.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/e86e9a72e85ddbe425840179531ec951a30c47aa41268a345c2e869a9bf45d67.json",
+        "receipt_sha256": "64793addec524357b01c3b7f795bbd1622942ba091e19b7b4f88770f16e3851e",
+        "retrieved_at": "2026-10-02T04:49:53.854565+00:00",
+        "rows": 773,
+        "sha256": "f4352feea6fc1f78edf08a70e2c6d8fcfaa6c28f117f998a20218f247f723571",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-07-01",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 1000,
+      "ordinary_source": {
+        "date": "2019-07-01",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/fe0ebc720d6d2babe96d154f7a1834ae772fc383904ced1f0cec2aaee888aaad.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/fe0ebc720d6d2babe96d154f7a1834ae772fc383904ced1f0cec2aaee888aaad.json",
+        "receipt_sha256": "8b70556e20bcb9928876ebbd3f2ce42006caac63bd6a8f2058af5a870838c6c9",
+        "retrieved_at": "2026-10-02T04:50:00.038805+00:00",
+        "rows": 775,
+        "sha256": "2d5b587de4697582b308b5b5d0f7c67aca84a70a40dad3a40771f677aa87ba4e",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-07-02",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 1000,
+      "ordinary_source": {
+        "date": "2019-07-02",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/590724478bbaef45b8cce7aadd9fbf4b32746d0eb50a4cfddc3eb9246f44272a.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/590724478bbaef45b8cce7aadd9fbf4b32746d0eb50a4cfddc3eb9246f44272a.json",
+        "receipt_sha256": "7f562c9e052251ccfcb499696e1c71365ed6ceeb50529c3cc386795a104d14cf",
+        "retrieved_at": "2026-10-02T04:50:03.164689+00:00",
+        "rows": 775,
+        "sha256": "d23f15ca7314a20bc6d53f0a8f6fe5a2b529250a39a89a09ab46dbec033fd2f4",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-07-03",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 2000,
+      "ordinary_source": {
+        "date": "2019-07-03",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/08ee22e7517d87ba61f007bc41b0d47924123b761c6fc92226ec78448054020b.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/08ee22e7517d87ba61f007bc41b0d47924123b761c6fc92226ec78448054020b.json",
+        "receipt_sha256": "806559c2ebb193dc9a70ffd7230576a3f534484d51736f7419b9d1b5909bd7a8",
+        "retrieved_at": "2026-10-02T04:50:06.319267+00:00",
+        "rows": 775,
+        "sha256": "1299262b76463e4b075843b365bc51d9d722adb12bcefa863a7391006c4c40cb",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": 2364,
+      "total_source": {
+        "path": ".cache/market-input-repair-20261002/tpex-total/correct-date-probe-20190703/response.bin",
+        "sha256": "1f931b51bcc71b78117457f66148a2e11690c7905b406e34f8398fc364777a1f"
+      },
+      "total_volume_scope": "dailyQuotes_reported_all_sessions",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-07-04",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 2000,
+      "ordinary_source": {
+        "date": "2019-07-04",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/c4212887ab175fa7789cea43bae8516cb7198ed8bff34e3b2d0c7ea4d8bba0ec.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/c4212887ab175fa7789cea43bae8516cb7198ed8bff34e3b2d0c7ea4d8bba0ec.json",
+        "receipt_sha256": "a747abb3a815a30ee0739e219050043ea19f83bc80e4588bd9bea2e39a836e8a",
+        "retrieved_at": "2026-10-02T04:50:09.808566+00:00",
+        "rows": 775,
+        "sha256": "0bf87096a73859401b12412549bd4f2c23a23d621b14ad9e918b17a1d1475752",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-07-08",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 2000,
+      "ordinary_source": {
+        "date": "2019-07-08",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/0060dc1b914ad23d9721d36054a3754dff8134b26ced6bffcfcc6f41b988fee4.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/0060dc1b914ad23d9721d36054a3754dff8134b26ced6bffcfcc6f41b988fee4.json",
+        "receipt_sha256": "dbb80c5a8845849930a313900598119e6b69e7edf77edbca094575165fa765db",
+        "retrieved_at": "2026-10-02T04:50:15.553563+00:00",
+        "rows": 775,
+        "sha256": "b6c1c34e3d0a3794bbce47548f903c3b49f0736b24221d9d8ee8a3cd8d891905",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    },
+    {
+      "date": "2019-07-09",
+      "stock_id": "4415",
+      "raw_ohlc": {
+        "open": 6.0,
+        "high": 6.0,
+        "low": 6.0,
+        "close": 6.0
+      },
+      "ordinary_session_shares": 2000,
+      "ordinary_source": {
+        "date": "2019-07-09",
+        "http_status": 200,
+        "http_status_evidence": "recorded_http_200",
+        "market": "TPEX",
+        "path": ".cache/official-market-days-20261002/acquisition/raw/8aa22716f9b20e1f1b9828cab8499f1fd989bb8663fa94fe2c6101e626bf7b85.bin",
+        "receipt": ".cache/official-market-days-20261002/acquisition/receipts/8aa22716f9b20e1f1b9828cab8499f1fd989bb8663fa94fe2c6101e626bf7b85.json",
+        "receipt_sha256": "35abd55332d5f4bafcf10e15fdc96b189f7fe413454b8a6163699c101820d91b",
+        "retrieved_at": "2026-10-02T04:50:18.659745+00:00",
+        "rows": 775,
+        "sha256": "7672a4ebd9ae53876261531e2e862fa77a7f479faffc5e2d6a14fa9e51302408",
+        "url": "https://www.tpex.org.tw/web/stock/aftertrading/otc_quotes_no1430/stk_wn1430_result.php",
+        "volume_scope": "ordinary_session"
+      },
+      "total_daily_shares": null,
+      "total_source": null,
+      "total_volume_scope": "unknown",
+      "independent_adjusted_price_verified": false,
+      "quality_gate_passed": false,
+      "ordinary_quote_not_promoted_to_total": true
+    }
+  ],
+  "limitations": [
+    "4415 independent adjusted-price evidence remains unavailable on all nine dates; quality is not promoted.",
+    "4415 only 2019-07-03 total volume was fetched and differs from ordinary volume (2364 versus 2000); other eight total values remain unknown.",
+    "TPEx returned HTTP403 on a later documentation request; origin hold preserved and no same-origin further requests made.",
+    "Retrospective classification corrections do not certify a complete point-in-time security universe or unchanged strategy returns.",
+    "No fabricated zero-activity or raw-price records are created by applying these trading exclusions."
+  ]
+}

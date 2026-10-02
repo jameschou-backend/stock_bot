@@ -1,0 +1,378 @@
+{
+  "schema": "historical_identity_repair_v1",
+  "live_qualified": false,
+  "complete_historical_universe": false,
+  "publication_time_archive_complete": false,
+  "base_identity": {
+    "path": ".cache/partial-risk-2019-20260929/inputs-final/identity.json",
+    "sha256": "7810fe9be3887f39cd24854a109e0bcccb3a03270d208100fb9ad738fdb51ddf"
+  },
+  "listing_source": {
+    "raw_path": ".cache/readiness-continuation-20260914/twse-newlisting.json",
+    "raw_sha256": "c45549cd8c749bab1aa41d65ae81ea5415ecf1e9876da373bafef174fb56ba9b",
+    "receipt_path": ".cache/readiness-continuation-20260914/twse-newlisting.source.json",
+    "receipt_sha256": "e14e001278e05a3aa94f2e338931847799cbca4f8e2505cb9573f6a0505ee9fe",
+    "fields": [
+      "公司代號",
+      "公司簡稱",
+      "申請日期",
+      "董事長",
+      "申請時股本(仟元)",
+      "上市審議委員會審議日期",
+      "交易所董事會通過上市日期",
+      "上市契約報請主管機關備查日期",
+      "證期局核准上市契約日期",
+      "股票上市買賣日期",
+      "承銷商",
+      "承銷價",
+      "備註"
+    ],
+    "http_status_evidence": "legacy_status_unknown"
+  },
+  "entries": [
+    {
+      "stock_id": "5292",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2023-11-21",
+      "initial_board": "general",
+      "general_board_start": null,
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "5292",
+        "華懋",
+        "112.06.30",
+        "鄭石治",
+        "308,000",
+        "112.08.11",
+        "112.08.22",
+        "112.09.01",
+        "",
+        "112.11.21",
+        "群益金鼎",
+        68.0,
+        "科技事業"
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0005292007",
+        "market": "TWSE",
+        "name": "華懋",
+        "snapshot_date": "2026-09-14",
+        "start": "2020-01-07",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "5292"
+      }
+    },
+    {
+      "stock_id": "6757",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2023-08-15",
+      "initial_board": "innovation",
+      "general_board_start": "2024-11-29",
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "6757",
+        "台灣虎航-創",
+        "111.12.21",
+        "陳漢銘",
+        "4,000,000",
+        "112.02.08",
+        "112.02.21",
+        "112.03.03",
+        "",
+        "112.08.15",
+        "台新",
+        42.6,
+        "創新板"
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0006757008",
+        "market": "TWSE",
+        "name": "台灣虎航",
+        "snapshot_date": "2026-09-14",
+        "start": "2024-11-29",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "6757"
+      },
+      "transfer_source": {
+        "path": ".cache/historical-identity-repair-20261002/6757.web-extraction.json",
+        "source_url": "https://wwwc.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d6933460a40193723f7325022d.pdf",
+        "pdf_pages_1based": [
+          1
+        ],
+        "source_kind": "official_pdf_web_extraction",
+        "raw_pdf_bytes_obtained": false
+      }
+    },
+    {
+      "stock_id": "6794",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2024-05-21",
+      "initial_board": "innovation",
+      "general_board_start": "2025-10-16",
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "6794",
+        "向榮生技-創",
+        "112.11.28",
+        "蔡意文",
+        "554,595",
+        "113.01.15",
+        "113.01.25",
+        "113.02.01",
+        "",
+        "113.05.21",
+        "宏遠",
+        58.0,
+        "創新板"
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0006794001",
+        "market": "TWSE",
+        "name": "向榮生技",
+        "snapshot_date": "2026-09-14",
+        "start": "2025-10-16",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "6794"
+      },
+      "transfer_source": {
+        "path": ".cache/historical-identity-repair-20261002/6794.web-extraction.json",
+        "source_url": "https://investoredu.twse.com.tw/Mobile_pages/..%2FFileSystem%2FFileUpload%2F8fddf148-5002-42b8-b70d-b7b4a03cfdab.pdf",
+        "pdf_pages_1based": [
+          1
+        ],
+        "source_kind": "official_pdf_web_extraction",
+        "raw_pdf_bytes_obtained": false
+      }
+    },
+    {
+      "stock_id": "6869",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2023-03-14",
+      "initial_board": "innovation",
+      "general_board_start": "2024-06-19",
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "6869",
+        "雲豹能源-創",
+        "111.11.15",
+        "賴勁麟",
+        "1,127,091",
+        "111.12.21",
+        "111.12.27",
+        "111.12.28",
+        "",
+        "112.03.14",
+        "元富",
+        96.0,
+        "創新板"
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0006869001",
+        "market": "TWSE",
+        "name": "雲豹能源",
+        "snapshot_date": "2026-09-14",
+        "start": "2024-06-19",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "6869"
+      },
+      "transfer_source": {
+        "path": ".cache/historical-identity-repair-20261002/6869.web-extraction.json",
+        "source_url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d6901a64ae01902ad7af4f0045.pdf",
+        "pdf_pages_1based": [
+          1
+        ],
+        "source_kind": "official_pdf_web_extraction",
+        "raw_pdf_bytes_obtained": false
+      }
+    },
+    {
+      "stock_id": "6873",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2023-03-06",
+      "initial_board": "innovation",
+      "general_board_start": "2024-09-26",
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "6873",
+        "泓德能源-創",
+        "111.10.31",
+        "謝源一",
+        "850,000",
+        "111.12.12",
+        "111.12.27",
+        "111.12.28",
+        "",
+        "112.03.06",
+        "永豐金",
+        110.0,
+        "創新板"
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0006873003",
+        "market": "TWSE",
+        "name": "泓德能源",
+        "snapshot_date": "2026-09-14",
+        "start": "2024-09-26",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "6873"
+      },
+      "transfer_source": {
+        "path": ".cache/historical-identity-repair-20261002/6873.web-extraction.json",
+        "source_url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d691e550e301922893bdcd00e5.pdf",
+        "pdf_pages_1based": [
+          1
+        ],
+        "source_kind": "official_pdf_web_extraction",
+        "raw_pdf_bytes_obtained": false
+      }
+    },
+    {
+      "stock_id": "6902",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2023-07-13",
+      "initial_board": "innovation",
+      "general_board_start": "2025-05-16",
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "6902",
+        "走著瞧-創",
+        "111.12.29",
+        "鄭勝丰",
+        "308,988",
+        "112.03.14",
+        "112.03.28",
+        "112.04.07",
+        "",
+        "112.07.13",
+        "元大",
+        215.0,
+        "創新板"
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0006902000",
+        "market": "TWSE",
+        "name": "GOGOLOOK",
+        "snapshot_date": "2026-09-14",
+        "start": "2025-05-16",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "6902"
+      },
+      "transfer_source": {
+        "path": ".cache/historical-identity-repair-20261002/6902.web-extraction.json",
+        "source_url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d696b406fc0196d348beb50088.pdf",
+        "pdf_pages_1based": [
+          1
+        ],
+        "source_kind": "official_pdf_web_extraction",
+        "raw_pdf_bytes_obtained": false
+      }
+    },
+    {
+      "stock_id": "7780",
+      "market": "TWSE",
+      "category": "股票",
+      "start": "2025-09-09",
+      "initial_board": "general",
+      "general_board_start": null,
+      "interval": "start_inclusive_end_exclusive",
+      "listing_source_row": [
+        "7780",
+        "大研生醫",
+        "114.04.30",
+        "張家銘",
+        "600,024",
+        "114.06.10",
+        "114.06.25",
+        "114.07.02",
+        "",
+        "114.09.09",
+        "凱基",
+        158.0,
+        ""
+      ],
+      "replaces_episode": {
+        "category": "股票",
+        "cfi": "ESVUFR",
+        "end": null,
+        "isin": "TW0007780009",
+        "market": "TWSE",
+        "name": "大研生醫*",
+        "snapshot_date": "2026-09-14",
+        "start": "2026-01-19",
+        "start_evidence": "current_official_ISIN",
+        "stock_id": "7780"
+      }
+    }
+  ],
+  "account_policy": {
+    "name": "ordinary_retail_research",
+    "innovation_reform_date": "2025-01-06",
+    "pre_reform_qualified_investor_assumed": false,
+    "risk_notice_assumed_by_default": false,
+    "regular_lot_shares": 1000,
+    "old_rule_source": {
+      "path": ".cache/historical-identity-repair-20261002/tib_rule_2023.web-extraction.json",
+      "source_url": "https://www.twse.com.tw/pcversion/downloads/zh/products/shortversion-zh.pdf",
+      "pdf_pages_1based": null,
+      "source_kind": "official_pdf_web_extraction",
+      "raw_pdf_bytes_obtained": false
+    },
+    "reform_source": {
+      "path": ".cache/historical-identity-repair-20261002/tib_rule_2025.web-extraction.json",
+      "source_url": "https://www.twse.com.tw/staticFiles/news/news/tsecnews/8a8216d693d24db20193d3704ed30005.pdf",
+      "pdf_pages_1based": [
+        1
+      ],
+      "source_kind": "official_pdf_web_extraction",
+      "raw_pdf_bytes_obtained": false
+    },
+    "scope": "buy_access_only_not_sale_rights_or_execution_evidence",
+    "unknown_qualification_action": "blocked",
+    "post_reform_research_only_risk_notice_assumption": "explicit opt-in; does not establish actual broker signature"
+  },
+  "source_sha256": {
+    ".cache/partial-risk-2019-20260929/inputs-final/identity.json": "7810fe9be3887f39cd24854a109e0bcccb3a03270d208100fb9ad738fdb51ddf",
+    ".cache/readiness-continuation-20260914/twse-newlisting.json": "c45549cd8c749bab1aa41d65ae81ea5415ecf1e9876da373bafef174fb56ba9b",
+    ".cache/readiness-continuation-20260914/twse-newlisting.source.json": "e14e001278e05a3aa94f2e338931847799cbca4f8e2505cb9573f6a0505ee9fe",
+    ".cache/historical-identity-repair-20261002/6757.web-extraction.json": "c7724d425122c1427a6a66712431babf846a8fb444d139464ba0bd958e5421b0",
+    ".cache/historical-identity-repair-20261002/6794.web-extraction.json": "547b98c3c859ba326b28e809052cf5af2d64beac6e157742983ffe43441ea050",
+    ".cache/historical-identity-repair-20261002/6869.web-extraction.json": "4818cab44921750b02dc2db4850e8603d80d18a9d691e7fd743ac4f0bdaa3c0e",
+    ".cache/historical-identity-repair-20261002/6873.web-extraction.json": "2d70b0cfd69196c4b62fbe67c02566afdfa2e38b91a08b6ed6a0503a0fd2d81b",
+    ".cache/historical-identity-repair-20261002/6902.web-extraction.json": "a3adfd4559ed1b5abf4a3ff27045acf2f14bd25d6258ccd79b2959b4f7b014fe",
+    ".cache/historical-identity-repair-20261002/tib_rule_2023.web-extraction.json": "e8ee9be00c2251d1317f6002d6ed7be3bbccb33bb90cf75f7d15e10fe4aba48d",
+    ".cache/historical-identity-repair-20261002/tib_rule_2025.web-extraction.json": "e534df5482748626073db3ed5d41686d8b65b4932c6d8b724a8fbdb945dfb8ff"
+  },
+  "limitations": [
+    "Retrospective official evidence establishes these seven listing dates and five board transition dates; it does not prove the full historical universe.",
+    "Web extraction hashes identify captured official text, not original PDF bytes; no HTTP status or visual screenshot review is claimed.",
+    "5292 prior current-ISIN date does not prove emerging admission. TWSE eligibility begins 2023-11-21; no emerging eligibility is invented.",
+    "7780 IPO correction does not certify uninterrupted trading around later face-value conversion; independent dated suspensions remain required.",
+    "The user has supplied no historical innovation-board qualified-investor proof or risk-notice signature. NT$1m capital establishes neither.",
+    "Other innovation-board identities in the frozen base are not globally reclassified by this narrow overlay.",
+    "Applying eligibility requires signal/features/account replay; zero old-trade intersection is not proof of unchanged returns."
+  ]
+}
