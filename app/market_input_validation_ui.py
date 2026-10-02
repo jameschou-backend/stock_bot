@@ -126,6 +126,7 @@ def load(root=ROOT,path=REPORT):
 
 
 def overview(root=ROOT):
+    from app.market_repair_ui import overview as repair_overview
     try:
         value = load(root)
     except (OSError,ValueError,KeyError,TypeError) as exc:
@@ -139,11 +140,13 @@ def overview(root=ROOT):
         candidate_identity_issues=len(value['identity']['candidate_issues']),
         issue_counts={key:len(rows) for key,rows in _issue_rows(value).items()},
         supplement=value.get('supplement') if value['schema'] == 'market_input_validation_v2' else None,
-        observed_price_conflicts=len(value['price_conflicts']),report=str(REPORT))
+        observed_price_conflicts=len(value['price_conflicts']),latest_repair=repair_overview(root),report=str(REPORT))
 
 
 def render(root=ROOT):
     import streamlit as st
+    from app.market_repair_ui import render as render_repair
+    render_repair(root)
     value = overview(root)
     st.subheader('回測行情與歷史股票名單核對')
     if not value['available']:

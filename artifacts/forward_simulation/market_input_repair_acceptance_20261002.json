@@ -1,0 +1,145 @@
+{
+  "schema": "market_repair_acceptance_v1",
+  "created_at": "2026-10-02T08:32:12.284347+00:00",
+  "status": "code_tests_passed_external_data_and_pipeline_blocked",
+  "tests": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 4718,
+    "warnings": 37,
+    "seconds": 125.53
+  },
+  "api": {
+    "command": "make api",
+    "checks": [
+      {
+        "endpoint": "/health",
+        "exit_code": 0,
+        "http_status": "200",
+        "elapsed_seconds": 0.026,
+        "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+        "result": {
+          "status": "ok"
+        }
+      },
+      {
+        "endpoint": "/picks",
+        "exit_code": 0,
+        "http_status": "200",
+        "elapsed_seconds": 0.096,
+        "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+      },
+      {
+        "endpoint": "/models",
+        "exit_code": 0,
+        "http_status": "200",
+        "elapsed_seconds": 0.014,
+        "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+      },
+      {
+        "endpoint": "/jobs?limit=10",
+        "exit_code": 0,
+        "http_status": "200",
+        "elapsed_seconds": 0.018,
+        "sha256": "31478ceb15d1e7121738c700227d8c8ea677563a88fc775291add1ded0675ed3"
+      },
+      {
+        "endpoint": "/workbench/evidence",
+        "exit_code": 0,
+        "http_status": "200",
+        "elapsed_seconds": 20.146,
+        "sha256": "5bc245b4ed61447cf98c2916acd74fa4ad7c470f0b5e21e43e0cb165d17e9510",
+        "repair_available": true,
+        "live_qualified": false
+      }
+    ]
+  },
+  "ui": {
+    "elapsed_seconds": 18.443932541878894,
+    "exception_count": 0,
+    "dataframes": 1,
+    "warnings": [
+      "同口徑普通盤成交驗證尚未完成，研究報酬不能視為已驗證可成交。"
+    ],
+    "table": [
+      {
+        "帳戶": "三黑K出場策略",
+        "累積報酬": "2515.74%",
+        "最大回撤": "-41.38%",
+        "期末資產": "26,157,424 元"
+      },
+      {
+        "帳戶": "0050基準",
+        "累積報酬": "643.31%",
+        "最大回撤": "-33.91%",
+        "期末資產": "7,433,140 元"
+      }
+    ]
+  },
+  "pipeline": {
+    "completed": false,
+    "initial_attempt_exit_code": 2,
+    "initial_failure": "TAIEX total-return index had not yet been published for 2026-10-02",
+    "initial_data_blocker_resolved": true,
+    "rerun_performed": false,
+    "rerun_blockers": [
+      "Default margin_short and PER sources would contact official origins with active holds.",
+      "Explicit FinMind alternatives are implemented per stock: estimated 4922+ requests exceeded the observed shared remaining 4857."
+    ],
+    "explicit_source_overrides_supported": true,
+    "held_origins_bypassed": false,
+    "quota_raised": false,
+    "validation_weakened": false,
+    "evidence": ".cache/market-input-repair-20261002/final-pipeline-acceptance-v2.json"
+  },
+  "research_repeat_identical": true,
+  "strict_completed": false,
+  "strict_blocked_board_orders": 56,
+  "repairs": {
+    "quotes_added": 403,
+    "independently_aligned": 401,
+    "derived_adjusted": 2,
+    "original_candidates": 29930,
+    "repaired_candidates": 29945,
+    "added_candidates": 20,
+    "removed_candidates": 5,
+    "unresolved_quote_rows": 9,
+    "unresolved_quote_rows_in_strategy_scope": 0,
+    "candidate_prefix_checks": 2,
+    "candidate_prefix_exact": true,
+    "roster_issue_count": 0
+  },
+  "open_data_items": [
+    "Complete ordinary-session volume and prior 20-session capacity evidence across every replay path.",
+    "Strict changed-path odd-lot/corporate execution dependencies remain blocked by official-source holds.",
+    "Complete historical tradable universe certification.",
+    "Actual intraday fills and unseen-period strategy validation are not certified."
+  ],
+  "commits_local_only": true,
+  "pushed": false,
+  "push_gate": "Full pipeline acceptance is not complete.",
+  "live_qualified": false,
+  "complete_verified_data": false,
+  "source_sha256": {
+    "artifacts/forward_simulation/market_input_repair_20261002.json": "1ddc46bceca04ea8c156bfc4a5769aee407ffa5d0795d1a50208b6b025b3f853",
+    "artifacts/forward_simulation/market_input_repair_20261002.sha256": "9250d20e3fe9175d56682d4421abfa6d841734ae35997fa817c3bd5465de5fc8",
+    ".cache/market-input-repair-20261002/make-test-final.log": "3c423fcb2bc212186542212f9ae80d4687da5147b850e0bc863446d6b5aba003",
+    ".cache/market-input-repair-20261002/ui-acceptance-final.log": "234529e9c4fa47cd405fa8f22a8f0c4ed99e501e48d0afa3a5a82240bda5514c",
+    ".cache/market-input-repair-20261002/api-validation-final.json": "c85e9151d0f3040d1d17c21106a9c6440a6e633342ae3ab1a51302dd4fe6b9cc",
+    ".cache/market-input-repair-20261002/pipeline-a.log": "45ad16a1d2772f7a29d3d2df2f1c36fc50ab137902f42ea642db60e12000a3bb",
+    ".cache/market-input-repair-20261002/final-pipeline-acceptance-v2.json": "e86b0cb6cc7123b54109a5dd65633175897f949e6134e365fb4b87574d0fff8f",
+    ".cache/market-input-repair-20261002/current-index-check-final.json": "96a02f2020054e1f0a4eb58b9d1ac0b715814e064b45f436f5ffba1cab808537",
+    ".cache/market-input-repair-20261002/pipeline-final-preflight.json": "dd114512ab4fc32ac21d80d5f539f1a009149a66fba6ebcff823d3ce13db6cd7",
+    ".cache/market-input-repair-20261002/publish-final.log": "3ad0bcd35e8f4b4429ca29dc6593fef5c8938ce1eef15d2017112a93fd395462",
+    ".cache/market-input-repair-20261002/api-final-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/market-input-repair-20261002/api-final-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/market-input-repair-20261002/api-final-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/market-input-repair-20261002/api-final-jobs.json": "31478ceb15d1e7121738c700227d8c8ea677563a88fc775291add1ded0675ed3",
+    ".cache/market-input-repair-20261002/api-final-evidence.json": "5bc245b4ed61447cf98c2916acd74fa4ad7c470f0b5e21e43e0cb165d17e9510",
+    "app/market_repair_ui.py": "b6016297ceda1c44c41b02c4b4f68f7ec42f81b8e40753b61607c3259727fe5f",
+    "app/market_input_validation_ui.py": "31b031bbc6945c80c732cfcee1a7d2dd02d550b3cf610375b30b13d03feb1b39",
+    "scripts/publish_market_input_repair.py": "1e8dfb7f1e7ab61a687d06119bd5f6fc264e0116fb0c2ef290b40cf3f8345c0a",
+    "tests/test_market_repair_ui.py": "153e87cd0572c610529e6ce01770e5560797c3cd9888ae07a91e490c938d524a",
+    "tests/test_publish_market_input_repair.py": "377e900803da5bf8100f645d434d2dadb30898fee418537fa2c06a16a0c01452"
+  }
+}
