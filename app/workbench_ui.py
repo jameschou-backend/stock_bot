@@ -222,6 +222,8 @@ def render_fills(book,account):
 
 
 def render_research(status):
+    from app.market_input_validation_ui import render as render_market_inputs
+    render_market_inputs()
     view=st.radio('研究畫面',['驗證總覽','完整回測工具與歷史研究'],horizontal=True,key='research_view')
     if view=='驗證總覽':
         from app.research_validation_ui import render as render_validation

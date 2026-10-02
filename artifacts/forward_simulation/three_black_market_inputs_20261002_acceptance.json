@@ -1,0 +1,222 @@
+{
+  "created_at": "2026-10-02T04:08:57.024672+00:00",
+  "scope": "Primary-source data coverage, five price/adjusted-price repairs, unchanged full candidate population; no new strategy selection",
+  "make_test": {
+    "command": "make test",
+    "passed": 4318,
+    "warnings": 36,
+    "duration_seconds": 88.48,
+    "exit_code": 0,
+    "path": ".cache/market-input-validation-20261002/make-test-complete.log",
+    "sha256": "6aa74ceaa8660c6c2419998684fdccdc1b9f4869fbc2eeef2f90f2402af3421f"
+  },
+  "added_tests": 27,
+  "pipeline": [
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "path": ".cache/market-input-validation-20261002/pipeline-first.log",
+      "sha256": "08a819ecf85b4074c2e33d05c008247d18220606bd4dfe425d3b3fc1fc777ea2"
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "path": ".cache/market-input-validation-20261002/pipeline-second.log",
+      "sha256": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c"
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "path": ".cache/market-input-validation-20261002/pipeline-final.log",
+      "sha256": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c"
+    },
+    {
+      "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+      "exit_code": 0,
+      "path": ".cache/market-input-validation-20261002/pipeline-complete.log",
+      "sha256": "aef43f28e4046fac9048ed3ec42ffc883808e7daff2ea2c479c3ed3d3bc9195c"
+    }
+  ],
+  "pipeline_repeat_evidence": {
+    "picks_unchanged": true,
+    "models_unchanged": true,
+    "jobs": [
+      {
+        "name": "export_report",
+        "status": "success",
+        "rows": 10,
+        "note": null
+      },
+      {
+        "name": "daily_pick",
+        "status": "success",
+        "rows": 10,
+        "note": null
+      },
+      {
+        "name": "build_labels",
+        "status": "success",
+        "rows": 0,
+        "note": null
+      },
+      {
+        "name": "build_features",
+        "status": "success",
+        "rows": 0,
+        "note": null
+      },
+      {
+        "name": "data_quality_check",
+        "status": "success",
+        "rows": null,
+        "note": null
+      },
+      {
+        "name": "ingest_per",
+        "status": "success",
+        "rows": 0,
+        "note": null
+      },
+      {
+        "name": "ingest_fear_greed",
+        "status": "success",
+        "rows": 0,
+        "note": null
+      },
+      {
+        "name": "ingest_gov_bank",
+        "status": "success",
+        "rows": 0,
+        "note": null
+      },
+      {
+        "name": "ingest_theme_flow",
+        "status": "success",
+        "rows": 0,
+        "note": null
+      },
+      {
+        "name": "ingest_fundamental",
+        "status": "success",
+        "rows": 229890,
+        "note": null
+      }
+    ],
+    "all_checks_passed": true
+  },
+  "api": {
+    "command": "API_PORT=8001 make api",
+    "results": {
+      "8001": {
+        "health": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8001-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8001-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8001-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8001-jobs.json",
+          "sha256": "0f63d43a014b04123f9f05d93a3f9c40f095580935b5125afda77a153eaae355"
+        }
+      },
+      "8000": {
+        "health": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8000-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8000-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8000-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/market-input-validation-20261002/api-readonly-final-8000-jobs.json",
+          "sha256": "0f63d43a014b04123f9f05d93a3f9c40f095580935b5125afda77a153eaae355"
+        }
+      }
+    },
+    "existing8000_preserved": true,
+    "pid": 56221,
+    "fresh_process_stopped": true
+  },
+  "real_data_panel": {
+    "exceptions": 0,
+    "metrics": [
+      {
+        "label": "普通盤成交股日價格",
+        "value": "36 / 561"
+      },
+      {
+        "label": "候選身分異常",
+        "value": "0 / 29,930"
+      },
+      {
+        "label": "尚缺官方市場日表",
+        "value": "3,745"
+      }
+    ],
+    "warnings": [
+      "部分官方資料已核對，尚未完成全期間驗證。不能因此視為可實戰。"
+    ]
+  },
+  "report_read": {
+    "cold_seconds": 0.33635324984788895,
+    "warm_seconds": 0.022419166984036565,
+    "available": true,
+    "strict_data_gate_blocked": true,
+    "report_sha256": "072a7c35dbc3a1cf2fc4dcec587d587fd5ee048a70e2d7a46c89aaf84a7160f2"
+  },
+  "validation_report": {
+    "path": "artifacts/forward_simulation/three_black_market_inputs_20261002.json",
+    "sha256": "072a7c35dbc3a1cf2fc4dcec587d587fd5ee048a70e2d7a46c89aaf84a7160f2"
+  },
+  "repair_bundle": {
+    "path": ".cache/market-input-validation-20261002/repairs-v3/report.json",
+    "sha256": "11715903a84749b09067f40c355ead0f3ee60b3377df20f6d624d3a08fa199b8"
+  },
+  "repair_requests": 5,
+  "shared_quota_snapshot": {
+    "requests_in_window": 33,
+    "window_start_time": 1790912230.904153,
+    "total_requests": 10975,
+    "total_wait_time": 0,
+    "effective_limit": 4860,
+    "remaining_requests": 4827,
+    "retry_after_seconds": 0,
+    "cooldown_until": 0
+  },
+  "quota_note": "Shared-account counter is not exclusive to this task; targeted repair acquisition is exactly five requests.",
+  "original_candidates": 29930,
+  "recomputed_candidates": 29930,
+  "added_candidates": 0,
+  "removed_candidates": 0,
+  "changed_candidates": 0,
+  "quality_rows_repaired": 5,
+  "no_affected_later_exposures": {
+    "affected_holdings_after_repair": 0,
+    "affected_trades_after_repair": 0,
+    "affected_orders_after_repair": 0,
+    "affected_candidates_after_repair": 0
+  },
+  "account_return_recomputed": false,
+  "strict_data_gate_blocked": true,
+  "complete_verified_data": false,
+  "live_qualified": false
+}
