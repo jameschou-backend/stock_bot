@@ -1,0 +1,187 @@
+{
+  "schema": "official_market_completion_acceptance_v1",
+  "created_at": "2026-10-02T06:47:27.362216+00:00",
+  "historical_table_acquisition_complete": true,
+  "all_project_acceptance_passed": false,
+  "tests": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 4504,
+    "warnings": 36,
+    "seconds": 91.2,
+    "log": {
+      "path": ".cache/official-market-days-20261002/final-acceptance/make-test.log",
+      "sha256": "50812062982c6d70ea8c9651b6b87fb37e604e7debe1d5343ddcfc928d5c61c8"
+    }
+  },
+  "latest_pipeline": {
+    "command": "INGEST_PRICES_SOURCE=finmind SPONSOR_INGEST=off make pipeline",
+    "exit_code": 2,
+    "status": "blocked_by_incomplete_current_market_data",
+    "data_date": "2026-10-02",
+    "message": "上市／上櫃行情不完整：2026-10-02；請先補齊兩市場行情，再建置特徵、訓練與選股",
+    "log": {
+      "path": ".cache/official-market-days-20261002/final-acceptance/pipeline-first.log",
+      "sha256": "7a0c0d6086193b287266642e9a19a24a871b7a6317440e90da7cd0eb3d558db9"
+    },
+    "fresh_provider_read": {
+      "date": "2026-10-02",
+      "rows": 35993,
+      "positive_rows_by_market": {
+        "TWSE": 1086
+      },
+      "source": "FinMind shared client",
+      "network_requests": 1,
+      "cache_hit": false,
+      "retrieved_at": 1790923175.873216
+    },
+    "gate_unchanged": true,
+    "partial_data_not_removed": true,
+    "further_retry_deferred_until_provider_state_changes": true,
+    "impact_on_completed_historical_acquisition": false
+  },
+  "api": {
+    "command": "API_PORT=8001 make api",
+    "results": {
+      "8001": {
+        "health": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-jobs.json",
+          "sha256": "78df1915177088214ee5b84680496d016dc5607d2ab7ffc16eb6e0320439ea21"
+        }
+      },
+      "8000": {
+        "health": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-health.json",
+          "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+        },
+        "picks": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-picks.json",
+          "sha256": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68"
+        },
+        "models": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-models.json",
+          "sha256": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28"
+        },
+        "jobs?limit=10": {
+          "status": 200,
+          "path": ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-jobs.json",
+          "sha256": "78df1915177088214ee5b84680496d016dc5607d2ab7ffc16eb6e0320439ea21"
+        }
+      }
+    },
+    "existing8000_preserved": true,
+    "pid": 71786,
+    "fresh_process_stopped": true
+  },
+  "ui_render": {
+    "exceptions": 0,
+    "metrics": [
+      {
+        "label": "普通盤成交股日價格",
+        "value": "561 / 561"
+      },
+      {
+        "label": "候選身分異常",
+        "value": "0 / 29,930"
+      },
+      {
+        "label": "官方市場日表覆蓋",
+        "value": "3,928 / 3,928"
+      }
+    ],
+    "success": [
+      "官方市場日表已補齊：3,928 / 3,928 張。"
+    ],
+    "warnings": [
+      "尚有行情／身分／成交資料問題待核對；日表齊全不代表其他核對項目已通過，不能因此視為可實戰。"
+    ],
+    "table_count": 3
+  },
+  "ui_first_read_seconds": 2.3206787910312414,
+  "ui_cached_read_seconds": 0.30375554086640477,
+  "idempotency": {
+    "repeat_fetch": [
+      {
+        "market": "TWSE",
+        "exit_code": 0,
+        "seconds": 0.17697829217649996
+      },
+      {
+        "market": "TPEX",
+        "exit_code": 0,
+        "seconds": 0.17551308288238943
+      }
+    ],
+    "network_requests": 0,
+    "acquisition_and_origin_state_unchanged": true
+  },
+  "historical_acquisition_finmind_requests": 0,
+  "historical_acquisition_official_http_requests": 3744,
+  "final_provider_freshness_check_finmind_requests": 1,
+  "pipeline_finmind_requests": "Separate from historical acquisition; not claimed to be zero",
+  "performance": {
+    "audit_seconds": 51.984839582815766,
+    "completion_seconds": 25.10398295801133,
+    "network_requests": 0
+  },
+  "reports": {
+    "acquisition": {
+      "path": "artifacts/forward_simulation/official_market_completion_20261002.json",
+      "sha256": "867c95d54ca839e3ad8528577948dd91a8103c275a571d2d98f2b54c203b69e6"
+    },
+    "full_audit": {
+      "path": "artifacts/forward_simulation/three_black_market_supplement_20261002.json",
+      "sha256": "22bf4b23f1c16db5405ccdacc98272d2e4198efdcbac10e13283d56ef08632a9"
+    },
+    "remaining_issues": {
+      "path": "artifacts/forward_simulation/official_market_issues_20261002.json",
+      "sha256": "c23ac39301495d826edeca8978dad99071b1d303ff68e1ef0d2c933b6caee827"
+    }
+  },
+  "push_eligible": false,
+  "push_block_reason": "Final make pipeline acceptance has not passed on the currently available data; AGENTS.md requires full acceptance before push.",
+  "return_recomputed": false,
+  "complete_verified_data": false,
+  "live_qualified": false,
+  "actual_fill_verified": false,
+  "source_sha256": {
+    ".cache/official-market-days-20261002/final-acceptance/make-test.log": "50812062982c6d70ea8c9651b6b87fb37e604e7debe1d5343ddcfc928d5c61c8",
+    ".cache/official-market-days-20261002/final-acceptance/pipeline-first.log": "7a0c0d6086193b287266642e9a19a24a871b7a6317440e90da7cd0eb3d558db9",
+    ".cache/official-market-days-20261002/final-acceptance/provider-latest-check.json": "736233ff587ad66548b9a96cdf0678d1c2600211777b2d9405314850658046ec",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-checks.json": "12150552378a5772250f07b0dc45c0e2c8303b017e9ffc0a68009fb9ded676f3",
+    ".cache/official-market-days-20261002/final-acceptance/ui-render.json": "d06b759fd865cdf2c0114ca30e5a7abc320a7d6d487edff3dea5c640d10507fe",
+    ".cache/official-market-days-20261002/final-acceptance/resume-idempotency.json": "171a03cd26d323265464410824284ec93014ac6d057611155cea95e37270b37c",
+    "artifacts/forward_simulation/official_market_completion_20261002.json": "867c95d54ca839e3ad8528577948dd91a8103c275a571d2d98f2b54c203b69e6",
+    "artifacts/forward_simulation/three_black_market_supplement_20261002.json": "22bf4b23f1c16db5405ccdacc98272d2e4198efdcbac10e13283d56ef08632a9",
+    "artifacts/forward_simulation/official_market_issues_20261002.json": "c23ac39301495d826edeca8978dad99071b1d303ff68e1ef0d2c933b6caee827",
+    ".cache/official-market-days-20261002/final-verification-timing.json": "b73fd80768dffeaf2c2ba057cea5b4f200583bea5c8dba5ffb88d53269939b33",
+    ".cache/official-market-days-20261002/final-acceptance/ui-overview.json": "9439084749a26f274bf9a2ec85e33eeed73298fdb8ee66e0d6be66bb2f7a729c",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8001-jobs.json": "78df1915177088214ee5b84680496d016dc5607d2ab7ffc16eb6e0320439ea21",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-picks.json": "afbd128b2fa60a749d602fe89471e0bf3a797cfa31f5e4e2cb7e587a2d6cdd68",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/official-market-days-20261002/final-acceptance/api-readonly-final-8000-jobs.json": "78df1915177088214ee5b84680496d016dc5607d2ab7ffc16eb6e0320439ea21"
+  }
+}

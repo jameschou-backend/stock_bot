@@ -1,5 +1,6 @@
 """Read the dated primary-source coverage without running research or ingestion."""
 from copy import deepcopy
+from datetime import date
 import hashlib
 import json
 from pathlib import Path
@@ -9,9 +10,34 @@ from app.backtest_full_pass_ui import _file_signature
 from skills.market_input_validation import CHECK_NAMES, require
 
 ROOT = Path(__file__).resolve().parents[1]
-REPORT = Path('artifacts/forward_simulation/three_black_market_inputs_20261002.json')
+REPORT = Path('artifacts/forward_simulation/three_black_market_supplement_20261002.json')
 _CACHE = {}
 _LOCK = threading.RLock()
+CHECK_LABELS = {
+    'all_execution_prices_verified': '模擬普通盤成交價格',
+    'all_holding_marks_verified': '持股收盤估值',
+    'all_ordinary_capacity_verified': '普通盤成交容量',
+    'all_signal_histories_verified': '全部候選所需歷史價量',
+    'all_historical_market_days_observed': '必要官方市場日表',
+    'known_identity_checks_passed': '已知歷史板別與身分一致性',
+    'all_observed_positive_quotes_present': '官方有價、本地行情完整性',
+    'complete_historical_universe': '完整歷史股票名單',
+    'no_observed_price_conflicts': '已核對行情欄位一致性',
+}
+ISSUE_LABELS = {
+    'missing_positive_quotes_in_scope': '官方有價、本地無行情',
+    'in_scope_official_presence_issues': '歷史板別／身分待釐清',
+    'positive_local_absent_official': '本地有成交、官方名單未對上',
+}
+
+
+def _issue_rows(value):
+    # Both supported report schemas require these lists; unknown is not zero.
+    return {
+        'missing_positive_quotes_in_scope': value['missing_positive_quotes_in_scope'],
+        'in_scope_official_presence_issues': value['identity']['in_scope_official_presence_issues'],
+        'positive_local_absent_official': value['positive_local_absent_official'],
+    }
 
 
 def _digest(path):
@@ -48,6 +74,33 @@ def load(root=ROOT,path=REPORT):
         require(set(value['checks']) == set(CHECK_NAMES) and all(type(v) is bool for v in value['checks'].values()),
                 '核對項目不完整')
         require(value['complete_verified_data'] is all(value['checks'].values()), '資料完整狀態不一致')
+        for rows in _issue_rows(value).values():
+            require(isinstance(rows,list), '缺少股日問題明細')
+            for row in rows:
+                require(isinstance(row,dict) and isinstance(row.get('stock_id'),str)
+                        and bool(row['stock_id']) and row.get('market') in ('TWSE','TPEX')
+                        and isinstance(row.get('date'),str)
+                        and date.fromisoformat(row['date']).isoformat() == row['date'],
+                        '股日問題明細不完整')
+        plan = value['request_plan']
+        require(isinstance(plan,list) and bool(plan), '缺少必要市場日清單')
+        required_days = set()
+        missing_days = 0
+        for entry in plan:
+            require(isinstance(entry,dict) and entry.get('market') in ('TWSE','TPEX')
+                    and isinstance(entry.get('date'),str)
+                    and date.fromisoformat(entry['date']).isoformat() == entry['date']
+                    and entry.get('scope') == 'full_daily_prices_and_roster'
+                    and entry.get('status') in ('cached','source_missing'), '必要市場日清單不完整')
+            key = entry['market'],entry['date']
+            require(key not in required_days, '必要市場日重複')
+            required_days.add(key)
+            missing_days += entry['status'] == 'source_missing'
+        require(type(value['requests_lower_bound']) is int and value['requests_lower_bound'] == missing_days
+                and type(value['source_days']) is int and value['source_days'] >= len(plan)-missing_days,
+                '市場日表覆蓋數量不一致')
+        require(value['checks']['all_historical_market_days_observed'] is (missing_days == 0),
+                '市場日表完整狀態不一致')
         if value['schema'] == 'market_input_validation_v2':
             supplement = value.get('supplement', {})
             require(all(type(supplement.get(k)) is int and supplement[k] >= 0 for k in (
@@ -80,9 +133,11 @@ def overview(root=ROOT):
     return dict(available=True,live_qualified=False,start=value['start'],end=value['end'],
         complete_verified_data=value['complete_verified_data'],counts=value['counts'],coverage=value['coverage'],
         source_days=value['source_days'],required_market_days=len(value['request_plan']),
+        verified_market_days=len(value['request_plan'])-value['requests_lower_bound'],
         missing_market_days=value['requests_lower_bound'],checks=value['checks'],repair_summary=value['repair_summary'],
         candidate_count=value['identity']['candidate_count'],
         candidate_identity_issues=len(value['identity']['candidate_issues']),
+        issue_counts={key:len(rows) for key,rows in _issue_rows(value).items()},
         supplement=value.get('supplement') if value['schema'] == 'market_input_validation_v2' else None,
         observed_price_conflicts=len(value['price_conflicts']),report=str(REPORT))
 
@@ -100,8 +155,14 @@ def render(root=ROOT):
         st.info(f"本次新增核對 {supplement['added_source_days']:,} 張官方市場日表。")
         if supplement['legacy_status_unknown']:
             st.caption(f"其中 {supplement['legacy_status_unknown']} 張沿用早期官方快取，已核對原始檔與來源；舊收據未記錄 HTTP 狀態。")
-    if not value['complete_verified_data']:
-        st.warning('部分官方資料已核對，尚未完成全期間驗證。不能因此視為可實戰。')
+    if value['missing_market_days']:
+        st.warning(f"尚缺 {value['missing_market_days']:,} 張官方市場日表，尚未完成全期間驗證。不能因此視為可實戰。")
+    else:
+        st.success(f"官方市場日表已補齊：{value['verified_market_days']:,} / {value['required_market_days']:,} 張。")
+        if not value['complete_verified_data']:
+            st.warning('尚有行情／身分／成交資料問題待核對；日表齊全不代表其他核對項目已通過，不能因此視為可實戰。')
+        else:
+            st.info('資料核對項目已全部通過；實際成交與未見期績效仍未驗證。')
     repairs = value['repair_summary']
     if repairs:
         st.info(f"已補回 {repairs['missing_quotes_repaired']} 筆缺漏行情，官方四個價格欄位相符；"
@@ -114,13 +175,22 @@ def render(root=ROOT):
     a,b,d = st.columns(3)
     a.metric('普通盤成交股日價格',f"{c['verified']:,} / {c['required']:,}")
     b.metric('候選身分異常',f"{value['candidate_identity_issues']:,} / {value['candidate_count']:,}")
-    d.metric('尚缺官方市場日表',f"{value['missing_market_days']:,}")
+    d.metric('官方市場日表覆蓋',f"{value['verified_market_days']:,} / {value['required_market_days']:,}")
     st.caption('一個股日＝一檔股票的一個交易日；一張市場日表涵蓋該市場多檔股票。日成交總量、普通盤量及零股量分開核對。')
+    st.caption('市場日表覆蓋只計回測與訊號暖機需要的日期，範圍外來源不計入此比例。')
     with st.expander('查看各項覆蓋與限制'):
+        st.dataframe([dict(核對項目=CHECK_LABELS[key],結果='通過' if value['checks'][key] else '待核對')
+                      for key in CHECK_NAMES],hide_index=True,use_container_width=True)
+        st.dataframe([dict(待核對項目=label,股日數=value['issue_counts'][key])
+                      for key,label in ISSUE_LABELS.items()],hide_index=True,use_container_width=True)
+        st.caption('同一股日可能出現在多個項目，以上數量分開統計。')
         labels = dict(ordinary_fill_prices='普通盤成交價',traded_stock_day_prices='成交股日的普通盤行情（不認證零股）',
                       holding_marks='持股收盤估值',candidate_signal_prices='全部候選訊號日價格')
         st.dataframe([dict(項目=label,已核對=value['coverage'][key]['verified'],
                            應核對=value['coverage'][key]['required']) for key,label in labels.items()],
                      hide_index=True,use_container_width=True)
         st.write('普通盤容量還需要同口徑的前20日資料；候選身分沒有異常，也不代表完整歷史股票名單已認證。')
-        st.write('報告已記錄缺漏日期。資料不齊時，完整驗證模式會停止，不會刪除缺資料的股票繼續宣稱通過。')
+        if value['missing_market_days']:
+            st.write('報告已記錄缺漏日期。資料不齊時，完整驗證模式會停止，不會刪除缺資料的股票繼續宣稱通過。')
+        elif not value['complete_verified_data']:
+            st.write('市場日表已齊全，其餘未通過項目仍會阻擋完整驗證模式，不會刪除有問題的股票繼續宣稱通過。')
