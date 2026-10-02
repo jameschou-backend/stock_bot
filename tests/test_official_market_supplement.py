@@ -206,3 +206,76 @@ def test_overlap_keeps_managed_classification_even_when_ordinary_volume_is_stron
         assert existing[key]['table_category'] == '管理股票'
     with pytest.raises(MarketEvidenceError, match='market classifications'):
         merge_source_rows({key: managed}, {'2330': row}, 'TPEX', '2026-09-09')
+
+
+@pytest.fixture
+def recovered_entry(tmp_path, monkeypatch):
+    import requests
+    from tests.test_official_daily_acquisition import auth, response, setup
+
+    client, runtime, items = setup(tmp_path, [response(), requests.ConnectionError(),
+                                           response(day='2026-09-10')])
+    auth(client, runtime)
+    proof = client.probe(items[0], allow_probe=True)
+    client.fetch(items[1])
+    entry = client.recover_transport(items[1], 'Reviewed a response-free connection failure')
+
+    def network_forbidden(*args, **kwargs):
+        raise AssertionError('Supplement inspection must never issue a network request')
+
+    monkeypatch.setattr(requests.Session, 'request', network_forbidden)
+    return client, runtime, entry, proof
+
+
+def test_handbuilt_manifest_verifies_and_retains_complete_recovery_lineage(tmp_path, recovered_entry):
+    client, runtime, entry, proof = recovered_entry
+    # Deliberately omit source_sha256: the reader must derive all dependencies.
+    refs = {}
+    rows, descriptors = collect_supplement(manifest(tmp_path, [entry]), tmp_path, refs)
+    assert list(rows) == [('TWSE', '2026-09-10', '2330')]
+    lineage = descriptors[0]['recovery_source_sha256']
+    required = {str(client.plan_path.relative_to(tmp_path)), entry['base_receipt_path'],
+                entry['base_attempt_path'], entry['recovery_proof_path'], proof['raw_path'],
+                entry['authorization']['path'],
+                str((tmp_path/entry['receipt_path']).with_name('attempt.json').relative_to(tmp_path))}
+    assert required <= set(lineage)
+    assert all(refs[name] == value == sha(tmp_path/name) for name, value in lineage.items())
+    assert len(runtime.calls) == 3
+
+
+@pytest.mark.parametrize('mutation', ['missing_base', 'changed_base_attempt', 'missing_proof_raw',
+                                    'changed_authorization', 'missing_links', 'relabeled_kind',
+                                    'detached_receipt', 'stripped_detached_receipt'])
+def test_handbuilt_manifest_cannot_bypass_recovery_lineage(tmp_path, recovered_entry, mutation):
+    _, runtime, entry, proof = recovered_entry
+    receipt_path = tmp_path/entry['receipt_path']
+    receipt = json.loads(receipt_path.read_text())
+    if mutation == 'missing_base':
+        (tmp_path/entry['base_receipt_path']).unlink()
+    elif mutation == 'changed_base_attempt':
+        p = tmp_path/entry['base_attempt_path']
+        p.write_text(p.read_text()+' ')
+    elif mutation == 'missing_proof_raw':
+        (tmp_path/proof['raw_path']).unlink()
+    elif mutation == 'changed_authorization':
+        p = tmp_path/entry['authorization']['path']
+        p.write_text(p.read_text()+' ')
+    elif mutation == 'missing_links':
+        for key in ('base_receipt_path', 'base_attempt_path', 'recovery_proof_path'):
+            receipt.pop(key)
+    elif mutation == 'relabeled_kind':
+        receipt['request_kind'] = 'planned_missing_day'
+    else:
+        receipt_path = tmp_path/'detached.json'
+        entry['receipt_path'] = 'detached.json'
+        if mutation == 'stripped_detached_receipt':
+            for key in list(receipt):
+                if key.startswith(('base_', 'recovery_', 'legacy_')):
+                    receipt.pop(key)
+            receipt['request_kind'] = 'planned_missing_day'
+    receipt_path.write_text(json.dumps(receipt))
+    receipt_path.with_suffix('.sha256').write_text(sha(receipt_path))
+    entry['receipt_sha256'] = sha(receipt_path)
+    with pytest.raises(MarketEvidenceError, match='[Rr]ecovery'):
+        collect_supplement(manifest(tmp_path, [entry]), tmp_path, {})
+    assert len(runtime.calls) == 3

@@ -101,6 +101,45 @@ def compare_quote(local, official):
     return result
 
 
+def recovery_sources(receipt_path, receipt, raw_path, root, market, stamp):
+    """Verify reviewed recovery lineage even for a hand-built supplement manifest."""
+    # This import is local to keep the ordinary archived-receipt path independent
+    # of acquisition. Inspection never dispatches transport or writes evidence.
+    from skills.official_daily_acquisition import (OfficialDailyAcquisition,
+        TRANSPORT_RECOVERY_KIND, request_item)
+
+    if (receipt.get('request_kind') != TRANSPORT_RECOVERY_KIND
+            and not any(k in receipt for k in ('base_receipt_path', 'base_attempt_path',
+                                               'recovery_proof_path', 'recovery_reason'))
+            and receipt_path.parent.parent.name != 'recoveries'
+            and raw_path.parent.parent.name != 'recoveries'):
+        return {}
+    require(receipt.get('request_kind') == TRANSPORT_RECOVERY_KIND,
+            'Recovery receipt request kind differs')
+    item = request_item(market, stamp)
+    folder = receipt_path.parent
+    require(receipt_path.name == 'receipt.json' and folder.name == item['identity']
+            and folder.parent.name == 'recoveries', 'Recovery receipt location differs')
+    try:
+        client = OfficialDailyAcquisition(root, folder.parent.parent, session=object())
+        linked = client.inspect_transport_recovery(item)
+        require(linked['receipt_path'] == str(receipt_path.relative_to(root)),
+                'Recovery receipt location differs')
+        proof = json.loads(bound_path(root, linked['recovery_proof_path']).read_text())
+        sources = dict(client.plan['source_sha256'])
+        sources[str(client.plan_path.relative_to(root))] = client.plan_hash
+        for prefix in ('base_receipt', 'base_attempt', 'recovery_proof'):
+            sources[linked[prefix+'_path']] = linked[prefix+'_sha256']
+        sources[str((folder/'attempt.json').relative_to(root))] = sha(folder/'attempt.json')
+        sources[proof['raw_path']] = proof['raw_sha256']
+        sources[linked['authorization']['path']] = linked['authorization']['sha256']
+        for name, expected in sources.items():
+            require(sha(bound_path(root, name)) == expected, 'Changed recovery lineage source')
+        return sources
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        require(False, 'Invalid recovery receipt lineage: '+str(exc))
+
+
 def validate_entry(entry, root):
     """Derive scope from a verified receipt and raw response, never entry labels."""
     root = Path(root).resolve()
@@ -112,6 +151,7 @@ def validate_entry(entry, root):
     require(sha(raw) == entry.get('raw_sha256'), 'Changed supplement raw bytes')
     require(sha(receipt_path) == entry.get('receipt_sha256'), 'Changed supplement receipt')
     receipt = json.loads(receipt_path.read_text())
+    recovery_refs = recovery_sources(receipt_path, receipt, raw, root, market, stamp)
     if receipt.get('schema') == 'official_daily_receipt_v1':
         require(receipt.get('accepted') is True and receipt.get('status') == 'verified_market_day'
                 and receipt.get('automatic_redirects_disabled') is True
@@ -166,6 +206,8 @@ def validate_entry(entry, root):
         sha256=entry['raw_sha256'], receipt=entry['receipt_path'], receipt_sha256=entry['receipt_sha256'],
         volume_scope=scope, http_status=http_status, http_status_evidence=status_evidence,
         retrieved_at=receipt.get('retrieved_at', receipt.get('observed_at')), url=receipt['url'])
+    if recovery_refs:
+        descriptor['recovery_source_sha256'] = recovery_refs
     return rows, descriptor
 
 
@@ -212,7 +254,9 @@ def collect_supplement(manifest_path, root, refs, official=None):
         source_key = descriptor['market'], descriptor['date'], descriptor['volume_scope']
         require(source_key not in seen, 'Duplicate supplement market/day/scope')
         seen.add(source_key)
-        for name, digest in [(entry['raw_path'], entry['raw_sha256']), (entry['receipt_path'], entry['receipt_sha256'])]:
+        source_refs = {entry['raw_path']: entry['raw_sha256'], entry['receipt_path']: entry['receipt_sha256'],
+                       **descriptor.get('recovery_source_sha256', {})}
+        for name, digest in source_refs.items():
             require(name not in refs or refs[name] == digest, 'Source hash closure conflict')
             refs[name] = digest
         merge_source_rows(official, rows, descriptor['market'], descriptor['date'])

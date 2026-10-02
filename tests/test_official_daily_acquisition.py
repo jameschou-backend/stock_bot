@@ -293,3 +293,152 @@ def test_exported_acquisition_receipts_are_accepted_by_supplement_reader(tmp_pat
     assert official['TWSE','2026-09-09','2330']['volume_scope'] == 'all_daily_sessions'
     assert official['TPEX','2026-09-09','2330']['volume_scope'] == 'ordinary_session'
     assert all(digest(tmp_path/name) == value for name,value in refs.items())
+
+
+def test_reviewed_transport_recovery_preserves_failure_and_exports_linked_success(tmp_path):
+    from skills.official_market_supplement import collect_supplement
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(),response(day='2026-09-10')])
+    h = hold(tmp_path,r); original_hold = h.read_bytes(); auth(c,r)
+    c.probe(items[0],allow_probe=True)
+    failed = c.fetch(items[1]); assert failed['status'] == 'transport_error_no_retry'
+    base = c.cache/'receipts'/(items[1]['identity']+'.json'); before = base.read_bytes()
+    recovered = c.recover_transport(items[1],'Agent reviewed a response-free ConnectionError; one bounded completion.')
+    assert recovered['accepted'] and recovered['request_kind'] == 'reviewed_transport_recovery'
+    assert recovered['base_receipt_sha256'] == digest(base)
+    assert c.recover_transport(items[1],'Repeat inspection') == recovered and len(r.calls) == 3
+    assert c.fetch(items[1])['accepted'] is False  # Normal fetch never rewrites/retries history.
+    manifest = tmp_path/'with-recovery.json'; c.export_manifest(manifest)
+    official,descriptors = collect_supplement(manifest,tmp_path,{})
+    assert len(descriptors) == 2 and len(official) == 2
+    assert base.read_bytes() == before and h.read_bytes() == original_hold
+
+
+@pytest.mark.parametrize('failed_response',[response(status=403),response(status=428),response(status=429),
+    response(status=302),response(status=503),response(body=b'{}'),response(body=b'captcha')])
+def test_http_security_schema_failures_cannot_receive_transport_recovery(tmp_path,failed_response):
+    c,r,items = setup(tmp_path,[response(),failed_response])
+    auth(c,r); c.probe(items[0],allow_probe=True); c.fetch(items[1])
+    with pytest.raises(AcquisitionBlocked,match='response-free'):
+        c.recover_transport(items[1],'Reviewed')
+    assert len(r.calls) == 2 and not (c.cache/'recoveries').exists()
+
+
+def test_interrupted_original_attempt_cannot_receive_recovery(tmp_path):
+    c,r,items = setup(tmp_path,[response(),RuntimeError('process interruption')])
+    auth(c,r); c.probe(items[0],allow_probe=True)
+    with pytest.raises(RuntimeError): c.fetch(items[1])
+    with pytest.raises(AcquisitionBlocked,match='Interrupted'):
+        c.recover_transport(items[1],'Reviewed')
+    assert len(r.calls) == 2
+
+
+@pytest.mark.parametrize('second_failure',[requests.ConnectionError(),RuntimeError('recovery interrupted'),response(status=428)])
+def test_failed_or_interrupted_recovery_is_never_repeated(tmp_path,second_failure):
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(),second_failure])
+    auth(c,r); c.probe(items[0],allow_probe=True); c.fetch(items[1])
+    if isinstance(second_failure,RuntimeError):
+        with pytest.raises(RuntimeError): c.recover_transport(items[1],'Reviewed')
+    else:
+        assert not c.recover_transport(items[1],'Reviewed')['accepted']
+    assert not c.recover_transport(items[1],'Do not retry')['accepted'] and len(r.calls) == 3
+
+
+def test_each_separate_transport_failure_can_be_recovered_once(tmp_path):
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(),requests.Timeout(),
+        response(day='2026-09-10'),response(day='2026-09-11')],days=('2026-09-09','2026-09-10','2026-09-11'))
+    auth(c,r); c.probe(items[0],allow_probe=True)
+    for item in items[1:]: c.fetch(item)
+    for item in items[1:]: assert c.recover_transport(item,'Reviewed independent transport failure')['accepted']
+    assert len(r.calls) == 5
+
+
+def test_recovery_requires_same_fresh_proof_and_base_hash(tmp_path):
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError()])
+    auth(c,r); c.probe(items[0],allow_probe=True); c.fetch(items[1])
+    r.now += 86401
+    with pytest.raises(AcquisitionBlocked,match='stale'):
+        c.recover_transport(items[1],'Reviewed')
+    assert len(r.calls) == 2
+
+
+@pytest.mark.parametrize('status',[403,428,429,200])
+def test_exception_attached_response_is_preserved_and_cannot_be_recovered(tmp_path,status):
+    attached = requests.Response(); attached.status_code = status
+    attached._content = b'access denied' if status != 200 else b'{}'
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(response=attached)])
+    auth(c,r); c.probe(items[0],allow_probe=True)
+    failed = c.fetch(items[1])
+    assert failed['http_status'] == status and failed['exception_response_present'] is True
+    assert (tmp_path/failed['raw_path']).read_bytes() == attached.content
+    if status != 200: assert failed['status'] == 'origin_stopped'
+    with pytest.raises(AcquisitionBlocked,match='response-free'):
+        c.recover_transport(items[1],'Attached response must not be retried')
+    assert len(r.calls) == 2
+
+
+def test_recovery_cannot_change_date_while_retaining_original_failure_link(tmp_path):
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(),response(day='2026-09-10')])
+    auth(c,r); c.probe(items[0],allow_probe=True); c.fetch(items[1])
+    success = c.recover_transport(items[1],'Reviewed')
+    receipt_path = tmp_path/success['receipt_path']; folder = receipt_path.parent
+    replacement = request_item('TWSE','2026-09-11')
+    raw = tmp_path/success['raw_path']; raw.write_text(encoded(payload('TWSE','2026-09-11')))
+    for path in (receipt_path,folder/'attempt.json'):
+        value = json.loads(path.read_text()); value.update(replacement)
+        if path == receipt_path: value['raw_sha256'] = digest(raw)
+        path.write_text(encoded(value))
+    receipt_path.with_suffix('.sha256').write_text(digest(receipt_path))
+    with pytest.raises(AcquisitionBlocked,match='linked'):
+        c.inspect_transport_recovery(items[1])
+
+
+def test_unknown_legacy_response_presence_requires_explicit_exact_failure_sha(tmp_path):
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(),response(day='2026-09-10')])
+    auth(c,r); c.probe(items[0],allow_probe=True); c.fetch(items[1])
+    base = c.cache/'receipts'/(items[1]['identity']+'.json')
+    legacy = json.loads(base.read_text()); legacy.pop('exception_response_present')
+    base.write_text(encoded(legacy)); base.with_suffix('.sha256').write_text(digest(base))
+    before = base.read_bytes()
+    with pytest.raises(AcquisitionBlocked,match='presence is unknown'):
+        c.recover_transport(items[1],'Review must acknowledge missing metadata')
+    with pytest.raises(AcquisitionBlocked,match='presence is unknown'):
+        c.recover_transport(items[1],'Wrong digest',legacy_failure_sha256='0'*64)
+    assert len(r.calls) == 2
+    value = c.recover_transport(items[1],'Agent acknowledges original exception response presence was not recorded.',
+                                legacy_failure_sha256=digest(base))
+    assert value['legacy_failure_sha256'] == digest(base) and value['accepted']
+    assert base.read_bytes() == before and len(r.calls) == 3
+    assert c.inspect_transport_recovery(items[1]) == value
+
+
+def test_explicit_legacy_digest_cannot_override_attached_security_response(tmp_path):
+    attached = requests.Response(); attached.status_code = 403; attached._content = b'access denied'
+    c,r,items = setup(tmp_path,[response(),requests.ConnectionError(response=attached)])
+    auth(c,r); c.probe(items[0],allow_probe=True); c.fetch(items[1])
+    base = c.cache/'receipts'/(items[1]['identity']+'.json')
+    with pytest.raises(AcquisitionBlocked,match='connection failure'):
+        c.recover_transport(items[1],'Cannot override security evidence',legacy_failure_sha256=digest(base))
+    assert len(r.calls) == 2
+
+
+@pytest.mark.parametrize('operation',['probe','fetch','recovery'])
+def test_origin_wait_cannot_extend_authorization_or_proof_expiry(tmp_path,operation):
+    responses = [] if operation == 'probe' else [response()]
+    if operation == 'recovery': responses.append(requests.ConnectionError())
+    c,r,items = setup(tmp_path,responses)
+    h = hold(tmp_path,r); a = auth(c,r)
+    if operation != 'probe': c.probe(items[0],allow_probe=True)
+    if operation == 'recovery': c.fetch(items[1])
+    r.now = datetime.fromisoformat(json.loads(a.read_text())['created_at']).timestamp()+86399
+    state_path,_,_ = c._origin_paths(items[0])
+    state = json.loads(state_path.read_text()) if state_path.exists() else {'probes':{}}
+    state['last_start_epoch'] = r.now
+    state_path.parent.mkdir(parents=True,exist_ok=True); state_path.write_text(encoded(state))
+    before_calls = len(r.calls)
+    before_attempts = set(c.cache.rglob('attempt.json')) | set((c.cache/'attempts').glob('*.json'))
+    with pytest.raises(AcquisitionBlocked,match='stale'):
+        if operation == 'probe': c.probe(items[0],allow_probe=True)
+        elif operation == 'fetch': c.fetch(items[1])
+        else: c.recover_transport(items[1],'Freshness must remain valid after waiting')
+    assert len(r.calls) == before_calls
+    assert set(c.cache.rglob('attempt.json')) | set((c.cache/'attempts').glob('*.json')) == before_attempts
