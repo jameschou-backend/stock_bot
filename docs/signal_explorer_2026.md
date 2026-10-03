@@ -1,5 +1,7 @@
 # 2026 每日選股訊號與 K 線
 
+> 2026/10/3 更新：原頁已保留為 `artifacts/reports/signal_explorer_original_2026.html`。使用中的 `signal_explorer_2026.html` 現為 [POC 優先＋紅 K 研究版](poc_signal_explorer_2026.md)。以下紀錄屬舊版原始訊號；舊 receipt 仍保留原始交付 hash，新版索引另列替代路徑。
+
 本頁將既有三檔策略的全部候選訊號整理成可離線開啟的 HTML。它是訊號日誌，沒有把每日前三名當成實際買進，也不重算或改動策略。
 
 輸出：`artifacts/reports/signal_explorer_2026.html`。用瀏覽器開啟即可，不需登入、資料庫、FinMind 連線或外部圖表 CDN。
@@ -36,7 +38,7 @@
 
 ```sh
 python scripts/export_signal_explorer.py \
-  --output artifacts/reports/signal_explorer_2026.html \
+  --output artifacts/reports/signal_explorer_original_2026.html \
   --payload .cache/signal-explorer-20261003/payload.json \
   --receipt .cache/signal-explorer-20261003/receipt.json
 ```

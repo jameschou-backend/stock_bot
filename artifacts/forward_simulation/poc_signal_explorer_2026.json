@@ -1,0 +1,67 @@
+{
+  "schema": "poc_signal_explorer_publication_v1",
+  "created_at": "2026-10-03T13:54:34.852209+00:00",
+  "default_strategy": "poc_red",
+  "output_html": "artifacts/reports/signal_explorer_2026.html",
+  "output_sha256": {
+    ".cache/poc-explorer-20261003/payload.json": "cd6ce3cd34ba88239f59c0656e8904f58cbbebbd56c73900d77b2aee02275abf",
+    "artifacts/reports/signal_explorer_2026.html": "86b45b0ce120ee24d9e164583a424153bdccca1668014a7291676a6daa37093e"
+  },
+  "source_sha256": {
+    ".cache/poc-explorer-20261003/receipt.json": "72aa1d37456df13963fc2fc21a416b5f09db2540fa3c7cb66d6b673f213e8416",
+    ".cache/poc-explorer-20261003/browser-qa.json": "6193b6b785f31c3071c4301329f8fc758f056e183e917ebd5e77a8c521f3625a",
+    ".cache/poc-explorer-20261003/make-test.log": "5355a1915afcf08444a087185123ae133c60fe6bc5229a15526d54bcbed27c95",
+    ".cache/poc-explorer-20261003/pipeline.log": "47425d70e3487715664a4e69380b8ee4c5fd564077657953477cd1ab328fae20",
+    ".cache/poc-explorer-20261003/api.log": "8cca18234e5617013b7375b03dcc165b1a5eebcad318364a48169a69c5e7a2ef",
+    ".cache/poc-explorer-20261003/api-checks.json": "9034a20ce7524d5dca65ad2ffb77c1057c2e730128f358461c930793781ddf95",
+    ".cache/poc-explorer-20261003/preview.png": "95a352411a793bc9f1dfec4340e84003babe7e1e0458252395802ba4ad72580b",
+    ".cache/poc-explorer-20261003/review-v1/qa-examples.json": "18bb116774107b76bc46f09f3b002b7238d74641d04dc273440c7a0a7d89e133",
+    "scripts/export_poc_signal_explorer.py": "f6467402a9d05cea9223cdebd6255fe27bc02a542335a446f664168950bae3f7",
+    "tests/test_poc_signal_explorer_data.py": "282d2998896449788d53b3574f150f6a42beda556c22c13fbc557a4f78d191f3",
+    "ui/poc_signal_explorer.html": "0774bf0c227a0b9f27e73fda9635dc130ae95e55c36b2a38315ba2076aed0088",
+    "docs/poc_signal_explorer_2026.md": "b3b16ec6f69a24e9ae4214c5b94041633995f91e11d2c8634f048926975b09cb",
+    "docs/signal_explorer_2026.md": "339fe8c7312c7a4253abb6b7885906ee28f5b8cd74f3ea560b4063ade517efdf"
+  },
+  "prior_publication": {
+    "index": "artifacts/forward_simulation/signal_explorer_2026.json",
+    "preserved_html": "artifacts/reports/signal_explorer_original_2026.html",
+    "original_html_sha256": "51e6d1b4a9f5e74be2e03af7e05a8c4bcff6085119c2026cb8e963f013ff3b8c",
+    "reason": "Same historical HTML preserved under archive path; active URL now serves POC study"
+  },
+  "date_end": "2026-09-09",
+  "signal_count": 4369,
+  "stock_count": 760,
+  "market_day_count": 166,
+  "strategies": {
+    "poc_red": {
+      "decisions": 4369,
+      "account_days": 166,
+      "trades": 130,
+      "ledger_comparison": "exact"
+    },
+    "poc_base": {
+      "decisions": 4369,
+      "account_days": 166,
+      "trades": 145,
+      "ledger_comparison": "exact"
+    },
+    "original": {
+      "decisions": 4369,
+      "account_days": 166,
+      "trades": 134,
+      "ledger_comparison": "exact"
+    }
+  },
+  "validation": {
+    "tests_passed": 5076,
+    "warnings": 37,
+    "new_tests": 10,
+    "browser_qa": "passed",
+    "api_endpoints": "all_four_http_200",
+    "api_start": "port_8000_already_in_use",
+    "pipeline": "blocked_before_http_by_existing_source_hold_guard",
+    "push": "not_performed_full_pipeline_gate_unsatisfied"
+  },
+  "new_backtest_executed": false,
+  "live_qualified": false
+}
