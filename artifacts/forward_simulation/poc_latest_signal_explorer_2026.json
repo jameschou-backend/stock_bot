@@ -1,0 +1,464 @@
+{
+  "schema": "poc_latest_signal_explorer_publication_v1",
+  "created_at": "2026-10-03T16:07:59.357970+00:00",
+  "url": "http://127.0.0.1:8768/signal_explorer_2026.html",
+  "default_strategy": "poc_red",
+  "output_html": "artifacts/reports/signal_explorer_2026.html",
+  "output_sha256": {
+    ".cache/poc-latest-20261003/explorer-v2/payload.json": "0faa0d005c492d3a58293be0d10cee3d84bdd6cacba759953ba3bc5f653f87c8",
+    "artifacts/reports/signal_explorer_2026.html": "9a105d5f4e090f2968ef337d05c002a3b7e11146da17496adb10bbb5e51b5c5d"
+  },
+  "source_sha256": {
+    ".cache/poc-latest-20261003/run-v3/report.json": "f82dbcf728199ead57bc41eeea7463acc6c2c78f26cfa490deef4a9735a3623c",
+    ".cache/poc-latest-20261003/run-v3/report.sha256": "dbe5f211a44f787793158dcdba7572c90c2145811306c92326d21b17def56fdf",
+    ".cache/poc-latest-20261003/explorer-v2/receipt.json": "2014462759d7adddd3410bf2305b1518456cd9b9e01467b871ec7f1ac28c0a5e",
+    ".cache/poc-latest-20261003/final-review/review.json": "8fea4e7bd4d6a13bf12d9ae55adf2e112f4bf56f786ce71e9d2e3583a4985c1b",
+    ".cache/poc-latest-20261003/official-review/review.json": "e868c8b0da8e9caccaa8188775af66326aa66d54e65708c930112e442d7505f2",
+    ".cache/poc-latest-20261003/browser-qa.json": "42c007da5db34a20ab508365ad0c6fa7186d659f20ca9b36b34a9a1fdf70aa8a",
+    ".cache/poc-latest-20261003/preview.png": "6677a470d4a65fe51192404f088a60f7225445f8333812cce87a7a7b9bf9c9a9",
+    ".cache/poc-latest-20261003/make-test-final-v4.log": "daa0fb4b67c6e6aec55085ea7306d7e34f7ecaf7d11bdd231bdbe56b859b1553",
+    ".cache/poc-latest-20261003/make-pipeline.log": "5038aa2f04fdcadc936034f85b5842b78687740cbe51c32c0e6a863eb5752c41",
+    ".cache/poc-latest-20261003/make-api.log": "e273eafe8a666da4399c5f8db9e87a856cd6b724be99f7bb2977399f5b2b1a28",
+    ".cache/poc-latest-20261003/api-checks-final.json": "678abd08d61656e5a9760c490ce29f1f7732baabe7db1538553d56547500fe19",
+    "docs/research_poc_latest_20261003.md": "e16fedd0e0cb29e2c99275d8cf99a1befc0a49864b1680c94b60bba164a19e49",
+    "scripts/export_poc_latest_explorer.py": "00188b47fa3a3323db07394464c33465a051afcc2b69bb0fa45e8c3687ae8e78",
+    "tests/test_poc_latest_explorer.py": "ff666926f37251fa7beb31476f3dc6ad6747ad91c97d2d5e852f0572e000d2c7",
+    "ui/poc_latest_signal_explorer.html": "1004fb57d236fcce637c31bb68b52e34624b2d5b83e305881dac721368790b7b"
+  },
+  "prior_publication": {
+    "index": "artifacts/forward_simulation/poc_signal_explorer_2026.json",
+    "preserved_html": "artifacts/reports/signal_explorer_20260909.html",
+    "original_html_sha256": "86b45b0ce120ee24d9e164583a424153bdccca1668014a7291676a6daa37093e"
+  },
+  "date_end": "2026-10-02",
+  "signal_count": 4612,
+  "pending_signal_count": 21,
+  "market_day_count": 181,
+  "stock_count": 771,
+  "strategies": {
+    "benchmark": {
+      "completed": true,
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 1478714.26,
+            "max_drawdown": -0.21207052044668562,
+            "partial_year": false,
+            "profit": 478714.26,
+            "start_nav": 1000000.0,
+            "total_return": 0.47871426000000006,
+            "year": "2024"
+          },
+          {
+            "end_nav": 2022759.72,
+            "max_drawdown": -0.2749609347161396,
+            "partial_year": false,
+            "profit": 544045.46,
+            "start_nav": 1478714.26,
+            "total_return": 0.367917909982149,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3542492.5399999996,
+            "max_drawdown": -0.15339201240593725,
+            "partial_year": true,
+            "profit": 1519732.8199999996,
+            "start_nav": 2022759.72,
+            "total_return": 0.7513165330383382,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 23,
+        "cagr": 0.5842938959186756,
+        "cash": 121.34,
+        "costs": {
+          "commission": 1843.0,
+          "slippage": 4976.0,
+          "tax": 0.0,
+          "total_cost": 6819.0
+        },
+        "end": "2026-10-02",
+        "final_holdings": [
+          {
+            "date": "2026-10-02",
+            "event_id": "benchmark",
+            "mark_date": "2026-10-02",
+            "market_value": 3542371.1999999997,
+            "name": "元大台灣50",
+            "price": 112.8,
+            "qty": 31404,
+            "stale": false,
+            "stock_id": "0050"
+          }
+        ],
+        "final_nav": 3542492.5399999996,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 3542371.1999999997,
+        "max_drawdown": -0.2749609347161396,
+        "minimum_cash": 18.76,
+        "partial_or_rejected_orders": {
+          "midpoint_limit_not_crossed": 1
+        },
+        "profit": 2542492.5399999996,
+        "receivable": 0.0,
+        "sell_count": 0,
+        "stale_final_holdings": 0,
+        "start": "2024-01-02",
+        "stock_cohorts": 0,
+        "total_return": 2.5424925399999996,
+        "trade_count": 23,
+        "trading_days": 666
+      },
+      "prefix_exact": true
+    },
+    "original": {
+      "completed": true,
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 802239.4299999999,
+            "max_drawdown": -0.4417128283565853,
+            "partial_year": false,
+            "profit": -197760.57000000007,
+            "start_nav": 1000000.0,
+            "total_return": -0.19776057000000002,
+            "year": "2024"
+          },
+          {
+            "end_nav": 1613112.1400000001,
+            "max_drawdown": -0.22770032615658253,
+            "partial_year": false,
+            "profit": 810872.7100000002,
+            "start_nav": 802239.4299999999,
+            "total_return": 1.0107614755360506,
+            "year": "2025"
+          },
+          {
+            "end_nav": 3064876.56,
+            "max_drawdown": -0.39609241105746607,
+            "partial_year": true,
+            "profit": 1451764.42,
+            "start_nav": 1613112.1400000001,
+            "total_return": 0.8999773692112936,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 195,
+        "cagr": 0.5029845825142714,
+        "cash": 119674.56,
+        "costs": {
+          "commission": 128946.0,
+          "slippage": 401331.0,
+          "tax": 133154.0,
+          "total_cost": 663431.0
+        },
+        "end": "2026-10-02",
+        "final_holdings": [
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-08-13-7711",
+            "mark_date": "2026-10-02",
+            "market_value": 835090.0,
+            "name": "永擎",
+            "price": 610.0,
+            "qty": 1369,
+            "stale": false,
+            "stock_id": "7711"
+          },
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-09-16-2221",
+            "mark_date": "2026-10-02",
+            "market_value": 1186280.0,
+            "name": "大甲",
+            "price": 188.0,
+            "qty": 6310,
+            "stale": false,
+            "stock_id": "2221"
+          },
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-09-30-3055",
+            "mark_date": "2026-10-02",
+            "market_value": 923832.0,
+            "name": "蔚華科",
+            "price": 216.0,
+            "qty": 4277,
+            "stale": false,
+            "stock_id": "3055"
+          }
+        ],
+        "final_nav": 3064876.56,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 2945202.0,
+        "max_drawdown": -0.5202333470663587,
+        "minimum_cash": 14587.82,
+        "partial_or_rejected_orders": {
+          "midpoint_daily_capacity_zero": 1,
+          "midpoint_limit_not_crossed": 5,
+          "overlapping_member": 159,
+          "partial_midpoint_daily_capacity": 150,
+          "residual_exposure_cap": 134,
+          "resource_cash_locked": 39,
+          "resource_slots_locked": 887,
+          "slots_full": 11734
+        },
+        "profit": 2064876.56,
+        "receivable": 0.0,
+        "sell_count": 302,
+        "stale_final_holdings": 0,
+        "start": "2024-01-02",
+        "stock_cohorts": 105,
+        "total_return": 2.06487656,
+        "trade_count": 497,
+        "trading_days": 666
+      },
+      "prefix_exact": true
+    },
+    "poc_base": {
+      "completed": true,
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 1619516.19,
+            "max_drawdown": -0.2531023336560948,
+            "partial_year": false,
+            "profit": 619516.19,
+            "start_nav": 1000000.0,
+            "total_return": 0.6195161899999999,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3740647.0599999996,
+            "max_drawdown": -0.18575005704230474,
+            "partial_year": false,
+            "profit": 2121130.8699999996,
+            "start_nav": 1619516.19,
+            "total_return": 1.3097311920049406,
+            "year": "2025"
+          },
+          {
+            "end_nav": 8258495.02,
+            "max_drawdown": -0.3004819208964644,
+            "partial_year": true,
+            "profit": 4517847.96,
+            "start_nav": 3740647.0599999996,
+            "total_return": 1.207771780532537,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 185,
+        "cagr": 1.1555782983781144,
+        "cash": 403662.02,
+        "costs": {
+          "commission": 248377.0,
+          "slippage": 779544.0,
+          "tax": 260489.0,
+          "total_cost": 1288410.0
+        },
+        "end": "2026-10-02",
+        "final_holdings": [
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-08-13-7711",
+            "mark_date": "2026-10-02",
+            "market_value": 2165500.0,
+            "name": "永擎",
+            "price": 610.0,
+            "qty": 3550,
+            "stale": false,
+            "stock_id": "7711"
+          },
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-09-16-2221",
+            "mark_date": "2026-10-02",
+            "market_value": 3442280.0,
+            "name": "大甲",
+            "price": 188.0,
+            "qty": 18310,
+            "stale": false,
+            "stock_id": "2221"
+          },
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-09-30-3055",
+            "mark_date": "2026-10-02",
+            "market_value": 2247048.0,
+            "name": "蔚華科",
+            "price": 216.0,
+            "qty": 10403,
+            "stale": false,
+            "stock_id": "3055"
+          }
+        ],
+        "final_nav": 8258495.02,
+        "final_receivables": [
+          {
+            "action_id": "2543-2024-10-22-stock-fractional-cash",
+            "amount": 5.0,
+            "event_id": "liquid_universe-2024-10-11-2543",
+            "ex_date": "2024-10-22",
+            "kind": "cash",
+            "pay_date": null,
+            "stock_id": "2543"
+          }
+        ],
+        "initial_cash": 1000000.0,
+        "market_value": 7854828.0,
+        "max_drawdown": -0.3004819208964644,
+        "minimum_cash": 18219.54,
+        "partial_or_rejected_orders": {
+          "midpoint_daily_capacity_zero": 1,
+          "midpoint_limit_not_crossed": 7,
+          "overlapping_member": 4,
+          "partial_midpoint_daily_capacity": 131,
+          "resource_cash_locked": 41,
+          "resource_slots_locked": 62,
+          "slots_full": 458
+        },
+        "profit": 7258495.02,
+        "receivable": 5.0,
+        "sell_count": 276,
+        "stale_final_holdings": 0,
+        "start": "2024-01-02",
+        "stock_cohorts": 98,
+        "total_return": 7.25849502,
+        "trade_count": 461,
+        "trading_days": 666
+      },
+      "prefix_exact": true
+    },
+    "poc_red": {
+      "completed": true,
+      "summary": {
+        "annual": [
+          {
+            "end_nav": 2010322.77,
+            "max_drawdown": -0.26887661877310076,
+            "partial_year": false,
+            "profit": 1010322.77,
+            "start_nav": 1000000.0,
+            "total_return": 1.0103227700000001,
+            "year": "2024"
+          },
+          {
+            "end_nav": 3402400.51,
+            "max_drawdown": -0.2670456452126354,
+            "partial_year": false,
+            "profit": 1392077.7399999998,
+            "start_nav": 2010322.77,
+            "total_return": 0.6924647926064129,
+            "year": "2025"
+          },
+          {
+            "end_nav": 6766236.96,
+            "max_drawdown": -0.2578945051364484,
+            "partial_year": true,
+            "profit": 3363836.45,
+            "start_nav": 3402400.51,
+            "total_return": 0.9886656318423843,
+            "year": "2026"
+          }
+        ],
+        "buy_count": 182,
+        "cagr": 1.0048228884802204,
+        "cash": 915413.96,
+        "costs": {
+          "commission": 227832.0,
+          "slippage": 715158.0,
+          "tax": 239638.0,
+          "total_cost": 1182628.0
+        },
+        "end": "2026-10-02",
+        "final_holdings": [
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-08-10-6206",
+            "mark_date": "2026-10-02",
+            "market_value": 1654275.0,
+            "name": "飛捷",
+            "price": 137.0,
+            "qty": 12075,
+            "stale": false,
+            "stock_id": "6206"
+          },
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-08-13-7711",
+            "mark_date": "2026-10-02",
+            "market_value": 2165500.0,
+            "name": "永擎",
+            "price": 610.0,
+            "qty": 3550,
+            "stale": false,
+            "stock_id": "7711"
+          },
+          {
+            "date": "2026-10-02",
+            "event_id": "liquid_universe-2026-09-30-3055",
+            "mark_date": "2026-10-02",
+            "market_value": 2031048.0,
+            "name": "蔚華科",
+            "price": 216.0,
+            "qty": 9403,
+            "stale": false,
+            "stock_id": "3055"
+          }
+        ],
+        "final_nav": 6766236.96,
+        "final_receivables": [],
+        "initial_cash": 1000000.0,
+        "market_value": 5850823.0,
+        "max_drawdown": -0.26887661877310076,
+        "minimum_cash": 23723.77,
+        "partial_or_rejected_orders": {
+          "midpoint_limit_not_crossed": 9,
+          "overlapping_member": 6,
+          "partial_midpoint_daily_capacity": 143,
+          "resource_cash_locked": 2,
+          "resource_slots_locked": 88,
+          "slots_full": 414
+        },
+        "profit": 5766236.96,
+        "receivable": 0.0,
+        "sell_count": 273,
+        "stale_final_holdings": 0,
+        "start": "2024-01-02",
+        "stock_cohorts": 97,
+        "total_return": 5.76623696,
+        "trade_count": 455,
+        "trading_days": 666
+      },
+      "prefix_exact": true
+    }
+  },
+  "live_qualified": false,
+  "actual_fill_verified": false,
+  "accounting_validated": true,
+  "price_assumption": "per-channel daily high-low midpoint",
+  "acceptance": {
+    "make_test": "5191 passed,37 warnings,88.88 seconds",
+    "pipeline": "not passed: local full HTTP guard; external rejection not observed",
+    "new_api_start": "not passed: port already occupied",
+    "existing_api_checks": "4 HTTP200 valid JSON",
+    "push_gate_passed": false,
+    "pushed": false
+  },
+  "acquisition": {
+    "finmind_execution": 382,
+    "finmind_tick": 40,
+    "official_market_and_events": 36,
+    "official_odd_market_days": 6,
+    "automatic_retries": 0
+  },
+  "known_limits": [
+    "21 TWSE total-volume discrepancies on October 2",
+    "Historical identity and adjusted-price certification incomplete",
+    "HL2 price proxy; not verified broker execution",
+    "5 NTD pending fractional-stock cash in poc_base",
+    "Not unseen validation"
+  ]
+}
