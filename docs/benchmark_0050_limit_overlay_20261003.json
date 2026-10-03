@@ -1,0 +1,76 @@
+{
+  "limitations": [
+    "Only the listed stock and date may change.",
+    "Rule-derived limits are not a historical official daily limit observation.",
+    "The same feed overlay must be used by execution and its independent audit.",
+    "Other known ETF provider precision discrepancies remain unchanged."
+  ],
+  "live_qualified": false,
+  "patches": [
+    {
+      "corporate_check": {
+        "cash_ex_dates_2025": [
+          "2025-01-17",
+          "2025-07-21"
+        ],
+        "event_window_end": "2025-04-15",
+        "event_window_start": "2025-04-01",
+        "events_found": 0
+      },
+      "date": "2025-04-10",
+      "derived": {
+        "lower": 131.6,
+        "upper": 160.8
+      },
+      "limit_fraction": 0.1,
+      "observed_official_daily_limits": false,
+      "official_change": 14.6,
+      "official_ohlc": {
+        "close": 160.8,
+        "high": 160.8,
+        "low": 160.8,
+        "open": 160.8
+      },
+      "official_previous_close": 146.2,
+      "price_step": 0.05,
+      "provider": {
+        "lower": 132.0,
+        "upper": 160.5
+      },
+      "reference_date": "2025-04-09",
+      "reference_price": 146.2,
+      "source": "derived_etf_rule_not_observed_official_daily_limits"
+    }
+  ],
+  "primary_rule_web_checks": {
+    "checked_on": "2026-10-03",
+    "raw_rule_bytes_archived": false,
+    "urls": [
+      "https://wwwc.twse.com.tw/zh/products/securities/etf/overview/rules.html",
+      "https://www.twse.com.tw/staticFiles/news/event/event_download_201606220915_01.pdf",
+      "https://wwwc.twse.com.tw/zh/products/system/trading.html"
+    ]
+  },
+  "provider_query": {
+    "dataset": "TaiwanStockPriceLimit",
+    "end": "2026-09-09",
+    "start": "2018-01-01",
+    "stock_id": "0050"
+  },
+  "schema": "benchmark_0050_dated_limit_overlay_v1",
+  "source_sha256": {
+    ".cache/index-exposure-20260927/official/etf-rules.html": "d3fa92421bcceae0c01473474e6b64be16fa0506294df0fdfb8a21b7c4ecfa87",
+    ".cache/index-exposure-20260927/official/etf-rules.html.json": "2cf989452969cd1146f4f44332b7837c88e4ba09ef4f8d19aa1a7f45c8441558",
+    ".cache/market-input-repair-20261002/inputs-v2/events.parquet": "771a66cfdd5d321ee6cc78a95e16d6d6833d72b3149b9c46ae81df4ecc3900df",
+    ".cache/official-market-days-20261002/acquisition/raw/406b54210bc61480cafa3a21542152af4f39cd8169087890cd1e3890ae188327.bin": "d5013754d2ac6782983f2ab6e263f9f93891e7de2bc5bab0973f21f36f88b4d6",
+    ".cache/official-market-days-20261002/acquisition/raw/742d58d5acda08943eb7ac298592e5cf9812ecd835dbcd840451eca7a4b84d31.bin": "242af2d0ca0c63931509cf22c6da1597eb3d7da55de27fc79ecf58b3fce3c88d",
+    ".cache/official-market-days-20261002/acquisition/receipts/406b54210bc61480cafa3a21542152af4f39cd8169087890cd1e3890ae188327.json": "704eca42ed0219b3fc45d3ceb6093b0218def50a8826056b6335aae383ed4b51",
+    ".cache/official-market-days-20261002/acquisition/receipts/742d58d5acda08943eb7ac298592e5cf9812ecd835dbcd840451eca7a4b84d31.json": "05f0d9d8843a3e82c58d0b0af6f8603eaf02d5a901775c382998db2ed2aaee73",
+    ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockDividend.json": "e5ad7eafd2f3539aef3702504a51f9d1597fb91dae211bf7ed94d96ed3d295f4",
+    ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockDividend.parquet": "2c9917c401f2949f1518c99f567d4f213d4946975733dba8049b9ffe2883704d",
+    ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockPriceLimit.json": "f68b2de11d0623ed54ebca16ded21962e28c8ad64837cdc00cfc52d2b257058d",
+    ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockPriceLimit.parquet": "392ab50b4e892002a64cdf1852bb115a88185322daccd77387f6344ad0198ead"
+  },
+  "stock_id": "0050",
+  "strict_data_ready": false
+}
