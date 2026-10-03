@@ -1,0 +1,191 @@
+{
+  "schema": "sequential_strategy_research_v1",
+  "as_of": "2026-10-03",
+  "data_end": "2026-10-02",
+  "signals": 30188,
+  "research_order": [
+    "peer_participation",
+    "event_stage",
+    "institutional_response",
+    "staged_entry",
+    "replacement"
+  ],
+  "reports": {
+    "sector-v1": {
+      "path": ".cache/sequential-research-20261003/sector-v1/report.json",
+      "sha256": "907129df976e53473432e542cf45935d804a1ad0668ae7f8b86a9fe6989914b2"
+    },
+    "event-audit-v2": {
+      "path": ".cache/sequential-research-20261003/event-audit-v2/report.json",
+      "sha256": "7dc9702a213c0afa63987e64bb36b0aef215e88a6cc38171483b58f9c5e9adfa"
+    },
+    "flow-v1": {
+      "path": ".cache/sequential-research-20261003/flow-v1/report.json",
+      "sha256": "498944fbaf21201c2a3f4f0167ce00330945a2913f1a4fb309d8b3855c6f27da"
+    },
+    "staged-v1": {
+      "path": ".cache/sequential-research-20261003/staged-v1/report.json",
+      "sha256": "6f5149677cb2d6794be56755005835b070b71a6ab8b0d556c4aa6a3de3f0df2d"
+    },
+    "replacement-v1": {
+      "path": ".cache/sequential-research-20261003/replacement-v1/report.json",
+      "sha256": "737891b33114431baeb129d603a3cee0b48bd9e47165dbcfefbc98d341accd60"
+    }
+  },
+  "outcome": "no_new_rule_promoted",
+  "independent_units": true,
+  "cash_account": false,
+  "live_qualified": false,
+  "unseen_validation": false,
+  "new_finmind_requests": 1255,
+  "global_hourly_effective_limit": 5400,
+  "automatic_retries": 0,
+  "source_hash_counts": {
+    "sector-v1": {
+      "source_hashes": 137,
+      "output_hashes": 7
+    },
+    "event-audit-v2": {
+      "source_hashes": 166,
+      "output_hashes": 2
+    },
+    "flow-v1": {
+      "source_hashes": 2659,
+      "output_hashes": 4
+    },
+    "staged-v1": {
+      "source_hashes": 143,
+      "output_hashes": 4
+    },
+    "replacement-v1": {
+      "source_hashes": 143,
+      "output_hashes": 4
+    }
+  },
+  "verified_event_v2_equals_v1": true,
+  "trial_records": 11,
+  "registry_rows": [
+    2247,
+    2248,
+    2249,
+    2250,
+    2251,
+    2252,
+    2253,
+    2254,
+    2255,
+    2256,
+    2257
+  ],
+  "validation": {
+    "make_test": {
+      "exit_code": 0,
+      "passed": 4862,
+      "warnings": 39,
+      "seconds": 88.1
+    },
+    "post_review_targeted_tests": 9,
+    "pipeline": "blocked_by_explicit_http_acceptance_guard",
+    "pipeline_build": "blocked_by_explicit_http_acceptance_guard",
+    "api_start": "existing_port_8000_preserved",
+    "api_endpoints": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs": 200
+    },
+    "pushed": false
+  },
+  "source_sha256": {
+    ".cache/sequential-research-20261003/sector-v1/report.sha256": "c839bcc5f7607a43daa3eb9ac4896eb80e9537b7006b6ae7133ce00a6fde3f4c",
+    ".cache/sequential-research-20261003/sector-v1/report.json": "907129df976e53473432e542cf45935d804a1ad0668ae7f8b86a9fe6989914b2",
+    ".cache/sequential-research-20261003/sector-v1/features.json": "8e5cbcb33c5747f9240b383547ca14227c8be1b46af7f90e79c84c7bb283a00d",
+    ".cache/sequential-research-20261003/sector-v1/trials.json": "303f03cfc1083bc9d30f45284f9b6463ca8485659ecf077b932150f72784416a",
+    ".cache/sequential-research-20261003/sector-v1/comparisons.json": "615a69896690113bd41bbb0ff2f5bfe2351ad59d9667b427c87298c643f0297b",
+    ".cache/sequential-research-20261003/sector-v1/signals.parquet": "1cd61c1641b43a03f6420d86564e36a5b5978fbd240c1fae142a10ed73e8213d",
+    ".cache/sequential-research-20261003/sector-v1/matched-comparisons.json": "3f2584c122cdc83aba160572b47278a34a1ee09ee1d4befc4c2b3569543ef457",
+    ".cache/sequential-research-20261003/sector-v1/fixed-pairs.json": "06d735fc22ee285b8b5f72ad7664d4b269a66ab657d23d948aef542081b79ba1",
+    ".cache/sequential-research-20261003/sector-v1/monthly-peers.json": "dccd8a1e1bab9c15e2316da9ef34a5af0b479d7c5ce403effc1f215451e7fac4",
+    ".cache/sequential-research-20261003/event-audit-v2/report.sha256": "b904b02405b54294f448118426b5b0d439f28cc193b133904e3ddf1b10400a67",
+    ".cache/sequential-research-20261003/event-audit-v2/report.json": "7dc9702a213c0afa63987e64bb36b0aef215e88a6cc38171483b58f9c5e9adfa",
+    ".cache/sequential-research-20261003/event-audit-v2/events.json": "df66d57e4fefd0908a403ba00abbb24ed126957c4f6e4a6e8269c24ccb35d65e",
+    ".cache/sequential-research-20261003/event-audit-v2/signal-coverage.json": "76ff728364f898f52638518096343a1d13af6fe65d23af797edf5a0b014eff6d",
+    ".cache/sequential-research-20261003/flow-v1/report.sha256": "54fd97221e4fd82faf139dcbf5cf5606f9240132fc6c37583f2585ddd4e79c7a",
+    ".cache/sequential-research-20261003/flow-v1/report.json": "498944fbaf21201c2a3f4f0167ce00330945a2913f1a4fb309d8b3855c6f27da",
+    ".cache/sequential-research-20261003/flow-v1/features.json": "9ce4ae4597e3e9ebaf1ada8693c12062802c720a5d7eb352bb7083bbd81a5f92",
+    ".cache/sequential-research-20261003/flow-v1/trials.json": "2a611fc922b454f3923276eea0a5ca1ce9f980cc32e36ccd43c134682466f59a",
+    ".cache/sequential-research-20261003/flow-v1/comparisons.json": "bebccd14759a3bfa3f41bbc60618bffa6521cadf800cd4286185758c49ae6d93",
+    ".cache/sequential-research-20261003/flow-v1/signals.parquet": "b0ec95e859dc41d7d2054a5cc441412c18155a7d844371c6cf5b8f08be3eb73a",
+    ".cache/sequential-research-20261003/staged-v1/report.sha256": "74edd9068666947aef94e138a49f84a07a7693f2005a9d5b15bf9971aa3138b5",
+    ".cache/sequential-research-20261003/staged-v1/report.json": "6f5149677cb2d6794be56755005835b070b71a6ab8b0d556c4aa6a3de3f0df2d",
+    ".cache/sequential-research-20261003/staged-v1/trials.json": "e613565c662a0263e49fe606bdfa3444741ac386e50dc5d2cf613a1d69c5300b",
+    ".cache/sequential-research-20261003/staged-v1/decisions.parquet": "4a360fefc9fdd16ca63df2ab81d53df08455e70df8b96bc70a1dd1b45c454dec",
+    ".cache/sequential-research-20261003/staged-v1/comparisons.json": "fcb90771198da716bb1bb47d387decd4a7ac41f7d7581b6e3b9423adb4561484",
+    ".cache/sequential-research-20261003/staged-v1/staged-paths.parquet": "93dde9c0dc32cbe3711b1a5bd3894ba26942b2195ae6260cb552a8cc504a21f1",
+    ".cache/sequential-research-20261003/replacement-v1/report.sha256": "5c44b50f47b67f30d4a8d3a1e90083395b3cff7d62c2fba506a7a05f4dc548da",
+    ".cache/sequential-research-20261003/replacement-v1/report.json": "737891b33114431baeb129d603a3cee0b48bd9e47165dbcfefbc98d341accd60",
+    ".cache/sequential-research-20261003/replacement-v1/trials.json": "ffa2472a44b0fb54d89cb2b711b572da3d750640fa2d2384fc6662eb86ad7d22",
+    ".cache/sequential-research-20261003/replacement-v1/decisions.parquet": "cb3f8c77466055c3ad52649112d3e8640827f71df2d60e279e6ee4a091d94807",
+    ".cache/sequential-research-20261003/replacement-v1/comparisons.json": "0e9b02cb0f82e008cf5db0b9edec184353225ec576211bdb015c9c9a7f7069c5",
+    ".cache/sequential-research-20261003/replacement-v1/replacement-paths.parquet": "1b019778cfb06282090b93ce0d359c276a1dc038cc423897a6f466674aa3ec65",
+    ".cache/sequential-research-20261003/staged-replacement-hash-check.json": "3e890a12bfd862931e2098a4fb8fd93555c39c48a74eca09326d66deb5cc74e3",
+    ".cache/sequential-research-20261003/final-hash-check.json": "d2654955c42e97d7bfbb74108512f922580280570fc7496b65be90400bdaf8bc",
+    ".cache/sequential-research-20261003/replacement-common-tail-check.json": "8fbaf47123785f71dc0b9c28b5c3c49482aa585191d1cbf9813ba462e063f820",
+    ".cache/sequential-research-20261003/sector-audit/report.json": "2af84958b87ae166f2bd63a559bdda45365f34a63e4ab55a6bf67c5e4ef447c6",
+    ".cache/sequential-research-20261003/sector-audit/oracle.py": "6fd35cf2669c73198bd97816483ba02fccbf6d185ce0b41a35f2677a0698028f",
+    ".cache/sequential-research-20261003/flow-independent-audit/report.json": "67d964afa25d66f19022fd0047c8b4a530ce6ef00a0c76cf4a61b2d79b5cdb1e",
+    ".cache/sequential-research-20261003/flow-independent-audit/oracle.py": "e4a270b8faa4a017c5d541ba336310eaf35ee8a88fe851201cd8061dcedb9985",
+    ".cache/sequential-research-20261003/flow-inputs/manifest.json": "8a9f46bce7d69ccae8180e3a61788fd218b80a95fca3217fa1f5661ef161b2eb",
+    ".cache/sequential-research-20261003/flow-inputs/manifest.sha256": "0413d53de7717c186899fd93c5f89c14d1da513ee253a503813c08702c422384",
+    ".cache/sequential-research-20261003/make-test-local.log": "82cdda2c9e333cb3c5a1b9a0ea512fc5306f90074fc352680df0871c999b09dc",
+    ".cache/sequential-research-20261003/pipeline-full-guarded.log": "f4f84a818d7826c1c5c5516fc66a4f4f87a97ee65a54163fa7f0229eed4d4656",
+    ".cache/sequential-research-20261003/pipeline-build.log": "6987cfd46fc729e4b0689b2cbbc336937d7c8a9e5f50b726819c7ddfa1e32784",
+    ".cache/sequential-research-20261003/api-start.log": "2dfdb5911a2f6888c9209a18e0132e25f1f9d082ae3e78b1e9e51ab23e344125",
+    ".cache/sequential-research-20261003/api-models.json": "02026187863ff5064a0ae92ddda8b64407cfbb7ff104226f0799237fdfb4dc28",
+    ".cache/sequential-research-20261003/api-health.json": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+    ".cache/sequential-research-20261003/api-picks.json": "55dc000a3667efdbab6c27cdfbafaad256cd0cf4ef19e601701ae29202d2ae4b",
+    ".cache/sequential-research-20261003/api-jobs.json": "68969063da988b8358354d74541ae4ca7e274eeeba97db52171634d262883c30",
+    ".cache/sequential-research-20261003/no-network-guard/sitecustomize.py": "eb503226c9a25295cd2b938b67d73f9ea91a45642ae759e729e83ab12eec77e5",
+    ".cache/sequential-research-20261003/blocked-http.jsonl": "a4b545334fba96773396651877a8b79f456b35581361d6fb5c7f8c346b3b3aba",
+    ".cache/sequential-research-20261003/publish_receipt.py": "3ddafa694c10decaba7463306f5fd2fb14706f04077d013e83b250dd6671d6cc",
+    ".cache/sequential-research-20261003/staged-replacement-independent-review/report.sha256": "422070f65517e6ca7a01a8274e62cf2d68904c86d63e4b63bea8f96ece78df28",
+    ".cache/sequential-research-20261003/staged-replacement-independent-review/report.json": "409e49848609ed79c8e9a278056ba7b2b07b5a89b3c8af2cad4e21130a923290",
+    ".cache/sequential-research-20261003/staged-replacement-independent-review/oracle.log": "77ded77d8298bc3d2e5201f79d9c835cc39456f3f4eb95b4bca6385e7f3bd17a",
+    ".cache/sequential-research-20261003/staged-replacement-independent-review/oracle.py": "0335b57b01a86196d3b757271a053bddcb8297c7ee5e62fd1393afc12c069e32",
+    "docs/research_sector_participation_20261003.md": "c282be085568c41f288acd28a9c39fed8e3f11613163fab9c83de22c107b99fa",
+    "docs/research_staged_replacement_20261003.md": "6320425b9f3f912a42abe401b5b3f8cee5cc76a8e91cddc3b653b884641245ff",
+    "docs/research_sequential_prereg_20261003.md": "7a8247ef6304e684e085d6360d9e2bf2a4649c1b1e84da48f7afebac0576efa1",
+    "docs/research_sequential_results_20261003.md": "e77498b83bd69a78dc6c9aa0471c9dc1664bcc27a563374a0f60a81eca638ae6",
+    "docs/research_events_flows_20261003.md": "4d175def2011dcf895f34c31c0f1f9981a0ea82a090ba6cb5f7dc90df40b7d93",
+    "docs/research_signal_rank_20261003.md": "176f2485120f9c469e73cad03bfe33147044be239feab538a0f1d89e1490ea59",
+    "docs/research_sequential_flow_collection_20261003.md": "1b12973967a2f1a6a2d707f22d48d813363f53d2fc375e553bacc80294b7a836",
+    "scripts/prepare_sequential_flows_20261003.py": "fea06e6144f5b5faa7c0416a13e5ad2d0ae0e37c035795914a5f7470d81ea9ea",
+    "scripts/research_flow_response_20261003.py": "28b6c684955cac0ea84a737079c06140c5601f5c943dca883fe4a9a38ee062ef",
+    "scripts/research_replacement_path_20261003.py": "ee199b55af852e4ce4424e2e46b95ecf1c58daf15b5e14df2b24143f07d56922",
+    "scripts/research_staged_entry_20261003.py": "0ccd28eb315225d35396eb2f288aee41dbbd7e32225a4ba95a87efb88996ceee",
+    "scripts/research_signal_rank_20261003.py": "441420cf7759eb1e8e3766a6f7936eda4eef59700415b79c9646b697e9379908",
+    "scripts/research_sector_participation_20261003.py": "3bbad05a9be1fc5dfeb91d885c5d9f2d938e389be0a82148d5dc6269d8dab103",
+    "scripts/research_event_stage_audit_20261003.py": "8b1352c28262cc60bf529646b6b7b428ea933930955ae07f83b4a0a6a3abc788",
+    "tests/test_revenue_research.py": "b39d8ccc1b594f6825ec024eaa8aa7646beebc8af93749bc86918170b63f4082",
+    "tests/test_event_group_research.py": "1c30b50ea640884609b2304d229ccb4e623973965876d735550b9ef7fbe15992",
+    "tests/test_staged_entry_research.py": "1f4208c2374e30003b6ebcec6b6da0d2688a675616aa034d474295587c835ba3",
+    "tests/test_midpoint_risk_research.py": "f48c320d45a6ce901031480dba7af1d1d0a75435233a42ac5d9b3942d602bbd8",
+    "tests/test_peak_stop_research.py": "efbe95c777164ae3e4b6ecbd2f4064c42449273cc54e96108b6658b501bb5cef",
+    "tests/test_flow_response_research.py": "56b96332c5a0cd6fb906f427581c57daa865524047530598fc2dfca95f9b87d1",
+    "tests/test_guidance_research.py": "3b9b946acb19ee064bfe063e8b121ea009a50cef76c363034cbf1651f7eac11e",
+    "tests/test_regime_switch_research.py": "c0558e56c767d3f07c6144ad6986fcc96aa2c7695f90bc918094136ec10d507b",
+    "tests/test_replacement_path_research.py": "1026a483958d3999cf855e7427c2aeef3ced81a6a24f1358d4f44bb87ce6397a",
+    "tests/test_rule_research.py": "e110e087ce6d720c162f8cf99f77dc16b157079e026b001d94aaadf5b02f7622",
+    "tests/test_flow_research.py": "7be194b1207fffb1ac42d0a8be02a2063eb5d0968f40b91efdb93f6b3a5c5e10",
+    "tests/test_theme_research.py": "5eabdfa795c00a01e8006c0f18d678915df579c3e1b19a08c24071cc208a74e9",
+    "tests/test_diffusion_research.py": "4ac68a54413889436234216ed3c463a11e10e7062b4954c2730bd71e14d3e8ef",
+    "tests/test_breakout_phase_research.py": "04440f8ea9f9964e969a4e2bfe130432a898e48b7c3cfd02e6b67c550833c61a",
+    "tests/test_signal_rank_research.py": "9e320fe408bccf26081fbcf9d63eca2b8c04ae66505412832eec9aa6b94678c5",
+    "tests/test_chip_research.py": "5058bf668168a20b60b99ebe37edd76b312fc8589199e11054c54197f5cef60b",
+    "tests/test_entry_distance_research.py": "76042e578d3ac43d46f4028149d92af9b6a490b15a044b40a347202e9cb54a6d",
+    "tests/test_sector_participation_research.py": "f5ef85e06718486281547dc8bab37a893afae8082d50c86430994b05619c027f",
+    "tests/test_capacity_research.py": "57b58fb215d6255d81b87ccd673da6f5b6c37fe55755dac8a4df52447a6b112c",
+    "tests/test_event_stage_time_audit.py": "209cd0f93af607f07aba618191de2f0b319209ab1526e6e3a20af75be34724b1",
+    "tests/test_sequential_flow_sources.py": "4869c4824e2d511750a1d4d1a061e009d8be6b05513dc0ab10807b3477e29d61"
+  }
+}
