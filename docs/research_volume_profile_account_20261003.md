@@ -143,4 +143,4 @@ python scripts/research_volume_profile_account.py \
 
 離線逐項比對另見同目錄 `reproducibility.json`。初次失敗、嚴格版本停止與每次重播全部保留於各輸出目錄及 trial registry，沒有刪除失敗實驗。
 
-工程驗收：`make test` 通過 4,983 項測試；本機既有 API 的 health、picks、models、jobs 四端點均通過。`make api` 未另啟動服務，因 8000 已由既有服務占用。`make pipeline` 在明確的驗收網路保護下停止，未跑完完整 ingest／pipeline；這不能算 pipeline 通過，也不代表 FinMind 服務故障。依完整驗收要求，本組提交暫未 push。研究完成與實盤資格維持分開。
+工程驗收：`make test` 通過 4,983 項測試；本機既有 API 的 health、picks、models、jobs 四端點均通過。`make api` 初次在沙箱內因 bind 權限失敗（Errno 1）；取得本機執行權限後再次啟動，確認 8000 已由既有服務占用（Errno 48），沒有停止既有服務。兩次日誌分別保留於 `make-api.log`、`make-api-release.log`。`make pipeline` 在明確的驗收網路保護下停止，未跑完完整 ingest／pipeline；這不能算 pipeline 通過，也不代表 FinMind 服務故障。依完整驗收要求，本組提交暫未 push。研究完成與實盤資格維持分開。
