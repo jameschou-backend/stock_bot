@@ -1,0 +1,4112 @@
+{
+  "accounting_validated": true,
+  "acquisition": {
+    "finmind_requests": 290,
+    "network_requests": 470,
+    "official_requests": 180,
+    "shared_existing_budgets": true
+  },
+  "acquisition_report": {
+    "path": ".cache/poc-gap-20261004/online-v1/report.json",
+    "sha256": "15b9e691771106f9380b380b95bf35c1b9be357680f0532819bb02c0a34d0f12"
+  },
+  "actual_fill_verified": false,
+  "benchmark_financial_same": true,
+  "benchmark_summary": {
+    "annual": [
+      {
+        "end_nav": 1478556.8,
+        "max_drawdown": -0.2120690161785087,
+        "partial_year": false,
+        "profit": 478556.80000000005,
+        "start_nav": 1000000.0,
+        "total_return": 0.4785568,
+        "year": "2024"
+      },
+      {
+        "end_nav": 2022301.9099999997,
+        "max_drawdown": -0.2750294264763963,
+        "partial_year": false,
+        "profit": 543745.1099999996,
+        "start_nav": 1478556.8,
+        "total_return": 0.3677539543966113,
+        "year": "2025"
+      },
+      {
+        "end_nav": 3541728.21,
+        "max_drawdown": -0.1533927701008262,
+        "partial_year": true,
+        "profit": 1519426.3000000003,
+        "start_nav": 2022301.9099999997,
+        "total_return": 0.7513350467042779,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 27,
+    "cagr": 0.584169532104772,
+    "cash": 33.81,
+    "costs": {
+      "commission": 1854.0,
+      "slippage": 4981.0,
+      "tax": 0.0,
+      "total_cost": 6835.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "benchmark",
+        "mark_date": "2026-10-02",
+        "market_value": 3541694.4,
+        "name": "元大台灣50",
+        "price": 112.8,
+        "qty": 31398,
+        "stale": false,
+        "stock_id": "0050"
+      }
+    ],
+    "final_nav": 3541728.21,
+    "final_receivables": [],
+    "initial_cash": 1000000.0,
+    "market_value": 3541694.4,
+    "max_drawdown": -0.2750294264763963,
+    "minimum_cash": 33.81,
+    "partial_or_rejected_orders": {
+      "partial_auction_capacity": 5
+    },
+    "profit": 2541728.21,
+    "receivable": 0.0,
+    "sell_count": 0,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 0,
+    "total_return": 2.54172821,
+    "trade_count": 27,
+    "trading_days": 666
+  },
+  "cached_replay_report": {
+    "path": ".cache/poc-gap-20261004/cached-v2/report.json",
+    "sha256": "9a4670dd9f5807e209dec7b7364a866152ce79ef8f4f49a8245a4f1a9608d19f"
+  },
+  "cohort_analysis": {
+    "analysis": "independent_cohort_cash_flow_and_drawdown_reconciliation_v1",
+    "best_cohorts": [
+      {
+        "buy_cash_outflow": 305548.7,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-17",
+        "event_id": "liquid_universe-2025-09-16-2408",
+        "exit_date": "2025-12-22",
+        "name": "南亞科",
+        "net_pnl": 454637.8,
+        "net_return": 1.4879389112112078,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 760186.5,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "time63": 3
+        },
+        "stock_id": "2408",
+        "total_cost": 8646.0
+      },
+      {
+        "buy_cash_outflow": 439087.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-11",
+        "event_id": "liquid_universe-2026-02-10-5386",
+        "exit_date": "2026-03-30",
+        "name": "青雲",
+        "net_pnl": 412742.0,
+        "net_return": 0.9400005010396573,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 851829.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "5386",
+        "total_cost": 10258.0
+      },
+      {
+        "buy_cash_outflow": 239269.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-03",
+        "event_id": "liquid_universe-2025-07-02-8021",
+        "exit_date": "2025-09-17",
+        "name": "尖點",
+        "net_pnl": 176254.4,
+        "net_return": 0.7366354675376511,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 415523.9,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "8021",
+        "total_cost": 5225.0
+      },
+      {
+        "buy_cash_outflow": 214532.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-09",
+        "event_id": "liquid_universe-2025-07-08-3715",
+        "exit_date": "2025-09-04",
+        "name": "定穎投控",
+        "net_pnl": 159055.2,
+        "net_return": 0.741403404424316,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 373587.8,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3715",
+        "total_cost": 4667.0
+      },
+      {
+        "buy_cash_outflow": 186380.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-09-04",
+        "event_id": "liquid_universe-2024-09-03-3081",
+        "exit_date": "2024-11-29",
+        "name": "聯亞",
+        "net_pnl": 142998.0,
+        "net_return": 0.7672389741388561,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 329378.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3081",
+        "total_cost": 4104.0
+      },
+      {
+        "buy_cash_outflow": 350340.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-30",
+        "event_id": "liquid_universe-2024-01-29-2467",
+        "exit_date": "2024-03-12",
+        "name": "志聖",
+        "net_pnl": 129648.5,
+        "net_return": 0.370064266049743,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 479989.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "2467",
+        "total_cost": 6423.0
+      },
+      {
+        "buy_cash_outflow": 293373.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-8096",
+        "exit_date": "2024-02-05",
+        "name": "擎亞",
+        "net_pnl": 126756.5,
+        "net_return": 0.4320660047107266,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 420129.5,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "8096",
+        "total_cost": 5552.0
+      },
+      {
+        "buy_cash_outflow": 359992.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-27",
+        "event_id": "liquid_universe-2026-01-26-2313",
+        "exit_date": "2026-03-23",
+        "name": "華通",
+        "net_pnl": 79222.5,
+        "net_return": 0.2200670847309319,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 439215.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "2313",
+        "total_cost": 6081.0
+      },
+      {
+        "buy_cash_outflow": 306803.85,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-29",
+        "event_id": "liquid_universe-2024-03-28-1608",
+        "exit_date": "2024-04-24",
+        "name": "華榮",
+        "net_pnl": 70065.4,
+        "net_return": 0.22837197121222566,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 376869.25,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "1608",
+        "total_cost": 5240.0
+      },
+      {
+        "buy_cash_outflow": 308435.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-25",
+        "event_id": "liquid_universe-2025-09-24-6770",
+        "exit_date": "2025-11-06",
+        "name": "力積電",
+        "net_pnl": 61732.75,
+        "net_return": 0.2001480050123932,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 370168.25,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6770",
+        "total_cost": 5196.0
+      }
+    ],
+    "checks": {
+      "cohort_pnl_sum": 301204.58,
+      "daily_drawdowns_recomputed": 666,
+      "maximum_drawdown_matches_report": true,
+      "pnl_difference": -0.0,
+      "reported_account_profit": 301204.58,
+      "terminal_receivables": 0,
+      "unique_cohort_events": true,
+      "unique_corporate_action_owners": true,
+      "unmatched_non_deposit_cash_rows": 0
+    },
+    "cohorts": [
+      {
+        "buy_cash_outflow": 302834.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-2362",
+        "exit_date": "2024-01-17",
+        "name": "藍天",
+        "net_pnl": -13589.0,
+        "net_return": -0.04487276857948579,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 289245.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "2362",
+        "total_cost": 4389.0
+      },
+      {
+        "buy_cash_outflow": 293373.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-8096",
+        "exit_date": "2024-02-05",
+        "name": "擎亞",
+        "net_pnl": 126756.5,
+        "net_return": 0.4320660047107266,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 420129.5,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "8096",
+        "total_cost": 5552.0
+      },
+      {
+        "buy_cash_outflow": 4742.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-6415",
+        "exit_date": "2024-01-19",
+        "name": "矽力*-KY",
+        "net_pnl": -758.5,
+        "net_return": -0.15995360607338677,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 3983.5,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "6415",
+        "total_cost": 153.0
+      },
+      {
+        "buy_cash_outflow": 21502.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-17",
+        "event_id": "liquid_universe-2024-01-16-6643",
+        "exit_date": "2024-02-23",
+        "name": "M31",
+        "net_pnl": 3548.0,
+        "net_return": 0.1650079062412799,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 25050.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6643",
+        "total_cost": 377.0
+      },
+      {
+        "buy_cash_outflow": 298878.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-18",
+        "event_id": "liquid_universe-2024-01-17-6684",
+        "exit_date": "2024-01-31",
+        "name": "安格",
+        "net_pnl": -29359.1,
+        "net_return": -0.09823091933040327,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 269519.3,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "6684",
+        "total_cost": 4258.0
+      },
+      {
+        "buy_cash_outflow": 350340.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-30",
+        "event_id": "liquid_universe-2024-01-29-2467",
+        "exit_date": "2024-03-12",
+        "name": "志聖",
+        "net_pnl": 129648.5,
+        "net_return": 0.370064266049743,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 479989.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "2467",
+        "total_cost": 6423.0
+      },
+      {
+        "buy_cash_outflow": 349056.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-02-16",
+        "event_id": "liquid_universe-2024-02-15-6584",
+        "exit_date": "2024-03-28",
+        "name": "南俊國際",
+        "net_pnl": 9218.0,
+        "net_return": 0.026408370003667032,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 358274.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "6584",
+        "total_cost": 5282.0
+      },
+      {
+        "buy_cash_outflow": 291718.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-02-22",
+        "event_id": "liquid_universe-2024-02-21-6442",
+        "exit_date": "2024-03-11",
+        "name": "光聖",
+        "net_pnl": -40977.0,
+        "net_return": -0.14046784908713209,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 250741.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "6442",
+        "total_cost": 3977.0
+      },
+      {
+        "buy_cash_outflow": 223315.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-12",
+        "event_id": "liquid_universe-2024-03-11-5225",
+        "exit_date": "2024-03-27",
+        "name": "東科-KY",
+        "net_pnl": 3901.36,
+        "net_return": 0.0174702102411392,
+        "other_cash_inflow": 13144.36,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 214072.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "5225",
+        "total_cost": 3243.0
+      },
+      {
+        "buy_cash_outflow": 350573.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-13",
+        "event_id": "liquid_universe-2024-03-12-2543",
+        "exit_date": "2024-03-19",
+        "name": "皇昌",
+        "net_pnl": -43496.0,
+        "net_return": -0.12407095114977283,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 307077.6,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "2543",
+        "total_cost": 4891.0
+      },
+      {
+        "buy_cash_outflow": 266675.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-19",
+        "event_id": "liquid_universe-2024-03-18-2385",
+        "exit_date": "2024-03-28",
+        "name": "群光",
+        "net_pnl": -36934.0,
+        "net_return": -0.1384979122566565,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 229741.5,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "stock_id": "2385",
+        "total_cost": 3694.0
+      },
+      {
+        "buy_cash_outflow": 328629.25,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-27",
+        "event_id": "liquid_universe-2024-03-26-1616",
+        "exit_date": "2024-04-30",
+        "name": "億泰",
+        "net_pnl": 29204.05,
+        "net_return": 0.08886625277573436,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 357833.3,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "1616",
+        "total_cost": 5199.0
+      },
+      {
+        "buy_cash_outflow": 227455.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-28",
+        "event_id": "liquid_universe-2024-03-27-6605",
+        "exit_date": "2024-04-22",
+        "name": "帝寶",
+        "net_pnl": -30383.0,
+        "net_return": -0.13357807038754918,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 197072.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "6605",
+        "total_cost": 3171.0
+      },
+      {
+        "buy_cash_outflow": 306803.85,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-29",
+        "event_id": "liquid_universe-2024-03-28-1608",
+        "exit_date": "2024-04-24",
+        "name": "華榮",
+        "net_pnl": 70065.4,
+        "net_return": 0.22837197121222566,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 376869.25,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "1608",
+        "total_cost": 5240.0
+      },
+      {
+        "buy_cash_outflow": 338082.2,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-04-18",
+        "event_id": "liquid_universe-2024-04-17-4127",
+        "exit_date": "2024-04-25",
+        "name": "天良",
+        "net_pnl": -61150.7,
+        "net_return": -0.18087524276640415,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 276931.5,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "4127",
+        "total_cost": 4567.0
+      },
+      {
+        "buy_cash_outflow": 351272.25,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-04-24",
+        "event_id": "liquid_universe-2024-04-23-2501",
+        "exit_date": "2024-05-10",
+        "name": "國建",
+        "net_pnl": 5440.35,
+        "net_return": 0.015487559862756024,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 356712.6,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "2501",
+        "total_cost": 5337.0
+      },
+      {
+        "buy_cash_outflow": 323908.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-04-25",
+        "event_id": "liquid_universe-2024-04-24-6449",
+        "exit_date": "2024-05-14",
+        "name": "鈺邦",
+        "net_pnl": 12066.0,
+        "net_return": 0.037251318275559726,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 335974.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "6449",
+        "total_cost": 4934.0
+      },
+      {
+        "buy_cash_outflow": 322661.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-02",
+        "event_id": "liquid_universe-2024-04-30-6230",
+        "exit_date": "2024-05-16",
+        "name": "尼得科超眾",
+        "net_pnl": -29980.0,
+        "net_return": -0.092914854909642,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 292681.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "6230",
+        "total_cost": 4590.0
+      },
+      {
+        "buy_cash_outflow": 311913.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-10",
+        "event_id": "liquid_universe-2024-05-09-1587",
+        "exit_date": "2024-06-13",
+        "name": "吉茂",
+        "net_pnl": -73439.75,
+        "net_return": -0.2354491663391185,
+        "other_cash_inflow": 2017.85,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 236455.8,
+        "sell_child_trades": 5,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "stock_id": "1587",
+        "total_cost": 4064.0
+      },
+      {
+        "buy_cash_outflow": 301541.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-15",
+        "event_id": "liquid_universe-2024-05-14-2609",
+        "exit_date": "2024-07-11",
+        "name": "陽明",
+        "net_pnl": -8195.0,
+        "net_return": -0.027177067131832818,
+        "other_cash_inflow": 8560.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 284786.0,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "2609",
+        "total_cost": 4375.0
+      },
+      {
+        "buy_cash_outflow": 234468.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-15",
+        "event_id": "liquid_universe-2024-05-14-6664",
+        "exit_date": "2024-06-13",
+        "name": "群翊",
+        "net_pnl": 1450.5,
+        "net_return": 0.006186345258201545,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 235918.5,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "stock_id": "6664",
+        "total_cost": 3625.0
+      },
+      {
+        "buy_cash_outflow": 8265.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-06",
+        "event_id": "liquid_universe-2024-06-05-6446",
+        "exit_date": "2024-09-03",
+        "name": "藥華藥",
+        "net_pnl": 3935.0,
+        "net_return": 0.47610405323653965,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 12200.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "6446",
+        "total_cost": 169.0
+      },
+      {
+        "buy_cash_outflow": 338756.75,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-11",
+        "event_id": "liquid_universe-2024-06-07-2613",
+        "exit_date": "2024-06-26",
+        "name": "中櫃",
+        "net_pnl": -30396.7,
+        "net_return": -0.08973016773835503,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 308360.05,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "stock_id": "2613",
+        "total_cost": 4890.0
+      },
+      {
+        "buy_cash_outflow": 301426.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-21",
+        "event_id": "liquid_universe-2024-06-20-2438",
+        "exit_date": "2024-08-06",
+        "name": "翔耀",
+        "net_pnl": 39801.0,
+        "net_return": 0.13204235865519232,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 341227.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "2438",
+        "total_cost": 4849.0
+      },
+      {
+        "buy_cash_outflow": 323632.8,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-10",
+        "event_id": "liquid_universe-2024-07-09-6152",
+        "exit_date": "2024-08-05",
+        "name": "百一",
+        "net_pnl": -56800.95,
+        "net_return": -0.17551048595816,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 266831.85,
+        "sell_child_trades": 5,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "stock_id": "6152",
+        "total_cost": 4413.0
+      },
+      {
+        "buy_cash_outflow": 204147.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-31",
+        "event_id": "liquid_universe-2024-07-30-9906",
+        "exit_date": "2024-08-08",
+        "name": "欣巴巴",
+        "net_pnl": -21601.5,
+        "net_return": -0.10581345794941881,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 182545.5,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "9906",
+        "total_cost": 2892.0
+      },
+      {
+        "buy_cash_outflow": 3501.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-08-07",
+        "event_id": "liquid_universe-2024-08-06-6561",
+        "exit_date": "2024-10-11",
+        "name": "是方",
+        "net_pnl": -335.0,
+        "net_return": -0.09568694658668951,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 3166.0,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "stock_id": "6561",
+        "total_cost": 183.0
+      },
+      {
+        "buy_cash_outflow": 258409.8,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-08-08",
+        "event_id": "liquid_universe-2024-08-07-1540",
+        "exit_date": "2024-08-27",
+        "name": "喬福",
+        "net_pnl": -41062.55,
+        "net_return": -0.15890477063950362,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 217347.25,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "stock_id": "1540",
+        "total_cost": 3559.0
+      },
+      {
+        "buy_cash_outflow": 8838.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-08-26",
+        "event_id": "liquid_universe-2024-08-23-6223",
+        "exit_date": "2024-09-27",
+        "name": "旺矽",
+        "net_pnl": -558.0,
+        "net_return": -0.06313645621181263,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 8280.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6223",
+        "total_cost": 183.0
+      },
+      {
+        "buy_cash_outflow": 186380.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-09-04",
+        "event_id": "liquid_universe-2024-09-03-3081",
+        "exit_date": "2024-11-29",
+        "name": "聯亞",
+        "net_pnl": 142998.0,
+        "net_return": 0.7672389741388561,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 329378.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3081",
+        "total_cost": 4104.0
+      },
+      {
+        "buy_cash_outflow": 270298.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-09-26",
+        "event_id": "liquid_universe-2024-09-25-2497",
+        "exit_date": "2024-10-21",
+        "name": "怡利電",
+        "net_pnl": -38150.4,
+        "net_return": -0.14114199883091993,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 232147.6,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "stock_id": "2497",
+        "total_cost": 3797.0
+      },
+      {
+        "buy_cash_outflow": 294107.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-01",
+        "event_id": "liquid_universe-2024-09-30-1569",
+        "exit_date": "2024-10-18",
+        "name": "濱川",
+        "net_pnl": 7014.3,
+        "net_return": 0.023849483351297315,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 301121.3,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "1569",
+        "total_cost": 4525.0
+      },
+      {
+        "buy_cash_outflow": 282869.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-17",
+        "event_id": "liquid_universe-2024-10-16-3149",
+        "exit_date": "2024-11-05",
+        "name": "正達",
+        "net_pnl": -42899.75,
+        "net_return": -0.15165921092914256,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 239969.65,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "loss12": 6
+        },
+        "stock_id": "3149",
+        "total_cost": 3938.0
+      },
+      {
+        "buy_cash_outflow": 222541.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-17",
+        "event_id": "liquid_universe-2024-10-16-6830",
+        "exit_date": "2024-10-24",
+        "name": "汎銓",
+        "net_pnl": -10319.0,
+        "net_return": -0.046368983692892544,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 212222.0,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "6830",
+        "total_cost": 3298.0
+      },
+      {
+        "buy_cash_outflow": 321614.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-23",
+        "event_id": "liquid_universe-2024-10-22-6151",
+        "exit_date": "2024-11-19",
+        "name": "晉倫",
+        "net_pnl": -56017.2,
+        "net_return": -0.17417492862575268,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 265597.4,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "loss12": 6
+        },
+        "stock_id": "6151",
+        "total_cost": 4403.0
+      },
+      {
+        "buy_cash_outflow": 299666.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-30",
+        "event_id": "liquid_universe-2024-10-29-3581",
+        "exit_date": "2024-11-13",
+        "name": "博磊",
+        "net_pnl": -50114.0,
+        "net_return": -0.1672328525758678,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 249552.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "3581",
+        "total_cost": 4014.0
+      },
+      {
+        "buy_cash_outflow": 156478.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-11-14",
+        "event_id": "liquid_universe-2024-11-13-3211",
+        "exit_date": "2024-12-12",
+        "name": "順達",
+        "net_pnl": 48511.0,
+        "net_return": 0.31001802170273135,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 204989.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3211",
+        "total_cost": 2799.0
+      },
+      {
+        "buy_cash_outflow": 197767.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-11-14",
+        "event_id": "liquid_universe-2024-11-13-6859",
+        "exit_date": "2024-12-11",
+        "name": "伯特光",
+        "net_pnl": -12410.5,
+        "net_return": -0.06275298014082192,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 185357.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "6859",
+        "total_cost": 2873.0
+      },
+      {
+        "buy_cash_outflow": 285281.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-02",
+        "event_id": "liquid_universe-2024-11-29-6558",
+        "exit_date": "2024-12-11",
+        "name": "興能高",
+        "net_pnl": -22300.0,
+        "net_return": -0.07816854259484508,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 262981.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "6558",
+        "total_cost": 4050.0
+      },
+      {
+        "buy_cash_outflow": 154410.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-11",
+        "event_id": "liquid_universe-2024-12-10-3029",
+        "exit_date": "2024-12-17",
+        "name": "零壹",
+        "net_pnl": -5749.0,
+        "net_return": -0.03723204455669969,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 148661.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "3029",
+        "total_cost": 2249.0
+      },
+      {
+        "buy_cash_outflow": 10769.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-12",
+        "event_id": "liquid_universe-2024-12-11-6805",
+        "exit_date": "2024-12-18",
+        "name": "富世達",
+        "net_pnl": -1974.0,
+        "net_return": -0.18330392794131303,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 8795.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "stock_id": "6805",
+        "total_cost": 176.0
+      },
+      {
+        "buy_cash_outflow": 8711.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-13",
+        "event_id": "liquid_universe-2024-12-12-6526",
+        "exit_date": "2025-01-03",
+        "name": "達發",
+        "net_pnl": -762.0,
+        "net_return": -0.08747560555619333,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 7949.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6526",
+        "total_cost": 180.0
+      },
+      {
+        "buy_cash_outflow": 150889.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-18",
+        "event_id": "liquid_universe-2024-12-17-3019",
+        "exit_date": "2025-03-10",
+        "name": "亞光",
+        "net_pnl": 23540.0,
+        "net_return": 0.15600872164306212,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 174429.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "3019",
+        "total_cost": 2460.0
+      },
+      {
+        "buy_cash_outflow": 6168.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-18",
+        "event_id": "liquid_universe-2024-12-17-5269",
+        "exit_date": "2025-01-14",
+        "name": "祥碩",
+        "net_pnl": -248.0,
+        "net_return": -0.040207522697795074,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 5920.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "5269",
+        "total_cost": 133.0
+      },
+      {
+        "buy_cash_outflow": 5789.5,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-01-02",
+        "event_id": "liquid_universe-2024-12-31-2233",
+        "exit_date": "2025-01-08",
+        "name": "宇隆",
+        "net_pnl": -422.5,
+        "net_return": -0.07297694101390448,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 5367.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "2233",
+        "total_cost": 127.0
+      },
+      {
+        "buy_cash_outflow": 7434.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-01-08",
+        "event_id": "liquid_universe-2025-01-07-6683",
+        "exit_date": "2025-02-10",
+        "name": "雍智科技",
+        "net_pnl": -1145.0,
+        "net_return": -0.15402206080172182,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 6289.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "6683",
+        "total_cost": 161.0
+      },
+      {
+        "buy_cash_outflow": 246497.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-01-14",
+        "event_id": "liquid_universe-2025-01-13-6558",
+        "exit_date": "2025-02-14",
+        "name": "興能高",
+        "net_pnl": 28810.9,
+        "net_return": 0.11688105685410324,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 275308.5,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6558",
+        "total_cost": 3989.0
+      },
+      {
+        "buy_cash_outflow": 7173.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-02-06",
+        "event_id": "liquid_universe-2025-02-05-5314",
+        "exit_date": "2025-02-17",
+        "name": "世紀*",
+        "net_pnl": -849.0,
+        "net_return": -0.11836051861145964,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 6324.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "5314",
+        "total_cost": 121.0
+      },
+      {
+        "buy_cash_outflow": 167839.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-02-14",
+        "event_id": "liquid_universe-2025-02-13-4971",
+        "exit_date": "2025-03-17",
+        "name": "IET-KY",
+        "net_pnl": -41016.0,
+        "net_return": -0.2443770518175156,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 126823.0,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "stock_id": "4971",
+        "total_cost": 2209.0
+      },
+      {
+        "buy_cash_outflow": 271649.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-02-18",
+        "event_id": "liquid_universe-2025-02-17-8234",
+        "exit_date": "2025-03-28",
+        "name": "新漢",
+        "net_pnl": -18030.4,
+        "net_return": -0.06637388689080394,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 253618.6,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "8234",
+        "total_cost": 3962.0
+      },
+      {
+        "buy_cash_outflow": 235971.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-11",
+        "event_id": "liquid_universe-2025-06-10-2429",
+        "exit_date": "2025-07-04",
+        "name": "銘旺科",
+        "net_pnl": -43859.3,
+        "net_return": -0.1858670160875428,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 192112.1,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "2429",
+        "total_cost": 3178.0
+      },
+      {
+        "buy_cash_outflow": 228202.3,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-11",
+        "event_id": "liquid_universe-2025-06-10-4722",
+        "exit_date": "2025-06-23",
+        "name": "國精化",
+        "net_pnl": -17471.5,
+        "net_return": -0.07656145446386824,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 210730.8,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "4722",
+        "total_cost": 3300.0
+      },
+      {
+        "buy_cash_outflow": 175786.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-11",
+        "event_id": "liquid_universe-2025-06-10-6584",
+        "exit_date": "2025-07-15",
+        "name": "南俊國際",
+        "net_pnl": -5134.5,
+        "net_return": -0.029208810713026067,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 170651.5,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "stock_id": "6584",
+        "total_cost": 2690.0
+      },
+      {
+        "buy_cash_outflow": 238925.25,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-24",
+        "event_id": "liquid_universe-2025-06-23-5475",
+        "exit_date": "2025-07-01",
+        "name": "德宏",
+        "net_pnl": -6363.95,
+        "net_return": -0.026635736490806226,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 232561.3,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "stock_id": "5475",
+        "total_cost": 3542.0
+      },
+      {
+        "buy_cash_outflow": 3528.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-02",
+        "event_id": "liquid_universe-2025-07-01-3515",
+        "exit_date": "2025-07-08",
+        "name": "華擎",
+        "net_pnl": -331.0,
+        "net_return": -0.09382086167800453,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 3197.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3515",
+        "total_cost": 100.0
+      },
+      {
+        "buy_cash_outflow": 239269.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-03",
+        "event_id": "liquid_universe-2025-07-02-8021",
+        "exit_date": "2025-09-17",
+        "name": "尖點",
+        "net_pnl": 176254.4,
+        "net_return": 0.7366354675376511,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 415523.9,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "8021",
+        "total_cost": 5225.0
+      },
+      {
+        "buy_cash_outflow": 214532.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-09",
+        "event_id": "liquid_universe-2025-07-08-3715",
+        "exit_date": "2025-09-04",
+        "name": "定穎投控",
+        "net_pnl": 159055.2,
+        "net_return": 0.741403404424316,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 373587.8,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3715",
+        "total_cost": 4667.0
+      },
+      {
+        "buy_cash_outflow": 181027.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-17",
+        "event_id": "liquid_universe-2025-07-16-8046",
+        "exit_date": "2025-08-11",
+        "name": "南電",
+        "net_pnl": -9863.0,
+        "net_return": -0.054483585321526626,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 171164.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "8046",
+        "total_cost": 2636.0
+      },
+      {
+        "buy_cash_outflow": 288006.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-12",
+        "event_id": "liquid_universe-2025-08-11-5371",
+        "exit_date": "2025-08-18",
+        "name": "中強光電股份有限公司",
+        "net_pnl": -7510.4,
+        "net_return": -0.026077234502058986,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 280495.6,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "5371",
+        "total_cost": 4274.0
+      },
+      {
+        "buy_cash_outflow": 295793.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-18",
+        "event_id": "liquid_universe-2025-08-15-1802",
+        "exit_date": "2025-08-21",
+        "name": "台玻",
+        "net_pnl": -36131.0,
+        "net_return": -0.12214961138363653,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 259662.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "1802",
+        "total_cost": 4081.0
+      },
+      {
+        "buy_cash_outflow": 248587.1,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-22",
+        "event_id": "liquid_universe-2025-08-21-2402",
+        "exit_date": "2025-09-25",
+        "name": "毅嘉",
+        "net_pnl": -32738.5,
+        "net_return": -0.1316983061470205,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 215848.6,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "loss12": 6
+        },
+        "stock_id": "2402",
+        "total_cost": 3523.0
+      },
+      {
+        "buy_cash_outflow": 258420.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-05",
+        "event_id": "liquid_universe-2025-09-04-2231",
+        "exit_date": "2025-09-17",
+        "name": "為升",
+        "net_pnl": 11561.0,
+        "net_return": 0.04473724943889792,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 269981.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "2231",
+        "total_cost": 4005.0
+      },
+      {
+        "buy_cash_outflow": 3877.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-16",
+        "event_id": "liquid_universe-2025-09-15-5289",
+        "exit_date": "2025-09-25",
+        "name": "宜鼎",
+        "net_pnl": -202.5,
+        "net_return": -0.05223110652566417,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 3674.5,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "5289",
+        "total_cost": 107.0
+      },
+      {
+        "buy_cash_outflow": 305548.7,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-17",
+        "event_id": "liquid_universe-2025-09-16-2408",
+        "exit_date": "2025-12-22",
+        "name": "南亞科",
+        "net_pnl": 454637.8,
+        "net_return": 1.4879389112112078,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 760186.5,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "time63": 3
+        },
+        "stock_id": "2408",
+        "total_cost": 8646.0
+      },
+      {
+        "buy_cash_outflow": 173019.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-22",
+        "event_id": "liquid_universe-2025-09-19-3675",
+        "exit_date": "2025-09-30",
+        "name": "德微",
+        "net_pnl": -23862.0,
+        "net_return": -0.13791548905033552,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 149157.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "3675",
+        "total_cost": 2362.0
+      },
+      {
+        "buy_cash_outflow": 308435.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-25",
+        "event_id": "liquid_universe-2025-09-24-6770",
+        "exit_date": "2025-11-06",
+        "name": "力積電",
+        "net_pnl": 61732.75,
+        "net_return": 0.2001480050123932,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 370168.25,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6770",
+        "total_cost": 5196.0
+      },
+      {
+        "buy_cash_outflow": 321554.8,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-10-01",
+        "event_id": "liquid_universe-2025-09-30-3430",
+        "exit_date": "2025-12-18",
+        "name": "奇鈦科",
+        "net_pnl": -24861.8,
+        "net_return": -0.07731745879706974,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 296693.0,
+        "sell_child_trades": 11,
+        "sell_reasons": {
+          "three_black": 11
+        },
+        "stock_id": "3430",
+        "total_cost": 4787.0
+      },
+      {
+        "buy_cash_outflow": 31068.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-10-31",
+        "event_id": "liquid_universe-2025-10-30-8299",
+        "exit_date": "2026-01-30",
+        "name": "群聯",
+        "net_pnl": 37804.62,
+        "net_return": 1.2168346852066434,
+        "other_cash_inflow": 180.62,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 68692.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "time63": 1
+        },
+        "stock_id": "8299",
+        "total_cost": 801.0
+      },
+      {
+        "buy_cash_outflow": 395178.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-11-06",
+        "event_id": "liquid_universe-2025-11-05-4989",
+        "exit_date": "2025-11-19",
+        "name": "榮科",
+        "net_pnl": -15051.0,
+        "net_return": -0.0380866343774198,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 380127.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "4989",
+        "total_cost": 5751.0
+      },
+      {
+        "buy_cash_outflow": 365026.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-11-25",
+        "event_id": "liquid_universe-2025-11-24-6209",
+        "exit_date": "2026-01-07",
+        "name": "今國光",
+        "net_pnl": 22405.2,
+        "net_return": 0.061379737333778966,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 387431.2,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6209",
+        "total_cost": 5696.0
+      },
+      {
+        "buy_cash_outflow": 474248.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-12-22",
+        "event_id": "liquid_universe-2025-12-19-4927",
+        "exit_date": "2026-01-26",
+        "name": "泰鼎-KY",
+        "net_pnl": 9615.05,
+        "net_return": 0.020274286581823665,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 483863.55,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "4927",
+        "total_cost": 7229.0
+      },
+      {
+        "buy_cash_outflow": 470121.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-07",
+        "event_id": "liquid_universe-2026-01-06-8110",
+        "exit_date": "2026-01-27",
+        "name": "華東",
+        "net_pnl": -940.6,
+        "net_return": -0.0020007598037443093,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 469180.8,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "8110",
+        "total_cost": 7039.0
+      },
+      {
+        "buy_cash_outflow": 444537.8,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-23",
+        "event_id": "liquid_universe-2026-01-22-3149",
+        "exit_date": "2026-01-28",
+        "name": "正達",
+        "net_pnl": -40500.6,
+        "net_return": -0.09110721292992408,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 404037.2,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3149",
+        "total_cost": 6277.0
+      },
+      {
+        "buy_cash_outflow": 359992.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-27",
+        "event_id": "liquid_universe-2026-01-26-2313",
+        "exit_date": "2026-03-23",
+        "name": "華通",
+        "net_pnl": 79222.5,
+        "net_return": 0.2200670847309319,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 439215.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "2313",
+        "total_cost": 6081.0
+      },
+      {
+        "buy_cash_outflow": 475173.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-30",
+        "event_id": "liquid_universe-2026-01-29-2337",
+        "exit_date": "2026-02-09",
+        "name": "旺宏",
+        "net_pnl": -31102.8,
+        "net_return": -0.06545565662738839,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 444070.8,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "stock_id": "2337",
+        "total_cost": 6828.0
+      },
+      {
+        "buy_cash_outflow": 400224.5,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-02",
+        "event_id": "liquid_universe-2026-01-30-6285",
+        "exit_date": "2026-02-24",
+        "name": "啟碁",
+        "net_pnl": -47053.0,
+        "net_return": -0.11756651579301117,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 353171.5,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6285",
+        "total_cost": 5574.0
+      },
+      {
+        "buy_cash_outflow": 439087.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-11",
+        "event_id": "liquid_universe-2026-02-10-5386",
+        "exit_date": "2026-03-30",
+        "name": "青雲",
+        "net_pnl": 412742.0,
+        "net_return": 0.9400005010396573,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 851829.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "5386",
+        "total_cost": 10258.0
+      },
+      {
+        "buy_cash_outflow": 444655.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-24",
+        "event_id": "liquid_universe-2026-02-23-6202",
+        "exit_date": "2026-03-09",
+        "name": "盛群",
+        "net_pnl": -37329.8,
+        "net_return": -0.08395220208727927,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 407325.6,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "stock_id": "6202",
+        "total_cost": 6366.0
+      },
+      {
+        "buy_cash_outflow": 12225.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-03-09",
+        "event_id": "liquid_universe-2026-03-06-3081",
+        "exit_date": "2026-04-29",
+        "name": "聯亞",
+        "net_pnl": 9940.0,
+        "net_return": 0.8130879345603272,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 22165.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "3081",
+        "total_cost": 275.0
+      },
+      {
+        "buy_cash_outflow": 18442.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-03-24",
+        "event_id": "liquid_universe-2026-03-23-6187",
+        "exit_date": "2026-04-29",
+        "name": "萬潤",
+        "net_pnl": 4815.0,
+        "net_return": 0.26108881900010844,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 23257.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "6187",
+        "total_cost": 332.0
+      },
+      {
+        "buy_cash_outflow": 13883.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-03-31",
+        "event_id": "liquid_universe-2026-03-30-6683",
+        "exit_date": "2026-06-02",
+        "name": "雍智科技",
+        "net_pnl": 3128.0,
+        "net_return": 0.225311532089606,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 17011.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "6683",
+        "total_cost": 272.0
+      },
+      {
+        "buy_cash_outflow": 2471.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-29",
+        "event_id": "liquid_universe-2026-04-28-7750",
+        "exit_date": "2026-05-19",
+        "name": "新代",
+        "net_pnl": -174.0,
+        "net_return": -0.07041683528935654,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 2297.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "7750",
+        "total_cost": 69.0
+      },
+      {
+        "buy_cash_outflow": 1754.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-04",
+        "event_id": "liquid_universe-2026-04-30-3167",
+        "exit_date": "2026-05-11",
+        "name": "大量",
+        "net_pnl": -329.0,
+        "net_return": -0.18757126567844926,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1425.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "3167",
+        "total_cost": 59.0
+      },
+      {
+        "buy_cash_outflow": 449837.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-12",
+        "event_id": "liquid_universe-2026-05-11-6278",
+        "exit_date": "2026-06-01",
+        "name": "台表科",
+        "net_pnl": -6091.0,
+        "net_return": -0.013540460211143147,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 443746.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "6278",
+        "total_cost": 6676.0
+      },
+      {
+        "buy_cash_outflow": 490370.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-20",
+        "event_id": "liquid_universe-2026-05-19-3055",
+        "exit_date": "2026-06-23",
+        "name": "蔚華科",
+        "net_pnl": -140051.3,
+        "net_return": -0.28560331994208454,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 350318.7,
+        "sell_child_trades": 8,
+        "sell_reasons": {
+          "loss12": 8
+        },
+        "stock_id": "3055",
+        "total_cost": 6199.0
+      },
+      {
+        "buy_cash_outflow": 592289.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-01",
+        "event_id": "liquid_universe-2026-05-29-6116",
+        "exit_date": "2026-06-10",
+        "name": "彩晶",
+        "net_pnl": -100716.0,
+        "net_return": -0.17004536636675677,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 491573.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "6116",
+        "total_cost": 7916.0
+      },
+      {
+        "buy_cash_outflow": 551717.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-02",
+        "event_id": "liquid_universe-2026-06-01-2356",
+        "exit_date": "2026-06-10",
+        "name": "英業達",
+        "net_pnl": -67565.2,
+        "net_return": -0.12246342058452389,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 484152.2,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "2356",
+        "total_cost": 7634.0
+      },
+      {
+        "buy_cash_outflow": 356987.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-10",
+        "event_id": "liquid_universe-2026-06-09-2478",
+        "exit_date": "2026-07-15",
+        "name": "大毅",
+        "net_pnl": 17379.5,
+        "net_return": 0.048683845630233036,
+        "other_cash_inflow": 4128.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 370238.5,
+        "sell_child_trades": 5,
+        "sell_reasons": {
+          "three_black": 5
+        },
+        "stock_id": "2478",
+        "total_cost": 5506.0
+      },
+      {
+        "buy_cash_outflow": 434279.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-11",
+        "event_id": "liquid_universe-2026-06-10-8454",
+        "exit_date": "2026-06-16",
+        "name": "富邦媒",
+        "net_pnl": -128933.0,
+        "net_return": -0.2968897874407927,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 305346.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "stock_id": "8454",
+        "total_cost": 5327.0
+      },
+      {
+        "buy_cash_outflow": 332977.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-11",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "exit_date": "2026-09-21",
+        "name": "先進光",
+        "net_pnl": 20917.0,
+        "net_return": 0.06281815260513489,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 353894.0,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "time63": 3
+        },
+        "stock_id": "3362",
+        "total_cost": 5205.0
+      },
+      {
+        "buy_cash_outflow": 439992.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-17",
+        "event_id": "liquid_universe-2026-06-16-2243",
+        "exit_date": "2026-07-30",
+        "name": "宏旭-KY",
+        "net_pnl": -9618.0,
+        "net_return": -0.021859488354333715,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 430374.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "2243",
+        "total_cost": 6468.0
+      },
+      {
+        "buy_cash_outflow": 455643.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-14",
+        "event_id": "liquid_universe-2026-07-13-2332",
+        "exit_date": "2026-07-20",
+        "name": "友訊",
+        "net_pnl": -66501.85,
+        "net_return": -0.14595146294165,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 389141.75,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "2332",
+        "total_cost": 6247.0
+      },
+      {
+        "buy_cash_outflow": 422569.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-20",
+        "event_id": "liquid_universe-2026-07-17-6505",
+        "exit_date": "2026-08-05",
+        "name": "台塑化",
+        "net_pnl": -89266.2,
+        "net_return": -0.21124624736197178,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 333303.2,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "6505",
+        "total_cost": 5536.0
+      },
+      {
+        "buy_cash_outflow": 1135.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-31",
+        "event_id": "liquid_universe-2026-07-30-2207",
+        "exit_date": "2026-08-13",
+        "name": "和泰車",
+        "net_pnl": -115.0,
+        "net_return": -0.1013215859030837,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1020.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "stock_id": "2207",
+        "total_cost": 53.0
+      },
+      {
+        "buy_cash_outflow": 415212.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-08-05",
+        "event_id": "liquid_universe-2026-08-04-3231",
+        "exit_date": "2026-08-10",
+        "name": "緯創",
+        "net_pnl": -23971.0,
+        "net_return": -0.057731953797096426,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 391241.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "stock_id": "3231",
+        "total_cost": 5971.0
+      },
+      {
+        "buy_cash_outflow": 306472.0,
+        "buy_child_trades": 2,
+        "closed": false,
+        "ending_market_value": 275096.0,
+        "entry_date": "2026-08-11",
+        "event_id": "liquid_universe-2026-08-10-6206",
+        "exit_date": null,
+        "name": "飛捷",
+        "net_pnl": -31376.0,
+        "net_return": -0.10237803127202486,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_child_trades": 0,
+        "sell_reasons": {},
+        "stock_id": "6206",
+        "total_cost": 1824.0
+      },
+      {
+        "buy_cash_outflow": 1449.0,
+        "buy_child_trades": 1,
+        "closed": false,
+        "ending_market_value": 1830.0,
+        "entry_date": "2026-08-14",
+        "event_id": "liquid_universe-2026-08-13-7711",
+        "exit_date": null,
+        "name": "永擎",
+        "net_pnl": 381.0,
+        "net_return": 0.2629399585921325,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_child_trades": 0,
+        "sell_reasons": {},
+        "stock_id": "7711",
+        "total_cost": 27.0
+      },
+      {
+        "buy_cash_outflow": 2572.0,
+        "buy_child_trades": 1,
+        "closed": false,
+        "ending_market_value": 2715.0,
+        "entry_date": "2026-09-22",
+        "event_id": "liquid_universe-2026-09-21-7799",
+        "exit_date": null,
+        "name": "禾榮科",
+        "net_pnl": 143.0,
+        "net_return": 0.05559875583203733,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_child_trades": 0,
+        "sell_reasons": {},
+        "stock_id": "7799",
+        "total_cost": 32.0
+      }
+    ],
+    "counts": {
+      "all_cohort_negative_pnl": 64,
+      "all_cohort_positive_pnl": 34,
+      "closed_cohorts": 95,
+      "closed_flat": 0,
+      "closed_losses": 63,
+      "closed_win_rate": 0.3368421052631579,
+      "closed_wins": 32,
+      "open_cohorts": 3,
+      "total_cohorts": 98
+    },
+    "maximum_drawdown": {
+      "loss_from_peak": -1120094.55,
+      "max_drawdown": -0.4659527469865979,
+      "peak_date": "2026-03-19",
+      "peak_nav": 2403880.13,
+      "trough_date": "2026-09-14",
+      "trough_nav": 1283785.58
+    },
+    "method": {
+      "assumptions": [
+        "No terminal receivables in this input case.",
+        "Terminal holdings use provided marked NAV, without hypothetical liquidation costs.",
+        "This analysis does not certify omitted data or actual broker execution."
+      ],
+      "attribution": "Use cash ledger event_id; if absent, map action_id to the unique corporate action entitlement event_id, not whichever cohort is held on payment date.",
+      "closed_win_rate": "Strictly positive final cash PnL among cohorts with an exit_date; remaining marked positions excluded from this win rate.",
+      "cohort_key": "event_id",
+      "drawdown": "Each daily NAV / the cumulative maximum of initial cash and all preceding/current daily NAVs - 1.",
+      "net_pnl": "sell cash inflow + other attributed cash inflow + final marked market value - buy cash outflow; execution costs are already included in trade cash flows.",
+      "net_return": "cohort net PnL / actual buy cash outflow"
+    },
+    "scope": {
+      "actual_fill_verified": false,
+      "end": "2026-10-02",
+      "live_qualified": false,
+      "posthoc_data_exclusion": true,
+      "start": "2024-01-02",
+      "trading_days": 666
+    },
+    "source_refs": [
+      {
+        "path": ".cache/poc-gap-20261004/cached-v2/poc_red_executable.json",
+        "sha256": "5988458a4c0831407f91c2dc3dbab5bb48a3e30b1a83279a6ee499c147e665e2"
+      }
+    ],
+    "supplementary_dividend_attribution": [
+      {
+        "action_id": "5225-cash-2024-03-22",
+        "cash_after": 103107.46,
+        "cash_change": 13144.36,
+        "cash_ledger_sequence": 54,
+        "date": "2024-04-22",
+        "event_id": "liquid_universe-2024-03-11-5225",
+        "kind": "dividend_payment",
+        "method": "corporate_action_entitlement_event_id",
+        "stock_id": "5225"
+      },
+      {
+        "action_id": "1587-cash-2024-05-31",
+        "cash_after": 389602.91,
+        "cash_change": 2017.85,
+        "cash_ledger_sequence": 103,
+        "date": "2024-06-28",
+        "event_id": "liquid_universe-2024-05-09-1587",
+        "kind": "dividend_payment",
+        "method": "corporate_action_entitlement_event_id",
+        "stock_id": "1587"
+      },
+      {
+        "action_id": "2609-cash-2024-07-09",
+        "cash_after": 626058.06,
+        "cash_change": 8560.0,
+        "cash_ledger_sequence": 112,
+        "date": "2024-07-31",
+        "event_id": "liquid_universe-2024-05-14-2609",
+        "kind": "dividend_payment",
+        "method": "corporate_action_entitlement_event_id",
+        "stock_id": "2609"
+      },
+      {
+        "action_id": "8299-cash-2025-12-16",
+        "cash_after": 551493.98,
+        "cash_change": 180.62,
+        "cash_ledger_sequence": 331,
+        "date": "2026-01-13",
+        "event_id": "liquid_universe-2025-10-30-8299",
+        "kind": "dividend_payment",
+        "method": "corporate_action_entitlement_event_id",
+        "stock_id": "8299"
+      },
+      {
+        "action_id": "2478-cash-2026-07-09",
+        "cash_after": 668945.38,
+        "cash_change": 4128.0,
+        "cash_ledger_sequence": 422,
+        "date": "2026-07-31",
+        "event_id": "liquid_universe-2026-06-09-2478",
+        "kind": "dividend_payment",
+        "method": "corporate_action_entitlement_event_id",
+        "stock_id": "2478"
+      }
+    ],
+    "worst_cohorts": [
+      {
+        "buy_cash_outflow": 490370.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-20",
+        "event_id": "liquid_universe-2026-05-19-3055",
+        "exit_date": "2026-06-23",
+        "name": "蔚華科",
+        "net_pnl": -140051.3,
+        "net_return": -0.28560331994208454,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 350318.7,
+        "sell_child_trades": 8,
+        "sell_reasons": {
+          "loss12": 8
+        },
+        "stock_id": "3055",
+        "total_cost": 6199.0
+      },
+      {
+        "buy_cash_outflow": 434279.0,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-11",
+        "event_id": "liquid_universe-2026-06-10-8454",
+        "exit_date": "2026-06-16",
+        "name": "富邦媒",
+        "net_pnl": -128933.0,
+        "net_return": -0.2968897874407927,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 305346.0,
+        "sell_child_trades": 2,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "stock_id": "8454",
+        "total_cost": 5327.0
+      },
+      {
+        "buy_cash_outflow": 592289.0,
+        "buy_child_trades": 1,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-01",
+        "event_id": "liquid_universe-2026-05-29-6116",
+        "exit_date": "2026-06-10",
+        "name": "彩晶",
+        "net_pnl": -100716.0,
+        "net_return": -0.17004536636675677,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 491573.0,
+        "sell_child_trades": 1,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "stock_id": "6116",
+        "total_cost": 7916.0
+      },
+      {
+        "buy_cash_outflow": 422569.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-20",
+        "event_id": "liquid_universe-2026-07-17-6505",
+        "exit_date": "2026-08-05",
+        "name": "台塑化",
+        "net_pnl": -89266.2,
+        "net_return": -0.21124624736197178,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 333303.2,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "6505",
+        "total_cost": 5536.0
+      },
+      {
+        "buy_cash_outflow": 311913.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-10",
+        "event_id": "liquid_universe-2024-05-09-1587",
+        "exit_date": "2024-06-13",
+        "name": "吉茂",
+        "net_pnl": -73439.75,
+        "net_return": -0.2354491663391185,
+        "other_cash_inflow": 2017.85,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 236455.8,
+        "sell_child_trades": 5,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "stock_id": "1587",
+        "total_cost": 4064.0
+      },
+      {
+        "buy_cash_outflow": 551717.4,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-02",
+        "event_id": "liquid_universe-2026-06-01-2356",
+        "exit_date": "2026-06-10",
+        "name": "英業達",
+        "net_pnl": -67565.2,
+        "net_return": -0.12246342058452389,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 484152.2,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "stock_id": "2356",
+        "total_cost": 7634.0
+      },
+      {
+        "buy_cash_outflow": 455643.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-14",
+        "event_id": "liquid_universe-2026-07-13-2332",
+        "exit_date": "2026-07-20",
+        "name": "友訊",
+        "net_pnl": -66501.85,
+        "net_return": -0.14595146294165,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 389141.75,
+        "sell_child_trades": 3,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "stock_id": "2332",
+        "total_cost": 6247.0
+      },
+      {
+        "buy_cash_outflow": 338082.2,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-04-18",
+        "event_id": "liquid_universe-2024-04-17-4127",
+        "exit_date": "2024-04-25",
+        "name": "天良",
+        "net_pnl": -61150.7,
+        "net_return": -0.18087524276640415,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 276931.5,
+        "sell_child_trades": 4,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "stock_id": "4127",
+        "total_cost": 4567.0
+      },
+      {
+        "buy_cash_outflow": 323632.8,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-10",
+        "event_id": "liquid_universe-2024-07-09-6152",
+        "exit_date": "2024-08-05",
+        "name": "百一",
+        "net_pnl": -56800.95,
+        "net_return": -0.17551048595816,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 266831.85,
+        "sell_child_trades": 5,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "stock_id": "6152",
+        "total_cost": 4413.0
+      },
+      {
+        "buy_cash_outflow": 321614.6,
+        "buy_child_trades": 2,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-23",
+        "event_id": "liquid_universe-2024-10-22-6151",
+        "exit_date": "2024-11-19",
+        "name": "晉倫",
+        "net_pnl": -56017.2,
+        "net_return": -0.17417492862575268,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 265597.4,
+        "sell_child_trades": 6,
+        "sell_reasons": {
+          "loss12": 6
+        },
+        "stock_id": "6151",
+        "total_cost": 4403.0
+      }
+    ]
+  },
+  "complete_historical_universe": false,
+  "completed": true,
+  "corporate_fractional_cash_date_verified": false,
+  "data_gap_ledger": [
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2024-10-16",
+      "event_id": "liquid_universe-2024-10-15-3230",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 4000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 958
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3230 2024-10-16 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 4958,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2024-10-15",
+      "stock_id": "3230"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2024-11-19",
+      "date": "2024-11-12",
+      "event_id": "liquid_universe-2024-10-22-6151",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 26
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 6151 2024-11-12 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 5026,
+      "next_attempt_date": "2024-11-13",
+      "next_sell_fill_date": "2024-11-13",
+      "next_sell_fill_qty": 5006,
+      "planned_qty": 5026,
+      "reason": "loss12",
+      "side": "sell",
+      "signal_date": "2024-11-11",
+      "stock_id": "6151"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2025-03-17",
+      "date": "2025-03-12",
+      "event_id": "liquid_universe-2025-02-13-4971",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 8
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 4971 2025-03-12 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 1008,
+      "next_attempt_date": "2025-03-13",
+      "next_sell_fill_date": "2025-03-13",
+      "next_sell_fill_qty": 1003,
+      "planned_qty": 1008,
+      "reason": "loss12",
+      "side": "sell",
+      "signal_date": "2025-03-11",
+      "stock_id": "4971"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-06-23",
+      "event_id": "liquid_universe-2025-06-20-5475",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 8000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 648
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 5475 2025-06-23 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 8648,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-06-20",
+      "stock_id": "5475"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2025-07-01",
+      "date": "2025-06-30",
+      "event_id": "liquid_universe-2025-06-23-5475",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 8000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 17
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 5475 2025-06-30 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 8017,
+      "next_attempt_date": "2025-07-01",
+      "next_sell_fill_date": "2025-07-01",
+      "next_sell_fill_qty": 8017,
+      "planned_qty": 8017,
+      "reason": "loss12",
+      "side": "sell",
+      "signal_date": "2025-06-27",
+      "stock_id": "5475"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-07-02",
+      "event_id": "liquid_universe-2025-07-01-5475",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 7000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 923
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 5475 2025-07-02 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 7923,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-07-01",
+      "stock_id": "5475"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-07-04",
+      "event_id": "liquid_universe-2025-07-03-3297",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 587
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3297 2025-07-04 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 3587,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-07-03",
+      "stock_id": "3297"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-07-07",
+      "event_id": "liquid_universe-2025-07-04-4991",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 692
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 4991 2025-07-07 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 1692,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-07-04",
+      "stock_id": "4991"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-07-08",
+      "event_id": "liquid_universe-2025-07-07-4971",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 706
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 4971 2025-07-08 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 1706,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-07-07",
+      "stock_id": "4971"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-07-08",
+      "event_id": "liquid_universe-2025-07-07-3128",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 4000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 775
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3128 2025-07-08 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 4775,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-07-07",
+      "stock_id": "3128"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-07-09",
+      "event_id": "liquid_universe-2025-07-08-4971",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 705
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 4971 2025-07-09 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 1705,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-07-08",
+      "stock_id": "4971"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-11-20",
+      "event_id": "liquid_universe-2025-11-19-3624",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 8000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 322
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3624 2025-11-20 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 8322,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-11-19",
+      "stock_id": "3624"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-11-21",
+      "event_id": "liquid_universe-2025-11-20-6163",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 13000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 220
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 6163 2025-11-21 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 13220,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-11-20",
+      "stock_id": "6163"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2025-11-24",
+      "event_id": "liquid_universe-2025-11-21-8043",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 74
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 8043 2025-11-24 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 5074,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2025-11-21",
+      "stock_id": "8043"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2026-01-29",
+      "event_id": "liquid_universe-2026-01-28-4533",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 11000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 204
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 4533 2026-01-29 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 11204,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2026-01-28",
+      "stock_id": "4533"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2026-02-10",
+      "event_id": "liquid_universe-2026-02-09-5386",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 262
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 5386 2026-02-10 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 3262,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2026-02-09",
+      "stock_id": "5386"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2026-04-30",
+      "event_id": "liquid_universe-2026-04-29-6147",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 684
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 6147 2026-04-30 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 3684,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2026-04-29",
+      "stock_id": "6147"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2026-05-19",
+      "event_id": "liquid_universe-2026-05-18-6147",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 766
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 6147 2026-05-19 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 2766,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2026-05-18",
+      "stock_id": "6147"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2026-06-10",
+      "event_id": "liquid_universe-2026-06-09-6127",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 806
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 6127 2026-06-10 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 5806,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2026-06-09",
+      "stock_id": "6127"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": null,
+      "date": "2026-07-13",
+      "event_id": "liquid_universe-2026-07-09-6182",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 786
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 6182 2026-07-13 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 0,
+      "next_attempt_date": null,
+      "next_sell_fill_date": null,
+      "next_sell_fill_qty": 0,
+      "planned_qty": 2786,
+      "reason": "leader_entry",
+      "side": "buy",
+      "signal_date": "2026-07-09",
+      "stock_id": "6182"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2026-09-21",
+      "date": "2026-09-10",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 12
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-10 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 2012,
+      "next_attempt_date": "2026-09-11",
+      "next_sell_fill_date": "2026-09-18",
+      "next_sell_fill_qty": 2004,
+      "planned_qty": 2012,
+      "reason": "time63",
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "stock_id": "3362"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2026-09-21",
+      "date": "2026-09-11",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 12
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-11 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 2012,
+      "next_attempt_date": "2026-09-14",
+      "next_sell_fill_date": "2026-09-18",
+      "next_sell_fill_qty": 2004,
+      "planned_qty": 2012,
+      "reason": "time63",
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "stock_id": "3362"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2026-09-21",
+      "date": "2026-09-14",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 12
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-14 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 2012,
+      "next_attempt_date": "2026-09-15",
+      "next_sell_fill_date": "2026-09-18",
+      "next_sell_fill_qty": 2004,
+      "planned_qty": 2012,
+      "reason": "time63",
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "stock_id": "3362"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2026-09-21",
+      "date": "2026-09-15",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 12
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-15 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 2012,
+      "next_attempt_date": "2026-09-16",
+      "next_sell_fill_date": "2026-09-18",
+      "next_sell_fill_qty": 2004,
+      "planned_qty": 2012,
+      "reason": "time63",
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "stock_id": "3362"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2026-09-21",
+      "date": "2026-09-16",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 12
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-16 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 2012,
+      "next_attempt_date": "2026-09-17",
+      "next_sell_fill_date": "2026-09-18",
+      "next_sell_fill_qty": 2004,
+      "planned_qty": 2012,
+      "reason": "time63",
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "stock_id": "3362"
+    },
+    {
+      "arm": "poc_red_executable",
+      "cohort_exit_date": "2026-09-21",
+      "date": "2026-09-17",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 12
+        }
+      ],
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-17 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "holding_qty_retained": 2012,
+      "next_attempt_date": "2026-09-18",
+      "next_sell_fill_date": "2026-09-18",
+      "next_sell_fill_qty": 2004,
+      "planned_qty": 2012,
+      "reason": "time63",
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "stock_id": "3362"
+    }
+  ],
+  "excess_total_return": -2.24052363,
+  "execution_model": {
+    "actual_broker_fills_verified": false,
+    "actual_queue_verified": false,
+    "complete_exchange_tape_verified": false,
+    "odd": "after_hours_single_auction_estimate",
+    "ordinary": "chronological_strict_trade_through_participation"
+  },
+  "gap_audit": {
+    "all_original_planned_children_execution_evidence_complete": false,
+    "all_original_preplanned_limits_verified": true,
+    "data_gap_buys": 17,
+    "data_gap_children": 52,
+    "data_gap_plans": 26,
+    "data_gap_sells": 9,
+    "gap_failure_ledger": [
+      {
+        "date": "2024-10-16",
+        "event_id": "liquid_universe-2024-10-15-3230",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 4000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 958
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3230 2024-10-16 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "3230"
+      },
+      {
+        "date": "2024-11-12",
+        "event_id": "liquid_universe-2024-10-22-6151",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 5000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 26
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 6151 2024-11-12 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "6151"
+      },
+      {
+        "date": "2025-03-12",
+        "event_id": "liquid_universe-2025-02-13-4971",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 1000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 8
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 4971 2025-03-12 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "4971"
+      },
+      {
+        "date": "2025-06-23",
+        "event_id": "liquid_universe-2025-06-20-5475",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 8000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 648
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 5475 2025-06-23 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "5475"
+      },
+      {
+        "date": "2025-06-30",
+        "event_id": "liquid_universe-2025-06-23-5475",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 8000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 17
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 5475 2025-06-30 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "5475"
+      },
+      {
+        "date": "2025-07-02",
+        "event_id": "liquid_universe-2025-07-01-5475",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 7000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 923
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 5475 2025-07-02 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "5475"
+      },
+      {
+        "date": "2025-07-04",
+        "event_id": "liquid_universe-2025-07-03-3297",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 3000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 587
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3297 2025-07-04 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "3297"
+      },
+      {
+        "date": "2025-07-07",
+        "event_id": "liquid_universe-2025-07-04-4991",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 1000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 692
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 4991 2025-07-07 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "4991"
+      },
+      {
+        "date": "2025-07-08",
+        "event_id": "liquid_universe-2025-07-07-4971",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 1000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 706
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 4971 2025-07-08 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "4971"
+      },
+      {
+        "date": "2025-07-08",
+        "event_id": "liquid_universe-2025-07-07-3128",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 4000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 775
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3128 2025-07-08 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "3128"
+      },
+      {
+        "date": "2025-07-09",
+        "event_id": "liquid_universe-2025-07-08-4971",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 1000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 705
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 4971 2025-07-09 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "4971"
+      },
+      {
+        "date": "2025-11-20",
+        "event_id": "liquid_universe-2025-11-19-3624",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 8000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 322
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3624 2025-11-20 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "3624"
+      },
+      {
+        "date": "2025-11-21",
+        "event_id": "liquid_universe-2025-11-20-6163",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 13000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 220
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 6163 2025-11-21 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "6163"
+      },
+      {
+        "date": "2025-11-24",
+        "event_id": "liquid_universe-2025-11-21-8043",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 5000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 74
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 8043 2025-11-24 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "8043"
+      },
+      {
+        "date": "2026-01-29",
+        "event_id": "liquid_universe-2026-01-28-4533",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 11000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 204
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 4533 2026-01-29 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "4533"
+      },
+      {
+        "date": "2026-02-10",
+        "event_id": "liquid_universe-2026-02-09-5386",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 3000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 262
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 5386 2026-02-10 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "5386"
+      },
+      {
+        "date": "2026-04-30",
+        "event_id": "liquid_universe-2026-04-29-6147",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 3000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 684
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 6147 2026-04-30 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "6147"
+      },
+      {
+        "date": "2026-05-19",
+        "event_id": "liquid_universe-2026-05-18-6147",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 766
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 6147 2026-05-19 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "6147"
+      },
+      {
+        "date": "2026-06-10",
+        "event_id": "liquid_universe-2026-06-09-6127",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 5000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 806
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 6127 2026-06-10 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "6127"
+      },
+      {
+        "date": "2026-07-13",
+        "event_id": "liquid_universe-2026-07-09-6182",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 786
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 6182 2026-07-13 official_ordinary_aggregate_conflict",
+        "side": "buy",
+        "stage": "board",
+        "stock_id": "6182"
+      },
+      {
+        "date": "2026-09-10",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 12
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3362 2026-09-10 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "3362"
+      },
+      {
+        "date": "2026-09-11",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 12
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3362 2026-09-11 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "3362"
+      },
+      {
+        "date": "2026-09-14",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 12
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3362 2026-09-14 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "3362"
+      },
+      {
+        "date": "2026-09-15",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 12
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3362 2026-09-15 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "3362"
+      },
+      {
+        "date": "2026-09-16",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 12
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3362 2026-09-16 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "3362"
+      },
+      {
+        "date": "2026-09-17",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "excluded_children": [
+          {
+            "channel": "board",
+            "requested_qty": 2000
+          },
+          {
+            "channel": "odd",
+            "requested_qty": 12
+          }
+        ],
+        "reason": "Executable board tape quality conflict: 3362 2026-09-17 official_ordinary_aggregate_conflict",
+        "side": "sell",
+        "stage": "board",
+        "stock_id": "3362"
+      }
+    ],
+    "gap_failure_types": {
+      "Executable board tape quality conflict": 26
+    },
+    "gap_plans_with_verified_legal_limits": 26,
+    "gap_plans_without_verified_legal_limits": 0,
+    "gap_plans_without_verified_prior_reference": 0,
+    "gap_source_failures_independently_rebuilt": true,
+    "gap_zero_fill_and_resource_ledger_verified": true,
+    "nonexcluded_planned_children_reconciled": 498,
+    "nonexcluded_preplanned_limits_verified": true,
+    "original_planned_children": 550
+  },
+  "idle_capital": "cash",
+  "initial_cash": 1000000,
+  "live_qualified": false,
+  "metadata_only_replay_same": true,
+  "odd_participation": 0.01,
+  "offline_parity": {
+    "benchmark_executable": true,
+    "poc_red_executable": true
+  },
+  "offline_report": {
+    "path": ".cache/poc-gap-20261004/offline-v2/report.json",
+    "sha256": "3165b904d351bed11916adf29a49198af1116d89a9081026fdb25db84c838383"
+  },
+  "offline_requests": 0,
+  "original_strategy_fully_verified": false,
+  "period": [
+    "2024-01-02",
+    "2026-10-02"
+  ],
+  "position_count": 3,
+  "posthoc_data_exclusion": true,
+  "prefix_206_financial_same": true,
+  "profile_data_exclusions": [],
+  "quality_fallback_days": 42,
+  "schema": "poc_gap_account_completed_v1",
+  "strategy_summary": {
+    "annual": [
+      {
+        "end_nav": 911717.36,
+        "max_drawdown": -0.4043425652892717,
+        "partial_year": false,
+        "profit": -88282.64000000001,
+        "start_nav": 1000000.0,
+        "total_return": -0.08828263999999997,
+        "year": "2024"
+      },
+      {
+        "end_nav": 1505954.58,
+        "max_drawdown": -0.22255526097093925,
+        "partial_year": false,
+        "profit": 594237.2200000001,
+        "start_nav": 911717.36,
+        "total_return": 0.6517778930961675,
+        "year": "2025"
+      },
+      {
+        "end_nav": 1301204.58,
+        "max_drawdown": -0.46595274698659783,
+        "partial_year": true,
+        "profit": -204750.0,
+        "start_nav": 1505954.58,
+        "total_return": -0.13596027577405423,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 158,
+    "cagr": 0.10052099198743658,
+    "cash": 1021563.58,
+    "costs": {
+      "commission": 73363.0,
+      "slippage": 217631.0,
+      "tax": 72900.0,
+      "total_cost": 363894.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "liquid_universe-2026-08-10-6206",
+        "mark_date": "2026-10-02",
+        "market_value": 275096.0,
+        "name": "飛捷",
+        "price": 137.0,
+        "qty": 2008,
+        "stale": false,
+        "stock_id": "6206"
+      },
+      {
+        "date": "2026-10-02",
+        "event_id": "liquid_universe-2026-08-13-7711",
+        "mark_date": "2026-10-02",
+        "market_value": 1830.0,
+        "name": "永擎",
+        "price": 610.0,
+        "qty": 3,
+        "stale": false,
+        "stock_id": "7711"
+      },
+      {
+        "date": "2026-10-02",
+        "event_id": "liquid_universe-2026-09-21-7799",
+        "mark_date": "2026-10-02",
+        "market_value": 2715.0,
+        "name": "禾榮科",
+        "price": 543.0,
+        "qty": 5,
+        "stale": false,
+        "stock_id": "7799"
+      }
+    ],
+    "final_nav": 1301204.58,
+    "final_receivables": [],
+    "initial_cash": 1000000.0,
+    "market_value": 279641.0,
+    "max_drawdown": -0.46595274698659783,
+    "minimum_cash": 22137.41,
+    "partial_or_rejected_orders": {
+      "no_auction_trades": 5,
+      "no_trade_through_capacity": 4,
+      "overlapping_member": 7,
+      "partial_auction_capacity": 198,
+      "partial_trade_through_capacity": 1,
+      "participation_capacity_exhausted": 42,
+      "resource_slots_locked": 234,
+      "same_price_queue_uncredited": 15,
+      "slots_full": 375,
+      "user_authorized_data_gap_exclusion": 26
+    },
+    "profit": 301204.5800000001,
+    "receivable": 0.0,
+    "sell_count": 274,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 98,
+    "total_return": 0.30120458000000006,
+    "trade_count": 432,
+    "trading_days": 666
+  },
+  "unseen_validation": false,
+  "validated": false,
+  "validation": {
+    "api": {
+      "checks": [
+        {
+          "count": 1,
+          "endpoint": "health",
+          "http_status": 200,
+          "port": 8001,
+          "type": "dict"
+        },
+        {
+          "count": 10,
+          "endpoint": "picks",
+          "http_status": 200,
+          "port": 8001,
+          "type": "list"
+        },
+        {
+          "count": 11,
+          "endpoint": "models",
+          "http_status": 200,
+          "port": 8001,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "jobs?limit=10",
+          "http_status": 200,
+          "port": 8001,
+          "type": "list"
+        },
+        {
+          "count": 1,
+          "endpoint": "health",
+          "http_status": 200,
+          "port": 8000,
+          "type": "dict"
+        },
+        {
+          "count": 10,
+          "endpoint": "picks",
+          "http_status": 200,
+          "port": 8000,
+          "type": "list"
+        },
+        {
+          "count": 11,
+          "endpoint": "models",
+          "http_status": 200,
+          "port": 8000,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "jobs?limit=10",
+          "http_status": 200,
+          "port": 8000,
+          "type": "list"
+        }
+      ],
+      "temporary_server_stopped": true
+    },
+    "pipeline": {
+      "after": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "before": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "command": "make pipeline",
+      "first_exit_code": 0,
+      "repeat_exit_code": 0,
+      "row_counts_equal": true
+    },
+    "tests": {
+      "command": "make test",
+      "exit_code": 0,
+      "passed": 5768,
+      "seconds": 99.12,
+      "warnings": 37
+    }
+  }
+}
