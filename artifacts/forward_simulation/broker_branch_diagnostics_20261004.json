@@ -1,0 +1,3381 @@
+{
+  "actual_fill_verified": false,
+  "all_signals": {
+    "closed": 443,
+    "mean_net_return": 0.07683254322038846,
+    "median_net_return": -0.06680604123663825,
+    "peak20_rate": 0.38826185101580135,
+    "signals": 458,
+    "statuses": {
+      "closed": 443,
+      "open": 10,
+      "unknown": 5
+    },
+    "stocks": 280,
+    "stop_rate": 0.45598194130925507,
+    "win_rate": 0.417607223476298
+  },
+  "branch_coverage": {
+    "known": 442,
+    "missing_raw_source": 1,
+    "raw_market_imbalance": 15
+  },
+  "cash_account": false,
+  "comparisons": {
+    "combined": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 6,
+            "mean_net_return": 0.0037309999125081372,
+            "median_net_return": -0.08803700701869516,
+            "peak20_rate": 0.16666666666666666,
+            "signals": 6,
+            "statuses": {
+              "closed": 6
+            },
+            "stocks": 6,
+            "stop_rate": 0.5,
+            "win_rate": 0.3333333333333333
+          },
+          "passed": {
+            "closed": 9,
+            "mean_net_return": 0.040745912936863395,
+            "median_net_return": 0.037201469478991056,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.4444444444444444,
+            "win_rate": 0.5555555555555556
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 24,
+            "mean_net_return": 0.2228621982194523,
+            "median_net_return": 0.0565568423029188,
+            "peak20_rate": 0.5416666666666666,
+            "signals": 24,
+            "statuses": {
+              "closed": 24
+            },
+            "stocks": 23,
+            "stop_rate": 0.3333333333333333,
+            "win_rate": 0.5833333333333334
+          },
+          "passed": {
+            "closed": 26,
+            "mean_net_return": 0.05158650253559215,
+            "median_net_return": 0.02570687274554706,
+            "peak20_rate": 0.23076923076923078,
+            "signals": 26,
+            "statuses": {
+              "closed": 26
+            },
+            "stocks": 22,
+            "stop_rate": 0.2692307692307692,
+            "win_rate": 0.5384615384615384
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 30,
+            "mean_net_return": -0.051479318208702336,
+            "median_net_return": -0.10799195430677799,
+            "peak20_rate": 0.3,
+            "signals": 30,
+            "statuses": {
+              "closed": 30
+            },
+            "stocks": 29,
+            "stop_rate": 0.5666666666666667,
+            "win_rate": 0.26666666666666666
+          },
+          "passed": {
+            "closed": 40,
+            "mean_net_return": 0.018630613746642873,
+            "median_net_return": -0.021660223780163246,
+            "peak20_rate": 0.325,
+            "signals": 40,
+            "statuses": {
+              "closed": 40
+            },
+            "stocks": 35,
+            "stop_rate": 0.45,
+            "win_rate": 0.475
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 24,
+            "mean_net_return": 0.07517942185711336,
+            "median_net_return": -0.05358113685718241,
+            "peak20_rate": 0.625,
+            "signals": 24,
+            "statuses": {
+              "closed": 24
+            },
+            "stocks": 22,
+            "stop_rate": 0.4166666666666667,
+            "win_rate": 0.4166666666666667
+          },
+          "passed": {
+            "closed": 33,
+            "mean_net_return": 0.1479308703421445,
+            "median_net_return": 0.015728376102732256,
+            "peak20_rate": 0.45454545454545453,
+            "signals": 34,
+            "statuses": {
+              "closed": 33,
+              "unknown": 1
+            },
+            "stocks": 33,
+            "stop_rate": 0.30303030303030304,
+            "win_rate": 0.5151515151515151
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 19,
+            "mean_net_return": 0.11415727725878826,
+            "median_net_return": -0.09393339996236583,
+            "peak20_rate": 0.5263157894736842,
+            "signals": 21,
+            "statuses": {
+              "closed": 19,
+              "open": 2
+            },
+            "stocks": 20,
+            "stop_rate": 0.5789473684210527,
+            "win_rate": 0.3157894736842105
+          },
+          "passed": {
+            "closed": 30,
+            "mean_net_return": 0.19619225821356878,
+            "median_net_return": -0.08590270687548351,
+            "peak20_rate": 0.4666666666666667,
+            "signals": 37,
+            "statuses": {
+              "closed": 30,
+              "open": 7
+            },
+            "stocks": 36,
+            "stop_rate": 0.5333333333333333,
+            "win_rate": 0.43333333333333335
+          }
+        }
+      },
+      "known_signals": 251,
+      "other": {
+        "closed": 103,
+        "mean_net_return": 0.07572809323270421,
+        "median_net_return": -0.0816018644651122,
+        "peak20_rate": 0.46601941747572817,
+        "signals": 105,
+        "statuses": {
+          "closed": 103,
+          "open": 2
+        },
+        "stocks": 90,
+        "stop_rate": 0.47572815533980584,
+        "win_rate": 0.3883495145631068
+      },
+      "other_definition": "condition_not_met_on_same_data_coverage",
+      "passed": {
+        "closed": 138,
+        "mean_net_return": 0.09580198043420807,
+        "median_net_return": -0.0030768644639902476,
+        "peak20_rate": 0.3695652173913043,
+        "signals": 146,
+        "statuses": {
+          "closed": 138,
+          "open": 7,
+          "unknown": 1
+        },
+        "stocks": 114,
+        "stop_rate": 0.39855072463768115,
+        "win_rate": 0.4927536231884058
+      },
+      "unknown_signals": 207
+    },
+    "concentrated_directional": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 9,
+            "mean_net_return": -0.10115526586162774,
+            "median_net_return": -0.16969095616978602,
+            "peak20_rate": 0.1111111111111111,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.8888888888888888,
+            "win_rate": 0.1111111111111111
+          },
+          "passed": {
+            "closed": 17,
+            "mean_net_return": -0.0023692717083173423,
+            "median_net_return": -0.08320479868265107,
+            "peak20_rate": 0.23529411764705882,
+            "signals": 18,
+            "statuses": {
+              "closed": 17,
+              "unknown": 1
+            },
+            "stocks": 17,
+            "stop_rate": 0.4117647058823529,
+            "win_rate": 0.4117647058823529
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 37,
+            "mean_net_return": 0.11755292925644541,
+            "median_net_return": 0.007267543025102352,
+            "peak20_rate": 0.4864864864864865,
+            "signals": 37,
+            "statuses": {
+              "closed": 37
+            },
+            "stocks": 33,
+            "stop_rate": 0.3783783783783784,
+            "win_rate": 0.5135135135135135
+          },
+          "passed": {
+            "closed": 74,
+            "mean_net_return": 0.052538951207268474,
+            "median_net_return": 0.0020930446789677593,
+            "peak20_rate": 0.32432432432432434,
+            "signals": 74,
+            "statuses": {
+              "closed": 74
+            },
+            "stocks": 59,
+            "stop_rate": 0.35135135135135137,
+            "win_rate": 0.5
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 32,
+            "mean_net_return": 0.05601757901154707,
+            "median_net_return": -0.08977199886730097,
+            "peak20_rate": 0.40625,
+            "signals": 32,
+            "statuses": {
+              "closed": 32
+            },
+            "stocks": 30,
+            "stop_rate": 0.5,
+            "win_rate": 0.375
+          },
+          "passed": {
+            "closed": 85,
+            "mean_net_return": -0.02150031418846434,
+            "median_net_return": -0.1022802613224586,
+            "peak20_rate": 0.25882352941176473,
+            "signals": 86,
+            "statuses": {
+              "closed": 85,
+              "unknown": 1
+            },
+            "stocks": 73,
+            "stop_rate": 0.49411764705882355,
+            "win_rate": 0.35294117647058826
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 27,
+            "mean_net_return": 0.12698359159977826,
+            "median_net_return": -0.060402208824479664,
+            "peak20_rate": 0.6296296296296297,
+            "signals": 27,
+            "statuses": {
+              "closed": 27
+            },
+            "stocks": 26,
+            "stop_rate": 0.4444444444444444,
+            "win_rate": 0.4444444444444444
+          },
+          "passed": {
+            "closed": 69,
+            "mean_net_return": 0.08768063727715855,
+            "median_net_return": -0.008328328125245532,
+            "peak20_rate": 0.43478260869565216,
+            "signals": 70,
+            "statuses": {
+              "closed": 69,
+              "unknown": 1
+            },
+            "stocks": 62,
+            "stop_rate": 0.34782608695652173,
+            "win_rate": 0.463768115942029
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 20,
+            "mean_net_return": 0.020380091300047594,
+            "median_net_return": -0.1462581825343196,
+            "peak20_rate": 0.35,
+            "signals": 20,
+            "statuses": {
+              "closed": 20
+            },
+            "stocks": 19,
+            "stop_rate": 0.7,
+            "win_rate": 0.2
+          },
+          "passed": {
+            "closed": 59,
+            "mean_net_return": 0.2549048169195342,
+            "median_net_return": -0.08730738038811581,
+            "peak20_rate": 0.4915254237288136,
+            "signals": 69,
+            "statuses": {
+              "closed": 59,
+              "open": 10
+            },
+            "stocks": 59,
+            "stop_rate": 0.559322033898305,
+            "win_rate": 0.4067796610169492
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 125,
+        "mean_net_return": 0.07254225853838644,
+        "median_net_return": -0.09393339996236583,
+        "peak20_rate": 0.448,
+        "signals": 125,
+        "statuses": {
+          "closed": 125
+        },
+        "stocks": 105,
+        "stop_rate": 0.512,
+        "win_rate": 0.384
+      },
+      "other_definition": "condition_not_met_on_same_data_coverage",
+      "passed": {
+        "closed": 304,
+        "mean_net_return": 0.07601784945609691,
+        "median_net_return": -0.043498960568102374,
+        "peak20_rate": 0.35855263157894735,
+        "signals": 317,
+        "statuses": {
+          "closed": 304,
+          "open": 10,
+          "unknown": 3
+        },
+        "stocks": 208,
+        "stop_rate": 0.4342105263157895,
+        "win_rate": 0.4276315789473684
+      },
+      "unknown_signals": 16
+    },
+    "named_7001": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 15,
+            "mean_net_return": -0.058710897760954665,
+            "median_net_return": -0.11707565367505224,
+            "peak20_rate": 0.13333333333333333,
+            "signals": 16,
+            "statuses": {
+              "closed": 15,
+              "unknown": 1
+            },
+            "stocks": 15,
+            "stop_rate": 0.5333333333333333,
+            "win_rate": 0.26666666666666666
+          },
+          "passed": {
+            "closed": 11,
+            "mean_net_return": -0.006364685943793125,
+            "median_net_return": -0.1292695500707941,
+            "peak20_rate": 0.2727272727272727,
+            "signals": 11,
+            "statuses": {
+              "closed": 11
+            },
+            "stocks": 11,
+            "stop_rate": 0.6363636363636364,
+            "win_rate": 0.36363636363636365
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 71,
+            "mean_net_return": 0.06431065105571916,
+            "median_net_return": 0.007267543025102352,
+            "peak20_rate": 0.36619718309859156,
+            "signals": 71,
+            "statuses": {
+              "closed": 71
+            },
+            "stocks": 57,
+            "stop_rate": 0.36619718309859156,
+            "win_rate": 0.5070422535211268
+          },
+          "passed": {
+            "closed": 40,
+            "mean_net_return": 0.0917821136717572,
+            "median_net_return": 0.0020263559828941347,
+            "peak20_rate": 0.4,
+            "signals": 40,
+            "statuses": {
+              "closed": 40
+            },
+            "stocks": 37,
+            "stop_rate": 0.35,
+            "win_rate": 0.5
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 85,
+            "mean_net_return": 0.005147718279754963,
+            "median_net_return": -0.07289887688399099,
+            "peak20_rate": 0.29411764705882354,
+            "signals": 86,
+            "statuses": {
+              "closed": 85,
+              "unknown": 1
+            },
+            "stocks": 74,
+            "stop_rate": 0.47058823529411764,
+            "win_rate": 0.4
+          },
+          "passed": {
+            "closed": 32,
+            "mean_net_return": -0.014766257232160476,
+            "median_net_return": -0.11505139437931777,
+            "peak20_rate": 0.3125,
+            "signals": 32,
+            "statuses": {
+              "closed": 32
+            },
+            "stocks": 29,
+            "stop_rate": 0.5625,
+            "win_rate": 0.25
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 74,
+            "mean_net_return": 0.1128359549669379,
+            "median_net_return": 0.004450729332094672,
+            "peak20_rate": 0.5135135135135135,
+            "signals": 75,
+            "statuses": {
+              "closed": 74,
+              "unknown": 1
+            },
+            "stocks": 66,
+            "stop_rate": 0.36486486486486486,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 22,
+            "mean_net_return": 0.05130273989838862,
+            "median_net_return": -0.0413029339040033,
+            "peak20_rate": 0.4090909090909091,
+            "signals": 22,
+            "statuses": {
+              "closed": 22
+            },
+            "stocks": 22,
+            "stop_rate": 0.4090909090909091,
+            "win_rate": 0.3181818181818182
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 57,
+            "mean_net_return": 0.20997050158711572,
+            "median_net_return": -0.08730738038811581,
+            "peak20_rate": 0.49122807017543857,
+            "signals": 65,
+            "statuses": {
+              "closed": 57,
+              "open": 8
+            },
+            "stocks": 57,
+            "stop_rate": 0.543859649122807,
+            "win_rate": 0.38596491228070173
+          },
+          "passed": {
+            "closed": 22,
+            "mean_net_return": 0.15812124699035784,
+            "median_net_return": -0.12560421559340657,
+            "peak20_rate": 0.36363636363636365,
+            "signals": 24,
+            "statuses": {
+              "closed": 22,
+              "open": 2
+            },
+            "stocks": 23,
+            "stop_rate": 0.7272727272727273,
+            "win_rate": 0.2727272727272727
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 302,
+        "mean_net_return": 0.08093088765013216,
+        "median_net_return": -0.05548115508929041,
+        "peak20_rate": 0.39403973509933776,
+        "signals": 313,
+        "statuses": {
+          "closed": 302,
+          "open": 8,
+          "unknown": 3
+        },
+        "stocks": 209,
+        "stop_rate": 0.4370860927152318,
+        "win_rate": 0.44039735099337746
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 127,
+        "mean_net_return": 0.0609140195402508,
+        "median_net_return": -0.08652893029662545,
+        "peak20_rate": 0.36220472440944884,
+        "signals": 129,
+        "statuses": {
+          "closed": 127,
+          "open": 2
+        },
+        "stocks": 114,
+        "stop_rate": 0.5039370078740157,
+        "win_rate": 0.3543307086614173
+      },
+      "unknown_signals": 16
+    },
+    "named_961F": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 26,
+            "mean_net_return": -0.03656442353061709,
+            "median_net_return": -0.12317260187292317,
+            "peak20_rate": 0.19230769230769232,
+            "signals": 27,
+            "statuses": {
+              "closed": 26,
+              "unknown": 1
+            },
+            "stocks": 26,
+            "stop_rate": 0.5769230769230769,
+            "win_rate": 0.3076923076923077
+          },
+          "passed": {
+            "closed": 0,
+            "mean_net_return": null,
+            "median_net_return": null,
+            "peak20_rate": null,
+            "signals": 0,
+            "statuses": {},
+            "stocks": 0,
+            "stop_rate": null,
+            "win_rate": null
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 80,
+            "mean_net_return": 0.0644359927650544,
+            "median_net_return": 0.012478572682556477,
+            "peak20_rate": 0.3375,
+            "signals": 80,
+            "statuses": {
+              "closed": 80
+            },
+            "stocks": 64,
+            "stop_rate": 0.35,
+            "win_rate": 0.5125
+          },
+          "passed": {
+            "closed": 31,
+            "mean_net_return": 0.0994342371168386,
+            "median_net_return": -0.02727114809651998,
+            "peak20_rate": 0.4838709677419355,
+            "signals": 31,
+            "statuses": {
+              "closed": 31
+            },
+            "stocks": 29,
+            "stop_rate": 0.3870967741935484,
+            "win_rate": 0.4838709677419355
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 84,
+            "mean_net_return": -0.02218510555696899,
+            "median_net_return": -0.104624363100491,
+            "peak20_rate": 0.27380952380952384,
+            "signals": 85,
+            "statuses": {
+              "closed": 84,
+              "unknown": 1
+            },
+            "stocks": 73,
+            "stop_rate": 0.5119047619047619,
+            "win_rate": 0.30952380952380953
+          },
+          "passed": {
+            "closed": 33,
+            "mean_net_return": 0.055411657246528245,
+            "median_net_return": -0.08685307843708945,
+            "peak20_rate": 0.36363636363636365,
+            "signals": 33,
+            "statuses": {
+              "closed": 33
+            },
+            "stocks": 31,
+            "stop_rate": 0.45454545454545453,
+            "win_rate": 0.48484848484848486
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 73,
+            "mean_net_return": 0.0894420730423708,
+            "median_net_return": -0.010953307293156023,
+            "peak20_rate": 0.4794520547945205,
+            "signals": 74,
+            "statuses": {
+              "closed": 73,
+              "unknown": 1
+            },
+            "stocks": 66,
+            "stop_rate": 0.410958904109589,
+            "win_rate": 0.4520547945205479
+          },
+          "passed": {
+            "closed": 23,
+            "mean_net_return": 0.12822824405325586,
+            "median_net_return": -0.001433501991119579,
+            "peak20_rate": 0.5217391304347826,
+            "signals": 23,
+            "statuses": {
+              "closed": 23
+            },
+            "stocks": 23,
+            "stop_rate": 0.2608695652173913,
+            "win_rate": 0.4782608695652174
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 64,
+            "mean_net_return": 0.2169481470419664,
+            "median_net_return": -0.09637231295653143,
+            "peak20_rate": 0.453125,
+            "signals": 70,
+            "statuses": {
+              "closed": 64,
+              "open": 6
+            },
+            "stocks": 63,
+            "stop_rate": 0.59375,
+            "win_rate": 0.34375
+          },
+          "passed": {
+            "closed": 15,
+            "mean_net_return": 0.10415364090450778,
+            "median_net_return": -0.11998206741561124,
+            "peak20_rate": 0.4666666666666667,
+            "signals": 19,
+            "statuses": {
+              "closed": 15,
+              "open": 4
+            },
+            "stocks": 19,
+            "stop_rate": 0.6,
+            "win_rate": 0.4
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 327,
+        "mean_net_return": 0.0695859580593328,
+        "median_net_return": -0.06921291340272029,
+        "peak20_rate": 0.363914373088685,
+        "signals": 336,
+        "statuses": {
+          "closed": 327,
+          "open": 6,
+          "unknown": 3
+        },
+        "stocks": 228,
+        "stop_rate": 0.4709480122324159,
+        "win_rate": 0.39755351681957185
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 102,
+        "mean_net_return": 0.09237843398578365,
+        "median_net_return": -0.025549071853312122,
+        "peak20_rate": 0.45098039215686275,
+        "signals": 106,
+        "statuses": {
+          "closed": 102,
+          "open": 4
+        },
+        "stocks": 93,
+        "stop_rate": 0.4117647058823529,
+        "win_rate": 0.47058823529411764
+      },
+      "unknown_signals": 16
+    },
+    "named_984K": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 17,
+            "mean_net_return": -0.024979575185531257,
+            "median_net_return": -0.11148010721278279,
+            "peak20_rate": 0.17647058823529413,
+            "signals": 18,
+            "statuses": {
+              "closed": 17,
+              "unknown": 1
+            },
+            "stocks": 17,
+            "stop_rate": 0.5294117647058824,
+            "win_rate": 0.29411764705882354
+          },
+          "passed": {
+            "closed": 9,
+            "mean_net_return": -0.05844691484911256,
+            "median_net_return": -0.15304147487539832,
+            "peak20_rate": 0.2222222222222222,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.6666666666666666,
+            "win_rate": 0.3333333333333333
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 75,
+            "mean_net_return": 0.10157097187217341,
+            "median_net_return": 0.042507429196297686,
+            "peak20_rate": 0.41333333333333333,
+            "signals": 75,
+            "statuses": {
+              "closed": 75
+            },
+            "stocks": 62,
+            "stop_rate": 0.30666666666666664,
+            "win_rate": 0.5466666666666666
+          },
+          "passed": {
+            "closed": 36,
+            "mean_net_return": 0.017208830039259552,
+            "median_net_return": -0.07795123199570347,
+            "peak20_rate": 0.3055555555555556,
+            "signals": 36,
+            "statuses": {
+              "closed": 36
+            },
+            "stocks": 34,
+            "stop_rate": 0.4722222222222222,
+            "win_rate": 0.4166666666666667
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 88,
+            "mean_net_return": 0.0018150322757914394,
+            "median_net_return": -0.10026874699925697,
+            "peak20_rate": 0.2727272727272727,
+            "signals": 89,
+            "statuses": {
+              "closed": 88,
+              "unknown": 1
+            },
+            "stocks": 79,
+            "stop_rate": 0.5113636363636364,
+            "win_rate": 0.3522727272727273
+          },
+          "passed": {
+            "closed": 29,
+            "mean_net_return": -0.006713345445503773,
+            "median_net_return": -0.05843806337919488,
+            "peak20_rate": 0.3793103448275862,
+            "signals": 29,
+            "statuses": {
+              "closed": 29
+            },
+            "stocks": 28,
+            "stop_rate": 0.4482758620689655,
+            "win_rate": 0.3793103448275862
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 71,
+            "mean_net_return": 0.09374373550667792,
+            "median_net_return": -0.018792133094035157,
+            "peak20_rate": 0.43661971830985913,
+            "signals": 72,
+            "statuses": {
+              "closed": 71,
+              "unknown": 1
+            },
+            "stocks": 64,
+            "stop_rate": 0.38028169014084506,
+            "win_rate": 0.4507042253521127
+          },
+          "passed": {
+            "closed": 25,
+            "mean_net_return": 0.11290862897375284,
+            "median_net_return": -0.003236356126067097,
+            "peak20_rate": 0.64,
+            "signals": 25,
+            "statuses": {
+              "closed": 25
+            },
+            "stocks": 24,
+            "stop_rate": 0.36,
+            "win_rate": 0.48
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 48,
+            "mean_net_return": 0.13365391268603144,
+            "median_net_return": -0.09267007812366124,
+            "peak20_rate": 0.4791666666666667,
+            "signals": 55,
+            "statuses": {
+              "closed": 48,
+              "open": 7
+            },
+            "stocks": 48,
+            "stop_rate": 0.5416666666666666,
+            "win_rate": 0.4166666666666667
+          },
+          "passed": {
+            "closed": 31,
+            "mean_net_return": 0.29134187791367616,
+            "median_net_return": -0.11354971127619651,
+            "peak20_rate": 0.41935483870967744,
+            "signals": 34,
+            "statuses": {
+              "closed": 31,
+              "open": 3
+            },
+            "stocks": 32,
+            "stop_rate": 0.6774193548387096,
+            "win_rate": 0.25806451612903225
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 299,
+        "mean_net_return": 0.06830797987435538,
+        "median_net_return": -0.04982436359941034,
+        "peak20_rate": 0.3745819397993311,
+        "signals": 309,
+        "statuses": {
+          "closed": 299,
+          "open": 7,
+          "unknown": 3
+        },
+        "stocks": 211,
+        "stop_rate": 0.43478260869565216,
+        "win_rate": 0.431438127090301
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 130,
+        "mean_net_return": 0.09040863515015002,
+        "median_net_return": -0.08590270687548351,
+        "peak20_rate": 0.4076923076923077,
+        "signals": 133,
+        "statuses": {
+          "closed": 130,
+          "open": 3
+        },
+        "stocks": 117,
+        "stop_rate": 0.5076923076923077,
+        "win_rate": 0.3769230769230769
+      },
+      "unknown_signals": 16
+    },
+    "named_9853": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 14,
+            "mean_net_return": -0.04793733886954717,
+            "median_net_return": -0.12037482864178844,
+            "peak20_rate": 0.21428571428571427,
+            "signals": 15,
+            "statuses": {
+              "closed": 14,
+              "unknown": 1
+            },
+            "stocks": 15,
+            "stop_rate": 0.5714285714285714,
+            "win_rate": 0.35714285714285715
+          },
+          "passed": {
+            "closed": 12,
+            "mean_net_return": -0.023296022301865327,
+            "median_net_return": -0.12648327905507495,
+            "peak20_rate": 0.16666666666666666,
+            "signals": 12,
+            "statuses": {
+              "closed": 12
+            },
+            "stocks": 12,
+            "stop_rate": 0.5833333333333334,
+            "win_rate": 0.25
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 73,
+            "mean_net_return": 0.10412050599987831,
+            "median_net_return": 0.035706202443174684,
+            "peak20_rate": 0.4383561643835616,
+            "signals": 73,
+            "statuses": {
+              "closed": 73
+            },
+            "stocks": 61,
+            "stop_rate": 0.3150684931506849,
+            "win_rate": 0.547945205479452
+          },
+          "passed": {
+            "closed": 38,
+            "mean_net_return": 0.016751153521979784,
+            "median_net_return": -0.0659422571919338,
+            "peak20_rate": 0.2631578947368421,
+            "signals": 38,
+            "statuses": {
+              "closed": 38
+            },
+            "stocks": 35,
+            "stop_rate": 0.4473684210526316,
+            "win_rate": 0.42105263157894735
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 75,
+            "mean_net_return": -0.004951783893364447,
+            "median_net_return": -0.07441156450743325,
+            "peak20_rate": 0.29333333333333333,
+            "signals": 76,
+            "statuses": {
+              "closed": 75,
+              "unknown": 1
+            },
+            "stocks": 67,
+            "stop_rate": 0.4666666666666667,
+            "win_rate": 0.38666666666666666
+          },
+          "passed": {
+            "closed": 42,
+            "mean_net_return": 0.008009990817913577,
+            "median_net_return": -0.11946935859865088,
+            "peak20_rate": 0.30952380952380953,
+            "signals": 42,
+            "statuses": {
+              "closed": 42
+            },
+            "stocks": 40,
+            "stop_rate": 0.5476190476190477,
+            "win_rate": 0.30952380952380953
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 65,
+            "mean_net_return": 0.12556208842119085,
+            "median_net_return": 0.010334960655308922,
+            "peak20_rate": 0.49230769230769234,
+            "signals": 65,
+            "statuses": {
+              "closed": 65
+            },
+            "stocks": 61,
+            "stop_rate": 0.3076923076923077,
+            "win_rate": 0.5076923076923077
+          },
+          "passed": {
+            "closed": 31,
+            "mean_net_return": 0.04248339348195319,
+            "median_net_return": -0.07379935473674071,
+            "peak20_rate": 0.4838709677419355,
+            "signals": 32,
+            "statuses": {
+              "closed": 31,
+              "unknown": 1
+            },
+            "stocks": 32,
+            "stop_rate": 0.5161290322580645,
+            "win_rate": 0.3548387096774194
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 59,
+            "mean_net_return": 0.19809023706766202,
+            "median_net_return": -0.08730738038811581,
+            "peak20_rate": 0.5084745762711864,
+            "signals": 67,
+            "statuses": {
+              "closed": 59,
+              "open": 8
+            },
+            "stocks": 57,
+            "stop_rate": 0.559322033898305,
+            "win_rate": 0.3898305084745763
+          },
+          "passed": {
+            "closed": 20,
+            "mean_net_return": 0.18798310186307052,
+            "median_net_return": -0.12416419042232713,
+            "peak20_rate": 0.3,
+            "signals": 22,
+            "statuses": {
+              "closed": 20,
+              "open": 2
+            },
+            "stocks": 22,
+            "stop_rate": 0.7,
+            "win_rate": 0.25
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 286,
+        "mean_net_return": 0.09233269278386218,
+        "median_net_return": -0.027913502323230754,
+        "peak20_rate": 0.4160839160839161,
+        "signals": 296,
+        "statuses": {
+          "closed": 286,
+          "open": 8,
+          "unknown": 2
+        },
+        "stocks": 203,
+        "stop_rate": 0.4160839160839161,
+        "win_rate": 0.45454545454545453
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 143,
+        "mean_net_return": 0.040350058851518704,
+        "median_net_return": -0.10085752755919852,
+        "peak20_rate": 0.32167832167832167,
+        "signals": 146,
+        "statuses": {
+          "closed": 143,
+          "open": 2,
+          "unknown": 1
+        },
+        "stocks": 126,
+        "stop_rate": 0.5384615384615384,
+        "win_rate": 0.3356643356643357
+      },
+      "unknown_signals": 16
+    },
+    "named_9A9g": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 19,
+            "mean_net_return": -0.03247421438148514,
+            "median_net_return": -0.11148010721278279,
+            "peak20_rate": 0.21052631578947367,
+            "signals": 20,
+            "statuses": {
+              "closed": 19,
+              "unknown": 1
+            },
+            "stocks": 19,
+            "stop_rate": 0.5263157894736842,
+            "win_rate": 0.3157894736842105
+          },
+          "passed": {
+            "closed": 7,
+            "mean_net_return": -0.047666419792546676,
+            "median_net_return": -0.1469974945906869,
+            "peak20_rate": 0.14285714285714285,
+            "signals": 7,
+            "statuses": {
+              "closed": 7
+            },
+            "stocks": 7,
+            "stop_rate": 0.7142857142857143,
+            "win_rate": 0.2857142857142857
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 64,
+            "mean_net_return": 0.07154315969949551,
+            "median_net_return": 0.02230625936898556,
+            "peak20_rate": 0.390625,
+            "signals": 64,
+            "statuses": {
+              "closed": 64
+            },
+            "stocks": 51,
+            "stop_rate": 0.359375,
+            "win_rate": 0.515625
+          },
+          "passed": {
+            "closed": 47,
+            "mean_net_return": 0.07784209683103481,
+            "median_net_return": -0.021917488192553458,
+            "peak20_rate": 0.3617021276595745,
+            "signals": 47,
+            "statuses": {
+              "closed": 47
+            },
+            "stocks": 42,
+            "stop_rate": 0.3617021276595745,
+            "win_rate": 0.48936170212765956
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 69,
+            "mean_net_return": -0.01989055027269708,
+            "median_net_return": -0.07441156450743325,
+            "peak20_rate": 0.2463768115942029,
+            "signals": 70,
+            "statuses": {
+              "closed": 69,
+              "unknown": 1
+            },
+            "stocks": 60,
+            "stop_rate": 0.463768115942029,
+            "win_rate": 0.34782608695652173
+          },
+          "passed": {
+            "closed": 48,
+            "mean_net_return": 0.02786424564929449,
+            "median_net_return": -0.11246186777946898,
+            "peak20_rate": 0.375,
+            "signals": 48,
+            "statuses": {
+              "closed": 48
+            },
+            "stocks": 47,
+            "stop_rate": 0.5416666666666666,
+            "win_rate": 0.375
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 51,
+            "mean_net_return": 0.1356950694029898,
+            "median_net_return": -0.023826995610104262,
+            "peak20_rate": 0.47058823529411764,
+            "signals": 51,
+            "statuses": {
+              "closed": 51
+            },
+            "stocks": 48,
+            "stop_rate": 0.37254901960784315,
+            "win_rate": 0.47058823529411764
+          },
+          "passed": {
+            "closed": 45,
+            "mean_net_return": 0.05684605346145497,
+            "median_net_return": -0.010796197585665523,
+            "peak20_rate": 0.5111111111111111,
+            "signals": 46,
+            "statuses": {
+              "closed": 45,
+              "unknown": 1
+            },
+            "stocks": 43,
+            "stop_rate": 0.37777777777777777,
+            "win_rate": 0.4444444444444444
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 47,
+            "mean_net_return": 0.28246789813903805,
+            "median_net_return": -0.08652893029662545,
+            "peak20_rate": 0.5531914893617021,
+            "signals": 55,
+            "statuses": {
+              "closed": 47,
+              "open": 8
+            },
+            "stocks": 48,
+            "stop_rate": 0.5106382978723404,
+            "win_rate": 0.40425531914893614
+          },
+          "passed": {
+            "closed": 32,
+            "mean_net_return": 0.06784358786620873,
+            "median_net_return": -0.13043687419313904,
+            "peak20_rate": 0.3125,
+            "signals": 34,
+            "statuses": {
+              "closed": 32,
+              "open": 2
+            },
+            "stocks": 33,
+            "stop_rate": 0.71875,
+            "win_rate": 0.28125
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 250,
+        "mean_net_return": 0.09114297572316267,
+        "median_net_return": -0.061515985101901205,
+        "peak20_rate": 0.384,
+        "signals": 260,
+        "statuses": {
+          "closed": 250,
+          "open": 8,
+          "unknown": 2
+        },
+        "stocks": 181,
+        "stop_rate": 0.432,
+        "win_rate": 0.424
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 179,
+        "mean_net_return": 0.052466282799782674,
+        "median_net_return": -0.07430059952629475,
+        "peak20_rate": 0.3854748603351955,
+        "signals": 182,
+        "statuses": {
+          "closed": 179,
+          "open": 2,
+          "unknown": 1
+        },
+        "stocks": 153,
+        "stop_rate": 0.49162011173184356,
+        "win_rate": 0.4022346368715084
+      },
+      "unknown_signals": 16
+    },
+    "named_positive": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 2,
+            "mean_net_return": 0.15838498291905667,
+            "median_net_return": 0.15838498291905667,
+            "peak20_rate": 0.5,
+            "signals": 3,
+            "statuses": {
+              "closed": 2,
+              "unknown": 1
+            },
+            "stocks": 3,
+            "stop_rate": 0.0,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 24,
+            "mean_net_return": -0.05281020740142325,
+            "median_net_return": -0.12966291416213488,
+            "peak20_rate": 0.16666666666666666,
+            "signals": 24,
+            "statuses": {
+              "closed": 24
+            },
+            "stocks": 24,
+            "stop_rate": 0.625,
+            "win_rate": 0.2916666666666667
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 23,
+            "mean_net_return": 0.13313229316736488,
+            "median_net_return": 0.0514518079568842,
+            "peak20_rate": 0.4782608695652174,
+            "signals": 23,
+            "statuses": {
+              "closed": 23
+            },
+            "stocks": 19,
+            "stop_rate": 0.21739130434782608,
+            "win_rate": 0.6521739130434783
+          },
+          "passed": {
+            "closed": 88,
+            "mean_net_return": 0.05881020487473814,
+            "median_net_return": -0.027297953231200267,
+            "peak20_rate": 0.3522727272727273,
+            "signals": 88,
+            "statuses": {
+              "closed": 88
+            },
+            "stocks": 75,
+            "stop_rate": 0.3977272727272727,
+            "win_rate": 0.4659090909090909
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 25,
+            "mean_net_return": -0.0682638935329088,
+            "median_net_return": -0.10901544373503258,
+            "peak20_rate": 0.08,
+            "signals": 26,
+            "statuses": {
+              "closed": 25,
+              "unknown": 1
+            },
+            "stocks": 26,
+            "stop_rate": 0.56,
+            "win_rate": 0.24
+          },
+          "passed": {
+            "closed": 92,
+            "mean_net_return": 0.018169925659486497,
+            "median_net_return": -0.08271161177478908,
+            "peak20_rate": 0.358695652173913,
+            "signals": 92,
+            "statuses": {
+              "closed": 92
+            },
+            "stocks": 76,
+            "stop_rate": 0.4782608695652174,
+            "win_rate": 0.391304347826087
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 18,
+            "mean_net_return": 0.09481167115054454,
+            "median_net_return": -0.11055427117335903,
+            "peak20_rate": 0.3888888888888889,
+            "signals": 18,
+            "statuses": {
+              "closed": 18
+            },
+            "stocks": 18,
+            "stop_rate": 0.5,
+            "win_rate": 0.4444444444444444
+          },
+          "passed": {
+            "closed": 78,
+            "mean_net_return": 0.09963988287959169,
+            "median_net_return": -0.009562262855455528,
+            "peak20_rate": 0.5128205128205128,
+            "signals": 79,
+            "statuses": {
+              "closed": 78,
+              "unknown": 1
+            },
+            "stocks": 72,
+            "stop_rate": 0.34615384615384615,
+            "win_rate": 0.46153846153846156
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 19,
+            "mean_net_return": 0.29438167455975767,
+            "median_net_return": 0.24073748302501707,
+            "peak20_rate": 0.631578947368421,
+            "signals": 21,
+            "statuses": {
+              "closed": 19,
+              "open": 2
+            },
+            "stocks": 20,
+            "stop_rate": 0.3684210526315789,
+            "win_rate": 0.5789473684210527
+          },
+          "passed": {
+            "closed": 60,
+            "mean_net_return": 0.16422890346030125,
+            "median_net_return": -0.11495742858091196,
+            "peak20_rate": 0.4,
+            "signals": 68,
+            "statuses": {
+              "closed": 60,
+              "open": 8
+            },
+            "stocks": 61,
+            "stop_rate": 0.6666666666666666,
+            "win_rate": 0.2833333333333333
+          }
+        }
+      },
+      "known_signals": 442,
+      "other": {
+        "closed": 87,
+        "mean_net_return": 0.10312732491620666,
+        "median_net_return": -0.031201421897836146,
+        "peak20_rate": 0.3793103448275862,
+        "signals": 91,
+        "statuses": {
+          "closed": 87,
+          "open": 2,
+          "unknown": 2
+        },
+        "stocks": 76,
+        "stop_rate": 0.40229885057471265,
+        "win_rate": 0.47126436781609193
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 342,
+        "mean_net_return": 0.06785126106503445,
+        "median_net_return": -0.07007419804625303,
+        "peak20_rate": 0.38596491228070173,
+        "signals": 351,
+        "statuses": {
+          "closed": 342,
+          "open": 8,
+          "unknown": 1
+        },
+        "stocks": 245,
+        "stop_rate": 0.47076023391812866,
+        "win_rate": 0.40058479532163743
+      },
+      "unknown_signals": 16
+    },
+    "persistent5": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 3,
+            "mean_net_return": -0.021814940337758104,
+            "median_net_return": -0.06459390682460753,
+            "peak20_rate": 0.0,
+            "signals": 3,
+            "statuses": {
+              "closed": 3
+            },
+            "stocks": 3,
+            "stop_rate": 0.3333333333333333,
+            "win_rate": 0.3333333333333333
+          },
+          "passed": {
+            "closed": 12,
+            "mean_net_return": 0.03787866974334114,
+            "median_net_return": -0.037139318866895865,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 12,
+            "statuses": {
+              "closed": 12
+            },
+            "stocks": 12,
+            "stop_rate": 0.5,
+            "win_rate": 0.5
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 10,
+            "mean_net_return": 0.13470934487941505,
+            "median_net_return": 0.030687989832114515,
+            "peak20_rate": 0.4,
+            "signals": 10,
+            "statuses": {
+              "closed": 10
+            },
+            "stocks": 10,
+            "stop_rate": 0.3,
+            "win_rate": 0.6
+          },
+          "passed": {
+            "closed": 40,
+            "mean_net_return": 0.1335712093599525,
+            "median_net_return": 0.044319565280715234,
+            "peak20_rate": 0.375,
+            "signals": 40,
+            "statuses": {
+              "closed": 40
+            },
+            "stocks": 33,
+            "stop_rate": 0.3,
+            "win_rate": 0.55
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 12,
+            "mean_net_return": -0.09620850241357431,
+            "median_net_return": -0.1167250594901722,
+            "peak20_rate": 0.08333333333333333,
+            "signals": 12,
+            "statuses": {
+              "closed": 12
+            },
+            "stocks": 12,
+            "stop_rate": 0.6666666666666666,
+            "win_rate": 0.16666666666666666
+          },
+          "passed": {
+            "closed": 58,
+            "mean_net_return": 0.006126672975302361,
+            "median_net_return": -0.04720741016833213,
+            "peak20_rate": 0.3620689655172414,
+            "signals": 58,
+            "statuses": {
+              "closed": 58
+            },
+            "stocks": 51,
+            "stop_rate": 0.46551724137931033,
+            "win_rate": 0.43103448275862066
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 7,
+            "mean_net_return": -0.029053638580185566,
+            "median_net_return": -0.09979532086931375,
+            "peak20_rate": 0.42857142857142855,
+            "signals": 7,
+            "statuses": {
+              "closed": 7
+            },
+            "stocks": 7,
+            "stop_rate": 0.42857142857142855,
+            "win_rate": 0.2857142857142857
+          },
+          "passed": {
+            "closed": 50,
+            "mean_net_return": 0.13778800631845578,
+            "median_net_return": 0.007147437055806338,
+            "peak20_rate": 0.54,
+            "signals": 51,
+            "statuses": {
+              "closed": 50,
+              "unknown": 1
+            },
+            "stocks": 49,
+            "stop_rate": 0.34,
+            "win_rate": 0.5
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 9,
+            "mean_net_return": 0.0684580154078432,
+            "median_net_return": -0.09287144838005978,
+            "peak20_rate": 0.5555555555555556,
+            "signals": 11,
+            "statuses": {
+              "closed": 9,
+              "open": 2
+            },
+            "stocks": 10,
+            "stop_rate": 0.5555555555555556,
+            "win_rate": 0.3333333333333333
+          },
+          "passed": {
+            "closed": 40,
+            "mean_net_return": 0.1859658468913363,
+            "median_net_return": -0.09062039017524082,
+            "peak20_rate": 0.475,
+            "signals": 47,
+            "statuses": {
+              "closed": 40,
+              "open": 7
+            },
+            "stocks": 45,
+            "stop_rate": 0.55,
+            "win_rate": 0.4
+          }
+        }
+      },
+      "known_signals": 251,
+      "other": {
+        "closed": 41,
+        "mean_net_return": 0.01316812847383595,
+        "median_net_return": -0.09287144838005978,
+        "peak20_rate": 0.3170731707317073,
+        "signals": 43,
+        "statuses": {
+          "closed": 41,
+          "open": 2
+        },
+        "stocks": 39,
+        "stop_rate": 0.4878048780487805,
+        "win_rate": 0.34146341463414637
+      },
+      "other_definition": "condition_not_met_on_same_data_coverage",
+      "passed": {
+        "closed": 200,
+        "mean_net_return": 0.10240386817730986,
+        "median_net_return": -0.01801274002936204,
+        "peak20_rate": 0.43,
+        "signals": 208,
+        "statuses": {
+          "closed": 200,
+          "open": 7,
+          "unknown": 1
+        },
+        "stocks": 157,
+        "stop_rate": 0.42,
+        "win_rate": 0.47
+      },
+      "unknown_signals": 207
+    }
+  },
+  "coverage": {
+    "current_2026_candidates": 4612,
+    "current_2026_not_covered": 4522,
+    "old_cohort_overlap": 90
+  },
+  "evidence": {
+    ".cache/broker-branch-research-20261004/aggregate-audit.json": "461462b691cc755b4017e12c4af7993051c516bf87803730cdc696a243c312b1",
+    ".cache/broker-branch-research-20261004/api-checks.json": "51c667ee642dfc8f54fe6e79e56094bd3b2ca68069d231a4fe7d0d5024887f70",
+    ".cache/broker-branch-research-20261004/final-b/report.json": "c1720205a452938c902130d325acf19775b7d6d002b3415c257c9c8d0a271010",
+    ".cache/broker-branch-research-20261004/final-b/rows.json": "051fe6e76367e6faa4ce7241832b137c9d211c6600fa5d7ec2ffd81f2f1d361a",
+    ".cache/broker-branch-research-20261004/final-c/report.json": "c1720205a452938c902130d325acf19775b7d6d002b3415c257c9c8d0a271010",
+    ".cache/broker-branch-research-20261004/independent-review-v1/review.json": "6da04d6032906bdc0566168a672d5a0f1d325a5a33a9472117c70ac6404f42f0",
+    ".cache/broker-branch-research-20261004/make-pipeline.log": "f03d268e2264e64f540ba4b690dbcaaf0be8ba698ba1efc7e85a763fced0304c",
+    ".cache/broker-branch-research-20261004/make-test.log": "e02fdd3ac2a6a8556c4a8e7e473fbc6f9619292cb5b126d9f47597706d1ddbc4",
+    ".cache/broker-branch-research-20261004/prior-review.json": "3e5601f1dc1ec4f9bed1e0ffa9492444d63fec3a3804f9c19a8536502f06d011"
+  },
+  "first_per_stock": {
+    "combined": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 5,
+            "mean_net_return": 0.01739598125993127,
+            "median_net_return": -0.11148010721278279,
+            "peak20_rate": 0.2,
+            "signals": 5,
+            "statuses": {
+              "closed": 5
+            },
+            "stocks": 5,
+            "stop_rate": 0.6,
+            "win_rate": 0.4
+          },
+          "passed": {
+            "closed": 9,
+            "mean_net_return": 0.040745912936863395,
+            "median_net_return": 0.037201469478991056,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.4444444444444444,
+            "win_rate": 0.5555555555555556
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 20,
+            "mean_net_return": 0.22627954022457447,
+            "median_net_return": 0.030687989832114515,
+            "peak20_rate": 0.5,
+            "signals": 20,
+            "statuses": {
+              "closed": 20
+            },
+            "stocks": 20,
+            "stop_rate": 0.35,
+            "win_rate": 0.55
+          },
+          "passed": {
+            "closed": 19,
+            "mean_net_return": 0.07161002255943322,
+            "median_net_return": 0.0468148097522183,
+            "peak20_rate": 0.2631578947368421,
+            "signals": 19,
+            "statuses": {
+              "closed": 19
+            },
+            "stocks": 19,
+            "stop_rate": 0.2631578947368421,
+            "win_rate": 0.5789473684210527
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 19,
+            "mean_net_return": -0.055703196244935214,
+            "median_net_return": -0.1069684648785234,
+            "peak20_rate": 0.2631578947368421,
+            "signals": 19,
+            "statuses": {
+              "closed": 19
+            },
+            "stocks": 19,
+            "stop_rate": 0.5789473684210527,
+            "win_rate": 0.21052631578947367
+          },
+          "passed": {
+            "closed": 26,
+            "mean_net_return": 0.045240985182545095,
+            "median_net_return": 0.007691219383302861,
+            "peak20_rate": 0.3076923076923077,
+            "signals": 26,
+            "statuses": {
+              "closed": 26
+            },
+            "stocks": 26,
+            "stop_rate": 0.34615384615384615,
+            "win_rate": 0.5384615384615384
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 15,
+            "mean_net_return": 0.046170146304769795,
+            "median_net_return": -0.060402208824479664,
+            "peak20_rate": 0.5333333333333333,
+            "signals": 15,
+            "statuses": {
+              "closed": 15
+            },
+            "stocks": 15,
+            "stop_rate": 0.4,
+            "win_rate": 0.3333333333333333
+          },
+          "passed": {
+            "closed": 11,
+            "mean_net_return": -0.08035618024718696,
+            "median_net_return": -0.10062893495484049,
+            "peak20_rate": 0.2727272727272727,
+            "signals": 11,
+            "statuses": {
+              "closed": 11
+            },
+            "stocks": 11,
+            "stop_rate": 0.5454545454545454,
+            "win_rate": 0.2727272727272727
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 10,
+            "mean_net_return": 0.03995773931863472,
+            "median_net_return": -0.12064801002120823,
+            "peak20_rate": 0.5,
+            "signals": 10,
+            "statuses": {
+              "closed": 10
+            },
+            "stocks": 10,
+            "stop_rate": 0.7,
+            "win_rate": 0.2
+          },
+          "passed": {
+            "closed": 9,
+            "mean_net_return": -0.1023100062874522,
+            "median_net_return": -0.13960277628780138,
+            "peak20_rate": 0.1111111111111111,
+            "signals": 11,
+            "statuses": {
+              "closed": 9,
+              "open": 2
+            },
+            "stocks": 11,
+            "stop_rate": 0.8888888888888888,
+            "win_rate": 0.1111111111111111
+          }
+        }
+      },
+      "known_signals": 145,
+      "other": {
+        "closed": 69,
+        "mean_net_return": 0.06733825463616336,
+        "median_net_return": -0.0909843418433458,
+        "peak20_rate": 0.42028985507246375,
+        "signals": 69,
+        "statuses": {
+          "closed": 69
+        },
+        "stocks": 69,
+        "stop_rate": 0.4927536231884058,
+        "win_rate": 0.34782608695652173
+      },
+      "other_definition": "condition_not_met_on_same_data_coverage",
+      "passed": {
+        "closed": 74,
+        "mean_net_return": 0.014849475952716865,
+        "median_net_return": -0.01801274002936204,
+        "peak20_rate": 0.2702702702702703,
+        "signals": 76,
+        "statuses": {
+          "closed": 74,
+          "open": 2
+        },
+        "stocks": 76,
+        "stop_rate": 0.43243243243243246,
+        "win_rate": 0.4594594594594595
+      },
+      "unknown_signals": 135
+    },
+    "concentrated_directional": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 9,
+            "mean_net_return": -0.10115526586162774,
+            "median_net_return": -0.16969095616978602,
+            "peak20_rate": 0.1111111111111111,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.8888888888888888,
+            "win_rate": 0.1111111111111111
+          },
+          "passed": {
+            "closed": 16,
+            "mean_net_return": 0.0015197679864507943,
+            "median_net_return": -0.09186150485681355,
+            "peak20_rate": 0.25,
+            "signals": 17,
+            "statuses": {
+              "closed": 16,
+              "unknown": 1
+            },
+            "stocks": 17,
+            "stop_rate": 0.4375,
+            "win_rate": 0.4375
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 30,
+            "mean_net_return": 0.10278918231948984,
+            "median_net_return": -0.07795123199570347,
+            "peak20_rate": 0.43333333333333335,
+            "signals": 30,
+            "statuses": {
+              "closed": 30
+            },
+            "stocks": 30,
+            "stop_rate": 0.43333333333333335,
+            "win_rate": 0.43333333333333335
+          },
+          "passed": {
+            "closed": 53,
+            "mean_net_return": 0.06466257300924498,
+            "median_net_return": -0.004720226936860916,
+            "peak20_rate": 0.33962264150943394,
+            "signals": 53,
+            "statuses": {
+              "closed": 53
+            },
+            "stocks": 53,
+            "stop_rate": 0.33962264150943394,
+            "win_rate": 0.49056603773584906
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 22,
+            "mean_net_return": 0.06501988113125202,
+            "median_net_return": -0.09547407598678392,
+            "peak20_rate": 0.36363636363636365,
+            "signals": 22,
+            "statuses": {
+              "closed": 22
+            },
+            "stocks": 22,
+            "stop_rate": 0.5454545454545454,
+            "win_rate": 0.3181818181818182
+          },
+          "passed": {
+            "closed": 53,
+            "mean_net_return": 0.007292483392323225,
+            "median_net_return": -0.05843806337919488,
+            "peak20_rate": 0.2830188679245283,
+            "signals": 54,
+            "statuses": {
+              "closed": 53,
+              "unknown": 1
+            },
+            "stocks": 54,
+            "stop_rate": 0.41509433962264153,
+            "win_rate": 0.41509433962264153
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 21,
+            "mean_net_return": 0.12134312616707629,
+            "median_net_return": -0.060402208824479664,
+            "peak20_rate": 0.5714285714285714,
+            "signals": 21,
+            "statuses": {
+              "closed": 21
+            },
+            "stocks": 21,
+            "stop_rate": 0.42857142857142855,
+            "win_rate": 0.42857142857142855
+          },
+          "passed": {
+            "closed": 29,
+            "mean_net_return": -0.013293152933137915,
+            "median_net_return": -0.018792133094035157,
+            "peak20_rate": 0.41379310344827586,
+            "signals": 29,
+            "statuses": {
+              "closed": 29
+            },
+            "stocks": 29,
+            "stop_rate": 0.4482758620689655,
+            "win_rate": 0.3793103448275862
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 9,
+            "mean_net_return": -0.03188404224108031,
+            "median_net_return": -0.18882392744375864,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.7777777777777778,
+            "win_rate": 0.1111111111111111
+          },
+          "passed": {
+            "closed": 24,
+            "mean_net_return": 0.23654604276638216,
+            "median_net_return": -0.1138597932555977,
+            "peak20_rate": 0.375,
+            "signals": 26,
+            "statuses": {
+              "closed": 24,
+              "open": 2
+            },
+            "stocks": 26,
+            "stop_rate": 0.6666666666666666,
+            "win_rate": 0.3333333333333333
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 91,
+        "mean_net_return": 0.06445016187974144,
+        "median_net_return": -0.10085752755919852,
+        "peak20_rate": 0.4065934065934066,
+        "signals": 91,
+        "statuses": {
+          "closed": 91
+        },
+        "stocks": 91,
+        "stop_rate": 0.5384615384615384,
+        "win_rate": 0.34065934065934067
+      },
+      "other_definition": "condition_not_met_on_same_data_coverage",
+      "passed": {
+        "closed": 175,
+        "mean_net_return": 0.05216878781941999,
+        "median_net_return": -0.04471478947342966,
+        "peak20_rate": 0.3314285714285714,
+        "signals": 179,
+        "statuses": {
+          "closed": 175,
+          "open": 2,
+          "unknown": 2
+        },
+        "stocks": 179,
+        "stop_rate": 0.4342857142857143,
+        "win_rate": 0.4228571428571429
+      },
+      "unknown_signals": 10
+    },
+    "named_7001": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 14,
+            "mean_net_return": -0.05829068282783661,
+            "median_net_return": -0.13324170988079048,
+            "peak20_rate": 0.14285714285714285,
+            "signals": 15,
+            "statuses": {
+              "closed": 14,
+              "unknown": 1
+            },
+            "stocks": 15,
+            "stop_rate": 0.5714285714285714,
+            "win_rate": 0.2857142857142857
+          },
+          "passed": {
+            "closed": 11,
+            "mean_net_return": -0.006364685943793125,
+            "median_net_return": -0.1292695500707941,
+            "peak20_rate": 0.2727272727272727,
+            "signals": 11,
+            "statuses": {
+              "closed": 11
+            },
+            "stocks": 11,
+            "stop_rate": 0.6363636363636364,
+            "win_rate": 0.36363636363636365
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 51,
+            "mean_net_return": 0.08547512627634168,
+            "median_net_return": 0.007267543025102352,
+            "peak20_rate": 0.4117647058823529,
+            "signals": 51,
+            "statuses": {
+              "closed": 51
+            },
+            "stocks": 51,
+            "stop_rate": 0.35294117647058826,
+            "win_rate": 0.5098039215686274
+          },
+          "passed": {
+            "closed": 32,
+            "mean_net_return": 0.06723626246816415,
+            "median_net_return": -0.047664344664231695,
+            "peak20_rate": 0.3125,
+            "signals": 32,
+            "statuses": {
+              "closed": 32
+            },
+            "stocks": 32,
+            "stop_rate": 0.40625,
+            "win_rate": 0.40625
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 55,
+            "mean_net_return": 0.04343849404608198,
+            "median_net_return": -0.031201421897836146,
+            "peak20_rate": 0.3090909090909091,
+            "signals": 56,
+            "statuses": {
+              "closed": 55,
+              "unknown": 1
+            },
+            "stocks": 56,
+            "stop_rate": 0.4,
+            "win_rate": 0.45454545454545453
+          },
+          "passed": {
+            "closed": 20,
+            "mean_net_return": -0.028608908392691628,
+            "median_net_return": -0.11505139437931777,
+            "peak20_rate": 0.3,
+            "signals": 20,
+            "statuses": {
+              "closed": 20
+            },
+            "stocks": 20,
+            "stop_rate": 0.6,
+            "win_rate": 0.2
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 37,
+            "mean_net_return": 0.07037041168067062,
+            "median_net_return": -0.001433501991119579,
+            "peak20_rate": 0.5135135135135135,
+            "signals": 37,
+            "statuses": {
+              "closed": 37
+            },
+            "stocks": 37,
+            "stop_rate": 0.3783783783783784,
+            "win_rate": 0.4864864864864865
+          },
+          "passed": {
+            "closed": 13,
+            "mean_net_return": -0.033923155210554626,
+            "median_net_return": -0.1299864549766908,
+            "peak20_rate": 0.38461538461538464,
+            "signals": 13,
+            "statuses": {
+              "closed": 13
+            },
+            "stocks": 13,
+            "stop_rate": 0.6153846153846154,
+            "win_rate": 0.15384615384615385
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 25,
+            "mean_net_return": 0.06099968270592628,
+            "median_net_return": -0.12321502847566146,
+            "peak20_rate": 0.32,
+            "signals": 27,
+            "statuses": {
+              "closed": 25,
+              "open": 2
+            },
+            "stocks": 27,
+            "stop_rate": 0.72,
+            "win_rate": 0.24
+          },
+          "passed": {
+            "closed": 8,
+            "mean_net_return": 0.4831445723219115,
+            "median_net_return": -0.12473266872228295,
+            "peak20_rate": 0.5,
+            "signals": 8,
+            "statuses": {
+              "closed": 8
+            },
+            "stocks": 8,
+            "stop_rate": 0.625,
+            "win_rate": 0.375
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 182,
+        "mean_net_return": 0.055280089850940614,
+        "median_net_return": -0.05942013610183727,
+        "peak20_rate": 0.36813186813186816,
+        "signals": 186,
+        "statuses": {
+          "closed": 182,
+          "open": 2,
+          "unknown": 2
+        },
+        "stocks": 186,
+        "stop_rate": 0.43956043956043955,
+        "win_rate": 0.4340659340659341
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 84,
+        "mean_net_return": 0.058732455316473565,
+        "median_net_return": -0.10064644143082013,
+        "peak20_rate": 0.3333333333333333,
+        "signals": 84,
+        "statuses": {
+          "closed": 84
+        },
+        "stocks": 84,
+        "stop_rate": 0.5357142857142857,
+        "win_rate": 0.30952380952380953
+      },
+      "unknown_signals": 10
+    },
+    "named_961F": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 25,
+            "mean_net_return": -0.03544324419885748,
+            "median_net_return": -0.1292695500707941,
+            "peak20_rate": 0.2,
+            "signals": 26,
+            "statuses": {
+              "closed": 25,
+              "unknown": 1
+            },
+            "stocks": 26,
+            "stop_rate": 0.6,
+            "win_rate": 0.32
+          },
+          "passed": {
+            "closed": 0,
+            "mean_net_return": null,
+            "median_net_return": null,
+            "peak20_rate": null,
+            "signals": 0,
+            "statuses": {},
+            "stocks": 0,
+            "stop_rate": null,
+            "win_rate": null
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 58,
+            "mean_net_return": 0.07572296056945496,
+            "median_net_return": 0.014460174817926053,
+            "peak20_rate": 0.3448275862068966,
+            "signals": 58,
+            "statuses": {
+              "closed": 58
+            },
+            "stocks": 58,
+            "stop_rate": 0.3448275862068966,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 25,
+            "mean_net_return": 0.0847544050418517,
+            "median_net_return": -0.07795363288825186,
+            "peak20_rate": 0.44,
+            "signals": 25,
+            "statuses": {
+              "closed": 25
+            },
+            "stocks": 25,
+            "stop_rate": 0.44,
+            "win_rate": 0.4
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 54,
+            "mean_net_return": 0.005161547988027072,
+            "median_net_return": -0.07105589514335564,
+            "peak20_rate": 0.3148148148148148,
+            "signals": 55,
+            "statuses": {
+              "closed": 54,
+              "unknown": 1
+            },
+            "stocks": 55,
+            "stop_rate": 0.4444444444444444,
+            "win_rate": 0.37037037037037035
+          },
+          "passed": {
+            "closed": 21,
+            "mean_net_return": 0.0732483530155816,
+            "median_net_return": -0.0926909192975125,
+            "peak20_rate": 0.2857142857142857,
+            "signals": 21,
+            "statuses": {
+              "closed": 21
+            },
+            "stocks": 21,
+            "stop_rate": 0.47619047619047616,
+            "win_rate": 0.42857142857142855
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 35,
+            "mean_net_return": 0.01300510185606089,
+            "median_net_return": -0.09979532086931375,
+            "peak20_rate": 0.45714285714285713,
+            "signals": 35,
+            "statuses": {
+              "closed": 35
+            },
+            "stocks": 35,
+            "stop_rate": 0.5142857142857142,
+            "win_rate": 0.37142857142857144
+          },
+          "passed": {
+            "closed": 15,
+            "mean_net_return": 0.11383504329903144,
+            "median_net_return": -0.001433501991119579,
+            "peak20_rate": 0.5333333333333333,
+            "signals": 15,
+            "statuses": {
+              "closed": 15
+            },
+            "stocks": 15,
+            "stop_rate": 0.26666666666666666,
+            "win_rate": 0.4666666666666667
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 25,
+            "mean_net_return": 0.19449547474669757,
+            "median_net_return": -0.12321502847566146,
+            "peak20_rate": 0.32,
+            "signals": 26,
+            "statuses": {
+              "closed": 25,
+              "open": 1
+            },
+            "stocks": 26,
+            "stop_rate": 0.72,
+            "win_rate": 0.24
+          },
+          "passed": {
+            "closed": 8,
+            "mean_net_return": 0.06597022219450112,
+            "median_net_return": -0.12238551925434765,
+            "peak20_rate": 0.5,
+            "signals": 9,
+            "statuses": {
+              "closed": 8,
+              "open": 1
+            },
+            "stocks": 9,
+            "stop_rate": 0.625,
+            "win_rate": 0.375
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 197,
+        "mean_net_return": 0.04620375448243646,
+        "median_net_return": -0.07441156450743325,
+        "peak20_rate": 0.3350253807106599,
+        "signals": 200,
+        "statuses": {
+          "closed": 197,
+          "open": 1,
+          "unknown": 2
+        },
+        "stocks": 200,
+        "stop_rate": 0.48223350253807107,
+        "win_rate": 0.38578680203045684
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 69,
+        "mean_net_return": 0.08539656473065196,
+        "median_net_return": -0.07795363288825186,
+        "peak20_rate": 0.42028985507246375,
+        "signals": 70,
+        "statuses": {
+          "closed": 69,
+          "open": 1
+        },
+        "stocks": 70,
+        "stop_rate": 0.43478260869565216,
+        "win_rate": 0.42028985507246375
+      },
+      "unknown_signals": 10
+    },
+    "named_984K": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 16,
+            "mean_net_return": -0.02250367945808899,
+            "median_net_return": -0.11427788044391751,
+            "peak20_rate": 0.1875,
+            "signals": 17,
+            "statuses": {
+              "closed": 16,
+              "unknown": 1
+            },
+            "stocks": 17,
+            "stop_rate": 0.5625,
+            "win_rate": 0.3125
+          },
+          "passed": {
+            "closed": 9,
+            "mean_net_return": -0.05844691484911256,
+            "median_net_return": -0.15304147487539832,
+            "peak20_rate": 0.2222222222222222,
+            "signals": 9,
+            "statuses": {
+              "closed": 9
+            },
+            "stocks": 9,
+            "stop_rate": 0.6666666666666666,
+            "win_rate": 0.3333333333333333
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 58,
+            "mean_net_return": 0.11419695646749815,
+            "median_net_return": 0.04647325555867554,
+            "peak20_rate": 0.43103448275862066,
+            "signals": 58,
+            "statuses": {
+              "closed": 58
+            },
+            "stocks": 58,
+            "stop_rate": 0.3103448275862069,
+            "win_rate": 0.5344827586206896
+          },
+          "passed": {
+            "closed": 25,
+            "mean_net_return": -0.004505265441608532,
+            "median_net_return": -0.11863252862448892,
+            "peak20_rate": 0.24,
+            "signals": 25,
+            "statuses": {
+              "closed": 25
+            },
+            "stocks": 25,
+            "stop_rate": 0.52,
+            "win_rate": 0.32
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 56,
+            "mean_net_return": 0.027791868407531284,
+            "median_net_return": -0.08129955490154883,
+            "peak20_rate": 0.26785714285714285,
+            "signals": 57,
+            "statuses": {
+              "closed": 56,
+              "unknown": 1
+            },
+            "stocks": 57,
+            "stop_rate": 0.48214285714285715,
+            "win_rate": 0.35714285714285715
+          },
+          "passed": {
+            "closed": 19,
+            "mean_net_return": 0.013715493360995961,
+            "median_net_return": -0.04471478947342966,
+            "peak20_rate": 0.42105263157894735,
+            "signals": 19,
+            "statuses": {
+              "closed": 19
+            },
+            "stocks": 19,
+            "stop_rate": 0.3684210526315789,
+            "win_rate": 0.47368421052631576
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 35,
+            "mean_net_return": 0.058893520489921664,
+            "median_net_return": -0.046760064889885156,
+            "peak20_rate": 0.45714285714285713,
+            "signals": 35,
+            "statuses": {
+              "closed": 35
+            },
+            "stocks": 35,
+            "stop_rate": 0.42857142857142855,
+            "win_rate": 0.4
+          },
+          "passed": {
+            "closed": 15,
+            "mean_net_return": 0.0067620664866896146,
+            "median_net_return": -0.010796197585665523,
+            "peak20_rate": 0.5333333333333333,
+            "signals": 15,
+            "statuses": {
+              "closed": 15
+            },
+            "stocks": 15,
+            "stop_rate": 0.4666666666666667,
+            "win_rate": 0.4
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 17,
+            "mean_net_return": 0.04950335281639073,
+            "median_net_return": -0.09881122595069702,
+            "peak20_rate": 0.4117647058823529,
+            "signals": 18,
+            "statuses": {
+              "closed": 17,
+              "open": 1
+            },
+            "stocks": 18,
+            "stop_rate": 0.5882352941176471,
+            "win_rate": 0.35294117647058826
+          },
+          "passed": {
+            "closed": 16,
+            "mean_net_return": 0.2842869780215504,
+            "median_net_return": -0.13235806432839708,
+            "peak20_rate": 0.3125,
+            "signals": 17,
+            "statuses": {
+              "closed": 16,
+              "open": 1
+            },
+            "stocks": 17,
+            "stop_rate": 0.8125,
+            "win_rate": 0.1875
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 182,
+        "mean_net_return": 0.058915051921061105,
+        "median_net_return": -0.058801359973307654,
+        "peak20_rate": 0.3626373626373626,
+        "signals": 185,
+        "statuses": {
+          "closed": 182,
+          "open": 1,
+          "unknown": 2
+        },
+        "stocks": 185,
+        "stop_rate": 0.4340659340659341,
+        "win_rate": 0.4175824175824176
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 84,
+        "mean_net_return": 0.05085670416454582,
+        "median_net_return": -0.10391299621886096,
+        "peak20_rate": 0.34523809523809523,
+        "signals": 85,
+        "statuses": {
+          "closed": 84,
+          "open": 1
+        },
+        "stocks": 85,
+        "stop_rate": 0.5476190476190477,
+        "win_rate": 0.34523809523809523
+      },
+      "unknown_signals": 10
+    },
+    "named_9853": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 13,
+            "mean_net_return": -0.04665606441146561,
+            "median_net_return": -0.1292695500707941,
+            "peak20_rate": 0.23076923076923078,
+            "signals": 14,
+            "statuses": {
+              "closed": 13,
+              "unknown": 1
+            },
+            "stocks": 14,
+            "stop_rate": 0.6153846153846154,
+            "win_rate": 0.38461538461538464
+          },
+          "passed": {
+            "closed": 12,
+            "mean_net_return": -0.023296022301865327,
+            "median_net_return": -0.12648327905507495,
+            "peak20_rate": 0.16666666666666666,
+            "signals": 12,
+            "statuses": {
+              "closed": 12
+            },
+            "stocks": 12,
+            "stop_rate": 0.5833333333333334,
+            "win_rate": 0.25
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 54,
+            "mean_net_return": 0.10584454402576657,
+            "median_net_return": 0.001273658044120718,
+            "peak20_rate": 0.42592592592592593,
+            "signals": 54,
+            "statuses": {
+              "closed": 54
+            },
+            "stocks": 54,
+            "stop_rate": 0.3333333333333333,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 29,
+            "mean_net_return": 0.027420222816665007,
+            "median_net_return": -0.06680604123663825,
+            "peak20_rate": 0.27586206896551724,
+            "signals": 29,
+            "statuses": {
+              "closed": 29
+            },
+            "stocks": 29,
+            "stop_rate": 0.4482758620689655,
+            "win_rate": 0.41379310344827586
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 49,
+            "mean_net_return": 0.02599671404799575,
+            "median_net_return": -0.04471478947342966,
+            "peak20_rate": 0.30612244897959184,
+            "signals": 50,
+            "statuses": {
+              "closed": 49,
+              "unknown": 1
+            },
+            "stocks": 50,
+            "stop_rate": 0.3877551020408163,
+            "win_rate": 0.42857142857142855
+          },
+          "passed": {
+            "closed": 26,
+            "mean_net_return": 0.020888462166495515,
+            "median_net_return": -0.11246186777946898,
+            "peak20_rate": 0.3076923076923077,
+            "signals": 26,
+            "statuses": {
+              "closed": 26
+            },
+            "stocks": 26,
+            "stop_rate": 0.5769230769230769,
+            "win_rate": 0.3076923076923077
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 30,
+            "mean_net_return": 0.09862768123470354,
+            "median_net_return": 0.004450729332094672,
+            "peak20_rate": 0.5333333333333333,
+            "signals": 30,
+            "statuses": {
+              "closed": 30
+            },
+            "stocks": 30,
+            "stop_rate": 0.3333333333333333,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 20,
+            "mean_net_return": -0.03980631112967516,
+            "median_net_return": -0.12385991027321575,
+            "peak20_rate": 0.4,
+            "signals": 20,
+            "statuses": {
+              "closed": 20
+            },
+            "stocks": 20,
+            "stop_rate": 0.6,
+            "win_rate": 0.25
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 22,
+            "mean_net_return": 0.1518106698551956,
+            "median_net_return": -0.1138597932555977,
+            "peak20_rate": 0.4090909090909091,
+            "signals": 24,
+            "statuses": {
+              "closed": 22,
+              "open": 2
+            },
+            "stocks": 24,
+            "stop_rate": 0.6363636363636364,
+            "win_rate": 0.36363636363636365
+          },
+          "passed": {
+            "closed": 11,
+            "mean_net_return": 0.1863921735826496,
+            "median_net_return": -0.1251133523689928,
+            "peak20_rate": 0.2727272727272727,
+            "signals": 11,
+            "statuses": {
+              "closed": 11
+            },
+            "stocks": 11,
+            "stop_rate": 0.8181818181818182,
+            "win_rate": 0.09090909090909091
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 168,
+        "mean_net_return": 0.07548559941815204,
+        "median_net_return": -0.029236284997178064,
+        "peak20_rate": 0.39285714285714285,
+        "signals": 172,
+        "statuses": {
+          "closed": 168,
+          "open": 2,
+          "unknown": 2
+        },
+        "stocks": 172,
+        "stop_rate": 0.4107142857142857,
+        "win_rate": 0.4523809523809524
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 98,
+        "mean_net_return": 0.02360124384903497,
+        "median_net_return": -0.10816271809858402,
+        "peak20_rate": 0.29591836734693877,
+        "signals": 98,
+        "statuses": {
+          "closed": 98
+        },
+        "stocks": 98,
+        "stop_rate": 0.5714285714285714,
+        "win_rate": 0.29591836734693877
+      },
+      "unknown_signals": 10
+    },
+    "named_9A9g": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 18,
+            "mean_net_return": -0.030689787023533897,
+            "median_net_return": -0.11427788044391751,
+            "peak20_rate": 0.2222222222222222,
+            "signals": 19,
+            "statuses": {
+              "closed": 18,
+              "unknown": 1
+            },
+            "stocks": 19,
+            "stop_rate": 0.5555555555555556,
+            "win_rate": 0.3333333333333333
+          },
+          "passed": {
+            "closed": 7,
+            "mean_net_return": -0.047666419792546676,
+            "median_net_return": -0.1469974945906869,
+            "peak20_rate": 0.14285714285714285,
+            "signals": 7,
+            "statuses": {
+              "closed": 7
+            },
+            "stocks": 7,
+            "stop_rate": 0.7142857142857143,
+            "win_rate": 0.2857142857142857
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 44,
+            "mean_net_return": 0.09793684238165726,
+            "median_net_return": 0.04879175466100849,
+            "peak20_rate": 0.4318181818181818,
+            "signals": 44,
+            "statuses": {
+              "closed": 44
+            },
+            "stocks": 44,
+            "stop_rate": 0.3409090909090909,
+            "win_rate": 0.5227272727272727
+          },
+          "passed": {
+            "closed": 39,
+            "mean_net_return": 0.05645053267389127,
+            "median_net_return": -0.06805754123194341,
+            "peak20_rate": 0.3076923076923077,
+            "signals": 39,
+            "statuses": {
+              "closed": 39
+            },
+            "stocks": 39,
+            "stop_rate": 0.41025641025641024,
+            "win_rate": 0.41025641025641024
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 41,
+            "mean_net_return": 0.004639919748757941,
+            "median_net_return": -0.05843806337919488,
+            "peak20_rate": 0.2682926829268293,
+            "signals": 42,
+            "statuses": {
+              "closed": 41,
+              "unknown": 1
+            },
+            "stocks": 42,
+            "stop_rate": 0.3902439024390244,
+            "win_rate": 0.3902439024390244
+          },
+          "passed": {
+            "closed": 34,
+            "mean_net_return": 0.04784418514651764,
+            "median_net_return": -0.10261284877728938,
+            "peak20_rate": 0.35294117647058826,
+            "signals": 34,
+            "statuses": {
+              "closed": 34
+            },
+            "stocks": 34,
+            "stop_rate": 0.5294117647058824,
+            "win_rate": 0.38235294117647056
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 21,
+            "mean_net_return": 0.025385658069313213,
+            "median_net_return": -0.10062893495484049,
+            "peak20_rate": 0.38095238095238093,
+            "signals": 21,
+            "statuses": {
+              "closed": 21
+            },
+            "stocks": 21,
+            "stop_rate": 0.5238095238095238,
+            "win_rate": 0.2857142857142857
+          },
+          "passed": {
+            "closed": 29,
+            "mean_net_return": 0.05619328948248364,
+            "median_net_return": -0.003236356126067097,
+            "peak20_rate": 0.5517241379310345,
+            "signals": 29,
+            "statuses": {
+              "closed": 29
+            },
+            "stocks": 29,
+            "stop_rate": 0.3793103448275862,
+            "win_rate": 0.4827586206896552
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 21,
+            "mean_net_return": 0.3030590198647414,
+            "median_net_return": -0.10085752755919852,
+            "peak20_rate": 0.5238095238095238,
+            "signals": 22,
+            "statuses": {
+              "closed": 21,
+              "open": 1
+            },
+            "stocks": 22,
+            "stop_rate": 0.5714285714285714,
+            "win_rate": 0.38095238095238093
+          },
+          "passed": {
+            "closed": 12,
+            "mean_net_return": -0.0811742309113434,
+            "median_net_return": -0.1536025675721181,
+            "peak20_rate": 0.08333333333333333,
+            "signals": 13,
+            "statuses": {
+              "closed": 12,
+              "open": 1
+            },
+            "stocks": 13,
+            "stop_rate": 0.9166666666666666,
+            "win_rate": 0.08333333333333333
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 145,
+        "mean_net_return": 0.07478882651505885,
+        "median_net_return": -0.06921291340272029,
+        "peak20_rate": 0.36551724137931035,
+        "signals": 148,
+        "statuses": {
+          "closed": 145,
+          "open": 1,
+          "unknown": 2
+        },
+        "stocks": 148,
+        "stop_rate": 0.4413793103448276,
+        "win_rate": 0.4068965517241379
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 121,
+        "mean_net_return": 0.03429853516340031,
+        "median_net_return": -0.0854670317136893,
+        "peak20_rate": 0.34710743801652894,
+        "signals": 122,
+        "statuses": {
+          "closed": 121,
+          "open": 1
+        },
+        "stocks": 122,
+        "stop_rate": 0.5041322314049587,
+        "win_rate": 0.38016528925619836
+      },
+      "unknown_signals": 10
+    },
+    "named_positive": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 1,
+            "mean_net_return": 0.38136387266272087,
+            "median_net_return": 0.38136387266272087,
+            "peak20_rate": 1.0,
+            "signals": 2,
+            "statuses": {
+              "closed": 1,
+              "unknown": 1
+            },
+            "stocks": 2,
+            "stop_rate": 0.0,
+            "win_rate": 1.0
+          },
+          "passed": {
+            "closed": 24,
+            "mean_net_return": -0.05281020740142325,
+            "median_net_return": -0.12966291416213488,
+            "peak20_rate": 0.16666666666666666,
+            "signals": 24,
+            "statuses": {
+              "closed": 24
+            },
+            "stocks": 24,
+            "stop_rate": 0.625,
+            "win_rate": 0.2916666666666667
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 16,
+            "mean_net_return": 0.19114571898649918,
+            "median_net_return": 0.15692085481553064,
+            "peak20_rate": 0.625,
+            "signals": 16,
+            "statuses": {
+              "closed": 16
+            },
+            "stocks": 16,
+            "stop_rate": 0.1875,
+            "win_rate": 0.6875
+          },
+          "passed": {
+            "closed": 67,
+            "mean_net_return": 0.051529258735681975,
+            "median_net_return": -0.06680604123663825,
+            "peak20_rate": 0.31343283582089554,
+            "signals": 67,
+            "statuses": {
+              "closed": 67
+            },
+            "stocks": 67,
+            "stop_rate": 0.417910447761194,
+            "win_rate": 0.417910447761194
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 16,
+            "mean_net_return": -0.04560327108178168,
+            "median_net_return": -0.07846392078729997,
+            "peak20_rate": 0.125,
+            "signals": 17,
+            "statuses": {
+              "closed": 16,
+              "unknown": 1
+            },
+            "stocks": 17,
+            "stop_rate": 0.4375,
+            "win_rate": 0.25
+          },
+          "passed": {
+            "closed": 59,
+            "mean_net_return": 0.04316256511846072,
+            "median_net_return": -0.07441156450743325,
+            "peak20_rate": 0.3559322033898305,
+            "signals": 59,
+            "statuses": {
+              "closed": 59
+            },
+            "stocks": 59,
+            "stop_rate": 0.4576271186440678,
+            "win_rate": 0.423728813559322
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 5,
+            "mean_net_return": -0.13063603694190545,
+            "median_net_return": -0.12237728568288975,
+            "peak20_rate": 0.2,
+            "signals": 5,
+            "statuses": {
+              "closed": 5
+            },
+            "stocks": 5,
+            "stop_rate": 0.8,
+            "win_rate": 0.0
+          },
+          "passed": {
+            "closed": 45,
+            "mean_net_return": 0.06257520887015845,
+            "median_net_return": -0.010796197585665523,
+            "peak20_rate": 0.5111111111111111,
+            "signals": 45,
+            "statuses": {
+              "closed": 45
+            },
+            "stocks": 45,
+            "stop_rate": 0.4,
+            "win_rate": 0.4444444444444444
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 6,
+            "mean_net_return": 0.09917990357671878,
+            "median_net_return": 0.06469152119972454,
+            "peak20_rate": 0.5,
+            "signals": 6,
+            "statuses": {
+              "closed": 6
+            },
+            "stocks": 6,
+            "stop_rate": 0.5,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 27,
+            "mean_net_return": 0.17759515647270874,
+            "median_net_return": -0.1251133523689928,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 29,
+            "statuses": {
+              "closed": 27,
+              "open": 2
+            },
+            "stocks": 29,
+            "stop_rate": 0.7407407407407407,
+            "win_rate": 0.2222222222222222
+          }
+        }
+      },
+      "known_signals": 270,
+      "other": {
+        "closed": 44,
+        "mean_net_return": 0.06027141536111333,
+        "median_net_return": -0.041862834348611044,
+        "peak20_rate": 0.38636363636363635,
+        "signals": 46,
+        "statuses": {
+          "closed": 44,
+          "unknown": 2
+        },
+        "stocks": 46,
+        "stop_rate": 0.38636363636363635,
+        "win_rate": 0.4318181818181818
+      },
+      "other_definition": "no_positive_named_flow_observed_not_verified_zero_trading",
+      "passed": {
+        "closed": 222,
+        "mean_net_return": 0.055597118574621546,
+        "median_net_return": -0.08008600478880046,
+        "peak20_rate": 0.35135135135135137,
+        "signals": 224,
+        "statuses": {
+          "closed": 222,
+          "open": 2
+        },
+        "stocks": 224,
+        "stop_rate": 0.4864864864864865,
+        "win_rate": 0.38738738738738737
+      },
+      "unknown_signals": 10
+    },
+    "persistent5": {
+      "annual": {
+        "2022": {
+          "other": {
+            "closed": 2,
+            "mean_net_return": -0.0004254570943333924,
+            "median_net_return": -0.0004254570943333924,
+            "peak20_rate": 0.0,
+            "signals": 2,
+            "statuses": {
+              "closed": 2
+            },
+            "stocks": 2,
+            "stop_rate": 0.5,
+            "win_rate": 0.5
+          },
+          "passed": {
+            "closed": 12,
+            "mean_net_return": 0.03787866974334114,
+            "median_net_return": -0.037139318866895865,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 12,
+            "statuses": {
+              "closed": 12
+            },
+            "stocks": 12,
+            "stop_rate": 0.5,
+            "win_rate": 0.5
+          }
+        },
+        "2023": {
+          "other": {
+            "closed": 8,
+            "mean_net_return": 0.13814229965276123,
+            "median_net_return": 0.030687989832114515,
+            "peak20_rate": 0.375,
+            "signals": 8,
+            "statuses": {
+              "closed": 8
+            },
+            "stocks": 8,
+            "stop_rate": 0.25,
+            "win_rate": 0.625
+          },
+          "passed": {
+            "closed": 31,
+            "mean_net_return": 0.1542271882547945,
+            "median_net_return": 0.0468148097522183,
+            "peak20_rate": 0.3870967741935484,
+            "signals": 31,
+            "statuses": {
+              "closed": 31
+            },
+            "stocks": 31,
+            "stop_rate": 0.3225806451612903,
+            "win_rate": 0.5483870967741935
+          }
+        },
+        "2024": {
+          "other": {
+            "closed": 10,
+            "mean_net_return": -0.08330063300594598,
+            "median_net_return": -0.1167250594901722,
+            "peak20_rate": 0.1,
+            "signals": 10,
+            "statuses": {
+              "closed": 10
+            },
+            "stocks": 10,
+            "stop_rate": 0.6,
+            "win_rate": 0.2
+          },
+          "passed": {
+            "closed": 35,
+            "mean_net_return": 0.027168891890053237,
+            "median_net_return": -0.017233346964688923,
+            "peak20_rate": 0.34285714285714286,
+            "signals": 35,
+            "statuses": {
+              "closed": 35
+            },
+            "stocks": 35,
+            "stop_rate": 0.4,
+            "win_rate": 0.45714285714285713
+          }
+        },
+        "2025": {
+          "other": {
+            "closed": 3,
+            "mean_net_return": -0.07767271065735722,
+            "median_net_return": -0.09979532086931375,
+            "peak20_rate": 0.3333333333333333,
+            "signals": 3,
+            "statuses": {
+              "closed": 3
+            },
+            "stocks": 3,
+            "stop_rate": 0.3333333333333333,
+            "win_rate": 0.0
+          },
+          "passed": {
+            "closed": 23,
+            "mean_net_return": 0.0018109714706331188,
+            "median_net_return": -0.060402208824479664,
+            "peak20_rate": 0.43478260869565216,
+            "signals": 23,
+            "statuses": {
+              "closed": 23
+            },
+            "stocks": 23,
+            "stop_rate": 0.4782608695652174,
+            "win_rate": 0.34782608695652173
+          }
+        },
+        "2026": {
+          "other": {
+            "closed": 5,
+            "mean_net_return": 0.01096628466294105,
+            "median_net_return": -0.09287144838005978,
+            "peak20_rate": 0.6,
+            "signals": 5,
+            "statuses": {
+              "closed": 5
+            },
+            "stocks": 5,
+            "stop_rate": 0.6,
+            "win_rate": 0.2
+          },
+          "passed": {
+            "closed": 14,
+            "mean_net_return": -0.04114600619395913,
+            "median_net_return": -0.14175814361864908,
+            "peak20_rate": 0.21428571428571427,
+            "signals": 16,
+            "statuses": {
+              "closed": 14,
+              "open": 2
+            },
+            "stocks": 16,
+            "stop_rate": 0.8571428571428571,
+            "win_rate": 0.14285714285714285
+          }
+        }
+      },
+      "known_signals": 145,
+      "other": {
+        "closed": 28,
+        "mean_net_return": 0.003324801582735602,
+        "median_net_return": -0.08364150644374652,
+        "peak20_rate": 0.2857142857142857,
+        "signals": 28,
+        "statuses": {
+          "closed": 28
+        },
+        "stocks": 28,
+        "stop_rate": 0.4642857142857143,
+        "win_rate": 0.32142857142857145
+      },
+      "other_definition": "condition_not_met_on_same_data_coverage",
+      "passed": {
+        "closed": 115,
+        "mean_net_return": 0.04914875083547584,
+        "median_net_return": -0.046760064889885156,
+        "peak20_rate": 0.3565217391304348,
+        "signals": 117,
+        "statuses": {
+          "closed": 115,
+          "open": 2
+        },
+        "stocks": 117,
+        "stop_rate": 0.4608695652173913,
+        "win_rate": 0.4260869565217391
+      },
+      "unknown_signals": 135
+    }
+  },
+  "live_qualified": false,
+  "named_aliases": {
+    "7001": [
+      "兆豐嘉義"
+    ],
+    "961F": [
+      "富邦中港",
+      "富邦公益"
+    ],
+    "984K": [
+      "元大館前"
+    ],
+    "9853": [
+      "元大南屯"
+    ],
+    "9A9g": [
+      "永豐內湖",
+      "永豐金內湖"
+    ]
+  },
+  "named_observation_coverage": {
+    "7001": {
+      "absent_from_known_snapshot": 18,
+      "observed": 424
+    },
+    "961F": {
+      "absent_from_known_snapshot": 63,
+      "observed": 379
+    },
+    "984K": {
+      "absent_from_known_snapshot": 4,
+      "observed": 438
+    },
+    "9853": {
+      "absent_from_known_snapshot": 3,
+      "observed": 439
+    },
+    "9A9g": {
+      "absent_from_known_snapshot": 7,
+      "observed": 435
+    }
+  },
+  "network_requests": 0,
+  "offline_replay_identical": true,
+  "outcome_model": "T+1_HL2_loss12_time63_proportional_costs_not_cash_account",
+  "period": {
+    "prices_through": "2026-09-09",
+    "signal_end": "2026-09-07",
+    "signal_start": "2022-01-03"
+  },
+  "schema": "broker_branch_diagnostic_v1",
+  "source_code": {
+    "docs/prereg_broker_branch_20261004.md": "8d8380299abff93a00578a0bc65be0fd8e8e6bd15559574e427480b435b7e87f",
+    "scripts/research_broker_branch_diagnostics.py": "bdc65f55033bbc4831c6ab411a18fcada11d241de5de5272c442ceb0d2496d61",
+    "scripts/research_exit_scenarios.py": "87330b78d8e467ad2eb60758eb09010f7940091a7089df68da362d24c7d51af6",
+    "skills/broker_branch_diagnostics.py": "61884256727e50d893c23133dc0519f5489e8ed8bbd354f904cbff265b23ad1c",
+    "skills/exit_policy.py": "c64fdf8464274dd6104fd72591ffd814be8e0a48bab36a3254bbea0123516a5c",
+    "skills/independent_signals.py": "3acfc757ba7f6036e22d83cdf48de1fff1c712a99f74bbe3607ab942c946ea5a",
+    "skills/million_replay.py": "30461dfba114161e5fef0e9913ff3bed7148c0d01ead83717521b3bde39fa807",
+    "skills/trial_registry.py": "dcf05edeedecf056963579ff88eed5b74e6edf3b7916d269132bc31a5256d44b",
+    "tests/test_broker_branch_diagnostics.py": "11d42c8f93364ad179d96f126beefdff57840dd76f12034e10952ac39c69b735"
+  },
+  "unseen_validation": false,
+  "validation": {
+    "api_checks": {
+      "8000/health": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8000/jobs?limit=10": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8000/models": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8000/picks": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8001/health": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8001/jobs?limit=10": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8001/models": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      },
+      "8001/picks": {
+        "curl_exit": 0,
+        "http_status": "200",
+        "valid_json": true
+      }
+    },
+    "focused_tests": 20,
+    "independent_review_passed": true,
+    "pipeline_blocker": "Acceptance network guard: HTTP disabled; existing source holds preserved",
+    "pipeline_passed": false,
+    "tests_passed": 5266,
+    "warnings": 37
+  }
+}
