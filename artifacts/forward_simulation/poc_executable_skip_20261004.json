@@ -1,0 +1,308 @@
+{
+  "acquisition": {
+    "finmind_requests": 31,
+    "network_requests": 45,
+    "official_afterhours_requests": 14,
+    "shared_existing_budgets": true
+  },
+  "actual_fill_verified": false,
+  "benchmark": {
+    "costs": {
+      "commission": 1854.0,
+      "slippage": 4981.0,
+      "tax": 0.0,
+      "total_cost": 6835.0
+    },
+    "final_nav": 3541728.21,
+    "max_drawdown": -0.2750294264763963,
+    "total_return": 2.54172821
+  },
+  "benchmark_case_unchanged": true,
+  "comparison_valid": false,
+  "excluded_order": {
+    "actual_fill_verified": false,
+    "date": "2024-10-16",
+    "event_id": "liquid_universe-2024-10-15-3230",
+    "excluded_channels": [
+      "board",
+      "odd"
+    ],
+    "filled_qty": 0,
+    "live_qualified": false,
+    "original_plan": {
+      "board_qty": 4000,
+      "date": "2024-10-16",
+      "event_id": "liquid_universe-2024-10-15-3230",
+      "expires_at": "13:25:00",
+      "limit_price": 69.4,
+      "odd_expires_at": "14:30:00",
+      "odd_limit": 69.4,
+      "odd_order_time": "13:40:00",
+      "odd_qty": 958,
+      "opening_cash": 395371.51,
+      "order_time": "09:01:00",
+      "planned_qty": 4958,
+      "prior_reference": 63.1,
+      "reference_date": "2024-10-15",
+      "rejection": null,
+      "reserved_cash": 346859.0366666667,
+      "side": "buy",
+      "signal_date": "2024-10-15",
+      "sizing_budget": 346154.37,
+      "stock_id": "3230"
+    },
+    "policy": "user_authorized_3230_20241016_buy_data_conflict_v1",
+    "posthoc_data_exclusion": true,
+    "side": "buy",
+    "signal_date": "2024-10-15",
+    "source_hash_verification_required_by_caller": true,
+    "source_reference": {
+      "path": ".cache/poc-executable-20261004/online-v2/poc_red_executable.json",
+      "sha256": "fc45bd29bc55ba25621bce078c246562c0a212845fc5e3e109f5a99c92508b14"
+    },
+    "stock_id": "3230"
+  },
+  "excluded_order_resources": {
+    "available_before": 395371.51,
+    "budget": 346859.0366666667,
+    "date": "2024-10-16",
+    "event_id": "liquid_universe-2024-10-15-3230",
+    "filled_qty": 0,
+    "locked_after": 346859.04,
+    "locked_unused_before": 0.0,
+    "occupied_before": [
+      "1569",
+      "3081"
+    ],
+    "opening_cash": 395371.51,
+    "planned_qty": 5463,
+    "signal_date": "2024-10-15",
+    "spent": 0.0,
+    "stock_id": "3230"
+  },
+  "excluded_order_slot": {
+    "attempted": true,
+    "attempts_before": [],
+    "blocker_categories": [],
+    "date": "2024-10-16",
+    "event_id": "liquid_universe-2024-10-15-3230",
+    "failure": null,
+    "filled_qty": 0,
+    "held_before": [
+      "1569",
+      "3081"
+    ],
+    "new_position_budget": 346154.37,
+    "occupied_before": [
+      "1569",
+      "3081"
+    ],
+    "opening_members": [
+      "1569",
+      "3081"
+    ],
+    "released_residuals": [
+      "2497"
+    ],
+    "signal_date": "2024-10-15",
+    "stock_id": "3230",
+    "unfilled_before": []
+  },
+  "exclusion_audit": {
+    "all_original_planned_children_execution_evidence_complete": false,
+    "explicit_excluded_children": 2,
+    "explicit_excluded_plans": 1,
+    "explicit_exclusion_resource_lock_verified": true,
+    "posthoc_data_exclusion": true,
+    "source_hash_verification_required_by_caller": true,
+    "strict_prefix": {
+      "compared_rows": {
+        "cash_ledger": 150,
+        "corporate_actions": 6,
+        "daily": 188,
+        "holdings": 581,
+        "orders": 217,
+        "resource_plans": 33,
+        "selection_decisions": 184,
+        "tick_plans": 170,
+        "trades": 146
+      },
+      "completed_sessions": 188,
+      "last_complete_date": "2024-10-15",
+      "source_hash_verification_required_by_caller": true,
+      "strict_prefix_compared": true
+    }
+  },
+  "implementation_validation": {
+    "api": {
+      "checks": [
+        {
+          "count": 1,
+          "endpoint": "health",
+          "http_status": 200,
+          "port": 8001,
+          "type": "dict"
+        },
+        {
+          "count": 10,
+          "endpoint": "picks",
+          "http_status": 200,
+          "port": 8001,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "models",
+          "http_status": 200,
+          "port": 8001,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "jobs?limit=10",
+          "http_status": 200,
+          "port": 8001,
+          "type": "list"
+        },
+        {
+          "count": 1,
+          "endpoint": "health",
+          "http_status": 200,
+          "port": 8000,
+          "type": "dict"
+        },
+        {
+          "count": 10,
+          "endpoint": "picks",
+          "http_status": 200,
+          "port": 8000,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "models",
+          "http_status": 200,
+          "port": 8000,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "jobs?limit=10",
+          "http_status": 200,
+          "port": 8000,
+          "type": "list"
+        }
+      ],
+      "temporary_server_stopped": true
+    },
+    "pipeline": {
+      "after": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "before": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "command": "make pipeline",
+      "final_exit_code": 0,
+      "final_log": ".cache/poc-executable-skip-20261004/acceptance/pipeline-final.log",
+      "first_exit_code": 0,
+      "repeat_exit_code": 0,
+      "row_counts_equal": true
+    },
+    "tests": {
+      "command": "make test",
+      "exit_code": 0,
+      "passed": 5681,
+      "seconds": 102.06,
+      "warnings": 37
+    }
+  },
+  "initial_cash": 1000000,
+  "live_qualified": false,
+  "offline_parity": {
+    "benchmark_executable": true,
+    "poc_red_executable": true
+  },
+  "offline_report": {
+    "path": ".cache/poc-executable-skip-20261004/offline-v1/report.json",
+    "sha256": "137fe527f198b43554b8ae9df2c512df089a085a37e645d629f280a22350e5fd"
+  },
+  "offline_requests": 0,
+  "online_report": {
+    "path": ".cache/poc-executable-skip-20261004/online-v1/report.json",
+    "sha256": "31f7f0a784f46d4df52037e79c046b4f3645753bb859c65da9cbf515716ad817"
+  },
+  "original_strategy_fully_verified": false,
+  "period": [
+    "2024-01-02",
+    "2026-10-02"
+  ],
+  "posthoc_data_exclusion": true,
+  "remaining_blocker": {
+    "date": "2024-11-12",
+    "ordinary_amount_shortfall_ntd": 107200,
+    "ordinary_shares_shortfall": 2000,
+    "planned_qty": 5026,
+    "policy": "stop_preserve_holdings_and_cash_no_automatic_sell_exclusion",
+    "reason": "Executable board tape quality conflict: 6151 2024-11-12 official_ordinary_aggregate_conflict",
+    "side": "sell",
+    "source_audit": {
+      "date": "2024-11-12",
+      "differences": {
+        "amount_cents": {
+          "official": 24449400000,
+          "tape": 24438680000
+        },
+        "shares": {
+          "official": 4599000,
+          "tape": 4597000
+        }
+      },
+      "market": "TPEX",
+      "official_source_id": "6e3feb798b6d40768b3aef5ef2de4ef81e189e1b3e3ef4337a8138043a31adca",
+      "official_volume": 4599000.0,
+      "ordinary_amount_matched": false,
+      "ordinary_volume_matched": false,
+      "status": "official_ordinary_aggregate_conflict",
+      "stock_id": "6151",
+      "tape": {
+        "amount_cents": 24438680000,
+        "close_cents": 5360,
+        "first_regular_time": "0 days 09:00:08.232970",
+        "fixed_price_rows": 0,
+        "fixed_price_shares": 0,
+        "high_cents": 5550,
+        "last_regular_time": "0 days 13:30:00",
+        "low_cents": 5110,
+        "normalization_dropped_rows": 0,
+        "normalized_rows": 1827,
+        "open_cents": 5360,
+        "raw_all_session_shares": 4597000,
+        "raw_rows": 1827,
+        "regular_message_rows": 1827,
+        "shares": 4597000,
+        "unknown_session_rows": 0,
+        "zero_volume_rows": 0
+      },
+      "tick_sequence_complete": false,
+      "volume_scope": "ordinary_session"
+    },
+    "stock_id": "6151"
+  },
+  "schema": "poc_single_conflict_exclusion_v1",
+  "strategy_complete": false,
+  "strategy_completed_sessions": 206,
+  "strategy_last_completed_date": "2024-11-11",
+  "strategy_total_return": null,
+  "unseen_validation": false
+}
