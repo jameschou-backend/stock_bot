@@ -1,0 +1,64 @@
+{
+  "schema": "daily_poc_publication_v1",
+  "scope": "all 4612 original 2026 candidates; not every listed stock every day",
+  "account_independent": true,
+  "account_results_changed": false,
+  "snapshot_at_publication": {
+    "attempted_calls": 1500,
+    "quota_delay_seconds": 0.0,
+    "snapshot": ".cache/poc-daily-opportunities-20261004/snapshots/20261004T063227825688Z/0002",
+    "status_counts": {
+      "down": 20,
+      "pending_data": 3746,
+      "unknown": 637,
+      "up": 209
+    },
+    "updated_at": "2026-10-04T06:36:10.280411+00:00"
+  },
+  "profile_report": {
+    "path": ".cache/poc-daily-opportunities-20261004/snapshots/20261004T063227825688Z/0002/report.json",
+    "sha256": "2b376d20fb534d4c9d5cf56473c771de622c448d2ad4fc949b84b700603eeff2"
+  },
+  "explorer_receipt": {
+    "path": ".cache/poc-daily-opportunities-20261004/snapshots/20261004T063227825688Z/0002/explorer/receipt.json",
+    "sha256": "69a41dfc6a9a00a1402b8ac0bfa4120042e4a4263aca4c6f2925b60fa24c42af"
+  },
+  "current_progress_pointer": ".cache/poc-daily-opportunities-20261004/latest.json",
+  "active_html": "artifacts/reports/signal_explorer_2026.html",
+  "account_archive": "artifacts/reports/signal_explorer_account_20261002.html",
+  "archive_sha256": "9a105d5f4e090f2968ef337d05c002a3b7e11146da17496adb10bbb5e51b5c5d",
+  "source_files_sha256": {
+    "skills/poc_daily_opportunities.py": "e0fe23e9cc380bf153bfd05f90dbaa382a2e08a1a0a1e5edb932cd9abd14e495",
+    "scripts/prepare_poc_daily_opportunities.py": "183e0d2c080062ca2881eaafed44f09055f7b1b13ec0809081d53aba4bb6ed44",
+    "scripts/export_poc_daily_explorer.py": "a83ba542542ad5de19cbcf00515709073057834fc3f09777fb6f287c85208a71",
+    "ui/poc_daily_signal_explorer.html": "35fedff2b2846d159f742ec402d32ceacb313cc946c1c16f972c8c097d8a00b3",
+    "tests/test_poc_daily_opportunities.py": "23d099952114decae8c033cbf175a8710efa61e390f17830a0a0ea6f1223da70",
+    "tests/test_poc_daily_explorer.py": "3b42f66da8960484180d210235253151b33eb8944c728a43c648b40e5fc03eeb",
+    "tests/test_poc_daily_signal_ui.py": "fc3ecc88234a8ebadec8926408bb216868ea9b13af09ff3a0a484e05ee355e98",
+    "docs/prereg_poc_daily_opportunities_20261004.md": "53d9ea9b158c25026b6ac8f80039ad42c7829de5039dc7bcb9a223411b27ce04"
+  },
+  "validation": {
+    "focused_tests": 55,
+    "make_test_passed": 5246,
+    "make_test_warnings": 37,
+    "make_test_log": ".cache/poc-daily-opportunities-20261004/make-test-v2.log",
+    "api_four_endpoints": "HTTP 200",
+    "pipeline": "blocked by existing acceptance HTTP guard; not passed; no push",
+    "independent_real_profile_parity_count": 93
+  },
+  "acquisition": {
+    "kind": "single bounded process, not recurring automation",
+    "maximum_total_adapter_calls": 40000,
+    "hourly_hard_cap": 6000,
+    "shared_limiter_preserved": true,
+    "checkpoint_new_calls": 500,
+    "full_year_profile_data_complete": false
+  },
+  "limitations": [
+    "unknown is a quality problem, not a negative POC",
+    "pending_data is incomplete acquisition, not no opportunity",
+    "historical reconstruction does not certify past publication availability",
+    "POC up is one feature, not a complete entry rule"
+  ],
+  "live_qualified": false
+}
