@@ -1,0 +1,229 @@
+{
+  "acquisition": {
+    "finmind_gateway_calls": 215,
+    "official_http_calls": 116,
+    "official_usable_market_days": 116,
+    "offline_schema_reparses": 1,
+    "original_schema_failure_preserved": true,
+    "source_count": 62414
+  },
+  "actual_fill_verified": false,
+  "benchmark": {
+    "annual": [
+      {
+        "end_nav": 1478556.8,
+        "max_drawdown": -0.2120690161785087,
+        "partial_year": false,
+        "profit": 478556.80000000005,
+        "start_nav": 1000000.0,
+        "total_return": 0.4785568,
+        "year": "2024"
+      },
+      {
+        "end_nav": 2022301.9099999997,
+        "max_drawdown": -0.2750294264763963,
+        "partial_year": false,
+        "profit": 543745.1099999996,
+        "start_nav": 1478556.8,
+        "total_return": 0.3677539543966113,
+        "year": "2025"
+      },
+      {
+        "end_nav": 3541728.21,
+        "max_drawdown": -0.1533927701008262,
+        "partial_year": true,
+        "profit": 1519426.3000000003,
+        "start_nav": 2022301.9099999997,
+        "total_return": 0.7513350467042779,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 27,
+    "cagr": 0.584169532104772,
+    "cash": 33.81,
+    "costs": {
+      "commission": 1854.0,
+      "slippage": 4981.0,
+      "tax": 0.0,
+      "total_cost": 6835.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "benchmark",
+        "mark_date": "2026-10-02",
+        "market_value": 3541694.4,
+        "name": "元大台灣50",
+        "price": 112.8,
+        "qty": 31398,
+        "stale": false,
+        "stock_id": "0050"
+      }
+    ],
+    "final_nav": 3541728.21,
+    "final_receivables": [],
+    "initial_cash": 1000000.0,
+    "market_value": 3541694.4,
+    "max_drawdown": -0.2750294264763963,
+    "minimum_cash": 33.81,
+    "partial_or_rejected_orders": {
+      "partial_auction_capacity": 5
+    },
+    "profit": 2541728.21,
+    "receivable": 0.0,
+    "sell_count": 0,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 0,
+    "total_return": 2.54172821,
+    "trade_count": 27,
+    "trading_days": 666
+  },
+  "broker_private_review": {
+    "actual_fees_verified": false,
+    "broker_execution_verified": false,
+    "cash_reconciled": false,
+    "full_history_received": false,
+    "inventory_and_partial_fills_received": true
+  },
+  "comparison_valid": false,
+  "implementation_validation": {
+    "api": {
+      "checks": [
+        {
+          "count": 1,
+          "endpoint": "health",
+          "http_status": 200,
+          "type": "dict"
+        },
+        {
+          "count": 10,
+          "endpoint": "picks",
+          "http_status": 200,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "models",
+          "http_status": 200,
+          "type": "list"
+        },
+        {
+          "count": 10,
+          "endpoint": "jobs?limit=10",
+          "http_status": 200,
+          "type": "list"
+        }
+      ],
+      "port": 8000,
+      "temporary_port_8001_all_four_http_200": true,
+      "temporary_server_stopped": true
+    },
+    "pipeline": {
+      "after": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "before": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "command": "make pipeline",
+      "final_exit_code": 0,
+      "final_log": ".cache/poc-executable-20261004/acceptance/pipeline-final.log",
+      "first_exit_code": 0,
+      "repeat_exit_code": 0,
+      "row_counts_equal": true
+    },
+    "tests": {
+      "command": "make test",
+      "exit_code": 0,
+      "log": ".cache/poc-executable-20261004/acceptance/make-test-final.log",
+      "passed": 5627,
+      "seconds": 97.16,
+      "warnings": 37
+    }
+  },
+  "initial_cash": 1000000,
+  "live_qualified": false,
+  "offline_parity": {
+    "benchmark_executable": {
+      "entire_case_exact": true,
+      "offline": {
+        "path": ".cache/poc-executable-20261004/offline-v3/benchmark_executable.json",
+        "sha256": "6c67a34efd0fda23189469e7c352b599d5f91fb9e785a6d02b862b1f0b9d7b08"
+      },
+      "online": {
+        "path": ".cache/poc-executable-20261004/online-v2/benchmark_executable.json",
+        "sha256": "6c67a34efd0fda23189469e7c352b599d5f91fb9e785a6d02b862b1f0b9d7b08"
+      }
+    },
+    "poc_red_executable": {
+      "entire_case_exact": true,
+      "offline": {
+        "path": ".cache/poc-executable-20261004/offline-v3/poc_red_executable.json",
+        "sha256": "fc45bd29bc55ba25621bce078c246562c0a212845fc5e3e109f5a99c92508b14"
+      },
+      "online": {
+        "path": ".cache/poc-executable-20261004/online-v2/poc_red_executable.json",
+        "sha256": "fc45bd29bc55ba25621bce078c246562c0a212845fc5e3e109f5a99c92508b14"
+      }
+    }
+  },
+  "offline_report": {
+    "path": ".cache/poc-executable-20261004/offline-v3/report.json",
+    "sha256": "806fae8703a56b142ac3bed9596f5b17ed07fe40a4fd6f79fa5ff35c4f7f60fe"
+  },
+  "offline_requests": 0,
+  "online_report": {
+    "path": ".cache/poc-executable-20261004/online-v2/report.json",
+    "sha256": "bbec246f6f28d4fe676a2a6c98ad969906b207a5042f8f988830648202255da9"
+  },
+  "period": [
+    "2024-01-02",
+    "2026-10-02"
+  ],
+  "schema": "poc_executable_account_summary_v1",
+  "strategy_complete": false,
+  "strategy_completed_sessions": 188,
+  "strategy_failure": {
+    "amount_difference": 444500.0,
+    "date": "2024-10-16",
+    "missing_shares": 7000,
+    "missing_tick_times_unknown": true,
+    "official": {
+      "path": ".cache/board-tape-reconciliation-20260925/official/tpex-no1430-2024-10-16.json",
+      "sha256": "d6d1b7a8d5558e2677aaa80a4b08e00c3a32686b373b4596422648ae50b71aa9"
+    },
+    "official_amount": 902482200.0,
+    "official_shares": 14258000,
+    "ohlc_equal": true,
+    "provider_amount": 902037700.0,
+    "provider_shares": 14251000,
+    "query_receipt": {
+      "path": ".cache/poc-executable-20261004/board-v1/receipts/3230-2024-10-16.json",
+      "sha256": "b62ffd027fcf5daf61f5f2e92ab9b96726d7d046603d0cf57fbb9db002b53712"
+    },
+    "raw": {
+      "path": ".cache/poc-executable-20261004/board-v1/raw/3230-2024-10-16.parquet",
+      "sha256": "54be8276f2530a2c5b7ea2d915353acfb8388fb1295205b10379d95bc25541d7"
+    },
+    "repair_inferred": false,
+    "rows": 5157,
+    "stock_id": "3230",
+    "unmodified": true
+  },
+  "strategy_last_completed_date": "2024-10-15",
+  "strategy_partial_channel_trades": 146,
+  "strategy_total_return": null,
+  "unseen_validation": false
+}
