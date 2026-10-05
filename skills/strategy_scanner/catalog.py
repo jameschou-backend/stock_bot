@@ -426,6 +426,31 @@ CATALOG = (
 )
 
 
+# Adapter metadata replaces only explicitly ported IDs. The remaining research
+# catalogue stays visible with its original data/implementation gaps.
+from .public_rules import PUBLIC_CATALOG
+from .research_rules import RESEARCH_CATALOG
+_ADAPTERS = {row['id']: row for row in [*PUBLIC_CATALOG, *RESEARCH_CATALOG]}
+if len(_ADAPTERS) != len(PUBLIC_CATALOG) + len(RESEARCH_CATALOG):
+    raise ValueError('Duplicate scanner adapter IDs')
+_BASE_CATALOG_IDS = {row['id'] for row in CATALOG}
+CATALOG = tuple(_ADAPTERS.get(row['id'], row) for row in CATALOG) + tuple(
+    row for row in [*PUBLIC_CATALOG, *RESEARCH_CATALOG] if row['id'] not in _BASE_CATALOG_IDS)
+_PARTIAL_PORTS = {
+    'first_volume_bar': (['first_volume_bar_price'],
+        '純價量子版 first_volume_bar_price 已可掃描；原籌碼條件與接受事件冷卻語意未整套移植，不繼承原結果。'),
+    'entry_quality': (['entry_not_extended', 'entry_strong_close'],
+        '不過度乖離與嚴格紅K高位收盤已有獨立篩選；原候選交集、市場廣度與原同價K語意尚未整套移植。'),
+    'liquidity_filter': (['liquidity_median50m', 'liquidity_prior50m', 'liquidity_persistent50m'],
+        '三個流動性子條件已可獨立掃描；此父項指原候選交集比較，尚未自動套用到所有進場規則。'),
+}
+for _row in CATALOG:
+    if _row['id'] in _PARTIAL_PORTS:
+        _children, _note = _PARTIAL_PORTS[_row['id']]
+        _row['adapter_variants'] = _children
+        _row['data_gaps'] = [_note]
+
+
 def get_catalog() -> list[dict]:
     """Return caller-owned metadata; mutating a UI payload cannot alter registry."""
     return deepcopy(list(CATALOG))

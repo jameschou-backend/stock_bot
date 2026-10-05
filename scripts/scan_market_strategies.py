@@ -64,6 +64,8 @@ def entry_events(payload, strategy_id, *, first_only=False):
     if strategy_id not in payload['evaluated_strategy_ids']:
         raise ValueError('Strategy was not evaluated')
     specs={s['id']:s for s in payload['strategies']}
+    if specs[strategy_id].get('kind') != 'entry':
+        raise ValueError('Only entry rules can be exported as entry events; filters and rankings are separate')
     events=[]
     for day in payload['days']:
         for stock in day['stocks']:
@@ -94,19 +96,25 @@ def run(args):
         manifest_hash=data['provenance']['source_hashes']['manifest.json'])
     provenance=dict(data['provenance'],poc=poc_info,
         source_code_sha256={str(p.relative_to(ROOT)):digest(p) for p in
-            sorted((ROOT/'skills/strategy_scanner').glob('*.py'))+[Path(__file__).resolve()]},
+            sorted((ROOT/'skills/strategy_scanner').glob('*.py'))+[Path(__file__).resolve(),ROOT/'ui/multi_strategy_scanner.html']},
         external_data_requests=0,scheduler_enabled=False,
         research_scope='frozen_local_universe_not_certified_all_historical_listings',
         optional_data_policy='missing_is_unknown_no_synthetic_chips_or_news',
         original_returns_not_inherited=True)
     result=scan_market(data['bars'],data['calendar'],start=start,end=end,names=data['names'],
         original_signals=data['original_signals'],poc=profiles,provenance=provenance)
-    outputs={sid:entry_events(result,sid) for sid in result['evaluated_strategy_ids']}
+    entry_ids={s['id'] for s in result['strategies'] if s['kind']=='entry'}
+    outputs={sid:entry_events(result,sid) for sid in result['evaluated_strategy_ids'] if sid in entry_ids}
+    matched_counts=Counter({sid:0 for sid in result['evaluated_strategy_ids']})
+    for day in result['days']:
+        for stock in day['stocks']:
+            matched_counts.update(sid for sid,r in stock['results'].items() if r['status']=='matched')
     summary=dict(schema=result['schema'],start=result['start'],end=result['end'],
         source_end=result['source_end'],trading_days=len(result['days']),
         stocks_per_day={d['date']:len(d['stocks']) for d in result['days']},
         active_strategies=len(result['evaluated_strategy_ids']),
-        catalog_modules=len(result['strategies']),signals_per_strategy={k:len(v) for k,v in outputs.items()},
+        catalog_modules=len(result['strategies']),signals_per_strategy=dict(matched_counts),
+        entry_export_strategy_count=len(outputs),matches_include_non_entry_conditions=True,
         outcomes=dict(sum((Counter(d['counts']) for d in result['days']),Counter())),
         elapsed_seconds=round(time.perf_counter()-started,3),external_data_requests=0,
         account_independent=True,live_qualified=False,backtest_run=False)

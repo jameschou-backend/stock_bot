@@ -44,10 +44,13 @@ def test_active_catalog_exactly_matches_evaluator_not_old_factory():
     from skills.strategy_scanner.engine import ACTIVE_IDS
 
     active = {row["id"] for row in CATALOG if row["status"] == "active"}
-    assert active == EXPECTED_ACTIVE == set(ACTIVE_IDS)
+    from skills.strategy_scanner.public_rules import PUBLIC_IDS
+    from skills.strategy_scanner.research_rules import RESEARCH_IDS
+    assert active == EXPECTED_ACTIVE | set(PUBLIC_IDS) | set(RESEARCH_IDS) == set(ACTIVE_IDS)
     legacy = [row for row in CATALOG if row["family"] == "legacy_factory"]
     assert len(legacy) == 6
-    assert all(row["status"] == "catalog_only" for row in legacy)
+    assert {row['id'] for row in legacy if row['status']=='active'} == {
+        'legacy_momentum_trend', 'legacy_mean_reversion', 'legacy_course_breakout'}
 
 
 def test_poc_priority_is_not_silently_promoted_to_hard_gate():

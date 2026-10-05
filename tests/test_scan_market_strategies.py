@@ -9,7 +9,7 @@ from scripts.scan_market_strategies import entry_events, load_poc
 
 def test_entry_export_keeps_all_stocks_and_next_session_timing():
     result=dict(status='matched',first_signal=True,reasons=['rule'],metrics={},regime_fit=True)
-    payload=dict(strategies=[dict(id='x',version='1')],evaluated_strategy_ids=['x'],
+    payload=dict(strategies=[dict(id='x',version='1',kind='entry')],evaluated_strategy_ids=['x'],
         days=[dict(date='2026-10-02',market_regime='trend_up',stocks=[
             dict(stock_id=str(2300+i),regime='trend_up',results={'x':result}) for i in range(8)])])
     events=entry_events(payload,'x')
@@ -20,6 +20,9 @@ def test_entry_export_keeps_all_stocks_and_next_session_timing():
     payload['days'][0]['stocks'][0]['results']={'x':dict(result,first_signal=None)}
     assert len(entry_events(payload,'x',first_only=True))==7
     with pytest.raises(ValueError):entry_events(payload,'not_selected')
+    payload['strategies'][0]['kind']='filter'
+    with pytest.raises(ValueError,match='Only entry'):
+        entry_events(payload,'x')
 
 
 def seal(tmp_path,rows):

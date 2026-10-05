@@ -11,9 +11,13 @@ import re
 import numpy as np
 import pandas as pd
 
-ACTIVE_IDS = ('original_breakout', 'original_red', 'poc_red_priority', 'poc_up_red',
+BASE_IDS = ('original_breakout', 'original_red', 'poc_red_priority', 'poc_up_red',
               'momentum', 'risk_momentum', 'near_high', 'contraction_breakout',
               'donchian20', 'donchian55', 'bollinger_reclaim', 'ma_pullback')
+from .public_rules import PUBLIC_IDS, add_public_rules
+from .research_rules import RESEARCH_IDS, add_research_rules
+
+ACTIVE_IDS = BASE_IDS + PUBLIC_IDS + RESEARCH_IDS
 STATES = ('matched', 'not_matched', 'unknown', 'ineligible')
 
 
@@ -164,36 +168,20 @@ def _evidence_matrices(f, days, ids, original_signals, poc):
     return origin, priorities, pstate, before, after
 
 
-def scan_market(bars, calendar, *, start, end, names=None, original_signals=(),
-                poc=None, provenance=None, strategies=None):
-    """Return one outcome for every stock/date/active strategy, no account state.
-
-    `original_signals` must be the complete hash-bound candidate ledger, not
-    trades. Without that evidence original adapters return unknown, not False.
-    Caller supplies the full market calendar and at least 420 prior sessions.
-    Publication timestamps for optional external evidence belong in its adapter.
-    """
+def _compile_rules(f, days, ids, *, original_signals=(), poc=None, provenance=None):
+    """Shared causal rule matrices used by scanning and separate outcome studies."""
     from .catalog import get_catalog
-    start, end = _day(start), _day(end)
-    if start>end:
-        raise ValueError('Scan start must not exceed end')
-    f, days, ids = _prepare(bars, calendar, end)
-    if end not in days or start not in days:
-        raise ValueError('Scan endpoints must be observed market sessions')
     provenance = dict(provenance or {})
-    if provenance.get('source_end') and end>_day(provenance['source_end']):
-        raise ValueError('Scan exceeds frozen source coverage')
     z = _features(f)
     origin, priorities, pstate, before, after = _evidence_matrices(f, days, ids, original_signals, poc)
     catalog = get_catalog()
     active = {s['id']:s for s in catalog if s['status']=='active'}
-    chosen = list(ACTIVE_IDS if strategies is None else strategies)
-    if len(set(chosen)) != len(chosen) or not chosen or set(chosen)-set(active):
-        raise ValueError('Select unique registered active strategies')
     if set(active) != set(ACTIVE_IDS):
         raise ValueError('Active catalog and engine implementations differ')
     masks = {}
     def add(sid, match, fields, rule, *, known=None):
+        if sid in masks:
+            raise ValueError('Duplicate strategy evaluator: '+sid)
         available = f['valid'].copy()
         for field in fields:
             available &= z[field].notna() & np.isfinite(z[field])
@@ -231,45 +219,96 @@ def scan_market(bars, calendar, *, start, end, names=None, original_signals=(),
     add('ma_pullback', z['ma20'].gt(z['ma60']) & z['prior_ma20'].gt(z['prior_ma60'])
         & z['low'].le(z['ma20']*1.01) & z['c'].gt(z['ma20']) & z['red'] & liquid,
         ['ma20','ma60','prior_ma20','prior_ma60','low','amount20'], '20日線持續高於60日線，今日回測20日線附近後收紅站回；均成交值≥5千萬')
-    eligible = f['eligible'].eq(True).fillna(False)
+    add_public_rules(f, z, add)
+    add_research_rules(f, z, add)
+    if set(masks) != set(ACTIVE_IDS):
+        raise ValueError("Missing or unregistered strategy evaluator")
+    evidence = dict(priorities=priorities, pstate=pstate, before=before, after=after, red=red)
+    return z, masks, catalog, evidence
+
+
+def scan_market(bars, calendar, *, start, end, names=None, original_signals=(),
+                poc=None, provenance=None, strategies=None):
+    """Return one outcome for every stock/date/active strategy, no account state.
+
+    `original_signals` must be the complete hash-bound candidate ledger, not
+    trades. Without that evidence original adapters return unknown, not False.
+    Caller supplies the full market calendar and at least 420 prior sessions.
+    Publication timestamps for optional external evidence belong in its adapter.
+    """
+    start, end = _day(start), _day(end)
+    if start>end:
+        raise ValueError('Scan start must not exceed end')
+    f, days, ids = _prepare(bars, calendar, end)
+    if end not in days or start not in days:
+        raise ValueError('Scan endpoints must be observed market sessions')
+    provenance = dict(provenance or {})
+    if provenance.get('source_end') and end>_day(provenance['source_end']):
+        raise ValueError('Scan exceeds frozen source coverage')
+    z, masks, catalog, evidence = _compile_rules(f, days, ids,
+        original_signals=original_signals, poc=poc, provenance=provenance)
+    active = {s['id']:s for s in catalog if s['status']=='active'}
+    chosen = list(ACTIVE_IDS if strategies is None else strategies)
+    if len(set(chosen)) != len(chosen) or not chosen or set(chosen)-set(active):
+        raise ValueError('Select unique registered active strategies')
+    # The matrices already share _prepare's market-calendar/stock axes. Convert
+    # lookup views once; no indicator, eligibility or signal rule is recomputed.
+    # In particular, retain the preceding market row for first-signal evidence.
+    eligible = f['eligible'].eq(True).fillna(False).to_numpy(dtype=bool)
+    ineligible = f['eligible'].eq(False).fillna(False).to_numpy(dtype=bool)
+    regime_known, uptrend, downtrend = (z[k].to_numpy(copy=False) for k in
+        ('regime_known', 'uptrend', 'downtrend'))
+    priorities, pstate, before, after, red = (evidence[k].to_numpy(copy=False) for k in
+        ('priorities', 'pstate', 'before', 'after', 'red'))
+    numeric_fields = {field: z[field].to_numpy(copy=False)
+                      for key in chosen for field in masks[key][2]}
+    priority_keys = ('original_breakout', 'original_red', 'poc_red_priority', 'poc_up_red')
+    poc_keys = ('poc_red_priority', 'poc_up_red')
+    lookups = []
+    for key in chosen:
+        match, known, fields, rule = masks[key]
+        lookups.append((key, match.to_numpy(copy=False), known.to_numpy(copy=False),
+                        [(field, numeric_fields[field]) for field in fields], rule,
+                        active[key].get('preferred_regimes', []), key in priority_keys, key in poc_keys))
+    stock_coordinates = [(j, sid) for j, sid in enumerate(ids) if not sid.startswith('0')]
+    benchmark_index = ids.index('0050') if '0050' in ids else None
+    stock_names = names or {}
     dates = []
-    stock_ids = [sid for sid in ids if not sid.startswith('0')]
-    date_index = {d:i for i,d in enumerate(days)}
-    for d in days[(days>=start)&(days<=end)]:
-        i=date_index[d]; stocks=[]; counts=Counter()
-        market='unknown'
-        if '0050' in ids and z['regime_known'].at[d,'0050']:
-            market='trend_up' if z['uptrend'].at[d,'0050'] else 'trend_down' if z['downtrend'].at[d,'0050'] else 'range'
-        for sid in stock_ids:
-            regime='unknown'
-            if z['regime_known'].at[d,sid]:
-                regime='trend_up' if z['uptrend'].at[d,sid] else 'trend_down' if z['downtrend'].at[d,sid] else 'range'
-            results={}
-            for key in chosen:
-                match, known, fields, rule = masks[key]
-                metrics={field:_number(z[field].at[d,sid]) for field in fields}
-                first=None
-                if f['eligible'].at[d,sid] is False or (pd.notna(f['eligible'].at[d,sid]) and not bool(f['eligible'].at[d,sid])):
-                    state='ineligible'; reasons=['該日市場身分／原資料資格不符合個股掃描範圍']
-                elif not eligible.at[d,sid] or not known.at[d,sid]:
-                    state='unknown'; reasons=['資料不足、品質衝突或歷史窗口不完整，未判定為不符合']
+    for i in np.flatnonzero((days >= start) & (days <= end)):
+        d = days[i]; stocks = []; counts = Counter()
+        market = 'unknown'
+        if benchmark_index is not None and regime_known[i, benchmark_index]:
+            market = ('trend_up' if uptrend[i, benchmark_index] else
+                      'trend_down' if downtrend[i, benchmark_index] else 'range')
+        for j, sid in stock_coordinates:
+            regime = 'unknown'
+            if regime_known[i, j]:
+                regime = 'trend_up' if uptrend[i, j] else 'trend_down' if downtrend[i, j] else 'range'
+            results = {}
+            for key, match, known, fields, rule, preferred, has_priority, has_poc in lookups:
+                metrics = {field: _number(values[i, j]) for field, values in fields}
+                first = None
+                if ineligible[i, j]:
+                    state = 'ineligible'; reasons = ['該日市場身分／原資料資格不符合個股掃描範圍']
+                elif not eligible[i, j] or not known[i, j]:
+                    state = 'unknown'; reasons = ['資料不足、品質衝突或歷史窗口不完整，未判定為不符合']
                 else:
-                    state='matched' if match.at[d,sid] else 'not_matched'
-                    reasons=[rule if state=='matched' else '未同時符合：'+rule]
-                    if state=='matched' and i>0 and known.iloc[i-1][sid] and eligible.iloc[i-1][sid]:
-                        first=not bool(match.iloc[i-1][sid])
-                if key in ('original_breakout','original_red','poc_red_priority','poc_up_red'):
-                    metrics['original_priority']=_number(priorities.at[d,sid])
-                if key in ('poc_red_priority','poc_up_red'):
-                    metrics.update(poc_before=_number(before.at[d,sid]),poc_after=_number(after.at[d,sid]),poc_status=pstate.at[d,sid])
-                    if red.at[d,sid] and pstate.at[d,sid] not in ('up','down'):
+                    state = 'matched' if match[i, j] else 'not_matched'
+                    reasons = [rule if state == 'matched' else '未同時符合：'+rule]
+                    if state == 'matched' and i > 0 and known[i-1, j] and eligible[i-1, j]:
+                        first = not bool(match[i-1, j])
+                if has_priority:
+                    metrics['original_priority'] = _number(priorities[i, j])
+                if has_poc:
+                    metrics.update(poc_before=_number(before[i, j]), poc_after=_number(after[i, j]),
+                                   poc_status=pstate[i, j])
+                    if red[i, j] and pstate[i, j] not in ('up', 'down'):
                         reasons.append('POC資料不足；不能宣稱籌碼成本已上移')
-                preferred=active[key].get('preferred_regimes',[])
-                results[key]=dict(status=state,reasons=reasons,metrics=metrics,first_signal=first,
-                    regime_fit=None if regime=='unknown' else (regime in preferred if preferred else True))
-                counts[state]+=1
-            stocks.append(dict(stock_id=sid,name=(names or {}).get(sid,sid),regime=regime,results=results))
-        dates.append(dict(date=str(d.date()),market_regime=market,stocks=stocks,counts=dict(counts)))
+                results[key] = dict(status=state, reasons=reasons, metrics=metrics, first_signal=first,
+                    regime_fit=None if regime == 'unknown' else (regime in preferred if preferred else True))
+                counts[state] += 1
+            stocks.append(dict(stock_id=sid, name=stock_names.get(sid, sid), regime=regime, results=results))
+        dates.append(dict(date=str(d.date()), market_regime=market, stocks=stocks, counts=dict(counts)))
     return dict(schema='multi_strategy_scan_v1',start=str(start.date()),end=str(end.date()),
         source_end=provenance.get('source_end',str(days[-1].date())),strategies=catalog,days=dates,
         evaluated_strategy_ids=chosen,provenance=provenance,live_qualified=False,
