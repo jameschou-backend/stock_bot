@@ -1,0 +1,6293 @@
+{
+  "accounting_validated": true,
+  "acquisition": {
+    "added": {
+      "board-v1": 60,
+      "execution-v1": 9,
+      "odd-v1": 0,
+      "profiles-v1": 38
+    },
+    "finmind_effective_hourly_ceiling": 5400,
+    "finmind_requests": 107,
+    "network_requests": 111,
+    "new_intraday_odd": 4,
+    "official_intraday_accepted": 4,
+    "official_intraday_maximum": 400,
+    "original_shared_attempts_after": {
+      "board-v1": 210,
+      "execution-v1": 43,
+      "odd-v1": 310,
+      "profiles-v1": 390
+    },
+    "original_shared_attempts_before": {
+      "board-v1": 150,
+      "execution-v1": 34,
+      "odd-v1": 310,
+      "profiles-v1": 352
+    }
+  },
+  "actual_fill_verified": false,
+  "afterhours_total_return": 0.30120458000000006,
+  "benchmark_limit_overlay": [
+    {
+      "applied": true,
+      "corporate_check": {
+        "cash_ex_dates_2025": [
+          "2025-01-17",
+          "2025-07-21"
+        ],
+        "event_window_end": "2025-04-15",
+        "event_window_start": "2025-04-01",
+        "events_found": 0
+      },
+      "date": "2025-04-10",
+      "derived": {
+        "lower": 131.6,
+        "upper": 160.8
+      },
+      "evidence_path": "docs/benchmark_0050_limit_overlay_20261003.json",
+      "evidence_sha256": "94d50df226fd7f144619f6c4f6f0b7babf365b40218ad1006de1718529022ee5",
+      "limit_fraction": 0.1,
+      "live_qualified": false,
+      "observed_official_daily_limits": false,
+      "official_change": 14.6,
+      "official_ohlc": {
+        "close": 160.8,
+        "high": 160.8,
+        "low": 160.8,
+        "open": 160.8
+      },
+      "official_previous_close": 146.2,
+      "price_step": 0.05,
+      "provider": {
+        "lower": 132.0,
+        "upper": 160.5
+      },
+      "reference_date": "2025-04-09",
+      "reference_price": 146.2,
+      "source": "derived_etf_rule_not_observed_official_daily_limits",
+      "source_sha256": {
+        ".cache/index-exposure-20260927/official/etf-rules.html": "d3fa92421bcceae0c01473474e6b64be16fa0506294df0fdfb8a21b7c4ecfa87",
+        ".cache/index-exposure-20260927/official/etf-rules.html.json": "2cf989452969cd1146f4f44332b7837c88e4ba09ef4f8d19aa1a7f45c8441558",
+        ".cache/market-input-repair-20261002/inputs-v2/events.parquet": "771a66cfdd5d321ee6cc78a95e16d6d6833d72b3149b9c46ae81df4ecc3900df",
+        ".cache/official-market-days-20261002/acquisition/raw/406b54210bc61480cafa3a21542152af4f39cd8169087890cd1e3890ae188327.bin": "d5013754d2ac6782983f2ab6e263f9f93891e7de2bc5bab0973f21f36f88b4d6",
+        ".cache/official-market-days-20261002/acquisition/raw/742d58d5acda08943eb7ac298592e5cf9812ecd835dbcd840451eca7a4b84d31.bin": "242af2d0ca0c63931509cf22c6da1597eb3d7da55de27fc79ecf58b3fce3c88d",
+        ".cache/official-market-days-20261002/acquisition/receipts/406b54210bc61480cafa3a21542152af4f39cd8169087890cd1e3890ae188327.json": "704eca42ed0219b3fc45d3ceb6093b0218def50a8826056b6335aae383ed4b51",
+        ".cache/official-market-days-20261002/acquisition/receipts/742d58d5acda08943eb7ac298592e5cf9812ecd835dbcd840451eca7a4b84d31.json": "05f0d9d8843a3e82c58d0b0af6f8603eaf02d5a901775c382998db2ed2aaee73",
+        ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockDividend.json": "e5ad7eafd2f3539aef3702504a51f9d1597fb91dae211bf7ed94d96ed3d295f4",
+        ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockDividend.parquet": "2c9917c401f2949f1518c99f567d4f213d4946975733dba8049b9ffe2883704d",
+        ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockPriceLimit.json": "f68b2de11d0623ed54ebca16ded21962e28c8ad64837cdc00cfc52d2b257058d",
+        ".cache/partial-risk-2019-20260929/execution-v1/0050-TaiwanStockPriceLimit.parquet": "392ab50b4e892002a64cdf1852bb115a88185322daccd77387f6344ad0198ead",
+        "docs/benchmark_0050_limit_overlay_20261003.json": "94d50df226fd7f144619f6c4f6f0b7babf365b40218ad1006de1718529022ee5"
+      },
+      "stock_id": "0050",
+      "strict_data_ready": false
+    }
+  ],
+  "benchmark_summary": {
+    "annual": [
+      {
+        "end_nav": 1476354.71,
+        "max_drawdown": -0.21207009470971516,
+        "partial_year": false,
+        "profit": 476354.70999999996,
+        "start_nav": 1000000.0,
+        "total_return": 0.47635471000000007,
+        "year": "2024"
+      },
+      {
+        "end_nav": 2019490.0,
+        "max_drawdown": -0.2749793400861956,
+        "partial_year": false,
+        "profit": 543135.29,
+        "start_nav": 1476354.71,
+        "total_return": 0.3678894281442704,
+        "year": "2025"
+      },
+      {
+        "end_nav": 3536779.57,
+        "max_drawdown": -0.1533938677636325,
+        "partial_year": true,
+        "profit": 1517289.5699999998,
+        "start_nav": 2019490.0,
+        "total_return": 0.7513231409910421,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 24,
+    "cagr": 0.5833639275150244,
+    "cash": 48.37,
+    "costs": {
+      "commission": 1863.0,
+      "slippage": 4978.0,
+      "tax": 0.0,
+      "total_cost": 6841.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "benchmark",
+        "mark_date": "2026-10-02",
+        "market_value": 3536731.1999999997,
+        "name": "元大台灣50",
+        "price": 112.8,
+        "qty": 31354,
+        "stale": false,
+        "stock_id": "0050"
+      }
+    ],
+    "final_nav": 3536779.57,
+    "final_receivables": [],
+    "initial_cash": 1000000.0,
+    "market_value": 3536731.1999999997,
+    "max_drawdown": -0.2749793400861956,
+    "minimum_cash": 18.94,
+    "partial_or_rejected_orders": {},
+    "profit": 2536779.57,
+    "receivable": 0.0,
+    "sell_count": 0,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 0,
+    "total_return": 2.5367795699999998,
+    "trade_count": 24,
+    "trading_days": 666
+  },
+  "cohort_analysis": {
+    "afterhours_common_event_comparison": [
+      {
+        "afterhours": {
+          "buy_orders": [
+            {
+              "capacity_qty": 9,
+              "channel": "odd",
+              "date": "2026-03-09",
+              "failure": "partial_auction_capacity",
+              "filled_qty": 9,
+              "reference_price": 1350.0,
+              "requested_qty": 364,
+              "source_volume": 986
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 12225.0,
+            "buy_qty": 9,
+            "buy_vwap": 1350.0,
+            "closed": true,
+            "ending_market_value": 0.0,
+            "entry_date": "2026-03-09",
+            "event_id": "liquid_universe-2026-03-06-3081",
+            "exit_date": "2026-04-29",
+            "name": "聯亞",
+            "net_pnl": 9940.0,
+            "net_return": 0.8130879345603272,
+            "other_cash_inflow": 0.0,
+            "pnl_includes_terminal_mark": false,
+            "sell_cash_inflow": 22165.0,
+            "sell_qty": 9,
+            "sell_reasons": {
+              "three_black": 1
+            },
+            "sell_vwap": 2485.0,
+            "stock_id": "3081",
+            "total_cost": 275.0
+          }
+        },
+        "event_id": "liquid_universe-2026-03-06-3081",
+        "intraday": {
+          "buy_orders": [
+            {
+              "capacity_qty": 1996,
+              "channel": "odd",
+              "date": "2026-03-09",
+              "failure": null,
+              "filled_qty": 652,
+              "reference_price": 1375.0,
+              "requested_qty": 652,
+              "source_volume": 199669
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 901813.0,
+            "buy_qty": 652,
+            "buy_vwap": 1375.0,
+            "closed": true,
+            "ending_market_value": 0.0,
+            "entry_date": "2026-03-09",
+            "event_id": "liquid_universe-2026-03-06-3081",
+            "exit_date": "2026-04-29",
+            "name": "聯亞",
+            "net_pnl": 716871.0,
+            "net_return": 0.7949220071123393,
+            "other_cash_inflow": 0.0,
+            "pnl_includes_terminal_mark": false,
+            "sell_cash_inflow": 1618684.0,
+            "sell_qty": 652,
+            "sell_reasons": {
+              "three_black": 1
+            },
+            "sell_vwap": 2505.0,
+            "stock_id": "3081",
+            "total_cost": 19889.0
+          }
+        },
+        "stock_id": "3081"
+      },
+      {
+        "afterhours": {
+          "buy_orders": [
+            {
+              "capacity_qty": 29,
+              "channel": "odd",
+              "date": "2025-10-31",
+              "failure": "partial_auction_capacity",
+              "filled_qty": 29,
+              "reference_price": 1065.0,
+              "requested_qty": 316,
+              "source_volume": 2945
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 31068.0,
+            "buy_qty": 29,
+            "buy_vwap": 1065.0,
+            "closed": true,
+            "ending_market_value": 0.0,
+            "entry_date": "2025-10-31",
+            "event_id": "liquid_universe-2025-10-30-8299",
+            "exit_date": "2026-01-30",
+            "name": "群聯",
+            "net_pnl": 37804.62,
+            "net_return": 1.2168346852066434,
+            "other_cash_inflow": 180.62,
+            "pnl_includes_terminal_mark": false,
+            "sell_cash_inflow": 68692.0,
+            "sell_qty": 29,
+            "sell_reasons": {
+              "time63": 1
+            },
+            "sell_vwap": 2390.0,
+            "stock_id": "8299",
+            "total_cost": 801.0
+          }
+        },
+        "event_id": "liquid_universe-2025-10-30-8299",
+        "intraday": {
+          "buy_orders": [
+            {
+              "capacity_qty": 2319,
+              "channel": "odd",
+              "date": "2025-10-31",
+              "failure": null,
+              "filled_qty": 501,
+              "reference_price": 1052.5,
+              "requested_qty": 501,
+              "source_volume": 231911
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 530426.5,
+            "buy_qty": 501,
+            "buy_vwap": 1052.5,
+            "closed": true,
+            "ending_market_value": 0.0,
+            "entry_date": "2025-10-31",
+            "event_id": "liquid_universe-2025-10-30-8299",
+            "exit_date": "2026-01-30",
+            "name": "群聯",
+            "net_pnl": 659396.89,
+            "net_return": 1.2431446958249635,
+            "other_cash_inflow": 3120.39,
+            "pnl_includes_terminal_mark": false,
+            "sell_cash_inflow": 1186703.0,
+            "sell_qty": 501,
+            "sell_reasons": {
+              "time63": 1
+            },
+            "sell_vwap": 2390.0,
+            "stock_id": "8299",
+            "total_cost": 13811.0
+          }
+        },
+        "stock_id": "8299"
+      },
+      {
+        "afterhours": {
+          "buy_orders": [
+            {
+              "capacity_qty": 18,
+              "channel": "odd",
+              "date": "2024-06-06",
+              "failure": "partial_auction_capacity",
+              "filled_qty": 18,
+              "reference_price": 456.0,
+              "requested_qty": 699,
+              "source_volume": 1894
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 8265.0,
+            "buy_qty": 18,
+            "buy_vwap": 456.0,
+            "closed": true,
+            "ending_market_value": 0.0,
+            "entry_date": "2024-06-06",
+            "event_id": "liquid_universe-2024-06-05-6446",
+            "exit_date": "2024-09-03",
+            "name": "藥華藥",
+            "net_pnl": 3935.0,
+            "net_return": 0.47610405323653965,
+            "other_cash_inflow": 0.0,
+            "pnl_includes_terminal_mark": false,
+            "sell_cash_inflow": 12200.0,
+            "sell_qty": 18,
+            "sell_reasons": {
+              "three_black": 1
+            },
+            "sell_vwap": 684.0,
+            "stock_id": "6446",
+            "total_cost": 169.0
+          }
+        },
+        "event_id": "liquid_universe-2024-06-05-6446",
+        "intraday": {
+          "buy_orders": [
+            {
+              "capacity_qty": 1382,
+              "channel": "odd",
+              "date": "2024-06-06",
+              "failure": null,
+              "filled_qty": 773,
+              "reference_price": 468.5,
+              "requested_qty": 773,
+              "source_volume": 138228
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 364296.5,
+            "buy_qty": 773,
+            "buy_vwap": 468.5,
+            "closed": true,
+            "ending_market_value": 0.0,
+            "entry_date": "2024-06-06",
+            "event_id": "liquid_universe-2024-06-05-6446",
+            "exit_date": "2024-09-04",
+            "name": "藥華藥",
+            "net_pnl": 156980.5,
+            "net_return": 0.43091410430789207,
+            "other_cash_inflow": 0.0,
+            "pnl_includes_terminal_mark": false,
+            "sell_cash_inflow": 521277.0,
+            "sell_qty": 773,
+            "sell_reasons": {
+              "three_black": 2
+            },
+            "sell_vwap": 680.4294954721863,
+            "stock_id": "6446",
+            "total_cost": 6841.0
+          }
+        },
+        "stock_id": "6446"
+      },
+      {
+        "afterhours": {
+          "buy_orders": [
+            {
+              "capacity_qty": 3,
+              "channel": "odd",
+              "date": "2026-08-14",
+              "failure": "partial_auction_capacity",
+              "filled_qty": 3,
+              "reference_price": 474.0,
+              "requested_qty": 828,
+              "source_volume": 384
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 1449.0,
+            "buy_qty": 3,
+            "buy_vwap": 474.0,
+            "closed": false,
+            "ending_market_value": 1830.0,
+            "entry_date": "2026-08-14",
+            "event_id": "liquid_universe-2026-08-13-7711",
+            "exit_date": null,
+            "name": "永擎",
+            "net_pnl": 381.0,
+            "net_return": 0.2629399585921325,
+            "other_cash_inflow": 0.0,
+            "pnl_includes_terminal_mark": true,
+            "sell_cash_inflow": 0.0,
+            "sell_qty": 0,
+            "sell_reasons": {},
+            "sell_vwap": null,
+            "stock_id": "7711",
+            "total_cost": 27.0
+          }
+        },
+        "event_id": "liquid_universe-2026-08-13-7711",
+        "intraday": {
+          "buy_orders": [
+            {
+              "capacity_qty": 6000,
+              "channel": "board",
+              "date": "2026-08-14",
+              "failure": null,
+              "filled_qty": 1000,
+              "reference_price": 485.0,
+              "requested_qty": 1000,
+              "source_volume": 938000
+            },
+            {
+              "capacity_qty": 550,
+              "channel": "odd",
+              "date": "2026-08-14",
+              "failure": null,
+              "filled_qty": 489,
+              "reference_price": 480.75,
+              "requested_qty": 489,
+              "source_volume": 55049
+            }
+          ],
+          "cohort": {
+            "buy_cash_outflow": 724353.75,
+            "buy_qty": 1489,
+            "buy_vwap": 483.60426460711886,
+            "closed": false,
+            "ending_market_value": 908290.0,
+            "entry_date": "2026-08-14",
+            "event_id": "liquid_universe-2026-08-13-7711",
+            "exit_date": null,
+            "name": "永擎",
+            "net_pnl": 183936.25,
+            "net_return": 0.25393152171849737,
+            "other_cash_inflow": 0.0,
+            "pnl_includes_terminal_mark": true,
+            "sell_cash_inflow": 0.0,
+            "sell_qty": 0,
+            "sell_reasons": {},
+            "sell_vwap": null,
+            "stock_id": "7711",
+            "total_cost": 4267.0
+          }
+        },
+        "stock_id": "7711"
+      }
+    ],
+    "analysis": "independent_intraday_cohort_cash_flow_drawdown_and_afterhours_comparison_v1",
+    "best_cohorts": [
+      {
+        "buy_cash_outflow": 949935.0,
+        "buy_qty": 6463,
+        "buy_vwap": 146.11465263809376,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-11",
+        "event_id": "liquid_universe-2026-02-10-5386",
+        "exit_date": "2026-03-31",
+        "name": "青雲",
+        "net_pnl": 870307.75,
+        "net_return": 0.9161761067862538,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1820242.75,
+        "sell_qty": 6463,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 284.1768141729847,
+        "stock_id": "5386",
+        "total_cost": 21988.0
+      },
+      {
+        "buy_cash_outflow": 563343.75,
+        "buy_qty": 8085,
+        "buy_vwap": 69.26576994434137,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-17",
+        "event_id": "liquid_universe-2025-09-16-2408",
+        "exit_date": "2025-12-19",
+        "name": "南亞科",
+        "net_pnl": 842719.5,
+        "net_return": 1.495924113829256,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1406063.25,
+        "sell_qty": 8085,
+        "sell_reasons": {
+          "time63": 2
+        },
+        "sell_vwap": 175.47634508348793,
+        "stock_id": "2408",
+        "total_cost": 15993.0
+      },
+      {
+        "buy_cash_outflow": 901813.0,
+        "buy_qty": 652,
+        "buy_vwap": 1375.0,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-03-09",
+        "event_id": "liquid_universe-2026-03-06-3081",
+        "exit_date": "2026-04-29",
+        "name": "聯亞",
+        "net_pnl": 716871.0,
+        "net_return": 0.7949220071123393,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1618684.0,
+        "sell_qty": 652,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "sell_vwap": 2505.0,
+        "stock_id": "3081",
+        "total_cost": 19889.0
+      },
+      {
+        "buy_cash_outflow": 530426.5,
+        "buy_qty": 501,
+        "buy_vwap": 1052.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-10-31",
+        "event_id": "liquid_universe-2025-10-30-8299",
+        "exit_date": "2026-01-30",
+        "name": "群聯",
+        "net_pnl": 659396.89,
+        "net_return": 1.2431446958249635,
+        "other_cash_inflow": 3120.39,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1186703.0,
+        "sell_qty": 501,
+        "sell_reasons": {
+          "time63": 1
+        },
+        "sell_vwap": 2390.0,
+        "stock_id": "8299",
+        "total_cost": 13811.0
+      },
+      {
+        "buy_cash_outflow": 342126.0,
+        "buy_qty": 1146,
+        "buy_vwap": 296.78010471204186,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-11-12",
+        "event_id": "liquid_universe-2024-11-11-5314",
+        "exit_date": "2025-02-20",
+        "name": "世紀*",
+        "net_pnl": 583174.0,
+        "net_return": 1.7045591390306496,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 925300.0,
+        "sell_qty": 1146,
+        "sell_reasons": {
+          "time63": 3
+        },
+        "sell_vwap": 814.6937172774869,
+        "stock_id": "5314",
+        "total_cost": 10355.0
+      },
+      {
+        "buy_cash_outflow": 537632.63,
+        "buy_qty": 11363,
+        "buy_vwap": 47.03560943412831,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-03",
+        "event_id": "liquid_universe-2025-07-02-8021",
+        "exit_date": "2025-09-15",
+        "name": "尖點",
+        "net_pnl": 403871.82,
+        "net_return": 0.7512040703333055,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 941504.45,
+        "sell_qty": 11363,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 83.60322538062131,
+        "stock_id": "8021",
+        "total_cost": 11646.0
+      },
+      {
+        "buy_cash_outflow": 924829.0,
+        "buy_qty": 5297,
+        "buy_vwap": 173.56635831602793,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-27",
+        "event_id": "liquid_universe-2026-01-26-2313",
+        "exit_date": "2026-03-23",
+        "name": "華通",
+        "net_pnl": 208547.5,
+        "net_return": 0.2254984434960409,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1133376.5,
+        "sell_qty": 5297,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 215.89248631300737,
+        "stock_id": "2313",
+        "total_cost": 15654.0
+      },
+      {
+        "buy_cash_outflow": 724353.75,
+        "buy_qty": 1489,
+        "buy_vwap": 483.60426460711886,
+        "closed": false,
+        "ending_market_value": 908290.0,
+        "entry_date": "2026-08-14",
+        "event_id": "liquid_universe-2026-08-13-7711",
+        "exit_date": null,
+        "name": "永擎",
+        "net_pnl": 183936.25,
+        "net_return": 0.25393152171849737,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_qty": 0,
+        "sell_reasons": {},
+        "sell_vwap": null,
+        "stock_id": "7711",
+        "total_cost": 4267.0
+      },
+      {
+        "buy_cash_outflow": 388305.6,
+        "buy_qty": 4924,
+        "buy_vwap": 78.39512591389114,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-14",
+        "event_id": "liquid_universe-2024-06-13-8028",
+        "exit_date": "2024-07-17",
+        "name": "昇陽半導體",
+        "net_pnl": 175071.4,
+        "net_return": 0.4508598382305071,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 563377.0,
+        "sell_qty": 4924,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 115.44476035743298,
+        "stock_id": "8028",
+        "total_cost": 7361.0
+      },
+      {
+        "buy_cash_outflow": 364296.5,
+        "buy_qty": 773,
+        "buy_vwap": 468.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-06",
+        "event_id": "liquid_universe-2024-06-05-6446",
+        "exit_date": "2024-09-04",
+        "name": "藥華藥",
+        "net_pnl": 156980.5,
+        "net_return": 0.43091410430789207,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 521277.0,
+        "sell_qty": 773,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 680.4294954721863,
+        "stock_id": "6446",
+        "total_cost": 6841.0
+      }
+    ],
+    "checks": {
+      "cohort_pnl_sum": 1822440.17,
+      "daily_drawdowns_recomputed": 666,
+      "unmatched_cash_rows": 0
+    },
+    "cohorts": [
+      {
+        "buy_cash_outflow": 316515.85,
+        "buy_qty": 7313,
+        "buy_vwap": 43.02609736086421,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-2362",
+        "exit_date": "2024-01-18",
+        "name": "藍天",
+        "net_pnl": -14340.75,
+        "net_return": -0.04530815755356327,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 302175.1,
+        "sell_qty": 7313,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 41.69535074524819,
+        "stock_id": "2362",
+        "total_cost": 4609.0
+      },
+      {
+        "buy_cash_outflow": 295665.3,
+        "buy_qty": 18172,
+        "buy_vwap": 16.173580233325996,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-8096",
+        "exit_date": "2024-02-05",
+        "name": "擎亞",
+        "net_pnl": 127723.3,
+        "net_return": 0.4319861004994499,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 423388.6,
+        "sell_qty": 18172,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 23.50949812898965,
+        "stock_id": "8096",
+        "total_cost": 5585.0
+      },
+      {
+        "buy_cash_outflow": 290395.5,
+        "buy_qty": 598,
+        "buy_vwap": 482.75,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-02",
+        "event_id": "liquid_universe-2023-12-29-6415",
+        "exit_date": "2024-01-18",
+        "name": "矽力*-KY",
+        "net_pnl": -45644.5,
+        "net_return": -0.15718046595074647,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 244751.0,
+        "sell_qty": 598,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 412.96822742474916,
+        "stock_id": "6415",
+        "total_cost": 3915.0
+      },
+      {
+        "buy_cash_outflow": 285241.0,
+        "buy_qty": 204,
+        "buy_vwap": 1390.0,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-18",
+        "event_id": "liquid_universe-2024-01-17-6643",
+        "exit_date": "2024-02-22",
+        "name": "M31",
+        "net_pnl": 52536.0,
+        "net_return": 0.18418109598549998,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 337777.0,
+        "sell_qty": 204,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 1670.686274509804,
+        "stock_id": "6643",
+        "total_cost": 4724.0
+      },
+      {
+        "buy_cash_outflow": 226481.2,
+        "buy_qty": 2304,
+        "buy_vwap": 97.7201388888889,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-18",
+        "event_id": "liquid_universe-2024-01-17-6684",
+        "exit_date": "2024-01-31",
+        "name": "安格",
+        "net_pnl": -20514.8,
+        "net_return": -0.0905805868213344,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 205966.4,
+        "sell_qty": 2304,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 90.20763888888888,
+        "stock_id": "6684",
+        "total_cost": 3206.0
+      },
+      {
+        "buy_cash_outflow": 281114.6,
+        "buy_qty": 3232,
+        "buy_vwap": 86.46584158415841,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-01-30",
+        "event_id": "liquid_universe-2024-01-29-2467",
+        "exit_date": "2024-03-12",
+        "name": "志聖",
+        "net_pnl": 106201.4,
+        "net_return": 0.37778685276396173,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 387316.0,
+        "sell_qty": 3232,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 120.91707920792079,
+        "stock_id": "2467",
+        "total_cost": 5145.0
+      },
+      {
+        "buy_cash_outflow": 349056.0,
+        "buy_qty": 2000,
+        "buy_vwap": 173.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-02-16",
+        "event_id": "liquid_universe-2024-02-15-6584",
+        "exit_date": "2024-03-28",
+        "name": "南俊國際",
+        "net_pnl": 9218.0,
+        "net_return": 0.026408370003667032,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 358274.0,
+        "sell_qty": 2000,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "sell_vwap": 180.75,
+        "stock_id": "6584",
+        "total_cost": 5282.0
+      },
+      {
+        "buy_cash_outflow": 393170.63,
+        "buy_qty": 14149,
+        "buy_vwap": 27.623198105873207,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-02-23",
+        "event_id": "liquid_universe-2024-02-22-1809",
+        "exit_date": "2024-03-18",
+        "name": "中釉",
+        "net_pnl": -1125.58,
+        "net_return": -0.0028628282839946615,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 392045.05,
+        "sell_qty": 14149,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 27.95886988479751,
+        "stock_id": "1809",
+        "total_cost": 5875.0
+      },
+      {
+        "buy_cash_outflow": 407117.9,
+        "buy_qty": 8142,
+        "buy_vwap": 49.7063252272169,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-13",
+        "event_id": "liquid_universe-2024-03-12-2543",
+        "exit_date": "2024-03-19",
+        "name": "皇昌",
+        "net_pnl": -50157.42,
+        "net_return": -0.12320121517624255,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 356960.48,
+        "sell_qty": 8142,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 44.24054040776222,
+        "stock_id": "2543",
+        "total_cost": 5655.0
+      },
+      {
+        "buy_cash_outflow": 373737.5,
+        "buy_qty": 1451,
+        "buy_vwap": 256.05410062026186,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-19",
+        "event_id": "liquid_universe-2024-03-18-2385",
+        "exit_date": "2024-03-26",
+        "name": "群光",
+        "net_pnl": -55846.25,
+        "net_return": -0.14942640222081005,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 317891.25,
+        "sell_qty": 1451,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 221.05737422467263,
+        "stock_id": "2385",
+        "total_cost": 5066.0
+      },
+      {
+        "buy_cash_outflow": 253976.0,
+        "buy_qty": 2044,
+        "buy_vwap": 123.51614481409003,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-19",
+        "event_id": "liquid_universe-2024-03-18-4912",
+        "exit_date": "2024-04-15",
+        "name": "聯德控股-KY",
+        "net_pnl": 13105.51,
+        "net_return": 0.05160137178316061,
+        "other_cash_inflow": 1580.01,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 265501.5,
+        "sell_qty": 2044,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 131.07852250489236,
+        "stock_id": "4912",
+        "total_cost": 3932.0
+      },
+      {
+        "buy_cash_outflow": 330984.45,
+        "buy_qty": 15101,
+        "buy_vwap": 21.78785841997219,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-27",
+        "event_id": "liquid_universe-2024-03-26-1616",
+        "exit_date": "2024-04-30",
+        "name": "億泰",
+        "net_pnl": 29382.58,
+        "net_return": 0.08877329433452236,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 360367.03,
+        "sell_qty": 15101,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 24.079731805840673,
+        "stock_id": "1616",
+        "total_cost": 5227.0
+      },
+      {
+        "buy_cash_outflow": 318237.7,
+        "buy_qty": 10396,
+        "buy_vwap": 30.43080992689496,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-03-29",
+        "event_id": "liquid_universe-2024-03-28-1608",
+        "exit_date": "2024-04-24",
+        "name": "華榮",
+        "net_pnl": 72730.9,
+        "net_return": 0.22854268994528304,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 390968.6,
+        "sell_qty": 10396,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 37.94619084263178,
+        "stock_id": "1608",
+        "total_cost": 5399.0
+      },
+      {
+        "buy_cash_outflow": 365137.05,
+        "buy_qty": 8333,
+        "buy_vwap": 43.56006840273611,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-04-15",
+        "event_id": "liquid_universe-2024-04-12-4513",
+        "exit_date": "2024-05-16",
+        "name": "福裕",
+        "net_pnl": -57879.17,
+        "net_return": -0.15851354991228636,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 307257.88,
+        "sell_qty": 8333,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "sell_vwap": 37.2144341773671,
+        "stock_id": "4513",
+        "total_cost": 5001.0
+      },
+      {
+        "buy_cash_outflow": 335317.25,
+        "buy_qty": 3101,
+        "buy_vwap": 107.49346984843599,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-04-25",
+        "event_id": "liquid_universe-2024-04-24-6449",
+        "exit_date": "2024-05-15",
+        "name": "鈺邦",
+        "net_pnl": 12138.0,
+        "net_return": 0.03619855524879797,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 347455.25,
+        "sell_qty": 3101,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 113.0629635601419,
+        "stock_id": "6449",
+        "total_cost": 5133.0
+      },
+      {
+        "buy_cash_outflow": 370279.0,
+        "buy_qty": 1148,
+        "buy_vwap": 320.64285714285717,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-02",
+        "event_id": "liquid_universe-2024-04-30-6230",
+        "exit_date": "2024-05-16",
+        "name": "尼得科超眾",
+        "net_pnl": -36148.25,
+        "net_return": -0.09762435892934787,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 334130.75,
+        "sell_qty": 1148,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "sell_vwap": 293.68358013937285,
+        "stock_id": "6230",
+        "total_cost": 5199.0
+      },
+      {
+        "buy_cash_outflow": 379435.0,
+        "buy_qty": 5464,
+        "buy_vwap": 69.03367496339678,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-13",
+        "event_id": "liquid_universe-2024-05-10-2615",
+        "exit_date": "2024-06-13",
+        "name": "萬海",
+        "net_pnl": 98802.6,
+        "net_return": 0.2603940068786485,
+        "other_cash_inflow": 8196.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 470041.6,
+        "sell_qty": 5464,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 86.79970717423133,
+        "stock_id": "2615",
+        "total_cost": 6467.0
+      },
+      {
+        "buy_cash_outflow": 329062.65,
+        "buy_qty": 4667,
+        "buy_vwap": 70.09291836297407,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-15",
+        "event_id": "liquid_universe-2024-05-14-2609",
+        "exit_date": "2024-07-09",
+        "name": "陽明",
+        "net_pnl": -9664.45,
+        "net_return": -0.029369635235114044,
+        "other_cash_inflow": 9334.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 310064.2,
+        "sell_qty": 4667,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 67.03561174201843,
+        "stock_id": "2609",
+        "total_cost": 4730.0
+      },
+      {
+        "buy_cash_outflow": 289793.25,
+        "buy_qty": 1249,
+        "buy_vwap": 230.6527221777422,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-05-15",
+        "event_id": "liquid_universe-2024-05-14-6664",
+        "exit_date": "2024-06-07",
+        "name": "群翊",
+        "net_pnl": 4207.75,
+        "net_return": 0.014519834399179416,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 294001.0,
+        "sell_qty": 1249,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 237.5092073658927,
+        "stock_id": "6664",
+        "total_cost": 4356.0
+      },
+      {
+        "buy_cash_outflow": 364296.5,
+        "buy_qty": 773,
+        "buy_vwap": 468.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-06",
+        "event_id": "liquid_universe-2024-06-05-6446",
+        "exit_date": "2024-09-04",
+        "name": "藥華藥",
+        "net_pnl": 156980.5,
+        "net_return": 0.43091410430789207,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 521277.0,
+        "sell_qty": 773,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 680.4294954721863,
+        "stock_id": "6446",
+        "total_cost": 6841.0
+      },
+      {
+        "buy_cash_outflow": 388305.6,
+        "buy_qty": 4924,
+        "buy_vwap": 78.39512591389114,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-06-14",
+        "event_id": "liquid_universe-2024-06-13-8028",
+        "exit_date": "2024-07-17",
+        "name": "昇陽半導體",
+        "net_pnl": 175071.4,
+        "net_return": 0.4508598382305071,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 563377.0,
+        "sell_qty": 4924,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 115.44476035743298,
+        "stock_id": "8028",
+        "total_cost": 7361.0
+      },
+      {
+        "buy_cash_outflow": 401853.15,
+        "buy_qty": 21218,
+        "buy_vwap": 18.82699359034782,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-10",
+        "event_id": "liquid_universe-2024-07-09-6152",
+        "exit_date": "2024-08-02",
+        "name": "百一",
+        "net_pnl": -68140.57,
+        "net_return": -0.1695658476236904,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 333712.58,
+        "sell_qty": 21218,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "sell_vwap": 15.872918276934676,
+        "stock_id": "6152",
+        "total_cost": 5461.0
+      },
+      {
+        "buy_cash_outflow": 417525.5,
+        "buy_qty": 2198,
+        "buy_vwap": 188.83780709736124,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-18",
+        "event_id": "liquid_universe-2024-07-17-1799",
+        "exit_date": "2024-07-26",
+        "name": "易威",
+        "net_pnl": -73924.25,
+        "net_return": -0.17705325782497117,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 343601.25,
+        "sell_qty": 2198,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "sell_vwap": 157.7339626933576,
+        "stock_id": "1799",
+        "total_cost": 5558.0
+      },
+      {
+        "buy_cash_outflow": 449026.75,
+        "buy_qty": 2603,
+        "buy_vwap": 171.48741836342683,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-26",
+        "event_id": "liquid_universe-2024-07-23-9906",
+        "exit_date": "2024-08-09",
+        "name": "欣巴巴",
+        "net_pnl": 26328.75,
+        "net_return": 0.0586351481287028,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 475355.5,
+        "sell_qty": 2603,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 184.26219746446407,
+        "stock_id": "9906",
+        "total_cost": 6924.0
+      },
+      {
+        "buy_cash_outflow": 398163.5,
+        "buy_qty": 3589,
+        "buy_vwap": 110.28629144608526,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-07-31",
+        "event_id": "liquid_universe-2024-07-30-2524",
+        "exit_date": "2024-10-11",
+        "name": "京城",
+        "net_pnl": -56470.85,
+        "net_return": -0.14182829415554163,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 341692.65,
+        "sell_qty": 3589,
+        "sell_reasons": {
+          "three_black": 8
+        },
+        "sell_vwap": 96.08042630259126,
+        "stock_id": "2524",
+        "total_cost": 5486.0
+      },
+      {
+        "buy_cash_outflow": 440057.25,
+        "buy_qty": 2151,
+        "buy_vwap": 203.37715016271503,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-08-12",
+        "event_id": "liquid_universe-2024-08-09-1799",
+        "exit_date": "2024-08-30",
+        "name": "易威",
+        "net_pnl": 4806.25,
+        "net_return": 0.010921874369755299,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 444863.5,
+        "sell_qty": 2151,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 208.67945141794513,
+        "stock_id": "1799",
+        "total_cost": 6599.0
+      },
+      {
+        "buy_cash_outflow": 458932.5,
+        "buy_qty": 4025,
+        "buy_vwap": 113.34472049689441,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-08-30",
+        "event_id": "liquid_universe-2024-08-29-5386",
+        "exit_date": "2024-09-04",
+        "name": "青雲",
+        "net_pnl": -80496.25,
+        "net_return": -0.17539888763598133,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 378436.25,
+        "sell_qty": 4025,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 94.87236024844721,
+        "stock_id": "5386",
+        "total_cost": 6145.0
+      },
+      {
+        "buy_cash_outflow": 422753.5,
+        "buy_qty": 7293,
+        "buy_vwap": 57.625325654737416,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-09-06",
+        "event_id": "liquid_universe-2024-09-05-3581",
+        "exit_date": "2024-09-18",
+        "name": "博磊",
+        "net_pnl": -60625.15,
+        "net_return": -0.14340543602832384,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 362128.35,
+        "sell_qty": 7293,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "sell_vwap": 50.11221033868093,
+        "stock_id": "3581",
+        "total_cost": 5832.0
+      },
+      {
+        "buy_cash_outflow": 373834.75,
+        "buy_qty": 4135,
+        "buy_vwap": 89.8741837968561,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-09-06",
+        "event_id": "liquid_universe-2024-09-05-4563",
+        "exit_date": "2024-10-17",
+        "name": "百德",
+        "net_pnl": 79126.75,
+        "net_return": 0.2116623722112511,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 452961.5,
+        "sell_qty": 4135,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 110.53434099153567,
+        "stock_id": "4563",
+        "total_cost": 6303.0
+      },
+      {
+        "buy_cash_outflow": 398285.55,
+        "buy_qty": 6223,
+        "buy_vwap": 63.62502812148481,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-09-13",
+        "event_id": "liquid_universe-2024-09-12-6530",
+        "exit_date": "2024-11-11",
+        "name": "創威",
+        "net_pnl": 109125.6,
+        "net_return": 0.2739883483093976,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 507411.15,
+        "sell_qty": 6223,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 82.27529326691307,
+        "stock_id": "6530",
+        "total_cost": 6935.0
+      },
+      {
+        "buy_cash_outflow": 421401.75,
+        "buy_qty": 1337,
+        "buy_vwap": 313.3274121166791,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-01",
+        "event_id": "liquid_universe-2024-09-30-3081",
+        "exit_date": "2024-12-04",
+        "name": "聯亞",
+        "net_pnl": 23864.25,
+        "net_return": 0.056630638102475844,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 445266.0,
+        "sell_qty": 1337,
+        "sell_reasons": {
+          "three_black": 5
+        },
+        "sell_vwap": 336.0344053851907,
+        "stock_id": "3081",
+        "total_cost": 6495.0
+      },
+      {
+        "buy_cash_outflow": 448278.4,
+        "buy_qty": 9666,
+        "buy_vwap": 46.10349679288227,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-17",
+        "event_id": "liquid_universe-2024-10-16-3149",
+        "exit_date": "2024-11-01",
+        "name": "正達",
+        "net_pnl": -68616.57,
+        "net_return": -0.1530668664829713,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 379661.83,
+        "sell_qty": 9666,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "sell_vwap": 39.63395716945996,
+        "stock_id": "3149",
+        "total_cost": 6082.0
+      },
+      {
+        "buy_cash_outflow": 403503.0,
+        "buy_qty": 5371,
+        "buy_vwap": 74.68348538447216,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-10-30",
+        "event_id": "liquid_universe-2024-10-29-3581",
+        "exit_date": "2024-11-20",
+        "name": "博磊",
+        "net_pnl": -69057.65,
+        "net_return": -0.17114531986131454,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 334445.35,
+        "sell_qty": 5371,
+        "sell_reasons": {
+          "loss12": 7
+        },
+        "sell_vwap": 62.845717743436985,
+        "stock_id": "3581",
+        "total_cost": 5477.0
+      },
+      {
+        "buy_cash_outflow": 342126.0,
+        "buy_qty": 1146,
+        "buy_vwap": 296.78010471204186,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-11-12",
+        "event_id": "liquid_universe-2024-11-11-5314",
+        "exit_date": "2025-02-20",
+        "name": "世紀*",
+        "net_pnl": 583174.0,
+        "net_return": 1.7045591390306496,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 925300.0,
+        "sell_qty": 1146,
+        "sell_reasons": {
+          "time63": 3
+        },
+        "sell_vwap": 814.6937172774869,
+        "stock_id": "5314",
+        "total_cost": 10355.0
+      },
+      {
+        "buy_cash_outflow": 378971.75,
+        "buy_qty": 2471,
+        "buy_vwap": 152.46408336705787,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-11-14",
+        "event_id": "liquid_universe-2024-11-13-3211",
+        "exit_date": "2024-12-12",
+        "name": "順達",
+        "net_pnl": 116208.5,
+        "net_return": 0.3066415900393631,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 495180.25,
+        "sell_qty": 2471,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 202.20163901254554,
+        "stock_id": "3211",
+        "total_cost": 6693.0
+      },
+      {
+        "buy_cash_outflow": 483433.0,
+        "buy_qty": 483,
+        "buy_vwap": 995.0,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-03",
+        "event_id": "liquid_universe-2024-12-02-6781",
+        "exit_date": "2024-12-16",
+        "name": "AES-KY",
+        "net_pnl": -31015.5,
+        "net_return": -0.06415677043147654,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 452417.5,
+        "sell_qty": 483,
+        "sell_reasons": {
+          "three_black": 5
+        },
+        "sell_vwap": 945.1149068322982,
+        "stock_id": "6781",
+        "total_cost": 6921.0
+      },
+      {
+        "buy_cash_outflow": 477641.0,
+        "buy_qty": 1987,
+        "buy_vwap": 238.9672873678913,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-16",
+        "event_id": "liquid_universe-2024-12-13-2368",
+        "exit_date": "2025-01-09",
+        "name": "金像電",
+        "net_pnl": -12036.75,
+        "net_return": -0.025200412024930858,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 465604.25,
+        "sell_qty": 1987,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 236.43545546049322,
+        "stock_id": "2368",
+        "total_cost": 7006.0
+      },
+      {
+        "buy_cash_outflow": 436483.5,
+        "buy_qty": 145,
+        "buy_vwap": 2992.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-16",
+        "event_id": "liquid_universe-2024-12-13-3661",
+        "exit_date": "2024-12-27",
+        "name": "世芯-KY",
+        "net_pnl": 31638.0,
+        "net_return": 0.07248383959531117,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 468121.5,
+        "sell_qty": 145,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "sell_vwap": 3257.5,
+        "stock_id": "3661",
+        "total_cost": 6787.0
+      },
+      {
+        "buy_cash_outflow": 574949.0,
+        "buy_qty": 4149,
+        "buy_vwap": 137.7589780670041,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2024-12-30",
+        "event_id": "liquid_universe-2024-12-27-4974",
+        "exit_date": "2025-01-13",
+        "name": "亞泰",
+        "net_pnl": -98657.0,
+        "net_return": -0.171592610822873,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 476292.0,
+        "sell_qty": 4149,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "sell_vwap": 115.83489997589781,
+        "stock_id": "4974",
+        "total_cost": 7694.0
+      },
+      {
+        "buy_cash_outflow": 269505.0,
+        "buy_qty": 557,
+        "buy_vwap": 481.0,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-01-09",
+        "event_id": "liquid_universe-2025-01-08-6683",
+        "exit_date": "2025-02-13",
+        "name": "雍智科技",
+        "net_pnl": -34137.75,
+        "net_return": -0.12666833639450104,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 235367.25,
+        "sell_qty": 557,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 426.3972172351885,
+        "stock_id": "6683",
+        "total_cost": 3724.0
+      },
+      {
+        "buy_cash_outflow": 574853.9,
+        "buy_qty": 11594,
+        "buy_vwap": 49.28988269794721,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-01-13",
+        "event_id": "liquid_universe-2025-01-10-6558",
+        "exit_date": "2025-02-17",
+        "name": "興能高",
+        "net_pnl": 72483.0,
+        "net_return": 0.12608942898360784,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 647336.9,
+        "sell_qty": 11594,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 56.33766603415559,
+        "stock_id": "6558",
+        "total_cost": 9229.0
+      },
+      {
+        "buy_cash_outflow": 368894.0,
+        "buy_qty": 2318,
+        "buy_vwap": 158.20578084555652,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-02-13",
+        "event_id": "liquid_universe-2025-02-12-4971",
+        "exit_date": "2025-03-14",
+        "name": "IET-KY",
+        "net_pnl": -76261.0,
+        "net_return": -0.20672876219184916,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 292633.0,
+        "sell_qty": 2318,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "sell_vwap": 127.38050043140639,
+        "stock_id": "4971",
+        "total_cost": 4808.0
+      },
+      {
+        "buy_cash_outflow": 578998.0,
+        "buy_qty": 13154,
+        "buy_vwap": 43.75672799148548,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-02-14",
+        "event_id": "liquid_universe-2025-02-13-2027",
+        "exit_date": "2025-03-13",
+        "name": "大成鋼",
+        "net_pnl": 49757.8,
+        "net_return": 0.08593777526001817,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 628755.8,
+        "sell_qty": 13154,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 48.23071309107496,
+        "stock_id": "2027",
+        "total_cost": 9093.0
+      },
+      {
+        "buy_cash_outflow": 635928.25,
+        "buy_qty": 3647,
+        "buy_vwap": 173.3428160131615,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-02-20",
+        "event_id": "liquid_universe-2025-02-19-6206",
+        "exit_date": "2025-02-27",
+        "name": "飛捷",
+        "net_pnl": -48449.0,
+        "net_return": -0.07618626786905598,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 587479.25,
+        "sell_qty": 3647,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 162.53639978064163,
+        "stock_id": "6206",
+        "total_cost": 9038.0
+      },
+      {
+        "buy_cash_outflow": 565598.95,
+        "buy_qty": 7231,
+        "buy_vwap": 77.75784123910938,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-11",
+        "event_id": "liquid_universe-2025-06-10-2429",
+        "exit_date": "2025-07-04",
+        "name": "銘旺科",
+        "net_pnl": -104826.3,
+        "net_return": -0.185336800925815,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 460772.65,
+        "sell_qty": 7231,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 64.29838888120592,
+        "stock_id": "2429",
+        "total_cost": 7501.0
+      },
+      {
+        "buy_cash_outflow": 559513.0,
+        "buy_qty": 7360,
+        "buy_vwap": 75.57282608695652,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-11",
+        "event_id": "liquid_universe-2025-06-10-4722",
+        "exit_date": "2025-06-25",
+        "name": "國精化",
+        "net_pnl": -47859.65,
+        "net_return": -0.08553804826697503,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 511653.35,
+        "sell_qty": 7360,
+        "sell_reasons": {
+          "three_black": 5
+        },
+        "sell_vwap": 70.15018342391305,
+        "stock_id": "4722",
+        "total_cost": 7949.0
+      },
+      {
+        "buy_cash_outflow": 542682.0,
+        "buy_qty": 3144,
+        "buy_vwap": 171.5916030534351,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-11",
+        "event_id": "liquid_universe-2025-06-10-6584",
+        "exit_date": "2025-07-03",
+        "name": "南俊國際",
+        "net_pnl": 7250.5,
+        "net_return": 0.01336049472803594,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 549932.5,
+        "sell_qty": 3144,
+        "sell_reasons": {
+          "three_black": 6
+        },
+        "sell_vwap": 176.4998409669211,
+        "stock_id": "6584",
+        "total_cost": 8181.0
+      },
+      {
+        "buy_cash_outflow": 515541.7,
+        "buy_qty": 17308,
+        "buy_vwap": 29.61045181418997,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-06-24",
+        "event_id": "liquid_universe-2025-06-23-5475",
+        "exit_date": "2025-07-01",
+        "name": "德宏",
+        "net_pnl": -14513.1,
+        "net_return": -0.02815116604534609,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 501028.6,
+        "sell_qty": 17308,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 29.208897619597874,
+        "stock_id": "5475",
+        "total_cost": 7563.0
+      },
+      {
+        "buy_cash_outflow": 537632.63,
+        "buy_qty": 11363,
+        "buy_vwap": 47.03560943412831,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-03",
+        "event_id": "liquid_universe-2025-07-02-8021",
+        "exit_date": "2025-09-15",
+        "name": "尖點",
+        "net_pnl": 403871.82,
+        "net_return": 0.7512040703333055,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 941504.45,
+        "sell_qty": 11363,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 83.60322538062131,
+        "stock_id": "8021",
+        "total_cost": 11646.0
+      },
+      {
+        "buy_cash_outflow": 535767.5,
+        "buy_qty": 3157,
+        "buy_vwap": 168.70810896420653,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-07",
+        "event_id": "liquid_universe-2025-07-04-6596",
+        "exit_date": "2025-07-18",
+        "name": "寬宏藝術",
+        "net_pnl": -96779.75,
+        "net_return": -0.1806375899993934,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 438987.75,
+        "sell_qty": 3157,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 140.30432372505544,
+        "stock_id": "6596",
+        "total_cost": 7109.0
+      },
+      {
+        "buy_cash_outflow": 520980.25,
+        "buy_qty": 2969,
+        "buy_vwap": 174.43928932300437,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-17",
+        "event_id": "liquid_universe-2025-07-16-8046",
+        "exit_date": "2025-08-11",
+        "name": "南電",
+        "net_pnl": -20156.5,
+        "net_return": -0.038689566447096604,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 500823.75,
+        "sell_qty": 2969,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 170.2030144829909,
+        "stock_id": "8046",
+        "total_cost": 7579.0
+      },
+      {
+        "buy_cash_outflow": 469112.75,
+        "buy_qty": 2661,
+        "buy_vwap": 175.2531942878617,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-07-23",
+        "event_id": "liquid_universe-2025-07-22-3167",
+        "exit_date": "2025-08-27",
+        "name": "大量",
+        "net_pnl": 78426.25,
+        "net_return": 0.1671799583362422,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 547539.0,
+        "sell_qty": 2661,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 207.61781285231118,
+        "stock_id": "3167",
+        "total_cost": 7696.0
+      },
+      {
+        "buy_cash_outflow": 547264.0,
+        "buy_qty": 5752,
+        "buy_vwap": 94.58275382475661,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-12",
+        "event_id": "liquid_universe-2025-08-11-5371",
+        "exit_date": "2025-08-15",
+        "name": "中強光電股份有限公司",
+        "net_pnl": -14066.8,
+        "net_return": -0.025703865045023973,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 533197.2,
+        "sell_qty": 5752,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 93.53254520166898,
+        "stock_id": "5371",
+        "total_cost": 8026.0
+      },
+      {
+        "buy_cash_outflow": 577253.8,
+        "buy_qty": 15621,
+        "buy_vwap": 36.73598361180463,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-18",
+        "event_id": "liquid_universe-2025-08-15-1802",
+        "exit_date": "2025-08-21",
+        "name": "台玻",
+        "net_pnl": -70941.8,
+        "net_return": -0.12289533650536384,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 506312.0,
+        "sell_qty": 15621,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 32.70418027014916,
+        "stock_id": "1802",
+        "total_cost": 7961.0
+      },
+      {
+        "buy_cash_outflow": 474028.6,
+        "buy_qty": 7713,
+        "buy_vwap": 61.09627900946454,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-22",
+        "event_id": "liquid_universe-2025-08-21-2402",
+        "exit_date": "2025-09-23",
+        "name": "毅嘉",
+        "net_pnl": -63119.45,
+        "net_return": -0.13315536235577347,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 410909.15,
+        "sell_qty": 7713,
+        "sell_reasons": {
+          "loss12": 4
+        },
+        "sell_vwap": 53.75588616621288,
+        "stock_id": "2402",
+        "total_cost": 6503.0
+      },
+      {
+        "buy_cash_outflow": 551111.0,
+        "buy_qty": 3016,
+        "buy_vwap": 181.6472148541114,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-08-28",
+        "event_id": "liquid_universe-2025-08-27-8033",
+        "exit_date": "2025-09-16",
+        "name": "雷虎",
+        "net_pnl": -91305.0,
+        "net_return": -0.16567442856339284,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 459806.0,
+        "sell_qty": 3016,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 153.8342175066313,
+        "stock_id": "8033",
+        "total_cost": 7421.0
+      },
+      {
+        "buy_cash_outflow": 560671.0,
+        "buy_qty": 1609,
+        "buy_vwap": 346.40646364201365,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-16",
+        "event_id": "liquid_universe-2025-09-15-5289",
+        "exit_date": "2025-09-25",
+        "name": "宜鼎",
+        "net_pnl": -8326.25,
+        "net_return": -0.014850509478820913,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 552344.75,
+        "sell_qty": 1609,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 346.3758545680547,
+        "stock_id": "5289",
+        "total_cost": 8277.0
+      },
+      {
+        "buy_cash_outflow": 563343.75,
+        "buy_qty": 8085,
+        "buy_vwap": 69.26576994434137,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-17",
+        "event_id": "liquid_universe-2025-09-16-2408",
+        "exit_date": "2025-12-19",
+        "name": "南亞科",
+        "net_pnl": 842719.5,
+        "net_return": 1.495924113829256,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1406063.25,
+        "sell_qty": 8085,
+        "sell_reasons": {
+          "time63": 2
+        },
+        "sell_vwap": 175.47634508348793,
+        "stock_id": "2408",
+        "total_cost": 15993.0
+      },
+      {
+        "buy_cash_outflow": 574461.5,
+        "buy_qty": 3363,
+        "buy_vwap": 169.81162652393695,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-22",
+        "event_id": "liquid_universe-2025-09-19-3675",
+        "exit_date": "2025-10-03",
+        "name": "德微",
+        "net_pnl": -72280.25,
+        "net_return": -0.12582261822593854,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 502181.25,
+        "sell_qty": 3363,
+        "sell_reasons": {
+          "three_black": 5
+        },
+        "sell_vwap": 150.6753642581029,
+        "stock_id": "3675",
+        "total_cost": 7925.0
+      },
+      {
+        "buy_cash_outflow": 538708.73,
+        "buy_qty": 23071,
+        "buy_vwap": 23.211682631875515,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-09-25",
+        "event_id": "liquid_universe-2025-09-24-6770",
+        "exit_date": "2025-11-05",
+        "name": "力積電",
+        "net_pnl": 105898.57,
+        "net_return": 0.19657852955158162,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 644607.3,
+        "sell_qty": 23071,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 28.192549087599154,
+        "stock_id": "6770",
+        "total_cost": 9015.0
+      },
+      {
+        "buy_cash_outflow": 565941.95,
+        "buy_qty": 7061,
+        "buy_vwap": 79.67624274182127,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-10-01",
+        "event_id": "liquid_universe-2025-09-30-3430",
+        "exit_date": "2025-10-30",
+        "name": "奇鈦科",
+        "net_pnl": -53136.2,
+        "net_return": -0.09388984152879991,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 512805.75,
+        "sell_qty": 7061,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 73.28108624840674,
+        "stock_id": "3430",
+        "total_cost": 7980.0
+      },
+      {
+        "buy_cash_outflow": 530426.5,
+        "buy_qty": 501,
+        "buy_vwap": 1052.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-10-31",
+        "event_id": "liquid_universe-2025-10-30-8299",
+        "exit_date": "2026-01-30",
+        "name": "群聯",
+        "net_pnl": 659396.89,
+        "net_return": 1.2431446958249635,
+        "other_cash_inflow": 3120.39,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1186703.0,
+        "sell_qty": 501,
+        "sell_reasons": {
+          "time63": 1
+        },
+        "sell_vwap": 2390.0,
+        "stock_id": "8299",
+        "total_cost": 13811.0
+      },
+      {
+        "buy_cash_outflow": 680962.3,
+        "buy_qty": 15402,
+        "buy_vwap": 43.95210362290612,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-11-06",
+        "event_id": "liquid_universe-2025-11-05-4989",
+        "exit_date": "2025-11-19",
+        "name": "榮科",
+        "net_pnl": -31159.95,
+        "net_return": -0.045758700591794876,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 649802.35,
+        "sell_qty": 15402,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 42.569429294896764,
+        "stock_id": "4989",
+        "total_cost": 9864.0
+      },
+      {
+        "buy_cash_outflow": 645865.35,
+        "buy_qty": 10617,
+        "buy_vwap": 60.47464914759348,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-11-25",
+        "event_id": "liquid_universe-2025-11-24-6209",
+        "exit_date": "2026-01-07",
+        "name": "今國光",
+        "net_pnl": 35201.0,
+        "net_return": 0.054502072297267536,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 681066.35,
+        "sell_qty": 10617,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 64.7280163888104,
+        "stock_id": "6209",
+        "total_cost": 9957.0
+      },
+      {
+        "buy_cash_outflow": 849786.3,
+        "buy_qty": 23412,
+        "buy_vwap": 36.083218007859216,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2025-12-22",
+        "event_id": "liquid_universe-2025-12-19-4927",
+        "exit_date": "2026-01-23",
+        "name": "泰鼎-KY",
+        "net_pnl": 13947.4,
+        "net_return": 0.01641283226147562,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 863733.7,
+        "sell_qty": 23412,
+        "sell_reasons": {
+          "three_black": 3
+        },
+        "sell_vwap": 37.22581154963267,
+        "stock_id": "4927",
+        "total_cost": 12803.0
+      },
+      {
+        "buy_cash_outflow": 933296.3,
+        "buy_qty": 12038,
+        "buy_vwap": 77.07113307858448,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-07",
+        "event_id": "liquid_universe-2026-01-06-8110",
+        "exit_date": "2026-01-26",
+        "name": "華東",
+        "net_pnl": -2067.8,
+        "net_return": -0.0022155879113631973,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 931228.5,
+        "sell_qty": 12038,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 78.05536633992358,
+        "stock_id": "8110",
+        "total_cost": 13916.0
+      },
+      {
+        "buy_cash_outflow": 1013851.0,
+        "buy_qty": 16185,
+        "buy_vwap": 62.272103799814644,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-23",
+        "event_id": "liquid_universe-2026-01-22-3149",
+        "exit_date": "2026-01-28",
+        "name": "正達",
+        "net_pnl": -92991.25,
+        "net_return": -0.09172082485493431,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 920859.75,
+        "sell_qty": 16185,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 57.40857275254866,
+        "stock_id": "3149",
+        "total_cost": 14275.0
+      },
+      {
+        "buy_cash_outflow": 924829.0,
+        "buy_qty": 5297,
+        "buy_vwap": 173.56635831602793,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-27",
+        "event_id": "liquid_universe-2026-01-26-2313",
+        "exit_date": "2026-03-23",
+        "name": "華通",
+        "net_pnl": 208547.5,
+        "net_return": 0.2254984434960409,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1133376.5,
+        "sell_qty": 5297,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 215.89248631300737,
+        "stock_id": "2313",
+        "total_cost": 15654.0
+      },
+      {
+        "buy_cash_outflow": 999457.0,
+        "buy_qty": 10612,
+        "buy_vwap": 93.62693177534867,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-01-30",
+        "event_id": "liquid_universe-2026-01-29-2337",
+        "exit_date": "2026-02-09",
+        "name": "旺宏",
+        "net_pnl": -65825.4,
+        "net_return": -0.06586116261129793,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 933631.6,
+        "sell_qty": 10612,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 88.77116471918582,
+        "stock_id": "2337",
+        "total_cost": 14296.0
+      },
+      {
+        "buy_cash_outflow": 1016337.25,
+        "buy_qty": 5217,
+        "buy_vwap": 193.66498945754265,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-02",
+        "event_id": "liquid_universe-2026-01-30-6285",
+        "exit_date": "2026-02-23",
+        "name": "啟碁",
+        "net_pnl": -115391.25,
+        "net_return": -0.11353637781159748,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 900946.0,
+        "sell_qty": 5217,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 174.24956871765383,
+        "stock_id": "6285",
+        "total_cost": 14101.0
+      },
+      {
+        "buy_cash_outflow": 949935.0,
+        "buy_qty": 6463,
+        "buy_vwap": 146.11465263809376,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-11",
+        "event_id": "liquid_universe-2026-02-10-5386",
+        "exit_date": "2026-03-31",
+        "name": "青雲",
+        "net_pnl": 870307.75,
+        "net_return": 0.9161761067862538,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1820242.75,
+        "sell_qty": 6463,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 284.1768141729847,
+        "stock_id": "5386",
+        "total_cost": 21988.0
+      },
+      {
+        "buy_cash_outflow": 1062999.1,
+        "buy_qty": 16541,
+        "buy_vwap": 63.88592588114383,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-24",
+        "event_id": "liquid_universe-2026-02-23-6202",
+        "exit_date": "2026-03-06",
+        "name": "盛群",
+        "net_pnl": -109065.35,
+        "net_return": -0.10260154500601176,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 953933.75,
+        "sell_qty": 16541,
+        "sell_reasons": {
+          "loss12": 3
+        },
+        "sell_vwap": 58.19017894927755,
+        "stock_id": "6202",
+        "total_cost": 14852.0
+      },
+      {
+        "buy_cash_outflow": 901813.0,
+        "buy_qty": 652,
+        "buy_vwap": 1375.0,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-03-09",
+        "event_id": "liquid_universe-2026-03-06-3081",
+        "exit_date": "2026-04-29",
+        "name": "聯亞",
+        "net_pnl": 716871.0,
+        "net_return": 0.7949220071123393,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1618684.0,
+        "sell_qty": 652,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "sell_vwap": 2505.0,
+        "stock_id": "3081",
+        "total_cost": 19889.0
+      },
+      {
+        "buy_cash_outflow": 460847.5,
+        "buy_qty": 329,
+        "buy_vwap": 1392.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-03-30",
+        "event_id": "liquid_universe-2026-03-27-6640",
+        "exit_date": "2026-04-17",
+        "name": "均華",
+        "net_pnl": 60854.5,
+        "net_return": 0.13204910518121504,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 521702.0,
+        "sell_qty": 329,
+        "sell_reasons": {
+          "three_black": 1
+        },
+        "sell_vwap": 1600.0,
+        "stock_id": "6640",
+        "total_cost": 7413.0
+      },
+      {
+        "buy_cash_outflow": 708695.0,
+        "buy_qty": 304,
+        "buy_vwap": 2317.5,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-01",
+        "event_id": "liquid_universe-2026-03-31-7734",
+        "exit_date": "2026-04-17",
+        "name": "印能科技",
+        "net_pnl": 25372.5,
+        "net_return": 0.03580172006293257,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 734067.5,
+        "sell_qty": 304,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 2436.439144736842,
+        "stock_id": "7734",
+        "total_cost": 10785.0
+      },
+      {
+        "buy_cash_outflow": 1411034.25,
+        "buy_qty": 21381,
+        "buy_vwap": 65.60601702446097,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-20",
+        "event_id": "liquid_universe-2026-04-17-3339",
+        "exit_date": "2026-04-29",
+        "name": "泰谷",
+        "net_pnl": -362185.75,
+        "net_return": -0.2566810479618053,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1048848.5,
+        "sell_qty": 21381,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "sell_vwap": 49.49836303259904,
+        "stock_id": "3339",
+        "total_cost": 17788.0
+      },
+      {
+        "buy_cash_outflow": 1573577.75,
+        "buy_qty": 5443,
+        "buy_vwap": 287.3982638250965,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-21",
+        "event_id": "liquid_universe-2026-04-20-6213",
+        "exit_date": "2026-05-15",
+        "name": "聯茂",
+        "net_pnl": -147572.0,
+        "net_return": -0.09378119384313867,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1426005.75,
+        "sell_qty": 5443,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 264.34829138342826,
+        "stock_id": "6213",
+        "total_cost": 22111.0
+      },
+      {
+        "buy_cash_outflow": 1317173.0,
+        "buy_qty": 5097,
+        "buy_vwap": 256.89896017265056,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-30",
+        "event_id": "liquid_universe-2026-04-29-2486",
+        "exit_date": "2026-05-29",
+        "name": "一詮",
+        "net_pnl": 21525.65,
+        "net_return": 0.016342310387473778,
+        "other_cash_inflow": 2540.65,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1336158.0,
+        "sell_qty": 5097,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 264.5065724936237,
+        "stock_id": "2486",
+        "total_cost": 19791.0
+      },
+      {
+        "buy_cash_outflow": 1336621.0,
+        "buy_qty": 1552,
+        "buy_vwap": 856.1520618556701,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-04",
+        "event_id": "liquid_universe-2026-04-30-3167",
+        "exit_date": "2026-05-11",
+        "name": "大量",
+        "net_pnl": -313099.0,
+        "net_return": -0.2342466563072105,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1023522.0,
+        "sell_qty": 1552,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 665.4252577319587,
+        "stock_id": "3167",
+        "total_cost": 17091.0
+      },
+      {
+        "buy_cash_outflow": 1185774.0,
+        "buy_qty": 5344,
+        "buy_vwap": 220.58158682634732,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-12",
+        "event_id": "liquid_universe-2026-05-11-6278",
+        "exit_date": "2026-06-01",
+        "name": "台表科",
+        "net_pnl": -19356.0,
+        "net_return": -0.01632351527356815,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1166418.0,
+        "sell_qty": 5344,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 220.2324101796407,
+        "stock_id": "6278",
+        "total_cost": 17490.0
+      },
+      {
+        "buy_cash_outflow": 1168460.75,
+        "buy_qty": 9619,
+        "buy_vwap": 120.75868073604325,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-20",
+        "event_id": "liquid_universe-2026-05-19-3055",
+        "exit_date": "2026-06-09",
+        "name": "蔚華科",
+        "net_pnl": -337128.15,
+        "net_return": -0.28852329870729504,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 831332.6,
+        "sell_qty": 9619,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 87.20444952697785,
+        "stock_id": "3055",
+        "total_cost": 14370.0
+      },
+      {
+        "buy_cash_outflow": 1262638.0,
+        "buy_qty": 68000,
+        "buy_vwap": 18.458823529411763,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-01",
+        "event_id": "liquid_universe-2026-05-29-6116",
+        "exit_date": "2026-06-10",
+        "name": "彩晶",
+        "net_pnl": -218045.0,
+        "net_return": -0.1726900346734377,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1044593.0,
+        "sell_qty": 68000,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "sell_vwap": 15.5,
+        "stock_id": "6116",
+        "total_cost": 16845.0
+      },
+      {
+        "buy_cash_outflow": 1173756.45,
+        "buy_qty": 15263,
+        "buy_vwap": 76.4490893009238,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-02",
+        "event_id": "liquid_universe-2026-06-01-2356",
+        "exit_date": "2026-06-09",
+        "name": "英業達",
+        "net_pnl": -140680.95,
+        "net_return": -0.11985531581104411,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1033075.5,
+        "sell_qty": 15263,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 68.29447028762367,
+        "stock_id": "2356",
+        "total_cost": 16217.0
+      },
+      {
+        "buy_cash_outflow": 1043623.75,
+        "buy_qty": 6031,
+        "buy_vwap": 172.021845465097,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-10",
+        "event_id": "liquid_universe-2026-06-09-2478",
+        "exit_date": "2026-07-09",
+        "name": "大毅",
+        "net_pnl": 48259.0,
+        "net_return": 0.04624176097947177,
+        "other_cash_inflow": 12062.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1079820.75,
+        "sell_qty": 6031,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 180.65938484496766,
+        "stock_id": "2478",
+        "total_cost": 15896.0
+      },
+      {
+        "buy_cash_outflow": 960595.0,
+        "buy_qty": 2267,
+        "buy_vwap": 421.23334803705336,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-11",
+        "event_id": "liquid_universe-2026-06-10-8454",
+        "exit_date": "2026-06-16",
+        "name": "富邦媒",
+        "net_pnl": -280745.5,
+        "net_return": -0.2922620875603142,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 679849.5,
+        "sell_qty": 2267,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 302.589986766652,
+        "stock_id": "8454",
+        "total_cost": 11781.0
+      },
+      {
+        "buy_cash_outflow": 967433.5,
+        "buy_qty": 5826,
+        "buy_vwap": 165.0764675592173,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-11",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "exit_date": "2026-09-22",
+        "name": "先進光",
+        "net_pnl": 59888.0,
+        "net_return": 0.061903996502085154,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1027321.5,
+        "sell_qty": 5826,
+        "sell_reasons": {
+          "time63": 4
+        },
+        "sell_vwap": 177.92215928595948,
+        "stock_id": "3362",
+        "total_cost": 14951.0
+      },
+      {
+        "buy_cash_outflow": 913361.5,
+        "buy_qty": 20130,
+        "buy_vwap": 45.105290611028316,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-17",
+        "event_id": "liquid_universe-2026-06-16-2243",
+        "exit_date": "2026-08-03",
+        "name": "宏旭-KY",
+        "net_pnl": -70836.32,
+        "net_return": -0.07755562282842007,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 842525.18,
+        "sell_qty": 20130,
+        "sell_reasons": {
+          "three_black": 7
+        },
+        "sell_vwap": 42.23468355688028,
+        "stock_id": "2243",
+        "total_cost": 13051.0
+      },
+      {
+        "buy_cash_outflow": 969177.6,
+        "buy_qty": 38521,
+        "buy_vwap": 25.011463876846395,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-14",
+        "event_id": "liquid_universe-2026-07-13-2332",
+        "exit_date": "2026-07-17",
+        "name": "友訊",
+        "net_pnl": -143905.37,
+        "net_return": -0.14848193973942445,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 825272.23,
+        "sell_qty": 38521,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 21.616994107110408,
+        "stock_id": "2332",
+        "total_cost": 13147.0
+      },
+      {
+        "buy_cash_outflow": 932030.3,
+        "buy_qty": 11201,
+        "buy_vwap": 82.71942683688957,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-20",
+        "event_id": "liquid_universe-2026-07-17-6505",
+        "exit_date": "2026-08-04",
+        "name": "台塑化",
+        "net_pnl": -197704.45,
+        "net_return": -0.21212234194532087,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 734325.85,
+        "sell_qty": 11201,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 66.1492589947326,
+        "stock_id": "6505",
+        "total_cost": 12102.0
+      },
+      {
+        "buy_cash_outflow": 706514.5,
+        "buy_qty": 1323,
+        "buy_vwap": 530.8779289493575,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-08-03",
+        "event_id": "liquid_universe-2026-07-31-2207",
+        "exit_date": "2026-08-17",
+        "name": "和泰車",
+        "net_pnl": -21511.0,
+        "net_return": -0.030446650422602792,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 685003.5,
+        "sell_qty": 1323,
+        "sell_reasons": {
+          "three_black": 4
+        },
+        "sell_vwap": 522.4319727891157,
+        "stock_id": "2207",
+        "total_cost": 10337.0
+      },
+      {
+        "buy_cash_outflow": 833257.0,
+        "buy_qty": 4224,
+        "buy_vwap": 196.10511363636363,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-08-05",
+        "event_id": "liquid_universe-2026-08-04-3231",
+        "exit_date": "2026-08-10",
+        "name": "緯創",
+        "net_pnl": -48984.0,
+        "net_return": -0.05878618481452901,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 784273.0,
+        "sell_qty": 4224,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 187.34280303030303,
+        "stock_id": "3231",
+        "total_cost": 11972.0
+      },
+      {
+        "buy_cash_outflow": 771693.25,
+        "buy_qty": 5105,
+        "buy_vwap": 150.27350636630754,
+        "closed": false,
+        "ending_market_value": 699385.0,
+        "entry_date": "2026-08-11",
+        "event_id": "liquid_universe-2026-08-10-6206",
+        "exit_date": null,
+        "name": "飛捷",
+        "net_pnl": -72308.25,
+        "net_return": -0.09370076775972837,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_qty": 0,
+        "sell_reasons": {},
+        "sell_vwap": null,
+        "stock_id": "6206",
+        "total_cost": 4547.0
+      },
+      {
+        "buy_cash_outflow": 724353.75,
+        "buy_qty": 1489,
+        "buy_vwap": 483.60426460711886,
+        "closed": false,
+        "ending_market_value": 908290.0,
+        "entry_date": "2026-08-14",
+        "event_id": "liquid_universe-2026-08-13-7711",
+        "exit_date": null,
+        "name": "永擎",
+        "net_pnl": 183936.25,
+        "net_return": 0.25393152171849737,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_qty": 0,
+        "sell_reasons": {},
+        "sell_vwap": null,
+        "stock_id": "7711",
+        "total_cost": 4267.0
+      },
+      {
+        "buy_cash_outflow": 709416.5,
+        "buy_qty": 1385,
+        "buy_vwap": 509.19675090252707,
+        "closed": false,
+        "ending_market_value": 752055.0,
+        "entry_date": "2026-09-22",
+        "event_id": "liquid_universe-2026-09-21-7799",
+        "exit_date": null,
+        "name": "禾榮科",
+        "net_pnl": 42638.5,
+        "net_return": 0.06010362036969819,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": true,
+        "sell_cash_inflow": 0.0,
+        "sell_qty": 0,
+        "sell_reasons": {},
+        "sell_vwap": null,
+        "stock_id": "7799",
+        "total_cost": 4179.0
+      }
+    ],
+    "counts": {
+      "closed_cohorts": 91,
+      "closed_losses": 53,
+      "closed_wins": 38,
+      "open_cohorts": 3,
+      "total_cohorts": 94
+    },
+    "maximum_drawdown": {
+      "loss_from_peak": -2770406.44,
+      "max_drawdown": -0.5236848779997308,
+      "peak_date": "2026-04-22",
+      "peak_nav": 5290216.61,
+      "trough_date": "2026-09-15",
+      "trough_nav": 2519810.17
+    },
+    "method": {
+      "attribution": "Cash ledger event_id, else uniquely mapped corporate action_id entitlement event_id; include dividend cash and terminal marked positions; no invented terminal liquidation.",
+      "comparison": "Same frozen event_id; changed portfolio NAV, fills and earlier holdings mean event comparisons are descriptive, not isolated causal attribution.",
+      "scope": "Intraday daily HL2 odd-lot proxy, not historical tick execution proof."
+    },
+    "source_refs": [
+      {
+        "path": ".cache/poc-intraday-20261005/online-v1/poc_red_executable.json",
+        "sha256": "cde9e48ed140deddcc960d8edbf69a91bff20767e7c0ffcc705fead4dbb41360"
+      },
+      {
+        "path": ".cache/poc-gap-20261004/cached-v2/poc_red_executable.json",
+        "sha256": "5988458a4c0831407f91c2dc3dbab5bb48a3e30b1a83279a6ee499c147e665e2"
+      }
+    ],
+    "supplementary_dividend_attribution": [
+      {
+        "action_id": "4912-cash-2024-04-01",
+        "cash_after": 162447.06,
+        "cash_change": 1580.01,
+        "cash_ledger_index": 57,
+        "date": "2024-04-30",
+        "event_id": "liquid_universe-2024-03-18-4912",
+        "kind": "dividend_payment",
+        "stock_id": "4912"
+      },
+      {
+        "action_id": "2615-cash-2024-06-13",
+        "cash_after": 70935.62,
+        "cash_change": 8196.0,
+        "cash_ledger_index": 94,
+        "date": "2024-07-12",
+        "event_id": "liquid_universe-2024-05-10-2615",
+        "kind": "dividend_payment",
+        "stock_id": "2615"
+      },
+      {
+        "action_id": "2609-cash-2024-07-09",
+        "cash_after": 452226.97,
+        "cash_change": 9334.0,
+        "cash_ledger_index": 106,
+        "date": "2024-07-31",
+        "event_id": "liquid_universe-2024-05-14-2609",
+        "kind": "dividend_payment",
+        "stock_id": "2609"
+      },
+      {
+        "action_id": "8299-cash-2025-12-16",
+        "cash_after": 359909.31,
+        "cash_change": 3120.39,
+        "cash_ledger_index": 322,
+        "date": "2026-01-13",
+        "event_id": "liquid_universe-2025-10-30-8299",
+        "kind": "dividend_payment",
+        "stock_id": "8299"
+      },
+      {
+        "action_id": "2486-cash-2026-05-25",
+        "cash_after": 118549.06,
+        "cash_change": 2540.65,
+        "cash_ledger_index": 406,
+        "date": "2026-06-30",
+        "event_id": "liquid_universe-2026-04-29-2486",
+        "kind": "dividend_payment",
+        "stock_id": "2486"
+      },
+      {
+        "action_id": "2478-cash-2026-07-09",
+        "cash_after": 769967.27,
+        "cash_change": 12062.0,
+        "cash_ledger_index": 419,
+        "date": "2026-07-31",
+        "event_id": "liquid_universe-2026-06-09-2478",
+        "kind": "dividend_payment",
+        "stock_id": "2478"
+      }
+    ],
+    "worst_cohorts": [
+      {
+        "buy_cash_outflow": 1411034.25,
+        "buy_qty": 21381,
+        "buy_vwap": 65.60601702446097,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-20",
+        "event_id": "liquid_universe-2026-04-17-3339",
+        "exit_date": "2026-04-29",
+        "name": "泰谷",
+        "net_pnl": -362185.75,
+        "net_return": -0.2566810479618053,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1048848.5,
+        "sell_qty": 21381,
+        "sell_reasons": {
+          "loss12": 5
+        },
+        "sell_vwap": 49.49836303259904,
+        "stock_id": "3339",
+        "total_cost": 17788.0
+      },
+      {
+        "buy_cash_outflow": 1168460.75,
+        "buy_qty": 9619,
+        "buy_vwap": 120.75868073604325,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-20",
+        "event_id": "liquid_universe-2026-05-19-3055",
+        "exit_date": "2026-06-09",
+        "name": "蔚華科",
+        "net_pnl": -337128.15,
+        "net_return": -0.28852329870729504,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 831332.6,
+        "sell_qty": 9619,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 87.20444952697785,
+        "stock_id": "3055",
+        "total_cost": 14370.0
+      },
+      {
+        "buy_cash_outflow": 1336621.0,
+        "buy_qty": 1552,
+        "buy_vwap": 856.1520618556701,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-05-04",
+        "event_id": "liquid_universe-2026-04-30-3167",
+        "exit_date": "2026-05-11",
+        "name": "大量",
+        "net_pnl": -313099.0,
+        "net_return": -0.2342466563072105,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1023522.0,
+        "sell_qty": 1552,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 665.4252577319587,
+        "stock_id": "3167",
+        "total_cost": 17091.0
+      },
+      {
+        "buy_cash_outflow": 960595.0,
+        "buy_qty": 2267,
+        "buy_vwap": 421.23334803705336,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-11",
+        "event_id": "liquid_universe-2026-06-10-8454",
+        "exit_date": "2026-06-16",
+        "name": "富邦媒",
+        "net_pnl": -280745.5,
+        "net_return": -0.2922620875603142,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 679849.5,
+        "sell_qty": 2267,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 302.589986766652,
+        "stock_id": "8454",
+        "total_cost": 11781.0
+      },
+      {
+        "buy_cash_outflow": 1262638.0,
+        "buy_qty": 68000,
+        "buy_vwap": 18.458823529411763,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-01",
+        "event_id": "liquid_universe-2026-05-29-6116",
+        "exit_date": "2026-06-10",
+        "name": "彩晶",
+        "net_pnl": -218045.0,
+        "net_return": -0.1726900346734377,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1044593.0,
+        "sell_qty": 68000,
+        "sell_reasons": {
+          "loss12": 1
+        },
+        "sell_vwap": 15.5,
+        "stock_id": "6116",
+        "total_cost": 16845.0
+      },
+      {
+        "buy_cash_outflow": 932030.3,
+        "buy_qty": 11201,
+        "buy_vwap": 82.71942683688957,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-20",
+        "event_id": "liquid_universe-2026-07-17-6505",
+        "exit_date": "2026-08-04",
+        "name": "台塑化",
+        "net_pnl": -197704.45,
+        "net_return": -0.21212234194532087,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 734325.85,
+        "sell_qty": 11201,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 66.1492589947326,
+        "stock_id": "6505",
+        "total_cost": 12102.0
+      },
+      {
+        "buy_cash_outflow": 1573577.75,
+        "buy_qty": 5443,
+        "buy_vwap": 287.3982638250965,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-04-21",
+        "event_id": "liquid_universe-2026-04-20-6213",
+        "exit_date": "2026-05-15",
+        "name": "聯茂",
+        "net_pnl": -147572.0,
+        "net_return": -0.09378119384313867,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1426005.75,
+        "sell_qty": 5443,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 264.34829138342826,
+        "stock_id": "6213",
+        "total_cost": 22111.0
+      },
+      {
+        "buy_cash_outflow": 969177.6,
+        "buy_qty": 38521,
+        "buy_vwap": 25.011463876846395,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-07-14",
+        "event_id": "liquid_universe-2026-07-13-2332",
+        "exit_date": "2026-07-17",
+        "name": "友訊",
+        "net_pnl": -143905.37,
+        "net_return": -0.14848193973942445,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 825272.23,
+        "sell_qty": 38521,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 21.616994107110408,
+        "stock_id": "2332",
+        "total_cost": 13147.0
+      },
+      {
+        "buy_cash_outflow": 1173756.45,
+        "buy_qty": 15263,
+        "buy_vwap": 76.4490893009238,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-06-02",
+        "event_id": "liquid_universe-2026-06-01-2356",
+        "exit_date": "2026-06-09",
+        "name": "英業達",
+        "net_pnl": -140680.95,
+        "net_return": -0.11985531581104411,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 1033075.5,
+        "sell_qty": 15263,
+        "sell_reasons": {
+          "loss12": 2
+        },
+        "sell_vwap": 68.29447028762367,
+        "stock_id": "2356",
+        "total_cost": 16217.0
+      },
+      {
+        "buy_cash_outflow": 1016337.25,
+        "buy_qty": 5217,
+        "buy_vwap": 193.66498945754265,
+        "closed": true,
+        "ending_market_value": 0.0,
+        "entry_date": "2026-02-02",
+        "event_id": "liquid_universe-2026-01-30-6285",
+        "exit_date": "2026-02-23",
+        "name": "啟碁",
+        "net_pnl": -115391.25,
+        "net_return": -0.11353637781159748,
+        "other_cash_inflow": 0.0,
+        "pnl_includes_terminal_mark": false,
+        "sell_cash_inflow": 900946.0,
+        "sell_qty": 5217,
+        "sell_reasons": {
+          "three_black": 2
+        },
+        "sell_vwap": 174.24956871765383,
+        "stock_id": "6285",
+        "total_cost": 14101.0
+      }
+    ]
+  },
+  "common_event_buy_quantities": [
+    {
+      "buy_qty": {
+        "after_hours": 10,
+        "intraday": 598,
+        "old_hl2": 598
+      },
+      "signal_date": "2023-12-29",
+      "stock_id": "6415"
+    },
+    {
+      "buy_qty": {
+        "after_hours": 9,
+        "intraday": 652,
+        "old_hl2": 855
+      },
+      "signal_date": "2026-03-06",
+      "stock_id": "3081"
+    },
+    {
+      "buy_qty": {
+        "after_hours": 29,
+        "intraday": 501,
+        "old_hl2": 659
+      },
+      "signal_date": "2025-10-30",
+      "stock_id": "8299"
+    },
+    {
+      "buy_qty": {
+        "after_hours": 18,
+        "intraday": 773,
+        "old_hl2": 788
+      },
+      "signal_date": "2024-06-05",
+      "stock_id": "6446"
+    },
+    {
+      "buy_qty": {
+        "after_hours": 3,
+        "intraday": 1489,
+        "old_hl2": 3550
+      },
+      "signal_date": "2026-08-13",
+      "stock_id": "7711"
+    }
+  ],
+  "comparison_source_refs": {
+    "after_hours": {
+      "path": ".cache/poc-gap-20261004/cached-v2/poc_red_executable.json",
+      "sha256": "5988458a4c0831407f91c2dc3dbab5bb48a3e30b1a83279a6ee499c147e665e2"
+    },
+    "benchmark": {
+      "path": ".cache/poc-intraday-20261005/online-v1/benchmark_executable.json",
+      "sha256": "080894fa1d09d44e6c7fd7f5eaf95e886f3073188e5f92a1f400ca8b1fcad139"
+    },
+    "intraday": {
+      "path": ".cache/poc-intraday-20261005/online-v1/poc_red_executable.json",
+      "sha256": "cde9e48ed140deddcc960d8edbf69a91bff20767e7c0ffcc705fead4dbb41360"
+    },
+    "old_hl2": {
+      "path": ".cache/poc-latest-20261003/run-v3/poc_red.json",
+      "sha256": "7657f95c7633a322582fd53cc3aeddb6edb9ab07c06aae142ae4a8cd18375973"
+    }
+  },
+  "complete_historical_universe": false,
+  "completed": true,
+  "completed_report": {
+    "path": ".cache/poc-intraday-20261005/online-v1/report.json",
+    "sha256": "d8c82917657525abfef653218c2ee3516c366f7d5320cd3dc517719528493d4a"
+  },
+  "corporate_fractional_cash_date_verified": false,
+  "data_gap_ledger": [
+    {
+      "actual_fill_verified": false,
+      "cash_after": 552985.73,
+      "cash_before": 552985.73,
+      "cash_ledger_length_before": 163,
+      "date": "2024-11-11",
+      "event_id": "liquid_universe-2024-11-08-5314",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 596
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 5314 2024-11-11 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 243,
+      "original_plan": {
+        "board_qty": 1000,
+        "date": "2024-11-11",
+        "event_id": "liquid_universe-2024-11-08-5314",
+        "expires_at": "13:25:00",
+        "limit_price": 293.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 293.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 596,
+        "opening_cash": 550635.58,
+        "order_time": "09:01:00",
+        "planned_qty": 1596,
+        "prior_reference": 267.0,
+        "reference_date": "2024-11-08",
+        "rejection": null,
+        "reserved_cash": 472137.12666666665,
+        "side": "buy",
+        "signal_date": "2024-11-08",
+        "sizing_budget": 471338.66,
+        "stock_id": "5314"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2024-11-08",
+      "source_verification_required_by_caller": true,
+      "stock_id": "5314",
+      "trade_count_before": 159
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 964012.58,
+      "cash_before": 964012.58,
+      "cash_ledger_length_before": 221,
+      "date": "2025-03-03",
+      "event_id": "liquid_universe-2025-02-27-1569",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 7000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 380
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 1569 2025-03-03 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 346,
+      "original_plan": {
+        "board_qty": 7000,
+        "date": "2025-03-03",
+        "event_id": "liquid_universe-2025-02-27-1569",
+        "expires_at": "13:25:00",
+        "limit_price": 89.2,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 89.2,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 380,
+        "opening_cash": 964012.58,
+        "order_time": "09:01:00",
+        "planned_qty": 7380,
+        "prior_reference": 81.1,
+        "reference_date": "2025-02-27",
+        "rejection": null,
+        "reserved_cash": 662245.8266666667,
+        "side": "buy",
+        "signal_date": "2025-02-27",
+        "sizing_budget": 662245.8266666667,
+        "stock_id": "1569"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-02-27",
+      "source_verification_required_by_caller": true,
+      "stock_id": "1569",
+      "trade_count_before": 217
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 964012.58,
+      "cash_before": 964012.58,
+      "cash_ledger_length_before": 221,
+      "date": "2025-03-12",
+      "event_id": "liquid_universe-2025-02-12-4971",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 2000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 318
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 1728,
+        "entry_price": 163.65323383084575,
+        "event_id": "liquid_universe-2025-02-12-4971",
+        "peak_price": 185.1077736318408,
+        "signal_date": "2025-03-11",
+        "stock_id": "4971",
+        "target_date": "2025-03-12",
+        "target_index": 1746,
+        "trigger_reason": "loss12"
+      },
+      "exit_state_before": {
+        "entry_index": 1728,
+        "entry_price": 163.65323383084575,
+        "event_id": "liquid_universe-2025-02-12-4971",
+        "peak_price": 185.1077736318408,
+        "signal_date": "2025-03-11",
+        "stock_id": "4971",
+        "target_date": "2025-03-12",
+        "target_index": 1746,
+        "trigger_reason": "loss12"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 4971 2025-03-12 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 2318,
+      "holding_qty_before": 2318,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 358,
+      "original_plan": {
+        "board_qty": 2000,
+        "date": "2025-03-12",
+        "event_id": "liquid_universe-2025-02-12-4971",
+        "expires_at": "13:25:00",
+        "limit_price": 120.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 120.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 318,
+        "opening_cash": 964012.58,
+        "order_time": "09:01:00",
+        "planned_qty": 2318,
+        "prior_reference": 133.0,
+        "reference_date": "2025-03-11",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2025-03-11",
+        "sizing_budget": 0.0,
+        "stock_id": "4971"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "loss12",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2025-03-11",
+      "source_verification_required_by_caller": true,
+      "stock_id": "4971",
+      "trade_count_before": 217
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 718091.63,
+      "cash_before": 718091.63,
+      "cash_ledger_length_before": 235,
+      "date": "2025-06-23",
+      "event_id": "liquid_universe-2025-06-20-5475",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 18000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 597
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 5475 2025-06-23 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 392,
+      "original_plan": {
+        "board_qty": 18000,
+        "date": "2025-06-23",
+        "event_id": "liquid_universe-2025-06-20-5475",
+        "expires_at": "13:25:00",
+        "limit_price": 31.45,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 31.45,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 597,
+        "opening_cash": 712731.83,
+        "order_time": "09:01:00",
+        "planned_qty": 18597,
+        "prior_reference": 28.6,
+        "reference_date": "2025-06-20",
+        "rejection": null,
+        "reserved_cash": 593852.71,
+        "side": "buy",
+        "signal_date": "2025-06-20",
+        "sizing_budget": 588369.6433333333,
+        "stock_id": "5475"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-06-20",
+      "source_verification_required_by_caller": true,
+      "stock_id": "5475",
+      "trade_count_before": 231
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 213719.08,
+      "cash_before": 213719.08,
+      "cash_ledger_length_before": 239,
+      "date": "2025-06-30",
+      "event_id": "liquid_universe-2025-06-23-5475",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 17000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 308
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 1816,
+        "entry_price": 29.15,
+        "event_id": "liquid_universe-2025-06-23-5475",
+        "peak_price": 29.25,
+        "signal_date": "2025-06-27",
+        "stock_id": "5475",
+        "target_date": "2025-06-30",
+        "target_index": 1820,
+        "trigger_reason": "loss12"
+      },
+      "exit_state_before": {
+        "entry_index": 1816,
+        "entry_price": 29.15,
+        "event_id": "liquid_universe-2025-06-23-5475",
+        "peak_price": 29.25,
+        "signal_date": "2025-06-27",
+        "stock_id": "5475",
+        "target_date": "2025-06-30",
+        "target_index": 1820,
+        "trigger_reason": "loss12"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 5475 2025-06-30 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 17308,
+      "holding_qty_before": 17308,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 414,
+      "original_plan": {
+        "board_qty": 17000,
+        "date": "2025-06-30",
+        "event_id": "liquid_universe-2025-06-23-5475",
+        "expires_at": "13:25:00",
+        "limit_price": 23.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 23.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 308,
+        "opening_cash": 213719.08,
+        "order_time": "09:01:00",
+        "planned_qty": 17308,
+        "prior_reference": 25.55,
+        "reference_date": "2025-06-27",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2025-06-27",
+        "sizing_budget": 0.0,
+        "stock_id": "5475"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "loss12",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2025-06-27",
+      "source_verification_required_by_caller": true,
+      "stock_id": "5475",
+      "trade_count_before": 235
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1062975.18,
+      "cash_before": 1062975.18,
+      "cash_ledger_length_before": 245,
+      "date": "2025-07-02",
+      "event_id": "liquid_universe-2025-07-01-5475",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 17000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 222
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 5475 2025-07-02 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 421,
+      "original_plan": {
+        "board_qty": 17000,
+        "date": "2025-07-02",
+        "event_id": "liquid_universe-2025-07-01-5475",
+        "expires_at": "13:25:00",
+        "limit_price": 33.95,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 33.95,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 222,
+        "opening_cash": 890498.18,
+        "order_time": "09:01:00",
+        "planned_qty": 17222,
+        "prior_reference": 30.9,
+        "reference_date": "2025-07-01",
+        "rejection": null,
+        "reserved_cash": 588175.5266666667,
+        "side": "buy",
+        "signal_date": "2025-07-01",
+        "sizing_budget": 588175.5266666667,
+        "stock_id": "5475"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-01",
+      "source_verification_required_by_caller": true,
+      "stock_id": "5475",
+      "trade_count_before": 241
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1187820.2,
+      "cash_before": 1187820.2,
+      "cash_ledger_length_before": 252,
+      "date": "2025-07-04",
+      "event_id": "liquid_universe-2025-07-03-3297",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 7000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 828
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3297 2025-07-04 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 443,
+      "original_plan": {
+        "board_qty": 7000,
+        "date": "2025-07-04",
+        "event_id": "liquid_universe-2025-07-03-3297",
+        "expires_at": "13:25:00",
+        "limit_price": 72.7,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 72.7,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 828,
+        "opening_cash": 1184596.75,
+        "order_time": "09:01:00",
+        "planned_qty": 7828,
+        "prior_reference": 66.1,
+        "reference_date": "2025-07-03",
+        "rejection": null,
+        "reserved_cash": 573613.0833333334,
+        "side": "buy",
+        "signal_date": "2025-07-03",
+        "sizing_budget": 572507.15,
+        "stock_id": "3297"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-03",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3297",
+      "trade_count_before": 248
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1187820.2,
+      "cash_before": 1187820.2,
+      "cash_ledger_length_before": 252,
+      "date": "2025-07-04",
+      "event_id": "liquid_universe-2025-07-03-4991",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 979
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 4991 2025-07-04 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 444,
+      "original_plan": {
+        "board_qty": 3000,
+        "date": "2025-07-04",
+        "event_id": "liquid_universe-2025-07-03-4991",
+        "expires_at": "13:25:00",
+        "limit_price": 143.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 143.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 979,
+        "opening_cash": 1184596.75,
+        "order_time": "09:01:00",
+        "planned_qty": 3979,
+        "prior_reference": 130.0,
+        "reference_date": "2025-07-03",
+        "rejection": null,
+        "reserved_cash": 573613.0833333334,
+        "side": "buy",
+        "signal_date": "2025-07-03",
+        "sizing_budget": 572507.15,
+        "stock_id": "4991"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-03",
+      "source_verification_required_by_caller": true,
+      "stock_id": "4991",
+      "trade_count_before": 248
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1187820.2,
+      "cash_before": 1187820.2,
+      "cash_ledger_length_before": 252,
+      "date": "2025-07-07",
+      "event_id": "liquid_universe-2025-07-04-4991",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 700
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 4991 2025-07-07 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 461,
+      "original_plan": {
+        "board_qty": 3000,
+        "date": "2025-07-07",
+        "event_id": "liquid_universe-2025-07-04-4991",
+        "expires_at": "13:25:00",
+        "limit_price": 157.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 157.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 700,
+        "opening_cash": 1187820.2,
+        "order_time": "09:01:00",
+        "planned_qty": 3700,
+        "prior_reference": 143.0,
+        "reference_date": "2025-07-04",
+        "rejection": null,
+        "reserved_cash": 584376.4833333333,
+        "side": "buy",
+        "signal_date": "2025-07-04",
+        "sizing_budget": 584376.4833333333,
+        "stock_id": "4991"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-04",
+      "source_verification_required_by_caller": true,
+      "stock_id": "4991",
+      "trade_count_before": 248
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 652052.7,
+      "cash_before": 652052.7,
+      "cash_ledger_length_before": 254,
+      "date": "2025-07-08",
+      "event_id": "liquid_universe-2025-07-07-4971",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 699
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 4971 2025-07-08 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 473,
+      "original_plan": {
+        "board_qty": 3000,
+        "date": "2025-07-08",
+        "event_id": "liquid_universe-2025-07-07-4971",
+        "expires_at": "13:25:00",
+        "limit_price": 154.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 154.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 699,
+        "opening_cash": 652052.7,
+        "order_time": "09:01:00",
+        "planned_qty": 3699,
+        "prior_reference": 140.5,
+        "reference_date": "2025-07-07",
+        "rejection": null,
+        "reserved_cash": 574961.0833333334,
+        "side": "buy",
+        "signal_date": "2025-07-07",
+        "sizing_budget": 574961.0833333334,
+        "stock_id": "4971"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-07",
+      "source_verification_required_by_caller": true,
+      "stock_id": "4971",
+      "trade_count_before": 250
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 652052.7,
+      "cash_before": 652052.7,
+      "cash_ledger_length_before": 254,
+      "date": "2025-07-09",
+      "event_id": "liquid_universe-2025-07-08-4971",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 651
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 4971 2025-07-09 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 479,
+      "original_plan": {
+        "board_qty": 3000,
+        "date": "2025-07-09",
+        "event_id": "liquid_universe-2025-07-08-4971",
+        "expires_at": "13:25:00",
+        "limit_price": 156.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 156.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 651,
+        "opening_cash": 652052.7,
+        "order_time": "09:01:00",
+        "planned_qty": 3651,
+        "prior_reference": 142.0,
+        "reference_date": "2025-07-08",
+        "rejection": null,
+        "reserved_cash": 573002.9,
+        "side": "buy",
+        "signal_date": "2025-07-08",
+        "sizing_budget": 573002.9,
+        "stock_id": "4971"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-08",
+      "source_verification_required_by_caller": true,
+      "stock_id": "4971",
+      "trade_count_before": 250
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 570060.2,
+      "cash_before": 570060.2,
+      "cash_ledger_length_before": 258,
+      "date": "2025-07-21",
+      "event_id": "liquid_universe-2025-07-18-6739",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 67
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6739 2025-07-21 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 508,
+      "original_plan": {
+        "board_qty": 1000,
+        "date": "2025-07-21",
+        "event_id": "liquid_universe-2025-07-18-6739",
+        "expires_at": "13:25:00",
+        "limit_price": 523.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 523.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 67,
+        "opening_cash": 570060.2,
+        "order_time": "09:01:00",
+        "planned_qty": 1067,
+        "prior_reference": 476.0,
+        "reference_date": "2025-07-18",
+        "rejection": null,
+        "reserved_cash": 561514.4666666667,
+        "side": "buy",
+        "signal_date": "2025-07-18",
+        "sizing_budget": 561514.4666666667,
+        "stock_id": "6739"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-18",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6739",
+      "trade_count_before": 254
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 570060.2,
+      "cash_before": 570060.2,
+      "cash_ledger_length_before": 258,
+      "date": "2025-07-22",
+      "event_id": "liquid_universe-2025-07-21-3577",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 4000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 741
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3577 2025-07-22 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 517,
+      "original_plan": {
+        "board_qty": 4000,
+        "date": "2025-07-22",
+        "event_id": "liquid_universe-2025-07-21-3577",
+        "expires_at": "13:25:00",
+        "limit_price": 116.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 116.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 741,
+        "opening_cash": 570060.2,
+        "order_time": "09:01:00",
+        "planned_qty": 4741,
+        "prior_reference": 105.5,
+        "reference_date": "2025-07-21",
+        "rejection": null,
+        "reserved_cash": 553242.7333333333,
+        "side": "buy",
+        "signal_date": "2025-07-21",
+        "sizing_budget": 553242.7333333333,
+        "stock_id": "3577"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-07-21",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3577",
+      "trade_count_before": 254
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 698607.27,
+      "cash_before": 698607.27,
+      "cash_ledger_length_before": 311,
+      "date": "2025-11-20",
+      "event_id": "liquid_universe-2025-11-19-3624",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 12000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 77
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3624 2025-11-20 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 682,
+      "original_plan": {
+        "board_qty": 12000,
+        "date": "2025-11-20",
+        "event_id": "liquid_universe-2025-11-19-3624",
+        "expires_at": "13:25:00",
+        "limit_price": 57.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 57.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 77,
+        "opening_cash": 698607.27,
+        "order_time": "09:01:00",
+        "planned_qty": 12077,
+        "prior_reference": 52.3,
+        "reference_date": "2025-11-19",
+        "rejection": null,
+        "reserved_cash": 698607.27,
+        "side": "buy",
+        "signal_date": "2025-11-19",
+        "sizing_budget": 698607.27,
+        "stock_id": "3624"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-11-19",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3624",
+      "trade_count_before": 307
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 698607.27,
+      "cash_before": 698607.27,
+      "cash_ledger_length_before": 311,
+      "date": "2025-11-21",
+      "event_id": "liquid_universe-2025-11-20-6163",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 19000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 426
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6163 2025-11-21 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 686,
+      "original_plan": {
+        "board_qty": 19000,
+        "date": "2025-11-21",
+        "event_id": "liquid_universe-2025-11-20-6163",
+        "expires_at": "13:25:00",
+        "limit_price": 35.75,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 35.75,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 426,
+        "opening_cash": 698607.27,
+        "order_time": "09:01:00",
+        "planned_qty": 19426,
+        "prior_reference": 32.5,
+        "reference_date": "2025-11-20",
+        "rejection": null,
+        "reserved_cash": 698607.27,
+        "side": "buy",
+        "signal_date": "2025-11-20",
+        "sizing_budget": 698607.27,
+        "stock_id": "6163"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-11-20",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6163",
+      "trade_count_before": 307
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 698607.27,
+      "cash_before": 698607.27,
+      "cash_ledger_length_before": 311,
+      "date": "2025-11-24",
+      "event_id": "liquid_universe-2025-11-21-8043",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 7000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 847
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 8043 2025-11-24 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 693,
+      "original_plan": {
+        "board_qty": 7000,
+        "date": "2025-11-24",
+        "event_id": "liquid_universe-2025-11-21-8043",
+        "expires_at": "13:25:00",
+        "limit_price": 88.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 88.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 847,
+        "opening_cash": 698607.27,
+        "order_time": "09:01:00",
+        "planned_qty": 7847,
+        "prior_reference": 80.5,
+        "reference_date": "2025-11-21",
+        "rejection": null,
+        "reserved_cash": 698607.27,
+        "side": "buy",
+        "signal_date": "2025-11-21",
+        "sizing_budget": 698607.27,
+        "stock_id": "8043"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2025-11-21",
+      "source_verification_required_by_caller": true,
+      "stock_id": "8043",
+      "trade_count_before": 307
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1137051.26,
+      "cash_before": 1137051.26,
+      "cash_ledger_length_before": 334,
+      "date": "2026-01-29",
+      "event_id": "liquid_universe-2026-01-28-4533",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 23000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 485
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 4533 2026-01-29 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 721,
+      "original_plan": {
+        "board_qty": 23000,
+        "date": "2026-01-29",
+        "event_id": "liquid_universe-2026-01-28-4533",
+        "expires_at": "13:25:00",
+        "limit_price": 45.35,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 45.35,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 485,
+        "opening_cash": 1137051.26,
+        "order_time": "09:01:00",
+        "planned_qty": 23485,
+        "prior_reference": 41.25,
+        "reference_date": "2026-01-28",
+        "rejection": null,
+        "reserved_cash": 1071369.42,
+        "side": "buy",
+        "signal_date": "2026-01-28",
+        "sizing_budget": 1071369.42,
+        "stock_id": "4533"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-01-28",
+      "source_verification_required_by_caller": true,
+      "stock_id": "4533",
+      "trade_count_before": 329
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1241591.61,
+      "cash_before": 1241591.61,
+      "cash_ledger_length_before": 341,
+      "date": "2026-02-10",
+      "event_id": "liquid_universe-2026-02-09-5386",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 6000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 869
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 5386 2026-02-10 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 760,
+      "original_plan": {
+        "board_qty": 6000,
+        "date": "2026-02-10",
+        "event_id": "liquid_universe-2026-02-09-5386",
+        "expires_at": "13:25:00",
+        "limit_price": 147.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 147.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 869,
+        "opening_cash": 1241591.61,
+        "order_time": "09:01:00",
+        "planned_qty": 6869,
+        "prior_reference": 134.5,
+        "reference_date": "2026-02-09",
+        "rejection": null,
+        "reserved_cash": 1019288.3700000001,
+        "side": "buy",
+        "signal_date": "2026-02-09",
+        "sizing_budget": 1019288.3700000001,
+        "stock_id": "5386"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-02-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "5386",
+      "trade_count_before": 336
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1315100.76,
+      "cash_before": 1315100.76,
+      "cash_ledger_length_before": 353,
+      "date": "2026-03-24",
+      "event_id": "liquid_universe-2026-03-23-6187",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 431
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6187 2026-03-24 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 816,
+      "original_plan": {
+        "board_qty": 1000,
+        "date": "2026-03-24",
+        "event_id": "liquid_universe-2026-03-23-6187",
+        "expires_at": "13:25:00",
+        "limit_price": 913.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 913.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 431,
+        "opening_cash": 1315100.76,
+        "order_time": "09:01:00",
+        "planned_qty": 1431,
+        "prior_reference": 830.0,
+        "reference_date": "2026-03-23",
+        "rejection": null,
+        "reserved_cash": 1315100.76,
+        "side": "buy",
+        "signal_date": "2026-03-23",
+        "sizing_budget": 1315100.76,
+        "stock_id": "6187"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-03-23",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6187",
+      "trade_count_before": 348
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1315100.76,
+      "cash_before": 1315100.76,
+      "cash_ledger_length_before": 353,
+      "date": "2026-03-25",
+      "event_id": "liquid_universe-2026-03-24-6187",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 368
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6187 2026-03-25 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 835,
+      "original_plan": {
+        "board_qty": 1000,
+        "date": "2026-03-25",
+        "event_id": "liquid_universe-2026-03-24-6187",
+        "expires_at": "13:25:00",
+        "limit_price": 955.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 955.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 368,
+        "opening_cash": 1315100.76,
+        "order_time": "09:01:00",
+        "planned_qty": 1368,
+        "prior_reference": 869.0,
+        "reference_date": "2026-03-24",
+        "rejection": null,
+        "reserved_cash": 1315100.76,
+        "side": "buy",
+        "signal_date": "2026-03-24",
+        "sizing_budget": 1315100.76,
+        "stock_id": "6187"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-03-24",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6187",
+      "trade_count_before": 348
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1315100.76,
+      "cash_before": 1315100.76,
+      "cash_ledger_length_before": 353,
+      "date": "2026-03-26",
+      "event_id": "liquid_universe-2026-03-25-6187",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 1000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 245
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6187 2026-03-26 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 844,
+      "original_plan": {
+        "board_qty": 1000,
+        "date": "2026-03-26",
+        "event_id": "liquid_universe-2026-03-25-6187",
+        "expires_at": "13:25:00",
+        "limit_price": 1050.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 1050.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 245,
+        "opening_cash": 1315100.76,
+        "order_time": "09:01:00",
+        "planned_qty": 1245,
+        "prior_reference": 955.0,
+        "reference_date": "2026-03-25",
+        "rejection": null,
+        "reserved_cash": 1315100.76,
+        "side": "buy",
+        "signal_date": "2026-03-25",
+        "sizing_budget": 1315100.76,
+        "stock_id": "6187"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-03-25",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6187",
+      "trade_count_before": 348
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1315100.76,
+      "cash_before": 1315100.76,
+      "cash_ledger_length_before": 353,
+      "date": "2026-03-27",
+      "event_id": "liquid_universe-2026-03-26-5291",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 15000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 545
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 5291 2026-03-27 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 865,
+      "original_plan": {
+        "board_qty": 15000,
+        "date": "2026-03-27",
+        "event_id": "liquid_universe-2026-03-26-5291",
+        "expires_at": "13:25:00",
+        "limit_price": 84.1,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 84.1,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 545,
+        "opening_cash": 1315100.76,
+        "order_time": "09:01:00",
+        "planned_qty": 15545,
+        "prior_reference": 76.5,
+        "reference_date": "2026-03-26",
+        "rejection": null,
+        "reserved_cash": 1315100.76,
+        "side": "buy",
+        "signal_date": "2026-03-26",
+        "sizing_budget": 1315100.76,
+        "stock_id": "5291"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-03-26",
+      "source_verification_required_by_caller": true,
+      "stock_id": "5291",
+      "trade_count_before": 348
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 3221570.51,
+      "cash_before": 3221570.51,
+      "cash_ledger_length_before": 362,
+      "date": "2026-04-17",
+      "event_id": "liquid_universe-2026-04-16-3339",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 21000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 904
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3339 2026-04-17 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 916,
+      "original_plan": {
+        "board_qty": 21000,
+        "date": "2026-04-17",
+        "event_id": "liquid_universe-2026-04-16-3339",
+        "expires_at": "13:25:00",
+        "limit_price": 69.3,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 69.3,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 904,
+        "opening_cash": 2504326.01,
+        "order_time": "09:01:00",
+        "planned_qty": 21904,
+        "prior_reference": 63.0,
+        "reference_date": "2026-04-16",
+        "rejection": null,
+        "reserved_cash": 1587017.0033333332,
+        "side": "buy",
+        "signal_date": "2026-04-16",
+        "sizing_budget": 1526977.0033333332,
+        "stock_id": "3339"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-04-16",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3339",
+      "trade_count_before": 357
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1810536.26,
+      "cash_before": 1810536.26,
+      "cash_ledger_length_before": 364,
+      "date": "2026-04-20",
+      "event_id": "liquid_universe-2026-04-17-3587",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 3000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 899
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3587 2026-04-20 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 947,
+      "original_plan": {
+        "board_qty": 3000,
+        "date": "2026-04-20",
+        "event_id": "liquid_universe-2026-04-17-3587",
+        "expires_at": "13:25:00",
+        "limit_price": 403.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 403.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 899,
+        "opening_cash": 3221570.51,
+        "order_time": "09:01:00",
+        "planned_qty": 3899,
+        "prior_reference": 367.0,
+        "reference_date": "2026-04-17",
+        "rejection": null,
+        "reserved_cash": 1582647.01,
+        "side": "buy",
+        "signal_date": "2026-04-17",
+        "sizing_budget": 1582647.01,
+        "stock_id": "3587"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-04-17",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3587",
+      "trade_count_before": 359
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 2904491.01,
+      "cash_before": 2904491.01,
+      "cash_ledger_length_before": 372,
+      "date": "2026-04-30",
+      "event_id": "liquid_universe-2026-04-29-6147",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 8000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 182
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6147 2026-04-30 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1007,
+      "original_plan": {
+        "board_qty": 8000,
+        "date": "2026-04-30",
+        "event_id": "liquid_universe-2026-04-29-6147",
+        "expires_at": "13:25:00",
+        "limit_price": 173.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 173.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 182,
+        "opening_cash": 2904491.01,
+        "order_time": "09:01:00",
+        "planned_qty": 8182,
+        "prior_reference": 158.0,
+        "reference_date": "2026-04-29",
+        "rejection": null,
+        "reserved_cash": 1428097.17,
+        "side": "buy",
+        "signal_date": "2026-04-29",
+        "sizing_budget": 1428097.17,
+        "stock_id": "6147"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-04-29",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6147",
+      "trade_count_before": 367
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1514450.76,
+      "cash_before": 1514450.76,
+      "cash_ledger_length_before": 382,
+      "date": "2026-05-18",
+      "event_id": "liquid_universe-2026-05-15-3498",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 8000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 29
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3498 2026-05-18 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1034,
+      "original_plan": {
+        "board_qty": 8000,
+        "date": "2026-05-18",
+        "event_id": "liquid_universe-2026-05-15-3498",
+        "expires_at": "13:25:00",
+        "limit_price": 163.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 163.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 29,
+        "opening_cash": 1514450.76,
+        "order_time": "09:01:00",
+        "planned_qty": 8029,
+        "prior_reference": 149.0,
+        "reference_date": "2026-05-15",
+        "rejection": null,
+        "reserved_cash": 1320651.92,
+        "side": "buy",
+        "signal_date": "2026-05-15",
+        "sizing_budget": 1320651.92,
+        "stock_id": "3498"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-05-15",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3498",
+      "trade_count_before": 377
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1514450.76,
+      "cash_before": 1514450.76,
+      "cash_ledger_length_before": 382,
+      "date": "2026-05-19",
+      "event_id": "liquid_universe-2026-05-18-6147",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 718
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6147 2026-05-19 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1070,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-05-19",
+        "event_id": "liquid_universe-2026-05-18-6147",
+        "expires_at": "13:25:00",
+        "limit_price": 227.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 227.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 718,
+        "opening_cash": 1514450.76,
+        "order_time": "09:01:00",
+        "planned_qty": 5718,
+        "prior_reference": 207.0,
+        "reference_date": "2026-05-18",
+        "rejection": null,
+        "reserved_cash": 1308743.92,
+        "side": "buy",
+        "signal_date": "2026-05-18",
+        "sizing_budget": 1308743.92,
+        "stock_id": "6147"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-05-18",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6147",
+      "trade_count_before": 377
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 2277548.91,
+      "cash_before": 2277548.91,
+      "cash_ledger_length_before": 398,
+      "date": "2026-06-10",
+      "event_id": "liquid_universe-2026-06-09-6127",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 12000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 16
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6127 2026-06-10 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1118,
+      "original_plan": {
+        "board_qty": 12000,
+        "date": "2026-06-10",
+        "event_id": "liquid_universe-2026-06-09-6127",
+        "expires_at": "13:25:00",
+        "limit_price": 92.1,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 92.1,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 16,
+        "opening_cash": 2276579.66,
+        "order_time": "09:01:00",
+        "planned_qty": 12016,
+        "prior_reference": 83.8,
+        "reference_date": "2026-06-09",
+        "rejection": null,
+        "reserved_cash": 1113306.77,
+        "side": "buy",
+        "signal_date": "2026-06-09",
+        "sizing_budget": 1113306.77,
+        "stock_id": "6127"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-06-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6127",
+      "trade_count_before": 393
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 1198369.81,
+      "cash_before": 1198369.81,
+      "cash_ledger_length_before": 409,
+      "date": "2026-07-13",
+      "event_id": "liquid_universe-2026-07-09-6182",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 745
+        }
+      ],
+      "exit_state_after": null,
+      "exit_state_before": null,
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 6182 2026-07-13 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 0,
+      "holding_qty_before": 0,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1188,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-07-13",
+        "event_id": "liquid_universe-2026-07-09-6182",
+        "expires_at": "13:25:00",
+        "limit_price": 189.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 189.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 745,
+        "opening_cash": 1198369.81,
+        "order_time": "09:01:00",
+        "planned_qty": 5745,
+        "prior_reference": 172.5,
+        "reference_date": "2026-07-09",
+        "rejection": null,
+        "reserved_cash": 1095247.27,
+        "side": "buy",
+        "signal_date": "2026-07-09",
+        "sizing_budget": 1095247.27,
+        "stock_id": "6182"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "leader_entry",
+      "retry_sell": false,
+      "side": "buy",
+      "signal_date": "2026-07-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "6182",
+      "trade_count_before": 403
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 144805.17,
+      "cash_before": 144805.17,
+      "cash_ledger_length_before": 439,
+      "date": "2026-09-10",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 826
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "exit_state_before": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-10 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 5826,
+      "holding_qty_before": 5826,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1249,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-09-10",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "expires_at": "13:25:00",
+        "limit_price": 171.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 171.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 826,
+        "opening_cash": 144805.17,
+        "order_time": "09:01:00",
+        "planned_qty": 5826,
+        "prior_reference": 189.5,
+        "reference_date": "2026-09-09",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2026-09-09",
+        "sizing_budget": 0.0,
+        "stock_id": "3362"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "time63",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3362",
+      "trade_count_before": 432
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 144805.17,
+      "cash_before": 144805.17,
+      "cash_ledger_length_before": 439,
+      "date": "2026-09-11",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 826
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "exit_state_before": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-11 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 5826,
+      "holding_qty_before": 5826,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1250,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-09-11",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "expires_at": "13:25:00",
+        "limit_price": 164.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 164.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 826,
+        "opening_cash": 144805.17,
+        "order_time": "09:01:00",
+        "planned_qty": 5826,
+        "prior_reference": 182.5,
+        "reference_date": "2026-09-10",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2026-09-09",
+        "sizing_budget": 0.0,
+        "stock_id": "3362"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "time63",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3362",
+      "trade_count_before": 432
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 144805.17,
+      "cash_before": 144805.17,
+      "cash_ledger_length_before": 439,
+      "date": "2026-09-14",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 826
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "exit_state_before": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-14 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 5826,
+      "holding_qty_before": 5826,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1251,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-09-14",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "expires_at": "13:25:00",
+        "limit_price": 162.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 162.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 826,
+        "opening_cash": 144805.17,
+        "order_time": "09:01:00",
+        "planned_qty": 5826,
+        "prior_reference": 179.5,
+        "reference_date": "2026-09-11",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2026-09-09",
+        "sizing_budget": 0.0,
+        "stock_id": "3362"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "time63",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3362",
+      "trade_count_before": 432
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 144805.17,
+      "cash_before": 144805.17,
+      "cash_ledger_length_before": 439,
+      "date": "2026-09-15",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 826
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "exit_state_before": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-15 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 5826,
+      "holding_qty_before": 5826,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1252,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-09-15",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "expires_at": "13:25:00",
+        "limit_price": 152.0,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 152.0,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 826,
+        "opening_cash": 144805.17,
+        "order_time": "09:01:00",
+        "planned_qty": 5826,
+        "prior_reference": 168.5,
+        "reference_date": "2026-09-14",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2026-09-09",
+        "sizing_budget": 0.0,
+        "stock_id": "3362"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "time63",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3362",
+      "trade_count_before": 432
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 144805.17,
+      "cash_before": 144805.17,
+      "cash_ledger_length_before": 439,
+      "date": "2026-09-16",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 826
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "exit_state_before": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-16 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 5826,
+      "holding_qty_before": 5826,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1253,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-09-16",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "expires_at": "13:25:00",
+        "limit_price": 151.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 151.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 826,
+        "opening_cash": 144805.17,
+        "order_time": "09:01:00",
+        "planned_qty": 5826,
+        "prior_reference": 168.0,
+        "reference_date": "2026-09-15",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2026-09-09",
+        "sizing_budget": 0.0,
+        "stock_id": "3362"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "time63",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3362",
+      "trade_count_before": 432
+    },
+    {
+      "actual_fill_verified": false,
+      "cash_after": 144805.17,
+      "cash_before": 144805.17,
+      "cash_ledger_length_before": 439,
+      "date": "2026-09-17",
+      "event_id": "liquid_universe-2026-06-10-3362",
+      "excluded_channels": [
+        "board",
+        "odd"
+      ],
+      "excluded_children": [
+        {
+          "channel": "board",
+          "requested_qty": 5000
+        },
+        {
+          "channel": "odd",
+          "requested_qty": 826
+        }
+      ],
+      "exit_state_after": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "exit_state_before": {
+        "entry_index": 2051,
+        "entry_price": 164.0,
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "peak_price": 211.0,
+        "signal_date": "2026-09-09",
+        "stock_id": "3362",
+        "target_date": "2026-09-10",
+        "target_index": 2114,
+        "trigger_reason": "time63"
+      },
+      "failure_class": "ReplayDataUnavailable",
+      "failure_reason": "Executable board tape quality conflict: 3362 2026-09-17 official_ordinary_aggregate_conflict",
+      "failure_stage": "board",
+      "filled_qty": 0,
+      "holding_qty_after": 5826,
+      "holding_qty_before": 5826,
+      "live_qualified": false,
+      "market": "TPEX",
+      "order_count_before": 1254,
+      "original_plan": {
+        "board_qty": 5000,
+        "date": "2026-09-17",
+        "event_id": "liquid_universe-2026-06-10-3362",
+        "expires_at": "13:25:00",
+        "limit_price": 159.5,
+        "odd_expires_at": "13:30:00",
+        "odd_limit": 159.5,
+        "odd_order_time": "09:00:00",
+        "odd_qty": 826,
+        "opening_cash": 144805.17,
+        "order_time": "09:01:00",
+        "planned_qty": 5826,
+        "prior_reference": 177.0,
+        "reference_date": "2026-09-16",
+        "rejection": null,
+        "reserved_cash": 0.0,
+        "side": "sell",
+        "signal_date": "2026-09-09",
+        "sizing_budget": 0.0,
+        "stock_id": "3362"
+      },
+      "policy": "user_authorized_whole_order_data_gap_exclusion_v1",
+      "posthoc_data_exclusion": true,
+      "reason": "time63",
+      "retry_sell": true,
+      "side": "sell",
+      "signal_date": "2026-09-09",
+      "source_verification_required_by_caller": true,
+      "stock_id": "3362",
+      "trade_count_before": 432
+    }
+  ],
+  "elapsed_seconds": {
+    "offline": 562.616,
+    "online": 566.688
+  },
+  "excess_total_return": -0.7143393999999996,
+  "execution_model": {
+    "actual_broker_fills_verified": false,
+    "actual_queue_verified": false,
+    "complete_exchange_tape_verified": false,
+    "intraday_odd_sequence_verified": false,
+    "odd": "intraday_daily_high_low_midpoint_proxy",
+    "ordinary": "chronological_strict_trade_through_participation"
+  },
+  "gap_audit": {
+    "active_slots_rebuilt": true,
+    "actual_fill_verified": false,
+    "all_daily_nav_reconciled": true,
+    "all_original_planned_children_execution_evidence_complete": false,
+    "all_original_planned_children_source_data_present": false,
+    "all_original_preplanned_limits_verified": true,
+    "all_purchases_funded_before_sales": true,
+    "capacity_and_order_limits": true,
+    "capital_reductions_reconciled": true,
+    "capital_resources_independently_reconciled": true,
+    "cash_ledger_reconciled": true,
+    "cash_movements": 445,
+    "chronological_board_allocations_rebuilt": 177,
+    "daily_shares_reconstructed": true,
+    "data_gap_buys": 27,
+    "data_gap_children": 70,
+    "data_gap_plans": 35,
+    "data_gap_sells": 8,
+    "fees_recomputed": true,
+    "fills_reconciled": 438,
+    "gap_plans_with_verified_legal_limits": 35,
+    "gap_plans_without_verified_legal_limits": 0,
+    "gap_plans_without_verified_prior_reference": 0,
+    "gap_source_failures_independently_rebuilt": true,
+    "gap_zero_fill_and_resource_ledger_verified": true,
+    "integer_shares": true,
+    "intraday_daily_proxies_rebuilt": 274,
+    "intraday_odd_tick_verified": false,
+    "intraday_sequence_verified": false,
+    "ledger_sequence_is_execution_clock": false,
+    "live_qualified": false,
+    "no_overdraft": true,
+    "nonexcluded_planned_children_reconciled": 451,
+    "nonexcluded_preplanned_limits_verified": true,
+    "opening_cash_only": true,
+    "opening_nav_continuity": true,
+    "original_planned_children": 521,
+    "posthoc_data_exclusion": true,
+    "proxy_not_tick": true,
+    "residual_assets_retained": true,
+    "residual_classification_rebuilt": true,
+    "residual_risk_budget_rebuilt": true,
+    "resource_policy_reconciled": true,
+    "session_cash_verified": true,
+    "trade_cash_reconciled": true,
+    "trading_days": 666,
+    "verified_halt_children": 0
+  },
+  "idle_capital": {
+    "after_hours": {
+      "majority_cash_days": 245,
+      "mean_cash_fraction": 0.45005640984321543,
+      "mean_equity_exposure": 0.5493334278983005,
+      "odd_buy_count": 82,
+      "positive_odd_buy_shares": 2870,
+      "profile_quality_fallback_days": 42
+    },
+    "benchmark": {
+      "majority_cash_days": 0,
+      "mean_cash_fraction": 0.00032095823689943435,
+      "mean_equity_exposure": 0.9980594681084288,
+      "odd_buy_count": 23,
+      "positive_odd_buy_shares": 2422,
+      "profile_quality_fallback_days": 0
+    },
+    "intraday": {
+      "majority_cash_days": 81,
+      "mean_cash_fraction": 0.23001704909872556,
+      "mean_equity_exposure": 0.7694798739510683,
+      "odd_buy_count": 92,
+      "positive_odd_buy_shares": 33480,
+      "profile_quality_fallback_days": 51
+    },
+    "old_hl2": {
+      "majority_cash_days": 88,
+      "mean_cash_fraction": 0.2445109455005557,
+      "mean_equity_exposure": 0.754492412278254,
+      "odd_buy_count": 94,
+      "positive_odd_buy_shares": 36048,
+      "profile_quality_fallback_days": 35
+    }
+  },
+  "initial_cash": 1000000,
+  "intraday_odd_daily_proxy": true,
+  "intraday_odd_sequence_verified": false,
+  "live_qualified": false,
+  "odd_participation": 0.01,
+  "offline_parity": {
+    "benchmark_executable": {
+      "exact_case_bytes": true,
+      "offline": {
+        "path": ".cache/poc-intraday-20261005/offline-v1/benchmark_executable.json",
+        "sha256": "080894fa1d09d44e6c7fd7f5eaf95e886f3073188e5f92a1f400ca8b1fcad139"
+      },
+      "online": {
+        "path": ".cache/poc-intraday-20261005/online-v1/benchmark_executable.json",
+        "sha256": "080894fa1d09d44e6c7fd7f5eaf95e886f3073188e5f92a1f400ca8b1fcad139"
+      }
+    },
+    "poc_red_executable": {
+      "exact_case_bytes": true,
+      "offline": {
+        "path": ".cache/poc-intraday-20261005/offline-v1/poc_red_executable.json",
+        "sha256": "cde9e48ed140deddcc960d8edbf69a91bff20767e7c0ffcc705fead4dbb41360"
+      },
+      "online": {
+        "path": ".cache/poc-intraday-20261005/online-v1/poc_red_executable.json",
+        "sha256": "cde9e48ed140deddcc960d8edbf69a91bff20767e7c0ffcc705fead4dbb41360"
+      }
+    }
+  },
+  "offline_report": {
+    "path": ".cache/poc-intraday-20261005/offline-v1/report.json",
+    "sha256": "b8bf0eb6c7efcde6ab9de389812d546fb7b3e8d53b67c583db455a790eaff683"
+  },
+  "offline_requests": 0,
+  "original_hl2_total_return": 5.76623696,
+  "original_strategy_fully_verified": false,
+  "period": {
+    "end": "2026-10-02",
+    "start": "2024-01-02",
+    "trading_days": 666
+  },
+  "position_count": 3,
+  "posthoc_data_exclusion": true,
+  "profile_data_exclusions": [],
+  "quality_fallback_days": [
+    {
+      "date": "2024-06-06",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2024-06-14",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2024-08-09",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2024-08-12",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2024-08-30",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2024-09-06",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2024-10-30",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2024-11-14",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2024-12-30",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-01-09",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-02-13",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-03-03",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-06-11",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2025-06-23",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-06-24",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-02",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-04",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-07",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-08",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-09",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-17",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2025-07-21",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-07-22",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2025-08-12",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-08-22",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2025-09-16",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2025-11-20",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-11-21",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2025-11-24",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-01-29",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-02-10",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-02-11",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-03-09",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-03-24",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-03-25",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-03-26",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-03-27",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-03-30",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-04-01",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-04-17",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-04-20",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-04-30",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-05-18",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-05-19",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-06-10",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-06-11",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-07-13",
+      "reason": "ordinary_tape_conflict"
+    },
+    {
+      "date": "2026-07-20",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2026-08-05",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2026-08-11",
+      "reason": "corporate_action_or_nonconstant_price_scale"
+    },
+    {
+      "date": "2026-09-21",
+      "reason": "ordinary_tape_conflict"
+    }
+  ],
+  "red_gate_decisions": 13059,
+  "schema": "poc_intraday_daily_proxy_account_20261005_v1",
+  "sealed_baseline_hashes_unchanged": true,
+  "signal_parity": {
+    "account_equality_required": false,
+    "all_exact": true,
+    "compared": "all original red-candle decisions; candidate bundle is hash-bound",
+    "entry_gate_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+    "reason": "execution policy intentionally changed",
+    "through": "2026-10-02"
+  },
+  "source_file_count": 76505,
+  "strategy_summary": {
+    "annual": [
+      {
+        "end_nav": 2009412.58,
+        "max_drawdown": -0.2625966802190388,
+        "partial_year": false,
+        "profit": 1009412.5800000001,
+        "start_nav": 1000000.0,
+        "total_return": 1.0094125800000002,
+        "year": "2024"
+      },
+      {
+        "end_nav": 2815718.4600000004,
+        "max_drawdown": -0.23558370214685065,
+        "partial_year": false,
+        "profit": 806305.8800000004,
+        "start_nav": 2009412.58,
+        "total_return": 0.4012644730232555,
+        "year": "2025"
+      },
+      {
+        "end_nav": 2822440.17,
+        "max_drawdown": -0.5236848779997308,
+        "partial_year": true,
+        "profit": 6721.709999999497,
+        "start_nav": 2815718.4600000004,
+        "total_return": 0.002387209550772873,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 176,
+    "cagr": 0.45859576460946117,
+    "cash": 462710.17,
+    "costs": {
+      "commission": 165842.0,
+      "slippage": 519846.0,
+      "tax": 173527.0,
+      "total_cost": 859215.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "liquid_universe-2026-08-10-6206",
+        "mark_date": "2026-10-02",
+        "market_value": 699385.0,
+        "name": "飛捷",
+        "price": 137.0,
+        "qty": 5105,
+        "stale": false,
+        "stock_id": "6206"
+      },
+      {
+        "date": "2026-10-02",
+        "event_id": "liquid_universe-2026-08-13-7711",
+        "mark_date": "2026-10-02",
+        "market_value": 908290.0,
+        "name": "永擎",
+        "price": 610.0,
+        "qty": 1489,
+        "stale": false,
+        "stock_id": "7711"
+      },
+      {
+        "date": "2026-10-02",
+        "event_id": "liquid_universe-2026-09-21-7799",
+        "mark_date": "2026-10-02",
+        "market_value": 752055.0,
+        "name": "禾榮科",
+        "price": 543.0,
+        "qty": 1385,
+        "stale": false,
+        "stock_id": "7799"
+      }
+    ],
+    "final_nav": 2822440.17,
+    "final_receivables": [],
+    "initial_cash": 1000000.0,
+    "market_value": 2359730.0,
+    "max_drawdown": -0.5236848779997308,
+    "minimum_cash": 10450.6,
+    "partial_or_rejected_orders": {
+      "midpoint_limit_not_crossed": 7,
+      "no_trade_through_capacity": 6,
+      "overlapping_member": 7,
+      "partial_intraday_midpoint_capacity": 117,
+      "partial_trade_through_capacity": 6,
+      "resource_cash_locked": 127,
+      "resource_slots_locked": 332,
+      "slots_full": 334,
+      "user_authorized_data_gap_exclusion": 35
+    },
+    "profit": 1822440.17,
+    "receivable": 0.0,
+    "sell_count": 262,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 94,
+    "total_return": 1.8224401700000001,
+    "trade_count": 438,
+    "trading_days": 666
+  },
+  "unseen_validation": false,
+  "user_risk_assessment": {
+    "breach_dates": [
+      {
+        "date": "2026-08-07",
+        "drawdown": -0.5009356204792529,
+        "nav": 2640158.67
+      },
+      {
+        "date": "2026-08-11",
+        "drawdown": -0.5072299279631953,
+        "nav": 2606860.42
+      },
+      {
+        "date": "2026-08-12",
+        "drawdown": -0.5011297996737415,
+        "nav": 2639131.42
+      },
+      {
+        "date": "2026-08-14",
+        "drawdown": -0.512358782223853,
+        "nav": 2579727.67
+      },
+      {
+        "date": "2026-08-17",
+        "drawdown": -0.5005013282433439,
+        "nav": 2642456.17
+      },
+      {
+        "date": "2026-08-18",
+        "drawdown": -0.50294839250448,
+        "nav": 2629510.67
+      },
+      {
+        "date": "2026-08-20",
+        "drawdown": -0.5024949139086385,
+        "nav": 2631909.67
+      },
+      {
+        "date": "2026-09-14",
+        "drawdown": -0.5212845982123215,
+        "nav": 2532508.17
+      },
+      {
+        "date": "2026-09-15",
+        "drawdown": -0.5236848779997308,
+        "nav": 2519810.17
+      }
+    ],
+    "maximum_drawdown": 0.5,
+    "measurement": "close_nav_high_water_mark_drawdown",
+    "observed_drawdown": 0.5236848779997308,
+    "passed": false,
+    "pause_rule_applied_to_this_fixed_replay": false,
+    "source": {
+      "path": "docs/trading_risk_preference_20260914.json",
+      "sha256": "9c8a9a5d686ae4a00eaea4851dc0ccc34ead0d93d7d2e507fdd6468fa9726b73"
+    }
+  },
+  "validated": false,
+  "validation": {
+    "api": {
+      "checks": [
+        {
+          "http": 200,
+          "path": "health",
+          "payload_type": "dict",
+          "port": 8001
+        },
+        {
+          "http": 200,
+          "path": "picks",
+          "payload_type": "list",
+          "port": 8001
+        },
+        {
+          "http": 200,
+          "path": "models",
+          "payload_type": "list",
+          "port": 8001
+        },
+        {
+          "http": 200,
+          "path": "jobs?limit=10",
+          "payload_type": "list",
+          "port": 8001
+        },
+        {
+          "http": 200,
+          "path": "health",
+          "payload_type": "dict",
+          "port": 8000
+        },
+        {
+          "http": 200,
+          "path": "picks",
+          "payload_type": "list",
+          "port": 8000
+        },
+        {
+          "http": 200,
+          "path": "models",
+          "payload_type": "list",
+          "port": 8000
+        },
+        {
+          "http": 200,
+          "path": "jobs?limit=10",
+          "payload_type": "list",
+          "port": 8000
+        }
+      ],
+      "make_api_started": true
+    },
+    "pipeline": {
+      "before": {
+        "features": 4628992,
+        "labels": 5038348,
+        "picks": 367,
+        "raw_institutional": 3811908,
+        "raw_prices": 5306786,
+        "stocks": 3119
+      },
+      "idempotent": true,
+      "runs": [
+        {
+          "counts": {
+            "features": 4628992,
+            "labels": 5038348,
+            "picks": 367,
+            "raw_institutional": 3811908,
+            "raw_prices": 5306786,
+            "stocks": 3119
+          },
+          "exit_code": 0,
+          "run": 1,
+          "seconds": 54.91
+        },
+        {
+          "counts": {
+            "features": 4628992,
+            "labels": 5038348,
+            "picks": 367,
+            "raw_institutional": 3811908,
+            "raw_prices": 5306786,
+            "stocks": 3119
+          },
+          "exit_code": 0,
+          "run": 2,
+          "seconds": 53.94
+        }
+      ],
+      "unchanged": true
+    },
+    "test": {
+      "command": "make test",
+      "exit_code": 0,
+      "passed": 5905,
+      "seconds": 111.16,
+      "warnings": 37
+    }
+  }
+}
