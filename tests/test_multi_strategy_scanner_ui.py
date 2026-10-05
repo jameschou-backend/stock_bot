@@ -112,9 +112,10 @@ def test_daily_counts_are_recomputed_multihits_and_default_filter_is_matched():
     run_js(r"""
 const {ui,element}=mount();assert.equal(ui.state.date,'2026-10-02');assert.equal(ui.state.status,'matched');
 assert.equal(element('stat-stocks').textContent,'4');assert.equal(element('stat-matched').textContent,'2');
-assert.equal(element('stat-pairs').textContent,'3');assert.equal(element('stat-unknown').textContent,'1');
-assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2330','2317']);
-assert.match(element('stock-rows').textContent,/動能/);assert.match(element('stock-rows').textContent,/突破/);
+assert.equal(element('stat-pairs').textContent,'2');assert.equal(element('stat-unknown').textContent,'0');
+assert.equal(ui.state.kind,'entry');assert.equal(ui.state.family,'all');
+assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2317','2330']);
+assert.doesNotMatch(element('stock-rows').textContent,/動能/);assert.match(element('stock-rows').textContent,/進場 · 突破/);
 assert.match(element('strategy-details').textContent,/排序/);assert.match(element('strategy-details').textContent,/僅收錄/);
 assert.match(element('scope-note').textContent,/市場情境：上升趨勢/);
 """)
@@ -122,7 +123,7 @@ assert.match(element('scope-note').textContent,/市場情境：上升趨勢/);
 
 def test_filters_unknown_ineligible_and_missing_results_do_not_become_false():
     run_js(r"""
-const {ui,element}=mount();ui.setFilters({status:'unknown'});
+const {ui,element}=mount();ui.setFilters({kind:'all',status:'unknown'});
 assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2408']);
 assert.match(element('strategy-details').textContent,/資料不足/);
 ui.setFilters({status:'ineligible'});assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['9999']);
@@ -133,15 +134,16 @@ assert.equal(element('stat-unknown').textContent,'2');assert.match(element('stra
 """)
 
 
-def test_strategy_and_search_filters_preserve_all_strategy_detail_and_global_counts():
+def test_strategy_scope_and_search_preserve_all_strategy_detail_and_selected_denominator():
     run_js(r"""
 const {ui,element}=mount();ui.setFilters({strategy:'breakout',query:'鴻'});
 assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2317']);
 assert.match(element('strategy-details').textContent,/動能/);assert.match(element('strategy-details').textContent,/突破/);
-assert.equal(element('stat-stocks').textContent,'4');assert.equal(element('stat-pairs').textContent,'3');
+assert.equal(element('stat-stocks').textContent,'4');assert.equal(element('stat-pairs').textContent,'2');
 ui.setFilters({query:'2330'});assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2330']);
 ui.setFilters({strategy:'news',query:''});assert.equal(ui.state.status,'all');assert.equal(ui.visibleRows().length,4);
-assert.match(element('stock-rows').textContent,/僅收錄/);assert.equal(element('stat-unknown').textContent,'1');
+assert.match(element('stock-rows').textContent,/僅收錄/);assert.equal(element('stat-unknown').textContent,'0');
+assert.equal(element('stat-pairs').textContent,'0');
 """)
 
 
@@ -193,7 +195,7 @@ def test_untrusted_values_only_reach_text_nodes_and_payload_is_never_mutated():
     stock["results"]["momentum"]["reasons"] = ['<script>bad()</script>']
     stock["results"]["momentum"]["metrics"] = {"<svg onload=bad()>": '<a href="javascript:bad()">bad</a>'}
     run_js(r"""
-const before=JSON.stringify(input.payload),{ui,element}=mount();
+const before=JSON.stringify(input.payload),{ui,element}=mount();ui.setFilters({query:'2330'});
 assert.match(element('detail-title').textContent,/<img src=x/);
 assert.match(element('strategy-details').textContent,/<script>bad\(\)<\/script>/);
 assert.equal(JSON.stringify(ui.data),before);ui.setFilters({status:'all'});ui.selectDay('2026-09-30');
@@ -234,8 +236,73 @@ def test_actual_catalog_renders_all_families_without_claiming_live_qualification
             first_signal=None, regime_fit=None) for s in payload["strategies"] if s["status"] == "active"}
     run_js(r"""
 const {ui,element}=mount();ui.setFilters({status:'all'});
-assert.equal(ui.data.strategies.length,60);assert.equal(ui.active.length,12);
-assert.equal(element('strategy-details').children.length,60);
+assert.equal(ui.data.strategies.length,input.payload.strategies.length);
+assert.equal(ui.active.length,input.payload.strategies.filter(s=>s.status==='active').length);
+assert.equal(element('strategy-details').children.length,input.payload.strategies.length);
 assert.match(element('strategy-details').textContent,/沒有重建原三檔帳戶的最終排序/);
 assert.match(element('strategy-details').textContent,/策略來源/);
+""", payload)
+
+
+def test_default_entry_view_excludes_ranking_only_match_and_all_view_labels_its_purpose():
+    payload = fixture()
+    stock = payload["days"][1]["stocks"][2]
+    stock["results"]["breakout"]["status"] = "not_matched"
+    stock["results"]["momentum"]["status"] = "matched"
+    run_js(r"""
+const {ui,element}=mount();assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2330']);
+assert.equal(element('stat-matched').textContent,'1');assert.equal(element('stat-pairs').textContent,'1');
+assert.match(element('matched-label').textContent,/進場/);
+ui.setFilters({kind:'all'});assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2330','2317']);
+assert.equal(element('stat-pairs').textContent,'3');assert.match(element('stock-rows').textContent,/排序通過 · 動能/);
+assert.match(element('pairs-foot').textContent,/排序／篩選通過不等於進場訊號/);
+assert.match(element('strategy-details').textContent,/排序用途：條件通過不等於進場買訊/);
+ui.setFilters({kind:'ranking'});assert.equal(element('stat-pairs').textContent,'2');
+assert.doesNotMatch(element('stock-rows').textContent,/進場 ·/);
+""", payload)
+
+
+def test_catalog_readiness_counts_do_not_conflate_unknown_with_not_implemented():
+    payload = fixture()
+    payload["evaluated_strategy_ids"] = ["breakout"]
+    payload["days"][1]["stocks"][0]["results"] = {}
+    run_js(r"""
+const {ui,element}=mount();
+assert.equal(element('catalog-total').textContent,'3');assert.equal(element('catalog-active').textContent,'2');
+assert.equal(element('catalog-evaluated').textContent,'1');assert.equal(element('catalog-pending').textContent,'1');
+assert.equal(element('stat-unknown').textContent,'1');ui.setFilters({query:'2317',status:'all'});
+assert.equal(element('stat-unknown').textContent,'1');assert.equal(element('catalog-pending').textContent,'1');
+assert.match(element('scope-note').textContent,/不受股票搜尋、掃描狀態影響/);
+""", payload)
+
+
+def test_family_and_kind_are_intersections_and_change_resets_specific_strategy():
+    run_js(r"""
+const {ui,element}=mount();ui.setFilters({family:'事件',status:'all'});
+assert.equal(ui.state.kind,'entry');assert.equal(element('strategy-filter').children.length,2);
+assert.match(element('stock-rows').textContent,/僅收錄/);assert.equal(element('stat-pairs').textContent,'0');
+ui.setFilters({kind:'ranking'});assert.equal(element('strategy-filter').children.length,1);
+assert.match(element('stock-rows').textContent,/本篩選範圍無策略/);
+ui.setFilters({family:'all',strategy:'momentum'});assert.equal(ui.state.kind,'ranking');
+assert.equal(ui.state.strategy,'momentum');ui.setFilters({kind:'entry'});assert.equal(ui.state.strategy,'all');
+assert.equal(element('strategy-filter').children.length,3);
+element('family-filter').value='趨勢';element('family-filter').fire('change');
+assert.equal(ui.state.family,'趨勢');assert.equal(element('strategy-filter').children.length,2);
+""")
+
+
+def test_first_and_unknown_annotations_survive_purpose_switches_and_sources_stay_text():
+    payload = fixture()
+    payload["strategies"][0]["kind"] = "filter"
+    payload["strategies"][0]["source_urls"] = ['javascript:alert(1)', '<a href="bad">unsafe</a>']
+    payload["days"][1]["stocks"][0]["results"]["momentum"]["first_signal"] = True
+    run_js(r"""
+const {ui,element}=mount();ui.setFilters({kind:'filter'});
+assert.match(element('stock-rows').textContent,/篩選通過 · 動能/);
+assert.match(element('strategy-details').textContent,/首日標記：是/);
+assert.match(element('strategy-details').textContent,/javascript:alert\(1\)/);
+assert.match(element('strategy-details').textContent,/<a href="bad">unsafe<\/a>/);
+ui.setFilters({status:'unknown'});assert.deepEqual(Array.from(ui.visibleRows(),x=>x.stock_id),['2408']);
+assert.match(element('strategy-details').textContent,/首日標記：未判定/);
+assert.match(element('strategy-details').textContent,/資料不足/);
 """, payload)
