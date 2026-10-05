@@ -1,0 +1,143 @@
+{
+  "schema": "poc_range_settlement_repair_v1",
+  "strategy_parameters_changed": false,
+  "cash_supplements": [],
+  "overrides": {
+    "2515-2025-11-10": {
+      "shares_per_share": 0.0503,
+      "pay_date": "2025-12-31",
+      "fractional_cash_per_share": 0,
+      "source": "MOPS issuer ex-rights notice 2025-10-27: 50.30000000 shares per 1000, ex date 2025-11-10, fractions offset book-entry fees; issuer delivery notice 2025-12-22 and TWSE listing notice 2025-12-23: shares delivered/listed 2025-12-31.",
+      "use_scope": "account_settlement_only_not_selection",
+      "entitlement_announcement_date": "2025-10-27",
+      "delivery_announcement_date": "2025-12-22",
+      "evidence_files": [
+        ".cache/poc-range-first-20261005/corporate-repair/1141027-t108sb22.html",
+        ".cache/poc-range-first-20261005/corporate-repair/1141027-t108sb22.html.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/1141222-t59sb09.html",
+        ".cache/poc-range-first-20261005/corporate-repair/1141222-t59sb09.html.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/1141223-t59sb08.html",
+        ".cache/poc-range-first-20261005/corporate-repair/1141223-t59sb08.html.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/issuer-114-meeting-book.pdf",
+        ".cache/poc-range-first-20261005/corporate-repair/issuer-114-meeting-book.pdf.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141027.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141027.json.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141222.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141222.json.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141223.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141223.json.source.json",
+        ".cache/poc-latest-20261003/inputs-v1/events.parquet",
+        ".cache/poc-executable-20261004/execution-v1/2515-TaiwanStockDividend.parquet"
+      ]
+    },
+    "5876-2026-07-28": {
+      "shares_per_share": 0.01,
+      "pay_date": "2026-08-20",
+      "per_share": 0.0,
+      "certificate_delivery_date": "2026-08-20",
+      "certificate_listing_date": "2026-08-20",
+      "certificate_trading_modeled": true,
+      "certificate_stock_id": "5876",
+      "same_code_fungible_trading_verified": true,
+      "ordinary_conversion_date": "2026-09-11",
+      "ordinary_conversion_creates_new_entitlement": false,
+      "entitlement_announcement_date": "2026-07-13",
+      "delivery_announcement_date": "2026-08-17",
+      "ordinary_conversion_announcement_date": "2026-09-08",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_per_share": 10,
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": false,
+      "fractional_cash_treatment": "unpaid_gross_receivable_unavailable_for_trading",
+      "source": "SCSB official 2026-07-13 MOPS notice PDF, pages 2-3; TWSE LT185 5876 2026-08-17 certificate listing / 2026-09-08 conversion notices; SCSB AGM invitation fee-offset terms. Certificate credited and listed 2026-08-20 under 5876 with same rights and reflected in 5876 listed shares; 2026-09-11 automatic ordinary-share conversion is not a second allotment. Fraction gross at face NT$10 and floor NTD remains unpaid receivable; actual net amount/payment date unverified.",
+      "evidence_files": [
+        ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.html",
+        ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf",
+        ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.txt",
+        ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-agenda.pdf",
+        ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf",
+        ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json"
+      ]
+    }
+  },
+  "source_sha256": {
+    ".cache/poc-range-first-20261005/corporate-repair/1141027-t108sb22.html": "e549cb32301a0c656fffba798f7ae76d0108db93bda4049498e33318227cb892",
+    ".cache/poc-range-first-20261005/corporate-repair/1141027-t108sb22.html.source.json": "8110d00145fde02ac7f4812779af07f0200bd3f5fabb42b44cc2856afdcd89b9",
+    ".cache/poc-range-first-20261005/corporate-repair/1141222-t59sb09.html": "3657ba37bfe3a939da43e2ef8f3f552fa70295513ba3490a221cbb6c7ac4679b",
+    ".cache/poc-range-first-20261005/corporate-repair/1141222-t59sb09.html.source.json": "23d1d1e4bf9fb150144147d0a284e3578c48a1e9eaf883e4748f7a1014c58c80",
+    ".cache/poc-range-first-20261005/corporate-repair/1141223-t59sb08.html": "38b59a6e962b4116ecaab58bf0c689aecf3bfe4a61a013889b40f783bba03e2a",
+    ".cache/poc-range-first-20261005/corporate-repair/1141223-t59sb08.html.source.json": "8677fb688ef22d9c6b0dc06cd5408502d6602dccba081c269991a2ae90e77380",
+    ".cache/poc-range-first-20261005/corporate-repair/issuer-114-meeting-book.pdf": "6234f300ae9ed8e18d429e9dda50d9d645097056b5f68494db61eae8b3cb75b4",
+    ".cache/poc-range-first-20261005/corporate-repair/issuer-114-meeting-book.pdf.source.json": "0a3aac5e9af5cad4e62e5775d5ffbe117b742310134388cfd78e2376b5303183",
+    ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141027.json": "9c0eb157f9ca77641f0c583e1e4cbfbcd01052cdd17dc1121a042517c9cfe30b",
+    ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141027.json.source.json": "2dd0bd43f2ad1d04fc9436d5b6a1895ac6604efa7e5879555f531f33379d48cc",
+    ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141222.json": "b53bd3d256dc3f036e1c2038ea04b743998658ccd9dba312415ea461862bf419",
+    ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141222.json.source.json": "a26d2a1cc763251da6a060fc1eb96136d08b267ed9d70948fb979b2a4b881543",
+    ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141223.json": "6fb693341337858e4aabcaa58f09d300f9b6087d6aa03ce5193103b4078a6e5b",
+    ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141223.json.source.json": "c9628a8ba21aa881bd94b89b4560adba578a9400060673cddcda55d4448af6ec",
+    ".cache/poc-latest-20261003/inputs-v1/events.parquet": "783a2d9e800004e51c0a343cd02409099a3d646db5770335d59db4015200ed74",
+    ".cache/poc-executable-20261004/execution-v1/2515-TaiwanStockDividend.parquet": "5edb54a7140166ebb1c80438dc0e0189e9332436acc266bf8cdb33e494d206a8",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.html": "b54f3c4d93f5d8f2e6a380ce32331f3ebf0dabfd7e6f482062d768523628fb18",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf": "e2e7803414c4b3e70a6b3c634034200dc214e72c2903ea384904f315a91a1388",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.txt": "f15ffef606f442ec94d9c122afe96744aecc3e5d69449cb02f42b95fb09c9cb5",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-agenda.pdf": "1e32a73e44df7d9a8fd4453de561458f6d65e5d9ce33f91bdf1cdbbb87bfb107",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf": "e4033de44a24c711c39344f6d4b795c1ca90d2ee96d2b5708ea89bd5b2ce3fe0",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json": "ec25b44ab4e913b7d99940c473a5d1f475721c3231cef8560a08c18ee0f20961",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.html.receipt.json": "09a40918e58ad117fe055cab29135a0bb424a755827defeba77b5723cf933e81",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf.receipt.json": "968526c6662fc80d95ba074d619d7d075b70d2d47542a36f25118dd48a4b4e1c",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-agenda.pdf.receipt.json": "6e5f791175281d3d9fbfcafafb2b9330e6dc5fc318c88b0707e16ad907943ee9",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf.receipt.json": "9d7ef0c456d77cc50a87d823ecaed627a62dfac18a45d7f4c25351b5d193be8c",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json.receipt.json": "0869dcc2c57e3f8b72fe50dda5d2bf13fd56404af7b8204318246873668185ff"
+  },
+  "repair_reason": "online-v1 stopped two first-signal arms on unresolved stock distributions; all six registered arms rerun unchanged in online-v2.",
+  "interpretation": [
+    "Corporate terms are settlement-only, not selection features; delivery dates were not known on the earlier ex-date.",
+    "5876 certificates are tradable under the same stock code on 2026-08-20. The 2026-09-11 conversion does not create additional shares.",
+    "5876 fractional face-value amount is a gross undated receivable, unavailable to buy securities; eventual net fees/payment remain unverified."
+  ],
+  "official_references": [
+    {
+      "stock_id": "2515",
+      "sources": "MOPS issuer notices 2025-10-27 and 2025-12-22; TWSE listing notice 2025-12-23",
+      "facts": "50.3 shares per 1000; ex-date 2025-11-10; delivery/listing 2025-12-31; fractions offset book-entry fees.",
+      "receipts": [
+        ".cache/poc-range-first-20261005/corporate-repair/1141027-t108sb22.html.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/1141222-t59sb09.html.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/1141223-t59sb08.html.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/issuer-114-meeting-book.pdf.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141027.json.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141222.json.source.json",
+        ".cache/poc-range-first-20261005/corporate-repair/mops-2515-1141223.json.source.json"
+      ]
+    },
+    {
+      "stock_id": "5876",
+      "sources": [
+        {
+          "url": "https://www.scsb.com.tw/content/detailPage/4761",
+          "path": ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.html"
+        },
+        {
+          "url": "https://www.scsb.com.tw/content//upload/indexAnnounce/file/2026/%E6%B1%BA%E5%AE%9A%E5%88%86%E6%B4%BE%E8%82%A1%E6%81%AF%E5%8F%8A%E7%B4%85%E5%88%A9%E6%88%96%E5%85%B6%E4%BB%96%E5%88%A9%E7%9B%8A%E4%B9%8B%E5%9F%BA%E6%BA%96%E6%97%A5%E5%85%AC%E5%91%8A.pdf",
+          "path": ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf"
+        },
+        {
+          "url": "https://www.scsb.com.tw/content/about/files/about09_o/about09_o-115-03.pdf",
+          "path": ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-agenda.pdf"
+        },
+        {
+          "url": "https://www.scsb.com.tw/content/about/files/about09_o/about09_o-115-01.pdf",
+          "path": ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf"
+        },
+        {
+          "url": "https://www.twse.com.tw/rwd/zh/announcement/LT185?startDate1=20260701&endDate1=20260930&selectType=&stockNo=5876&response=json",
+          "path": ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json"
+        }
+      ],
+      "facts": "10 shares per 1000; ex-date 2026-07-28; same-code certificates delivered/listed 2026-08-20; ordinary conversion 2026-09-11."
+    }
+  ],
+  "live_qualified": false
+}
