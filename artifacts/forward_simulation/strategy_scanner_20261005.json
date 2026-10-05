@@ -1,0 +1,150 @@
+{
+  "schema": "multi_strategy_scan_v1",
+  "start": "2026-09-29",
+  "end": "2026-10-02",
+  "source_end": "2026-10-02",
+  "trading_days": 4,
+  "stocks_per_day": {
+    "2026-09-29": 2076,
+    "2026-09-30": 2076,
+    "2026-10-01": 2076,
+    "2026-10-02": 2076
+  },
+  "active_strategies": 12,
+  "catalog_modules": 60,
+  "signals_per_strategy": {
+    "original_breakout": 86,
+    "original_red": 78,
+    "poc_red_priority": 78,
+    "poc_up_red": 44,
+    "momentum": 1467,
+    "risk_momentum": 1466,
+    "near_high": 318,
+    "contraction_breakout": 14,
+    "donchian20": 232,
+    "donchian55": 131,
+    "bollinger_reclaim": 7,
+    "ma_pullback": 187
+  },
+  "outcomes": {
+    "not_matched": 80335,
+    "matched": 4108,
+    "unknown": 8773,
+    "ineligible": 6432
+  },
+  "elapsed_seconds": 31.068,
+  "external_data_requests": 0,
+  "account_independent": true,
+  "live_qualified": false,
+  "backtest_run": false,
+  "coverage": "frozen local individual-stock universe; historical listing identity not fully certified",
+  "catalog_only_modules": 48,
+  "latest_day_unique_matched_stocks": 415,
+  "latest_day_counts": {
+    "not_matched": 19976,
+    "matched": 1105,
+    "unknown": 2223,
+    "ineligible": 1608
+  },
+  "latest_day_signal_counts": {
+    "original_breakout": 21,
+    "original_red": 21,
+    "poc_red_priority": 21,
+    "poc_up_red": 13,
+    "momentum": 389,
+    "risk_momentum": 388,
+    "near_high": 83,
+    "contraction_breakout": 5,
+    "donchian20": 66,
+    "donchian55": 38,
+    "bollinger_reclaim": 1,
+    "ma_pullback": 59
+  },
+  "single_day_and_multiday_decisions_exact": true,
+  "indicator_comparison": "rtol=1e-10,atol=1e-6; rolling floating point roundoff, not byte equality",
+  "output_report": ".cache/multi-strategy-scanner/20261005-final/scan.json",
+  "output_sha256": "5e3d0cc986d77cafa8aec0398cae036bc6a5032a4b9e9c946f1d8595f3e1b40a",
+  "html_path": "artifacts/reports/multi_strategy_scanner.html",
+  "html_sha256": "ce74af69d63a19d0b40bd8823c7dcc818eab8dde987e9704f87262738b1934cb",
+  "full_source_closure_reverified": false,
+  "validated": false,
+  "returns_inherited": false,
+  "acceptance": {
+    "tests": {
+      "passed": 6189,
+      "warnings": 37,
+      "seconds": 96.22
+    },
+    "full_pipeline": {
+      "passed": false,
+      "reason": "Python requests SSLError at TPEx daily quotes; curl HEAD 200",
+      "log": "pipeline-1.log"
+    },
+    "pipeline_build": {
+      "passed": true,
+      "runs": 2,
+      "row_counts_unchanged": true
+    },
+    "row_counts": {
+      "stocks": 3119,
+      "raw_prices": 5306786,
+      "raw_institutional": 3811908,
+      "features": 4628992,
+      "labels": 5038348,
+      "picks": 367
+    },
+    "api_checks": [
+      {
+        "port": 8000,
+        "path": "/health",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8000,
+        "path": "/picks",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8000,
+        "path": "/models",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8000,
+        "path": "/jobs?limit=10",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8001,
+        "path": "/health",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8001,
+        "path": "/picks",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8001,
+        "path": "/models",
+        "status": "200",
+        "exit_code": 0
+      },
+      {
+        "port": 8001,
+        "path": "/jobs?limit=10",
+        "status": "200",
+        "exit_code": 0
+      }
+    ],
+    "browser_qa": ".cache/multi-strategy-scanner-20261005/browser-qa.json",
+    "financial_backtest_run": false,
+    "live_qualified": false
+  }
+}
