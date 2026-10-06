@@ -569,3 +569,9 @@ async def ws_metrics(websocket: WebSocket):
 # The UI and MCP share the same ledger/data gateway and FinMind request budget.
 from app.workbench_api import router as workbench_router
 app.include_router(workbench_router)
+
+# The integrated stock terminal reads sealed research through small local APIs.
+from app.research_terminal_api import router as research_terminal_router
+from app.research_terminal_web import router as research_terminal_web_router
+app.include_router(research_terminal_router)
+app.include_router(research_terminal_web_router)

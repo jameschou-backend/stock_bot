@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Stock Bot｜股票研究工作台</title>
+<link rel="stylesheet" href="/terminal/app.css">
+<script defer src="/terminal/app.js"></script>
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+ <a class="brand" href="#signals" aria-label="Stock Bot 首頁"><span class="brand-mark"><svg viewBox="0 0 28 28" fill="none"><path d="M5 20V12M11 20V7M17 20V11M23 20V3" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span>Stock Bot<small>RESEARCH TERMINAL</small></span></a>
+ <div class="nav-label">研究工作台</div>
+ <nav aria-label="主要導覽">
+  <button class="nav-item active" data-view="signals"><span class="nav-icon">◫</span>今日訊號<span class="nav-arrow">↗</span></button>
+  <button class="nav-item" data-view="stock"><span class="nav-icon">⌁</span>個股觀察</button>
+  <button class="nav-item" data-view="backtest"><span class="nav-icon">▥</span>回測實驗室</button>
+  <button class="nav-item" data-view="research"><span class="nav-icon">↗</span>飆股研究</button>
+  <button class="nav-item" data-view="catalog"><span class="nav-icon">▦</span>策略資料庫</button>
+ </nav>
+ <div class="sidebar-bottom"><span class="status-dot"></span> 本機研究環境<p>資料有依據，決策看得懂。</p><div id="sidebar-date">正在連接資料…</div><div class="research-label">研究用途 · 尚未實戰認證</div></div>
+</aside>
+<main class="main">
+ <header class="topbar"><div class="breadcrumb">工作台 <span>/</span> <strong id="breadcrumb-view">今日訊號</strong></div><div class="topbar-right"><span class="connection" id="connection-status"><span class="status-dot"></span> 連線中</span><button class="icon-button" id="refresh" title="重新載入資料" aria-label="重新載入資料">↻</button></div></header>
+ <div class="content">
+  <div id="global-error" class="alert error" role="alert" hidden></div>
+  <section id="view-signals" class="view">
+   <div class="page-heading"><div><div class="eyebrow">MARKET OVERVIEW</div><h1>發現訊號，看懂機會<span class="heading-dot">。</span></h1><p>從每日掃描，到個股走勢，把研究串在一起。</p></div><div class="heading-action"><span class="tag green" id="market-regime">讀取市場情境</span><div class="caption" id="source-asof">來源截止日讀取中</div></div></div>
+   <section class="stats" aria-label="當日掃描概況">
+    <div class="stat-card"><div class="stat-label">掃描個股 <span>01</span></div><div class="stat-number" id="stat-universe">—</div><div class="stat-note">來源名單內，逐檔獨立評估</div></div>
+    <div class="stat-card accent"><div class="stat-label">符合進場條件 <span>02</span></div><div class="stat-number" id="stat-matched">—<small>檔</small></div><div class="stat-note">符合所選策略，尚非買單</div></div>
+    <div class="stat-card"><div class="stat-label">當日新訊號 <span>03</span></div><div class="stat-number" id="stat-first">—<small>檔</small></div><div class="stat-note">前一交易日未符合、本日轉為符合</div></div>
+    <div class="stat-card"><div class="stat-label">已接入規則 <span>04</span></div><div class="stat-number" id="stat-strategies">—</div><div class="stat-note" id="catalog-progress">策略接入情況讀取中</div></div>
+   </section>
+   <div class="scan-toolbar panel">
+    <label class="field date-field"><span>掃描日期</span><select id="scan-date" aria-label="掃描日期"></select></label>
+    <label class="field strategy-field"><span>策略條件</span><select id="strategy-filter" aria-label="策略條件"><option value="all">全部進場策略</option></select></label>
+    <label class="field search-field"><span>尋找股票</span><div class="search-input"><span>⌕</span><input id="stock-search" type="search" placeholder="名稱或代碼，例如 2308" autocomplete="off"></div></label>
+    <label class="toggle"><input id="first-only" type="checkbox"><span class="toggle-track"></span><span>只看新訊號</span></label>
+   </div>
+   <div class="workspace">
+    <section class="panel signal-panel" aria-label="個股訊號清單"><div class="panel-heading"><div><h2>訊號雷達 <span class="count-pill" id="list-count">—</span></h2><p id="list-caption">點選個股，右側直接查看 K 線與訊號。</p></div><select id="sort-order" class="compact-select" aria-label="股票排序"><option value="matches">命中數優先</option><option value="stock">股票代碼</option><option value="first">新訊號優先</option></select></div><div class="table-scroll"><table class="signal-table"><thead><tr><th>股票</th><th>命中策略</th><th>狀態</th></tr></thead><tbody id="signal-rows"></tbody></table><div id="signal-empty" class="empty-state" hidden><span class="empty-symbol">⌕</span><h3>沒有符合條件的股票</h3><p>請調整策略、日期或搜尋條件。</p></div></div><div class="table-footer"><span id="signal-total">正在取得資料</span><div><button id="page-prev" class="mini-button" aria-label="上一頁">‹</button><button id="page-next" class="mini-button" aria-label="下一頁">›</button></div></div></section>
+    <section class="panel stock-panel" id="stock-panel" aria-label="個股行情與研究評估"><div id="chart-empty" class="empty-state chart-empty"><span class="empty-symbol">⌁</span><h3>選一檔股票，展開研究</h3><p>查看真實 K 線、成交量與當時出現的訊號。</p></div><div id="stock-detail" hidden><div class="stock-heading"><div><div class="eyebrow" id="stock-industry">個股研究</div><h2><span id="stock-name">—</span> <span id="stock-code">—</span></h2></div><div class="stock-price"><strong id="stock-close">—</strong><span id="stock-change">—</span></div></div><div class="chart-toolbar"><div class="chart-legend"><span class="legend-candle"></span>日 K <span class="legend-ma"></span>20 日 <span class="legend-ma ma60"></span>60 日 <span class="legend-signal"></span>訊號</div><div class="segmented" id="chart-ranges"><button data-range="60">60 日</button><button class="active" data-range="120">120 日</button><button data-range="240">240 日</button></div></div><div class="chart-container" id="chart-container"><canvas id="price-chart" aria-label="日 K 線與成交量走勢圖" role="img"></canvas><div id="chart-tooltip" class="chart-tooltip" hidden></div><div id="chart-loading" class="chart-loading" hidden><span class="spinner"></span>正在載入行情</div></div><div class="chart-caption"><span id="chart-asof">只顯示截至所選日的資料</span><span>紅漲・綠跌</span></div><div id="assessment" class="assessment"></div><div class="detail-tabs"><button class="active" data-detail="signals">訊號與依據</button><button data-detail="data">資料品質</button></div><div id="stock-signals" class="stock-reasons"></div><div id="stock-data" class="stock-reasons" hidden></div></div></section>
+   </div>
+   <p class="workspace-footnote">多套條件命中不等於多份獨立證據。所有訊號依所選日資料判斷；實際成交與資金配置須另行驗證。</p>
+  </section>
+  <section id="view-stock" class="view" hidden><div class="page-heading"><div><div class="eyebrow">STOCK OBSERVATORY</div><h1>把一檔股票，看清楚。</h1><p>在今日訊號搜尋或點選個股，K 線與判斷依據會一起呈現。</p></div></div><div class="panel stock-lookup"><form id="stock-lookup-form"><label class="field"><span>股票代碼</span><input id="stock-lookup-id" inputmode="numeric" placeholder="例如 2308" maxlength="6" required></label><button class="primary-button" type="submit">查看走勢 ↗</button></form><p class="caption">依目前選定掃描日期查看，不使用該日之後的行情。</p></div><div id="standalone-stock-host"></div></section>
+  <section id="view-backtest" class="view" hidden><div class="page-heading"><div><div class="eyebrow">BACKTEST LAB</div><h1>讓想法，接受數據檢驗。</h1><p>使用一致的進出場與成本假設，比較策略和同期 0050。</p></div><span class="tag neutral">研究回測</span></div><div class="lab-layout"><aside class="panel lab-config"><h2>建立實驗</h2><form id="backtest-form"><label class="field"><span>策略</span><select id="backtest-strategy" required></select></label><div class="field-pair"><label class="field"><span>開始日期</span><input id="backtest-start" type="date" required></label><label class="field"><span>結束日期</span><input id="backtest-end" type="date" required></label></div><label class="field"><span>持有交易日</span><select id="backtest-holding"><option value="5">5 日</option><option value="10">10 日</option><option value="20" selected>20 日</option><option value="40">40 日</option><option value="60">60 日</option></select></label><label class="field"><span>單次來回成本（基點）</span><input id="backtest-cost" type="number" min="0" max="500" step="1" value="60"><small>60 基點 = 0.60%，含費稅與滑價假設。</small></label><div class="method-note"><strong>先比較訊號本身</strong><p>每個訊號獨立評估、次日開盤進場。不是資金帳戶複利回測；重疊持有會另行揭露。</p></div><button class="primary-button full" id="backtest-submit" type="submit">執行回測 <span>→</span></button><p class="caption" id="backtest-bounds"></p></form></aside><div class="lab-main"><div id="backtest-status" class="alert" hidden role="status"></div><div id="backtest-result" class="panel lab-placeholder"><span class="empty-symbol">▥</span><h2>一個假設，一次公平比較。</h2><p>選擇策略與時間範圍，執行後查看勝率、報酬分布與同期基準。</p></div><section class="panel previous-studies"><div class="panel-heading"><div><h2>已保存的研究</h2><p>保留不同版本、成交假設與期間。</p></div></div><div id="studies-list" class="study-list"><p class="caption">讀取中…</p></div></section></div></div><section class="panel account-replay-config"><h2>原封存帳戶 · 重現完整資金回測</h2><p id="account-replay-scope">原策略、固定本金與期間，和上方單筆訊號研究分開比較。</p><form id="account-replay-form" class="account-replay-controls"><label class="field"><span>成交證據</span><select id="account-mode"><option value="daily">日資料估算</option><option value="strict">逐筆成交證據檢查</option></select></label><label class="field"><span>交易單位</span><select id="account-policy"><option value="mixed">整張加零股</option><option value="board_only">只買整張</option><option value="all">全部比較</option></select></label><label class="field"><span>成本情境</span><select id="account-stress"><option value="control">一般成本</option><option value="combined">加嚴成本</option><option value="all">全部比較</option></select></label><button class="primary-button" id="account-run" type="submit">重播帳戶 →</button></form><p class="caption">依封存版本重現，不會發送委託。逐筆證據不足時顯示缺件，不補成假想成交。</p><div id="account-status" class="alert" hidden role="status"></div><div id="account-result"></div></section><section class="panel account-replay-config" id="backtest-archive"></section></section>
+  <section id="view-research" class="view" hidden><div class="page-heading"><div><div class="eyebrow">BEFORE THE RALLY</div><h1>上漲之前，發生了什麼？</h1><p>同時看抓到多少飆股，以及多少訊號最後未達飆升門檻。</p></div><span class="tag neutral">歷史事件研究</span></div><div id="research-body" class="panel research-body"><div class="empty-state"><span class="spinner"></span><p>正在取得研究結果…</p></div></div></section>
+  <section id="view-catalog" class="view" hidden><div class="page-heading"><div><div class="eyebrow">STRATEGY LIBRARY</div><h1>建立自己的策略地圖。</h1><p>策略有不同用途、資料需求與適用情境，收錄與驗證分開標示。</p></div></div><div class="catalog-summary panel" id="catalog-summary"></div><div class="catalog-toolbar"><div class="search-input"><span>⌕</span><input id="catalog-search" type="search" placeholder="搜尋策略、家族或關鍵字"></div><select id="catalog-status"><option value="all">所有接入狀態</option><option value="active">已實作可掃描</option><option value="catalog_only">待接入研究</option></select><select id="catalog-family"><option value="all">全部策略家族</option></select></div><div id="catalog-grid" class="catalog-grid"></div></section>
+  <footer class="footer"><span>STOCK BOT <b>·</b> RESEARCH TERMINAL</span><span>研究、回測與實際交易資格分開呈現。</span></footer>
+ </div>
+</main>
+</div>
+<div id="announcement" class="sr-only" aria-live="polite"></div>
+</body>
+</html>
