@@ -1,5 +1,56 @@
 # 多策略、全股票、每日獨立掃描
 
+## 2026-10-05 掃描更新（2026-10-06 執行）
+
+頁面已延長到10/5，保留9/29至10/2四日結果；舊四日逐檔、逐策略的狀態、數值、原因與首日標記完全一致。此次仍用既有36項評估規則，沒有為10/5改參數。29項進場規則有492檔至少符合一項、共1,470項進場條件成立；不同規則會重疊，不能把命中數視為獨立證據或買單數。
+
+| 10/5規則 | 符合股票數 |
+|---|---:|
+| 原價量突破候選 | 28 |
+| 原突破＋紅K | 21 |
+| 原突破＋紅K＋POC上移 | 13 |
+| 20日價格通道突破 | 81 |
+| 55日價格通道突破 | 47 |
+| 收斂後帶量突破 | 7 |
+| 盤整後第一根放量紅K（純價量） | 14 |
+
+POC上移＋紅K共13檔：台達電2308、台亞2340、冠西電2466、聯陽3014、佰鴻3031、景碩3189、泰鼎-KY4927、崇越5434、帆宣6196、台表科6278、騰輝電子-KY6672、洋基工程6691、裕慶-KY6957。其中8檔該規則的`first_signal=true`，指從前一市場日未符合轉為符合，不代表首次上市訊號，也不另加進場條件。
+
+28個原候選的POC資料均已處理：17個POC上移（其中13個同時紅K）、11個品質未知、0個仍待抓逐筆。未知包括9933公司行動／價格基準改變、2302逐筆普通盤OHLC衝突，其餘9檔逐筆普通盤量或金額與官方表不一致。21個红K候選裡有8個POC未知，保留未知並顯示原因，不當作POC上移或POC沒有上移。POC只用訊號前20個市場日，末日為10/2。
+
+資料取得使用4次FinMind日行情／主檔請求，重用既有逐筆後另補262次逐筆請求，合計266次；官方日表與六類公司行動共8次正常TLS請求。所有FinMind請求走共用用量帳本，沒有重試失敗資料或解除限額。主檔曾因重複產業標籤被本地檢查拒絕，從快取重新讀取未增加網路請求。完整pipeline驗收另有少量請求，見驗收收據的共用帳本統計。
+
+本次固定研究名單仍為2,076個股，0050只供市場情境。1,951檔（含0050）當日有效OHLC與官方一致、0價格衝突；17檔無有效OHLC、109檔兩方均無當日報價。846檔成交量差異分開保存，部分來自普通盤與全日量口徑，不能宣稱全數成交量也已一致。官方表另有8檔有效報價在凍結名單外（含新股／DR）；興櫃仍排除，不能稱此結果涵蓋今日所有上市櫃個股。
+
+新工具`extend_scanner_daily_inputs.py`只追加一個觀測市場日，保持舊矩陣精確不變，以同批FinMind還原價的10/2錨點延長至10/5。缺錨點保留未知；例如2601減資且10/2無有效錨點，沒有拿原價或補值冒充還原價。身分沿用具日期的歷史區間，再與現抓主檔市場核對，仍為provisional且非10/5即時身分認證。這不升級完整歷史資料或實戰資格。
+
+```sh
+python scripts/extend_scanner_daily_inputs.py \
+  --base .cache/poc-latest-20261003/inputs-v1 \
+  --quotes .cache/scanner-20261006/provider/TaiwanStockPrice-2026-10-05.parquet \
+  --adj-anchor .cache/scanner-20261006/provider/TaiwanStockPriceAdj-2026-10-02.parquet \
+  --adj-end .cache/scanner-20261006/provider/TaiwanStockPriceAdj-2026-10-05.parquet \
+  --market-snapshot .cache/scanner-20261006/provider/TaiwanStockInfo-2026-10-05.parquet \
+  --calendar .cache/scanner-20261006/provider/observed-calendar.parquet \
+  --event-extension-report .cache/scanner-20261006/official-v1/report.json \
+  --end 2026-10-05 --output .cache/scanner-20261006/inputs-replay
+
+python scripts/prepare_scanner_daily_poc.py \
+  --bundle .cache/scanner-20261006/inputs-v1 \
+  --tick-directory .cache/scanner-20261006/ticks-v1 \
+  --output .cache/scanner-20261006/poc-replay
+
+python scripts/scan_market_strategies.py \
+  --bundle .cache/scanner-20261006/inputs-v1 \
+  --poc-report .cache/scanner-20261006/poc-complete-v2/report.json \
+  --start 2026-09-29 --end 2026-10-05 \
+  --output .cache/multi-strategy-scanner/oct05-replay
+```
+
+三個離線指令都要求新輸出目錄。POC續接工具限定本次10/2至10/5，先核對舊價格、候選、事件與4,612個原POC紀錄，再重新計算新增28個候選；不把前一天同股票的POC當今天結果。報告封存實際POC演算法、輸入loader及來源雜湊。掃描最早執行時點仍為下一市場交易日；未在本次重算帳戶報酬、成交或實戰資格。完整結果與驗收見`artifacts/forward_simulation/strategy_scanner_20261006.json`及SHA旁檔。
+
+---
+
 目前版本已擴充為80項目錄、36項每日評估（29進場、5篩選、2排名）；已完成2024後87組固定訊號比較。詳見 [本輪擴充結果](strategy_scanner_expansion_20261005.md)。下列「第一批規則／本輪驗收」保留為首次12項版本的歷史紀錄。
 
 2026-10-05。將「每日是否符合策略」獨立於「買幾檔、分配多少錢、何時成交、如何出場」。同一檔股票同一天可以符合多個策略，不用事後知道哪套會贏才能產生訊號。
