@@ -1,0 +1,141 @@
+{
+  "schema": "research_terminal_delivery_v1",
+  "date": "2026-10-06",
+  "application_url": "http://127.0.0.1:8000/terminal/",
+  "legacy_url": "http://127.0.0.1:8768/multi_strategy_scanner.html",
+  "source_end": "2026-10-05",
+  "signal_study_period": [
+    "2024-01-02",
+    "2026-10-02"
+  ],
+  "catalog": {
+    "items": 80,
+    "active_rules": 36,
+    "entry_rules": 29,
+    "filters": 5,
+    "rankings": 2,
+    "pending": 44
+  },
+  "rally_research": {
+    "publication": "artifacts/forward_simulation/strategy_rally_attribution_20261006.json",
+    "sha256": "ce64bc159a89fd84f5b2aa001c0bb9721cc062183559fb34d9aa27d730ad6c62",
+    "new_research_directions": 15,
+    "tested_new_prototypes": 2,
+    "nonoverlapping_episodes_across_two_horizons": 3779
+  },
+  "features": [
+    "dated_signals",
+    "as_of_candles_and_volume",
+    "moving_averages",
+    "known_first_signal_markers",
+    "explainable_watch_assessment",
+    "bounded_signal_study",
+    "frozen_account_replay",
+    "rally_precursors_and_controls",
+    "verified_recent_research_archive"
+  ],
+  "browser_qa": {
+    "stock_click": "5434 崇越: candlestick canvas, volume, MA20/60, signal markers rendered",
+    "historical_case": "2308 台達電 2025-04-08: selected date retained, no later candles; absent daily scan explicitly unknown",
+    "signal_study": "POC 20d: 1359 evaluated events; average net 3.51%, average excess -2.12pp; not compound return",
+    "account_replay": "daily/mixed/control completed using verified cached cases; fixed original 5-stock account identified separately",
+    "archived_account": "poc_range50_all: 666 NAV observations, 442 trades, all six comparison cases retained",
+    "mobile": "390x844: document scrollWidth=390; bottom navigation and cards visible; viewport reset",
+    "legacy_redirect": "original scanner bookmark redirects to new terminal",
+    "console_errors": [],
+    "proof": ".cache/research-terminal/acceptance/terminal-chart.png",
+    "proof_sha256": "a20db10b0565707fffd2131b319afbb98483b6530ff8004649575d673663592b"
+  },
+  "http_checks": [
+    {
+      "endpoint": "/health",
+      "ok": true,
+      "seconds": 0.011,
+      "bytes": 15,
+      "root_type": "dict"
+    },
+    {
+      "endpoint": "/picks",
+      "ok": true,
+      "seconds": 0.088,
+      "bytes": 11381,
+      "root_type": "list"
+    },
+    {
+      "endpoint": "/models",
+      "ok": true,
+      "seconds": 0.017,
+      "bytes": 15257,
+      "root_type": "list"
+    },
+    {
+      "endpoint": "/jobs?limit=10",
+      "ok": true,
+      "seconds": 0.032,
+      "bytes": 6677,
+      "root_type": "list"
+    },
+    {
+      "endpoint": "/research-terminal/api/overview",
+      "ok": true,
+      "seconds": 0.031,
+      "bytes": 1525,
+      "root_type": "dict"
+    },
+    {
+      "endpoint": "/research-terminal/api/signals?date=2026-10-05&strategy_id=poc_up_red",
+      "ok": true,
+      "seconds": 0.01,
+      "bytes": 8542,
+      "root_type": "dict"
+    },
+    {
+      "endpoint": "/research-terminal/api/stocks/2308?date=2025-04-08",
+      "ok": true,
+      "seconds": 0.137,
+      "bytes": 29451,
+      "root_type": "dict"
+    },
+    {
+      "endpoint": "/research-terminal/api/research/episodes?stock_id=2308&year=2025&horizon=60",
+      "ok": true,
+      "seconds": 0.016,
+      "bytes": 3279,
+      "root_type": "dict"
+    },
+    {
+      "endpoint": "/research-terminal/api/archive",
+      "ok": true,
+      "seconds": 0.016,
+      "bytes": 7571,
+      "root_type": "dict"
+    }
+  ],
+  "validation": {
+    "make_test": {
+      "passed": 6350,
+      "warnings": 37,
+      "log": ".cache/research-terminal/acceptance/make-test-final.log",
+      "elapsed_seconds": 100.33
+    },
+    "make_pipeline": {
+      "exit_code": 0,
+      "log": ".cache/research-terminal/acceptance/pipeline.log"
+    },
+    "node_check": true,
+    "git_diff_check": true
+  },
+  "external_data_requests_for_terminal_and_rally_research": 0,
+  "schedules_enabled": false,
+  "trade_orders_sent": false,
+  "live_qualified": false,
+  "limitations": [
+    "Catalog is not an exhaustive inventory of all possible strategies.",
+    "Most daily scan snapshots cover only 2026-09-29 to 2026-10-05; older historical markers contain first events, not full daily scans.",
+    "Signal studies are overlapping event returns, not account compound returns.",
+    "POC paired comparison covers known-profile candidates, largely 2026; no independent out-of-sample validation.",
+    "Frozen account range prices are execution assumptions, not verified fills.",
+    "Original replay is a fixed earlier account, not an arbitrary portfolio of all 29 entry rules.",
+    "Local sealed .cache source files are required; unavailable sources raise explicit errors."
+  ]
+}
