@@ -1,0 +1,137 @@
+{
+  "schema": "market_day_update_acceptance_v1",
+  "completed_at": "2026-10-08T00:22:31.039321+08:00",
+  "source_end": "2026-10-07",
+  "sources": [
+    {
+      "path": "artifacts/forward_simulation/entry_context_terminal_20261008.json",
+      "sha256": "aa73fba990fb4b037c9a6b14e2ca15c8b32ba366e20c82340045abcb0e57c823"
+    },
+    {
+      "path": "artifacts/forward_simulation/strategy_scanner_20261008_v2.json",
+      "sha256": "b5b16de7c86df6fcbd5c85c485d7a89778322f04a1e4c2a7595038c7dafbbaa4"
+    },
+    {
+      "path": ".cache/scanner-20261008/db-price-repair.json",
+      "sha256": "2a7aeba82e5a09f70b57e2270d1ae842fb074cf0aabf45b0c64a536ff8717500"
+    },
+    {
+      "path": ".cache/scanner-20261008/official-v1/provider-crosscheck-v3.json",
+      "sha256": "77cee0f5820a7121fd0f6569ce1a15bf3110fe075f20279adc6727bcabf75b48"
+    },
+    {
+      "path": ".cache/institutional-repair-20261008/audit-complete.json",
+      "sha256": "47caec703e10de2415f4041ae690502700ea66f5ef9113aaac1d02ec808673d3"
+    }
+  ],
+  "tests": {
+    "command": "make test",
+    "passed": 6848,
+    "warnings": 37,
+    "seconds": 205.25
+  },
+  "pipeline": {
+    "command": "FORCE_RECOMPUTE_DAYS=13 SPONSOR_INGEST=off make pipeline",
+    "exit_code": 0,
+    "jobs": [
+      {
+        "name": "data_quality_check",
+        "status": "success",
+        "started_at": "2026-10-07 16:20:02",
+        "ended_at": "2026-10-07 16:20:05",
+        "degraded_mode": false,
+        "issues": [
+          {
+            "message": "偵測到 3 筆單日漲跌幅超過 50%（最近 5 交易日）",
+            "category": "price_spike",
+            "severity": "warning"
+          }
+        ]
+      },
+      {
+        "name": "build_features",
+        "status": "success",
+        "started_at": "2026-10-07 16:20:05",
+        "ended_at": "2026-10-07 16:21:03"
+      },
+      {
+        "name": "build_labels",
+        "status": "success",
+        "started_at": "2026-10-07 16:21:03",
+        "ended_at": "2026-10-07 16:21:05"
+      },
+      {
+        "name": "daily_pick",
+        "status": "success",
+        "started_at": "2026-10-07 16:21:05",
+        "ended_at": "2026-10-07 16:21:12"
+      },
+      {
+        "name": "export_report",
+        "status": "success",
+        "started_at": "2026-10-07 16:21:12",
+        "ended_at": "2026-10-07 16:21:12"
+      }
+    ]
+  },
+  "api": {
+    "health": {
+      "http_status": 200
+    },
+    "picks": {
+      "http_status": 200
+    },
+    "models": {
+      "http_status": 200
+    },
+    "jobs": {
+      "http_status": 200
+    },
+    "poc_first": {
+      "http_status": 200,
+      "total": 7
+    },
+    "overview": {
+      "http_status": 200,
+      "source_end": "2026-10-07"
+    }
+  },
+  "data_status": {
+    "data_ready": true,
+    "price_date": "2026-10-07",
+    "expected_date": "2026-10-07",
+    "feature_date": "2026-10-07",
+    "feature_stocks": 1850,
+    "markets": [
+      {
+        "market": "TPEX",
+        "date": "2026-10-07",
+        "stocks": 873
+      },
+      {
+        "market": "TWSE",
+        "date": "2026-10-07",
+        "stocks": 1081
+      }
+    ],
+    "problems": []
+  },
+  "finmind_shared_usage": {
+    "requests_in_window": 681,
+    "window_start_time": 1791389229.784929,
+    "total_requests": 54871,
+    "total_wait_time": 0.0,
+    "effective_limit": 4860,
+    "remaining_requests": 4179,
+    "retry_after_seconds": 0.0,
+    "cooldown_until": 0.0
+  },
+  "live_qualified": false,
+  "orders_submitted": false,
+  "scheduler_changed": false,
+  "limitations": [
+    "10/7 POC quality remains unknown for 11 of 28 original candidates; no missing tape coordinates remain.",
+    "Official/FinMind institutional overlaps with field differences were preserved and audited, not overwritten.",
+    "Frozen research stock membership and historical real-time publication availability remain uncertified."
+  ]
+}

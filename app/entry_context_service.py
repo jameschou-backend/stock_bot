@@ -16,8 +16,8 @@ import pyarrow.parquet as pq
 
 from app.research_terminal_service import EvidenceError, ResearchTerminal, _iso
 
-PUBLICATION = 'artifacts/forward_simulation/entry_context_terminal_20261007.json'
-PUBLICATION_SHA256 = '872d189be103546cc99d8976329377680a77a8a1026103d43a1c565a452cc0ba'
+PUBLICATION = 'artifacts/forward_simulation/entry_context_terminal_20261008.json'
+PUBLICATION_SHA256 = 'aa73fba990fb4b037c9a6b14e2ca15c8b32ba366e20c82340045abcb0e57c823'
 STRATEGY_IDS = ('entry_contraction_narrow', 'entry_peer_narrow')
 _RULES = {
     STRATEGY_IDS[0]: ('前期價格收斂＋市場廣度偏弱', 'contraction_and_narrow', 'contraction'),

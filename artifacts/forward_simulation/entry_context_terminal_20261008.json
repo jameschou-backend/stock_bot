@@ -1,0 +1,301 @@
+{
+  "schema": "entry_context_terminal_v1",
+  "start": "2026-09-01",
+  "end": "2026-10-07",
+  "dates": [
+    "2026-09-01",
+    "2026-09-02",
+    "2026-09-03",
+    "2026-09-04",
+    "2026-09-07",
+    "2026-09-08",
+    "2026-09-09",
+    "2026-09-10",
+    "2026-09-11",
+    "2026-09-14",
+    "2026-09-15",
+    "2026-09-16",
+    "2026-09-17",
+    "2026-09-18",
+    "2026-09-21",
+    "2026-09-22",
+    "2026-09-23",
+    "2026-09-24",
+    "2026-09-29",
+    "2026-09-30",
+    "2026-10-01",
+    "2026-10-02",
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07"
+  ],
+  "day_context": [
+    {
+      "date": "2026-09-01",
+      "market_breadth_value": 0.4554913294797688,
+      "market_breadth_coverage": 0.8908341915550978,
+      "market_narrow": true,
+      "valid60_stocks": 1730,
+      "eligible_stocks": 1942,
+      "parent_candidates": 3
+    },
+    {
+      "date": "2026-09-02",
+      "market_breadth_value": 0.4513888888888889,
+      "market_breadth_coverage": 0.8902627511591963,
+      "market_narrow": true,
+      "valid60_stocks": 1728,
+      "eligible_stocks": 1941,
+      "parent_candidates": 3
+    },
+    {
+      "date": "2026-09-03",
+      "market_breadth_value": 0.3948896631823461,
+      "market_breadth_coverage": 0.8871715610510046,
+      "market_narrow": true,
+      "valid60_stocks": 1722,
+      "eligible_stocks": 1941,
+      "parent_candidates": 0
+    },
+    {
+      "date": "2026-09-04",
+      "market_breadth_value": 0.4276583381754794,
+      "market_breadth_coverage": 0.8866563626996393,
+      "market_narrow": true,
+      "valid60_stocks": 1721,
+      "eligible_stocks": 1941,
+      "parent_candidates": 2
+    },
+    {
+      "date": "2026-09-07",
+      "market_breadth_value": 0.42334494773519166,
+      "market_breadth_coverage": 0.8871715610510046,
+      "market_narrow": true,
+      "valid60_stocks": 1722,
+      "eligible_stocks": 1941,
+      "parent_candidates": 0
+    },
+    {
+      "date": "2026-09-08",
+      "market_breadth_value": 0.40267286461359675,
+      "market_breadth_coverage": 0.8866563626996393,
+      "market_narrow": true,
+      "valid60_stocks": 1721,
+      "eligible_stocks": 1941,
+      "parent_candidates": 1
+    },
+    {
+      "date": "2026-09-09",
+      "market_breadth_value": 0.42044134727061555,
+      "market_breadth_coverage": 0.8867147270854789,
+      "market_narrow": true,
+      "valid60_stocks": 1722,
+      "eligible_stocks": 1942,
+      "parent_candidates": 0
+    },
+    {
+      "date": "2026-09-10",
+      "market_breadth_value": 0.39591836734693875,
+      "market_breadth_coverage": 0.8831101956745623,
+      "market_narrow": true,
+      "valid60_stocks": 1715,
+      "eligible_stocks": 1942,
+      "parent_candidates": 1
+    },
+    {
+      "date": "2026-09-11",
+      "market_breadth_value": 0.3556851311953353,
+      "market_breadth_coverage": 0.8831101956745623,
+      "market_narrow": true,
+      "valid60_stocks": 1715,
+      "eligible_stocks": 1942,
+      "parent_candidates": 1
+    },
+    {
+      "date": "2026-09-14",
+      "market_breadth_value": 0.3405373831775701,
+      "market_breadth_coverage": 0.8811116829644879,
+      "market_narrow": true,
+      "valid60_stocks": 1712,
+      "eligible_stocks": 1943,
+      "parent_candidates": 4
+    },
+    {
+      "date": "2026-09-15",
+      "market_breadth_value": 0.30971896955503514,
+      "market_breadth_coverage": 0.8795056642636457,
+      "market_narrow": true,
+      "valid60_stocks": 1708,
+      "eligible_stocks": 1942,
+      "parent_candidates": 3
+    },
+    {
+      "date": "2026-09-16",
+      "market_breadth_value": 0.3568075117370892,
+      "market_breadth_coverage": 0.8774459320288363,
+      "market_narrow": true,
+      "valid60_stocks": 1704,
+      "eligible_stocks": 1942,
+      "parent_candidates": 2
+    },
+    {
+      "date": "2026-09-17",
+      "market_breadth_value": 0.41245593419506466,
+      "market_breadth_coverage": 0.8764160659114315,
+      "market_narrow": true,
+      "valid60_stocks": 1702,
+      "eligible_stocks": 1942,
+      "parent_candidates": 4
+    },
+    {
+      "date": "2026-09-18",
+      "market_breadth_value": 0.4588719153936545,
+      "market_breadth_coverage": 0.8764160659114315,
+      "market_narrow": true,
+      "valid60_stocks": 1702,
+      "eligible_stocks": 1942,
+      "parent_candidates": 7
+    },
+    {
+      "date": "2026-09-21",
+      "market_breadth_value": 0.48063380281690143,
+      "market_breadth_coverage": 0.8774459320288363,
+      "market_narrow": true,
+      "valid60_stocks": 1704,
+      "eligible_stocks": 1942,
+      "parent_candidates": 6
+    },
+    {
+      "date": "2026-09-22",
+      "market_breadth_value": 0.4715208455666471,
+      "market_breadth_coverage": 0.8769309989701339,
+      "market_narrow": true,
+      "valid60_stocks": 1703,
+      "eligible_stocks": 1942,
+      "parent_candidates": 2
+    },
+    {
+      "date": "2026-09-23",
+      "market_breadth_value": 0.4647887323943662,
+      "market_breadth_coverage": 0.8774459320288363,
+      "market_narrow": true,
+      "valid60_stocks": 1704,
+      "eligible_stocks": 1942,
+      "parent_candidates": 2
+    },
+    {
+      "date": "2026-09-24",
+      "market_breadth_value": 0.4653755868544601,
+      "market_breadth_coverage": 0.8774459320288363,
+      "market_narrow": true,
+      "valid60_stocks": 1704,
+      "eligible_stocks": 1942,
+      "parent_candidates": 6
+    },
+    {
+      "date": "2026-09-29",
+      "market_breadth_value": 0.4586510263929619,
+      "market_breadth_coverage": 0.8779608650875386,
+      "market_narrow": true,
+      "valid60_stocks": 1705,
+      "eligible_stocks": 1942,
+      "parent_candidates": 3
+    },
+    {
+      "date": "2026-09-30",
+      "market_breadth_value": 0.5275821596244131,
+      "market_breadth_coverage": 0.8774459320288363,
+      "market_narrow": false,
+      "valid60_stocks": 1704,
+      "eligible_stocks": 1942,
+      "parent_candidates": 4
+    },
+    {
+      "date": "2026-10-01",
+      "market_breadth_value": 0.536427732079906,
+      "market_breadth_coverage": 0.8764160659114315,
+      "market_narrow": false,
+      "valid60_stocks": 1702,
+      "eligible_stocks": 1942,
+      "parent_candidates": 3
+    },
+    {
+      "date": "2026-10-02",
+      "market_breadth_value": 0.551440329218107,
+      "market_breadth_coverage": 0.8759011328527292,
+      "market_narrow": false,
+      "valid60_stocks": 1701,
+      "eligible_stocks": 1942,
+      "parent_candidates": 0
+    },
+    {
+      "date": "2026-10-05",
+      "market_breadth_value": 0.5443856554967667,
+      "market_breadth_coverage": 0.8781621063500258,
+      "market_narrow": false,
+      "valid60_stocks": 1701,
+      "eligible_stocks": 1937,
+      "parent_candidates": 4
+    },
+    {
+      "date": "2026-10-06",
+      "market_breadth_value": 0.5584950029394474,
+      "market_breadth_coverage": 0.8781621063500258,
+      "market_narrow": false,
+      "valid60_stocks": 1701,
+      "eligible_stocks": 1937,
+      "parent_candidates": 3
+    },
+    {
+      "date": "2026-10-07",
+      "market_breadth_value": 0.5801886792452831,
+      "market_breadth_coverage": 0.8746776689014956,
+      "market_narrow": false,
+      "valid60_stocks": 1696,
+      "eligible_stocks": 1939,
+      "parent_candidates": 5
+    }
+  ],
+  "artifacts": {
+    "report": {
+      "path": ".cache/entry-context-terminal-20261008/report.json",
+      "sha256": "3c692da41da646a9d0ed2d8d19bcf85c9157ecc37b3540c72257d763a15f6538"
+    },
+    "bundle": {
+      "path": ".cache/scanner-20261008/inputs-v1/manifest.json",
+      "sha256": "5cca5f1cac1463287d7ebd1b128ddd4a63e4c16bcfd5b25202a9f8a7993728b3"
+    }
+  },
+  "previous_publication": {
+    "path": "artifacts/forward_simulation/entry_context_terminal_20261007.json",
+    "sha256": "872d189be103546cc99d8976329377680a77a8a1026103d43a1c565a452cc0ba"
+  },
+  "continuity": {
+    "previous_end": "2026-10-06",
+    "unchanged_dates": 24,
+    "unchanged_parent_events": 64,
+    "exact_comparison": true
+  },
+  "source_sha256": {
+    "scripts/publish_entry_context_extension.py": "b8cfc8793aa17884f341254d58a465d63d69b8b5f2ee7dd8abd53390d50f54bc",
+    "scripts/publish_entry_context_terminal.py": "78a01c7d1d9ed58aadfd6f106efb32a80c5bfa3910aad018fbe985b563e231a9",
+    "skills/rally_context_features.py": "a8c46a3c8c07e6bd04589e1d067ef2f5a7e763180e35365db5b4b6cd94a5695c",
+    "skills/strategy_scanner/engine.py": "df16fc4688c96472dbc3df849e8de7b9300ecf0cf0cad196b04e69d0e80f8442",
+    "skills/strategy_scanner/research_rules.py": "4075a89a40dc2032bd199442cf2e5cb84ca16beb5be990974da41375bf1bd20f",
+    "skills/strategy_scanner/data.py": "e1841f50af0da6706a8143b04ce3ffff33d850300cf6df1dcb39110f32ad46fc",
+    "scripts/research_sector_participation_20261003.py": "3bbad05a9be1fc5dfeb91d885c5d9f2d938e389be0a82148d5dc6269d8dab103",
+    ".cache/scanner-20261008/inputs-v1/manifest.json": "5cca5f1cac1463287d7ebd1b128ddd4a63e4c16bcfd5b25202a9f8a7993728b3",
+    "artifacts/forward_simulation/entry_context_terminal_20261007.json": "872d189be103546cc99d8976329377680a77a8a1026103d43a1c565a452cc0ba",
+    ".cache/entry-context-terminal-20261007-v2/report.json": "8143a2e5bd092c7382c3df7f51fac77154b63676b0e1b7741ff81c01d7d59d4e",
+    ".cache/scanner-20261008/inputs-v1/close-official.parquet": "c0c831882fd471087344e4dc7cb56d6d954b73822ec6632d86d42aeff03f93cb",
+    ".cache/scanner-20261008/inputs-v1/raw-close.parquet": "bd2545c4b54657271702c4d145797870356c165550cfc244e1e63f6a407b4a50",
+    ".cache/scanner-20261008/inputs-v1/raw-volume.parquet": "c6d449a605b437942cdda7929eb96ad9b86b2613483609478de75de30459c07b",
+    ".cache/scanner-20261008/inputs-v1/eligibility.parquet": "df92b4a06f8b274f1e19dc5a08a2490f156e1c54af05a4a850c9dcc1e173d308"
+  },
+  "live_qualified": false,
+  "account_independent": true,
+  "historical_period_already_researched": true,
+  "signal_timing": "T_completed_close_then_next_session",
+  "signal_policy": "Known first parent occurrence; no holdings or capital restriction; no 60-session research cooldown",
+  "note": "兩組只看進場條件；同儕依前月以前的價格相關性建立，不是官方產業分類。每日訊號與歷史60日冷卻勝率樣本分開。"
+}

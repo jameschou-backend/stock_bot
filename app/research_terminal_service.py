@@ -23,8 +23,8 @@ import pandas as pd
 import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parents[1]
-DAILY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_20261006.json'
-DAILY_AUDIT_SHA = 'a3c0874367d4e8302f89285f459e4752df6d35963aad9df2a68eebadc5153b23'
+DAILY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_20261008_v2.json'
+DAILY_AUDIT_SHA = 'b5b16de7c86df6fcbd5c85c485d7a89778322f04a1e4c2a7595038c7dafbbaa4'
 STUDY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_expansion_20261005.json'
 STUDY_AUDIT_SHA = '7b5602319aeda6538728ae8f9fccfe4a0d6784d934b778950fd6cb40c30d3a64'
 RALLY_REPORT = 'artifacts/forward_simulation/strategy_rally_attribution_20261006.json'
