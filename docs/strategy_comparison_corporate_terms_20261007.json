@@ -1,0 +1,80 @@
+{
+  "schema": "strategy_comparison_corporate_completion_v1",
+  "description": "Only completes corporate settlement in the fixed eight-arm comparison. Original range terms, blocked attempts, selection rules, costs and account journal remain unchanged.",
+  "strategy_parameters_changed": false,
+  "cash_supplements": [],
+  "live_qualified": false,
+  "overrides": {
+    "3086-2024-09-24": {
+      "pay_date": "2024-10-29",
+      "ordinary_share_available_date": "2024-10-29",
+      "shares_per_share": 0.10000000423,
+      "fractional_cash_per_share": 10.0,
+      "entitlement_announcement_date": "2024-09-05",
+      "delivery_announcement_date": "2024-10-08",
+      "listing_announcement_date": "2024-10-17",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": false,
+      "fractional_cash_available_for_trading": false,
+      "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+      "evidence_manifest": {
+        "path": "docs/strategy_comparison_corporate_3086_evidence_20261007.json",
+        "sha256": "4a5412cf18f865745d4510bbefdf8e7f40a2e0e4e9872480a0f3de278cdcc88a"
+      },
+      "evidence_files": [
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130905-t59sb09.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130905-t59sb09.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130906-t108sb22.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130906-t108sb22.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131008-t59sb09.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131008-t59sb09.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131017-t59sb08.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131017-t59sb08.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130901-1131031.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130901-1131031.json.source.json",
+        ".cache/strategy-account-comparison-20261007/online-v3/red_known.json"
+      ],
+      "source": "Official issuer confirmed whole-share delivery and listing notices; fractional cash offsets fees, actual net/payment date unspecified. Source manifest: docs/strategy_comparison_corporate_3086_evidence_20261007.json"
+    },
+    "8932-2025-09-08": {
+      "pay_date": "2025-10-30",
+      "ordinary_share_available_date": "2025-10-30",
+      "shares_per_share": 0.0841412231,
+      "fractional_cash_per_share": 5.0,
+      "entitlement_announcement_date": "2025-08-20",
+      "delivery_announcement_date": "2025-10-23",
+      "listing_announcement_date": "2025-10-28",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": false,
+      "fractional_cash_available_for_trading": false,
+      "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+      "evidence_manifest": {
+        "path": "docs/strategy_comparison_corporate_8932_evidence_20261007.json",
+        "sha256": "2ecd1e66a939f36b180cdf344dae10006ea7b23a1e2f3b66c231c8910135030a"
+      },
+      "evidence_files": [
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140820-t59sb09.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140820-t59sb09.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140821-t108sb22.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140821-t108sb22.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141023-t59sb09.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141023-t59sb09.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141028-t59sb08.html",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141028-t59sb08.html.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/wiselink-114-agm-minutes.pdf",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/wiselink-114-agm-minutes.pdf.source.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140801-1141130.json",
+        ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140801-1141130.json.source.json",
+        ".cache/strategy-account-comparison-20261007/online-v3/poc_priority_known.json"
+      ],
+      "source": "Official issuer confirmed whole-share delivery and listing notices; fractional cash offsets fees, actual net/payment date unspecified. Source manifest: docs/strategy_comparison_corporate_8932_evidence_20261007.json"
+    }
+  },
+  "valuation_qualification": "Whole shares are delivered on the confirmed date. Any positive fractional gross face-value amount stays an undated, unavailable receivable. The ledger NAV includes its gross value and is therefore an upper estimate for this asset; disclose NAV minus the actual unpaid gross versus NAV as endpoint sensitivity, not as an exact net-asset certification. Fee offsets, net proceeds and payment dates were not established."
+}

@@ -1,0 +1,177 @@
+{
+  "schema": "strategy_comparison_corporate_evidence_v1",
+  "recorded_at": "2026-10-07T00:12:14.808668+00:00",
+  "stock_id": "8932",
+  "stock_name": "智通*",
+  "action_id": "8932-2025-09-08",
+  "use_scope": "account_settlement_only_not_selection",
+  "strategy_parameters_changed": false,
+  "verified_terms": {
+    "ex_date": "2025-09-08",
+    "record_date": "2025-09-14",
+    "shares_per_1000": "84.14122310",
+    "shares_per_share_decimal": "0.0841412231",
+    "par_value_ntd": "5",
+    "stock_pay_date": "2025-10-30",
+    "ordinary_share_available_date": "2025-10-30",
+    "entitlement_announcement_date": "2025-08-20",
+    "delivery_confirmation_announcement_date": "2025-10-23",
+    "listing_confirmation_announcement_date": "2025-10-28",
+    "same_rights_as_existing_ordinary": true,
+    "deposit_method": "book_entry",
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_gross_basis": "par_value",
+    "fractional_cash_purpose": "offset_book_entry_fees",
+    "fractional_cash_net_amount": null,
+    "fractional_cash_pay_date": null,
+    "spendable_fractional_cash_proven": false
+  },
+  "valuation_boundary": {
+    "whole_share_valuation": "An account model may mark receivable ordinary shares using observable ordinary-share closing prices before delivery, provided they remain nontradable until 2025-10-30. This is a model valuation basis, not a promised cash amount.",
+    "fractional_valuation": "Only the gross par-value calculation and fee-offset designation are verified. The net payable amount and payment date are unknown; do not add the gross amount to available cash.",
+    "selection_boundary": "Use the confirmed delivery announcement only for accounting settlement. Do not use its later publication as an earlier selection input; the 2025-08-20 issuer notice supplied only a tentative delivery date.",
+    "par_value_boundary": "This issuer has NTD 5 par value. The final entitlement is taken directly from 84.14122310 shares per 1000, rather than dividing the monetary stock dividend by an assumed NTD 10 par value."
+  },
+  "affected_position_example": {
+    "source_path": ".cache/strategy-account-comparison-20261007/online-v3/poc_priority_known.json",
+    "source_sha256": "45d108bbc0c1efe9fb0964e59324c956ac4a53f1c4ca65c447ba676e2d08dba4",
+    "event_id": "liquid_universe-2025-06-10-8932",
+    "entitled_old_shares": 3215,
+    "total_new_share_rights_decimal": "270.5140322665",
+    "whole_new_shares": 270,
+    "fractional_share_right_decimal": "0.5140322665",
+    "gross_fractional_par_cash_ntd": 2,
+    "fee_offset_net_cash_ntd": null,
+    "fractional_cash_pay_date": null,
+    "available_cash_increment_from_fraction": 0,
+    "zero_increment_reason": "No spendable fractional cash is evidenced; this does not assert that the economic net amount is zero."
+  },
+  "official_sources": [
+    {
+      "announcement_date": "2025-08-20",
+      "purpose": "issuer_entitlement_and_tentative_delivery",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda10cbffb803bd7872dc15f8c9bc630918a4a2d15f644030cffc5b2d44e1d867d85001c4020199082e66027ea6fd1674a1f9277cdd65cc2525274d38fcf4b87e266b82d7c1e9b75e6e65d7b9d4c5c107e8",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140820-t59sb09.html",
+      "sha256": "1224ba3c6b3a8e9eba16d3b1196a0788bee0ba41d8a0eece271f0875c2402419",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140820-t59sb09.html.source.json",
+      "receipt_sha256": "b73d267900796eccfce4a574f144843335c59f9e5e46c73d4386714d20fe504c",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:07:52.720077+00:00",
+      "verified_terms": {
+        "shares_per_1000": "84.14122310",
+        "par_value_ntd": "5",
+        "fractional_rule": "Uncombined sub-share rights are converted at par to whole NTD; for book-entry recipients these proceeds are designated as book-entry processing fees. Explicit floor rounding is confirmed by the approved AGM resolution cited separately.",
+        "combination_window": "Within five days from the beginning of the share-transfer suspension.",
+        "tentative_delivery_date": "2025-10-30"
+      }
+    },
+    {
+      "announcement_date": "2025-08-21",
+      "purpose": "issuer_ex_rights_and_record_date",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t108sb22?parameters=500238982122988332dfa44d37df9b33a6f3e7c368f122d0ee991ed86e9ac89da947c8bbbf1ffbc601cb76736e9e5e79482edc8fafbb7395009b24ba4329524058a4140f4742e6f1302da1ef6e15b625364397574a402723a90bc0eb101895809ed4a2cd9132d82c1ca54f6fe601ab3c",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140821-t108sb22.html",
+      "sha256": "6dbedb407622503e1dbe853190865442660dbcd73d92f3dc90be8b5a3c02808a",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140821-t108sb22.html.source.json",
+      "receipt_sha256": "e21a5c1b58afc3415159915b1c6419a9b0d4b86a625360b22598bc010af5b30f",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:07:50.666806+00:00",
+      "verified_terms": {
+        "ex_date": "2025-09-08",
+        "record_date": "2025-09-14",
+        "transfer_suspension_start": "2025-09-10",
+        "transfer_suspension_end": "2025-09-14",
+        "cash_dividend_per_share": "0.28194759",
+        "cash_dividend_pay_date": "2025-09-30",
+        "shares_per_1000": "84.14122310",
+        "par_value_ntd": "5"
+      }
+    },
+    {
+      "announcement_date": "2025-10-23",
+      "purpose": "issuer_confirmed_delivery",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda10cbffb803bd7872dc15f8c9bc630918a4a2d15f644030cffc5b2d44e1d867d85001c4020199082e66027ea6fd1674a1f9277cdd65cc2525274d38fcf4b87e26ce185562139fa3030d62afb41f321b73",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141023-t59sb09.html",
+      "sha256": "af8054df6c8fbd8bd966e05a1f0e4e289300a954bc6aafeaefe8b0c9f24dbbac",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141023-t59sb09.html.source.json",
+      "receipt_sha256": "2e1901ae9ab86cbeadbeda656d12c10819bcafeccedf8ee676ae73a5e0f4e77f",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:07:53.183852+00:00",
+      "verified_terms": {
+        "stock_delivery_date": "2025-10-30",
+        "issued_new_ordinary_shares": 13802380,
+        "delivery_method": "Book-entry transfer into the shareholder-designated securities account for shareholders with an existing depository account.",
+        "rights": "Same rights and obligations as existing ordinary shares.",
+        "par_value_ntd": "5"
+      }
+    },
+    {
+      "announcement_date": "2025-10-28",
+      "purpose": "official_listing_confirmation",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb08?parameters=52858abc88ec4a6ddd930c418cfa2ddafba97c1041962a640d0022af3de806006c653194a07ff06a3e03e61b2ef05e61ab8480ef7a3a65630efbef0d3322cadffce23bf092429fb6eae1ee1a7d12d4141867686890b1a9dc908bc350f12612f0aeb537f477d135aaa7cfe6b60d70cfc4",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141028-t59sb08.html",
+      "sha256": "14123e22e6b42173db48b3fd3f471653a744869f061d7571110b58cfb77c8daf",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141028-t59sb08.html.source.json",
+      "receipt_sha256": "36083c8804f25bbed0f99061be014ba48193fc125a17bc7605c3881dce69a8aa",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:07:52.126656+00:00",
+      "verified_terms": {
+        "ordinary_share_trading_date": "2025-10-30",
+        "issued_new_ordinary_shares": 13802380,
+        "rights": "Same rights and obligations as existing ordinary shares.",
+        "issuer_delivery_notice_date": "2025-10-23"
+      }
+    }
+  ],
+  "official_query": {
+    "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140801-1141130.json",
+    "sha256": "ed266c1d296f94c49df32b9dd3d119e8fb1170b3bd45e74fa018daf81cd22368",
+    "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140801-1141130.json.source.json",
+    "receipt_sha256": "35a219ef2ba605b33b465e0c4864086bacd1ad2f98f140066d6d752ab0fe7f5a"
+  },
+  "source_sha256": {
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140820-t59sb09.html": "1224ba3c6b3a8e9eba16d3b1196a0788bee0ba41d8a0eece271f0875c2402419",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140820-t59sb09.html.source.json": "b73d267900796eccfce4a574f144843335c59f9e5e46c73d4386714d20fe504c",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140821-t108sb22.html": "6dbedb407622503e1dbe853190865442660dbcd73d92f3dc90be8b5a3c02808a",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140821-t108sb22.html.source.json": "e21a5c1b58afc3415159915b1c6419a9b0d4b86a625360b22598bc010af5b30f",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141023-t59sb09.html": "af8054df6c8fbd8bd966e05a1f0e4e289300a954bc6aafeaefe8b0c9f24dbbac",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141023-t59sb09.html.source.json": "2e1901ae9ab86cbeadbeda656d12c10819bcafeccedf8ee676ae73a5e0f4e77f",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141028-t59sb08.html": "14123e22e6b42173db48b3fd3f471653a744869f061d7571110b58cfb77c8daf",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1141028-t59sb08.html.source.json": "36083c8804f25bbed0f99061be014ba48193fc125a17bc7605c3881dce69a8aa",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/wiselink-114-agm-minutes.pdf": "08e0dd7add57f1725fd0b5b450b591c71047464d4d79c926bec1307997defd45",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/wiselink-114-agm-minutes.pdf.source.json": "bef0fe2201683c16942348d64abd5d0b1430f74339f0656a54a293d521ebc104",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140801-1141130.json": "ed266c1d296f94c49df32b9dd3d119e8fb1170b3bd45e74fa018daf81cd22368",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/mops-8932-1140801-1141130.json.source.json": "35a219ef2ba605b33b465e0c4864086bacd1ad2f98f140066d6d752ab0fe7f5a",
+    ".cache/strategy-account-comparison-20261007/online-v3/poc_priority_known.json": "45d108bbc0c1efe9fb0964e59324c956ac4a53f1c4ca65c447ba676e2d08dba4"
+  },
+  "privacy": "This manifest omits personal names, addresses, telephone numbers and unrelated announcement sections. Original public issuer/regulator responses remain unmodified in the local evidence cache for hash verification.",
+  "network_requests_used_to_archive_official_evidence": 6,
+  "finmind_requests": 0,
+  "database_mutations": false,
+  "live_qualified": false,
+  "complete_fractional_cash_settlement_verified": false,
+  "supporting_sources": [
+    {
+      "announcement_date": "2025-06-30",
+      "purpose": "approved_fractional_rounding_and_fee_designation",
+      "url": "https://wiselink.tw/wp-content/uploads/2025/07/114%E5%B9%B4%E6%99%BA%E9%80%9A%E8%82%A1%E6%9D%B1%E6%9C%83%E8%AD%B0%E4%BA%8B%E9%8C%84.pdf",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/wiselink-114-agm-minutes.pdf",
+      "sha256": "08e0dd7add57f1725fd0b5b450b591c71047464d4d79c926bec1307997defd45",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/8932/wiselink-114-agm-minutes.pdf.source.json",
+      "receipt_sha256": "bef0fe2201683c16942348d64abd5d0b1430f74339f0656a54a293d521ebc104",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:10:45.733288+00:00",
+      "verified_terms": {
+        "document_date_kind": "shareholder_meeting_date; online publication date not separately established",
+        "pdf_page_number": 4,
+        "pdf_page_index": 3,
+        "fractional_cash_rounding": "floor_ntd",
+        "fractional_cash_gross_basis": "par_value",
+        "fractional_cash_purpose": "offset_book_entry_fees",
+        "par_value_ntd": "5",
+        "superseded_shares_per_1000_not_used": "83.56",
+        "final_ratio_source": "2025-08-20 issuer entitlement announcement supplies 84.14122310 shares per 1000; the AGM authorized subsequent adjustment for changes in eligible shares.",
+        "next_page_resolution": "PDF page 5 records approval of this capital-increase proposal."
+      }
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "schema": "strategy_account_comparison_gap_diagnosis_v1",
+  "recorded_at": "2026-10-06T23:41:26.542638+00:00",
+  "stock_id": "6914",
+  "stock_name": "阜爾運通",
+  "signal_date": "2024-06-05",
+  "entry_date": "2024-06-06",
+  "conclusion": "Official daily evidence shows this TWSE-listed stock traded; the exact FinMind board-tick request returned zero rows. This is missing execution evidence, not an ineligible emerging-market candidate or evidence of no trading.",
+  "invalid_skip": false,
+  "skip_as_ineligible_allowed": false,
+  "skip_as_zero_volume_allowed": false,
+  "no_valid_tick_found": true,
+  "emerging_market_on_entry_date": false,
+  "trading_suspension_supported": false,
+  "new_ipo_on_entry_date": false,
+  "historical_identity": {
+    "episode": {
+      "category": "股票",
+      "cfi": "ESVUFR",
+      "end": null,
+      "isin": "TW0006914005",
+      "market": "TWSE",
+      "name": "阜爾運通",
+      "snapshot_date": "2026-10-02",
+      "start": "2024-05-03",
+      "start_evidence": "current_official_ISIN",
+      "stock_id": "6914"
+    },
+    "source": {
+      "path": ".cache/poc-latest-20261003/inputs-v1/identity.json",
+      "sha256": "94e4a020abfe8dc448d48da1e1831f5a046d975282e830970fec675f0381b872"
+    },
+    "exact_stock_trading_exclusions": [],
+    "first_eligible_session": "2024-05-03",
+    "eligible_sessions_through_entry": 25,
+    "eligibility_source": {
+      "path": ".cache/poc-latest-20261003/inputs-v1/eligibility.parquet",
+      "sha256": "a097c01105456c84b24a8ef5221616cd7f49bece458563d670b71324317a5d06"
+    },
+    "reference_urls": [
+      "https://dsp.tpex.org.tw/web/announcement/announcement_detail.php?content_file=MTEzMDA1OTg4ODAuaHRtbA%3D%3D&content_number=MTEzMDA1OTg4ODA%3D"
+    ],
+    "url_note": "Parent investigator independently verified the TPEX announcement ending emerging-market trading on the TWSE listing date."
+  },
+  "official_daily": {
+    "raw": {
+      "path": ".cache/official-market-days-20261002/acquisition/raw/4c097faa51deb0f4863a48b2249e4e497516fe5e2166c24e18eea33ac1e9dec1.bin",
+      "sha256": "4fe57397ffd23d86d7eec90f7ae4c8c75f998379b31a452262b9a379d2e4cc47"
+    },
+    "receipt": {
+      "path": ".cache/official-market-days-20261002/acquisition/receipts/4c097faa51deb0f4863a48b2249e4e497516fe5e2166c24e18eea33ac1e9dec1.json",
+      "sha256": "2eba34fcf7cb696242b2903e4be70256eedf946f9824de3ea567229463756f6c"
+    },
+    "table_title": "113年06月06日 每日收盤行情(全部(不含權證、牛熊證、可展延牛熊證))",
+    "fields": [
+      "證券代號",
+      "證券名稱",
+      "成交股數",
+      "成交筆數",
+      "成交金額",
+      "開盤價",
+      "最高價",
+      "最低價",
+      "收盤價",
+      "漲跌(+/-)",
+      "漲跌價差",
+      "最後揭示買價",
+      "最後揭示買量",
+      "最後揭示賣價",
+      "最後揭示賣量",
+      "本益比"
+    ],
+    "row": [
+      "6914",
+      "阜爾運通",
+      "226,180",
+      "371",
+      "36,172,436",
+      "160.50",
+      "162.00",
+      "158.50",
+      "160.00",
+      "<p style= color:red>+</p>",
+      "1.00",
+      "160.00",
+      "14",
+      "160.50",
+      "1",
+      "17.58"
+    ],
+    "normalized_row": {
+      "source_id": "da16eaa20f727535f7e3df57b95277b325798a5b96cb84f87346915b7d4b42c6",
+      "market": "TWSE",
+      "date": "2024-06-06",
+      "stock_id": "6914",
+      "name": "阜爾運通",
+      "open": 160.5,
+      "high": 162.0,
+      "low": 158.5,
+      "close": 160.0,
+      "volume": 226180,
+      "volume_scope": "all_daily_sessions",
+      "table_category": null
+    },
+    "normalized_source": {
+      "path": ".cache/market-input-repair-20261002/quote-evidence/official-normalized.parquet",
+      "sha256": "bc8abda7a72394d3dab98720b416f1815ece4675fc7eeb6affe3cb3572e1d9cb"
+    },
+    "volume_scope": "all_daily_sessions",
+    "ordinary_tick_sequence_proven": false
+  },
+  "account_daily": {
+    "row": {
+      "stock_id": "6914",
+      "date": "2024-06-06",
+      "open": 160.5,
+      "high": 162.0,
+      "low": 158.5,
+      "close": 160.0,
+      "volume": 226180.0
+    },
+    "source": {
+      "path": ".cache/poc-latest-20261003/inputs-v1/quotes-unmasked.parquet",
+      "sha256": "d2882ed543bf113cc487639a2792d2b3f26f6ffdacde84de40d9a2ef8e67aeb1"
+    },
+    "ohlcv_equal_official_daily": true
+  },
+  "rsi_candidate": {
+    "event": {
+      "event_id": "rsi14_reclaim30-2024-06-05-6914",
+      "signal_date": "2024-06-05",
+      "entry_date": "2024-06-06",
+      "members": [
+        "6914"
+      ],
+      "priority": 104553985.35,
+      "group_id": "rsi14_reclaim30-2024-06",
+      "group_members": [
+        "6914"
+      ],
+      "group_cutoff_date": "2024-05-31",
+      "selection_reason": "Wilder RSI14 reclaims 30; known first signal; raw amount20 >= 50m",
+      "leader_evidence": {
+        "rsi14": 30.26819834906373,
+        "previous_rsi14": 27.798513268464994,
+        "amount20": 104553985.35,
+        "ranking_basis": "signal_pub_amount20",
+        "information_cutoff": "2024-06-05"
+      }
+    },
+    "source": {
+      "path": ".cache/strategy-account-comparison-20261007/inputs-v1/rsi-entries.json",
+      "sha256": "56201833a1d4011977e495b3aeaee665afbe79422194ca22d260852860cb35fe"
+    },
+    "rule": "Existing Wilder RSI14 reclaim 30, first known signal, amount20 >= 50000000; next observed market session entry.",
+    "candidate_matched_fixed_rule": true
+  },
+  "finmind_tick": {
+    "receipt": {
+      "path": ".cache/strategy-account-comparison-20261007/board-v1/receipts/6914-2024-06-06.json",
+      "sha256": "99f980c1142bd610416d971ce300d71473cb1ff622b7df7396080c9147d2cf02"
+    },
+    "raw": {
+      "path": ".cache/strategy-account-comparison-20261007/board-v1/raw/6914-2024-06-06.parquet",
+      "sha256": "218a5823c57a1bff2e1a06a174dfddbc8292bbfb7b63ea5602d9944fe7289971"
+    },
+    "query": {
+      "data_id": "6914",
+      "dataset": "TaiwanStockPriceTick",
+      "start_date": "2024-06-06"
+    },
+    "status": "empty",
+    "rows": 0,
+    "cache_hit": false,
+    "retrieved_at": 1791329823.754055,
+    "started_at": "2026-10-06T23:37:03.208840+00:00",
+    "raw_columns": [],
+    "attempt": {
+      "path": ".cache/strategy-account-comparison-20261007/board-v1/attempts/6914-2024-06-06.json",
+      "sha256": "1de85caa14bcb6f35d8b0694cb91484434c28e69f7af2e8efef4672b9ef095c4"
+    }
+  },
+  "local_tick_search": {
+    "scope": "Exact 6914-2024-06-06 filename prefix under repository .cache plus the hash-bound volume-profile reuse index. This is not a claim about every hashed external cache or provider archive.",
+    "matching_paths": [
+      ".cache/strategy-account-comparison-20261007/board-v1/attempts/6914-2024-06-06.json",
+      ".cache/strategy-account-comparison-20261007/board-v1/raw/6914-2024-06-06.parquet",
+      ".cache/strategy-account-comparison-20261007/board-v1/receipts/6914-2024-06-06.json"
+    ],
+    "reuse_index_source": {
+      "path": ".cache/volume-profile-20261003/inventory/reuse-index.json",
+      "sha256": "e289bfc2314449b4aae1e3214a8825edc03f89565cb0851228ddd2bf97d80bfc"
+    },
+    "reuse_index_entry_present": false
+  },
+  "action": "Keep the affected arm incomplete pending valid execution evidence or a separately preregistered execution-evidence design; do not fabricate ticks or delete this candidate to complete the run.",
+  "network_requests_for_this_diagnosis": 0,
+  "database_mutations": false,
+  "runner_or_adapter_modified": false,
+  "live_qualified": false
+}

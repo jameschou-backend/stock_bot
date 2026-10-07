@@ -1,0 +1,149 @@
+{
+  "schema": "strategy_comparison_corporate_evidence_v1",
+  "recorded_at": "2026-10-07T00:06:18.399392+00:00",
+  "stock_id": "3086",
+  "stock_name": "華義",
+  "action_id": "3086-2024-09-24",
+  "use_scope": "account_settlement_only_not_selection",
+  "strategy_parameters_changed": false,
+  "verified_terms": {
+    "ex_date": "2024-09-24",
+    "record_date": "2024-09-30",
+    "shares_per_1000": "100.00000423",
+    "shares_per_share_decimal": "0.10000000423",
+    "par_value_ntd": "10",
+    "stock_pay_date": "2024-10-29",
+    "ordinary_share_available_date": "2024-10-29",
+    "entitlement_announcement_date": "2024-09-05",
+    "delivery_confirmation_announcement_date": "2024-10-08",
+    "listing_confirmation_announcement_date": "2024-10-17",
+    "same_rights_as_existing_ordinary": true,
+    "deposit_method": "book_entry",
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_gross_basis": "par_value",
+    "fractional_cash_purpose": "offset_book_entry_and_dematerialized_registration_fees",
+    "fractional_cash_net_amount": null,
+    "fractional_cash_pay_date": null,
+    "spendable_fractional_cash_proven": false
+  },
+  "valuation_boundary": {
+    "whole_share_valuation": "An account model may mark receivable ordinary shares using observable ordinary-share closing prices before delivery, provided they remain nontradable until 2024-10-29. This is a model valuation basis, not a promised cash amount.",
+    "fractional_valuation": "Only the gross par-value calculation and fee-offset designation are verified. The net payable amount and payment date are unknown; do not add the gross amount to available cash.",
+    "selection_boundary": "Use the confirmed delivery announcement only for accounting settlement. Do not use its later publication as an earlier selection input; the 2024-09-05 issuer notice supplied only a tentative delivery date."
+  },
+  "affected_position_example": {
+    "source_path": ".cache/strategy-account-comparison-20261007/online-v3/red_known.json",
+    "source_sha256": "1290919babbf09ecbb3fe1738ddd9aa7adedf16e0d0e7bf9a7843e3a4ab826b9",
+    "event_id": "liquid_universe-2024-09-13-3086",
+    "entitled_old_shares": 1147,
+    "total_new_share_rights_decimal": "114.70000485181",
+    "whole_new_shares": 114,
+    "fractional_share_right_decimal": "0.70000485181",
+    "gross_fractional_par_cash_ntd": 7,
+    "fee_offset_net_cash_ntd": null,
+    "fractional_cash_pay_date": null,
+    "available_cash_increment_from_fraction": 0,
+    "zero_increment_reason": "No spendable fractional cash is evidenced; this does not assert that the economic net amount is zero."
+  },
+  "official_sources": [
+    {
+      "announcement_date": "2024-09-05",
+      "purpose": "issuer_entitlement_and_tentative_delivery",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda10cbffb803bd7872dc15f8c9bc630918df32c33a36944e0adf6404fb984df0815001c4020199082e66027ea6fd1674a1f9277cdd65cc2525274d38fcf4b87e268fdd1a0fbbec00b458ab7a53f8cbda0d",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130905-t59sb09.html",
+      "sha256": "1a2bfac3bb26b53f11cdea619cd75770bc900301e5045bafcd5e8454cbbf56b1",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130905-t59sb09.html.source.json",
+      "receipt_sha256": "0a2d0cb2504565e5a3077cea3dd2776f61943e817330cd9aaade117c39d1a722",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:03:28.161811+00:00",
+      "verified_terms": {
+        "shares_per_1000": "100.00000423",
+        "par_value_ntd": "10",
+        "fractional_rule": "Uncombined sub-share rights are converted at par, rounded down to whole NTD, and designated to offset book-entry and dematerialized-registration fees.",
+        "combination_window": "Within five days from the beginning of the share-transfer suspension.",
+        "tentative_delivery_date": "2024-10-29"
+      }
+    },
+    {
+      "announcement_date": "2024-09-06",
+      "purpose": "issuer_ex_rights_and_record_date",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t108sb22?parameters=3eeab8872213791d1941c5480f9572c7a6f3e7c368f122d0ee991ed86e9ac89da947c8bbbf1ffbc601cb76736e9e5e79482edc8fafbb7395009b24ba4329524058a4140f4742e6f1302da1ef6e15b6258416e2fa1e7c2af49be71dcb10d45788922c9d3c394dc58fdb403f6b5bb4974a",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130906-t108sb22.html",
+      "sha256": "ebbb2546336fd519d4f0990990ae0a3dab80d2b06e57ba8cb690f12deceb3a78",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130906-t108sb22.html.source.json",
+      "receipt_sha256": "f025db767817ad302e97ea528bceb28305eb4f01e3e2eb59833ad38dc6cd7dff",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:03:26.306919+00:00",
+      "verified_terms": {
+        "ex_date": "2024-09-24",
+        "record_date": "2024-09-30",
+        "transfer_suspension_start": "2024-09-26",
+        "transfer_suspension_end": "2024-09-30",
+        "cash_dividend_per_share": "0.5",
+        "cash_dividend_pay_date": "2024-10-29",
+        "shares_per_1000": "100.00000423",
+        "fractional_rule": "Par-value conversion offsets book-entry and dematerialized-registration fees."
+      }
+    },
+    {
+      "announcement_date": "2024-10-08",
+      "purpose": "issuer_confirmed_delivery",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda10cbffb803bd7872dc15f8c9bc630918df32c33a36944e0adf6404fb984df0815001c4020199082e66027ea6fd1674a1f9277cdd65cc2525274d38fcf4b87e2657b142508b38725ae8d5ccbfb432f4b0",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131008-t59sb09.html",
+      "sha256": "32341c2d970d5fca15473d76e21efc1944ec947c590530a2161eb9864326538b",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131008-t59sb09.html.source.json",
+      "receipt_sha256": "9a8704c8c8285195f48e4499b9ecf7a19c5587a064e55e6bc2a17c06fa218d83",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:03:28.747455+00:00",
+      "verified_terms": {
+        "stock_delivery_date": "2024-10-29",
+        "ordinary_share_trading_date": "2024-10-29",
+        "issued_new_ordinary_shares": 2361130,
+        "delivery_method": "Book-entry transfer into the shareholder-designated securities account for shareholders with an existing depository account.",
+        "rights": "Same rights and obligations as existing ordinary shares."
+      }
+    },
+    {
+      "announcement_date": "2024-10-17",
+      "purpose": "official_listing_confirmation",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb08?parameters=52858abc88ec4a6ddd930c418cfa2ddafba97c1041962a640d0022af3de806001bcb9892dfd6fb846241ee795862043bab8480ef7a3a65630efbef0d3322cadffce23bf092429fb6eae1ee1a7d12d414b60ace1cfb911de6bb123d552ec276a9aeb537f477d135aaa7cfe6b60d70cfc4",
+      "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131017-t59sb08.html",
+      "sha256": "668b2bf8c286cfd5c27ff3b8b4a7f77e4aaa638c77b71ee3a953b7bf2d614ad1",
+      "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131017-t59sb08.html.source.json",
+      "receipt_sha256": "51cbf80b7af14debb76a9c89fa828d80eb0ae221ecfd65a2fcb4422c113ab5dc",
+      "http_status": 200,
+      "retrieved_at": "2026-10-07T00:03:26.877966+00:00",
+      "verified_terms": {
+        "ordinary_share_trading_date": "2024-10-29",
+        "issued_new_ordinary_shares": 2361130,
+        "rights": "Same rights and obligations as existing ordinary shares.",
+        "issuer_delivery_notice_date": "2024-10-08"
+      }
+    }
+  ],
+  "official_query": {
+    "path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130901-1131031.json",
+    "sha256": "bb553d27a32e02f72e65377ddb01a436fec0a78dca76ac87f447942b06f3e4ad",
+    "receipt_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130901-1131031.json.source.json",
+    "receipt_sha256": "8c19f34e3f465604c9a77c40344ff131f6e7cf04aed1e5587f57386626654324"
+  },
+  "source_sha256": {
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130905-t59sb09.html": "1a2bfac3bb26b53f11cdea619cd75770bc900301e5045bafcd5e8454cbbf56b1",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130905-t59sb09.html.source.json": "0a2d0cb2504565e5a3077cea3dd2776f61943e817330cd9aaade117c39d1a722",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130906-t108sb22.html": "ebbb2546336fd519d4f0990990ae0a3dab80d2b06e57ba8cb690f12deceb3a78",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130906-t108sb22.html.source.json": "f025db767817ad302e97ea528bceb28305eb4f01e3e2eb59833ad38dc6cd7dff",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131008-t59sb09.html": "32341c2d970d5fca15473d76e21efc1944ec947c590530a2161eb9864326538b",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131008-t59sb09.html.source.json": "9a8704c8c8285195f48e4499b9ecf7a19c5587a064e55e6bc2a17c06fa218d83",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131017-t59sb08.html": "668b2bf8c286cfd5c27ff3b8b4a7f77e4aaa638c77b71ee3a953b7bf2d614ad1",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1131017-t59sb08.html.source.json": "51cbf80b7af14debb76a9c89fa828d80eb0ae221ecfd65a2fcb4422c113ab5dc",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130901-1131031.json": "bb553d27a32e02f72e65377ddb01a436fec0a78dca76ac87f447942b06f3e4ad",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/3086/mops-3086-1130901-1131031.json.source.json": "8c19f34e3f465604c9a77c40344ff131f6e7cf04aed1e5587f57386626654324",
+    ".cache/strategy-account-comparison-20261007/online-v3/red_known.json": "1290919babbf09ecbb3fe1738ddd9aa7adedf16e0d0e7bf9a7843e3a4ab826b9"
+  },
+  "privacy": "This manifest omits personal names, addresses, telephone numbers and unrelated announcement sections. Original public issuer/regulator responses remain unmodified in the local evidence cache for hash verification.",
+  "network_requests_used_to_archive_official_evidence": 6,
+  "finmind_requests": 0,
+  "database_mutations": false,
+  "live_qualified": false,
+  "complete_fractional_cash_settlement_verified": false
+}

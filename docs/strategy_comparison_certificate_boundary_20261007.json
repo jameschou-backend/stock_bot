@@ -1,0 +1,281 @@
+{
+  "schema": "strategy_comparison_certificate_boundary_v1",
+  "scope": "read_only_execution_boundary_review_no_strategy_or_frozen_engine_change",
+  "live_qualified": false,
+  "actual_certificate_fills_verified": false,
+  "original_source_files_modified": false,
+  "completed_comparison_cases_5876_checks": [
+    {
+      "version": "online-v2",
+      "arm": "poc_priority",
+      "case_path": ".cache/strategy-account-comparison-20261007/online-v2/poc_priority.json",
+      "case_sha256": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+      "completed": true,
+      "stock_id": "5876",
+      "coverage": "entire_account_period",
+      "counts": {
+        "cohorts": 0,
+        "corporate_actions": 0,
+        "trades": 0
+      },
+      "conclusion": "No 5876 holdings, entitlements or fills in this account; no execution impact from this certificate case. This is not a general engine certification."
+    },
+    {
+      "version": "online-v2",
+      "arm": "benchmark",
+      "case_path": ".cache/strategy-account-comparison-20261007/online-v2/benchmark.json",
+      "case_sha256": "aa58f62222c4e4eed5d29b0f7c82f81dae71b0013db18230adb4254a35c2b366",
+      "completed": true,
+      "stock_id": "5876",
+      "coverage": "entire_account_period",
+      "counts": {
+        "cohorts": 0,
+        "corporate_actions": 0,
+        "trades": 0
+      },
+      "conclusion": "No 5876 holdings, entitlements or fills in this account; no execution impact from this certificate case. This is not a general engine certification."
+    },
+    {
+      "version": "online-v2",
+      "arm": "rsi_time20",
+      "case_path": ".cache/strategy-account-comparison-20261007/online-v2/rsi_time20.json",
+      "case_sha256": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+      "completed": true,
+      "stock_id": "5876",
+      "coverage": "entire_account_period",
+      "counts": {
+        "cohorts": 0,
+        "corporate_actions": 0,
+        "trades": 0
+      },
+      "conclusion": "No 5876 holdings, entitlements or fills in this account; no execution impact from this certificate case. This is not a general engine certification."
+    },
+    {
+      "version": "online-v3",
+      "arm": "red_original",
+      "case_path": ".cache/strategy-account-comparison-20261007/online-v3/red_original.json",
+      "case_sha256": "f1ccd0f99749e6d2e15ab2e99478bb44110d633b132a2bb655e64f870d85d3cf",
+      "completed": true,
+      "stock_id": "5876",
+      "coverage": "entire_account_period",
+      "counts": {
+        "cohorts": 0,
+        "corporate_actions": 0,
+        "trades": 0
+      },
+      "conclusion": "No 5876 holdings, entitlements or fills in this account; no execution impact from this certificate case. This is not a general engine certification."
+    }
+  ],
+  "previous_range_six_case_checks": [
+    {
+      "arm": "benchmark_range50",
+      "case_path": ".cache/poc-range-first-20261005/online-v2/benchmark_range50.json",
+      "case_sha256": "9c56a83718e397218386a54fd17513611bb8c93db8ca22edd1921924ea2a7e56",
+      "cohort_count": 0,
+      "corporate_action_count": 0,
+      "trade_count": 0,
+      "certificate_window_sales": [],
+      "stop_window_fill_count": 0,
+      "certificate_new_share_quantities": [],
+      "conclusion": "No 5876 certificate exposure.",
+      "final_return_error_quantified": false
+    },
+    {
+      "arm": "benchmark_range70_30",
+      "case_path": ".cache/poc-range-first-20261005/online-v2/benchmark_range70_30.json",
+      "case_sha256": "96c6833c1f3b40d2601dbbfceddfbf199587554b235eac12356ffb912a0e6d14",
+      "cohort_count": 0,
+      "corporate_action_count": 0,
+      "trade_count": 0,
+      "certificate_window_sales": [],
+      "stop_window_fill_count": 0,
+      "certificate_new_share_quantities": [],
+      "conclusion": "No 5876 certificate exposure.",
+      "final_return_error_quantified": false
+    },
+    {
+      "arm": "poc_range50_all",
+      "case_path": ".cache/poc-range-first-20261005/online-v2/poc_range50_all.json",
+      "case_sha256": "a40fddff126a32dd2d8cbca640d00bff459c710cacd47b7e06d84afecfa0a102",
+      "cohort_count": 0,
+      "corporate_action_count": 0,
+      "trade_count": 0,
+      "certificate_window_sales": [],
+      "stop_window_fill_count": 0,
+      "certificate_new_share_quantities": [],
+      "conclusion": "No 5876 certificate exposure.",
+      "final_return_error_quantified": false
+    },
+    {
+      "arm": "poc_range50_first",
+      "case_path": ".cache/poc-range-first-20261005/online-v2/poc_range50_first.json",
+      "case_sha256": "82039170f9edfeb85509a3ea39a1bf4a10602af9fb9293b82afec010b7da0c48",
+      "cohort_count": 1,
+      "corporate_action_count": 5,
+      "trade_count": 5,
+      "certificate_window_sales": [
+        {
+          "date": "2026-08-20",
+          "side": "sell",
+          "stock_id": "5876",
+          "qty": 202,
+          "channel": "odd",
+          "proxy_price": 43.55,
+          "gross": 8797.1,
+          "cash_change": 8711.1,
+          "reason": "three_black",
+          "event_id": "liquid_universe-2026-07-17-5876",
+          "execution_evidence": "intraday_odd_daily_range_fraction_proxy"
+        }
+      ],
+      "stop_window_fill_count": 0,
+      "certificate_new_share_quantities": [
+        202
+      ],
+      "conclusion": "Original shares were sold before certificate delivery; the delivery-day odd-lot sale is the new certificate quantity. It is outside the three-session stop window, but using ordinary odd-lot prices/volume for certificates remains unverified.",
+      "final_return_error_quantified": false
+    },
+    {
+      "arm": "poc_range70_30_all",
+      "case_path": ".cache/poc-range-first-20261005/online-v2/poc_range70_30_all.json",
+      "case_sha256": "f6046594148c0ab6660b36b204d3d878ae716ab0fcb5c6f564ffece0981cb771",
+      "cohort_count": 0,
+      "corporate_action_count": 0,
+      "trade_count": 0,
+      "certificate_window_sales": [],
+      "stop_window_fill_count": 0,
+      "certificate_new_share_quantities": [],
+      "conclusion": "No 5876 certificate exposure.",
+      "final_return_error_quantified": false
+    },
+    {
+      "arm": "poc_range70_30_first",
+      "case_path": ".cache/poc-range-first-20261005/online-v2/poc_range70_30_first.json",
+      "case_sha256": "ad39fc30fb1ed84832b787b9d945e9462f5c7b0dfbe5adcda3ec69defdf352a4",
+      "cohort_count": 1,
+      "corporate_action_count": 5,
+      "trade_count": 6,
+      "certificate_window_sales": [
+        {
+          "date": "2026-08-20",
+          "side": "sell",
+          "stock_id": "5876",
+          "qty": 175,
+          "channel": "odd",
+          "proxy_price": 43.41,
+          "gross": 7596.75,
+          "cash_change": 7519.75,
+          "reason": "three_black",
+          "event_id": "liquid_universe-2026-07-17-5876",
+          "execution_evidence": "intraday_odd_daily_range_fraction_proxy"
+        }
+      ],
+      "stop_window_fill_count": 0,
+      "certificate_new_share_quantities": [
+        175
+      ],
+      "conclusion": "Original shares were sold before certificate delivery; the delivery-day odd-lot sale is the new certificate quantity. It is outside the three-session stop window, but using ordinary odd-lot prices/volume for certificates remains unverified.",
+      "final_return_error_quantified": false
+    }
+  ],
+  "legal_rule": {
+    "source_path": ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/twse-certificate-trading-rules-FL007359.html",
+    "source_url": "https://twse-regulation.twse.com.tw/TW/law/DAT0201.aspx?FLCODE=FL007359",
+    "rule_code": "FL007359",
+    "title": "臺灣證券交易所股份有限公司新股權利證書暨股款繳納憑證買賣辦法",
+    "document_amendment_date": "2018-12-24",
+    "date_note": "The website footer update is not the rule amendment date.",
+    "relevant_articles": [
+      2,
+      3,
+      6
+    ],
+    "interpretation": "The instrument is a new-share entitlement certificate. Its initial reference price has a separate rule. Certificate odd-lot orders follow the odd-lot rules and stop three business days before the replacement stock listing. A company code and same shareholder rights do not independently verify use of that company ordinary odd-lot tape.",
+    "formal_legal_opinion": false
+  },
+  "certificates": [
+    {
+      "stock_id": "5876",
+      "ex_date": "2026-07-28",
+      "certificate_listing_date": "2026-08-20",
+      "ordinary_conversion_date": "2026-09-11",
+      "derived_preconversion_stop_sessions": [
+        "2026-09-08",
+        "2026-09-09",
+        "2026-09-10"
+      ],
+      "frozen_terms_claim": {
+        "certificate_stock_id": "5876",
+        "same_code_fungible_trading_verified": true,
+        "certificate_trading_modeled": true
+      },
+      "review": "Frozen terms directly add certificates to the ordinary holding and do not encode the preconversion reporting stop. The saved LT185/company evidence has not independently certified the ordinary odd-lot tape for this instrument. No assertion that the trading code must differ. Old source remains unchanged."
+    },
+    {
+      "stock_id": "6446",
+      "ex_date": "2026-07-09",
+      "certificate_listing_date": "2026-08-06",
+      "ordinary_conversion_date": "2026-08-13",
+      "derived_preconversion_stop_sessions": [
+        "2026-08-10",
+        "2026-08-11",
+        "2026-08-12"
+      ],
+      "failed_case_path": ".cache/strategy-account-comparison-20261007/online-v4/red_known.json",
+      "failed_reason": "Stock dividend data missing or invalid: 6446 2026-07-09; shares_per_share, pay_date",
+      "held_old_shares": 531,
+      "shares_per_share_decimal": "0.10927783862",
+      "new_whole_shares": 58,
+      "fraction_decimal": "0.02653230722",
+      "fractional_gross_face_value_floor_ntd": 0,
+      "ordinary_price_volume_applicability_verified": false,
+      "certificate_stock_id_verified": false,
+      "required_treatment": "Keep this arm incomplete until certificate identity, tradability, prices/volume and conversion are represented with evidence. Do not assume ordinary tape, silently delay delivery to conversion, discard entitlement, or count conversion as a second allotment.",
+      "facts_manifest": {
+        "path": "docs/strategy_comparison_corporate_6446_evidence_20261007.json",
+        "sha256": "b94180e01ac53fd502761052972f4c6f930f10fedcd9ea3269d26562d3207c5b"
+      }
+    }
+  ],
+  "limitations": [
+    "Absence of 5876 in four completed accounts only establishes non-exposure to this corporate case.",
+    "The implicated old sale proceeds are not the final portfolio-return error; later reinvestment and alternative certificate execution require an actual replay.",
+    "The three-session stop dates are derived from the sealed completed-account market calendar; no certificate fill has been certified.",
+    "This record changes neither any original terms nor any previously sealed account result."
+  ],
+  "source_sha256": {
+    ".cache/strategy-account-comparison-20261007/online-v2/poc_priority.json": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+    ".cache/strategy-account-comparison-20261007/online-v2/benchmark.json": "aa58f62222c4e4eed5d29b0f7c82f81dae71b0013db18230adb4254a35c2b366",
+    ".cache/strategy-account-comparison-20261007/online-v2/rsi_time20.json": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+    ".cache/strategy-account-comparison-20261007/online-v3/red_original.json": "f1ccd0f99749e6d2e15ab2e99478bb44110d633b132a2bb655e64f870d85d3cf",
+    ".cache/poc-range-first-20261005/online-v2/report.json": "637071e14cf08bf06123d919bcc97b43b929f03bd12fece22f655fc9acc35594",
+    ".cache/poc-range-first-20261005/online-v2/benchmark_range50.json": "9c56a83718e397218386a54fd17513611bb8c93db8ca22edd1921924ea2a7e56",
+    ".cache/poc-range-first-20261005/online-v2/benchmark_range70_30.json": "96c6833c1f3b40d2601dbbfceddfbf199587554b235eac12356ffb912a0e6d14",
+    ".cache/poc-range-first-20261005/online-v2/poc_range50_all.json": "a40fddff126a32dd2d8cbca640d00bff459c710cacd47b7e06d84afecfa0a102",
+    ".cache/poc-range-first-20261005/online-v2/poc_range50_first.json": "82039170f9edfeb85509a3ea39a1bf4a10602af9fb9293b82afec010b7da0c48",
+    ".cache/poc-range-first-20261005/online-v2/poc_range70_30_all.json": "f6046594148c0ab6660b36b204d3d878ae716ab0fcb5c6f564ffece0981cb771",
+    ".cache/poc-range-first-20261005/online-v2/poc_range70_30_first.json": "ad39fc30fb1ed84832b787b9d945e9462f5c7b0dfbe5adcda3ec69defdf352a4",
+    "docs/poc_range_corporate_terms_20261005.json": "0d8a2f96b5bc9431d2e03fd7f9800ea9ecf6db1bacd3a8b38332454b4e1c3238",
+    "docs/strategy_comparison_corporate_terms_20261007.json": "0beb606d43e1aff2c42b94e1bfdc40785b8f7e863116e68adf5e5a72d7e31efb",
+    ".cache/strategy-account-comparison-20261007/online-v4/red_known.json": "5a4d1f8e04fe83bf2df2ad7d06ff357b553b38ad03be912c96e3ed53c91d9145",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/twse-certificate-trading-rules-FL007359.html": "ce80e781ef75d6fdea8b469064a6f4626483415374f5eced71891afa940649cd",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/twse-certificate-trading-rules-FL007359.html.source.json": "da24af0aff808dae61e72a0c2d735b55ca5ab03bacfb3a7496d866e2396d69a3",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/twse-LT185-6446-2026.json": "620a21030318490cf1cdc7ddf0e18228d6d5b35e0f240e365647b29b42b96bbc",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/twse-LT185-6446-2026.json.source.json": "18cf395f75660e0a2bb99f044def2efc530e8492c807a67874d6e931f62694ce",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150731-t59sb08.html": "6c0b00a6c3b4d65cb35fcacb970c6eeb38a1ea89709a6aca37df5ed6f2ef0d67",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150731-t59sb08.html.source.json": "4b43879bad738d24b750f4a1cd3f6077985decccc95b12e513f33cc06169f52d",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150811-t59sb08.html": "17e874adbafa0ba446d6d1c00188d88db54898a80cc0beffa3e9e97c5a76d99d",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150811-t59sb08.html.source.json": "8074b5acd70e8b53d9425a11642a85cab401e961d2e1422c8bed5520d25a0398",
+    "docs/strategy_comparison_corporate_6446_evidence_20261007.json": "b94180e01ac53fd502761052972f4c6f930f10fedcd9ea3269d26562d3207c5b",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150624-t59sb09.html": "17562859e1bb9e4bee819b3378b1ba7dab6c83664a9e0375fd4d6e983942eed7",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150624-t59sb09.html.source.json": "da10cfc0654a1fd5f174a2e709c0900b237a5b2a3bfe644b72f0cb15171a8544",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150625-t108sb22.html": "a3a3b623e3cf1a01fe5aeeb221d0f104fdf3a17f0ba25f4648dda5be33160c48",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150625-t108sb22.html.source.json": "0b62f55cb9e84a8cff9c4f4778acb9af51a2b62ae499ac6633413dd09b6504c5",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150731-t59sb09.html": "b22409c72e2dca34909b5e2bb399f6e5705762d33299c788429174e64d7a555a",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150731-t59sb09.html.source.json": "5938e062fbb87526c197a959c4cd2e23e643133c78d9bfa6ff4e0af87cd4b5e2",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150804-t59sb09.html": "853e56fc5cdb1d4915d7c8b30ea08e2ba32139e721f347185ebb64914482493f",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150804-t59sb09.html.source.json": "1b5f394ee9489974a0b57f00b301289cc0ca5405201504a9f926ba87c508382d",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150501-1150831.json": "88b7606f1606409f27ca808377caf4a6e17482514c22b0efc24b76997a1cfdab",
+    ".cache/strategy-account-comparison-20261007/corporate-evidence/6446/mops-6446-1150501-1150831.json.source.json": "19564550963d083033aa62dac6cdb95329fe0fc88277a5914b70d64253c81a5f"
+  }
+}

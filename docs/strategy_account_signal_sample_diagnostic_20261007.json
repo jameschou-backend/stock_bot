@@ -1,0 +1,1513 @@
+{
+  "schema": "strategy_account_signal_sample_diagnostic_v1",
+  "created_date": "2026-10-07",
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "guards": {
+    "posthoc_descriptive": true,
+    "noncausal": true,
+    "not_counterfactual": true,
+    "not_an_independent_unseen_test": true,
+    "parameters_unchanged": true,
+    "no_replay_performed": true,
+    "no_request_performed": true,
+    "no_strategy_promotion": true,
+    "live_qualified": false,
+    "exact_return_difference_attributed_to_costs": false,
+    "caution": "The funded set is chosen by its realized constrained-account path. This matched subset is descriptive, not a tradable filter or an estimate of removing/replacing individual trades."
+  },
+  "comparison_scope": {
+    "completed_accounts": [
+      "poc_priority",
+      "rsi_time20"
+    ],
+    "rsi_shared_exit_completed": false,
+    "rsi_shared_exit_reason": "Necessary board tick unavailable: 6914-2024-06-06 empty",
+    "price_proxy": "buy L+0.7*(H-L), sell L+0.3*(H-L), separate board/odd data",
+    "account_exit_time20": "entry day counted as1; after20 completed holding sessions, attempt next-session sale; partial/unfilled exits retry",
+    "old_signal_exit": "T+20 adjusted close proxy; older costs unchanged for the paired signal-only comparison"
+  },
+  "unchanged_old_all_signal_research": {
+    "rows": 3524,
+    "status_counts": {
+      "evaluated": 3475,
+      "stock_path_missing": 17,
+      "benchmark_path_missing": 10,
+      "immature": 22
+    },
+    "evaluated": 3475,
+    "wins": 1925,
+    "losses": 1550,
+    "flat": 0,
+    "win_rate": 0.5539568345323741,
+    "arithmetic_mean_net_return": 0.02900037547047216,
+    "arithmetic_mean_matched_0050_net_return": 0.0348885737090484,
+    "return_unit": "ratio; multiply by 100 for percent",
+    "definition": "unchanged older T+1 adjusted open to T+20 adjusted close signal outcome and its original costs"
+  },
+  "unchanged_old_research_on_new_funded_coordinates": {
+    "rows": 90,
+    "status_counts": {
+      "evaluated": 82,
+      "benchmark_path_missing": 3,
+      "stock_path_missing": 2,
+      "immature": 3
+    },
+    "evaluated": 82,
+    "wins": 34,
+    "losses": 48,
+    "flat": 0,
+    "win_rate": 0.4146341463414634,
+    "arithmetic_mean_net_return": -0.013787981125977808,
+    "arithmetic_mean_matched_0050_net_return": 0.034662442388284115,
+    "return_unit": "ratio; multiply by 100 for percent",
+    "definition": "unchanged older T+1 adjusted open to T+20 adjusted close signal outcome and its original costs"
+  },
+  "matched_coordinates": [
+    {
+      "event_id": "rsi14_reclaim30-2024-01-05-3701",
+      "stock_id": "3701",
+      "signal_date": "2024-01-05",
+      "funded_entry_date": "2024-01-08",
+      "old_signal_entry_date": "2024-01-08",
+      "old_signal_exit_date": "2024-02-02",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.0337558454969803
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-01-08-1590",
+      "stock_id": "1590",
+      "signal_date": "2024-01-08",
+      "funded_entry_date": "2024-01-09",
+      "old_signal_entry_date": "2024-01-09",
+      "old_signal_exit_date": "2024-02-05",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.04142148291657688
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-01-09-3693",
+      "stock_id": "3693",
+      "signal_date": "2024-01-09",
+      "funded_entry_date": "2024-01-10",
+      "old_signal_entry_date": "2024-01-10",
+      "old_signal_exit_date": "2024-02-15",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.015006792551898185
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-02-05-6547",
+      "stock_id": "6547",
+      "signal_date": "2024-02-05",
+      "funded_entry_date": "2024-02-15",
+      "old_signal_entry_date": "2024-02-15",
+      "old_signal_exit_date": "2024-03-14",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.1782624588996673
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-02-15-3665",
+      "stock_id": "3665",
+      "signal_date": "2024-02-15",
+      "funded_entry_date": "2024-02-16",
+      "old_signal_entry_date": "2024-02-16",
+      "old_signal_exit_date": "2024-03-15",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.038812557893060484
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-02-16-8454",
+      "stock_id": "8454",
+      "signal_date": "2024-02-16",
+      "funded_entry_date": "2024-02-19",
+      "old_signal_entry_date": "2024-02-19",
+      "old_signal_exit_date": "2024-03-18",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.08362677856770195
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-03-15-8155",
+      "stock_id": "8155",
+      "signal_date": "2024-03-15",
+      "funded_entry_date": "2024-03-18",
+      "old_signal_entry_date": "2024-03-18",
+      "old_signal_exit_date": "2024-04-16",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.16002063968251612
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-03-18-2345",
+      "stock_id": "2345",
+      "signal_date": "2024-03-18",
+      "funded_entry_date": "2024-03-19",
+      "old_signal_entry_date": "2024-03-19",
+      "old_signal_exit_date": "2024-04-17",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.11129270344616793
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-03-19-2231",
+      "stock_id": "2231",
+      "signal_date": "2024-03-19",
+      "funded_entry_date": "2024-03-20",
+      "old_signal_entry_date": "2024-03-20",
+      "old_signal_exit_date": "2024-04-18",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.04550542342701158
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-04-17-2352",
+      "stock_id": "2352",
+      "signal_date": "2024-04-17",
+      "funded_entry_date": "2024-04-18",
+      "old_signal_entry_date": "2024-04-18",
+      "old_signal_exit_date": "2024-05-16",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.05839987941482405
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-04-22-1476",
+      "stock_id": "1476",
+      "signal_date": "2024-04-22",
+      "funded_entry_date": "2024-04-23",
+      "old_signal_entry_date": "2024-04-23",
+      "old_signal_exit_date": "2024-05-21",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.08081083650837106
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-04-22-6789",
+      "stock_id": "6789",
+      "signal_date": "2024-04-22",
+      "funded_entry_date": "2024-04-23",
+      "old_signal_entry_date": "2024-04-23",
+      "old_signal_exit_date": "2024-05-21",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.00013675016273040352
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-05-20-2352",
+      "stock_id": "2352",
+      "signal_date": "2024-05-20",
+      "funded_entry_date": "2024-05-21",
+      "old_signal_entry_date": "2024-05-21",
+      "old_signal_exit_date": "2024-06-18",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.03577651280590055
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-05-22-2204",
+      "stock_id": "2204",
+      "signal_date": "2024-05-22",
+      "funded_entry_date": "2024-05-23",
+      "old_signal_entry_date": "2024-05-23",
+      "old_signal_exit_date": "2024-06-20",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.02456944693685914
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-05-22-5439",
+      "stock_id": "5439",
+      "signal_date": "2024-05-22",
+      "funded_entry_date": "2024-05-23",
+      "old_signal_entry_date": "2024-05-23",
+      "old_signal_exit_date": "2024-06-20",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.055612760985670695
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-06-19-6505",
+      "stock_id": "6505",
+      "signal_date": "2024-06-19",
+      "funded_entry_date": "2024-06-20",
+      "old_signal_entry_date": "2024-06-20",
+      "old_signal_exit_date": "2024-07-17",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.010862832262118483
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-06-25-6469",
+      "stock_id": "6469",
+      "signal_date": "2024-06-25",
+      "funded_entry_date": "2024-06-26",
+      "old_signal_entry_date": "2024-06-26",
+      "old_signal_exit_date": "2024-07-23",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.08653432963692387
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-06-28-1326",
+      "stock_id": "1326",
+      "signal_date": "2024-06-28",
+      "funded_entry_date": "2024-07-01",
+      "old_signal_entry_date": "2024-07-01",
+      "old_signal_exit_date": "2024-07-30",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.00531155507828629
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-07-23-2603",
+      "stock_id": "2603",
+      "signal_date": "2024-07-23",
+      "funded_entry_date": "2024-07-26",
+      "old_signal_entry_date": "2024-07-26",
+      "old_signal_exit_date": "2024-08-22",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.1504325575404657
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-07-26-3264",
+      "stock_id": "3264",
+      "signal_date": "2024-07-26",
+      "funded_entry_date": "2024-07-29",
+      "old_signal_entry_date": "2024-07-29",
+      "old_signal_exit_date": "2024-08-23",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.01651977306485586
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-07-31-6669",
+      "stock_id": "6669",
+      "signal_date": "2024-07-31",
+      "funded_entry_date": "2024-08-01",
+      "old_signal_entry_date": "2024-08-01",
+      "old_signal_exit_date": "2024-08-28",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.11165995879842594
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-08-26-1326",
+      "stock_id": "1326",
+      "signal_date": "2024-08-26",
+      "funded_entry_date": "2024-08-27",
+      "old_signal_entry_date": "2024-08-27",
+      "old_signal_exit_date": "2024-09-24",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.07442430587392679
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-08-26-6505",
+      "stock_id": "6505",
+      "signal_date": "2024-08-26",
+      "funded_entry_date": "2024-08-27",
+      "old_signal_entry_date": "2024-08-27",
+      "old_signal_exit_date": "2024-09-24",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.13864520377888645
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-09-05-3228",
+      "stock_id": "3228",
+      "signal_date": "2024-09-05",
+      "funded_entry_date": "2024-09-06",
+      "old_signal_entry_date": "2024-09-06",
+      "old_signal_exit_date": "2024-10-08",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.03909393011356532
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-09-25-5483",
+      "stock_id": "5483",
+      "signal_date": "2024-09-25",
+      "funded_entry_date": "2024-09-26",
+      "old_signal_entry_date": "2024-09-26",
+      "old_signal_exit_date": "2024-10-28",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.08414892855142408
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-09-25-5508",
+      "stock_id": "5508",
+      "signal_date": "2024-09-25",
+      "funded_entry_date": "2024-09-26",
+      "old_signal_entry_date": "2024-09-26",
+      "old_signal_exit_date": "2024-10-28",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.01013002911880545
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-10-11-3661",
+      "stock_id": "3661",
+      "signal_date": "2024-10-11",
+      "funded_entry_date": "2024-10-14",
+      "old_signal_entry_date": "2024-10-14",
+      "old_signal_exit_date": "2024-11-11",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.24854718633525685
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-10-29-3086",
+      "stock_id": "3086",
+      "signal_date": "2024-10-29",
+      "funded_entry_date": "2024-10-30",
+      "old_signal_entry_date": "2024-10-30",
+      "old_signal_exit_date": "2024-11-27",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.26316638675736537
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-10-29-5432",
+      "stock_id": "5432",
+      "signal_date": "2024-10-29",
+      "funded_entry_date": "2024-10-30",
+      "old_signal_entry_date": "2024-10-30",
+      "old_signal_exit_date": "2024-11-27",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.2988934517283386
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-11-12-6869",
+      "stock_id": "6869",
+      "signal_date": "2024-11-12",
+      "funded_entry_date": "2024-11-13",
+      "old_signal_entry_date": "2024-11-13",
+      "old_signal_exit_date": "2024-12-10",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.026598827440128314
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-11-28-1808",
+      "stock_id": "1808",
+      "signal_date": "2024-11-28",
+      "funded_entry_date": "2024-11-29",
+      "old_signal_entry_date": "2024-11-29",
+      "old_signal_exit_date": "2024-12-26",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.06922478774192797
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-11-29-2327",
+      "stock_id": "2327",
+      "signal_date": "2024-11-29",
+      "funded_entry_date": "2024-12-02",
+      "old_signal_entry_date": "2024-12-02",
+      "old_signal_exit_date": "2024-12-27",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.02252524818995738
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-12-11-6416",
+      "stock_id": "6416",
+      "signal_date": "2024-12-11",
+      "funded_entry_date": "2024-12-12",
+      "old_signal_entry_date": "2024-12-12",
+      "old_signal_exit_date": "2025-01-09",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.02760670814319366
+    },
+    {
+      "event_id": "rsi14_reclaim30-2024-12-27-5871",
+      "stock_id": "5871",
+      "signal_date": "2024-12-27",
+      "funded_entry_date": "2024-12-30",
+      "old_signal_entry_date": "2024-12-30",
+      "old_signal_exit_date": "2025-02-05",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.014122701902681944
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-01-02-2211",
+      "stock_id": "2211",
+      "signal_date": "2025-01-02",
+      "funded_entry_date": "2025-01-03",
+      "old_signal_entry_date": "2025-01-03",
+      "old_signal_exit_date": "2025-02-10",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.0034475556257678175
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-01-10-2344",
+      "stock_id": "2344",
+      "signal_date": "2025-01-10",
+      "funded_entry_date": "2025-01-13",
+      "old_signal_entry_date": "2025-01-13",
+      "old_signal_exit_date": "2025-02-18",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.3628736182270478
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-02-06-2382",
+      "stock_id": "2382",
+      "signal_date": "2025-02-06",
+      "funded_entry_date": "2025-02-07",
+      "old_signal_entry_date": "2025-02-07",
+      "old_signal_exit_date": "2025-03-07",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.04481785497908963
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-02-11-3037",
+      "stock_id": "3037",
+      "signal_date": "2025-02-11",
+      "funded_entry_date": "2025-02-12",
+      "old_signal_entry_date": "2025-02-12",
+      "old_signal_exit_date": "2025-03-12",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.11455567063139027
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-03-04-4977",
+      "stock_id": "4977",
+      "signal_date": "2025-03-04",
+      "funded_entry_date": "2025-03-05",
+      "old_signal_entry_date": "2025-03-05",
+      "old_signal_exit_date": "2025-04-01",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.10835644585843507
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-03-10-2455",
+      "stock_id": "2455",
+      "signal_date": "2025-03-10",
+      "funded_entry_date": "2025-03-11",
+      "old_signal_entry_date": "2025-03-11",
+      "old_signal_exit_date": "2025-04-09",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.3663628856057485
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-03-13-2357",
+      "stock_id": "2357",
+      "signal_date": "2025-03-13",
+      "funded_entry_date": "2025-03-14",
+      "old_signal_entry_date": "2025-03-14",
+      "old_signal_exit_date": "2025-04-14",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.12417390751538193
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-04-02-2486",
+      "stock_id": "2486",
+      "signal_date": "2025-04-02",
+      "funded_entry_date": "2025-04-07",
+      "old_signal_entry_date": "2025-04-07",
+      "old_signal_exit_date": "2025-05-05",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.0839630066936391
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-04-11-2317",
+      "stock_id": "2317",
+      "signal_date": "2025-04-11",
+      "funded_entry_date": "2025-04-14",
+      "old_signal_entry_date": "2025-04-14",
+      "old_signal_exit_date": "2025-05-12",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.07280788051308451
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-04-15-2049",
+      "stock_id": "2049",
+      "signal_date": "2025-04-15",
+      "funded_entry_date": "2025-04-16",
+      "old_signal_entry_date": "2025-04-16",
+      "old_signal_exit_date": "2025-05-14",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.1832569707048577
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-05-06-4174",
+      "stock_id": "4174",
+      "signal_date": "2025-05-06",
+      "funded_entry_date": "2025-05-07",
+      "old_signal_entry_date": "2025-05-07",
+      "old_signal_exit_date": "2025-06-04",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.10907004614186167
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-05-27-9914",
+      "stock_id": "9914",
+      "signal_date": "2025-05-27",
+      "funded_entry_date": "2025-05-28",
+      "old_signal_entry_date": "2025-05-28",
+      "old_signal_exit_date": "2025-06-25",
+      "old_status": "benchmark_path_missing",
+      "old_signal_net_return": -0.13815568311777715
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-06-03-6415",
+      "stock_id": "6415",
+      "signal_date": "2025-06-03",
+      "funded_entry_date": "2025-06-04",
+      "old_signal_entry_date": "2025-06-04",
+      "old_signal_exit_date": "2025-07-01",
+      "old_status": "benchmark_path_missing",
+      "old_signal_net_return": 0.0020795603438767962
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-06-05-1101",
+      "stock_id": "1101",
+      "signal_date": "2025-06-05",
+      "funded_entry_date": "2025-06-06",
+      "old_signal_entry_date": "2025-06-06",
+      "old_signal_exit_date": "2025-07-03",
+      "old_status": "benchmark_path_missing",
+      "old_signal_net_return": -0.054190883202027695
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-06-26-2105",
+      "stock_id": "2105",
+      "signal_date": "2025-06-26",
+      "funded_entry_date": "2025-06-27",
+      "old_signal_entry_date": "2025-06-27",
+      "old_signal_exit_date": "2025-07-24",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.05999134556263441
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-07-02-2353",
+      "stock_id": "2353",
+      "signal_date": "2025-07-02",
+      "funded_entry_date": "2025-07-03",
+      "old_signal_entry_date": "2025-07-03",
+      "old_signal_exit_date": "2025-07-30",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.035660052250898966
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-07-09-2545",
+      "stock_id": "2545",
+      "signal_date": "2025-07-09",
+      "funded_entry_date": "2025-07-10",
+      "old_signal_entry_date": "2025-07-10",
+      "old_signal_exit_date": "2025-08-06",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.026021868902640355
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-07-29-4909",
+      "stock_id": "4909",
+      "signal_date": "2025-07-29",
+      "funded_entry_date": "2025-07-30",
+      "old_signal_entry_date": "2025-07-30",
+      "old_signal_exit_date": "2025-08-26",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.07196204953640106
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-08-01-3035",
+      "stock_id": "3035",
+      "signal_date": "2025-08-01",
+      "funded_entry_date": "2025-08-04",
+      "old_signal_entry_date": "2025-08-04",
+      "old_signal_exit_date": "2025-08-29",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.008123312301915764
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-08-08-2337",
+      "stock_id": "2337",
+      "signal_date": "2025-08-08",
+      "funded_entry_date": "2025-08-11",
+      "old_signal_entry_date": "2025-08-11",
+      "old_signal_exit_date": "2025-09-05",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.06508752119249306
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-08-27-1210",
+      "stock_id": "1210",
+      "signal_date": "2025-08-27",
+      "funded_entry_date": "2025-08-28",
+      "old_signal_entry_date": "2025-08-28",
+      "old_signal_exit_date": "2025-09-24",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.039237547642400394
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-09-02-1795",
+      "stock_id": "1795",
+      "signal_date": "2025-09-02",
+      "funded_entry_date": "2025-09-03",
+      "old_signal_entry_date": "2025-09-03",
+      "old_signal_exit_date": "2025-10-01",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.310077232479089
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-09-08-2474",
+      "stock_id": "2474",
+      "signal_date": "2025-09-08",
+      "funded_entry_date": "2025-09-09",
+      "old_signal_entry_date": "2025-09-09",
+      "old_signal_exit_date": "2025-10-08",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.03915975311184483
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-09-25-6643",
+      "stock_id": "6643",
+      "signal_date": "2025-09-25",
+      "funded_entry_date": "2025-09-26",
+      "old_signal_entry_date": "2025-09-26",
+      "old_signal_exit_date": "2025-10-29",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.09032567727793439
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-10-02-9921",
+      "stock_id": "9921",
+      "signal_date": "2025-10-02",
+      "funded_entry_date": "2025-10-03",
+      "old_signal_entry_date": "2025-10-03",
+      "old_signal_exit_date": "2025-11-04",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.040468196955202984
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-10-09-1210",
+      "stock_id": "1210",
+      "signal_date": "2025-10-09",
+      "funded_entry_date": "2025-10-13",
+      "old_signal_entry_date": "2025-10-13",
+      "old_signal_exit_date": "2025-11-10",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.0250509880248031
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-11-03-2884",
+      "stock_id": "2884",
+      "signal_date": "2025-11-03",
+      "funded_entry_date": "2025-11-04",
+      "old_signal_entry_date": "2025-11-04",
+      "old_signal_exit_date": "2025-12-01",
+      "old_status": "stock_path_missing",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-11-05-2371",
+      "stock_id": "2371",
+      "signal_date": "2025-11-05",
+      "funded_entry_date": "2025-11-06",
+      "old_signal_entry_date": "2025-11-06",
+      "old_signal_exit_date": "2025-12-03",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.08920038530042107
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-11-11-3034",
+      "stock_id": "3034",
+      "signal_date": "2025-11-11",
+      "funded_entry_date": "2025-11-12",
+      "old_signal_entry_date": "2025-11-12",
+      "old_signal_exit_date": "2025-12-09",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.033300971118624734
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-12-04-8926",
+      "stock_id": "8926",
+      "signal_date": "2025-12-04",
+      "funded_entry_date": "2025-12-05",
+      "old_signal_entry_date": "2025-12-05",
+      "old_signal_exit_date": "2026-01-05",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.02094566450614488
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-12-09-4904",
+      "stock_id": "4904",
+      "signal_date": "2025-12-09",
+      "funded_entry_date": "2025-12-10",
+      "old_signal_entry_date": "2025-12-10",
+      "old_signal_exit_date": "2026-01-08",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.03033245537964757
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-12-10-4763",
+      "stock_id": "4763",
+      "signal_date": "2025-12-10",
+      "funded_entry_date": "2025-12-11",
+      "old_signal_entry_date": "2025-12-11",
+      "old_signal_exit_date": "2026-01-09",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.023421505693520306
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-01-06-2352",
+      "stock_id": "2352",
+      "signal_date": "2026-01-06",
+      "funded_entry_date": "2026-01-07",
+      "old_signal_entry_date": "2026-01-07",
+      "old_signal_exit_date": "2026-02-03",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.039614729752437405
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-01-12-2357",
+      "stock_id": "2357",
+      "signal_date": "2026-01-12",
+      "funded_entry_date": "2026-01-13",
+      "old_signal_entry_date": "2026-01-13",
+      "old_signal_exit_date": "2026-02-09",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.0775184602276282
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-01-12-2498",
+      "stock_id": "2498",
+      "signal_date": "2026-01-12",
+      "funded_entry_date": "2026-01-13",
+      "old_signal_entry_date": "2026-01-13",
+      "old_signal_exit_date": "2026-02-09",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.047132463939878466
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-02-04-1102",
+      "stock_id": "1102",
+      "signal_date": "2026-02-04",
+      "funded_entry_date": "2026-02-05",
+      "old_signal_entry_date": "2026-02-05",
+      "old_signal_exit_date": "2026-03-16",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.017749725871402333
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-02-10-2377",
+      "stock_id": "2377",
+      "signal_date": "2026-02-10",
+      "funded_entry_date": "2026-02-11",
+      "old_signal_entry_date": "2026-02-11",
+      "old_signal_exit_date": "2026-03-20",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.020550950995364747
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-02-10-9910",
+      "stock_id": "9910",
+      "signal_date": "2026-02-10",
+      "funded_entry_date": "2026-02-11",
+      "old_signal_entry_date": "2026-02-11",
+      "old_signal_exit_date": "2026-03-20",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.11456000968349811
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-03-17-2101",
+      "stock_id": "2101",
+      "signal_date": "2026-03-17",
+      "funded_entry_date": "2026-03-18",
+      "old_signal_entry_date": "2026-03-18",
+      "old_signal_exit_date": "2026-04-16",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.12839281591159213
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-03-24-1402",
+      "stock_id": "1402",
+      "signal_date": "2026-03-24",
+      "funded_entry_date": "2026-03-25",
+      "old_signal_entry_date": "2026-03-25",
+      "old_signal_exit_date": "2026-04-23",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.017223574056365765
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-03-24-2884",
+      "stock_id": "2884",
+      "signal_date": "2026-03-24",
+      "funded_entry_date": "2026-03-25",
+      "old_signal_entry_date": "2026-03-25",
+      "old_signal_exit_date": "2026-04-23",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.0062968763102319025
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-04-20-1477",
+      "stock_id": "1477",
+      "signal_date": "2026-04-20",
+      "funded_entry_date": "2026-04-21",
+      "old_signal_entry_date": "2026-04-21",
+      "old_signal_exit_date": "2026-05-19",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.07807027099756192
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-04-24-2206",
+      "stock_id": "2206",
+      "signal_date": "2026-04-24",
+      "funded_entry_date": "2026-04-27",
+      "old_signal_entry_date": "2026-04-27",
+      "old_signal_exit_date": "2026-05-25",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.04826652376932117
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-04-28-2812",
+      "stock_id": "2812",
+      "signal_date": "2026-04-28",
+      "funded_entry_date": "2026-04-29",
+      "old_signal_entry_date": "2026-04-29",
+      "old_signal_exit_date": "2026-05-27",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.07430106756810595
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-05-20-1795",
+      "stock_id": "1795",
+      "signal_date": "2026-05-20",
+      "funded_entry_date": "2026-05-21",
+      "old_signal_entry_date": "2026-05-21",
+      "old_signal_exit_date": "2026-06-17",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.012929147288392007
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-05-26-2890",
+      "stock_id": "2890",
+      "signal_date": "2026-05-26",
+      "funded_entry_date": "2026-05-27",
+      "old_signal_entry_date": "2026-05-27",
+      "old_signal_exit_date": "2026-06-24",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.31679202568592046
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-05-28-1402",
+      "stock_id": "1402",
+      "signal_date": "2026-05-28",
+      "funded_entry_date": "2026-05-29",
+      "old_signal_entry_date": "2026-05-29",
+      "old_signal_exit_date": "2026-06-26",
+      "old_status": "evaluated",
+      "old_signal_net_return": 0.14250108407978934
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-06-29-3491",
+      "stock_id": "3491",
+      "signal_date": "2026-06-29",
+      "funded_entry_date": "2026-06-30",
+      "old_signal_entry_date": "2026-06-30",
+      "old_signal_exit_date": "2026-07-28",
+      "old_status": "stock_path_missing",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-06-29-4768",
+      "stock_id": "4768",
+      "signal_date": "2026-06-29",
+      "funded_entry_date": "2026-06-30",
+      "old_signal_entry_date": "2026-06-30",
+      "old_signal_exit_date": "2026-07-28",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.1848545442916203
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-06-30-3036",
+      "stock_id": "3036",
+      "signal_date": "2026-06-30",
+      "funded_entry_date": "2026-07-01",
+      "old_signal_entry_date": "2026-07-01",
+      "old_signal_exit_date": "2026-07-29",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.15642519398256183
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-08-17-4123",
+      "stock_id": "4123",
+      "signal_date": "2026-08-17",
+      "funded_entry_date": "2026-08-18",
+      "old_signal_entry_date": "2026-08-18",
+      "old_signal_exit_date": "2026-09-14",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.05008138738160983
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-08-19-2211",
+      "stock_id": "2211",
+      "signal_date": "2026-08-19",
+      "funded_entry_date": "2026-08-20",
+      "old_signal_entry_date": "2026-08-20",
+      "old_signal_exit_date": "2026-09-16",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.03669119121272546
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-08-20-1477",
+      "stock_id": "1477",
+      "signal_date": "2026-08-20",
+      "funded_entry_date": "2026-08-21",
+      "old_signal_entry_date": "2026-08-21",
+      "old_signal_exit_date": "2026-09-17",
+      "old_status": "evaluated",
+      "old_signal_net_return": -0.039993182795798665
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-09-15-5388",
+      "stock_id": "5388",
+      "signal_date": "2026-09-15",
+      "funded_entry_date": "2026-09-16",
+      "old_signal_entry_date": "2026-09-16",
+      "old_signal_exit_date": null,
+      "old_status": "immature",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-09-18-1722",
+      "stock_id": "1722",
+      "signal_date": "2026-09-18",
+      "funded_entry_date": "2026-09-21",
+      "old_signal_entry_date": "2026-09-21",
+      "old_signal_exit_date": null,
+      "old_status": "immature",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-09-21-1590",
+      "stock_id": "1590",
+      "signal_date": "2026-09-21",
+      "funded_entry_date": "2026-09-22",
+      "old_signal_entry_date": "2026-09-22",
+      "old_signal_exit_date": null,
+      "old_status": "immature",
+      "old_signal_net_return": null
+    }
+  ],
+  "unavailable_old_outcomes": [
+    {
+      "event_id": "rsi14_reclaim30-2025-05-27-9914",
+      "stock_id": "9914",
+      "signal_date": "2025-05-27",
+      "funded_entry_date": "2025-05-28",
+      "old_signal_entry_date": "2025-05-28",
+      "old_signal_exit_date": "2025-06-25",
+      "old_status": "benchmark_path_missing",
+      "old_signal_net_return": -0.13815568311777715
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-06-03-6415",
+      "stock_id": "6415",
+      "signal_date": "2025-06-03",
+      "funded_entry_date": "2025-06-04",
+      "old_signal_entry_date": "2025-06-04",
+      "old_signal_exit_date": "2025-07-01",
+      "old_status": "benchmark_path_missing",
+      "old_signal_net_return": 0.0020795603438767962
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-06-05-1101",
+      "stock_id": "1101",
+      "signal_date": "2025-06-05",
+      "funded_entry_date": "2025-06-06",
+      "old_signal_entry_date": "2025-06-06",
+      "old_signal_exit_date": "2025-07-03",
+      "old_status": "benchmark_path_missing",
+      "old_signal_net_return": -0.054190883202027695
+    },
+    {
+      "event_id": "rsi14_reclaim30-2025-11-03-2884",
+      "stock_id": "2884",
+      "signal_date": "2025-11-03",
+      "funded_entry_date": "2025-11-04",
+      "old_signal_entry_date": "2025-11-04",
+      "old_signal_exit_date": "2025-12-01",
+      "old_status": "stock_path_missing",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-06-29-3491",
+      "stock_id": "3491",
+      "signal_date": "2026-06-29",
+      "funded_entry_date": "2026-06-30",
+      "old_signal_entry_date": "2026-06-30",
+      "old_signal_exit_date": "2026-07-28",
+      "old_status": "stock_path_missing",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-09-15-5388",
+      "stock_id": "5388",
+      "signal_date": "2026-09-15",
+      "funded_entry_date": "2026-09-16",
+      "old_signal_entry_date": "2026-09-16",
+      "old_signal_exit_date": null,
+      "old_status": "immature",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-09-18-1722",
+      "stock_id": "1722",
+      "signal_date": "2026-09-18",
+      "funded_entry_date": "2026-09-21",
+      "old_signal_entry_date": "2026-09-21",
+      "old_signal_exit_date": null,
+      "old_status": "immature",
+      "old_signal_net_return": null
+    },
+    {
+      "event_id": "rsi14_reclaim30-2026-09-21-1590",
+      "stock_id": "1590",
+      "signal_date": "2026-09-21",
+      "funded_entry_date": "2026-09-22",
+      "old_signal_entry_date": "2026-09-22",
+      "old_signal_exit_date": null,
+      "old_status": "immature",
+      "old_signal_net_return": null
+    }
+  ],
+  "accounts": {
+    "poc_priority": {
+      "completed": true,
+      "initial_cash": 1000000.0,
+      "trading_days": 666,
+      "net_return": 1.16941789,
+      "final_nav": 2169417.89,
+      "max_drawdown": -0.5700932653268356,
+      "annual": [
+        {
+          "year": "2024",
+          "start_nav": 1000000.0,
+          "end_nav": 1552331.25,
+          "profit": 552331.25,
+          "total_return": 0.5523312499999999,
+          "max_drawdown": -0.2989563022079075,
+          "partial_year": false
+        },
+        {
+          "year": "2025",
+          "start_nav": 1552331.25,
+          "end_nav": 2197926.07,
+          "profit": 645594.8199999998,
+          "total_return": 0.41588727921311897,
+          "max_drawdown": -0.34073340706617894,
+          "partial_year": false
+        },
+        {
+          "year": "2026",
+          "start_nav": 2197926.07,
+          "end_nav": 2169417.89,
+          "profit": -28508.179999999702,
+          "total_return": -0.012970490859139594,
+          "max_drawdown": -0.5700932653268356,
+          "partial_year": true
+        }
+      ],
+      "cohorts": {
+        "funded": 92,
+        "settled": 89,
+        "wins": 31,
+        "losses": 58,
+        "flat": 0,
+        "unresolved": 3,
+        "win_rate": 0.34831460674157305,
+        "average_return_on_cost": 0.041386900926372636,
+        "average_winner_return": 0.35799013830569076,
+        "average_loser_return": -0.12783207077636638,
+        "profit_factor": 1.2360423042484612,
+        "cohort_profit_reconciled": true
+      },
+      "candidate_population": {
+        "raw_candidate_events": 13059,
+        "candidate_events": 11226,
+        "candidate_stocks": 1063,
+        "signal_days": 584,
+        "same_day_order": "original ranking with sealed POC priority_available policy and explicit quality fallback",
+        "first_signal_policy": "all original qualified red signals, not re-first-filtered after POC"
+      },
+      "funded_distinct_stocks": 86,
+      "funded_original_same_day_rank_counts": {
+        "1": 75,
+        "2": 11,
+        "3": 5,
+        "5": 1
+      },
+      "funded_cohort_count": 92,
+      "child_buy_fills": 169,
+      "child_sell_fills": 247,
+      "mean_daily_cash_fraction": 0.21338106201592366,
+      "median_daily_cash_fraction": 0.08818866394939122,
+      "days_cash_fraction_above50pct": 81,
+      "unfilled_candidate_unique_event_count": 743,
+      "unfilled_events_with_single_reason": 743,
+      "unfilled_single_reason_counts": {
+        "range_limit_not_crossed": 2,
+        "overlapping_member": 5,
+        "slots_full": 417,
+        "user_authorized_data_gap_exclusion": 22,
+        "resource_slots_locked": 169,
+        "resource_cash_locked": 128
+      },
+      "partial_fill_funded_event_count": 30,
+      "known_data_exclusion_records": 30,
+      "selection_fallback_days": 46,
+      "settled_pnl": 891857.04,
+      "open_and_unsettled_pnl": 277560.85000000003,
+      "settled_winner_pnl_sum": 4670235.0,
+      "settled_loser_pnl_sum": -3778377.96,
+      "largest_five_settled_profits": [
+        {
+          "event_id": "liquid_universe-2025-09-16-2408",
+          "stock_id": "2408",
+          "name": "南亞科",
+          "signal_date": "2025-09-16",
+          "entry_date": "2025-09-17",
+          "exit_date": "2025-12-19",
+          "cash_out": 480022.93,
+          "pnl": 652043.6200000001,
+          "return_on_cost": 1.3583593183767286
+        },
+        {
+          "event_id": "liquid_universe-2024-11-11-5314",
+          "stock_id": "5314",
+          "name": "世紀*",
+          "signal_date": "2024-11-11",
+          "entry_date": "2024-11-12",
+          "exit_date": "2025-02-20",
+          "cash_out": 345395.8,
+          "pnl": 565317.2,
+          "return_on_cost": 1.6367228553445061
+        },
+        {
+          "event_id": "liquid_universe-2026-03-06-3081",
+          "stock_id": "3081",
+          "name": "聯亞",
+          "signal_date": "2026-03-06",
+          "entry_date": "2026-03-09",
+          "exit_date": "2026-04-29",
+          "cash_out": 703570.0,
+          "pnl": 536151.0,
+          "return_on_cost": 0.7620435777534573
+        },
+        {
+          "event_id": "liquid_universe-2026-02-10-5386",
+          "stock_id": "5386",
+          "name": "青雲",
+          "signal_date": "2026-02-10",
+          "entry_date": "2026-02-11",
+          "exit_date": "2026-04-01",
+          "cash_out": 701624.0,
+          "pnl": 518542.85,
+          "return_on_cost": 0.7390608787612738
+        },
+        {
+          "event_id": "liquid_universe-2025-10-30-8299",
+          "stock_id": "8299",
+          "name": "群聯",
+          "signal_date": "2025-10-30",
+          "entry_date": "2025-10-31",
+          "exit_date": "2026-01-30",
+          "cash_out": 398715.0,
+          "pnl": 475160.93,
+          "return_on_cost": 1.1917307600667144
+        }
+      ],
+      "largest_five_settled_losses": [
+        {
+          "event_id": "liquid_universe-2026-04-30-3167",
+          "stock_id": "3167",
+          "name": "大量",
+          "signal_date": "2026-04-30",
+          "entry_date": "2026-05-04",
+          "exit_date": "2026-05-11",
+          "cash_out": 1167561.5,
+          "pnl": -277181.0,
+          "return_on_cost": -0.23740162723762304
+        },
+        {
+          "event_id": "liquid_universe-2026-05-29-6116",
+          "stock_id": "6116",
+          "name": "彩晶",
+          "signal_date": "2026-05-29",
+          "entry_date": "2026-06-01",
+          "exit_date": "2026-06-10",
+          "cash_out": 1012253.0,
+          "pnl": -225805.0,
+          "return_on_cost": -0.2230717024301237
+        },
+        {
+          "event_id": "liquid_universe-2026-05-13-3055",
+          "stock_id": "3055",
+          "name": "蔚華科",
+          "signal_date": "2026-05-13",
+          "entry_date": "2026-05-14",
+          "exit_date": "2026-06-10",
+          "cash_out": 968106.0,
+          "pnl": -217909.0,
+          "return_on_cost": -0.22508795524457031
+        },
+        {
+          "event_id": "liquid_universe-2026-06-10-8454",
+          "stock_id": "8454",
+          "name": "富邦媒",
+          "signal_date": "2026-06-10",
+          "entry_date": "2026-06-11",
+          "exit_date": "2026-06-16",
+          "cash_out": 694906.0,
+          "pnl": -187621.5,
+          "return_on_cost": -0.2699955101841112
+        },
+        {
+          "event_id": "liquid_universe-2026-06-01-2356",
+          "stock_id": "2356",
+          "name": "英業達",
+          "signal_date": "2026-06-01",
+          "entry_date": "2026-06-02",
+          "exit_date": "2026-06-09",
+          "cash_out": 971986.4299999999,
+          "pnl": -163512.08999999994,
+          "return_on_cost": -0.16822466338341777
+        }
+      ],
+      "drawdown_interval": {
+        "peak_date": "2026-05-05",
+        "peak_nav": 4133424.64,
+        "trough_date": "2026-09-15",
+        "trough_nav": 1776987.09
+      },
+      "cost_totals": {
+        "commission": 126242.0,
+        "tax": 131096.0,
+        "slippage": 394423.0,
+        "total_cost": 651761.0
+      }
+    },
+    "rsi_time20": {
+      "completed": true,
+      "initial_cash": 1000000.0,
+      "trading_days": 666,
+      "net_return": -0.43929818,
+      "final_nav": 560701.8200000001,
+      "max_drawdown": -0.46539600999999997,
+      "annual": [
+        {
+          "year": "2024",
+          "start_nav": 1000000.0,
+          "end_nav": 715769.0700000001,
+          "profit": -284230.92999999993,
+          "total_return": -0.2842309299999999,
+          "max_drawdown": -0.29024335999999995,
+          "partial_year": false
+        },
+        {
+          "year": "2025",
+          "start_nav": 715769.0700000001,
+          "end_nav": 655529.44,
+          "profit": -60239.63000000012,
+          "total_return": -0.0841607056309378,
+          "max_drawdown": -0.3158770977089125,
+          "partial_year": false
+        },
+        {
+          "year": "2026",
+          "start_nav": 655529.44,
+          "end_nav": 560701.8200000001,
+          "profit": -94827.61999999988,
+          "total_return": -0.14465806447991092,
+          "max_drawdown": -0.2083423830555614,
+          "partial_year": true
+        }
+      ],
+      "cohorts": {
+        "funded": 90,
+        "settled": 87,
+        "wins": 32,
+        "losses": 55,
+        "flat": 0,
+        "unresolved": 3,
+        "win_rate": 0.367816091954023,
+        "average_return_on_cost": -0.027582629245782777,
+        "average_winner_return": 0.07812332718794032,
+        "average_loser_return": -0.08908427662540351,
+        "profit_factor": 0.5511004140584722,
+        "cohort_profit_reconciled": true
+      },
+      "candidate_population": {
+        "candidate_events": 3523,
+        "candidate_stocks": 860,
+        "signal_days": 446,
+        "maximum_candidates_same_signal_day": 334,
+        "same_day_order": "descending signal-day-known 20-session mean(raw close * volume), then stock_id ascending",
+        "first_signal_policy": "known RSI14 crossing from below30 to at least30; no additional red gate"
+      },
+      "funded_distinct_stocks": 78,
+      "funded_original_same_day_rank_counts": {
+        "1": 75,
+        "2": 13,
+        "3": 2
+      },
+      "funded_cohort_count": 90,
+      "child_buy_fills": 156,
+      "child_sell_fills": 207,
+      "mean_daily_cash_fraction": 0.2792408358887395,
+      "median_daily_cash_fraction": 0.18370049497700855,
+      "days_cash_fraction_above50pct": 89,
+      "unfilled_candidate_unique_event_count": 3433,
+      "unfilled_events_with_single_reason": 3433,
+      "unfilled_single_reason_counts": {
+        "slots_full": 2567,
+        "resource_slots_locked": 208,
+        "overlapping_member": 64,
+        "residual_exposure_cap": 588,
+        "user_authorized_data_gap_exclusion": 3,
+        "range_limit_not_crossed": 1,
+        "resource_cash_locked": 2
+      },
+      "partial_fill_funded_event_count": 42,
+      "known_data_exclusion_records": 14,
+      "selection_fallback_days": 0,
+      "settled_pnl": -421623.06,
+      "open_and_unsettled_pnl": -17675.12000000001,
+      "settled_winner_pnl_sum": 517613.85,
+      "settled_loser_pnl_sum": -939236.91,
+      "largest_five_settled_profits": [
+        {
+          "event_id": "rsi14_reclaim30-2025-01-10-2344",
+          "stock_id": "2344",
+          "name": "華邦電",
+          "signal_date": "2025-01-10",
+          "entry_date": "2025-01-13",
+          "exit_date": "2025-02-19",
+          "cash_out": 207408.24,
+          "pnl": 78341.56000000001,
+          "return_on_cost": 0.37771671945145485
+        },
+        {
+          "event_id": "rsi14_reclaim30-2025-09-02-1795",
+          "stock_id": "1795",
+          "name": "美時",
+          "signal_date": "2025-09-02",
+          "entry_date": "2025-09-03",
+          "exit_date": "2025-10-02",
+          "cash_out": 198989.95,
+          "pnl": 57101.84999999999,
+          "return_on_cost": 0.28695846197257696
+        },
+        {
+          "event_id": "rsi14_reclaim30-2026-05-26-2890",
+          "stock_id": "2890",
+          "name": "永豐金",
+          "signal_date": "2026-05-26",
+          "entry_date": "2026-05-27",
+          "exit_date": "2026-06-25",
+          "cash_out": 178256.35,
+          "pnl": 55394.729999999996,
+          "return_on_cost": 0.310758803262829
+        },
+        {
+          "event_id": "rsi14_reclaim30-2024-03-15-8155",
+          "stock_id": "8155",
+          "name": "博智",
+          "signal_date": "2024-03-15",
+          "entry_date": "2024-03-18",
+          "exit_date": "2024-04-17",
+          "cash_out": 275852.8,
+          "pnl": 50363.70000000001,
+          "return_on_cost": 0.1825745470047794
+        },
+        {
+          "event_id": "rsi14_reclaim30-2024-10-11-3661",
+          "stock_id": "3661",
+          "name": "世芯-KY",
+          "signal_date": "2024-10-11",
+          "entry_date": "2024-10-14",
+          "exit_date": "2024-11-12",
+          "cash_out": 243483.0,
+          "pnl": 45316.0,
+          "return_on_cost": 0.18611566310584313
+        }
+      ],
+      "largest_five_settled_losses": [
+        {
+          "event_id": "rsi14_reclaim30-2025-03-10-2455",
+          "stock_id": "2455",
+          "name": "全新",
+          "signal_date": "2025-03-10",
+          "entry_date": "2025-03-11",
+          "exit_date": "2025-04-11",
+          "cash_out": 225877.2,
+          "pnl": -73822.61000000002,
+          "return_on_cost": -0.3268263020791829
+        },
+        {
+          "event_id": "rsi14_reclaim30-2024-10-29-3086",
+          "stock_id": "3086",
+          "name": "華義*",
+          "signal_date": "2024-10-29",
+          "entry_date": "2024-10-30",
+          "exit_date": "2024-12-09",
+          "cash_out": 237317.4,
+          "pnl": -56026.30000000001,
+          "return_on_cost": -0.2360817200930063
+        },
+        {
+          "event_id": "rsi14_reclaim30-2024-02-05-6547",
+          "stock_id": "6547",
+          "name": "高端疫苗",
+          "signal_date": "2024-02-05",
+          "entry_date": "2024-02-15",
+          "exit_date": "2024-03-18",
+          "cash_out": 279206.95,
+          "pnl": -45592.720000000016,
+          "return_on_cost": -0.16329364294119475
+        },
+        {
+          "event_id": "rsi14_reclaim30-2024-07-31-6669",
+          "stock_id": "6669",
+          "name": "緯穎",
+          "signal_date": "2024-07-31",
+          "entry_date": "2024-08-01",
+          "exit_date": "2024-08-29",
+          "cash_out": 282368.0,
+          "pnl": -42716.5,
+          "return_on_cost": -0.15127953592475069
+        },
+        {
+          "event_id": "rsi14_reclaim30-2024-03-18-2345",
+          "stock_id": "2345",
+          "name": "智邦",
+          "signal_date": "2024-03-18",
+          "entry_date": "2024-03-19",
+          "exit_date": "2024-04-19",
+          "cash_out": 271145.15,
+          "pnl": -34514.10000000002,
+          "return_on_cost": -0.12729012486485566
+        }
+      ],
+      "drawdown_interval": {
+        "peak_date": "2024-01-02",
+        "peak_nav": 1000000.0,
+        "trough_date": "2026-07-30",
+        "trough_nav": 534603.99
+      },
+      "cost_totals": {
+        "commission": 50956.0,
+        "tax": 51115.0,
+        "slippage": 156571.0,
+        "total_cost": 258642.0
+      }
+    }
+  },
+  "findings": [
+    "The prior 55.40% win rate is 1,925 winners among 3,475 evaluated unconstrained signal events, not the funded-account sample.",
+    "Among the 90 actually funded RSI events, 82 have evaluated outcomes in the unchanged older study; those 82 contain34 winners (41.46%) and average -1.38% under the old assumptions.",
+    "The actual RSI account has87 settled cohorts,32 winners and55 losers; its average winner is+7.81% and average loser-8.91%. Its closed P&L plus retained positions reconciles to the -439,298.18 NTD account loss.",
+    "Different sample membership, weights, overlapping-signal funding, prices, exit timing, fees and capacity are jointly different. No single-factor causal share of the performance gap is inferred.",
+    "POC priority has a lower settled win rate than RSI20, but a much larger average winning cohort in this realized path; its positive return does not remove its57.01% maximum drawdown.",
+    "A few residual odd-lot positions can remain during liquidation in addition to three active slots; raw holding counts are not a new five-stock strategy."
+  ],
+  "source_sha256": {
+    ".cache/strategy-account-comparison-20261007/online-v2/report.json": "7c6406ec0bdf560107557307fbddf0c377572ae0fd668d849e0ce05448975c16",
+    ".cache/strategy-account-comparison-20261007/online-v2/poc_priority.json": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+    ".cache/strategy-account-comparison-20261007/online-v2/rsi_time20.json": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+    ".cache/multi-strategy-scanner/20261005-study-v2/receipt.json": "054e06e29929c8ea1e734f69f184f2310ca57d638ccde2c94fe806dc04df7aa9",
+    ".cache/multi-strategy-scanner/20261005-study-v2/events.parquet": "2dfa38231e42f927b4332e450f040a64c9b1abbafc8437fcdf5db4cc8141ee91",
+    ".cache/multi-strategy-scanner/20261005-study-v2/summary.json": "888727160761584ea17265d39ec910ac372627e78d797d9cf6839b0388ff8281",
+    "scripts/summarize_poc_broker_account.py": "b0a45d58d62a55e2ad3ca19de2cc897dc5d47a17ce85e49750172fe5d3c81267",
+    "skills/account_cohort_attribution.py": "8c2295284122e720cae87cab764a45b2b49c1570b23a44759aa2bf582db58ef9",
+    "docs/strategy_scanner_expansion_20261005.md": "9404d5d436298fca37f7c5652982f1f16e82d4f83742c398be128f81fd16b34a",
+    ".cache/strategy-account-comparison-20261007/inputs-v1/manifest.json": "acfbcc5f49df83d49c94ddf42a2b8df94262aee9dd70432273cd6f2592e4407c",
+    ".cache/strategy-account-comparison-20261007/inputs-v1/rsi-entries.json": "56201833a1d4011977e495b3aeaee665afbe79422194ca22d260852860cb35fe",
+    ".cache/strategy-account-comparison-20261007/reporting-sources-v1/summarize_strategy_account_comparison.py": "2dc33d2cca3ad8d1f37c04bb0c4d442a528b98377b145301236d1a898903cd1f"
+  },
+  "reporting_source_relocation": {
+    "original_path": "scripts/summarize_strategy_account_comparison.py",
+    "snapshot_path": ".cache/strategy-account-comparison-20261007/reporting-sources-v1/summarize_strategy_account_comparison.py",
+    "sha256": "2dc33d2cca3ad8d1f37c04bb0c4d442a528b98377b145301236d1a898903cd1f",
+    "reason": "Preserve the exact reporting implementation used for this diagnostic before adding uncertain-receivable disclosures to later account reports.",
+    "original_diagnostic_path": ".cache/strategy-account-comparison-20261007/reporting-sources-v1/strategy_account_signal_sample_diagnostic_20261007.json",
+    "original_diagnostic_sha256": "e7719cc9bd3f325901bfb93f925bb57235a4bc95e14cb3146658a1a0b5005c18",
+    "metrics_changed": false
+  }
+}

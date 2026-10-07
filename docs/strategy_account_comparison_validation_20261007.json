@@ -1,0 +1,122 @@
+{
+  "schema": "strategy_account_comparison_validation_v1",
+  "validation_date": "2026-10-07",
+  "registered_cases": 8,
+  "complete_cases": 4,
+  "incomplete_cases": 4,
+  "all_cases_exact_offline_parity": true,
+  "summary_checked_sources": 165412,
+  "original_poc_exact": true,
+  "offline_network_requests": 0,
+  "offline_finmind_requests": 0,
+  "acquisition_attempts": {
+    "board": 221,
+    "profiles": 792,
+    "financial": 449
+  },
+  "acquisition_attempts_total": 1462,
+  "offline_runner_elapsed_seconds": 1609.118,
+  "tests": {
+    "make_test": "passed",
+    "passed": 6614,
+    "warnings": 37,
+    "targeted_passed": 136
+  },
+  "api": [
+    {
+      "port": 8001,
+      "route": "health",
+      "status": 200,
+      "json_type": "dict"
+    },
+    {
+      "port": 8001,
+      "route": "picks",
+      "status": 200,
+      "json_type": "list"
+    },
+    {
+      "port": 8001,
+      "route": "models",
+      "status": 200,
+      "json_type": "list"
+    },
+    {
+      "port": 8001,
+      "route": "jobs?limit=10",
+      "status": 200,
+      "json_type": "list"
+    },
+    {
+      "port": 8000,
+      "route": "health",
+      "status": 200,
+      "json_type": "dict"
+    },
+    {
+      "port": 8000,
+      "route": "picks",
+      "status": 200,
+      "json_type": "list"
+    },
+    {
+      "port": 8000,
+      "route": "models",
+      "status": 200,
+      "json_type": "list"
+    },
+    {
+      "port": 8000,
+      "route": "jobs?limit=10",
+      "status": 200,
+      "json_type": "list"
+    }
+  ],
+  "pipeline": {
+    "passed": false,
+    "error": "AttributeError: 'numpy.float64' object has no attribute 'fillna'",
+    "cause": "Existing daily research scoring receives pruned model columns and lacks persisted breakout_20; not changed in this comparison."
+  },
+  "push_eligible": false,
+  "live_qualified": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "source_sha256": {
+    "artifacts/forward_simulation/strategy_account_comparison_20261007.json": "ac410c51f1e65c2fde2e3ac11d8d506ed75b7c5cce06f302ae8c7c6b75e7fb13",
+    "artifacts/forward_simulation/strategy_account_comparison_20261007.json.sha256": "f0a96287bd54b794be5972ff9255d880ce11821a861955fcfc112bd7bf0ffd49",
+    "docs/strategy_account_comparison_replay_parity_20261007.json": "008ab1a6bbafa4f7c9135a47f7b1f586b183bbd0a39c0253da88da23a3b76923",
+    ".cache/strategy-account-comparison-20261007/offline-v1/report.json": "f8a57f612c00eca4a3a26f709bf11ad58648f0385a6939f9ed0b13de5bef46f4",
+    ".cache/strategy-account-comparison-20261007/offline-v1/report.sha256": "088ccfb6585139feffbfead8f0cae0be91980d414ebffe71c22e83ee98ef2ef0",
+    ".cache/strategy-account-comparison-20261007/make-test-seal.log": "7ed12b269b5b197ecd254fb7a3e8dccd1298f8129355a99e34f128e997b6f4ef",
+    ".cache/strategy-account-comparison-20261007/targeted-final.log": "49efa96b73a7a98a4b88078a9591dae304dacd717f160dec24ea14bcc6d9b9eb",
+    ".cache/strategy-account-comparison-20261007/pipeline-post-corporate.log": "b7f4b47c0757979ef29073358ee810db7bcf3b861acd8864d3ebbfa42b73bbf2",
+    ".cache/strategy-account-comparison-20261007/api-smoke-post-corporate.json": "d3fd9ed5186e4656a49f81facb1de7397adc7a6d3072a4570626177ba1c5a59a",
+    ".cache/strategy-account-comparison-20261007/api-smoke-post-corporate.log": "c2007a573f6b28d5a1dfe1e0952dd4f763a9395304d5ee8a1e5c18f708fa0645",
+    "docs/research_strategy_account_comparison_20261007.md": "29b5701dae10d5f2d769b11fd2f427de3a4a622e80e59b94c18059d9432ddf23",
+    "docs/strategy_account_comparison_implementation_audit_20261007.md": "197e385e4b4e9b21edf942c109c420bcb9f51bace0e8751b9fcfecfe46cb00fd",
+    ".cache/strategy-account-comparison-20261007/board-v1/attempts/6914-2024-06-06.json": "1de85caa14bcb6f35d8b0694cb91484434c28e69f7af2e8efef4672b9ef095c4",
+    ".cache/strategy-account-comparison-20261007/board-v1/raw/6914-2024-06-06.parquet": "218a5823c57a1bff2e1a06a174dfddbc8292bbfb7b63ea5602d9944fe7289971",
+    ".cache/strategy-account-comparison-20261007/board-v1/receipts/6914-2024-06-06.json": "99f980c1142bd610416d971ce300d71473cb1ff622b7df7396080c9147d2cf02",
+    ".cache/strategy-account-comparison-20261007/online-v2/benchmark.json": "aa58f62222c4e4eed5d29b0f7c82f81dae71b0013db18230adb4254a35c2b366",
+    ".cache/strategy-account-comparison-20261007/online-v2/poc_priority.json": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+    ".cache/strategy-account-comparison-20261007/online-v2/report.json": "7c6406ec0bdf560107557307fbddf0c377572ae0fd668d849e0ce05448975c16",
+    ".cache/strategy-account-comparison-20261007/online-v2/rsi_shared_exit.json": "8a3a93b7b0733b2e8b946cc16e2030b09c9765a26db5e393d1f59cc8a3bd5899",
+    ".cache/strategy-account-comparison-20261007/online-v2/rsi_time20.json": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+    ".cache/strategy-account-comparison-20261007/online-v3/red_original.json": "f1ccd0f99749e6d2e15ab2e99478bb44110d633b132a2bb655e64f870d85d3cf",
+    ".cache/strategy-account-comparison-20261007/online-v3/report.json": "daed29971bc1341d0ddcb73f7ec9fd77ccf4c3283d7d9462d95ccfec9e484d85",
+    ".cache/strategy-account-comparison-20261007/online-v4/poc_filter.json": "fdd2646907705d6b86e71896cec9f269a9b931b9afdb814d393dbe9b643be253",
+    ".cache/strategy-account-comparison-20261007/online-v4/poc_priority_known.json": "83344954004a6378f1dcb11ff715e81f8154e9169fdb488517fc13b0fab63ba8",
+    ".cache/strategy-account-comparison-20261007/online-v4/red_known.json": "5a4d1f8e04fe83bf2df2ad7d06ff357b553b38ad03be912c96e3ed53c91d9145",
+    ".cache/strategy-account-comparison-20261007/online-v4/report.json": "32029344a23920d364f56f11bdfb9746002015c71933c4595b19262b883f23da",
+    ".cache/strategy-account-comparison-20261007/validation/replay-parity-baseline-v2.json": "7e8bde6548ba00a980d6d72d8c17abc02ac6bc485d83321a4c4ee6db8498a0b9",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/strategy-account-comparison-20261007/validation/verify_replay_parity.py": "a02e5258131c714cf9eeb203be478f3741f999c11fc3e17a4dd3207d327be403",
+    ".cache/strategy-account-comparison-20261007/offline-v1/poc_priority.json": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+    ".cache/strategy-account-comparison-20261007/offline-v1/benchmark.json": "aa58f62222c4e4eed5d29b0f7c82f81dae71b0013db18230adb4254a35c2b366",
+    ".cache/strategy-account-comparison-20261007/offline-v1/rsi_time20.json": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+    ".cache/strategy-account-comparison-20261007/offline-v1/red_original.json": "f1ccd0f99749e6d2e15ab2e99478bb44110d633b132a2bb655e64f870d85d3cf",
+    ".cache/strategy-account-comparison-20261007/offline-v1/rsi_shared_exit.json": "8a3a93b7b0733b2e8b946cc16e2030b09c9765a26db5e393d1f59cc8a3bd5899",
+    ".cache/strategy-account-comparison-20261007/offline-v1/red_known.json": "5a4d1f8e04fe83bf2df2ad7d06ff357b553b38ad03be912c96e3ed53c91d9145",
+    ".cache/strategy-account-comparison-20261007/offline-v1/poc_priority_known.json": "83344954004a6378f1dcb11ff715e81f8154e9169fdb488517fc13b0fab63ba8",
+    ".cache/strategy-account-comparison-20261007/offline-v1/poc_filter.json": "fdd2646907705d6b86e71896cec9f269a9b931b9afdb814d393dbe9b643be253"
+  }
+}

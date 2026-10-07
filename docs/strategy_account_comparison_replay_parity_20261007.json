@@ -1,0 +1,2017 @@
+{
+  "schema": "strategy_account_replay_parity_v2",
+  "created_at": "2026-10-07T00:59:54.685016+00:00",
+  "offline_directory": ".cache/strategy-account-comparison-20261007/offline-v1",
+  "passed": true,
+  "comparison": "Exact JSON values, full account and every case field; no tolerance, omitted fields, or normalization.",
+  "cases": {
+    "poc_priority": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v2/poc_priority.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/poc_priority.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "0b4e92dc5f58cc9f442f4b86643800cc84c7cab963e9d82fb32bc4e52b66baf2",
+        "offline_canonical_sha256": "0b4e92dc5f58cc9f442f4b86643800cc84c7cab963e9d82fb32bc4e52b66baf2",
+        "online_count": 24,
+        "offline_count": 24
+      },
+      "top_level_fields": {
+        "account": {
+          "equal": true,
+          "online_canonical_sha256": "02b808073bee22360cf727c6bc57a7c1cd92cf67ca47424fa81aba6135917845",
+          "offline_canonical_sha256": "02b808073bee22360cf727c6bc57a7c1cd92cf67ca47424fa81aba6135917845",
+          "online_count": 20,
+          "offline_count": 20
+        },
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "audit": {
+          "equal": true,
+          "online_canonical_sha256": "a369f650ea12ab3b6371e5eff1eead58790e3b03394844d66fd662b14c568a99",
+          "offline_canonical_sha256": "a369f650ea12ab3b6371e5eff1eead58790e3b03394844d66fd662b14c568a99",
+          "online_count": 53,
+          "offline_count": 53
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "fc816b40462cce96fee990495ebf2f6fd435f0afb05a4a0fc4eedb44c03f2d1a",
+          "offline_canonical_sha256": "fc816b40462cce96fee990495ebf2f6fd435f0afb05a4a0fc4eedb44c03f2d1a",
+          "online_count": 30,
+          "offline_count": 30
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "8b496bf96bbcc9e5ac11c068b6cfb00c32f9d163bb8a3d5af107217499de997a",
+          "offline_canonical_sha256": "8b496bf96bbcc9e5ac11c068b6cfb00c32f9d163bb8a3d5af107217499de997a"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "offline_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "online_count": 13059,
+          "offline_count": 13059
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "e787b0b7cd0a51e94c5d21978b5dcce87002cc99bd28394154dc69ab280b3b48",
+          "offline_canonical_sha256": "e787b0b7cd0a51e94c5d21978b5dcce87002cc99bd28394154dc69ab280b3b48",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "855a56079a09ab71ba837efde7de79cb1670ea13b1d57e75eba9984e8b855788",
+          "offline_canonical_sha256": "855a56079a09ab71ba837efde7de79cb1670ea13b1d57e75eba9984e8b855788",
+          "online_count": 4,
+          "offline_count": 4
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "b1a3e3a69808c55cb3c7827927df47e7421b7de7a6670fc0465e5a6df8b7768c",
+          "offline_canonical_sha256": "b1a3e3a69808c55cb3c7827927df47e7421b7de7a6670fc0465e5a6df8b7768c",
+          "online_count": 119,
+          "offline_count": 119
+        },
+        "rule_audit": {
+          "equal": true,
+          "online_canonical_sha256": "400c64ee2e6dc13c379d0676b70ef2740ecb19e797895874125f305b7384032e",
+          "offline_canonical_sha256": "400c64ee2e6dc13c379d0676b70ef2740ecb19e797895874125f305b7384032e",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "25fc0e7096fc653718202dc30b0c580b8ab87eac11a700cba03a7c021bc35b0c",
+          "offline_canonical_sha256": "25fc0e7096fc653718202dc30b0c580b8ab87eac11a700cba03a7c021bc35b0c"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "offline_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "online_count": 6,
+          "offline_count": 6
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "745795abe36ec827a42e398a12923f69d5c155ada03a24f2ff84246fda0e16ec",
+          "offline_canonical_sha256": "745795abe36ec827a42e398a12923f69d5c155ada03a24f2ff84246fda0e16ec",
+          "online_count": 23,
+          "offline_count": 23
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "account_fields": {
+        "base_tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "34de661f74e805c5c14c8c80fdfffc5fcea2f6e9fe5933c3475b7aadd2992158",
+          "offline_canonical_sha256": "34de661f74e805c5c14c8c80fdfffc5fcea2f6e9fe5933c3475b7aadd2992158",
+          "online_count": 1014,
+          "offline_count": 1014
+        },
+        "black_log": {
+          "equal": true,
+          "online_canonical_sha256": "69bed3ba7301c8308821cdcf8788e83135015720b81012b317b094730d17220b",
+          "offline_canonical_sha256": "69bed3ba7301c8308821cdcf8788e83135015720b81012b317b094730d17220b",
+          "online_count": 1642,
+          "offline_count": 1642
+        },
+        "board_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "cash_ledger": {
+          "equal": true,
+          "online_canonical_sha256": "95aa50f12b9ff7f5a18365b85bc18a41a8ff6124a8d39389bc4e1b740041de4e",
+          "offline_canonical_sha256": "95aa50f12b9ff7f5a18365b85bc18a41a8ff6124a8d39389bc4e1b740041de4e",
+          "online_count": 422,
+          "offline_count": 422
+        },
+        "cohorts": {
+          "equal": true,
+          "online_canonical_sha256": "75b11ce606db4ee222a746995e50edbb9bc1be17dd69b2a4708d5fde69095486",
+          "offline_canonical_sha256": "75b11ce606db4ee222a746995e50edbb9bc1be17dd69b2a4708d5fde69095486",
+          "online_count": 92,
+          "offline_count": 92
+        },
+        "corporate_actions": {
+          "equal": true,
+          "online_canonical_sha256": "03f95cb32e33d578dbde6ef2252551916f80538062c21dfce2606ae8dfa8b98e",
+          "offline_canonical_sha256": "03f95cb32e33d578dbde6ef2252551916f80538062c21dfce2606ae8dfa8b98e",
+          "online_count": 10,
+          "offline_count": 10
+        },
+        "daily": {
+          "equal": true,
+          "online_canonical_sha256": "fbf231b90b98f2ea93b19b17677cfb6c910ccffc4cce9f42331d7e3ca1799dbe",
+          "offline_canonical_sha256": "fbf231b90b98f2ea93b19b17677cfb6c910ccffc4cce9f42331d7e3ca1799dbe",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "fc816b40462cce96fee990495ebf2f6fd435f0afb05a4a0fc4eedb44c03f2d1a",
+          "offline_canonical_sha256": "fc816b40462cce96fee990495ebf2f6fd435f0afb05a4a0fc4eedb44c03f2d1a",
+          "online_count": 30,
+          "offline_count": 30
+        },
+        "ending_inventory": {
+          "equal": true,
+          "online_canonical_sha256": "fbf5431ff0ce2c0965ceff9bf83ce55a774419bdf3bfbeea1fc8fa5524b7282f",
+          "offline_canonical_sha256": "fbf5431ff0ce2c0965ceff9bf83ce55a774419bdf3bfbeea1fc8fa5524b7282f",
+          "online_count": 5,
+          "offline_count": 5
+        },
+        "holdings": {
+          "equal": true,
+          "online_canonical_sha256": "21a8428920cfede79dd3bb38370ab21b68a005f882635df98ba02ec34c34d772",
+          "offline_canonical_sha256": "21a8428920cfede79dd3bb38370ab21b68a005f882635df98ba02ec34c34d772",
+          "online_count": 1763,
+          "offline_count": 1763
+        },
+        "orders": {
+          "equal": true,
+          "online_canonical_sha256": "111f04a6b557b474749aab56603b82cc263a7201b8f462285f35193889ac2d34",
+          "offline_canonical_sha256": "111f04a6b557b474749aab56603b82cc263a7201b8f462285f35193889ac2d34",
+          "online_count": 1174,
+          "offline_count": 1174
+        },
+        "ordinary_volume_evidence": {
+          "equal": true,
+          "online_canonical_sha256": "4f2a79a4b2307345d0b3d8372b34bc145e0d2a1f8ac7e7f716718f72c460b440",
+          "offline_canonical_sha256": "4f2a79a4b2307345d0b3d8372b34bc145e0d2a1f8ac7e7f716718f72c460b440",
+          "online_count": 12,
+          "offline_count": 12
+        },
+        "receivables": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "residual_days": {
+          "equal": true,
+          "online_canonical_sha256": "5479f1718b905bfb76b3ee77ed1448604875ef053cbd6e52ec1d32266df6e3c8",
+          "offline_canonical_sha256": "5479f1718b905bfb76b3ee77ed1448604875ef053cbd6e52ec1d32266df6e3c8",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "resource_plans": {
+          "equal": true,
+          "online_canonical_sha256": "f5cba653f5863de18338fe19d56040025c65034acd3258b285b5961363f8ed0d",
+          "offline_canonical_sha256": "f5cba653f5863de18338fe19d56040025c65034acd3258b285b5961363f8ed0d",
+          "online_count": 413,
+          "offline_count": 413
+        },
+        "selection_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "8caa3cf7f8cdf19ab009973d0652a0b2e150823c7c3af00315207459a250bc18",
+          "offline_canonical_sha256": "8caa3cf7f8cdf19ab009973d0652a0b2e150823c7c3af00315207459a250bc18",
+          "online_count": 584,
+          "offline_count": 584
+        },
+        "settings": {
+          "equal": true,
+          "online_canonical_sha256": "6de6b280870b67240f762d3f1e39847368a53c8c282448f7d6801b0728ad91cc",
+          "offline_canonical_sha256": "6de6b280870b67240f762d3f1e39847368a53c8c282448f7d6801b0728ad91cc",
+          "online_count": 56,
+          "offline_count": 56
+        },
+        "slot_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "d06d1ac4368564cb535df6c8b364098d83108d6eb2e33915356b431161a5ae84",
+          "offline_canonical_sha256": "d06d1ac4368564cb535df6c8b364098d83108d6eb2e33915356b431161a5ae84",
+          "online_count": 413,
+          "offline_count": 413
+        },
+        "tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "42937fd927e7fe57b54b01a5d293a258d86ca6d33a0b4c94115b122f05728548",
+          "offline_canonical_sha256": "42937fd927e7fe57b54b01a5d293a258d86ca6d33a0b4c94115b122f05728548",
+          "online_count": 1014,
+          "offline_count": 1014
+        },
+        "trades": {
+          "equal": true,
+          "online_canonical_sha256": "435407e90e7e09d8e8c212464ea71f71d99f96c08deee1ca3044ca8dadbb1e07",
+          "offline_canonical_sha256": "435407e90e7e09d8e8c212464ea71f71d99f96c08deee1ca3044ca8dadbb1e07",
+          "online_count": 416,
+          "offline_count": 416
+        }
+      }
+    },
+    "benchmark": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v2/benchmark.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/benchmark.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "31b41e8fddfd802da07c1ae5a0390a7c6196ff727a388eb782fccf44cdf673c6",
+        "offline_canonical_sha256": "31b41e8fddfd802da07c1ae5a0390a7c6196ff727a388eb782fccf44cdf673c6",
+        "online_count": 24,
+        "offline_count": 24
+      },
+      "top_level_fields": {
+        "account": {
+          "equal": true,
+          "online_canonical_sha256": "bf45e9e2241f9afb329ec988658de2a79e2a23241552693947f8d55ced69adf1",
+          "offline_canonical_sha256": "bf45e9e2241f9afb329ec988658de2a79e2a23241552693947f8d55ced69adf1",
+          "online_count": 15,
+          "offline_count": 15
+        },
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "audit": {
+          "equal": true,
+          "online_canonical_sha256": "79e81c86bd4ce1185e5a8620b639a5216e21c2ee1171ef89bc78a8b50e0a45d8",
+          "offline_canonical_sha256": "79e81c86bd4ce1185e5a8620b639a5216e21c2ee1171ef89bc78a8b50e0a45d8",
+          "online_count": 46,
+          "offline_count": 46
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "53eb50e67ec34370762c95d4062d022c2b271e0f32db59d3d461b9b33e8daf9e",
+          "offline_canonical_sha256": "53eb50e67ec34370762c95d4062d022c2b271e0f32db59d3d461b9b33e8daf9e",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "23cba5870552a4566ed82d0eac83baec7b61b7d4b1f118fe961465a5dad68a27",
+          "offline_canonical_sha256": "23cba5870552a4566ed82d0eac83baec7b61b7d4b1f118fe961465a5dad68a27",
+          "online_count": 4,
+          "offline_count": 4
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "rule_audit": {
+          "equal": true,
+          "online_canonical_sha256": "b501cdb20231a4d06935091a59d5a944421685e20de5aaf2f2f3f335dc6ff5ef",
+          "offline_canonical_sha256": "b501cdb20231a4d06935091a59d5a944421685e20de5aaf2f2f3f335dc6ff5ef",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "91ffa52e62f5e21a63d7278bfc7ff61aadf7112246bfc23e1fc30eb0464e1517",
+          "offline_canonical_sha256": "91ffa52e62f5e21a63d7278bfc7ff61aadf7112246bfc23e1fc30eb0464e1517",
+          "online_count": 23,
+          "offline_count": 23
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "account_fields": {
+        "base_tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "e35e9a82aa4ed2890f5570a4224022ea682903901261949d6dfe149ba3b68555",
+          "offline_canonical_sha256": "e35e9a82aa4ed2890f5570a4224022ea682903901261949d6dfe149ba3b68555",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "cash_ledger": {
+          "equal": true,
+          "online_canonical_sha256": "f6b769c2345479b507f2a817b6a296f07c0881e88e079dff19a00f8c4c6419fd",
+          "offline_canonical_sha256": "f6b769c2345479b507f2a817b6a296f07c0881e88e079dff19a00f8c4c6419fd",
+          "online_count": 29,
+          "offline_count": 29
+        },
+        "cohorts": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "corporate_actions": {
+          "equal": true,
+          "online_canonical_sha256": "102e49bd7fd3688c358d11f2f27c4063c77ea3a646ce2a6ca9fc19224dc6293e",
+          "offline_canonical_sha256": "102e49bd7fd3688c358d11f2f27c4063c77ea3a646ce2a6ca9fc19224dc6293e",
+          "online_count": 13,
+          "offline_count": 13
+        },
+        "daily": {
+          "equal": true,
+          "online_canonical_sha256": "6f4d6f87cf8db6d2ba0fcf9e7109999f7dbbe563151858dca4288f5fa8ccaecc",
+          "offline_canonical_sha256": "6f4d6f87cf8db6d2ba0fcf9e7109999f7dbbe563151858dca4288f5fa8ccaecc",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "ending_inventory": {
+          "equal": true,
+          "online_canonical_sha256": "a9402168aa297055a8e72d077e0792661c724b3a01542f2aedec70c69b8bf182",
+          "offline_canonical_sha256": "a9402168aa297055a8e72d077e0792661c724b3a01542f2aedec70c69b8bf182",
+          "online_count": 5,
+          "offline_count": 5
+        },
+        "holdings": {
+          "equal": true,
+          "online_canonical_sha256": "2bce3f7f9275df80703fdb1ac4aa9013f870bb79aa76460b2a4b88beccec4a82",
+          "offline_canonical_sha256": "2bce3f7f9275df80703fdb1ac4aa9013f870bb79aa76460b2a4b88beccec4a82",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "orders": {
+          "equal": true,
+          "online_canonical_sha256": "6463b9be52979d17c15c092deb926eb278f20e1ceea124c4ece9f5a85a0cc51d",
+          "offline_canonical_sha256": "6463b9be52979d17c15c092deb926eb278f20e1ceea124c4ece9f5a85a0cc51d",
+          "online_count": 22,
+          "offline_count": 22
+        },
+        "ordinary_volume_evidence": {
+          "equal": true,
+          "online_canonical_sha256": "d5573d018fad85107759a0a88dac174066f78c739974fe59f33e3b1ab96deb5a",
+          "offline_canonical_sha256": "d5573d018fad85107759a0a88dac174066f78c739974fe59f33e3b1ab96deb5a",
+          "online_count": 12,
+          "offline_count": 12
+        },
+        "receivables": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "resource_plans": {
+          "equal": true,
+          "online_canonical_sha256": "9b9d58e4d5b0081b7598382f3cac963613bef062a7501c32c797994ced2ce2ce",
+          "offline_canonical_sha256": "9b9d58e4d5b0081b7598382f3cac963613bef062a7501c32c797994ced2ce2ce",
+          "online_count": 21,
+          "offline_count": 21
+        },
+        "settings": {
+          "equal": true,
+          "online_canonical_sha256": "449a4571b0d5357326b3a9935a3b1608d169fd7b9ab1409cac5acc974dbc9856",
+          "offline_canonical_sha256": "449a4571b0d5357326b3a9935a3b1608d169fd7b9ab1409cac5acc974dbc9856",
+          "online_count": 49,
+          "offline_count": 49
+        },
+        "tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "e8347b09e15dda0a5f4c651be12e49f91ff3740cd873614e145ac8afce4f3b07",
+          "offline_canonical_sha256": "e8347b09e15dda0a5f4c651be12e49f91ff3740cd873614e145ac8afce4f3b07",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "trades": {
+          "equal": true,
+          "online_canonical_sha256": "89b2738a79c83016e05953f3e31217b4f9e3ea69f2ee2f09311c7b81a8509132",
+          "offline_canonical_sha256": "89b2738a79c83016e05953f3e31217b4f9e3ea69f2ee2f09311c7b81a8509132",
+          "online_count": 22,
+          "offline_count": 22
+        }
+      }
+    },
+    "rsi_time20": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v2/rsi_time20.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/rsi_time20.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "b40b35e0007bf6934186a6c96ffd664b48a7716b728d57a7ef4d9a4d5f56ec91",
+        "offline_canonical_sha256": "b40b35e0007bf6934186a6c96ffd664b48a7716b728d57a7ef4d9a4d5f56ec91",
+        "online_count": 24,
+        "offline_count": 24
+      },
+      "top_level_fields": {
+        "account": {
+          "equal": true,
+          "online_canonical_sha256": "117a2ecb08c0bc1c58d6aeba206d2cdbc02dede6160976805a003de1915acacf",
+          "offline_canonical_sha256": "117a2ecb08c0bc1c58d6aeba206d2cdbc02dede6160976805a003de1915acacf",
+          "online_count": 20,
+          "offline_count": 20
+        },
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "audit": {
+          "equal": true,
+          "online_canonical_sha256": "65400ec0cd1bfc1bc840bca727ea293cf31f2b8ca6db1200b3311a7294df430e",
+          "offline_canonical_sha256": "65400ec0cd1bfc1bc840bca727ea293cf31f2b8ca6db1200b3311a7294df430e",
+          "online_count": 54,
+          "offline_count": 54
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "431450143ed0c0dcf6a65327d78d75cd90f647e4aee63f07ba49d9f5c3881b88",
+          "offline_canonical_sha256": "431450143ed0c0dcf6a65327d78d75cd90f647e4aee63f07ba49d9f5c3881b88",
+          "online_count": 14,
+          "offline_count": 14
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "210e3b160c355818509425b9d9e9fd3ea2e287f2c43a13e5be8817140db0b9e6",
+          "offline_canonical_sha256": "210e3b160c355818509425b9d9e9fd3ea2e287f2c43a13e5be8817140db0b9e6"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "085ad381d182e42754806e268f7265a773b0831c5d8650da66d2f6eca68da6e7",
+          "offline_canonical_sha256": "085ad381d182e42754806e268f7265a773b0831c5d8650da66d2f6eca68da6e7",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "rule_audit": {
+          "equal": true,
+          "online_canonical_sha256": "b501cdb20231a4d06935091a59d5a944421685e20de5aaf2f2f3f335dc6ff5ef",
+          "offline_canonical_sha256": "b501cdb20231a4d06935091a59d5a944421685e20de5aaf2f2f3f335dc6ff5ef",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "bca33be85c2ee9aaa06a8d9a4d3f1629f2843ce61e4ed11c070eb8e548200e5b",
+          "offline_canonical_sha256": "bca33be85c2ee9aaa06a8d9a4d3f1629f2843ce61e4ed11c070eb8e548200e5b",
+          "online_count": 23,
+          "offline_count": 23
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "account_fields": {
+        "base_tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "8e83532d70285580b66277c4449bf021815a26edfeb68cc224c1c10784f2b4ec",
+          "offline_canonical_sha256": "8e83532d70285580b66277c4449bf021815a26edfeb68cc224c1c10784f2b4ec",
+          "online_count": 3678,
+          "offline_count": 3678
+        },
+        "board_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "cash_ledger": {
+          "equal": true,
+          "online_canonical_sha256": "b84d7cd25e8fb5236f4e2ce3c5870b195867f56ac224943a302db39b70b44c43",
+          "offline_canonical_sha256": "b84d7cd25e8fb5236f4e2ce3c5870b195867f56ac224943a302db39b70b44c43",
+          "online_count": 370,
+          "offline_count": 370
+        },
+        "cohorts": {
+          "equal": true,
+          "online_canonical_sha256": "a52a9ce6cdc461cb77ef9147cd70fee733105aeebdf009b164bae95eda7e9116",
+          "offline_canonical_sha256": "a52a9ce6cdc461cb77ef9147cd70fee733105aeebdf009b164bae95eda7e9116",
+          "online_count": 90,
+          "offline_count": 90
+        },
+        "corporate_actions": {
+          "equal": true,
+          "online_canonical_sha256": "aa180732cf7f716748fde4e119acc42e868d92095e2ddbea2e9fd82251ff0406",
+          "offline_canonical_sha256": "aa180732cf7f716748fde4e119acc42e868d92095e2ddbea2e9fd82251ff0406",
+          "online_count": 12,
+          "offline_count": 12
+        },
+        "daily": {
+          "equal": true,
+          "online_canonical_sha256": "67211ff6178c1cda1309d69ed306b60525433e4df41db892bf4efea2dd73e5e7",
+          "offline_canonical_sha256": "67211ff6178c1cda1309d69ed306b60525433e4df41db892bf4efea2dd73e5e7",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "431450143ed0c0dcf6a65327d78d75cd90f647e4aee63f07ba49d9f5c3881b88",
+          "offline_canonical_sha256": "431450143ed0c0dcf6a65327d78d75cd90f647e4aee63f07ba49d9f5c3881b88",
+          "online_count": 14,
+          "offline_count": 14
+        },
+        "ending_inventory": {
+          "equal": true,
+          "online_canonical_sha256": "c0ac61710d603d64132071af56e756df1ec77147d54e2d0ef37d95848a3f2c1d",
+          "offline_canonical_sha256": "c0ac61710d603d64132071af56e756df1ec77147d54e2d0ef37d95848a3f2c1d",
+          "online_count": 5,
+          "offline_count": 5
+        },
+        "exit_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "d7e047af2c245787961b2d754e78b98bfd758fced89342859eb5ea57dec03782",
+          "offline_canonical_sha256": "d7e047af2c245787961b2d754e78b98bfd758fced89342859eb5ea57dec03782",
+          "online_count": 1831,
+          "offline_count": 1831
+        },
+        "holdings": {
+          "equal": true,
+          "online_canonical_sha256": "045f8efa683ec953bda548deca22cb4b628712baec2408dac691686e2b90db3e",
+          "offline_canonical_sha256": "045f8efa683ec953bda548deca22cb4b628712baec2408dac691686e2b90db3e",
+          "online_count": 1834,
+          "offline_count": 1834
+        },
+        "orders": {
+          "equal": true,
+          "online_canonical_sha256": "edf570cd2536be9bb08628c62c472febaa05459f89f75026d7a56c68c230a1e2",
+          "offline_canonical_sha256": "edf570cd2536be9bb08628c62c472febaa05459f89f75026d7a56c68c230a1e2",
+          "online_count": 3809,
+          "offline_count": 3809
+        },
+        "ordinary_volume_evidence": {
+          "equal": true,
+          "online_canonical_sha256": "70e5533e11c0c6b715aa6fab9f37fae62771388ba21a0a2d0750efc0359a7086",
+          "offline_canonical_sha256": "70e5533e11c0c6b715aa6fab9f37fae62771388ba21a0a2d0750efc0359a7086",
+          "online_count": 12,
+          "offline_count": 12
+        },
+        "receivables": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "residual_days": {
+          "equal": true,
+          "online_canonical_sha256": "c354c375c0f536c59693681be5d122b3b5e955d34ec771f5d05516984b6f1e03",
+          "offline_canonical_sha256": "c354c375c0f536c59693681be5d122b3b5e955d34ec771f5d05516984b6f1e03",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "resource_plans": {
+          "equal": true,
+          "online_canonical_sha256": "e8fd923db56ac91f61510592361c57ad57d305b043679f11327871c93ed6ddf9",
+          "offline_canonical_sha256": "e8fd923db56ac91f61510592361c57ad57d305b043679f11327871c93ed6ddf9",
+          "online_count": 304,
+          "offline_count": 304
+        },
+        "selection_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "6179737115e83dd4913e1f3316d2a1e7f060945f8040d1c6d9d3586aa487db2b",
+          "offline_canonical_sha256": "6179737115e83dd4913e1f3316d2a1e7f060945f8040d1c6d9d3586aa487db2b",
+          "online_count": 446,
+          "offline_count": 446
+        },
+        "settings": {
+          "equal": true,
+          "online_canonical_sha256": "ebe9060379486869711eff8ab5f092ec838ecfbd9369c26ea110ee5b7e65d193",
+          "offline_canonical_sha256": "ebe9060379486869711eff8ab5f092ec838ecfbd9369c26ea110ee5b7e65d193",
+          "online_count": 58,
+          "offline_count": 58
+        },
+        "slot_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "86cb0596f8915e94996680d35868c66fa4c275328044a744ac67d4f3e1444399",
+          "offline_canonical_sha256": "86cb0596f8915e94996680d35868c66fa4c275328044a744ac67d4f3e1444399",
+          "online_count": 892,
+          "offline_count": 892
+        },
+        "tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "7cb8eb3b5bc502d2a76225d0b69158b687e630487b27a4072dffee2e0f199f42",
+          "offline_canonical_sha256": "7cb8eb3b5bc502d2a76225d0b69158b687e630487b27a4072dffee2e0f199f42",
+          "online_count": 3678,
+          "offline_count": 3678
+        },
+        "trades": {
+          "equal": true,
+          "online_canonical_sha256": "c4e15162b6dca3e2159a0d503bf472a6170bdc98831772decc07b274ce15dd5f",
+          "offline_canonical_sha256": "c4e15162b6dca3e2159a0d503bf472a6170bdc98831772decc07b274ce15dd5f",
+          "online_count": 363,
+          "offline_count": 363
+        }
+      }
+    },
+    "red_original": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v3/red_original.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/red_original.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "b097bf302ec40fc174e4484a6a3b84c486cf8c4cdb7088d657844a182907e1ec",
+        "offline_canonical_sha256": "b097bf302ec40fc174e4484a6a3b84c486cf8c4cdb7088d657844a182907e1ec",
+        "online_count": 24,
+        "offline_count": 24
+      },
+      "top_level_fields": {
+        "account": {
+          "equal": true,
+          "online_canonical_sha256": "4630cebb29dc709f2e5435cfd127e672e8fed088d9c048c4ee644117ae0f6d82",
+          "offline_canonical_sha256": "4630cebb29dc709f2e5435cfd127e672e8fed088d9c048c4ee644117ae0f6d82",
+          "online_count": 20,
+          "offline_count": 20
+        },
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "audit": {
+          "equal": true,
+          "online_canonical_sha256": "f52016a025ee93ada81eeac4e85e91bd80fd7ed01a6f4e6f70cb5450916dbeef",
+          "offline_canonical_sha256": "f52016a025ee93ada81eeac4e85e91bd80fd7ed01a6f4e6f70cb5450916dbeef",
+          "online_count": 53,
+          "offline_count": 53
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "0a63f726000bff4bbb72ceaacc71c291bd09350c9694ad7b07474b7866feeadc",
+          "offline_canonical_sha256": "0a63f726000bff4bbb72ceaacc71c291bd09350c9694ad7b07474b7866feeadc",
+          "online_count": 32,
+          "offline_count": 32
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "864995ea35b82212a9a2d456a3f89833f24651c4e5ebc21c18476a9afb065035",
+          "offline_canonical_sha256": "864995ea35b82212a9a2d456a3f89833f24651c4e5ebc21c18476a9afb065035"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "offline_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "online_count": 13059,
+          "offline_count": 13059
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "7c329d3e692412de3a4afc5a787835751f792085a65a83e576b1aa20d0635923",
+          "offline_canonical_sha256": "7c329d3e692412de3a4afc5a787835751f792085a65a83e576b1aa20d0635923",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "rule_audit": {
+          "equal": true,
+          "online_canonical_sha256": "cdf74c7d3b1b168c49319f64a0559490a24c39e2a1ce8861a360ff534bf8450f",
+          "offline_canonical_sha256": "cdf74c7d3b1b168c49319f64a0559490a24c39e2a1ce8861a360ff534bf8450f",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "offline_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "online_count": 6,
+          "offline_count": 6
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "7e5d0fc1c42590e555b1871ee5213110979f09a53a660357d8680fb2d87fe70e",
+          "offline_canonical_sha256": "7e5d0fc1c42590e555b1871ee5213110979f09a53a660357d8680fb2d87fe70e",
+          "online_count": 23,
+          "offline_count": 23
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "account_fields": {
+        "base_tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "70784e0c730909302bd32980e9d843be16cbad7064766af77faf69a27c25d53d",
+          "offline_canonical_sha256": "70784e0c730909302bd32980e9d843be16cbad7064766af77faf69a27c25d53d",
+          "online_count": 11400,
+          "offline_count": 11400
+        },
+        "black_log": {
+          "equal": true,
+          "online_canonical_sha256": "1aa53f182bc0454080b19050ab232fb47e3e58040abf9aeef1344bdb6c79b9cd",
+          "offline_canonical_sha256": "1aa53f182bc0454080b19050ab232fb47e3e58040abf9aeef1344bdb6c79b9cd",
+          "online_count": 1639,
+          "offline_count": 1639
+        },
+        "board_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "cash_ledger": {
+          "equal": true,
+          "online_canonical_sha256": "78ca832a458cc896f8149433582fdf4c2dd01404f99fd93692081a9879c976ef",
+          "offline_canonical_sha256": "78ca832a458cc896f8149433582fdf4c2dd01404f99fd93692081a9879c976ef",
+          "online_count": 410,
+          "offline_count": 410
+        },
+        "cohorts": {
+          "equal": true,
+          "online_canonical_sha256": "a9ed9ac90815617778bd6933e1b6744d959ba4f5674b305ef4b051d0260c67af",
+          "offline_canonical_sha256": "a9ed9ac90815617778bd6933e1b6744d959ba4f5674b305ef4b051d0260c67af",
+          "online_count": 90,
+          "offline_count": 90
+        },
+        "corporate_actions": {
+          "equal": true,
+          "online_canonical_sha256": "5a34a8a6eb410126b58bbf81e1bb1d5a7c5b53488d0b1bc028e47e4a5bd2ec77",
+          "offline_canonical_sha256": "5a34a8a6eb410126b58bbf81e1bb1d5a7c5b53488d0b1bc028e47e4a5bd2ec77",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "daily": {
+          "equal": true,
+          "online_canonical_sha256": "e8aec0113e12f57b4535f04fb613bb16729a4565f5373874762c72c4d602cd6b",
+          "offline_canonical_sha256": "e8aec0113e12f57b4535f04fb613bb16729a4565f5373874762c72c4d602cd6b",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "0a63f726000bff4bbb72ceaacc71c291bd09350c9694ad7b07474b7866feeadc",
+          "offline_canonical_sha256": "0a63f726000bff4bbb72ceaacc71c291bd09350c9694ad7b07474b7866feeadc",
+          "online_count": 32,
+          "offline_count": 32
+        },
+        "ending_inventory": {
+          "equal": true,
+          "online_canonical_sha256": "fe4b2b1e50bc0fdd8879d0eed5b647a788b035482e442ee3b7abf33213cbbdb5",
+          "offline_canonical_sha256": "fe4b2b1e50bc0fdd8879d0eed5b647a788b035482e442ee3b7abf33213cbbdb5",
+          "online_count": 5,
+          "offline_count": 5
+        },
+        "holdings": {
+          "equal": true,
+          "online_canonical_sha256": "3161a9c50638d948cb54d138bfa9fce75f2291131965b2f2dbafa6cf39348ccc",
+          "offline_canonical_sha256": "3161a9c50638d948cb54d138bfa9fce75f2291131965b2f2dbafa6cf39348ccc",
+          "online_count": 1758,
+          "offline_count": 1758
+        },
+        "orders": {
+          "equal": true,
+          "online_canonical_sha256": "4ab778837614200628b506d1cf22e951a8d7189c69ab459f674e666584abd827",
+          "offline_canonical_sha256": "4ab778837614200628b506d1cf22e951a8d7189c69ab459f674e666584abd827",
+          "online_count": 11556,
+          "offline_count": 11556
+        },
+        "ordinary_volume_evidence": {
+          "equal": true,
+          "online_canonical_sha256": "0b803e235085567408beae10546e2732b273d3f82587c7172151849d314585a3",
+          "offline_canonical_sha256": "0b803e235085567408beae10546e2732b273d3f82587c7172151849d314585a3",
+          "online_count": 12,
+          "offline_count": 12
+        },
+        "receivables": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "residual_days": {
+          "equal": true,
+          "online_canonical_sha256": "15b35ee4898065b05096ec15c319a8bdf61d365a1d905839fdcc8aa33882c8ce",
+          "offline_canonical_sha256": "15b35ee4898065b05096ec15c319a8bdf61d365a1d905839fdcc8aa33882c8ce",
+          "online_count": 666,
+          "offline_count": 666
+        },
+        "resource_plans": {
+          "equal": true,
+          "online_canonical_sha256": "60f2a52f808885af8720bb15e8545b6d5e2d2ebac3e10e42796eac9bf3ede785",
+          "offline_canonical_sha256": "60f2a52f808885af8720bb15e8545b6d5e2d2ebac3e10e42796eac9bf3ede785",
+          "online_count": 1324,
+          "offline_count": 1324
+        },
+        "selection_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "0c66fe45f3da01e78f3b99d5b0dfd903960cc8616069e11f1aa21fff7734516d",
+          "offline_canonical_sha256": "0c66fe45f3da01e78f3b99d5b0dfd903960cc8616069e11f1aa21fff7734516d",
+          "online_count": 584,
+          "offline_count": 584
+        },
+        "settings": {
+          "equal": true,
+          "online_canonical_sha256": "18375767b1146572c467c3f284f464e582bb8702325cf912449ec59a47acffac",
+          "offline_canonical_sha256": "18375767b1146572c467c3f284f464e582bb8702325cf912449ec59a47acffac",
+          "online_count": 56,
+          "offline_count": 56
+        },
+        "slot_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "a7a25659141784b3297e2a39613f79a46dd385f1704aa2fddb6aef1bfa77e22b",
+          "offline_canonical_sha256": "a7a25659141784b3297e2a39613f79a46dd385f1704aa2fddb6aef1bfa77e22b",
+          "online_count": 1473,
+          "offline_count": 1473
+        },
+        "tick_plans": {
+          "equal": true,
+          "online_canonical_sha256": "46d2e313b236949e86a2ef933ec1af1db879ffe0848aa1e06160291ece7c477e",
+          "offline_canonical_sha256": "46d2e313b236949e86a2ef933ec1af1db879ffe0848aa1e06160291ece7c477e",
+          "online_count": 11400,
+          "offline_count": 11400
+        },
+        "trades": {
+          "equal": true,
+          "online_canonical_sha256": "21d33fef6aba938aebcd70ba0e3c425e838f128b9c9b0d7ed81272944922609f",
+          "offline_canonical_sha256": "21d33fef6aba938aebcd70ba0e3c425e838f128b9c9b0d7ed81272944922609f",
+          "online_count": 405,
+          "offline_count": 405
+        }
+      }
+    },
+    "rsi_shared_exit": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v2/rsi_shared_exit.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/rsi_shared_exit.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "2c4befa6c82a307c3a2007aeb50a7b1494a9825a36cd159c6d9cfbc1b0fd6cc7",
+        "offline_canonical_sha256": "2c4befa6c82a307c3a2007aeb50a7b1494a9825a36cd159c6d9cfbc1b0fd6cc7",
+        "online_count": 27,
+        "offline_count": 27
+      },
+      "top_level_fields": {
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed_sessions": {
+          "equal": true,
+          "online_canonical_sha256": "16dc368a89b428b2485484313ba67a3912ca03f2b2b42429174a4f8b3dc84e44",
+          "offline_canonical_sha256": "16dc368a89b428b2485484313ba67a3912ca03f2b2b42429174a4f8b3dc84e44"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5",
+          "offline_canonical_sha256": "4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "failure_holdings": {
+          "equal": true,
+          "online_canonical_sha256": "d18da043db7dc42339cf1753454df2b9dbe4b3bf93964fb9e48ed74b3028e7f6",
+          "offline_canonical_sha256": "d18da043db7dc42339cf1753454df2b9dbe4b3bf93964fb9e48ed74b3028e7f6",
+          "online_count": 2,
+          "offline_count": 2
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "45a709968e93f58575d75a6ca865927e205b80bc47b40ad303d48c02fd130691",
+          "offline_canonical_sha256": "45a709968e93f58575d75a6ca865927e205b80bc47b40ad303d48c02fd130691",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "last_date": {
+          "equal": true,
+          "online_canonical_sha256": "602654625307633d4ba5fe3f8203ac77dbde93f6b7ab6978fe200772468beaa1",
+          "offline_canonical_sha256": "602654625307633d4ba5fe3f8203ac77dbde93f6b7ab6978fe200772468beaa1"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "partial_journal": {
+          "equal": true,
+          "online_canonical_sha256": "0af1a25450056117d0a78146e92491f933ae14c77b9eb699905a5314118abb2b",
+          "offline_canonical_sha256": "0af1a25450056117d0a78146e92491f933ae14c77b9eb699905a5314118abb2b",
+          "online_count": 16,
+          "offline_count": 16
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "reason": {
+          "equal": true,
+          "online_canonical_sha256": "d03e9cb83ca661634ff6938838ec5739663e08138a8ec3ac4deae70b7323cb79",
+          "offline_canonical_sha256": "d03e9cb83ca661634ff6938838ec5739663e08138a8ec3ac4deae70b7323cb79"
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "stage": {
+          "equal": true,
+          "online_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91",
+          "offline_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91"
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "blocked_contract": {
+        "completed": {
+          "expected": false,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "completed_sessions": {
+          "expected": 101,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "last_date": {
+          "expected": "2024-06-05",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "reason": {
+          "expected": "Necessary board tick unavailable: 6914-2024-06-06 empty",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "stage": {
+          "expected": "arm_execution",
+          "online_matches": true,
+          "offline_matches": true
+        }
+      },
+      "partial_journal": {
+        "equal": true,
+        "online_canonical_sha256": "0af1a25450056117d0a78146e92491f933ae14c77b9eb699905a5314118abb2b",
+        "offline_canonical_sha256": "0af1a25450056117d0a78146e92491f933ae14c77b9eb699905a5314118abb2b",
+        "online_count": 16,
+        "offline_count": 16
+      }
+    },
+    "red_known": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v4/red_known.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/red_known.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "ab0a12e56287d0f3bb0fec4e79b383b34cb2183256f453095af2228a3739e0a0",
+        "offline_canonical_sha256": "ab0a12e56287d0f3bb0fec4e79b383b34cb2183256f453095af2228a3739e0a0",
+        "online_count": 27,
+        "offline_count": 27
+      },
+      "top_level_fields": {
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed_sessions": {
+          "equal": true,
+          "online_canonical_sha256": "67eab6db6703cdf9acf656bbb09640fcde2ff197786adbd9ae9c14936fc8d159",
+          "offline_canonical_sha256": "67eab6db6703cdf9acf656bbb09640fcde2ff197786adbd9ae9c14936fc8d159"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "1f917eb9788801e53163e6b427f45014accfbffec2208ccd68518fa9947e527d",
+          "offline_canonical_sha256": "1f917eb9788801e53163e6b427f45014accfbffec2208ccd68518fa9947e527d",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "offline_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "online_count": 13059,
+          "offline_count": 13059
+        },
+        "failure_holdings": {
+          "equal": true,
+          "online_canonical_sha256": "9770c7e245a9b907b4f3e677d7e2b986f579cf215277c88602c8d60a8606dd50",
+          "offline_canonical_sha256": "9770c7e245a9b907b4f3e677d7e2b986f579cf215277c88602c8d60a8606dd50",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "1aff73307864099d950a6e7da0e784f13cf15be0bf22ec19141a90e48ab243fe",
+          "offline_canonical_sha256": "1aff73307864099d950a6e7da0e784f13cf15be0bf22ec19141a90e48ab243fe",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "last_date": {
+          "equal": true,
+          "online_canonical_sha256": "54367a4479b4fc3ef319fac2b9e62af69dd602addfed7c0e4d446662da98486f",
+          "offline_canonical_sha256": "54367a4479b4fc3ef319fac2b9e62af69dd602addfed7c0e4d446662da98486f"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "partial_journal": {
+          "equal": true,
+          "online_canonical_sha256": "2402c184807f10fd9881f936a88290cb195e1c4561604dfa31e7032938e4a4b5",
+          "offline_canonical_sha256": "2402c184807f10fd9881f936a88290cb195e1c4561604dfa31e7032938e4a4b5",
+          "online_count": 16,
+          "offline_count": 16
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "9b1d0b6725aff2727ed8552e595354fdfba2bd8ebfcb0d5ef6729f1dbd2394c4",
+          "offline_canonical_sha256": "9b1d0b6725aff2727ed8552e595354fdfba2bd8ebfcb0d5ef6729f1dbd2394c4",
+          "online_count": 61,
+          "offline_count": 61
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "9530eb3a07b776bf92dcde1bf133c0b22044dc709de1e00a0bd1cae5105525b5",
+          "offline_canonical_sha256": "9530eb3a07b776bf92dcde1bf133c0b22044dc709de1e00a0bd1cae5105525b5",
+          "online_count": 139,
+          "offline_count": 139
+        },
+        "reason": {
+          "equal": true,
+          "online_canonical_sha256": "21bc5c13e9dcd86e1fb654804f4a3446cb6900e04ad9f68f714ffadf581c02b5",
+          "offline_canonical_sha256": "21bc5c13e9dcd86e1fb654804f4a3446cb6900e04ad9f68f714ffadf581c02b5"
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "offline_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "online_count": 6,
+          "offline_count": 6
+        },
+        "stage": {
+          "equal": true,
+          "online_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91",
+          "offline_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91"
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "blocked_contract": {
+        "completed": {
+          "expected": false,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "completed_sessions": {
+          "expected": 607,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "last_date": {
+          "expected": "2026-07-08",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "reason": {
+          "expected": "Stock dividend data missing or invalid: 6446 2026-07-09; shares_per_share, pay_date",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "stage": {
+          "expected": "arm_execution",
+          "online_matches": true,
+          "offline_matches": true
+        }
+      },
+      "partial_journal": {
+        "equal": true,
+        "online_canonical_sha256": "2402c184807f10fd9881f936a88290cb195e1c4561604dfa31e7032938e4a4b5",
+        "offline_canonical_sha256": "2402c184807f10fd9881f936a88290cb195e1c4561604dfa31e7032938e4a4b5",
+        "online_count": 16,
+        "offline_count": 16
+      }
+    },
+    "poc_priority_known": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v4/poc_priority_known.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/poc_priority_known.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "58951bda487002d5adb0473d27b75d8462af459e6f68684d1fd6e0986101482a",
+        "offline_canonical_sha256": "58951bda487002d5adb0473d27b75d8462af459e6f68684d1fd6e0986101482a",
+        "online_count": 27,
+        "offline_count": 27
+      },
+      "top_level_fields": {
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed_sessions": {
+          "equal": true,
+          "online_canonical_sha256": "67eab6db6703cdf9acf656bbb09640fcde2ff197786adbd9ae9c14936fc8d159",
+          "offline_canonical_sha256": "67eab6db6703cdf9acf656bbb09640fcde2ff197786adbd9ae9c14936fc8d159"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "653e2f9c749ac1d9d517a6eec34506830198f5ff4fb76e447e5ca038a3f6a789",
+          "offline_canonical_sha256": "653e2f9c749ac1d9d517a6eec34506830198f5ff4fb76e447e5ca038a3f6a789",
+          "online_count": 2,
+          "offline_count": 2
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "offline_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "online_count": 13059,
+          "offline_count": 13059
+        },
+        "failure_holdings": {
+          "equal": true,
+          "online_canonical_sha256": "0bfc878eb17a6313ff5ec1a31f1fa40c77e69e74db12bc820bf3a4b0b3ba43d3",
+          "offline_canonical_sha256": "0bfc878eb17a6313ff5ec1a31f1fa40c77e69e74db12bc820bf3a4b0b3ba43d3",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "e87f314a8d505fac8a3a76819c14d45dcc1f0a11e150841b2e7c1a105d9ca124",
+          "offline_canonical_sha256": "e87f314a8d505fac8a3a76819c14d45dcc1f0a11e150841b2e7c1a105d9ca124",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "last_date": {
+          "equal": true,
+          "online_canonical_sha256": "54367a4479b4fc3ef319fac2b9e62af69dd602addfed7c0e4d446662da98486f",
+          "offline_canonical_sha256": "54367a4479b4fc3ef319fac2b9e62af69dd602addfed7c0e4d446662da98486f"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "partial_journal": {
+          "equal": true,
+          "online_canonical_sha256": "78f7a28c0d696834000a358a3daccf7e87f178897913bf0cf17cee083a027c16",
+          "offline_canonical_sha256": "78f7a28c0d696834000a358a3daccf7e87f178897913bf0cf17cee083a027c16",
+          "online_count": 16,
+          "offline_count": 16
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "b0ed6d77efd7a53da643d03a6eb1527d931b9f7452c38fb41033ca32dff44526",
+          "offline_canonical_sha256": "b0ed6d77efd7a53da643d03a6eb1527d931b9f7452c38fb41033ca32dff44526",
+          "online_count": 54,
+          "offline_count": 54
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "1eaaf9321884dd6c2b611e35fcb71857114cea96d8021a1c06b0b2d83e0af36b",
+          "offline_canonical_sha256": "1eaaf9321884dd6c2b611e35fcb71857114cea96d8021a1c06b0b2d83e0af36b",
+          "online_count": 148,
+          "offline_count": 148
+        },
+        "reason": {
+          "equal": true,
+          "online_canonical_sha256": "21bc5c13e9dcd86e1fb654804f4a3446cb6900e04ad9f68f714ffadf581c02b5",
+          "offline_canonical_sha256": "21bc5c13e9dcd86e1fb654804f4a3446cb6900e04ad9f68f714ffadf581c02b5"
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "offline_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "online_count": 6,
+          "offline_count": 6
+        },
+        "stage": {
+          "equal": true,
+          "online_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91",
+          "offline_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91"
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "blocked_contract": {
+        "completed": {
+          "expected": false,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "completed_sessions": {
+          "expected": 607,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "last_date": {
+          "expected": "2026-07-08",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "reason": {
+          "expected": "Stock dividend data missing or invalid: 6446 2026-07-09; shares_per_share, pay_date",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "stage": {
+          "expected": "arm_execution",
+          "online_matches": true,
+          "offline_matches": true
+        }
+      },
+      "partial_journal": {
+        "equal": true,
+        "online_canonical_sha256": "78f7a28c0d696834000a358a3daccf7e87f178897913bf0cf17cee083a027c16",
+        "offline_canonical_sha256": "78f7a28c0d696834000a358a3daccf7e87f178897913bf0cf17cee083a027c16",
+        "online_count": 16,
+        "offline_count": 16
+      }
+    },
+    "poc_filter": {
+      "online_path": ".cache/strategy-account-comparison-20261007/online-v4/poc_filter.json",
+      "offline_path": ".cache/strategy-account-comparison-20261007/offline-v1/poc_filter.json",
+      "completed_state_matches": true,
+      "entire_case": {
+        "equal": true,
+        "online_canonical_sha256": "8cceb2de15c0af5815be9baaaa4b45c00c9563d534f41f56635f1ca3eeb8dd59",
+        "offline_canonical_sha256": "8cceb2de15c0af5815be9baaaa4b45c00c9563d534f41f56635f1ca3eeb8dd59",
+        "online_count": 27,
+        "offline_count": 27
+      },
+      "top_level_fields": {
+        "actual_fill_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "completed_sessions": {
+          "equal": true,
+          "online_canonical_sha256": "67eab6db6703cdf9acf656bbb09640fcde2ff197786adbd9ae9c14936fc8d159",
+          "offline_canonical_sha256": "67eab6db6703cdf9acf656bbb09640fcde2ff197786adbd9ae9c14936fc8d159"
+        },
+        "daily_range_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "data_gap_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "9435bbfd8f4795470229f4e120786898340e366ad3b4ed1335f795228adfb532",
+          "offline_canonical_sha256": "9435bbfd8f4795470229f4e120786898340e366ad3b4ed1335f795228adfb532",
+          "online_count": 2,
+          "offline_count": 2
+        },
+        "deferred_corporate_preparations": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "entry_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "offline_canonical_sha256": "3a32da7b9295367e4d1053ccd7a541c8a5fc49e840b317dfdee3984773c3b4a4",
+          "online_count": 13059,
+          "offline_count": 13059
+        },
+        "failure_holdings": {
+          "equal": true,
+          "online_canonical_sha256": "6c5e150252bbb3fe15e21f7798c361fc3ea0b5eb50043a677f6bfc918da02ef2",
+          "offline_canonical_sha256": "6c5e150252bbb3fe15e21f7798c361fc3ea0b5eb50043a677f6bfc918da02ef2",
+          "online_count": 3,
+          "offline_count": 3
+        },
+        "family_rules": {
+          "equal": true,
+          "online_canonical_sha256": "1aff73307864099d950a6e7da0e784f13cf15be0bf22ec19141a90e48ab243fe",
+          "offline_canonical_sha256": "1aff73307864099d950a6e7da0e784f13cf15be0bf22ec19141a90e48ab243fe",
+          "online_count": 8,
+          "offline_count": 8
+        },
+        "first_gate_decisions": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        },
+        "historical_period_already_researched": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_daily_proxy": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "intraday_odd_sequence_verified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "last_date": {
+          "equal": true,
+          "online_canonical_sha256": "54367a4479b4fc3ef319fac2b9e62af69dd602addfed7c0e4d446662da98486f",
+          "offline_canonical_sha256": "54367a4479b4fc3ef319fac2b9e62af69dd602addfed7c0e4d446662da98486f"
+        },
+        "legacy_anchor_parity": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "live_qualified": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "partial_journal": {
+          "equal": true,
+          "online_canonical_sha256": "8d9767b2b07045fe3885bfa7f4e0d305e6e4d2d7ad5e55dbd86fad61031725a0",
+          "offline_canonical_sha256": "8d9767b2b07045fe3885bfa7f4e0d305e6e4d2d7ad5e55dbd86fad61031725a0",
+          "online_count": 16,
+          "offline_count": 16
+        },
+        "posthoc_data_exclusion": {
+          "equal": true,
+          "online_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+          "offline_canonical_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "profile_data_exclusions": {
+          "equal": true,
+          "online_canonical_sha256": "86b5fbc322ff374d7af2ecc47fd1571d20cf612b9eb818221860917c2a22ec6e",
+          "offline_canonical_sha256": "86b5fbc322ff374d7af2ecc47fd1571d20cf612b9eb818221860917c2a22ec6e",
+          "online_count": 59,
+          "offline_count": 59
+        },
+        "profile_queries": {
+          "equal": true,
+          "online_canonical_sha256": "96fd0b12d96a7a12f1753ec80d8d994c0f5914c67c8c43e18240e2d713d9d4cc",
+          "offline_canonical_sha256": "96fd0b12d96a7a12f1753ec80d8d994c0f5914c67c8c43e18240e2d713d9d4cc",
+          "online_count": 155,
+          "offline_count": 155
+        },
+        "reason": {
+          "equal": true,
+          "online_canonical_sha256": "21bc5c13e9dcd86e1fb654804f4a3446cb6900e04ad9f68f714ffadf581c02b5",
+          "offline_canonical_sha256": "21bc5c13e9dcd86e1fb654804f4a3446cb6900e04ad9f68f714ffadf581c02b5"
+        },
+        "selection_fallback_days": {
+          "equal": true,
+          "online_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+          "offline_canonical_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        "signal_parity": {
+          "equal": true,
+          "online_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "offline_canonical_sha256": "04b07e6814cdb76eb1af9961f96743693f3ffc904df511499c9f8dcef2fed209",
+          "online_count": 6,
+          "offline_count": 6
+        },
+        "stage": {
+          "equal": true,
+          "online_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91",
+          "offline_canonical_sha256": "89216301e8dc0e4334e0a5b78b67538bdaee5bcf2b2a4147ef5bd4caee64af91"
+        },
+        "summary": {
+          "equal": true,
+          "online_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+          "offline_canonical_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "unseen_validation": {
+          "equal": true,
+          "online_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+          "offline_canonical_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+        },
+        "volume_exit_log": {
+          "equal": true,
+          "online_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "offline_canonical_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "online_count": 0,
+          "offline_count": 0
+        }
+      },
+      "blocked_contract": {
+        "completed": {
+          "expected": false,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "completed_sessions": {
+          "expected": 607,
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "last_date": {
+          "expected": "2026-07-08",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "reason": {
+          "expected": "Stock dividend data missing or invalid: 6446 2026-07-09; shares_per_share, pay_date",
+          "online_matches": true,
+          "offline_matches": true
+        },
+        "stage": {
+          "expected": "arm_execution",
+          "online_matches": true,
+          "offline_matches": true
+        }
+      },
+      "partial_journal": {
+        "equal": true,
+        "online_canonical_sha256": "8d9767b2b07045fe3885bfa7f4e0d305e6e4d2d7ad5e55dbd86fad61031725a0",
+        "offline_canonical_sha256": "8d9767b2b07045fe3885bfa7f4e0d305e6e4d2d7ad5e55dbd86fad61031725a0",
+        "online_count": 16,
+        "offline_count": 16
+      }
+    }
+  },
+  "empty_6914_receipt_and_payload_hashes_verified": true,
+  "source_sha256": {
+    ".cache/strategy-account-comparison-20261007/board-v1/attempts/6914-2024-06-06.json": "1de85caa14bcb6f35d8b0694cb91484434c28e69f7af2e8efef4672b9ef095c4",
+    ".cache/strategy-account-comparison-20261007/board-v1/raw/6914-2024-06-06.parquet": "218a5823c57a1bff2e1a06a174dfddbc8292bbfb7b63ea5602d9944fe7289971",
+    ".cache/strategy-account-comparison-20261007/board-v1/receipts/6914-2024-06-06.json": "99f980c1142bd610416d971ce300d71473cb1ff622b7df7396080c9147d2cf02",
+    ".cache/strategy-account-comparison-20261007/online-v2/benchmark.json": "aa58f62222c4e4eed5d29b0f7c82f81dae71b0013db18230adb4254a35c2b366",
+    ".cache/strategy-account-comparison-20261007/online-v2/poc_priority.json": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+    ".cache/strategy-account-comparison-20261007/online-v2/report.json": "7c6406ec0bdf560107557307fbddf0c377572ae0fd668d849e0ce05448975c16",
+    ".cache/strategy-account-comparison-20261007/online-v2/rsi_shared_exit.json": "8a3a93b7b0733b2e8b946cc16e2030b09c9765a26db5e393d1f59cc8a3bd5899",
+    ".cache/strategy-account-comparison-20261007/online-v2/rsi_time20.json": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+    ".cache/strategy-account-comparison-20261007/online-v3/red_original.json": "f1ccd0f99749e6d2e15ab2e99478bb44110d633b132a2bb655e64f870d85d3cf",
+    ".cache/strategy-account-comparison-20261007/online-v3/report.json": "daed29971bc1341d0ddcb73f7ec9fd77ccf4c3283d7d9462d95ccfec9e484d85",
+    ".cache/strategy-account-comparison-20261007/online-v4/poc_filter.json": "fdd2646907705d6b86e71896cec9f269a9b931b9afdb814d393dbe9b643be253",
+    ".cache/strategy-account-comparison-20261007/online-v4/poc_priority_known.json": "83344954004a6378f1dcb11ff715e81f8154e9169fdb488517fc13b0fab63ba8",
+    ".cache/strategy-account-comparison-20261007/online-v4/red_known.json": "5a4d1f8e04fe83bf2df2ad7d06ff357b553b38ad03be912c96e3ed53c91d9145",
+    ".cache/strategy-account-comparison-20261007/online-v4/report.json": "32029344a23920d364f56f11bdfb9746002015c71933c4595b19262b883f23da",
+    ".cache/strategy-account-comparison-20261007/validation/replay-parity-baseline-v2.json": "7e8bde6548ba00a980d6d72d8c17abc02ac6bc485d83321a4c4ee6db8498a0b9",
+    "/Users/james.chou/JamesProject/stock_bot/.cache/strategy-account-comparison-20261007/validation/verify_replay_parity.py": "a02e5258131c714cf9eeb203be478f3741f999c11fc3e17a4dd3207d327be403",
+    ".cache/strategy-account-comparison-20261007/offline-v1/report.json": "f8a57f612c00eca4a3a26f709bf11ad58648f0385a6939f9ed0b13de5bef46f4",
+    ".cache/strategy-account-comparison-20261007/offline-v1/poc_priority.json": "762f72d5e962f0c7efe6e315bc09801acda8314a9c79ea014fa96d2a2acfab3c",
+    ".cache/strategy-account-comparison-20261007/offline-v1/benchmark.json": "aa58f62222c4e4eed5d29b0f7c82f81dae71b0013db18230adb4254a35c2b366",
+    ".cache/strategy-account-comparison-20261007/offline-v1/rsi_time20.json": "efd894c808e991f2b5addba3c5576a41812c7fef6a1d46a4a47bccb2cf99ce3d",
+    ".cache/strategy-account-comparison-20261007/offline-v1/red_original.json": "f1ccd0f99749e6d2e15ab2e99478bb44110d633b132a2bb655e64f870d85d3cf",
+    ".cache/strategy-account-comparison-20261007/offline-v1/rsi_shared_exit.json": "8a3a93b7b0733b2e8b946cc16e2030b09c9765a26db5e393d1f59cc8a3bd5899",
+    ".cache/strategy-account-comparison-20261007/offline-v1/red_known.json": "5a4d1f8e04fe83bf2df2ad7d06ff357b553b38ad03be912c96e3ed53c91d9145",
+    ".cache/strategy-account-comparison-20261007/offline-v1/poc_priority_known.json": "83344954004a6378f1dcb11ff715e81f8154e9169fdb488517fc13b0fab63ba8",
+    ".cache/strategy-account-comparison-20261007/offline-v1/poc_filter.json": "fdd2646907705d6b86e71896cec9f269a9b931b9afdb814d393dbe9b643be253"
+  },
+  "scope": "All eight registered cases: four completed and four explicitly blocked. The full execution source closure is verified separately by the parent report.",
+  "replay_executed": false,
+  "network_requests": 0,
+  "database_mutations": false,
+  "live_qualified": false
+}
