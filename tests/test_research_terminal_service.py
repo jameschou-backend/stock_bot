@@ -274,3 +274,27 @@ def test_account_replay_delegates_only_fixed_verified_engine(monkeypatch, termin
     assert got[0].replay_preflight is False
     assert result['job_id'] == 'account_'+'a'*32
     assert result['scope']['start'] == '2022-01-03'
+
+
+def test_overview_includes_supplement_catalog_counts_without_mixing_daily_scope(terminal):
+    before = terminal.overview()
+
+    class Supplement:
+        def metadata(self):
+            return dict(status='ready', source_end='2026-10-06', dates=['2026-10-06'])
+
+        def catalog(self):
+            return [dict(id=sid, name=sid, kind='entry', status='active', signal_only=True)
+                    for sid in ('entry_contraction_narrow', 'entry_peer_narrow')]
+
+    terminal._entry_context_provider = Supplement()
+    after = terminal.overview()
+    catalog = terminal.strategies()
+    assert after['catalog_count'] == len(catalog['catalog']) == before['catalog_count'] + 2
+    assert after['active_strategies'] == catalog['counts']['active'] == before['active_strategies'] + 2
+    assert after['entry_strategies'] == before['entry_strategies'] + 2
+    assert after['pending_strategies'] == before['pending_strategies']
+    assert after['latest'] == before['latest']
+    assert after['source_end'] == before['source_end'] == '2026-10-05'
+    assert after['dates'] == before['dates']
+    assert after['entry_context']['source_end'] == '2026-10-06'

@@ -71,8 +71,9 @@ def signals(date: str | None = None, strategy_id: str = 'poc_up_red',
 
 
 @router.get('/stocks/{stock_id}')
-def stock(stock_id: str, date: str | None = None, sessions: int = Query(default=120, ge=20, le=500)):
-    return _call('stock', stock_id, date, sessions)
+def stock(stock_id: str, date: str | None = None, sessions: int = Query(default=120, ge=20, le=500),
+          strategy_id: str | None = None):
+    return _call('stock', stock_id, date, sessions, strategy_id)
 
 
 @router.get('/strategies')

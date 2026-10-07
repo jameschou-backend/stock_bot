@@ -66,7 +66,7 @@ def _stamp(path):
 class ResearchTerminal:
     def __init__(self, root=ROOT, *, daily_audit=DAILY_AUDIT,
                  daily_sha=DAILY_AUDIT_SHA, study_audit=STUDY_AUDIT,
-                 study_sha=STUDY_AUDIT_SHA):
+                 study_sha=STUDY_AUDIT_SHA, entry_context_descriptor=None):
         self.root = Path(root).resolve()
         self.daily_descriptor = dict(path=daily_audit, sha256=daily_sha)
         self.study_descriptor = dict(path=study_audit, sha256=study_sha)
@@ -76,6 +76,8 @@ class ResearchTerminal:
         self._study = None
         self._rally_cases = None
         self._chart_cache = {}
+        self._entry_context_descriptor = entry_context_descriptor
+        self._entry_context_provider = None
         self.jobs_dir = self.root / '.cache/research-terminal/jobs'
 
     def _path(self, name):
@@ -215,19 +217,28 @@ class ResearchTerminal:
             modes=['daily', 'strict'], policies=['mixed', 'board_only', 'all'],
             stress_levels=['control', 'combined', 'all'], live_qualified=False)
 
+    def _entry_context(self):
+        from app.entry_context_service import EntryContextProvider
+        if self._entry_context_provider is None:
+            self._entry_context_provider = EntryContextProvider(self.root, self._entry_context_descriptor)
+        return self._entry_context_provider
+
     def overview(self):
         self._load()
         self._load_study()
+        entry_context = self._entry_context()
+        catalog = list(self._catalog.values()) + entry_context.catalog()
         last = self._days[max(self._days)]
         entries = {sid for sid, row in self._catalog.items() if row['kind'] == 'entry'}
         matches = [[r for sid, r in s['results'].items()
                     if sid in entries and r['status'] == 'matched'] for s in last['stocks']]
         return dict(source_end=self._scan['source_end'], dates=list(self._days),
+            entry_context=entry_context.metadata(),
             default_date=last['date'], universe_count=len(last['stocks']),
-            active_strategies=len(self._scan['evaluated_strategy_ids']),
-            catalog_count=len(self._catalog),
-            pending_strategies=sum(s['status'] != 'active' for s in self._catalog.values()),
-            entry_strategies=sum(s['kind'] == 'entry' and s['status'] == 'active' for s in self._catalog.values()),
+            active_strategies=sum(s['status'] == 'active' for s in catalog),
+            catalog_count=len(catalog),
+            pending_strategies=sum(s['status'] != 'active' for s in catalog),
+            entry_strategies=sum(s['kind'] == 'entry' and s['status'] == 'active' for s in catalog),
             latest=dict(entry_matched_stocks=sum(bool(x) for x in matches),
                 entry_matches=sum(len(x) for x in matches),
                 first_entry_stocks=sum(any(r['first_signal'] is True for r in x) for x in matches),
@@ -266,6 +277,9 @@ class ResearchTerminal:
                     earliest_execution='next_market_session', unknown_entry_rules=unknown)
 
     def signals(self, selected=None, strategy_id='poc_up_red', first_only=False, search=''):
+        from app.entry_context_service import STRATEGY_IDS
+        if strategy_id in STRATEGY_IDS:
+            return self._entry_context().signals(selected, strategy_id, first_only, search)
         day = self._selected_day(selected)
         if strategy_id != 'all' and strategy_id not in self._scan['evaluated_strategy_ids']:
             raise ValueError('請選擇已實作的策略；目錄待研究項目沒有訊號')
@@ -298,12 +312,18 @@ class ResearchTerminal:
 
     def strategies(self):
         self._load()
-        return dict(catalog=list(self._catalog.values()),
-                    counts=dict(Counter(r['status'] for r in self._catalog.values())),
+        catalog = list(self._catalog.values()) + self._entry_context().catalog()
+        return dict(catalog=catalog,
+                    counts=dict(Counter(r['status'] for r in catalog)),
                     global_completeness_claim=False, live_qualified=False)
 
-    def stock(self, stock_id, selected=None, sessions=120):
+    def stock(self, stock_id, selected=None, sessions=120, strategy_id=None):
+        from app.entry_context_service import STRATEGY_IDS
+        if strategy_id in STRATEGY_IDS:
+            return self._entry_context().stock(stock_id, selected, sessions, strategy_id)
         self._load()
+        if strategy_id is not None and strategy_id != 'all' and strategy_id not in self._catalog:
+            raise ValueError('未知的策略圖表範圍')
         selected = _iso(selected) if selected else max(self._days)
         if pd.Timestamp(selected) not in self._calendar or selected > self._scan['source_end']:
             raise ValueError('圖表日期須是封存來源內已觀測的交易日')
