@@ -1,0 +1,333 @@
+{
+  "schema": "rally_context_sources_v1",
+  "created_at": "2026-10-07T03:31:32.130372+00:00",
+  "purpose": "Freeze existing historical context features for descriptive rally-versus-nonrally comparison on same signal cohort; do not transplant old trade outcomes.",
+  "requested_period": {
+    "start": "2024-01-02",
+    "end": "2026-10-05"
+  },
+  "requested_scanner_bundle": ".cache/scanner-20261006/inputs-v1",
+  "context_original_bundle": ".cache/all-signals-2019-20261002/inputs",
+  "calendar": {
+    "path": ".cache/all-signals-2019-20261002/inputs/close-official.parquet",
+    "sha256": "e89b93249083ff581b933d8f55921bbce8332396838509dd943e5186ba07beee"
+  },
+  "new_network_requests": 0,
+  "new_finmind_requests": 0,
+  "new_data_collection": false,
+  "new_model_training": false,
+  "new_market_database_writes": false,
+  "qualification": {
+    "cash_account_backtest": false,
+    "actual_fill_verified": false,
+    "live_qualified": false,
+    "unseen_validation": false,
+    "historical_news_first_publication_verified": false
+  },
+  "sources": {
+    "flow": {
+      "features": {
+        "path": ".cache/sequential-research-20261003/flow-v1/features.json",
+        "sha256": "9ce4ae4597e3e9ebaf1ada8693c12062802c720a5d7eb352bb7083bbd81a5f92"
+      },
+      "report": {
+        "path": ".cache/sequential-research-20261003/flow-v1/report.json",
+        "sha256": "498944fbaf21201c2a3f4f0167ce00330945a2913f1a4fb309d8b3855c6f27da"
+      },
+      "report_hash_file": {
+        "path": ".cache/sequential-research-20261003/flow-v1/report.sha256",
+        "sha256": "54fd97221e4fd82faf139dcbf5cf5606f9240132fc6c37583f2585ddd4e79c7a"
+      },
+      "generator_sources": [
+        {
+          "path": "scripts/research_flow_response_20261003.py",
+          "sha256": "28b6c684955cac0ea84a737079c06140c5601f5c943dca883fe4a9a38ee062ef"
+        },
+        {
+          "path": "scripts/prepare_sequential_flows_20261003.py",
+          "sha256": "fea06e6144f5b5faa7c0416a13e5ad2d0ae0e37c035795914a5f7470d81ea9ea"
+        },
+        {
+          "path": "skills/launch_flows.py",
+          "sha256": "4e6372242bdd876f0d46d245717d86dca5b4800aaf00a747985602df9064b37f"
+        }
+      ],
+      "all_original_direct_sources_and_outputs_verified": true,
+      "direct_source_count": 2659,
+      "direct_output_count": 4,
+      "direct_source_or_output_missing": 0,
+      "direct_source_or_output_mismatches": 0,
+      "features_schema_fields": [
+        "signal_id",
+        "stock_id",
+        "signal_date",
+        "lag",
+        "flow_end",
+        "price_start",
+        "flow_ratio5",
+        "relative_return5",
+        "flow_quadrant",
+        "flow_buy_strong",
+        "flow_issue",
+        "flow_and_group"
+      ],
+      "join_keys": [
+        "signal_date",
+        "stock_id",
+        "lag"
+      ],
+      "all_rows": 60376,
+      "duplicate_coordinates": 0,
+      "signal_date_min": "2019-02-21",
+      "signal_date_max": "2026-10-02",
+      "requested_period_coverage": {
+        "1": {
+          "rows": 13062,
+          "known": 12973,
+          "unknown": 89,
+          "issue_counts": {
+            "known": 12973,
+            "flow_category_or_volume_missing_or_conflicting": 5,
+            "price_adjustment_or_identity_unknown": 84
+          }
+        },
+        "3": {
+          "rows": 13062,
+          "known": 12938,
+          "unknown": 124,
+          "issue_counts": {
+            "known": 12938,
+            "flow_category_or_volume_missing_or_conflicting": 6,
+            "price_adjustment_or_identity_unknown": 118
+          }
+        }
+      },
+      "temporal_checks": {
+        "flow_window_end_equals_T_minus_lag": true,
+        "five_session_price_window_exact": true,
+        "known_feature_values_finite": true,
+        "feature_rows_checked": 60376
+      },
+      "admissibility": "descriptive_matched_known_subset_only",
+      "availability_policy": "lag=1 and lag=3 market sessions, explicitly assumed rather than historically verified first publication",
+      "first_publication_verified": false,
+      "normalized_raw_flows": {
+        "path": ".cache/sequential-research-20261003/flow-inputs/flows.parquet",
+        "sha256": "3aa7ea383ce544075fabf63432906662b11275f94118f84c7c91b2b2eed028cc"
+      },
+      "normalized_manifest": {
+        "path": ".cache/sequential-research-20261003/flow-inputs/manifest.json",
+        "sha256": "8a9f46bce7d69ccae8180e3a61788fd218b80a95fca3217fa1f5661ef161b2eb"
+      },
+      "feature_definitions": {
+        "flow_ratio5": "Sum of foreign including Foreign_Dealer_Self plus Investment_Trust net shares in 5 market sessions ending T-lag, divided by same-session volume. Requires both actor totals complete. Dealer-only not included.",
+        "relative_return5": "Adjusted price return over same 5-session interval minus 0050 return.",
+        "flow_quadrant": "buy_strong,buy_weak,sell_strong,sell_weak; zero values neutral; missing/invalid unknown.",
+        "flow_buy_strong": "flow_ratio5>0 and relative_return5>0; unknown preserved."
+      },
+      "not_available_in_frozen_feature_file": [
+        "separate foreign/trust net ratios",
+        "consecutive net-buy streak days"
+      ],
+      "construction_review": [
+        {
+          "path": "scripts/research_flow_response_20261003.py",
+          "lines": [
+            22,
+            60
+          ],
+          "finding": "Feature function accepts signal identity/date only and applies lag before accessing 5-session trailing windows."
+        },
+        {
+          "path": "scripts/research_flow_response_20261003.py",
+          "lines": [
+            99,
+            113
+          ],
+          "finding": "Both lag feature sets are written before future outcomes are loaded."
+        },
+        {
+          "path": "scripts/prepare_sequential_flows_20261003.py",
+          "lines": [
+            34,
+            139
+          ],
+          "finding": "Raw coverage selection uses pre-signal coordinates rather than future outcome, conflicts and incomplete categories remain unknown, old DB aggregates not used."
+        }
+      ]
+    },
+    "sector": {
+      "features": {
+        "path": ".cache/sequential-research-20261003/sector-v1/features.json",
+        "sha256": "8e5cbcb33c5747f9240b383547ca14227c8be1b46af7f90e79c84c7bb283a00d"
+      },
+      "report": {
+        "path": ".cache/sequential-research-20261003/sector-v1/report.json",
+        "sha256": "907129df976e53473432e542cf45935d804a1ad0668ae7f8b86a9fe6989914b2"
+      },
+      "report_hash_file": {
+        "path": ".cache/sequential-research-20261003/sector-v1/report.sha256",
+        "sha256": "c839bcc5f7607a43daa3eb9ac4896eb80e9537b7006b6ae7133ce00a6fde3f4c"
+      },
+      "generator_sources": [
+        {
+          "path": "scripts/research_sector_participation_20261003.py",
+          "sha256": "3bbad05a9be1fc5dfeb91d885c5d9f2d938e389be0a82148d5dc6269d8dab103"
+        }
+      ],
+      "all_original_direct_sources_and_outputs_verified": true,
+      "direct_source_count": 137,
+      "direct_output_count": 7,
+      "direct_source_or_output_missing": 0,
+      "direct_source_or_output_mismatches": 0,
+      "features_schema_fields": [
+        "breadth_confirmed",
+        "expected_peers",
+        "feature_available_at",
+        "feature_issue",
+        "group_cutoff_date",
+        "group_participation",
+        "historical_industry_claimed",
+        "leader_description",
+        "market_min_coverage25",
+        "observed_peer_ids",
+        "observed_peers",
+        "own_minus_peer_return20",
+        "own_return20",
+        "peer_above_ma20_fraction",
+        "peer_coverage",
+        "peer_ids",
+        "peer_median_return20",
+        "peer_share5",
+        "peer_share_multiple",
+        "peer_share_prior20",
+        "rank_priority",
+        "rank_score_bin",
+        "signal_date",
+        "signal_id",
+        "stock_id",
+        "turnover_confirmed",
+        "turnover_mean20"
+      ],
+      "join_keys": [
+        "signal_date",
+        "stock_id"
+      ],
+      "all_rows": 30188,
+      "duplicate_coordinates": 0,
+      "signal_date_min": "2019-02-21",
+      "signal_date_max": "2026-10-02",
+      "requested_period_coverage": {
+        "rows": 13062,
+        "known": 7953,
+        "unknown": 5109,
+        "issue_counts": {
+          "fewer_than_three_correlated_peers": 5090,
+          "known": 7953,
+          "insufficient_common_peer_coverage": 19
+        }
+      },
+      "temporal_checks": {
+        "month_cutoff_equals_prior_month_last_market_session": true,
+        "feature_availability_equals_T_after_completed_close": true,
+        "month_frozen_peer_ids_match": true,
+        "candidate_and_0050_excluded_from_peers": true,
+        "all_known_rows_meet_coverage_bounds": true,
+        "historical_industry_claimed": false,
+        "feature_rows_checked": 30188,
+        "monthly_peer_rows": 13130
+      },
+      "admissibility": "descriptive_matched_known_subset_only",
+      "monthly_peers": {
+        "path": ".cache/sequential-research-20261003/sector-v1/monthly-peers.json",
+        "sha256": "dccd8a1e1bab9c15e2316da9ef34a5af0b479d7c5ce403effc1f215451e7fac4"
+      },
+      "availability_policy": "Group frozen before signal month; trailing T-close features usable only after completed close. Price co-movement peers, not verified historical industry or news-theme membership.",
+      "historical_industry_claimed": false,
+      "feature_definitions": {
+        "peer_above_ma20_fraction": "Fraction of common eligible peers above their own MA20 at T.",
+        "peer_share5": "Mean over T-4..T of peer raw-close-times-shares turnover estimate divided by market estimate; both exclude candidate and 0050.",
+        "peer_share_prior20": "Same frozen peers and denominator policy, mean T-24..T-5.",
+        "peer_share_multiple": "peer_share5/peer_share_prior20; this is trading participation, not net cash inflow.",
+        "own_minus_peer_return20": "Candidate trailing 20-session return minus median same peers return.",
+        "breadth_confirmed": "peer_above_ma20_fraction>=0.60.",
+        "turnover_confirmed": "peer_share_multiple>=1.20.",
+        "group_participation": "breadth_confirmed and turnover_confirmed, only if full required quality coverage is known."
+      },
+      "construction_review": [
+        {
+          "path": "scripts/research_sector_participation_20261003.py",
+          "lines": [
+            46,
+            82
+          ],
+          "finding": "Trailing 120 daily returns end at month-prior cutoff; minimum100 joint observations,corr>=.5,top10 and at least3; group frozen within month."
+        },
+        {
+          "path": "scripts/research_sector_participation_20261003.py",
+          "lines": [
+            85,
+            178
+          ],
+          "finding": "Common peer set across trailing25 sessions,peer coverage>=80%,market coverage>=95%,own stock and0050 excluded from turnover estimates."
+        },
+        {
+          "path": "scripts/research_sector_participation_20261003.py",
+          "lines": [
+            308,
+            326
+          ],
+          "finding": "Only preknown columns loaded; features,peers and fixed-pair maps materialized before forward outcome read."
+        }
+      ]
+    }
+  },
+  "unknown_policy": [
+    "Join strictly by signal_date and stock_id and flow lag; never as-of-carry a signal-specific feature onto other dates.",
+    "The old context signal cohort differs from scanner cohort. Absent key means unknown; do not fill zero,false,neutral or no-theme.",
+    "Coverage ends2026-10-02; requested2026-10-05 has no frozen context row and stays unknown.",
+    "Within each comparison keep both treated and control on same known feature cohort; report missing context and missing outcome separately, preserve full requested denominator.",
+    "Use scanner current frozen future-outcome labels only. Do not join old context signals.parquet,comparisons.json or old net_return outcomes.",
+    "Current company industry categories must not be backfilled as historical sector membership.",
+    "News/theme absent is unknown rather than no event. Historical first publication not verified.",
+    "Legacy input price quality, adjusted-price and historical identity limitations remain; SHA stability does not prove source truth."
+  ],
+  "not_selected_sources": {
+    "holder_distribution": {
+      "available_path": ".cache/theme-chip-research-20260927-v4/weekly.csv",
+      "rows": 491526,
+      "stocks": 1974,
+      "date_range": [
+        "2021-11-05",
+        "2026-09-04"
+      ],
+      "reason": "Separate8/15-calendar-day availability assumptions and current1974-stock membership; not in this frozen two-source join. Strict holdings changes may be reused in separately preregistered study."
+    },
+    "broker_flows": {
+      "available_report": "docs/research_broker_branch_20261004.md",
+      "reason": "458 old candidates; only251 complete5-day data. Nonrepresentative coverage and historical availability not fully certified; not full scanner-context population."
+    },
+    "news": {
+      "available_audit": "docs/research_events_flows_20261003.md",
+      "reason": "26 events/8 stocks; zero events meet historical first-publication,complete provenance and exclusive stage requirements together. No complete negative-event corpus."
+    }
+  },
+  "verified_document_sources": [
+    {
+      "path": "docs/research_events_flows_20261003.md",
+      "sha256": "4d175def2011dcf895f34c31c0f1f9981a0ea82a090ba6cb5f7dc90df40b7d93"
+    },
+    {
+      "path": "docs/research_sector_participation_20261003.md",
+      "sha256": "c282be085568c41f288acd28a9c39fed8e3f11613163fab9c83de22c107b99fa"
+    },
+    {
+      "path": "docs/research_broker_branch_20261004.md",
+      "sha256": "7b8ad8535949cb9c2133a61619a19a95f4e27d34436da16ccf347c562877e758"
+    },
+    {
+      "path": "docs/research_theme_chips_20260927.md",
+      "sha256": "95e0c1a7b11e136c8eb0ccdd738225b46a36db31e29e4ad715b26c9a02b90af8"
+    }
+  ]
+}

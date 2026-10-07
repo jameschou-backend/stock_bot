@@ -1,0 +1,83 @@
+{
+  "schema": "rally_context_validation_v1",
+  "report_sha256": "fc302ce2e30e057071b14bce4ef1659e1ad617a77b2359e4e0a6b78688c5ebfc",
+  "independent_arithmetic": {
+    "schema": "rally_context_independent_verification_v1",
+    "generated_at": "2026-10-07T03:43:00.858382+00:00",
+    "report_path": ".cache/rally-context-20261007/run-v2/report.json",
+    "report_sha256": "fc302ce2e30e057071b14bce4ef1659e1ad617a77b2359e4e0a6b78688c5ebfc",
+    "parquet_path": ".cache/rally-context-20261007/run-v2/labelled-events.parquet",
+    "parquet_sha256": "9907dd03153d0a9c16a7a7295c2a7d596d658fe3a2ddb269c3a107bfd5790890",
+    "parquet_expected_sha256": "9907dd03153d0a9c16a7a7295c2a7d596d658fe3a2ddb269c3a107bfd5790890",
+    "verifier_path": "/Users/james.chou/JamesProject/stock_bot/.cache/rally-context-20261007/verify_independently.py",
+    "verifier_sha256": "7307dca1bbb13acd94cfd1d97aa658381df246f080b3b5523b2e5c485b82c7d8",
+    "labelled_row_count": 20608,
+    "unique_event_count": 10304,
+    "comparison_count": 512,
+    "scalar_check_count": 35845,
+    "absolute_tolerance": 1e-12,
+    "relative_tolerance": 0,
+    "production_stats_imported": false,
+    "scope": "Arithmetic and independently selected raw/nonoverlapping all/year populations; does not certify upstream features, market data, execution, or live profitability.",
+    "passed": true,
+    "failure_count": 0,
+    "failures": [],
+    "elapsed_seconds": 3.5786138330586255
+  },
+  "replay": {
+    "runs": [
+      "run-v1",
+      "run-v2"
+    ],
+    "change": "Explicit known-context publication guards; no threshold or outcome retuning",
+    "same_feature_parquet_sha256": true,
+    "same_labelled_parquet_sha256": true,
+    "all_statistics_equal": true,
+    "finmind_requests_each": 0
+  },
+  "api_checks": [
+    {
+      "route": "/health",
+      "http_status": "200",
+      "valid_json": true,
+      "curl_exit": 0
+    },
+    {
+      "route": "/picks",
+      "http_status": "200",
+      "valid_json": true,
+      "curl_exit": 0
+    },
+    {
+      "route": "/models",
+      "http_status": "200",
+      "valid_json": true,
+      "curl_exit": 0
+    },
+    {
+      "route": "/jobs?limit=10",
+      "http_status": "200",
+      "valid_json": true,
+      "curl_exit": 0
+    }
+  ],
+  "focused_test_count": 46,
+  "pipeline": {
+    "status": "failed",
+    "cause": "Sandbox denies localhost MySQL connection (Errno 1)",
+    "attempt_log_sha256": "6d3eeaba4428d61cb7c0fc68136b5d09b58cfea603562efc2e11f49e19cd00bd",
+    "prior_application_failure": "docs/strategy_account_comparison_implementation_audit_20261007.md",
+    "passed": false
+  },
+  "full_test_status": "passed",
+  "live_qualified": false,
+  "full_test_count": 6660,
+  "full_test_warnings": 37,
+  "full_test_seconds": 114.2,
+  "full_test_log_sha256": "3f08ff8a3ebaaa612ca1c65971e1f020d95f1d096695dd1993e8097c5c21d3f4",
+  "focused_test_seconds": 1.88,
+  "trial_registry_records_by_run": {
+    "run-v1": 64,
+    "run-v2": 64
+  }
+}
