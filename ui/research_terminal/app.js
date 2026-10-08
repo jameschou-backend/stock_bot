@@ -15,7 +15,18 @@ function value(v){return v==null?'未提供':typeof v==='number'?number(v,4):typ
 function regime(v){return({trend_up:'上升趨勢',trend_down:'下降趨勢',range:'區間整理',sideways:'區間整理',neutral:'中性',risk_off:'風險偏高',unknown:'情境未判定'})[v]||v||'情境未判定';}
 function textReason(x){return reasons[x]||x;}function tradeReason(reason){const labels={leader_entry:'符合當日候選與資金規則進場',three_black:'進場後連續三根黑 K，還原收盤逐日降低',loss12:'入場價格訊號下跌 12%',time63:'持有滿 63 個交易日'};return labels[reason]?labels[reason]+'（'+reason+'）':reason||'—';}function precursorLabel(raw){return raw==='known first signals on episode anchor or preceding10 observed market sessions within study period'?'前置信號：研究期間內，在事後辨識的起點當日，或往前 10 個已觀測交易日出現、且當時可判定的首次訊號。':raw||'';}function executionLabel(x){return({T_plus_1_adjusted_open_proxy:'訊號次日還原開盤價估算','T+1_adjusted_open_proxy':'訊號次日還原開盤價估算','T+h_adjusted_close_proxy_including_entry_session':'持有期末還原收盤價估算，包含進場日'})[x]||value(x);}
 function setError(message){$('global-error').hidden=!message;$('global-error').textContent=message||'';}
-async function api(path,options={}){const response=await fetch(API+path,{headers:{'Content-Type':'application/json'},...options});let data;try{data=await response.json();}catch{throw Error(`伺服器回應無法讀取（${response.status}），請確認研究 API 已啟動。`);}if(!response.ok){let msg=data.detail||data.error||data.message||`HTTP ${response.status}`;if(typeof msg==='object')msg=JSON.stringify(msg);throw Error(msg);}return data;}
+async function api(path,options={}){
+ const headers=new Headers(options.headers);
+ if(!headers.has('Content-Type'))headers.set('Content-Type','application/json');
+ // ngrok otherwise returns its HTML interstitial with HTTP 200 to mobile fetches.
+ headers.set('ngrok-skip-browser-warning','1');
+ const response=await fetch(API+path,{...options,headers});
+ let data;
+ try{data=await response.json();}
+ catch{throw Error(`伺服器未回傳有效資料（HTTP ${response.status}），請重新整理；若持續發生，請檢查分享連線與研究 API。`);}
+ if(!response.ok){let msg=data.detail||data.error||data.message||`HTTP ${response.status}`;if(typeof msg==='object')msg=JSON.stringify(msg);throw Error(msg);}
+ return data;
+}
 function option(value,label){const o=el('option',label);o.value=value;return o;}
 function tag(label,style='neutral'){return el('span',label,'tag '+style);}
 function empty(title,body){const e=el('div',undefined,'empty-state');e.append(el('span','⌕','empty-symbol'),el('h3',title),el('p',body));return e;}
