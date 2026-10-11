@@ -38,10 +38,21 @@ def combine(report_paths,output):
         candidate=report['candidate_manifest'];manifest=json.loads(sources.bind(candidate['path'],candidate['sha256']).read_text())
         if set(report['cases'])!=set(report['requested_arms']):raise ValueError('Attempted cases differ from requested arms')
         for arm,case in report['cases'].items():
-            if arm!='benchmark' and case.get('candidate_coverage')!=manifest['counts'][arm]:
-                raise ValueError('Case coverage differs from its own candidate version')
-            sources.bind(case['path'],case['sha256'])
-            cases[arm]=deepcopy(case);origins[arm]=dict(report_path=str(path.relative_to(ROOT)),
+            sealed_case=json.loads(sources.bind(case['path'],case['sha256']).read_text())
+            if sealed_case.get('completed') != case.get('completed'):
+                raise ValueError('Case completion differs from its sealed file')
+            if arm!='benchmark':
+                coverage=manifest['counts'][arm]
+                # Copying settlement writers add scanner metadata to the sealed
+                # case without mutating the in-memory report descriptor. Verify
+                # the actual hash-bound case; never infer missing data from the
+                # manifest alone or accept an explicit conflicting descriptor.
+                if (sealed_case.get('candidate_coverage') != coverage
+                        or case.get('candidate_coverage') not in (None,coverage)):
+                    raise ValueError('Case coverage differs from its own candidate version')
+            cases[arm]=deepcopy(case)
+            cases[arm]['candidate_coverage']=deepcopy(sealed_case.get('candidate_coverage'))
+            origins[arm]=dict(report_path=str(path.relative_to(ROOT)),
                 report_sha256=digest(path),candidate_file_sha256=manifest['files_sha256'].get(arm+'.json'))
         for key,value in report['source_sha256'].items():
             if key in refs and refs[key]!=value:raise ValueError('Shared evidence changed across replays: '+key)
