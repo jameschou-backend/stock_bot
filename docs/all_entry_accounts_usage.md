@@ -55,7 +55,7 @@ python scripts/combine_all_entry_accounts.py \
 上海商銀另有獨立的 [證書單位核對](all_entry_certificate_completion_20261011.md)。[裕融證書](all_entry_9941_certificate_20261011.md) 在期末仍未換發普通股，保留獨立不可交易單位；[兆豐金與玉山金](all_entry_bank_distributions_20261011.md) 則核對普通股直接上市、最終配股率及員工酬勞股數。不得以未驗證的同代碼成交假設將證書提早當成普通股。最新完整補件入口每次執行一組策略，例如：
 
 ```bash
-python scripts/research_all_entry_accounts_yageo_split.py \
+python scripts/research_all_entry_accounts_tcfhc_completion.py \
   --arms ma20_60_cross \
   --candidate-bundle .cache/all-entry-accounts-20261011/inputs-v3 \
   --terms docs/all_entry_corporate_terms_v3_20261011.json \
@@ -73,6 +73,7 @@ python scripts/research_all_entry_accounts_yageo_split.py \
   --poya-completion docs/all_entry_5904_certificate_20261012.json \
   --merger-halt docs/all_entry_2888_halt_20261012.json \
   --yageo-split docs/all_entry_2327_split_20261012.json \
+  --tcfhc-completion docs/all_entry_5880_certificate_20261012.json \
   --output .cache/all-entry-accounts-20261011/new-completed-data-replay
 ```
 
@@ -87,6 +88,8 @@ python scripts/research_all_entry_accounts_yageo_split.py \
 [新光金停牌補件](all_entry_2888_halt_20261012.md) 依事前公告拒絕停牌期間的新買單，保持預留資金，不假造當日行情。
 
 [國巨面額變更補件](all_entry_2327_split_20261012.md) 核對 2025 年 1 拆 4 及停牌期間，重用既有拆股結算，不把股價除以 4 誤認為損失。
+
+[合庫金證書補件](all_entry_5880_certificate_20261012.md) 核對 2026 年證書及普通股日期，保留比例與畸零條款採公告轉載的來源限制。
 
 每個新嘗試使用不同輸出目錄；用 `combine_all_entry_accounts.py --report` 依嘗試順序列入各組報告，完整覆蓋 31 個策略與基準後才發布。後半段尚未執行的組別直接使用最新補件，已完成且未受補件事件影響者保留原始帳本。補件組另核對事件前的共同帳本及新股實際交付紀錄。
 

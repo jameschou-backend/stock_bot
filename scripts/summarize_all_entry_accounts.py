@@ -38,9 +38,16 @@ def guard_certificate_inventory(case):
         raise UnverifiedCertificateInventory('2888 合併停牌核對失敗：'+str(exc)) from exc
     # The inherited runner has not separated these rights certificates from
     # ordinary stock inventory. A completed replay alone cannot certify them.
-    boundaries = {('5876','2026-07-28'), ('6446','2026-07-09'), ('9941','2026-09-01'), ('2801','2026-08-05'), ('5904','2025-07-15')}
+    boundaries = {('5876','2026-07-28'), ('6446','2026-07-09'), ('9941','2026-09-01'), ('2801','2026-08-05'), ('5904','2025-07-15'), ('5880','2026-08-11')}
     for row in case['account'].get('corporate_actions',[]):
         if (row.get('stock_id'),row.get('date')) in boundaries and row.get('kind') == 'stock_dividend':
+            if row['stock_id'] == '5880' and case.get('tcfhc_certificate_inventory_audit'):
+                from skills.all_entry_tcfhc_completion import verify_inventory_proof
+                try:
+                    verify_inventory_proof(case)
+                except ValueError as exc:
+                    raise UnverifiedCertificateInventory('5880 獨立證書庫存核對失敗：'+str(exc)) from exc
+                continue
             if row['stock_id'] == '5904' and case.get('poya_certificate_inventory_audit'):
                 from skills.all_entry_poya_completion import verify_inventory_proof
                 try:
@@ -114,7 +121,7 @@ def summarize(report_path, output):
             rows[arm] = row
             continue
         metrics = account_metrics(case)
-        from skills.all_entry_poya_completion import settlement_notes
+        from skills.all_entry_tcfhc_completion import settlement_notes
         evidence_notes = settlement_notes(case)
         if case.get('settlement_evidence_notes', []) != evidence_notes:
             raise ValueError('Settlement source limitations are absent or differ')
@@ -169,6 +176,7 @@ def summarize(report_path, output):
             '排名僅描述同一組假設下的已見歷史；不是未來獲利機率或實戰推薦。',
             '每日符合條件可再次成為候選；不能直接套用首日訊號研究的勝率。',
             '一般訊號資料未知、POC品質未知及帳戶未完成分開揭露。',
+            '現金股利以毛額入帳；個人所得稅、補充保費與個別券商郵匯費未納入。',
             '未結清持股與應收權益列入資產，但不列入已結清批次勝率。'])
     result['limitations'].extend(sorted({note for row in rows.values()
         for note in row.get('settlement_evidence_notes', [])}))

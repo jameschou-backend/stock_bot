@@ -1,0 +1,84 @@
+{
+  "schema": "all_entry_5880_nontraded_certificate_inventory_v1",
+  "key": "5880-2026-08-11",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "evidence_note": "5880／2026 配股：證書與普通股上市日已核對 TWSE 原始公告；配股率與畸零款條款採公司公告轉載交叉核對，公司議事錄原始 PDF 下載逾時、未留存且未完成視覺核對。證書獨立記錄且不交易；畸零款淨額與支付日未證實，不列可用現金。",
+  "evidence": {
+    "certificate": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/certificate.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/certificate.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    },
+    "conversion": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/conversion.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/conversion.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    },
+    "exdate": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/exdate.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/exdate.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    }
+  },
+  "exchange": {
+    "path": ".cache/all-entry-accounts-20261011/required-listings-v9/raw/71dc1882d77459d7a1d1564baed9734076cc282008ae1c5ad82b23d967f41725.bin",
+    "receipt_path": ".cache/all-entry-accounts-20261011/required-listings-v9/receipts/71dc1882d77459d7a1d1564baed9734076cc282008ae1c5ad82b23d967f41725.json",
+    "source_role": "primary_exchange_response"
+  },
+  "existing_dividend_feed": ".cache/all-entry-accounts-20261011/execution-v1/dividends/5880.parquet",
+  "official_ex_events": ".cache/poc-latest-20261003/inputs-v1/events.parquet",
+  "issuer_pdf_failure": ".cache/all-entry-accounts-20261011/corporate-evidence/5880/agm-download-failure.json",
+  "source_sha256": {
+    ".cache/all-entry-accounts-20261011/execution-v1/dividends/5880.parquet": "8d94b701875e8769abf0d9f652256de37d3a093655d1547f314db3ca1c0723f1",
+    ".cache/poc-latest-20261003/inputs-v1/events.parquet": "783a2d9e800004e51c0a343cd02409099a3d646db5770335d59db4015200ed74",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/agm-download-failure.json": "e5b31a77b825fbb4e96fcc7f9ad3488860385e1fdedf812e1efaf084f3069af5",
+    ".cache/all-entry-accounts-20261011/required-listings-v9/plan.json": "3fa61599f7e12b2d9bdcf74981eda4890e252b28eb3934c769a602bee1fd6bec",
+    ".cache/all-entry-accounts-20261011/required-listings-v9/outcome.json": "505b9f06e8b5cc97d539dcd55ff01823c78bd603ee3cc5dbf554ad6cc766a94c",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/certificate.html": "ab222445841ca81640f9543bce0a42cb898d7a6f8e9ea33856a316eb7e4473c0",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/certificate.html.receipt.json": "a8c7e9b4632504d843d162fe76c18692b89b138c676650b79317ac2880343515",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/conversion.html": "55383d432b3456e149194526d4533e95024f56acf269a75aa65070ffb03441af",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/conversion.html.receipt.json": "d984cb7ef647e9d5fec4448dd113aeef5e1d33d0d3ef70d358dcb1e348a7524c",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/exdate.html": "778eeadccfe9d859bf7d89b481fe69aa6ae89ed5c0a00f649f31d0b39da72ae4",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5880/exdate.html.receipt.json": "ac8914c160b80cef597d514af52fc0dec3c4d2c8d223e6171adcb1e13685e0e2",
+    ".cache/all-entry-accounts-20261011/required-listings-v9/raw/71dc1882d77459d7a1d1564baed9734076cc282008ae1c5ad82b23d967f41725.bin": "5e0a9a1e50d715dfdce737d03bb07f5b76ea1c65bab258d463cc43d9078c87cf",
+    ".cache/all-entry-accounts-20261011/required-listings-v9/receipts/71dc1882d77459d7a1d1564baed9734076cc282008ae1c5ad82b23d967f41725.json": "4f9947e8b20062dcf44d1673c0a3f27838fe6cf73a10bc6da951d0e134177ecb"
+  },
+  "override": {
+    "shares_per_share": 0.025,
+    "pay_date": "2026-09-24",
+    "ordinary_share_available_date": "2026-09-24",
+    "listing_announcement_date": "2026-09-22",
+    "certificate_delivery_date": "2026-09-11",
+    "certificate_listing_date": "2026-09-11",
+    "ordinary_conversion_date": "2026-09-24",
+    "ordinary_conversion_creates_new_entitlement": false,
+    "certificate_trading_modeled": false,
+    "same_code_fungible_trading_verified": false,
+    "valuation_basis": "ordinary_share_close_proxy",
+    "fractional_cash_per_share": 10,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": false,
+    "fractional_cash_available_for_trading": false,
+    "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+    "use_scope": "account_settlement_only_not_selection",
+    "source": "Primary TWSE listing dates; issuer announcement republications for entitlement and fractional terms",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/agm-download-failure.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/certificate.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/certificate.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/conversion.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/conversion.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/exdate.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5880/exdate.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/execution-v1/dividends/5880.parquet",
+      ".cache/all-entry-accounts-20261011/required-listings-v9/outcome.json",
+      ".cache/all-entry-accounts-20261011/required-listings-v9/plan.json",
+      ".cache/all-entry-accounts-20261011/required-listings-v9/raw/71dc1882d77459d7a1d1564baed9734076cc282008ae1c5ad82b23d967f41725.bin",
+      ".cache/all-entry-accounts-20261011/required-listings-v9/receipts/71dc1882d77459d7a1d1564baed9734076cc282008ae1c5ad82b23d967f41725.json",
+      ".cache/poc-latest-20261003/inputs-v1/events.parquet"
+    ]
+  }
+}
