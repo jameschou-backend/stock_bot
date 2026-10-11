@@ -95,8 +95,11 @@ def test_create_paper_account_and_record_fill_without_duplicate(monkeypatch,tmp_
                  'regime_switch_ui', 'diffusion_research_ui', 'guidance_research_ui',
                  'capacity_forward_ui', 'backtest_full_pass_ui',
                  'backtest_completion_ui', 'backtest_tool_ui', 'historical_selector_ui',
-                 'residual_ticks_ui', 'limit_band_ui', 'opening_entry_ui', 'mixed_odd_ui', 'market_input_validation_ui'):
+                 'residual_ticks_ui', 'limit_band_ui', 'opening_entry_ui', 'mixed_odd_ui',
+                 'market_input_validation_ui', 'intraday_limit_ui'):
         monkeypatch.setattr(importlib.import_module('app.'+name), 'render', lambda: None)
+    monkeypatch.setattr(service, 'strategy_evidence', lambda: {
+        'validation_requirements': ['尚待獨立驗證'], 'documents': []})
     from app import cash_allocation_research as allocation
     monkeypatch.setattr(allocation,'overview',lambda:{'available':False,
         'note':'測試未準備資金配置快取','source_verification':{'status':'pending'}})
