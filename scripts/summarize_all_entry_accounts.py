@@ -31,6 +31,11 @@ def holding_scope(account, active_slots):
 
 
 def guard_certificate_inventory(case):
+    from skills.all_entry_merger_halt_publication import verify_published_halt
+    try:
+        verify_published_halt(case)
+    except ValueError as exc:
+        raise UnverifiedCertificateInventory('2888 合併停牌核對失敗：'+str(exc)) from exc
     # The inherited runner has not separated these rights certificates from
     # ordinary stock inventory. A completed replay alone cannot certify them.
     boundaries = {('5876','2026-07-28'), ('6446','2026-07-09'), ('9941','2026-09-01'), ('2801','2026-08-05'), ('5904','2025-07-15')}
