@@ -1,0 +1,170 @@
+{
+  "schema": "all_entry_ordinary_delivery_v1",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "overrides": {
+    "4763-2024-09-12": {
+      "pay_date": "2024-10-09",
+      "ordinary_share_available_date": "2024-10-09",
+      "shares_per_share": 0.14978205387,
+      "fractional_cash_per_share": 10.0,
+      "entitlement_announcement_date": "2024-08-28",
+      "delivery_announcement_date": "2024-09-23",
+      "listing_announcement_date": "2024-09-26",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": false,
+      "fractional_cash_available_for_trading": false,
+      "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+      "evidence_files": [
+        ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130828-ajax_t108sb22.html",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130828-ajax_t108sb22.html.source.json",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130923-ajax_t59sb09.html",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130923-ajax_t59sb09.html.source.json",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130926-ajax_t59sb08.html",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130926-ajax_t59sb08.html.source.json"
+      ],
+      "source": "MOPS entitlement 2024-08-28, confirmed ordinary share delivery 2024-09-23, listing 2024-09-26; fractional net cash and delivery unverified, unavailable for trading."
+    },
+    "5871-2026-07-29": {
+      "pay_date": "2026-09-01",
+      "ordinary_share_available_date": "2026-09-01",
+      "shares_per_share": 0.02,
+      "fractional_cash_per_share": 10.0,
+      "entitlement_announcement_date": "2026-06-26",
+      "delivery_announcement_date": "2026-08-11",
+      "listing_announcement_date": "2026-08-25",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": false,
+      "fractional_cash_available_for_trading": false,
+      "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+      "evidence_files": [
+        ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150626-t108sb22.html",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150626-t108sb22.html.source.json",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150811-t59sb09.html",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150811-t59sb09.html.source.json",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150825-t59sb08.html",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150825-t59sb08.html.source.json"
+      ],
+      "source": "MOPS ordinary-share entitlement 2026-06-26, delivery 2026-08-11 and exchange listing 2026-08-25. New ordinary shares trade 2026-09-01; fractional gross cash remains an undated nonspendable receivable."
+    }
+  },
+  "evidence": {
+    "4763-2024-09-12": {
+      "shares_per_1000": "149.78205387",
+      "par_value": "10",
+      "same_rights_as_ordinary": true,
+      "sources": [
+        {
+          "purpose": "entitlement",
+          "path": ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130828-ajax_t108sb22.html",
+          "sha256": "e4c6c37591da818f6bd423284d9f6e685289abc7bb3f390aa8860ae7a5f79d83",
+          "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130828-ajax_t108sb22.html.source.json",
+          "receipt_sha256": "3dd9b418772ac310fa3ea6082f2008eab36cc33eb62e01653915dc730c5633a1",
+          "url": "https://mopsov.twse.com.tw/mops/web/ajax_t108sb22?parameters=ecdf1a4f2c31d895550bc482fdbfeee5a6f3e7c368f122d0ee991ed86e9ac89da947c8bbbf1ffbc601cb76736e9e5e79482edc8fafbb7395009b24ba43295240d47df8ea420867d8ff8cd17207e575d18416e2fa1e7c2af49be71dcb10d45788922c9d3c394dc58fdb403f6b5bb4974a",
+          "announcement_date": "2024-08-28",
+          "required_text": [
+            "149.78205387",
+            "113年09月12日",
+            "86,029,058",
+            "配發不足一股之畸零股款充抵為帳簿劃撥費用"
+          ]
+        },
+        {
+          "purpose": "delivery",
+          "path": ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130923-ajax_t59sb09.html",
+          "sha256": "a7bf6c42b67534e47de92e4388ab4709f73f78b6f23f014be75d33c8e2333885",
+          "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130923-ajax_t59sb09.html.source.json",
+          "receipt_sha256": "fd3e72c99a6b632490b18c484c675a1a9c975165028b6b1386f4a38c447f1a0c",
+          "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda08b686a325c7edc459f459420e4d9875558b74bc633d2e2dfac89f90358760befe93a4b7d3e4477fa76854d4832d93a4ee04b241ee1b035e6bd770a943887b76e739b76d213d31547446f660ea255aba",
+          "announcement_date": "2024-09-23",
+          "required_text": [
+            "149.78205387",
+            "113年10月9日",
+            "面額新台幣10元",
+            "與已發行之普通股股份相同",
+            "元以下捨去"
+          ]
+        },
+        {
+          "purpose": "listing",
+          "path": ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130926-ajax_t59sb08.html",
+          "sha256": "d426602202eb8c8f8edb8d70eb50fcd1ea77f9a61871999f593924bb277079af",
+          "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/4763/mops-4763-1130926-ajax_t59sb08.html.source.json",
+          "receipt_sha256": "5fdc4d4685178f89897d881619f6f583a74acf85418b6bbd8df10803c822cf7e",
+          "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb08?parameters=52858abc88ec4a6ddd930c418cfa2ddadef8cf6745b48b5a4bdcb665ab6a6f993bf1c65bd3c5eab7324a774f3c9db097a5dee38720ef0c6c7164396fa2f0bf14b53f0917e6f783b2511b4bc262034c26d74c99e1e3f872befb6fdb9d920c9888aeb537f477d135aaa7cfe6b60d70cfc4",
+          "announcement_date": "2024-09-26",
+          "required_text": [
+            "12,885,609",
+            "113 年 10 月 09 日",
+            "與原已發行之股份相同"
+          ]
+        }
+      ]
+    },
+    "5871-2026-07-29": {
+      "shares_per_1000": "20.00000000",
+      "par_value": "10",
+      "same_rights_as_ordinary": true,
+      "sources": [
+        {
+          "purpose": "entitlement",
+          "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150626-t108sb22.html",
+          "sha256": "cecebcbb64a7731a8e35c83901daaab1e15b931bef73470b850ef1d5e866081f",
+          "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150626-t108sb22.html.source.json",
+          "receipt_sha256": "cac9306571c32b6fb4466cf53ec75993766ceb2da8c61939f8d8041f885df5e6",
+          "url": "https://mopsov.twse.com.tw/mops/web/ajax_t108sb22?parameters=52ed7851f78e4e0cdc2ae3c681b20885a6f3e7c368f122d0ee991ed86e9ac89da947c8bbbf1ffbc601cb76736e9e5e79482edc8fafbb7395009b24ba43295240d47df8ea420867d8ff8cd17207e575d10b61046924cec8f561db1a7e5100ef0e233e93c3bb02ce89f6671762aff70913",
+          "announcement_date": "2026-06-26",
+          "required_text": [
+            "20.00000000",
+            "115年07月29日",
+            "新台幣10.0000元",
+            "本次增資發行新股之權利義務與原股份相同"
+          ]
+        },
+        {
+          "purpose": "delivery",
+          "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150811-t59sb09.html",
+          "sha256": "32b0372dd134cff412a94183de559c441eb267d53bd0c6371436fd7715904440",
+          "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150811-t59sb09.html.source.json",
+          "receipt_sha256": "1cc911f5abe59f55848f6883af81aa6385f43de327ceec41763841cfc538d66c",
+          "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda10cbffb803bd7872dc15f8c9bc630918534eff20f5ae96cf8ab4e0a9f91434c3cb48d915fdc84471c0726a76a1f4eebaf9277cdd65cc2525274d38fcf4b87e26690730080c2ff7a4e7771ed2c7b83559",
+          "announcement_date": "2026-08-11",
+          "required_text": [
+            "普通股新股34,228,423股",
+            "115年9月1日",
+            "每仟股無償配發20股",
+            "與原有普通股股份相同",
+            "元以下捨去"
+          ]
+        },
+        {
+          "purpose": "listing",
+          "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150825-t59sb08.html",
+          "sha256": "53660840f3e71d8e02443bf7a67ba861d22eda765c479a3d0363de69d1922437",
+          "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5871/mops-5871-1150825-t59sb08.html.source.json",
+          "receipt_sha256": "6c66f42474c5a322198cb7a0842ab23b5fba43f7c57b8badd45eca9fcc371c6f",
+          "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb08?parameters=52858abc88ec4a6ddd930c418cfa2ddafba97c1041962a640d0022af3de80600bbb8c336ed81c07cc5dfa7f1d00a36545aa5f5601879ecf4c3fb8423fd342ef1fce23bf092429fb6eae1ee1a7d12d414c6da645d1d8b25dd7c4634a3ebc2b1bbaeb537f477d135aaa7cfe6b60d70cfc4",
+          "announcement_date": "2026-08-25",
+          "required_text": [
+            "上市股票代號：5871",
+            "普通股34,228,423股",
+            "115年09月01日",
+            "與原已發行之股份相同"
+          ]
+        }
+      ]
+    }
+  },
+  "notes": [
+    "Official August notice states fractional cash offsets book-entry fees; September notice confirms face-value gross cash but no verified net amount or payment date. Preserve unavailable gross receivable treatment.",
+    "TWSE LT185 independently confirms ordinary share listing on 2024-10-09.",
+    "Normal MOPS website search succeeded after standalone API response was blocked. Failed response was retained separately and is not used as successful evidence.",
+    "Version 2 adds ordinary shares for 5871 ex-date 2026-07-29 after the account stopped on 2026-07-28; no rule, costs, or existing 4763 terms changed. Later attempts must replace earlier cases even if they fail."
+  ]
+}

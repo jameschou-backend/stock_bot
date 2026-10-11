@@ -1,0 +1,87 @@
+{
+  "schema": "all_entry_pending_delivery_completion_v1",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "key": "6669-2026-09-02",
+  "previous_document": {
+    "path": "docs/drawdown_control_corporate_terms_20261001.json",
+    "sha256": "9f11238327a394e1f9291555c4f0e1c1d38def7fc25e415643bc02dc8ea06634"
+  },
+  "previous_terms_sha256": "73cab5e5df61aca4b8db4624d065706012f214a259805bdaa6bdb0052866bb3c",
+  "replacement": {
+    "shares_per_share": 1.9827946,
+    "pay_date": "2026-10-14",
+    "ordinary_share_available_date": "2026-10-14",
+    "fractional_cash_per_share": 0.0,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_net_zero_verified": true,
+    "source": "MOPS final bonus-share entitlement, delivery and listing notices",
+    "event_kind": "earnings_capitalization",
+    "entitlement_announcement_date": "2026-08-19",
+    "delivery_announcement_date": "2026-10-02",
+    "listing_announcement_date": "2026-10-08",
+    "use_scope": "account_settlement_only_not_selection",
+    "valuation_basis": "ordinary_share_close_proxy",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1150819-t108sb22.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1150819-t108sb22.html.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151002-t59sb09.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151002-t59sb09.html.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151008-t59sb08.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151008-t59sb08.html.source.json"
+    ]
+  },
+  "sources": [
+    {
+      "purpose": "entitlement",
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1150819-t108sb22.html",
+      "sha256": "57068d16af54eccf4ce2b408d6c6935ead7fe66b581779f0876fffc328997bc7",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1150819-t108sb22.html.source.json",
+      "receipt_sha256": "ac2997ca34b8efbe7abfc99e9580b53cae84808e977db1d0e99cc9542e5bbc6d",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t108sb22?parameters=53dc02bf87db2ed930e768369ecfdf54a6f3e7c368f122d0ee991ed86e9ac89da947c8bbbf1ffbc601cb76736e9e5e79482edc8fafbb7395009b24ba43295240d47df8ea420867d8ff8cd17207e575d10b61046924cec8f561db1a7e5100ef0e6489386c3fba0a47faf8ed096160f93b",
+      "announcement_date": "2026-08-19",
+      "required_text": [
+        "1,982.79460000",
+        "115年09月02日",
+        "新台幣10.0000元",
+        "本次增資發行新股之權利義務與原股份相同",
+        "未滿一股之畸零股款，做為處理無實體劃撥及其他必要之費用"
+      ]
+    },
+    {
+      "purpose": "delivery",
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151002-t59sb09.html",
+      "sha256": "d22e0337c9aa3a3b5138fef5f727a69808b57f5ec7638db0305b93416b74f80d",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151002-t59sb09.html.source.json",
+      "receipt_sha256": "91442dd789c28bdecebed3937f501508cdae2c9f41e224a1833db8e4b137a6a7",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb09?parameters=52858abc88ec4a6ddd930c418cfa2dda08b686a325c7edc459f459420e4d9875c535906f4cf97543ad2e70dc4fe8b69a79dce59432c79a45458ee1155e9b3f6392ace7bf28ab0e634d0943cbff18d151e98476cdb218918ff1cce731354a94c0",
+      "announcement_date": "2026-10-02",
+      "required_text": [
+        "普通股371,681,582股",
+        "115年10月14日",
+        "與原已發行普通股相同"
+      ]
+    },
+    {
+      "purpose": "listing",
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151008-t59sb08.html",
+      "sha256": "0e4850ec9ffd785093e4efad772e4404fdd6c4a7e3effad6a107a9c9044e98cb",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/6669/mops-6669-1151008-t59sb08.html.source.json",
+      "receipt_sha256": "5a3bf670b106265603848e601600c741b640386978fd973737e0767d7604e0ac",
+      "url": "https://mopsov.twse.com.tw/mops/web/ajax_t59sb08?parameters=52858abc88ec4a6ddd930c418cfa2ddadef8cf6745b48b5a4bdcb665ab6a6f993bf1c65bd3c5eab7324a774f3c9db097cd435438d4ab6da8da2a7fe977e783f0b53f0917e6f783b2511b4bc262034c26f1bbd69153810f6cf06b44c351a28716aeb537f477d135aaa7cfe6b60d70cfc4",
+      "announcement_date": "2026-10-08",
+      "required_text": [
+        "上市股票代號：6669",
+        "普通股371,681,582股",
+        "115 年 10 月 14 日",
+        "與原已發行之股份相同"
+      ]
+    }
+  ],
+  "notes": [
+    "New notices replace the dated pending confirmation only for this action; final ordinary delivery is after the account endpoint, so whole-share rights remain unavailable throughout this replay.",
+    "Final listing notice is a retrospective settlement-data confirmation; it is not used for candidate selection or to make shares available before delivery.",
+    "Preserve previously verified zero net fractional cash: all fractional cash is used for necessary fees."
+  ]
+}
