@@ -65,3 +65,33 @@ def test_zero_buy_reentry_policy_cannot_be_mixed_with_old_replays(tmp_path,monke
     patch.write_text(json.dumps(report));patch.with_suffix('.sha256').write_text(module.digest(patch))
     with pytest.raises(ValueError,match='different account models'):
         module.combine([first,patch],tmp_path/'merged.json')
+
+
+def reseal_report(path, report):
+    path.write_text(json.dumps(report));path.with_suffix('.sha256').write_text(digest(path))
+
+
+def test_copying_writer_coverage_is_verified_from_sealed_case(tmp_path,monkeypatch):
+    first,run,revised=fixtures(tmp_path,monkeypatch)
+    patch=run('later',['entry_peer_narrow'],revised)
+    report=json.loads(patch.read_text());report['cases']['entry_peer_narrow'].pop('candidate_coverage')
+    reseal_report(patch,report)
+    merged=module.combine([first,patch],tmp_path/'merged.json')
+    assert merged['cases']['entry_peer_narrow']['candidate_coverage']==revised['counts']['entry_peer_narrow']
+
+
+@pytest.mark.parametrize('change',['missing_sealed','wrong_sealed','wrong_descriptor','wrong_completion'])
+def test_manifest_cannot_fill_missing_or_conflicting_case_evidence(tmp_path,monkeypatch,change):
+    first,run,revised=fixtures(tmp_path,monkeypatch)
+    patch=run('later',['entry_peer_narrow'],revised)
+    report=json.loads(patch.read_text());descriptor=report['cases']['entry_peer_narrow']
+    case_path=tmp_path/descriptor['path'];case=json.loads(case_path.read_text())
+    if change=='wrong_descriptor':descriptor['candidate_coverage']={'executable':99}
+    elif change=='wrong_completion':case['completed']=not descriptor['completed']
+    elif change=='missing_sealed':case.pop('candidate_coverage');descriptor.pop('candidate_coverage')
+    else:case['candidate_coverage']={'executable':99};descriptor.pop('candidate_coverage')
+    # Deliberately corrupt the isolated fixture, then recompute both hashes.
+    case_path.write_text(json.dumps(case));descriptor['sha256']=digest(case_path)
+    reseal_report(patch,report)
+    with pytest.raises(ValueError,match='Case (coverage|completion) differs'):
+        module.combine([first,patch],tmp_path/'merged.json')
