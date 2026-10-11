@@ -1,0 +1,88 @@
+{
+  "schema": "all_entry_5904_nontraded_certificate_inventory_v1",
+  "key": "5904-2025-07-15",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "override": {
+    "shares_per_share": 0.01,
+    "pay_date": "2025-09-26",
+    "ordinary_share_available_date": "2025-09-26",
+    "certificate_delivery_date": "2025-08-15",
+    "certificate_listing_date": "2025-08-15",
+    "ordinary_conversion_date": "2025-09-26",
+    "ordinary_conversion_creates_new_entitlement": false,
+    "certificate_trading_modeled": false,
+    "same_code_fungible_trading_verified": false,
+    "valuation_basis": "ordinary_share_close_proxy",
+    "fractional_cash_per_share": 0,
+    "fractional_net_zero_verified": true,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": true,
+    "fractional_cash_available_for_trading": false,
+    "fractional_cash_treatment": "net_zero_book_entry_fees_verified",
+    "use_scope": "account_settlement_only_not_selection",
+    "source": "Adopted primary issuer minutes and calendar; explicitly secondary certificate conversion and listing notices",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.pdf.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/dividend-calendar.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/dividend-calendar.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/conversion-issuer-secondary.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/conversion-issuer-secondary.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/ordinary-listing-secondary.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/ordinary-listing-secondary.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.txt",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/shareholder-2025.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5904/shareholder-2025.html.receipt.json",
+      ".cache/poc-latest-20261003/execution-v1/5904-TaiwanStockDividend.parquet",
+      ".cache/poc-latest-20261003/execution-v1/5904-TaiwanStockDividend.json"
+    ]
+  },
+  "evidence": {
+    "minutes": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.pdf",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.pdf.receipt.json",
+      "source_role": "primary_issuer_pdf",
+      "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.txt",
+      "reviewed_pdf_pages": [
+        4,
+        5
+      ],
+      "extraction_command": "pdftotext -layout"
+    },
+    "calendar": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/dividend-calendar.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/dividend-calendar.html.receipt.json",
+      "source_role": "primary_issuer_calendar"
+    },
+    "conversion": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/conversion-issuer-secondary.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/conversion-issuer-secondary.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    },
+    "listing": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/ordinary-listing-secondary.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5904/ordinary-listing-secondary.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    }
+  },
+  "source_sha256": {
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.pdf": "152d635c675ecf370c10d76601c2cca8145374447776ffacb5e1aa505558e958",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.pdf.receipt.json": "30f4e72ff3b5d182ce9b617c63a986013791a79b1b7d34335f7e3aaddf58e74f",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/dividend-calendar.html": "bcb276f3b5b8e9339484176e77e6c6ce4a765ce2e251c79d094dff87e97e82bd",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/dividend-calendar.html.receipt.json": "c51acd2ce027e53eff788a10047cfe724afc734e4e7125ba70a2ac08b8f402d4",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/conversion-issuer-secondary.html": "7c719c91735d09e8ade396c89b07629239bc53f8ed1e8a80ed6a735d3963568d",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/conversion-issuer-secondary.html.receipt.json": "9c780fe78f231c7f5937e9eadbd9fee2aca86d059a9b7c5731974203eb5cea3c",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/ordinary-listing-secondary.html": "fc7a8860798f45e2ad242d124c4b9db136ca906180275828aa1bb6925b94329d",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/ordinary-listing-secondary.html.receipt.json": "1874465264da27fe41dcc4a5e460d0dcf7081fcbe728b4f9c20353661c305d35",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/agm-2025.txt": "b052af5a1c974138b24e7cdab761fe02fc6ded8036c4af199073db76807bc6c2",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/shareholder-2025.html": "485f9450b7465c8d48cd1949bd87a7131941700a68236e060026cad11f0a6ff3",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/5904/shareholder-2025.html.receipt.json": "4facd81adac9968051b714a37a7bf3934f2237d364dc6edbca55ceff360b42c3",
+    ".cache/poc-latest-20261003/execution-v1/5904-TaiwanStockDividend.parquet": "e8ede968ae11c2801977954b313bf086505e60ef22454378a2088d5bb671f32e",
+    ".cache/poc-latest-20261003/execution-v1/5904-TaiwanStockDividend.json": "79b50ad502199a9e1dd281f4750267cfe89ea8f65ca2cf6816d63395436b8ad4"
+  },
+  "existing_dividend_feed": ".cache/poc-latest-20261003/execution-v1/5904-TaiwanStockDividend.parquet",
+  "evidence_note": "5904／2025 配股：公司議事錄原始 PDF 已核對；8/15 證書交付及 9/26 普通股轉換日期依公司與櫃買公告的媒體轉載交叉核對，尚缺公告原站回應。證書獨立記錄且不交易；帳簿劃撥畸零款依議事錄抵充費用，淨額為零。"
+}

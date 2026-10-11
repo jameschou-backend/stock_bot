@@ -55,7 +55,7 @@ python scripts/combine_all_entry_accounts.py \
 上海商銀另有獨立的 [證書單位核對](all_entry_certificate_completion_20261011.md)。[裕融證書](all_entry_9941_certificate_20261011.md) 在期末仍未換發普通股，保留獨立不可交易單位；[兆豐金與玉山金](all_entry_bank_distributions_20261011.md) 則核對普通股直接上市、最終配股率及員工酬勞股數。不得以未驗證的同代碼成交假設將證書提早當成普通股。最新完整補件入口每次執行一組策略，例如：
 
 ```bash
-python scripts/research_all_entry_accounts_rescheduled_distributions.py \
+python scripts/research_all_entry_accounts_poya_completion.py \
   --arms ma20_60_cross \
   --candidate-bundle .cache/all-entry-accounts-20261011/inputs-v3 \
   --terms docs/all_entry_corporate_terms_v3_20261011.json \
@@ -70,6 +70,7 @@ python scripts/research_all_entry_accounts_rescheduled_distributions.py \
   --issuer-distributions docs/all_entry_issuer_distributions_20261011.json \
   --northstar-completion docs/all_entry_8927_delivery_20261011.json \
   --context-distributions docs/all_entry_context_distributions_20261011.json \
+  --poya-completion docs/all_entry_5904_certificate_20261012.json \
   --output .cache/all-entry-accounts-20261011/new-completed-data-replay
 ```
 
@@ -78,6 +79,8 @@ python scripts/research_all_entry_accounts_rescheduled_distributions.py \
 [情境帳戶補件](all_entry_context_distributions_20261011.md) 保留彰銀 2026 年證書與普通股的不同交付日，並補台新金 2024 年普通股交付。台新金議事錄為官方工具擷取文字，原始 PDF 未留存；這項限制同樣顯示在實際持有該事件的帳戶。
 
 [休市順延補件](all_entry_rescheduled_distributions_20261011.md) 讓玉山金與華城的 2024 年原訂除權日取得同一份已驗證條款，再由既有交易日曆順延；只產生一筆權益。
+
+[寶雅證書補件](all_entry_5904_certificate_20261012.md) 核對 2025 年配股的證書交付、普通股轉換及畸零款淨額；日期轉載來源限制另列。
 
 每個新嘗試使用不同輸出目錄；用 `combine_all_entry_accounts.py --report` 依嘗試順序列入各組報告，完整覆蓋 31 個策略與基準後才發布。後半段尚未執行的組別直接使用最新補件，已完成且未受補件事件影響者保留原始帳本。補件組另核對事件前的共同帳本及新股實際交付紀錄。
 
