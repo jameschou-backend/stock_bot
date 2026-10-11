@@ -6,6 +6,12 @@ from skills.all_entry_accounts import registry, write
 from app.all_entry_account_ui import validate
 
 
+def test_delayed_share_delivery_is_counted_outside_active_entry_slots():
+    account = dict(holdings=[dict(date='2026-09-01',stock_id=str(2300+i),qty=1)
+                            for i in range(4)] + [dict(date='2026-09-02',stock_id='2300',qty=0)])
+    assert summary.holding_scope(account,3) == dict(maximum_held_symbols=4,days_above_active_slot_count=1)
+
+
 @pytest.mark.parametrize('sid,day', [('5876', '2026-07-28'), ('6446', '2026-07-09')])
 def test_certificate_exposure_is_not_a_qualified_completed_account(sid, day):
     case = {'account':{'corporate_actions':[dict(stock_id=sid, date=day, kind='stock_dividend')]}}

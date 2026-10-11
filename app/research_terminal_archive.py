@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('all_entry_accounts_20261011', '31 組進場條件：同資金帳戶比較', '2026-10-11', 'account', '共同本金、名額、成交與出場；含0050基準'),
     ('strategy_scanner_20261006', '10/5 全市場策略掃描', '2026-10-06', 'data', '行情與每日訊號'),
     ('strategy_scanner_expansion_20261005', '29 套進場規則：訊號後續比較', '2026-10-05', 'signal_research', '固定 5／20／60 日、同期間 0050'),
     ('poc_range_first_account_20261005', 'POC＋紅 K：首日訊號與成交價比較', '2026-10-05', 'account', '三檔帳戶、現金與零股、六個固定比較'),
@@ -80,7 +81,11 @@ def overview(root=ROOT):
                        position_count=report.get('maximum_active_stock_slots', report.get('position_count', report.get('active_slots'))),
                        note='已核對發布紀錄指紋；未於開啟頁面時重跑帳戶或核對全部歷史來源。',
                        download_url='/research-terminal/api/archive/' + identifier)
-            if identifier == 'poc_range_first_account_20261005':
+            if identifier == 'all_entry_accounts_20261011':
+                from app.all_entry_account_ui import validate
+                row['comparison'] = validate(report)
+                row['execution_note'] = '本金100萬、3個活躍名額、共同12%收盤停損／63日期限／進場後三黑K；T+1買70%／賣30%日區間價代理。'
+            elif identifier == 'poc_range_first_account_20261005':
                 row['execution_note'] = 'T 收盤訊號、T+1 日內區間價估算；中間價=(H+L)/2，另一組買 L+70%×(H−L)、賣 L+30%×(H−L)。日內高低事前未知，並非可預掛的成交保證。'
                 row['note'] += '「首日」指原紅 K 候選首次連續成立，與 POC 硬篩首次成立不同。'
                 for name, case in report['cases'].items():
@@ -109,6 +114,10 @@ def publication_bytes(identifier, root=ROOT):
 
 
 def case_detail(identifier, case_id, root=ROOT):
+    if identifier == 'all_entry_accounts_20261011':
+        from app.all_entry_account_ui import case_detail as comparison_detail
+        publication, _, _ = _publication(identifier, root)
+        return comparison_detail(publication, case_id, root)
     if identifier != 'poc_range_first_account_20261005' or case_id not in CASE_NAMES:
         raise ValueError('這份研究尚未提供帳戶曲線')
     publication, _, _ = _publication(identifier, root)

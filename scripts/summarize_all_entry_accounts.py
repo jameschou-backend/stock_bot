@@ -19,6 +19,17 @@ class UnverifiedCertificateInventory(ValueError):
     """A full replay cannot be ranked until this instrument is represented."""
 
 
+def holding_scope(account, active_slots):
+    """Count actual symbols, including residual shares and delayed deliveries."""
+    by_day = {}
+    for row in account['holdings']:
+        if row['qty'] > 0:
+            by_day.setdefault(row['date'], set()).add(row['stock_id'])
+    counts = [len(stocks) for stocks in by_day.values()]
+    return dict(maximum_held_symbols=max(counts, default=0),
+        days_above_active_slot_count=sum(n > active_slots for n in counts))
+
+
 def guard_certificate_inventory(case):
     # The inherited runner has not separated these rights certificates from
     # ordinary stock inventory. A completed replay alone cannot certify them.
@@ -70,6 +81,7 @@ def summarize(report_path, output):
             rows[arm] = row
             continue
         metrics = account_metrics(case)
+        metrics.update(holding_scope(case['account'], 1 if arm == 'benchmark' else 3))
         daily, trades = case['account']['daily'], case['account']['trades']
         dates = [r['date'] for r in daily]
         if len(dates) != 666 or (dates[0], dates[-1]) != (START, END) or calendar is not None and dates != calendar:
@@ -95,7 +107,7 @@ def summarize(report_path, output):
         row['rank'] = i
         row['metrics']['excess_total_return_pp'] = None if benchmark is None else 100*(row['metrics']['total_return']-benchmark['total_return'])
     result = dict(schema='all_entry_account_comparison_publication_v1', start=START, end=END,
-        initial_cash=1_000_000, position_count=3, strategy_count=31,
+        initial_cash=1_000_000, position_count=3, position_scope='active_stock_slots', strategy_count=31,
         completed_strategies=sum(r['completed'] for k,r in rows.items() if k != 'benchmark'),
         all_completed=all(r['completed'] for r in rows.values()), cases=rows,
         ranking=[r['id'] for r in ranked], best_completed_strategy=ranked[0]['id'] if ranked else None,
