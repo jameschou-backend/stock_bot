@@ -1,0 +1,71 @@
+{
+  "schema": "all_entry_2352_capital_completion_v1",
+  "key": "2352-2025-10-07",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "terms": {
+    "kind": "capital_reduction",
+    "multiplier": 0.82,
+    "cash_per_share": 1.8,
+    "cash_rounding": "floor_ntd",
+    "known_date": "2025-08-04",
+    "pay_date": "2025-10-07",
+    "fractional_reference_date": "2025-09-24",
+    "fractional_policy": "historical_close_gross_receivable",
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_net_amount_verified": false,
+    "fractional_cash_available_for_trading": false,
+    "use_scope": "account_settlement_only_not_selection",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-meeting-record.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-meeting-record.pdf.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-annual-report.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-annual-report.pdf.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/taifex-adjustment-20250915.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/taifex-adjustment-20250915.pdf.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/mops-20250804-republished.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/2352/mops-20250804-republished.html.source.json"
+    ],
+    "source": "Issuer May 29 meeting record, August 4 MOPS announcement reproduced by Refinitiv, exchange adjustment notice, and issuer 2025 annual report actual-payment confirmation"
+  },
+  "sources": {
+    "meeting": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-meeting-record.pdf",
+      "sha256": "19f61a093d13532f15f3b54890bed1d75cd6a7926ff153ec4d37a3dcd64119a9",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-meeting-record.pdf.source.json",
+      "receipt_sha256": "aa4ef69f25dfdcd115ab499fa2591717b487484acf58b12e3f0d910ec44186bf",
+      "url": "https://image-prod.qisda.com/content/dam/qisda/qisda-photo/static-assets/upload-files/stockholder-meeting/meeting-record/佳世達114股東常會議事錄(上傳).pdf"
+    },
+    "annual": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-annual-report.pdf",
+      "sha256": "87929c1b21e28c9e78c9b6041c7154c8897e033e21b94fed05709240e4375cde",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/qisda-2025-annual-report.pdf.source.json",
+      "receipt_sha256": "9c6d3bcada8146a7de5eb6aeaa88af2c9b35b68c95f884ba5268eabc306cdf51",
+      "url": "https://image-prod.qisda.com/content/dam/qisda/qisda-photo/static-assets/upload-files/annual-report/佳世達2025年報v1--上傳檔0506.pdf"
+    },
+    "exchange": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/taifex-adjustment-20250915.pdf",
+      "sha256": "dc25043d74b811ce5f4355708affb1c97ae5011b6ddd54bf8311f552f853e4c5",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/taifex-adjustment-20250915.pdf.source.json",
+      "receipt_sha256": "cd036cc1f0d42769abd6aa59a18cbed6d5af14fbdf5bbbe4c54006b61fc5bf96",
+      "url": "https://www.pfcf.com.tw/photo/article/6516/file19979.pdf"
+    },
+    "mops_republication": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/mops-20250804-republished.html",
+      "sha256": "2774f14692cbc1326a1eaa12a364aa1ef3ad81acf85bc61084da2ee0941e3ade",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2352/mops-20250804-republished.html.source.json",
+      "receipt_sha256": "27d3163a674ba4e3335fd208814373d3eb38e1e92d3c19f12a85c7a982dfbcc5",
+      "url": "https://tw.tradingview.com/news/reuters.com,2025-08-04:newsml_MOPbJhJ:0/"
+    }
+  },
+  "source_boundary": "Original issuer PDFs plus attributed reproductions of issuer and exchange notices. Annual report is retrospective settlement corroboration only.",
+  "raw_close": {
+    "path": ".cache/poc-latest-20261003/inputs-v1/raw-close.parquet",
+    "sha256": "449edc32c17904cf105a8e19497b8a502cbe3c375a4b02eca61bde9e680e97b8"
+  },
+  "official_event": {
+    "path": ".cache/poc-latest-20261003/inputs-v1/events.parquet",
+    "sha256": "783a2d9e800004e51c0a343cd02409099a3d646db5770335d59db4015200ed74"
+  }
+}
