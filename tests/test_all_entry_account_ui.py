@@ -37,10 +37,19 @@ def test_partial_results_cannot_claim_a_global_winner_or_expose_partial_returns(
 def test_actual_detail_hash_qualification_and_summary_must_all_match(tmp_path):
     report=publication();row=report['cases']['momentum'];path=tmp_path/'account.json'
     account=dict(completed=True,summary=row['summary'],live_qualified=False,actual_fill_verified=False,
-        unseen_validation=False,account=dict(daily=[dict(date='2024-01-02',nav=1_000_000)],trades=[]))
+        unseen_validation=False,account=dict(daily=[dict(date='2024-01-02',nav=1_000_000)],trades=[],
+            corporate_actions=[dict(kind='stock_dividend',stock_id='2834',date='2026-08-04',
+                entitled_qty=13312,whole_new_shares=931,certificate_restriction=dict(
+                    certificate_delivery_date='2026-09-02',ordinary_share_available_date='2026-09-10',
+                    valuation_basis='ordinary_share_close_proxy',certificate_trading_modeled=False))]))
     path.write_text(json.dumps(account));row.update(path=path.name,sha256=hashlib.sha256(path.read_bytes()).hexdigest())
     result=case_detail(report,'momentum',tmp_path)
     assert result['daily'][0]['nav']==1_000_000 and result['live_qualified'] is False
+    restriction=result['certificate_restrictions'][0]
+    assert restriction['stock_id']=='2834' and restriction['whole_new_shares']==931
+    assert restriction['certificate_delivery_date']=='2026-09-02'
+    assert restriction['ordinary_share_available_date']=='2026-09-10'
+    assert restriction['certificate_trading_modeled'] is False
     with pytest.raises(ValueError,match='尚未完成'):case_detail(report,'original_red',tmp_path)
     path.write_text(path.read_text()+' ')
     with pytest.raises(ValueError,match='指紋'):case_detail(report,'momentum',tmp_path)

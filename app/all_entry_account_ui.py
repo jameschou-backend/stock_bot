@@ -54,11 +54,16 @@ def case_detail(publication, case_id, root=ROOT):
             or any(case.get(k) is not False for k in ('live_qualified','actual_fill_verified','unseen_validation'))):
         raise ValueError('帳戶與發布摘要不一致')
     account = case['account']
+    restrictions = [dict(stock_id=r['stock_id'], ex_date=r['date'],
+        entitled_qty=r.get('entitled_qty'), whole_new_shares=r.get('whole_new_shares'),
+        **r['certificate_restriction']) for r in account.get('corporate_actions', [])
+        if r.get('kind') == 'stock_dividend' and r.get('certificate_restriction')]
     return dict(id=case_id,name=row['name'],summary=case['summary'],
         daily=[{k:r.get(k) for k in ('date','nav','cash','market_value','receivable','drawdown','holdings')} for r in account['daily']],
         trades=[{k:r.get(k) for k in ('date','signal_date','stock_id','name','side','qty','price','proxy_price',
             'reason','commission','tax','slippage','gross','cash_change','total_cost','cash_after','channel')} for r in account['trades']],
         annual=row['annual'],cohorts=row['cohorts'],candidate_coverage=row.get('candidate_coverage'),
+        certificate_restrictions=restrictions,
         initial_cash=publication['initial_cash'],position_count=1 if case_id=='benchmark' else 3,
         position_scope='single_benchmark' if case_id=='benchmark' else 'active_stock_slots',
         actual_fill_verified=False,live_qualified=False,source_sha256=row['sha256'],

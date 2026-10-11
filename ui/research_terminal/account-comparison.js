@@ -22,6 +22,7 @@ window.renderAccountComparison = function (item, host, helpers) {
   method.append(el('summary', '共同規格與實戰缺件'));
   method.append(el('p', 'T 收盤訊號、T+1 執行；同日候選按前 20 日均成交值排序。共同出場：12% 收盤停損、63 個交易日期限、進場後三黑 K。0050 為買進持有基準。'));
   method.append(el('p', '3 個名額限制新的活躍部位；餘股或延後配股交付可能短暫增加實際持股檔數，帳戶明細另列歷史最多同持檔數。'));
+  method.append(el('p', '配股權益在普通股可交易前保留為應收；已核對的權利證書期間採普通股收盤價估值，未模擬證書買賣。各帳戶明細列出相關股票與日期；未核實的畸零款不作為可用現金。'));
   method.append(el('p', '買 L＋70%×(H−L)、賣 L＋30%×(H−L)，為事後日區間代理；佣金每邊 0.1425%、每通路至少 20 元、摩擦每邊 0.45%，另含賣出稅。一般規則每日可成立，2 組情境取母訊號首日。'));
   const gaps = el('ul');for (const text of report.qualification_gaps || []) gaps.append(el('li', text));
   method.append(gaps, el('p', (report.limitations || []).join('；'), 'caption'));host.append(method);
@@ -47,6 +48,13 @@ window.renderAccountComparison = function (item, host, helpers) {
       const coverage = row.candidate_coverage || {}, metrics = row.metrics;
       detail.append(el('p', `候選 ${number(coverage.executable)}；期末待執行 ${number(coverage.pending)}。已進場 ${number(row.cohorts.funded)} 批、已結清 ${number(row.cohorts.settled)} 批、未結清 ${number(row.cohorts.unresolved)} 批。期末現金 ${number(metrics.cash)}、持股市值 ${number(metrics.market_value)}、應收權益 ${number(metrics.receivable)} 元。`, 'result-note'));
       detail.append(el('p', `歷史最多同持 ${number(metrics.maximum_held_symbols)} 檔；持股超過活躍名額 ${number(metrics.days_above_active_slot_count)} 個交易日（包含餘股與延後配股）。`, 'caption'));
+      const pending = row.pending_cash_valuation;
+      if (pending?.gross_unavailable_cash > 0) {
+        detail.append(el('p', `應收款估值待核：${number(pending.gross_unavailable_cash)} 元尚無確認支付日，未用於買進。若該款項淨額為零，期末資產為 ${number(pending.nav_if_these_claims_pay_zero)} 元；按帳載毛額為 ${number(pending.nav_using_recorded_gross_claims)} 元。這只反映該款項的期末估值差異。`, 'result-note'));
+      }
+      for (const right of result.certificate_restrictions || []) {
+        detail.append(el('p', `${right.stock_id} 配股限制：除權日 ${right.ex_date}，${number(right.whole_new_shares)} 股新權益；證書 ${right.certificate_delivery_date} 交付，普通股 ${right.ordinary_share_available_date} 才可交易。期間按普通股收盤價估值，未模擬證書成交或把它當作可賣普通股。`, 'result-note'));
+      }
       detail.append(el('p', `未知股票日 ${number(coverage.unknown_stock_days)}；情境未知事件 ${number(coverage.unknown_context)}；POC 品質排除 ${number(row.profile_quality_exclusions)}；單邊換手 ${number(metrics.one_way_turnover_multiple, 2)} 倍。未成交或資料排除紀錄：${Object.entries(row.execution_exclusion_reasons || {}).map(([k,v]) => `${k} ${number(v)}`).join('；') || '無'}。`, 'caption'));
       renderAccountDetail(result, detail);detail.scrollIntoView({behavior: 'smooth', block: 'start'});
     } catch (error) {if (request === generation) detail.replaceChildren(el('p', error.message, 'alert error'));}

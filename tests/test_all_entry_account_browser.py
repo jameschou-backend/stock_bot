@@ -24,13 +24,13 @@ class E {
 const context={window:{}};vm.runInNewContext(JSON.parse(require('node:fs').readFileSync(0,'utf8')),context);
 const el=(...args)=>new E(...args),host=el('section'),walk=e=>[e,...e.children.flatMap(walk)],requests=[];
 const metric={total_return:.25,max_drawdown:-.3,cagr:.08,costs:{total_cost:123},mean_daily_cash_weight:.2,maximum_held_symbols:4,days_above_active_slot_count:5};
-const completed={completed:true,completed_sessions:666,metrics:metric,annual:[{year:'2024',total_return:.12}],cohorts:{settled:10,win_rate:.6},candidate_coverage:{executable:100}};
+const completed={completed:true,completed_sessions:666,metrics:metric,annual:[{year:'2024',total_return:.12}],cohorts:{settled:10,win_rate:.6},candidate_coverage:{executable:100},pending_cash_valuation:{gross_unavailable_cash:8,nav_if_these_claims_pay_zero:1249992,nav_using_recorded_gross_claims:1250000}};
 const report={start:'2024-01-02',end:'2026-10-02',initial_cash:1000000,completed_strategies:1,best_is_global:false,best_completed_strategy:'one',cases:{
  benchmark:{...completed,id:'benchmark',name:'0050',rank:null},
  one:{...completed,id:'one',name:'<img src=x onerror=bad()>',rank:1},
  two:{id:'two',name:'Incomplete rule',completed:false,metrics:null,completed_sessions:20,rank:null,reason:'Necessary source missing'},
 }};
-const helpers={el,tag:(text,cls)=>el('span',text,cls),number:n=>n==null?'—':String(n),pct:n=>n==null?'—':`${n*100}%`,api:async path=>{requests.push(path);return {name:'detail'};},renderAccountDetail:(result,dest)=>dest.append(el('p','verified curve'))};
+const helpers={el,tag:(text,cls)=>el('span',text,cls),number:n=>n==null?'—':String(n),pct:n=>n==null?'—':`${n*100}%`,api:async path=>{requests.push(path);return {name:'detail',certificate_restrictions:[{stock_id:'2834',ex_date:'2026-08-04',whole_new_shares:931,certificate_delivery_date:'2026-09-02',ordinary_share_available_date:'2026-09-10'}]};},renderAccountDetail:(result,dest)=>dest.append(el('p','verified curve'))};
 (async()=>{
  context.window.renderAccountComparison({id:'study',status:'verified_publication',comparison:report},host,helpers);
  assert.match(host.textContent,/已完成組別中最高/);assert.match(host.textContent,/尚無策略取得實戰資格/);
@@ -42,6 +42,9 @@ const helpers={el,tag:(text,cls)=>el('span',text,cls),number:n=>n==null?'—':St
  await buttons[1].listeners.click();assert.deepEqual(requests,['/archive/study/cases/one']);
  assert.match(host.textContent,/verified curve/);
  assert.match(host.textContent,/歷史最多同持 4 檔/);
+ assert.match(host.textContent,/應收款估值待核：8 元/);assert.match(host.textContent,/1249992 元/);
+ assert.match(host.textContent,/證書 2026-09-02 交付，普通股 2026-09-10 才可交易/);
+ assert.match(host.textContent,/931 股新權益/);
  const search=walk(host).find(e=>e.tagName==='input');search.value='Incomplete';search.listeners.input();
  assert.equal(walk(host).find(e=>e.tagName==='tbody').children.length,1);
  context.window.renderAccountComparison(null,host,helpers);assert.match(host.textContent,/尚未發布/);assert.doesNotMatch(host.textContent,/25%/);
