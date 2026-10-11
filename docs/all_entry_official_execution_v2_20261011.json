@@ -1,0 +1,19 @@
+{
+  "schema": "all_entry_official_execution_completion_v1",
+  "manifest_path": ".cache/all-entry-accounts-20261011/required-official-v3/execution-manifest.json",
+  "manifest_sha256": "9b2ccaaa2d4ce54766c32323f6e4b9a4ddcb59f3a93a5ffd39a8415afb3dd1bc",
+  "coordinates": [
+    "6914-2024-06-06",
+    "8045-2025-02-06",
+    "8045-2025-03-10"
+  ],
+  "account_model_changed": false,
+  "daily_range_proxy": true,
+  "actual_fill_verified": false,
+  "live_qualified": false,
+  "source_rule": "Explicit two-coordinate official ordinary-session decomposition; all other coordinates retain the original evidence adapter; no automatic fallback; no fabricated prints.",
+  "revision": "v2_complete_basket_constituents",
+  "added_coordinates": [
+    "8045-2025-03-10"
+  ]
+}
