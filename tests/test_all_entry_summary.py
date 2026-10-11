@@ -21,6 +21,10 @@ def test_certificate_exposure_is_not_a_qualified_completed_account(sid, day):
 
 
 def test_invalid_instrument_keeps_its_evidence_but_cannot_rank(tmp_path, monkeypatch):
+    for name in ('scripts/summarize_all_entry_accounts.py','skills/all_entry_cohort_reporting.py',
+                 'scripts/summarize_strategy_account_comparison.py','skills/account_cohort_attribution.py'):
+        target=tmp_path/name;target.parent.mkdir(parents=True,exist_ok=True)
+        target.write_bytes((summary.ROOT/name).read_bytes())
     monkeypatch.setattr(summary, 'ROOT', tmp_path)
     cases = {}
     for arm in [r['id'] for r in registry()] + ['benchmark']:

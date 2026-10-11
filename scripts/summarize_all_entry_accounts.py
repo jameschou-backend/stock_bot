@@ -12,7 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from skills.all_entry_accounts import START, END, registry, write, digest
 from scripts.summarize_poc_broker_account import Sources, account_metrics
-from scripts.summarize_strategy_account_comparison import describe_cohorts, describe_benchmark, pending_cash_claims
+from scripts.summarize_strategy_account_comparison import describe_benchmark, pending_cash_claims
+from skills.all_entry_cohort_reporting import describe_cohorts
 
 
 class UnverifiedCertificateInventory(ValueError):
@@ -137,7 +138,7 @@ def summarize(report_path, output):
         average_nav = sum(r['nav'] for r in daily)/len(daily)
         metrics['one_way_turnover_multiple'] = sum(t['gross'] for t in trades)/2/average_nav
         row.update(metrics=metrics, summary=case['summary'], completed_sessions=len(daily),
-            cohorts=describe_benchmark(case) if arm == 'benchmark' else describe_cohorts(case),
+            cohorts=describe_benchmark(case) if arm == 'benchmark' else describe_cohorts(case, report, sources),
             pending_cash_valuation=pending_cash_claims(case),
             execution_exclusion_reasons=dict(Counter(r['failure_reason'] for r in case.get('data_gap_exclusions',[]))),
             profile_quality_exclusions=len(case.get('profile_data_exclusions',[])),
@@ -180,6 +181,12 @@ def summarize(report_path, output):
             '未結清持股與應收權益列入資產，但不列入已結清批次勝率。'])
     result['limitations'].extend(sorted({note for row in rows.values()
         for note in row.get('settlement_evidence_notes', [])}))
+    result['reporting_sources'] = {}
+    for name in ('scripts/summarize_all_entry_accounts.py','skills/all_entry_cohort_reporting.py',
+                 'scripts/summarize_strategy_account_comparison.py','skills/account_cohort_attribution.py'):
+        result['reporting_sources'][name] = digest(ROOT/name)
+        sources.bind(name,result['reporting_sources'][name])
+    result['checked_source_count'] = len(sources.used)
     for name,sha in tuple(sources.used.items()):
         sources.bind(name,sha)
     h = write(output,result)
