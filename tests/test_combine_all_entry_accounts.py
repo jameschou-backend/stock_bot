@@ -56,3 +56,12 @@ def test_different_period_or_execution_model_cannot_share_a_leaderboard(tmp_path
     patch.write_text(json.dumps(report));patch.with_suffix('.sha256').write_text(digest(patch))
     with pytest.raises(ValueError,match='different account models'):
         module.combine([first,patch],tmp_path/'merged.json')
+
+
+def test_zero_buy_reentry_policy_cannot_be_mixed_with_old_replays(tmp_path,monkeypatch):
+    first,run,revised=fixtures(tmp_path,monkeypatch)
+    patch=run('later',['entry_peer_narrow'],revised)
+    report=json.loads(patch.read_text());report['zero_buy_reentry_policy']='corrected_zero_rejection'
+    patch.write_text(json.dumps(report));patch.with_suffix('.sha256').write_text(module.digest(patch))
+    with pytest.raises(ValueError,match='different account models'):
+        module.combine([first,patch],tmp_path/'merged.json')

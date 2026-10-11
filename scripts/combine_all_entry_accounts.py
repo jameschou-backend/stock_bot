@@ -16,7 +16,8 @@ sys.path.insert(0,str(ROOT))
 from skills.all_entry_accounts import BASE,digest,registry,write
 from scripts.summarize_poc_broker_account import Sources
 
-MODEL_FIELDS=('start','end','initial_cash','input_bundle','volume_policy','data_revision','execution_model')
+MODEL_FIELDS=('start','end','initial_cash','input_bundle','volume_policy','data_revision','execution_model',
+              'zero_buy_reentry_policy')
 
 
 def combine(report_paths,output):
@@ -31,7 +32,7 @@ def combine(report_paths,output):
         if report.get('schema')!='all_entry_accounts_v1':raise ValueError('Unexpected replay schema')
         source_sha=digest(ROOT/report['execution_source_snapshot'])
         if baseline is None:baseline=report;model_sha=source_sha
-        elif source_sha!=model_sha or any(report[k]!=baseline[k] for k in MODEL_FIELDS):
+        elif source_sha!=model_sha or any(report.get(k)!=baseline.get(k) for k in MODEL_FIELDS):
             raise ValueError('Cannot consolidate different account models or periods')
         sources.closure(report,str(path.relative_to(ROOT)))
         candidate=report['candidate_manifest'];manifest=json.loads(sources.bind(candidate['path'],candidate['sha256']).read_text())
