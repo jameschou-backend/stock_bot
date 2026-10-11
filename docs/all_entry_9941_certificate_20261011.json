@@ -1,0 +1,60 @@
+{
+  "schema": "all_entry_9941_nontraded_certificate_at_period_end_v1",
+  "key": "9941-2026-09-01",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "override": {
+    "pay_date": "2026-10-16",
+    "ordinary_share_available_date": "2026-10-16",
+    "certificate_delivery_date": "2026-09-23",
+    "certificate_trading_modeled": false,
+    "valuation_basis": "ordinary_share_close_proxy",
+    "shares_per_share": 0.02,
+    "fractional_cash_per_share": 10,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": false,
+    "fractional_cash_available_for_trading": false,
+    "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+    "use_scope": "account_settlement_only_not_selection",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.pdf.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.txt",
+      ".cache/all-entry-accounts-20261011/required-listings-v2/raw/830958e6202d279c2e9c306f9c91752432a08e8f00927d54543818bafc8cddb5.bin",
+      ".cache/all-entry-accounts-20261011/required-listings-v2/receipts/830958e6202d279c2e9c306f9c91752432a08e8f00927d54543818bafc8cddb5.json",
+      ".cache/all-entry-accounts-20261011/execution-v1/9941-TaiwanStockDividend.parquet",
+      ".cache/all-entry-accounts-20261011/execution-v1/9941-TaiwanStockDividend.json",
+      ".cache/strategy-account-comparison-20261007/execution-v1/receipts/9941-TaiwanStockDividend.json"
+    ],
+    "source": "Issuer adopted minutes and TWSE certificate and ordinary listing; no certificate trading; conversion after account end"
+  },
+  "source_sha256": {
+    ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.pdf": "677090ded4c2a91c1890a19750661a33aba804f459e41224b093f3d3c84333c6",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.pdf.receipt.json": "16e78b3fd92b36a9891bda68f1d806cc08b9ed3cc48aef36b6f3a42b3756f805",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.txt": "086cdd8484dfb07e384248387a7c9a47071aeb439e79009504eb449e6331e8c2",
+    ".cache/all-entry-accounts-20261011/required-listings-v2/raw/830958e6202d279c2e9c306f9c91752432a08e8f00927d54543818bafc8cddb5.bin": "e37caf6bc1d3bd60e64863e0efde2df9d1d1995cc70b331ddc98b3cc92cdc6c5",
+    ".cache/all-entry-accounts-20261011/required-listings-v2/receipts/830958e6202d279c2e9c306f9c91752432a08e8f00927d54543818bafc8cddb5.json": "dfffce220700c9c32e18f0965223c1832cd1eb5d5ac31541d61f841e1c06eca6",
+    ".cache/all-entry-accounts-20261011/execution-v1/9941-TaiwanStockDividend.parquet": "bf2dab84544e3d7d953bbbc2fc56b3de3a8c30153a6bc5e4df05676c7a20557a",
+    ".cache/all-entry-accounts-20261011/execution-v1/9941-TaiwanStockDividend.json": "5df13817e59b6aa9aa826b83a3537221bb644c72dd08c228ecbefd542edbe2b5",
+    ".cache/strategy-account-comparison-20261007/execution-v1/receipts/9941-TaiwanStockDividend.json": "851d762cfdac45f064a2ee9ccf366661f842aaff864c12f7a662a7fcbc129d99"
+  },
+  "issuer": {
+    "path": ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.pdf",
+    "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.pdf.receipt.json",
+    "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/9941/agm-2026-minutes.txt",
+    "reviewed_pdf_pages": [
+      7
+    ],
+    "adopted_date": "2026-05-28"
+  },
+  "exchange": {
+    "path": ".cache/all-entry-accounts-20261011/required-listings-v2/raw/830958e6202d279c2e9c306f9c91752432a08e8f00927d54543818bafc8cddb5.bin",
+    "receipt_path": ".cache/all-entry-accounts-20261011/required-listings-v2/receipts/830958e6202d279c2e9c306f9c91752432a08e8f00927d54543818bafc8cddb5.json"
+  },
+  "existing_dividend_feed": ".cache/all-entry-accounts-20261011/execution-v1/9941-TaiwanStockDividend.parquet",
+  "ordinary_conversion_announcement_date": "2026-10-08",
+  "post_period_announcement_use": "Settlement boundary only; never an earlier selection input",
+  "certificate_execution": "not modeled; separate nonspendable inventory valued by ordinary closing-price proxy"
+}
