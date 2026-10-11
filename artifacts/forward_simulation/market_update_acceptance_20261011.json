@@ -1,0 +1,750 @@
+{
+  "schema": "market_day_update_acceptance_v1",
+  "completed_at": "2026-10-11T15:09:40.926815+08:00",
+  "source_end": "2026-10-08",
+  "sources": [
+    {
+      "path": "artifacts/forward_simulation/entry_context_terminal_20261011.json",
+      "sha256": "67eb1c57155c1262bb142b927c022b37bc5c8cd51e83080faa80f708ec347f22"
+    },
+    {
+      "path": "artifacts/forward_simulation/strategy_scanner_20261011.json",
+      "sha256": "39f52fb4e516cb25083168dab35292066b4415ab11dddd1f681a1dd38697f360"
+    },
+    {
+      "path": ".cache/scanner-20261011/db-official-repair.json",
+      "sha256": "2476cdd37ccf394c9e948b739a3957ccc51e31d092637f40b1f47725bdd59ad9"
+    },
+    {
+      "path": ".cache/scanner-20261011/db-official-repair-idempotency.json",
+      "sha256": "75ad6e4e04875cb318da65389332db56862fde210ab1cc6e5c889f812b62c7e4"
+    },
+    {
+      "path": ".cache/scanner-20261011/official-v2/report.json",
+      "sha256": "cda5677c886fa693dbcdefd8f928743635e3182ac7ac113e5a2d1396d0e9dd9a"
+    },
+    {
+      "path": ".cache/scanner-20261011/official-v1/provider-crosscheck-v3.json",
+      "sha256": "a2e87c04d2c143e8c2b9e1a9a3b59aab8ea65ed914fa5af3ffb25f2644c3aba8"
+    },
+    {
+      "path": ".cache/scanner-20261011/ticks-v1/report.json",
+      "sha256": "34e399e6acb5e5599d3a39a209009c05fb98be70269ace7ec4027c3571b94a12"
+    },
+    {
+      "path": ".cache/scanner-20261011/data-status-final.json",
+      "sha256": "56adc862d4cb09ee64f074592a97f8432fa111137d039a8e47ee7d1b16e87a23"
+    },
+    {
+      "path": ".cache/scanner-20261011/local-http-strategy-validation.json",
+      "sha256": "6e4f85f1b14fbed5f97c164bb7f247d665e8549cb7b069ea908dd1e8b4157a72"
+    },
+    {
+      "path": ".cache/scanner-20261011/public-mobile-transport-acceptance.json",
+      "sha256": "50fb4e296a3ac69d1231e4d1fa0169d23e8bb8c29f8949094f6eedc74e186c5b"
+    }
+  ],
+  "tests": {
+    "command": "make test",
+    "passed": 6858,
+    "warnings": 37,
+    "seconds": 212.96,
+    "log_sha256": "1aed63b1814f7ae4676e4e7a7b17179ec07b5f6d853dec8dac8b63315ee89a55"
+  },
+  "pipeline": {
+    "command": "SPONSOR_INGEST=off make pipeline",
+    "exit_code": 0,
+    "completed_runs": 2,
+    "final_log_sha256": "55ff423b1efeadb2b3838ac3edb4482554a1d00338f1500cda8650efbcd10b76",
+    "jobs": [
+      {
+        "job_name": "export_report",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:52",
+        "ended_at": "2026-10-11T07:02:52",
+        "details": {
+          "pick_date": "2026-10-08",
+          "rows": 10
+        }
+      },
+      {
+        "job_name": "daily_pick",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:48",
+        "ended_at": "2026-10-11T07:02:52",
+        "details": {
+          "pick_date": "2026-10-08",
+          "rows": 10,
+          "degraded_mode": false
+        }
+      },
+      {
+        "job_name": "build_labels",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:46",
+        "ended_at": "2026-10-11T07:02:48",
+        "details": {
+          "rows": 0
+        }
+      },
+      {
+        "job_name": "build_features",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:45",
+        "ended_at": "2026-10-11T07:02:46",
+        "details": {
+          "rows": 0
+        }
+      },
+      {
+        "job_name": "data_quality_check",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:36",
+        "ended_at": "2026-10-11T07:02:45",
+        "details": {
+          "degraded_mode": false,
+          "issues": [
+            {
+              "message": "偵測到 3 筆單日漲跌幅超過 50%（最近 5 交易日）",
+              "category": "price_spike",
+              "severity": "warning"
+            }
+          ]
+        }
+      },
+      {
+        "job_name": "ingest_per",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:31",
+        "ended_at": "2026-10-11T07:02:36",
+        "details": {
+          "rows": 0
+        }
+      },
+      {
+        "job_name": "ingest_fear_greed",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:30",
+        "ended_at": "2026-10-11T07:02:31",
+        "details": {
+          "rows": 1,
+          "end_date": "2026-10-11",
+          "start_date": "2026-10-09"
+        }
+      },
+      {
+        "job_name": "ingest_theme_flow",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:27",
+        "ended_at": "2026-10-11T07:02:27",
+        "details": {
+          "rows": 0
+        }
+      },
+      {
+        "job_name": "ingest_gov_bank",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:27",
+        "ended_at": "2026-10-11T07:02:30",
+        "details": {
+          "rows": 2221,
+          "end_date": "2026-10-11",
+          "days_total": 2,
+          "fetch_mode": "daily_bulk",
+          "start_date": "2026-10-08",
+          "allowed_stock_ids": 2370
+        }
+      },
+      {
+        "job_name": "ingest_fundamental",
+        "status": "success",
+        "started_at": "2026-10-11T07:02:25",
+        "ended_at": "2026-10-11T07:02:27",
+        "details": {
+          "rows": 231808
+        }
+      }
+    ],
+    "note": "Dedicated bounded acquisition populated the sealed scanner bundle; broad Sponsor backfill was disabled for pipeline acceptance."
+  },
+  "api": {
+    "health": {
+      "http_status": 200
+    },
+    "picks": {
+      "http_status": 200
+    },
+    "models": {
+      "http_status": 200
+    },
+    "jobs": {
+      "http_status": 200
+    },
+    "overview": {
+      "http_status": 200,
+      "source_end": "2026-10-08",
+      "default_date": "2026-10-08",
+      "universe_count": 2076,
+      "active_strategies": 38,
+      "catalog_count": 82,
+      "latest": {
+        "entry_matched_stocks": 485,
+        "entry_matches": 1317,
+        "first_entry_stocks": 168,
+        "market_regime": "trend_up"
+      }
+    },
+    "strategies": {
+      "http_status": 200
+    },
+    "poc": {
+      "http_status": 200,
+      "total": 11
+    },
+    "poc_first": {
+      "http_status": 200,
+      "total": 7
+    },
+    "strategy_rows_verified": [
+      {
+        "strategy_id": "original_breakout",
+        "matched": 27,
+        "first": 16,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "original_red",
+        "matched": 24,
+        "first": 14,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "poc_red_priority",
+        "matched": 24,
+        "first": 14,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "poc_up_red",
+        "matched": 11,
+        "first": 7,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "momentum",
+        "matched": 378,
+        "first": 13,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "risk_momentum",
+        "matched": 378,
+        "first": 13,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "near_high",
+        "matched": 94,
+        "first": 18,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "contraction_breakout",
+        "matched": 3,
+        "first": 2,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "donchian20",
+        "matched": 41,
+        "first": 24,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "donchian55",
+        "matched": 27,
+        "first": 15,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "bollinger_reclaim",
+        "matched": 0,
+        "first": 0,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "ma_pullback",
+        "matched": 38,
+        "first": 26,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "ma20_60_cross",
+        "matched": 8,
+        "first": 8,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "macd12_26_cross",
+        "matched": 17,
+        "first": 17,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "rsi14_reclaim30",
+        "matched": 0,
+        "first": 0,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "stochastic14_3_cross",
+        "matched": 15,
+        "first": 15,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "bollinger_squeeze_breakout",
+        "matched": 1,
+        "first": 1,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "keltner20_breakout",
+        "matched": 20,
+        "first": 20,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "adx14_di_cross",
+        "matched": 0,
+        "first": 0,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "ichimoku_cloud_breakout",
+        "matched": 3,
+        "first": 3,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "obv20_breakout",
+        "matched": 38,
+        "first": 38,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "cmf20_cross",
+        "matched": 28,
+        "first": 28,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "mfi14_reclaim20",
+        "matched": 1,
+        "first": 1,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "atr14_volatility_breakout",
+        "matched": 32,
+        "first": 19,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "legacy_momentum_trend",
+        "matched": 182,
+        "first": 22,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "legacy_mean_reversion",
+        "matched": 3,
+        "first": 2,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "legacy_course_breakout",
+        "matched": 7,
+        "first": 5,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "first_volume_bar_price",
+        "matched": 4,
+        "first": 4,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "early_rotation",
+        "matched": 82,
+        "first": 23,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "launch_breakout_strength",
+        "matched": 35,
+        "first": 18,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "launch_turnover_heat",
+        "matched": 198,
+        "first": 23,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "entry_not_extended",
+        "matched": 534,
+        "first": 25,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "entry_strong_close",
+        "matched": 135,
+        "first": 86,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "liquidity_median50m",
+        "matched": 555,
+        "first": 4,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "liquidity_prior50m",
+        "matched": 612,
+        "first": 3,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "liquidity_persistent50m",
+        "matched": 555,
+        "first": 4,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "entry_contraction_narrow",
+        "matched": 0,
+        "first": 0,
+        "http_status": 200
+      },
+      {
+        "strategy_id": "entry_peer_narrow",
+        "matched": 0,
+        "first": 0,
+        "http_status": 200
+      }
+    ],
+    "poc_charts_verified": [
+      {
+        "stock_id": "1301",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "1326",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "1710",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "1714",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "2103",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "2340",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "2484",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "3013",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "3543",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "3661",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      },
+      {
+        "stock_id": "6197",
+        "candles": 120,
+        "last_date": "2026-10-08",
+        "future_rows": 0,
+        "http_status": 200
+      }
+    ]
+  },
+  "public_mobile_transport": {
+    "schema": "public_terminal_mobile_transport_acceptance_v1",
+    "started_at": "2026-10-11T07:08:29.067Z",
+    "base": "https://ocean-endorse-bonehead.ngrok-free.dev",
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1",
+    "date": "2026-10-08",
+    "checks": [
+      {
+        "path": "/research-terminal/api/overview",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/research-terminal/api/strategies",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/research-terminal/api/signals?date=2026-10-08&strategy_id=poc_up_red&first_only=false",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/research-terminal/api/signals?date=2026-10-08&strategy_id=poc_up_red&first_only=true",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/research-terminal/api/stocks/1326?date=2026-10-08&strategy_id=poc_up_red",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/research-terminal/api/signals?date=2026-10-08&strategy_id=entry_contraction_narrow",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/research-terminal/api/signals?date=2026-10-08&strategy_id=entry_peer_narrow",
+        "method": "GET",
+        "http_status": 200,
+        "content_type": "application/json",
+        "ngrok_header_from_frontend": true
+      },
+      {
+        "path": "/workbench/portfolio",
+        "method": "GET",
+        "http_status": 403,
+        "content_type": "text/plain; charset=utf-8",
+        "read_only_proxy_denial": true,
+        "response_sha256": "6d86ff57ab365ea00f37bdc10867b32582ad9f518473710a4380733723250263"
+      },
+      {
+        "path": "/research-terminal/api/backtests",
+        "method": "POST",
+        "http_status": 403,
+        "content_type": "text/plain; charset=utf-8",
+        "read_only_proxy_denial": true,
+        "response_sha256": "201c6ed9b0487cf2d2ad40d1c0de2c556ab01526899e9bf477fd4c61459bd3ff"
+      }
+    ],
+    "visual_browser_verification": false,
+    "orders_submitted": false,
+    "asset": {
+      "path": "/terminal/app.js",
+      "http_status": 200,
+      "sha256": "cfed1292617474e4b84c941c386ff91cb4e356d1b2e086b16fc9e8c0abc1725c",
+      "matches_local_source": true
+    },
+    "overview": {
+      "source_end": "2026-10-08",
+      "context_source_end": "2026-10-08",
+      "universe_count": 2076,
+      "active_strategies": 38,
+      "catalog_count": 82
+    },
+    "poc": {
+      "total": 11,
+      "first": 7,
+      "first_stock_ids": [
+        "1326",
+        "1710",
+        "2340",
+        "2484",
+        "3013",
+        "3543",
+        "3661"
+      ]
+    },
+    "chart": {
+      "stock_id": "1326",
+      "candles": 120,
+      "last_date": "2026-10-08",
+      "no_future_candles": true
+    },
+    "entry_contraction_narrow": {
+      "total": 0,
+      "unknown": 0,
+      "parent_candidates": 5
+    },
+    "entry_peer_narrow": {
+      "total": 0,
+      "unknown": 1,
+      "parent_candidates": 5
+    },
+    "completed_at": "2026-10-11T07:08:33.082Z",
+    "passed": true,
+    "validation_script": {
+      "path": "/tmp/stock-ngrok-transport-20261011.cjs",
+      "sha256": "06be29a9a1cee4bb67579d5df533f6b83b3bf6d88c36c3240d93afb5bfc8ef59"
+    }
+  },
+  "data_status": {
+    "data_ready": true,
+    "price_date": "2026-10-08",
+    "expected_date": "2026-10-08",
+    "feature_date": "2026-10-08",
+    "feature_stocks": 1857,
+    "markets": [
+      {
+        "market": "TPEX",
+        "date": "2026-10-08",
+        "stocks": 867
+      },
+      {
+        "market": "TWSE",
+        "date": "2026-10-08",
+        "stocks": 1083
+      }
+    ],
+    "problems": [],
+    "strategy_ready": false
+  },
+  "finmind_shared_usage": {
+    "requests_in_window": 249,
+    "window_start_time": 1791701327.537178,
+    "total_requests": 55136,
+    "total_wait_time": 0.0,
+    "effective_limit": 4860,
+    "remaining_requests": 4611,
+    "retry_after_seconds": 0.0,
+    "cooldown_until": 0.0
+  },
+  "official_data": {
+    "daily_tables_extension_complete": true,
+    "corporate_events_extension_complete": true,
+    "corporate_action_coverage": [
+      {
+        "complete": true,
+        "end": "2026-10-08",
+        "events": 0,
+        "kind": "twse_ex_rights",
+        "start": "2026-10-08",
+        "status": "verified_corporate_action_interval"
+      },
+      {
+        "complete": true,
+        "end": "2026-10-08",
+        "events": 0,
+        "kind": "twse_capital_reduction",
+        "start": "2026-10-08",
+        "status": "verified_corporate_action_interval"
+      },
+      {
+        "complete": true,
+        "end": "2026-10-08",
+        "events": 0,
+        "kind": "twse_par_value_change",
+        "start": "2026-10-08",
+        "status": "verified_corporate_action_interval"
+      },
+      {
+        "complete": true,
+        "end": "2026-10-08",
+        "events": 0,
+        "kind": "tpex_ex_rights",
+        "start": "2026-10-08",
+        "status": "verified_corporate_action_interval"
+      },
+      {
+        "complete": true,
+        "end": "2026-10-08",
+        "events": 0,
+        "kind": "tpex_capital_reduction",
+        "start": "2026-10-08",
+        "status": "verified_corporate_action_interval"
+      },
+      {
+        "complete": true,
+        "end": "2026-10-08",
+        "events": 0,
+        "kind": "tpex_par_value_change",
+        "start": "2026-10-08",
+        "status": "verified_corporate_action_interval"
+      }
+    ],
+    "event_count": 0,
+    "total_network_requests_including_v1": 9
+  },
+  "historical_continuity": {
+    "historical_scan_days_exact": true,
+    "unchanged_scan_dates": 7,
+    "historical_poc_rows_exact": true,
+    "unchanged_poc_profiles": 4695,
+    "new_scan_dates": [
+      "2026-10-08"
+    ],
+    "source_receipt_files_sha256_verified": true
+  },
+  "live_qualified": false,
+  "orders_submitted": false,
+  "scheduler_changed": false,
+  "limitations": [
+    "Current market identity snapshots remain provisional, not certified as known at the signal close.",
+    "All new POC tick coordinates acquired; 16 of 27 original candidates retain unknown quality: 13 ordinary-tape conflicts and 3 corporate-action or changing-price-scale restrictions.",
+    "The peer-context screen retains one unknown candidate for fewer than three correlated peers; unknown is not treated as a negative result.",
+    "Official/FinMind OHLC agreement and authentic tick acquisition do not certify fills or strategy profitability; daily volume scopes differ.",
+    "36 general evaluators and 2 first-parent context evaluators ran. Unimplemented catalog modules remain unavailable; context screens are not included in the general all-strategies total.",
+    "Signal and context selections use completed 2026-10-08 data. Historical reconstruction does not establish real-time publication or live qualification."
+  ]
+}
