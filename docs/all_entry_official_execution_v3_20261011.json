@@ -1,0 +1,26 @@
+{
+  "schema": "all_entry_official_execution_completion_v1",
+  "manifest_path": ".cache/all-entry-accounts-20261011/required-official-v4/execution-manifest.json",
+  "manifest_sha256": "6b46ae5c9a1dd1473688ca2661e44ae0f74435783d2a31233742021c428daac8",
+  "coordinates": [
+    "6914-2024-06-06",
+    "6914-2024-06-14",
+    "8045-2025-02-06",
+    "8045-2025-03-10"
+  ],
+  "account_model_changed": false,
+  "daily_range_proxy": true,
+  "actual_fill_verified": false,
+  "live_qualified": false,
+  "source_rule": "Explicit sealed missing execution coordinates; preserve prior coordinates; full official ordinary-session decomposition; no ticks or automatic fallback.",
+  "revision": "v2_complete_basket_constituents",
+  "added_coordinates": [
+    "6914-2024-06-14",
+    "8045-2025-03-10"
+  ],
+  "preceding_document": {
+    "path": "docs/all_entry_official_execution_v2_20261011.json",
+    "sha256": "cd4f054bc8d7bf79eca4792f670fe5a0bb7b0754e8d903d28aee84113e797bcb"
+  },
+  "reason": "Necessary 6914 ordinary execution missing on 2024-06-14 in RSI replay"
+}
