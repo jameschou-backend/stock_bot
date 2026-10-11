@@ -23,7 +23,9 @@
       ".cache/all-entry-accounts-20261011/corporate-evidence/5386/meeting-minutes-2024.pdf.source.json",
       ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf",
       ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf.source.json",
-      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.txt"
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.txt",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/republished-listing-20240923.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/republished-listing-20240923.html.source.json"
     ],
     "source": "Issuer adopted minutes and annual report confirming completed ordinary-share delivery; settlement reconstruction only"
   },
@@ -60,5 +62,12 @@
       ],
       "extraction_command": "pdftotext -layout"
     }
+  },
+  "secondary_listing": {
+    "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/republished-listing-20240923.html",
+    "sha256": "40823025be6cc3ae186fe629cccd7a25881762088b2da546dca6fdf2a99bc613",
+    "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/republished-listing-20240923.html.source.json",
+    "receipt_sha256": "cc0972139143b647f1a523fe5ec20225d1b1f0339d1dc411bcb844e3c00e855c",
+    "source_role": "secondary_republication_not_primary_exchange_response"
   }
 }

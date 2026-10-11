@@ -7,6 +7,8 @@
 - [股東會議事錄](https://www.albatron.com.tw/db/upload/webdata15/5albatron_20248221642682725.pdf)
 - [2024 年年報](https://www.albatron.com.tw/db/upload/webdata15/5albatron_202582814392155215.pdf)
 
+股票發放與可交易日期另行區分：[鉅亨轉載的 2024/9/23 掛牌公告](https://news.cnyes.com/news/id/5722210) 交叉確認同批 2,577,080 股普通股在 9/27 開始買賣，與既有普通股權利相同。此資料明確標示為第二手公告轉載，不冒稱櫃買原始 HTTP 回應。載入補件時同時驗證公司原始文件及此上市日期佐證；不能單憑年報的發放日推定可交易日。
+
 原始 PDF、HTTP 回執、年報抽取文字與人工檢視圖片保留於 `.cache/all-entry-accounts-20261011/corporate-evidence/5386/`。議事錄是掃描檔，以原頁視覺檢視記錄為準，沒有偽稱文字抽取成功。補件文件綁定兩份原始 PDF 與回執；載入時核對固定事件、比例、股種、交付日及淨現金限制。
 
 新入口 `scripts/research_all_entry_accounts_albatron.py` 延用既有資金與成交規則，增加 `--albatron-completion docs/all_entry_5386_delivery_20261011.json`。舊失敗回放保留，不覆寫既有來源。

@@ -3,6 +3,8 @@ from copy import deepcopy
 import json
 from pathlib import Path
 
+from bs4 import BeautifulSoup
+
 from scripts.summarize_poc_broker_account import Sources
 from skills.all_entry_accounts import digest
 
@@ -11,6 +13,9 @@ URLS = {
     'minutes': 'https://www.albatron.com.tw/db/upload/webdata15/5albatron_20248221642682725.pdf',
     'annual': 'https://www.albatron.com.tw/db/upload/webdata15/5albatron_202582814392155215.pdf',
 }
+LISTING_URL = 'https://news.cnyes.com/news/id/5722210'
+LISTING_FACTS = ('上櫃股票代號：5386', '普通股2,577,080股',
+    '上櫃股票開始買賣日期：民國113年09月27日', '上櫃股票權利義務：與原已發行之股份相同')
 EXPECTED = dict(pay_date='2024-09-27', ordinary_share_available_date='2024-09-27',
     shares_per_share=.09, fractional_cash_per_share=0, fractional_net_zero_verified=True,
     fractional_cash_rounding='floor_ntd', fractional_cash_pay_date=None,
@@ -53,6 +58,20 @@ def load_albatron(root, document):
         raise ValueError('Albatron reviewed primary facts differ')
     text = ''.join(sources.bind(annual['text_path'], annual['text_sha256']).read_text().split())
     inventory.add(annual['text_path'])
+    # Delivery and tradability are separate facts. The issuer's completed-event
+    # report proves delivery; this explicitly secondary exchange republication
+    # corroborates the ordinary-share listing date and exact issue quantity.
+    listing = doc['secondary_listing']
+    html = sources.bind(listing['path'], listing['sha256'])
+    receipt = json.loads(sources.bind(listing['receipt_path'], listing['receipt_sha256']).read_text())
+    if (listing.get('source_role') != 'secondary_republication_not_primary_exchange_response'
+            or receipt.get('url') != LISTING_URL or receipt.get('http_status') != 200
+            or receipt.get('redirected') is not False or receipt.get('sha256') != listing['sha256']):
+        raise ValueError('Albatron listing corroboration source differs')
+    listing_text = ''.join(BeautifulSoup(html.read_bytes(), 'html.parser').get_text().split())
+    if any(fact not in listing_text for fact in LISTING_FACTS):
+        raise ValueError('Albatron ordinary-share listing is not corroborated')
+    inventory.update([listing['path'], listing['receipt_path']])
     # This completed-event disclosure is only for settlement reconstruction.
     # It is published later and must never be exposed to historical selection.
     needle = '盈餘轉增資發行新股案。執行情形：決議通過。訂定113年8月30日為除權基準日，113年9月27日為股票發放日。'

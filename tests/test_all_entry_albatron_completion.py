@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 
 from skills.all_entry_accounts import digest
-from skills.all_entry_albatron_completion import KEY, URLS, load_albatron, install_albatron
+from skills.all_entry_albatron_completion import KEY, URLS, LISTING_URL, LISTING_FACTS, load_albatron, install_albatron
 from skills.scenario_exit_replay import FractionalCashActions
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +26,11 @@ def package(tmp_path):
             text = tmp_path/item['text_path']
             text.write_text('盈餘轉增資發行新股案。執行情形：決議通過。訂定113年8月30日為除權基準日，113年9月27日為股票發放日。')
             item['text_sha256'] = digest(text)
+    item = doc['secondary_listing'];path=tmp_path/item['path']
+    path.write_text('<p>'+''.join(LISTING_FACTS)+'</p>')
+    receipt=tmp_path/item['receipt_path']
+    receipt.write_text(json.dumps(dict(url=LISTING_URL,http_status=200,redirected=False,sha256=digest(path))))
+    item.update(sha256=digest(path),receipt_sha256=digest(receipt))
     target = tmp_path/DOCUMENT; target.parent.mkdir()
     def save(): target.write_text(json.dumps(doc))
     save()
@@ -43,7 +48,7 @@ def test_no_early_delivery_or_invented_fractional_cash(package,field,value):
     with pytest.raises(ValueError):load_albatron(root,root/DOCUMENT)
 
 
-@pytest.mark.parametrize('change',['bytes','wrong_issuer','wrong_payment_text','unapproved','certificate'])
+@pytest.mark.parametrize('change',['bytes','wrong_issuer','wrong_payment_text','unapproved','certificate','early_listing'])
 def test_primary_evidence_is_rechecked(package,change):
     root,doc,save = package
     item = doc['evidence']['annual']
@@ -53,6 +58,11 @@ def test_primary_evidence_is_rechecked(package,change):
         p.write_text(json.dumps(r));item['receipt_sha256']=digest(p)
     elif change == 'wrong_payment_text':
         p=root/item['text_path'];p.write_text('113年9月27日僅為現金股利發放日');item['text_sha256']=digest(p)
+    elif change == 'early_listing':
+        item=doc['secondary_listing'];p=root/item['path']
+        p.write_text(p.read_text().replace('09月27日','08月30日'));item['sha256']=digest(p)
+        p=root/item['receipt_path'];r=json.loads(p.read_text());r['sha256']=item['sha256']
+        p.write_text(json.dumps(r));item['receipt_sha256']=digest(p)
     else:
         doc['evidence']['minutes']['reviewed_facts'][
             'approved' if change == 'unapproved' else 'same_rights_as_ordinary'] = False
@@ -78,4 +88,4 @@ def test_actual_primary_documents():
     if not (ROOT/'.cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf').exists():
         pytest.skip('Primary PDF evidence is retained in the local research cache')
     row,refs=load_albatron(ROOT,ROOT/DOCUMENT)
-    assert len(refs)==6 and row['pay_date']=='2024-09-27'
+    assert len(refs)==8 and row['pay_date']=='2024-09-27'
