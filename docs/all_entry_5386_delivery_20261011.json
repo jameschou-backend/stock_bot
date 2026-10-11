@@ -1,0 +1,64 @@
+{
+  "schema": "all_entry_albatron_completion_v1",
+  "key": "5386-2024-08-22",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "source_policy": "issuer_minutes_and_retrospective_annual_execution",
+  "replacement": {
+    "pay_date": "2024-09-27",
+    "ordinary_share_available_date": "2024-09-27",
+    "shares_per_share": 0.09,
+    "fractional_cash_per_share": 0,
+    "fractional_net_zero_verified": true,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": true,
+    "fractional_cash_available_for_trading": false,
+    "fractional_cash_treatment": "net_zero_book_entry_fees_verified",
+    "use_scope": "account_settlement_only_not_selection",
+    "entitlement_announcement_date": "2024-06-07",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/meeting-minutes-2024.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/meeting-minutes-2024.pdf.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf.source.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.txt"
+    ],
+    "source": "Issuer adopted minutes and annual report confirming completed ordinary-share delivery; settlement reconstruction only"
+  },
+  "evidence": {
+    "minutes": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/meeting-minutes-2024.pdf",
+      "sha256": "ea3299dbc2e35053f9876634a6510c84faa8d5f5b7b899a8792fd376fac071d2",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/meeting-minutes-2024.pdf.source.json",
+      "receipt_sha256": "e68a4dd5309cd7df5bef075de5e59036d2944fc8bfc47b89d3c74e6f2a07bd67",
+      "reviewed_pdf_pages": [
+        1,
+        3,
+        4
+      ],
+      "review_method": "visually_read_scanned_original",
+      "reviewed_facts": {
+        "approved": true,
+        "shares_per_1000": 90,
+        "new_ordinary_shares": 2577080,
+        "par_value": 10,
+        "same_rights_as_ordinary": true,
+        "book_entry_fractional_cash_used_for_processing_fees": true
+      }
+    },
+    "annual": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf",
+      "sha256": "3394fdc2fca98045c435f415edd508eb14c453617e21ad06a4c37a94b1fa7f42",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.pdf.source.json",
+      "receipt_sha256": "cad6b686fcdf753edeaaa22961efeffddb00d0664784cb9f0f328fdbe358e65e",
+      "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/5386/annual-report-2024.txt",
+      "text_sha256": "cb93d79ada8983420491ada23a240509a44736644fee7998eef3b7dbc99a36ea",
+      "reviewed_pdf_pages": [
+        37
+      ],
+      "extraction_command": "pdftotext -layout"
+    }
+  }
+}
