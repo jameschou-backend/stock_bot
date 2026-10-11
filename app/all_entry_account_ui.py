@@ -53,6 +53,8 @@ def case_detail(publication, case_id, root=ROOT):
     if (case.get('completed') is not True or case.get('summary') != row.get('summary')
             or any(case.get(k) is not False for k in ('live_qualified','actual_fill_verified','unseen_validation'))):
         raise ValueError('帳戶與發布摘要不一致')
+    if case.get('settlement_evidence_notes', []) != row.get('settlement_evidence_notes', []):
+        raise ValueError('公告來源限制與封存帳戶不一致')
     account = case['account']
     restrictions = [dict(stock_id=r['stock_id'], ex_date=r['date'],
         entitled_qty=r.get('entitled_qty'), whole_new_shares=r.get('whole_new_shares'),
@@ -64,6 +66,7 @@ def case_detail(publication, case_id, root=ROOT):
             'reason','commission','tax','slippage','gross','cash_change','total_cost','cash_after','channel')} for r in account['trades']],
         annual=row['annual'],cohorts=row['cohorts'],candidate_coverage=row.get('candidate_coverage'),
         certificate_restrictions=restrictions,
+        settlement_evidence_notes=case.get('settlement_evidence_notes', []),
         initial_cash=publication['initial_cash'],position_count=1 if case_id=='benchmark' else 3,
         position_scope='single_benchmark' if case_id=='benchmark' else 'active_stock_slots',
         actual_fill_verified=False,live_qualified=False,source_sha256=row['sha256'],

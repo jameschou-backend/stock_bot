@@ -55,6 +55,7 @@ window.renderAccountComparison = function (item, host, helpers) {
       for (const right of result.certificate_restrictions || []) {
         detail.append(el('p', `${right.stock_id} 配股限制：除權日 ${right.ex_date}，${number(right.whole_new_shares)} 股新權益；證書 ${right.certificate_delivery_date} 交付，普通股 ${right.ordinary_share_available_date} 才可交易。期間按普通股收盤價估值，未模擬證書成交或把它當作可賣普通股。`, 'result-note'));
       }
+      for (const note of result.settlement_evidence_notes || []) detail.append(el('p', note, 'result-note'));
       detail.append(el('p', `未知股票日 ${number(coverage.unknown_stock_days)}；情境未知事件 ${number(coverage.unknown_context)}；POC 品質排除 ${number(row.profile_quality_exclusions)}；單邊換手 ${number(metrics.one_way_turnover_multiple, 2)} 倍。未成交或資料排除紀錄：${Object.entries(row.execution_exclusion_reasons || {}).map(([k,v]) => `${k} ${number(v)}`).join('；') || '無'}。`, 'caption'));
       renderAccountDetail(result, detail);detail.scrollIntoView({behavior: 'smooth', block: 'start'});
     } catch (error) {if (request === generation) detail.replaceChildren(el('p', error.message, 'alert error'));}

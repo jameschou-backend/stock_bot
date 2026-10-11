@@ -95,6 +95,10 @@ def summarize(report_path, output):
             rows[arm] = row
             continue
         metrics = account_metrics(case)
+        from skills.all_entry_issuer_distributions import settlement_notes
+        evidence_notes = settlement_notes(case)
+        if case.get('settlement_evidence_notes', []) != evidence_notes:
+            raise ValueError('Settlement source limitations are absent or differ')
         metrics.update(holding_scope(case['account'], 1 if arm == 'benchmark' else 3))
         daily, trades = case['account']['daily'], case['account']['trades']
         dates = [r['date'] for r in daily]
@@ -112,7 +116,7 @@ def summarize(report_path, output):
             execution_exclusion_reasons=dict(Counter(r['failure_reason'] for r in case.get('data_gap_exclusions',[]))),
             profile_quality_exclusions=len(case.get('profile_data_exclusions',[])),
             profile_queries=len(case.get('profile_queries',[])),
-            annual=metrics['annual'])
+            annual=metrics['annual'], settlement_evidence_notes=evidence_notes)
         rows[arm] = row
     benchmark = rows['benchmark']['metrics']
     ranked = sorted((r for k,r in rows.items() if k != 'benchmark' and r['completed']),
@@ -147,6 +151,8 @@ def summarize(report_path, output):
             '每日符合條件可再次成為候選；不能直接套用首日訊號研究的勝率。',
             '一般訊號資料未知、POC品質未知及帳戶未完成分開揭露。',
             '未結清持股與應收權益列入資產，但不列入已結清批次勝率。'])
+    result['limitations'].extend(sorted({note for row in rows.values()
+        for note in row.get('settlement_evidence_notes', [])}))
     for name,sha in tuple(sources.used.items()):
         sources.bind(name,sha)
     h = write(output,result)

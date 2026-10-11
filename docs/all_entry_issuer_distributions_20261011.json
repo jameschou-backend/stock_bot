@@ -1,0 +1,107 @@
+{
+  "schema": "all_entry_issuer_distributions_v1",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "events": {
+    "1519-2024-07-26": {
+      "override": {
+        "pay_date": "2024-08-30",
+        "ordinary_share_available_date": "2024-08-30",
+        "shares_per_share": 0.1,
+        "listing_announcement_date": "2024-08-21",
+        "fractional_cash_per_share": 10,
+        "fractional_cash_rounding": "floor_ntd",
+        "fractional_cash_pay_date": null,
+        "fractional_cash_payment_date_verified": false,
+        "fractional_cash_net_amount_verified": false,
+        "fractional_cash_available_for_trading": false,
+        "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+        "use_scope": "account_settlement_only_not_selection",
+        "evidence_files": [
+          ".cache/all-entry-accounts-20261011/corporate-evidence/1519/agm-2024-web-tool-observation.txt",
+          ".cache/all-entry-accounts-20261011/corporate-evidence/1519/agm-2024-web-tool-observation.receipt.json",
+          ".cache/all-entry-accounts-20261011/required-listings-v5/raw/e25864c686f94b3adac4f8c4db57fbb5f12c85ace2204f2d16289c2fa5e2a8df.bin",
+          ".cache/all-entry-accounts-20261011/required-listings-v5/receipts/e25864c686f94b3adac4f8c4db57fbb5f12c85ace2204f2d16289c2fa5e2a8df.json",
+          ".cache/all-entry-accounts-20261011/execution-v1/1519-TaiwanStockDividend.parquet",
+          ".cache/all-entry-accounts-20261011/execution-v1/1519-TaiwanStockDividend.json"
+        ],
+        "source": "Adopted issuer distribution terms and TWSE confirmed ordinary listing; provenance explicitly retained in source document"
+      },
+      "source_sha256": {
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1519/agm-2024-web-tool-observation.txt": "5e2a3497c382004fbc35a7be24270112e747bc90db320cd72aefe9f2419bdc1f",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1519/agm-2024-web-tool-observation.receipt.json": "8064f6d25f6ac337bf881348f6f523c4371768526db7c221cc171e9cbb065c5c",
+        ".cache/all-entry-accounts-20261011/required-listings-v5/raw/e25864c686f94b3adac4f8c4db57fbb5f12c85ace2204f2d16289c2fa5e2a8df.bin": "3cc719ea22af9e0d192b9a89dc28eda4a1704f565ffef8830a084700c0d89d19",
+        ".cache/all-entry-accounts-20261011/required-listings-v5/receipts/e25864c686f94b3adac4f8c4db57fbb5f12c85ace2204f2d16289c2fa5e2a8df.json": "a0bddae140b201f8c25fb18d6e425bcc28f47ce976806a5b68839e08a01942e9",
+        ".cache/all-entry-accounts-20261011/execution-v1/1519-TaiwanStockDividend.parquet": "3e5ff8c6761ecf7c0fb6ddf6c73109b28f8aa614e495fe52204fa04b6483854b",
+        ".cache/all-entry-accounts-20261011/execution-v1/1519-TaiwanStockDividend.json": "4910d47cc003fce9979e9559c1f8d17b998aad54303af49f8b55ef1c057b4706"
+      },
+      "issuer": {
+        "path": ".cache/all-entry-accounts-20261011/corporate-evidence/1519/agm-2024-web-tool-observation.txt",
+        "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/1519/agm-2024-web-tool-observation.receipt.json"
+      },
+      "exchange": {
+        "path": ".cache/all-entry-accounts-20261011/required-listings-v5/raw/e25864c686f94b3adac4f8c4db57fbb5f12c85ace2204f2d16289c2fa5e2a8df.bin",
+        "receipt_path": ".cache/all-entry-accounts-20261011/required-listings-v5/receipts/e25864c686f94b3adac4f8c4db57fbb5f12c85ace2204f2d16289c2fa5e2a8df.json"
+      },
+      "issuer_evidence_kind": "retained_primary_pdf_tool_text",
+      "evidence_note": "1519／2024 配股：比例與畸零款條款依先前取得的官方議事錄工具擷取文字，普通股上市日另有 TWSE 原始公告；公司網站下載受防護限制，原始 PDF 未留存且未完成 PDF 視覺核對。畸零款淨額與支付日未證實，不列可用現金。",
+      "existing_dividend_feed": ".cache/all-entry-accounts-20261011/execution-v1/1519-TaiwanStockDividend.parquet",
+      "raw_ex_date": "2024-07-25",
+      "ex_date_policy": "existing_engine_next_trading_day_no_selection_change"
+    },
+    "6592-2024-07-16": {
+      "override": {
+        "pay_date": "2024-08-16",
+        "ordinary_share_available_date": "2024-08-16",
+        "shares_per_share": 0.1,
+        "listing_announcement_date": "2024-08-09",
+        "fractional_cash_per_share": 10,
+        "fractional_cash_rounding": "floor_ntd",
+        "fractional_cash_pay_date": null,
+        "fractional_cash_payment_date_verified": false,
+        "fractional_cash_net_amount_verified": false,
+        "fractional_cash_available_for_trading": false,
+        "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+        "use_scope": "account_settlement_only_not_selection",
+        "evidence_files": [
+          ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.pdf",
+          ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.pdf.receipt.json",
+          ".cache/all-entry-accounts-20261011/required-listings-v6/raw/ba2242cb0efbb82336d24430bc99edae867b498bd815f438eb11ab4f666c8731.bin",
+          ".cache/all-entry-accounts-20261011/required-listings-v6/receipts/ba2242cb0efbb82336d24430bc99edae867b498bd815f438eb11ab4f666c8731.json",
+          ".cache/all-entry-accounts-20261011/execution-v1/6592-TaiwanStockDividend.parquet",
+          ".cache/all-entry-accounts-20261011/execution-v1/6592-TaiwanStockDividend.json",
+          ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.txt"
+        ],
+        "source": "Adopted issuer distribution terms and TWSE confirmed ordinary listing; provenance explicitly retained in source document"
+      },
+      "source_sha256": {
+        ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.pdf": "c9a22d1cd4f6a045c385d5e22957950c1eb4fef3ac0fbf6b3a596bf94b8ac9fa",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.pdf.receipt.json": "f23224dce10e8a2bd4c017607a6f20605581780f6ff4b33c9ddbbec67fc9bf8b",
+        ".cache/all-entry-accounts-20261011/required-listings-v6/raw/ba2242cb0efbb82336d24430bc99edae867b498bd815f438eb11ab4f666c8731.bin": "977dbb198d129ac45d4509430e0b1f040b8126bc43e660aef0a279c96608b7b8",
+        ".cache/all-entry-accounts-20261011/required-listings-v6/receipts/ba2242cb0efbb82336d24430bc99edae867b498bd815f438eb11ab4f666c8731.json": "7d4504396cc8fcf8ca6521774a4b0221d7b116f3f16bb6207d9bfb99b7ec14e5",
+        ".cache/all-entry-accounts-20261011/execution-v1/6592-TaiwanStockDividend.parquet": "92d880e0fd24214c8c1df3436b1406243db335a5f7be490cc985e090684f749c",
+        ".cache/all-entry-accounts-20261011/execution-v1/6592-TaiwanStockDividend.json": "4dee8a4936fadc5781c045c586abf38a69bc3808a9cd15132a51bee75113a806",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.txt": "47a8273dbf533ad0bb274903e1070646f3abb0ea34ae2b173e29355b266d33ff"
+      },
+      "issuer": {
+        "path": ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.pdf",
+        "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.pdf.receipt.json",
+        "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/6592/agm-2024-minutes.txt",
+        "extraction_command": "pdftotext -layout",
+        "reviewed_pdf_pages": [
+          3,
+          4
+        ]
+      },
+      "exchange": {
+        "path": ".cache/all-entry-accounts-20261011/required-listings-v6/raw/ba2242cb0efbb82336d24430bc99edae867b498bd815f438eb11ab4f666c8731.bin",
+        "receipt_path": ".cache/all-entry-accounts-20261011/required-listings-v6/receipts/ba2242cb0efbb82336d24430bc99edae867b498bd815f438eb11ab4f666c8731.json"
+      },
+      "issuer_evidence_kind": "retained_primary_pdf",
+      "evidence_note": null,
+      "existing_dividend_feed": ".cache/all-entry-accounts-20261011/execution-v1/6592-TaiwanStockDividend.parquet",
+      "raw_ex_date": "2024-07-16",
+      "ex_date_policy": "existing_engine_next_trading_day_no_selection_change"
+    }
+  }
+}

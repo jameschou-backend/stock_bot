@@ -1,0 +1,81 @@
+{
+  "schema": "all_entry_northstar_completion_v1",
+  "key": "8927-2024-09-06",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "evidence_note": "8927／2024 配股：議事錄及年度財報原檔已核對；2024/10/31 普通股發放與掛牌日依公司及櫃買公告的媒體轉載交叉核對，尚缺公告原站回應。當日休市不成交；分項配股與合併記帳須核對股數及畸零毛額相同。畸零款淨額與支付日未證實，不列可用現金。",
+  "evidence": {
+    "minutes": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.pdf",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.pdf.receipt.json",
+      "source_role": "primary_issuer_pdf",
+      "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.txt",
+      "reviewed_pdf_pages": [
+        15,
+        16
+      ]
+    },
+    "financial": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.pdf",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.pdf.receipt.json",
+      "source_role": "primary_issuer_pdf",
+      "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.txt",
+      "reviewed_pdf_pages": [
+        56
+      ]
+    },
+    "listing": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/exchange-republication.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/exchange-republication.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    },
+    "delivery": {
+      "path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/issuer-republication.html",
+      "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/8927/issuer-republication.html.receipt.json",
+      "source_role": "secondary_republication_not_primary_response"
+    }
+  },
+  "source_sha256": {
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.pdf": "88157d6735479792ed58700ca6d0b77ddf6875ac3a342be393894bab3844f401",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.pdf.receipt.json": "a75c023c6e59b137ff2a8814389e181e1ec41e5e8a3d7b5e87b667a19badfbc2",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.txt": "fdb9cd1207780c7e20ed2d8c56d8f2e5ca73211369b2e2a5e4aa5b118debd495",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.pdf": "d66ebc604d7e1b8122f910f01c3ffeea2b7237fff30ac2449e29474d6b5462b8",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.pdf.receipt.json": "fd28ddc4b4220bfd21205e8fd7a44d2ca8bd79d3a9cbb13fa1be9063442d70d4",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.txt": "6ca62a44796149d6281fa8e76d1907d31844722e7dadbccba14ba8b0f2169df0",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/exchange-republication.html": "6cdc28c33a78f90266425dd162f18876d494b63ca2489e0c4f3e31a58447b556",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/exchange-republication.html.receipt.json": "76085e85e92759b56178391ee55982118261811918638a4ad8abe1b969970a4d",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/issuer-republication.html": "18e7a00bb20876eaca7242d8080a1beacc23b8afeee36810fb80777497e1e8a4",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/8927/issuer-republication.html.receipt.json": "83ab839462927c7ad61329f324a0a414202616f452218eb8f0528d97b3a889cf",
+    ".cache/all-entry-accounts-20261011/execution-v1/8927-TaiwanStockDividend.parquet": "b10d800784180e9dc905303269f1e17b24ee23cd612ebefec5e9b6ca495a91b1",
+    ".cache/all-entry-accounts-20261011/execution-v1/8927-TaiwanStockDividend.json": "7e7c171848ea5a77ff9e5de40c96e20271ef8f57712177ab95e4a590305c9c0a"
+  },
+  "existing_dividend_feed": ".cache/all-entry-accounts-20261011/execution-v1/8927-TaiwanStockDividend.parquet",
+  "override": {
+    "shares_per_share": 0.12983712865,
+    "pay_date": "2024-10-31",
+    "ordinary_share_available_date": "2024-10-31",
+    "fractional_cash_per_share": 10,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": false,
+    "fractional_cash_available_for_trading": false,
+    "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+    "use_scope": "account_settlement_only_not_selection",
+    "evidence_files": [
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.pdf.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/agm-2024.txt",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/exchange-republication.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/exchange-republication.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.pdf",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.pdf.receipt.json",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/financial-2024.txt",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/issuer-republication.html",
+      ".cache/all-entry-accounts-20261011/corporate-evidence/8927/issuer-republication.html.receipt.json",
+      ".cache/all-entry-accounts-20261011/execution-v1/8927-TaiwanStockDividend.json",
+      ".cache/all-entry-accounts-20261011/execution-v1/8927-TaiwanStockDividend.parquet"
+    ],
+    "source": "issuer_primary_and_explicit_secondary_listing"
+  }
+}

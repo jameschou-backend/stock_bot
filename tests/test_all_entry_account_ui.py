@@ -68,3 +68,16 @@ def test_archive_exposes_comparison_only_after_publication_checks(tmp_path):
     path.write_text(path.read_text()+' ')
     row=next(r for r in overview(tmp_path)['items'] if r['id']==IDENTIFIER)
     assert row['status']=='unavailable' and 'comparison' not in row
+
+
+def test_source_limitation_is_visible_and_cannot_be_omitted(tmp_path):
+    report = publication(); row = report['cases']['momentum']; path = tmp_path/'account.json'
+    note = 'Retained primary text; original PDF unavailable'
+    case = dict(completed=True, summary=row['summary'], live_qualified=False,
+        actual_fill_verified=False, unseen_validation=False, settlement_evidence_notes=[note],
+        account=dict(daily=[], trades=[], corporate_actions=[]))
+    path.write_text(json.dumps(case))
+    row.update(path=path.name, sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+    with pytest.raises(ValueError, match='來源限制'): case_detail(report, 'momentum', tmp_path)
+    row['settlement_evidence_notes'] = [note]
+    assert case_detail(report, 'momentum', tmp_path)['settlement_evidence_notes'] == [note]
