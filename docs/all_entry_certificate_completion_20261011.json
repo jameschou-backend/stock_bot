@@ -1,0 +1,69 @@
+{
+  "schema": "all_entry_5876_nontraded_certificate_inventory_v1",
+  "key": "5876-2026-07-28",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "previous_document": {
+    "path": "docs/poc_range_corporate_terms_20261005.json",
+    "sha256": "0d8a2f96b5bc9431d2e03fd7f9800ea9ecf6db1bacd3a8b38332454b4e1c3238"
+  },
+  "previous_terms_sha256": "53f985d0924a204354dc56b0cdb805732a5e79be68cbcfcdf0657655940c18b6",
+  "replacement": {
+    "shares_per_share": 0.01,
+    "pay_date": "2026-09-11",
+    "per_share": 0.0,
+    "certificate_delivery_date": "2026-08-20",
+    "certificate_listing_date": "2026-08-20",
+    "certificate_trading_modeled": false,
+    "certificate_stock_id": "5876",
+    "same_code_fungible_trading_verified": false,
+    "ordinary_conversion_date": "2026-09-11",
+    "ordinary_conversion_creates_new_entitlement": false,
+    "entitlement_announcement_date": "2026-07-13",
+    "delivery_announcement_date": "2026-08-17",
+    "ordinary_conversion_announcement_date": "2026-09-08",
+    "use_scope": "account_settlement_only_not_selection",
+    "fractional_cash_per_share": 10,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": false,
+    "fractional_cash_treatment": "unpaid_gross_receivable_unavailable_for_trading",
+    "source": "Issuer entitlement and TWSE listing/conversion; separate non-traded certificate units until ordinary conversion",
+    "evidence_files": [
+      ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.html",
+      ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf",
+      ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.txt",
+      ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-agenda.pdf",
+      ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf",
+      ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json"
+    ],
+    "ordinary_share_available_date": "2026-09-11",
+    "valuation_basis": "ordinary_share_close_proxy"
+  },
+  "source_sha256": {
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.html": "b54f3c4d93f5d8f2e6a380ce32331f3ebf0dabfd7e6f482062d768523628fb18",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf": "e2e7803414c4b3e70a6b3c634034200dc214e72c2903ea384904f315a91a1388",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.txt": "f15ffef606f442ec94d9c122afe96744aecc3e5d69449cb02f42b95fb09c9cb5",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-agenda.pdf": "1e32a73e44df7d9a8fd4453de561458f6d65e5d9ce33f91bdf1cdbbb87bfb107",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf": "e4033de44a24c711c39344f6d4b795c1ca90d2ee96d2b5708ea89bd5b2ce3fe0",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json": "ec25b44ab4e913b7d99940c473a5d1f475721c3231cef8560a08c18ee0f20961",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf.receipt.json": "968526c6662fc80d95ba074d619d7d075b70d2d47542a36f25118dd48a4b4e1c",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json.receipt.json": "0869dcc2c57e3f8b72fe50dda5d2bf13fd56404af7b8204318246873668185ff",
+    ".cache/poc-range-first-20261005/corporate-repair/5876/agm-2026-invitation.pdf.receipt.json": "9d7ef0c456d77cc50a87d823ecaed627a62dfac18a45d7f4c25351b5d193be8c"
+  },
+  "issuer": {
+    "path": ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf",
+    "receipt_path": ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.pdf.receipt.json",
+    "text_path": ".cache/poc-range-first-20261005/corporate-repair/5876/announcement-20260713.txt",
+    "reviewed_pdf_pages": [
+      2,
+      3
+    ]
+  },
+  "exchange": {
+    "path": ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json",
+    "receipt_path": ".cache/poc-range-first-20261005/corporate-repair/5876/twse-LT185-5876-2026.json.receipt.json"
+  },
+  "account_policy": "ordinary_shares_only; certificates separately counted but never sold or used as buying power; one ordinary conversion; close-proxy valuation only"
+}

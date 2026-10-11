@@ -36,6 +36,13 @@ def guard_certificate_inventory(case):
     boundaries = {('5876','2026-07-28'), ('6446','2026-07-09')}
     for row in case['account'].get('corporate_actions',[]):
         if (row.get('stock_id'),row.get('date')) in boundaries and row.get('kind') == 'stock_dividend':
+            if row['stock_id'] == '5876' and case.get('certificate_inventory_audit'):
+                from skills.all_entry_certificate_completion import verify_inventory_proof
+                try:
+                    verify_inventory_proof(case)
+                except ValueError as exc:
+                    raise UnverifiedCertificateInventory('5876 獨立證書庫存核對失敗：'+str(exc)) from exc
+                continue
             raise UnverifiedCertificateInventory(
                 f"{row['stock_id']} {row['date']} 配發新股權利證書：尚缺獨立庫存、"
                 '轉換與可交易行情驗證，完整回放不等於有效績效，暫不排名。')
