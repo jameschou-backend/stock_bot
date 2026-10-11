@@ -33,7 +33,7 @@ def holding_scope(account, active_slots):
 def guard_certificate_inventory(case):
     # The inherited runner has not separated these rights certificates from
     # ordinary stock inventory. A completed replay alone cannot certify them.
-    boundaries = {('5876','2026-07-28'), ('6446','2026-07-09'), ('9941','2026-09-01')}
+    boundaries = {('5876','2026-07-28'), ('6446','2026-07-09'), ('9941','2026-09-01'), ('2801','2026-08-05')}
     for row in case['account'].get('corporate_actions',[]):
         if (row.get('stock_id'),row.get('date')) in boundaries and row.get('kind') == 'stock_dividend':
             if row['stock_id'] == '5876' and case.get('certificate_inventory_audit'):
@@ -42,6 +42,13 @@ def guard_certificate_inventory(case):
                     verify_inventory_proof(case)
                 except ValueError as exc:
                     raise UnverifiedCertificateInventory('5876 獨立證書庫存核對失敗：'+str(exc)) from exc
+                continue
+            if row['stock_id'] == '2801' and case.get('context_certificate_inventory_audit'):
+                from skills.all_entry_context_distributions import verify_inventory_proof
+                try:
+                    verify_inventory_proof(case)
+                except ValueError as exc:
+                    raise UnverifiedCertificateInventory('2801 獨立證書庫存核對失敗：'+str(exc)) from exc
                 continue
             if row['stock_id'] == '9941' and case.get('late_certificate_inventory_audit'):
                 from skills.all_entry_late_certificate_completion import verify_inventory_proof
@@ -95,7 +102,7 @@ def summarize(report_path, output):
             rows[arm] = row
             continue
         metrics = account_metrics(case)
-        from skills.all_entry_issuer_distributions import settlement_notes
+        from skills.all_entry_context_distributions import settlement_notes
         evidence_notes = settlement_notes(case)
         if case.get('settlement_evidence_notes', []) != evidence_notes:
             raise ValueError('Settlement source limitations are absent or differ')

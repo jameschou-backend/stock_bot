@@ -12,7 +12,7 @@ def test_delayed_share_delivery_is_counted_outside_active_entry_slots():
     assert summary.holding_scope(account,3) == dict(maximum_held_symbols=4,days_above_active_slot_count=1)
 
 
-@pytest.mark.parametrize('sid,day', [('5876', '2026-07-28'), ('6446', '2026-07-09')])
+@pytest.mark.parametrize('sid,day', [('5876', '2026-07-28'), ('6446', '2026-07-09'), ('2801', '2026-08-05')])
 def test_certificate_exposure_is_not_a_qualified_completed_account(sid, day):
     case = {'account':{'corporate_actions':[dict(stock_id=sid, date=day, kind='stock_dividend')]}}
     with pytest.raises(summary.UnverifiedCertificateInventory):summary.guard_certificate_inventory(case)
