@@ -1,0 +1,19 @@
+{
+  "schema": "all_entry_2327_split_halt_v1",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "reviewed_pdf_pages": [
+    1,
+    3
+  ],
+  "notice_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2327/taifex-2025-split.pdf",
+  "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2327/taifex-2025-split.pdf.receipt.json",
+  "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2327/taifex-2025-split.txt",
+  "events_path": ".cache/poc-latest-20261003/inputs-v1/events.parquet",
+  "source_sha256": {
+    ".cache/all-entry-accounts-20261011/corporate-evidence/2327/taifex-2025-split.pdf": "55a5896c4bd4325cbffb034baf0ba7c053b86f2855d90448736441594fcc4a6d",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/2327/taifex-2025-split.pdf.receipt.json": "2832d06941f7173d91a0f9fa90e98d2ec499f95512dfe9b641cb9d39c6a6fc67",
+    ".cache/all-entry-accounts-20261011/corporate-evidence/2327/taifex-2025-split.txt": "b14e7426fc200606e1a2431ad539f897e609f407f41f6e6fa267e00b78283ecd",
+    ".cache/poc-latest-20261003/inputs-v1/events.parquet": "783a2d9e800004e51c0a343cd02409099a3d646db5770335d59db4015200ed74"
+  }
+}
