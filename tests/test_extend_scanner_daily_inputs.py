@@ -217,6 +217,53 @@ def test_complete_six_kind_report_extends_events_but_not_live_certification(sour
     assert 'official/report.json' in result['source_sha256']
 
 
+def empty_event_report(sources):
+    old_path = sources['base'] / 'events.parquet'
+    old = pd.read_parquet(old_path)
+    old['cash_increase_suspected'] = False
+    old.to_parquet(old_path, index=False)
+    seal(sources['base'])
+    report = event_report(sources)
+    events = report.parent / 'events.parquet'
+    # The official zero-event normalizer emits an object-typed empty schema.
+    pd.DataFrame(columns=old.columns).to_parquet(events, index=False)
+    payload = json.loads(report.read_text())
+    payload['output_sha256']['official/events.parquet'] = digest(events)
+    write(report, payload); report.with_suffix('.sha256').write_text(digest(report))
+    return report
+
+
+def test_complete_empty_event_interval_preserves_parent_rows_and_dtypes(sources):
+    report = empty_event_report(sources)
+    old = pd.read_parquet(sources['base'] / 'events.parquet')
+    result = extend(**sources, event_extension_report=report)
+    new = pd.read_parquet(sources['output'] / 'events.parquet')
+    pd.testing.assert_frame_equal(new, old)
+    assert result['events_extension_complete'] and result['corporate_events_extended']
+    assert result['source_sha256']['official/events.parquet'] == digest(report.parent / 'events.parquet')
+    assert result['live_qualified'] is False
+
+
+@pytest.mark.parametrize('mutation,reason', [('duplicate_parent', 'Duplicate corporate event'),
+                                          ('future_parent', 'Parent corporate event'),
+                                          ('unbound_empty', 'hash mismatch')])
+def test_empty_event_interval_still_validates_sources_and_parent(sources, mutation, reason):
+    report = empty_event_report(sources)
+    old_path = sources['base'] / 'events.parquet'
+    old = pd.read_parquet(old_path)
+    if mutation == 'duplicate_parent':
+        pd.concat([old, old], ignore_index=True).to_parquet(old_path, index=False)
+        seal(sources['base'])
+    elif mutation == 'future_parent':
+        old['event_date'] = pd.to_datetime(['2026-10-05']).date
+        old.to_parquet(old_path, index=False)
+        seal(sources['base'])
+    else:
+        (report.parent / 'events.parquet').write_bytes(b'changed after sealing')
+    with pytest.raises(ValueError, match=reason):
+        extend(**sources, event_extension_report=report)
+
+
 @pytest.mark.parametrize('mutation', ['incomplete', 'missing_kind', 'wrong_interval', 'unbound_events'])
 def test_partial_or_unbound_event_report_cannot_claim_completion(sources, mutation):
     report = event_report(sources); payload = json.loads(report.read_text())

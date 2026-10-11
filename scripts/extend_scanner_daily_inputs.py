@@ -231,7 +231,8 @@ def load_event_extension(path, *, anchor, end, base, manifest, root, refs):
     require(added.stock_id.map(lambda s: isinstance(s, str) and bool(re.fullmatch(r'\d{4}', s))).all(),
             'Corporate events need four-digit security identifiers')
     added['event_date'] = stamps if pd.api.types.is_datetime64_any_dtype(old.event_date) else stamps.dt.date
-    combined = pd.concat([old, added], ignore_index=True)
+    # A verified empty interval adds no rows; concat can coerce bool columns to object.
+    combined = old.copy() if added.empty else pd.concat([old, added], ignore_index=True)
     require(combined.iloc[:len(old)].equals(old), 'Corporate event prefix changed')
     require(not combined.duplicated(['stock_id', 'event_date']).any(), 'Duplicate corporate event identity')
     require(pd.to_datetime(old.event_date).le(day(anchor)).all(), 'Parent corporate event exceeds parent end')
