@@ -1,0 +1,129 @@
+{
+  "schema": "all_entry_distribution_completion_v1",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "source_policy": "issuer_minutes_and_exchange_listing_primary_only",
+  "overrides": {
+    "1477-2024-09-12": {
+      "pay_date": "2024-10-18",
+      "ordinary_share_available_date": "2024-10-18",
+      "shares_per_share": 0.02,
+      "fractional_cash_per_share": 0,
+      "entitlement_announcement_date": "2024-06-28",
+      "delivery_announcement_date": "2024-10-04",
+      "listing_announcement_date": "2024-10-09",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": true,
+      "fractional_cash_available_for_trading": false,
+      "fractional_cash_treatment": "net_zero_book_entry_fees_verified",
+      "evidence_files": [
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.pdf",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.pdf.source.json",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.txt",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/raw/216e66f939fc1c005a4dc5c1b7c9eacda1c85021ebd4ba76fbe0a741a225737b.bin",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/receipts/216e66f939fc1c005a4dc5c1b7c9eacda1c85021ebd4ba76fbe0a741a225737b.json"
+      ],
+      "source": "Issuer adopted shareholder minutes and TWSE confirmed ordinary-share listing",
+      "fractional_net_zero_verified": true
+    },
+    "2834-2026-08-04": {
+      "pay_date": "2026-09-10",
+      "ordinary_share_available_date": "2026-09-10",
+      "shares_per_share": 0.07,
+      "fractional_cash_per_share": 10,
+      "entitlement_announcement_date": "2026-06-18",
+      "delivery_announcement_date": "2026-08-28",
+      "listing_announcement_date": "2026-09-07",
+      "use_scope": "account_settlement_only_not_selection",
+      "fractional_cash_rounding": "floor_ntd",
+      "fractional_cash_pay_date": null,
+      "fractional_cash_payment_date_verified": false,
+      "fractional_cash_net_amount_verified": false,
+      "fractional_cash_available_for_trading": false,
+      "fractional_cash_treatment": "gross_undated_receivable_upper_bound_net_unknown",
+      "evidence_files": [
+        ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.pdf",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.pdf.source.json",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.txt",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/raw/73afbea5ee46cd46c3b8763501360323f4f8b5e02dd5460fb78f02282d1e79b4.bin",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/receipts/73afbea5ee46cd46c3b8763501360323f4f8b5e02dd5460fb78f02282d1e79b4.json"
+      ],
+      "source": "Issuer adopted shareholder minutes and TWSE confirmed ordinary-share listing",
+      "certificate_delivery_date": "2026-09-02",
+      "certificate_trading_modeled": false,
+      "valuation_basis": "ordinary_share_close_proxy"
+    }
+  },
+  "evidence": {
+    "1477-2024-09-12": {
+      "source_sha256": {
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.pdf": "f5b5a47484d5033782ae38a1b8ef1316fda18a16daf845178b0d48fa751882f5",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.pdf.source.json": "5179e49f58491bae6f3ae9b54216f91db860aa6854c120f9d9cd56304038a11e",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.txt": "7130e75ce063a9b715ff2862a9d854216e1ebb718c031c158b68d930d1b7694d",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/raw/216e66f939fc1c005a4dc5c1b7c9eacda1c85021ebd4ba76fbe0a741a225737b.bin": "834dd78dacc4758d47a147b5a2756a96ffa4b8b85773a96f5c9db6c50fc81bfb",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/receipts/216e66f939fc1c005a4dc5c1b7c9eacda1c85021ebd4ba76fbe0a741a225737b.json": "f97db3880350af7ee6082d09acc9bdd274afba2d9546dcafb77dcc00f9ac7804"
+      },
+      "issuer": {
+        "path": ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.pdf",
+        "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.pdf.source.json",
+        "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/1477/meeting-minutes-2024.txt",
+        "extraction_command": "pdftotext -layout",
+        "reviewed_pdf_pages": [
+          3
+        ],
+        "required_text": [
+          "每仟股無償配發20股",
+          "每股面額新台幣10元",
+          "本案照案表決通過",
+          "其未滿一股之畸零股款，將做為處理帳簿劃撥之費用"
+        ]
+      },
+      "listing": {
+        "path": ".cache/all-entry-accounts-20261011/required-listings-v1/raw/216e66f939fc1c005a4dc5c1b7c9eacda1c85021ebd4ba76fbe0a741a225737b.bin",
+        "receipt_path": ".cache/all-entry-accounts-20261011/required-listings-v1/receipts/216e66f939fc1c005a4dc5c1b7c9eacda1c85021ebd4ba76fbe0a741a225737b.json",
+        "ordinary_quantity": 4837132
+      },
+      "shares_per_1000": 20,
+      "par_value": 10,
+      "ex_date_source": "existing_sealed_corporate_event_not_modified",
+      "certificate_scope": null
+    },
+    "2834-2026-08-04": {
+      "source_sha256": {
+        ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.pdf": "03cbd47c44015288c0dddc798853bdd8e1d806672768b1f63cc34408c03211e5",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.pdf.source.json": "10f84818f9079070917f2f2425024ba3d0a13702d0fb1732da4c2e2def0bc567",
+        ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.txt": "48d6cc1069948c1452af9d6a364963f164cc7e21acba1d2f532382b81ca390d4",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/raw/73afbea5ee46cd46c3b8763501360323f4f8b5e02dd5460fb78f02282d1e79b4.bin": "300358c7993b2a86341e76c7ffa95061392b2596602ffa349ff2f3b27e83e55a",
+        ".cache/all-entry-accounts-20261011/required-listings-v1/receipts/73afbea5ee46cd46c3b8763501360323f4f8b5e02dd5460fb78f02282d1e79b4.json": "de897e1ac6c5b37dfe3577c15733dd324e2e4791d915c91b385140461b7cdc0a"
+      },
+      "issuer": {
+        "path": ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.pdf",
+        "receipt_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.pdf.source.json",
+        "text_path": ".cache/all-entry-accounts-20261011/corporate-evidence/2834/meeting-minutes-2026.txt",
+        "extraction_command": "pdftotext -layout",
+        "reviewed_pdf_pages": [
+          37,
+          38
+        ],
+        "required_text": [
+          "每仟股無償配發70股",
+          "每股面額10元",
+          "本案經表決照案通過",
+          "併湊不足壹股之畸零股改發現金（計算至元，元以下捨去）"
+        ]
+      },
+      "listing": {
+        "path": ".cache/all-entry-accounts-20261011/required-listings-v1/raw/73afbea5ee46cd46c3b8763501360323f4f8b5e02dd5460fb78f02282d1e79b4.bin",
+        "receipt_path": ".cache/all-entry-accounts-20261011/required-listings-v1/receipts/73afbea5ee46cd46c3b8763501360323f4f8b5e02dd5460fb78f02282d1e79b4.json",
+        "ordinary_quantity": 680264330
+      },
+      "shares_per_1000": 70,
+      "par_value": 10,
+      "ex_date_source": "existing_sealed_corporate_event_not_modified",
+      "certificate_scope": "separate_nontradable_stock_receivable_until_ordinary_conversion"
+    }
+  }
+}
