@@ -1,0 +1,61 @@
+{
+  "schema": "legacy_2867_exchange_v1",
+  "source_stock_id": "2867",
+  "target_stock_id": "2884",
+  "ratio": ".2596",
+  "halt_start": "2026-08-20",
+  "exchange_date": "2026-09-01",
+  "ordinary_date": "2026-09-08",
+  "fraction_reference_date": "2026-08-19",
+  "fraction_rounding": "half_up_ntd",
+  "fraction_payment_date_verified": true,
+  "fraction_net_amount_verified": false,
+  "fraction_cash_available_for_trading": false,
+  "certificate_trading_modeled": false,
+  "certificate_valuation": "ordinary_close_proxy",
+  "reviewed_pdf_pages": {
+    "qa": [
+      1
+    ],
+    "notice": [
+      1
+    ]
+  },
+  "selection_parameters_changed": false,
+  "live_qualified": false,
+  "evidence": {
+    "issuer0": {
+      "path": ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/raw/53337fdb19ad041dd0fda9ae01c54c391f46e62331af8ee79f0fd3fd759eb6e0.bin",
+      "receipt_path": ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/receipts/53337fdb19ad041dd0fda9ae01c54c391f46e62331af8ee79f0fd3fd759eb6e0.json",
+      "source_role": "primary_response"
+    },
+    "issuer1": {
+      "path": ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/raw/39432e6cccb0288a4d586f625250513ce25f491b7dcf3bd9e5cdf61c0d751bbe.bin",
+      "receipt_path": ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/receipts/39432e6cccb0288a4d586f625250513ce25f491b7dcf3bd9e5cdf61c0d751bbe.json",
+      "source_role": "primary_response"
+    },
+    "exchange0": {
+      "path": ".cache/legacy-return-comparison-20261012/merger-listing-v1/raw/d28423c3ddbe369a25352c8b49f89de58d20dbb2b00c861c3e4202639c4c5be9.bin",
+      "receipt_path": ".cache/legacy-return-comparison-20261012/merger-listing-v1/receipts/d28423c3ddbe369a25352c8b49f89de58d20dbb2b00c861c3e4202639c4c5be9.json",
+      "source_role": "primary_response"
+    }
+  },
+  "source_sha256": {
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/outcome.json": "2fe425b09d79e7f126f4b516bc21063f0ec63d431701bf8ca47429ad128f3781",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/plan.json": "34a1e7e45ed990661aaac1e57c2719d60ee98fdf64b2266ef0e9aa58bc10bc92",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/raw/53337fdb19ad041dd0fda9ae01c54c391f46e62331af8ee79f0fd3fd759eb6e0.bin": "81a2de0141d3ffcb771500e9cef9a02d809fedf9c04e08e02f6f8c50632efa60",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/receipts/53337fdb19ad041dd0fda9ae01c54c391f46e62331af8ee79f0fd3fd759eb6e0.json": "5395813da0304fc8ef71fd133b9112b7a66ce0f2627509c7a1c2a44b8cda34f7",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/raw/39432e6cccb0288a4d586f625250513ce25f491b7dcf3bd9e5cdf61c0d751bbe.bin": "08278cf99f24008a7a214a402a5533f2bd35a0ccee3e8a169decf5907275d97a",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/receipts/39432e6cccb0288a4d586f625250513ce25f491b7dcf3bd9e5cdf61c0d751bbe.json": "d9d1824e83d74ba252d2dc31e206d6f00ccc64eae818fb60c589b099e1327c1f",
+    ".cache/legacy-return-comparison-20261012/merger-listing-v1/outcome.json": "d045bb6a3e9835048a2529a42f4e141991b63d20f159ee265bdbf0757089c49f",
+    ".cache/legacy-return-comparison-20261012/merger-listing-v1/plan.json": "15c3fd2ca3dbaad4247308b1d59b62580fe916a192dc31f32bb2064913808da9",
+    ".cache/legacy-return-comparison-20261012/merger-listing-v1/raw/d28423c3ddbe369a25352c8b49f89de58d20dbb2b00c861c3e4202639c4c5be9.bin": "ce4ee395cc72933681eaf8e46854cb49ad0ba98711bdc45d3e6d8a4ab733a439",
+    ".cache/legacy-return-comparison-20261012/merger-listing-v1/receipts/d28423c3ddbe369a25352c8b49f89de58d20dbb2b00c861c3e4202639c4c5be9.json": "2a864979456bc68ad5408a607c9b6b30263811dff17da4844c38014195e3efdc",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/qa.pdf": "81a2de0141d3ffcb771500e9cef9a02d809fedf9c04e08e02f6f8c50632efa60",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/qa.txt": "c9c824d74d35900a2fa1246cc44eabfb925eefccd72d4cb24d0c80100bc442d1",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/qa.png": "773c71afd4c34394560888de8672d5c89f3a5cc3a4643df7c02f1b51f0aa24f5",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/notice.pdf": "08278cf99f24008a7a214a402a5533f2bd35a0ccee3e8a169decf5907275d97a",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/notice.txt": "b909784873b0f6942e912bd4eca94a921b86a2eba248b0bc1aed196d341e715c",
+    ".cache/legacy-return-comparison-20261012/merger-pdfs-v1/notice.png": "4c3c1c7616f24b4026ad7931068d7850d139a7bde9642fc0c3ff6054afd79a8e"
+  }
+}
