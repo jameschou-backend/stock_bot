@@ -43,9 +43,10 @@ def trial_accounting(sources, reports):
         expected = digest(trial_path)
         bound = sources.bind(str(trial_path.relative_to(ROOT)), expected)
         rows = [json.loads(line) for line in bound.read_text().splitlines() if line]
-        if (len(rows) != 4 or {r['params']['arm'] for r in rows} != set(ARMS)
+        expected_arms = set(report.get('arms', ARMS))
+        if (len(rows) != len(expected_arms) or {r['params']['arm'] for r in rows} != expected_arms
                 or any(r.get('top3_mode') != report['mode'] for r in rows)):
-            raise ValueError('Each fixed cost mode must preserve all four trial records')
+            raise ValueError('Each report must preserve all four trial records or its explicit repair arms')
         attempted.extend(rows)
         refs.append(dict(path=str(trial_path.relative_to(ROOT)), sha256=expected))
     failures = []
@@ -59,25 +60,38 @@ def trial_accounting(sources, reports):
         refs.append(dict(path=str(path.relative_to(ROOT)), sha256=expected))
     return dict(published_attempts=len(attempted), development_incomplete_attempts=len(failures),
         total_recorded_attempts=len(attempted)+len(failures),
+        incomplete_attempts=sum(r['completed'] is False for r in attempted)+len(failures),
         development_attempts=failures, sources=refs,
-        note='含核帳失敗與中止試次；不是19個獨立策略，亦未重設既有全域試驗紀錄。')
+        note='含核帳失敗、修復重播與中止試次；不是獨立策略數，亦未重設既有全域試驗紀錄。')
 
 
-def summarize(paths, output):
+def select_attempt(cases, key, row, replacement):
+    if replacement:
+        if key not in cases or cases[key]['completed'] or not row['completed']:
+            raise ValueError('Repair may only replace an explicitly failed case with a completed replay')
+        row['superseded_attempt'] = cases[key]
+    elif key in cases:
+        raise ValueError('Unexpected duplicate arm/stress; select attempts explicitly')
+    cases[key] = row
+
+
+def summarize(paths, output, replacements=()):
     sources = Sources(ROOT)
     names = {r['id']: r['name'] for r in registry()} | {'benchmark':'0050 含息基準'}
     cases, accounts, report_refs = {}, {}, []
-    for path in map(lambda p: Path(p).resolve(), paths):
+    for supplied, replacement in [(p,False) for p in paths]+[(p,True) for p in replacements]:
+        path = Path(supplied).resolve()
         expected = path.with_suffix('.sha256').read_text().strip()
         report = json.loads(sources.bind(str(path.relative_to(ROOT)), expected).read_text())
         sources.closure(report, str(path.relative_to(ROOT)))
         mode = report['top3_validation']['mode']
         if mode not in MODES or (report['start'], report['end'], report['initial_cash']) != ('2024-01-02','2026-10-02',1_000_000):
             raise ValueError('Study scope differs')
-        report_refs.append(dict(path=str(path.relative_to(ROOT)), sha256=expected, mode=mode))
+        report_refs.append(dict(path=str(path.relative_to(ROOT)), sha256=expected, mode=mode,
+            arms=sorted(report['cases']), replacement=replacement))
         for arm, descriptor in report['cases'].items():
-            if arm not in ARMS or f'{arm}:{mode}' in cases:
-                raise ValueError('Unexpected or duplicate arm/stress; select attempts explicitly')
+            if arm not in ARMS:
+                raise ValueError('Unexpected arm')
             case = json.loads(sources.bind(descriptor['path'], descriptor['sha256']).read_text())
             if case.get('top3_validation') != report['top3_validation']:
                 raise ValueError('Case cost/price configuration differs')
@@ -94,7 +108,7 @@ def summarize(paths, output):
                     raise ValueError('Truncated replay cannot be published as complete')
                 row.update(metrics=metrics, **{k:metrics[k] for k in ('total_return','max_drawdown')})
                 accounts[f'{arm}:{mode}'] = case['account']['daily']
-            cases[f'{arm}:{mode}'] = row
+            select_attempt(cases, f'{arm}:{mode}', row, replacement)
     if set(cases) != {f'{arm}:{mode}' for arm in ARMS for mode in MODES}:
         raise ValueError('Every fixed strategy and stress needs an attempted result')
     gates, diagnostics = {}, {}
@@ -186,7 +200,9 @@ def summarize(paths, output):
 if __name__ == '__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--report', action='append', type=Path, required=True)
+    parser.add_argument('--replacement-report', action='append', type=Path, default=[],
+        help='Explicit completed repair of a failed case only; old attempt is retained')
     parser.add_argument('--output', type=Path, required=True)
     args=parser.parse_args()
-    result=summarize(args.report,args.output)
+    result=summarize(args.report,args.output,args.replacement_report)
     print(json.dumps({key:result[key] for key in ('completed_cases','checked_source_count','qualification')}))

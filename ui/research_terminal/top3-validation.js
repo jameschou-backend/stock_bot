@@ -17,7 +17,7 @@ window.renderTop3Validation = function(item, host, helpers) {
     const box=el('div',undefined,'research-stat');box.append(el('span',label),el('strong',value));stats.append(box);
   }
   host.append(stats,el('p',report.out_of_sample.explanation,'result-note'));
-  if (report.trial_accounting) host.append(el('p',`本輪保留 ${report.trial_accounting.total_recorded_attempts} 次帳戶嘗試，其中 ${report.trial_accounting.development_incomplete_attempts} 次開發失敗／中止；未從紀錄刪除。`,'caption'));
+  if (report.trial_accounting) host.append(el('p',`本輪保留 ${report.trial_accounting.total_recorded_attempts} 次帳戶嘗試，其中 ${report.trial_accounting.incomplete_attempts} 次失敗／中止；未從紀錄刪除。`,'caption'));
   for (const row of Object.values(report.diagnostics||{})) {
     host.append(el('p',`${row.name}：${row.positive_stresses} / 4 組淨報酬為正，${row.benchmark_wins} / 4 組勝過0050；最差回撤 ${pct(row.worst_drawdown)}。`,'caption'));
   }

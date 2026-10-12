@@ -110,3 +110,15 @@ def test_trial_accounting_keeps_failed_attempts_and_rejects_missing_arm(tmp_path
     path.write_text('\n'.join(path.read_text().splitlines()[:-1]))
     with pytest.raises(ValueError, match='all four trial records'):
         summary.trial_accounting(summary.Sources(tmp_path),reports)
+
+
+def test_repair_selection_cannot_replace_a_success_with_a_more_profitable_attempt():
+    from scripts.summarize_top3_validation import select_attempt
+    cases={'benchmark:baseline':dict(completed=False,reason='audit failure',sha256='old')}
+    repaired=dict(completed=True,total_return=.2,sha256='new')
+    select_attempt(cases,'benchmark:baseline',repaired,True)
+    assert cases['benchmark:baseline']['superseded_attempt']['sha256']=='old'
+    with pytest.raises(ValueError,match='explicitly failed'):
+        select_attempt(cases,'benchmark:baseline',dict(completed=True,total_return=9),True)
+    with pytest.raises(ValueError,match='explicitly failed'):
+        select_attempt(cases,'benchmark:fee2',dict(completed=True,total_return=9),True)
