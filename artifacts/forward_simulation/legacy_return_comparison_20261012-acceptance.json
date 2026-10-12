@@ -1,0 +1,358 @@
+{
+  "schema": "legacy_return_comparison_acceptance_v1",
+  "created_at": "2026-10-12T08:58:27.650087+00:00",
+  "code_revision": "89b7cead982352ec61eba5ef315c6793ccdafce2",
+  "publication_sha256": "a9be68818d890ca1d101e0d4c9c08cf46d956534f96dc568367bbc8319beae4c",
+  "tests": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "exit_code": 0,
+    "passed": 7305,
+    "warnings": 37,
+    "seconds": 247.47,
+    "log": ".cache/legacy-make-test-final.log",
+    "sha256": "587079b66acff307fe9d677588a3049a997104333c5cec6768d9f83144f799dd"
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "log": ".cache/legacy-pipeline-v6.log",
+    "sha256": "a3d6d685f95bd454a5fc3c5f3d04b23a45f8e69be44aab29ffc0fc4c80c9d86a",
+    "idempotent_reruns_completed": true
+  },
+  "api": [
+    {
+      "endpoint": "/health",
+      "exit_code": 0,
+      "valid_json": true
+    },
+    {
+      "endpoint": "/picks",
+      "exit_code": 0,
+      "valid_json": true
+    },
+    {
+      "endpoint": "/models",
+      "exit_code": 0,
+      "valid_json": true
+    },
+    {
+      "endpoint": "/jobs?limit=10",
+      "exit_code": 0,
+      "valid_json": true
+    }
+  ],
+  "all_12_archive_details_verified": true,
+  "details": [
+    {
+      "case": "benchmark:baseline",
+      "days": 666,
+      "trades": 23,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "liquid_universe:baseline",
+      "days": 666,
+      "trades": 309,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "poc_priority:baseline",
+      "days": 666,
+      "trades": 434,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "benchmark:fee2",
+      "days": 666,
+      "trades": 25,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 2.842170943040401e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "liquid_universe:fee2",
+      "days": 666,
+      "trades": 306,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "poc_priority:fee2",
+      "days": 666,
+      "trades": 443,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "benchmark:slip2",
+      "days": 666,
+      "trades": 23,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "liquid_universe:slip2",
+      "days": 666,
+      "trades": 305,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "poc_priority:slip2",
+      "days": 666,
+      "trades": 432,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "benchmark:combined",
+      "days": 666,
+      "trades": 22,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "liquid_universe:combined",
+      "days": 666,
+      "trades": 293,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    },
+    {
+      "case": "poc_priority:combined",
+      "days": 666,
+      "trades": 431,
+      "buy_hl2": true,
+      "sell30": true,
+      "maximum_price_error": 1.4210854715202004e-14,
+      "lagged_buys": true,
+      "next_session_buy_verified": true
+    }
+  ],
+  "daily_refresh_receipt": {
+    "path": ".cache/legacy-return-comparison-20261012/current-price-20261012.receipt.json",
+    "sha256": "ce384ae658a6c16f5462c07c14fece35afa4b6de5acf37bc55740a17a08b0dbb"
+  },
+  "retained_preflight_stops": [
+    {
+      "path": ".cache/legacy-pipeline-v4.log",
+      "sha256": "fa9789bdb27eb162b96f91d6521fbb26a2a157dc950126136a8c32f4abb66337"
+    },
+    {
+      "path": ".cache/legacy-pipeline-v5.log",
+      "sha256": "82035e423746a04582c217e09fd1e2228936a85dca2f7fd6663df51fffc04b3e"
+    }
+  ],
+  "unpublished_completed_attempt_parity": [
+    {
+      "case": "liquid_universe:fee2",
+      "path": ".cache/legacy-return-comparison-20261012/fee2-v3/liquid_universe.json",
+      "sha256": "166fd0a2dc7a1f83a565c235087ca274d582da0fbefbd1961a335fc5971cae2e",
+      "selected_sha256": "166fd0a2dc7a1f83a565c235087ca274d582da0fbefbd1961a335fc5971cae2e",
+      "entire_account_identical": true,
+      "reason": "Parent batch aborted during benchmark; repeated stock account must remain identical"
+    },
+    {
+      "case": "poc_priority:fee2",
+      "path": ".cache/legacy-return-comparison-20261012/fee2-v3/poc_priority.json",
+      "sha256": "644dd4e38c18f39c2b7065d11ab85a6fc32a0c962372761d9cda5003381790e3",
+      "selected_sha256": "644dd4e38c18f39c2b7065d11ab85a6fc32a0c962372761d9cda5003381790e3",
+      "entire_account_identical": true,
+      "reason": "Parent batch aborted during benchmark; repeated stock account must remain identical"
+    }
+  ],
+  "baseline_repair_pre_exchange_financial_parity": {
+    "old_path": ".cache/legacy-return-comparison-20261012/baseline-v2/liquid_universe.json",
+    "old_sha256": "682c2a742cbca114472f13a32a1240d0aa766ae2d518b1c2dac0f90cac5d247b",
+    "new_sha256": "41926f121a34caedb972bffb48530fb4dee1df2679bf54617b4710521444c097",
+    "through": "2026-08-31",
+    "journals": {
+      "daily": true,
+      "trades": true,
+      "orders": true,
+      "cash_ledger": true,
+      "holdings": true,
+      "corporate_actions": true
+    }
+  },
+  "benchmark_parity": {
+    "baseline": {
+      "all_exact": true,
+      "journals": {
+        "daily": true,
+        "trades": true,
+        "orders": true,
+        "cash_ledger": true,
+        "holdings": true,
+        "cohorts": true,
+        "corporate_actions": true,
+        "receivables": true
+      },
+      "previous_case": {
+        "path": ".cache/top3-validation-20261012/baseline-benchmark-v4/benchmark.json",
+        "sha256": "3b7fe2193749c92d8dc25153e1fd34b6fd38055259a4c74dba2f8c7261f823f0"
+      }
+    },
+    "fee2": {
+      "all_exact": true,
+      "journals": {
+        "daily": true,
+        "trades": true,
+        "orders": true,
+        "cash_ledger": true,
+        "holdings": true,
+        "cohorts": true,
+        "corporate_actions": true,
+        "receivables": true
+      },
+      "previous_case": {
+        "path": ".cache/top3-validation-20261012/fee2-v3/benchmark.json",
+        "sha256": "30f7f7601b9d9acd22ebf2d0a8221ff3cc85afe675e8b37b2d1ef64c9c686345"
+      }
+    },
+    "slip2": {
+      "all_exact": true,
+      "journals": {
+        "daily": true,
+        "trades": true,
+        "orders": true,
+        "cash_ledger": true,
+        "holdings": true,
+        "cohorts": true,
+        "corporate_actions": true,
+        "receivables": true
+      },
+      "previous_case": {
+        "path": ".cache/top3-validation-20261012/slip2-v3/benchmark.json",
+        "sha256": "2951b6c9a510aedee1d05f72a0fb75ef3a668710cb851bc1a3bace0f897c4fac"
+      }
+    },
+    "combined": {
+      "all_exact": true,
+      "journals": {
+        "daily": true,
+        "trades": true,
+        "orders": true,
+        "cash_ledger": true,
+        "holdings": true,
+        "cohorts": true,
+        "corporate_actions": true,
+        "receivables": true
+      },
+      "previous_case": {
+        "path": ".cache/top3-validation-20261012/combined-v3/benchmark.json",
+        "sha256": "0c6ea788ca06ad6b25364b4e23e0fcf0b50f8e9a6e43e173bd08d7c985c71e0b"
+      }
+    }
+  },
+  "browser": {
+    "checks": {
+      "passed": true,
+      "modes": [
+        {
+          "mode": "baseline",
+          "returns_verified": [
+            "-53.97%",
+            "264.97%",
+            "254.25%"
+          ]
+        },
+        {
+          "mode": "fee2",
+          "returns_verified": [
+            "-56.36%",
+            "211.16%",
+            "253.71%"
+          ]
+        },
+        {
+          "mode": "slip2",
+          "returns_verified": [
+            "-46.35%",
+            "172.90%",
+            "252.57%"
+          ]
+        },
+        {
+          "mode": "combined",
+          "returns_verified": [
+            "-76.69%",
+            "123.12%",
+            "252.05%"
+          ]
+        }
+      ],
+      "details": [
+        {
+          "case": "poc_priority_combined",
+          "heading": "POC優先＋紅K（原576%）・combined",
+          "chart": true,
+          "rows": 40
+        },
+        {
+          "button": "擴大流動股池（原949%） 原成本 比較明細",
+          "heading": "擴大流動股池（原949%）・baseline",
+          "chart": true,
+          "rows": 40
+        },
+        {
+          "button": "0050含息基準 原成本 比較明細",
+          "heading": "0050含息基準・baseline",
+          "chart": true,
+          "rows": 23
+        },
+        {
+          "button": "POC硬篩選 原成本 比較明細",
+          "heading": "POC 上移＋紅 K（獨立硬篩研究版）・baseline",
+          "chart": true,
+          "rows": 40
+        }
+      ],
+      "differences_expanded": true,
+      "console_errors": [],
+      "url": "http://127.0.0.1:8000/terminal/?strategy=entry_contraction_narrow&date=2026-10-08#backtest",
+      "screenshot": ".cache/legacy-return-comparison-20261012/dashboard-final.png"
+    },
+    "path": ".cache/legacy-return-comparison-20261012/browser-checks.json",
+    "sha256": "b389b44573fe4a051361cd15b0349c00b265c1d85b29cabcdca9b901f9623fa5"
+  },
+  "paper_enabled": false,
+  "live_qualified": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false
+}
