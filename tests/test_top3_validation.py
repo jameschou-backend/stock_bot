@@ -88,3 +88,25 @@ def test_private_audit_and_engine_cost_adapters_leave_shared_modules_untouched()
         poc_range_audit._fractions(.5,.3)
     with pytest.raises(ValueError):
         poc_range_execution.validate_fractions(.5,.3)
+
+
+def test_trial_accounting_keeps_failed_attempts_and_rejects_missing_arm(tmp_path, monkeypatch):
+    import json
+    from scripts import summarize_top3_validation as summary
+    monkeypatch.setattr(summary, 'ROOT', tmp_path)
+    base = tmp_path/'.cache/top3-validation-20261012'
+    (base/'combined-v2').mkdir(parents=True)
+    (base/'development-trials.jsonl').write_text('\n'.join(json.dumps({'completed':False}) for _ in range(2)))
+    (base/'combined-v2/trials.jsonl').write_text(json.dumps({'completed':False}))
+    reports = []
+    for mode in MODES:
+        folder=tmp_path/mode; folder.mkdir()
+        records=[dict(params=dict(arm=arm),top3_mode=mode,completed=True) for arm in summary.ARMS]
+        (folder/'trials.jsonl').write_text('\n'.join(json.dumps(row) for row in records))
+        reports.append(dict(path=f'{mode}/report.json',mode=mode))
+    result=summary.trial_accounting(summary.Sources(tmp_path),reports)
+    assert (result['published_attempts'],result['development_incomplete_attempts'],result['total_recorded_attempts']) == (16,3,19)
+    path=tmp_path/'combined/trials.jsonl'
+    path.write_text('\n'.join(path.read_text().splitlines()[:-1]))
+    with pytest.raises(ValueError, match='all four trial records'):
+        summary.trial_accounting(summary.Sources(tmp_path),reports)

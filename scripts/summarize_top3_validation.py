@@ -35,6 +35,34 @@ def prior_publication(sources, name, expected=None):
     return data, dict(path=str(path.relative_to(ROOT)), sha256=expected)
 
 
+def trial_accounting(sources, reports):
+    refs, attempted = [], []
+    for report in reports:
+        path = ROOT/report['path']
+        trial_path = path.parent/'trials.jsonl'
+        expected = digest(trial_path)
+        bound = sources.bind(str(trial_path.relative_to(ROOT)), expected)
+        rows = [json.loads(line) for line in bound.read_text().splitlines() if line]
+        if (len(rows) != 4 or {r['params']['arm'] for r in rows} != set(ARMS)
+                or any(r.get('top3_mode') != report['mode'] for r in rows)):
+            raise ValueError('Each fixed cost mode must preserve all four trial records')
+        attempted.extend(rows)
+        refs.append(dict(path=str(trial_path.relative_to(ROOT)), sha256=expected))
+    failures = []
+    for name in ('development-trials.jsonl', 'combined-v2/trials.jsonl'):
+        path = ROOT/'.cache/top3-validation-20261012'/name
+        expected = digest(path)
+        rows = [json.loads(line) for line in sources.bind(str(path.relative_to(ROOT)), expected).read_text().splitlines() if line]
+        if any(row.get('completed') is not False for row in rows):
+            raise ValueError('Development attempt classification differs')
+        failures.extend(rows)
+        refs.append(dict(path=str(path.relative_to(ROOT)), sha256=expected))
+    return dict(published_attempts=len(attempted), development_incomplete_attempts=len(failures),
+        total_recorded_attempts=len(attempted)+len(failures),
+        development_attempts=failures, sources=refs,
+        note='含核帳失敗與中止試次；不是19個獨立策略，亦未重設既有全域試驗紀錄。')
+
+
 def summarize(paths, output):
     sources = Sources(ROOT)
     names = {r['id']: r['name'] for r in registry()} | {'benchmark':'0050 含息基準'}
@@ -123,6 +151,7 @@ def summarize(paths, output):
     status_path = ROOT/'.cache/top3-validation-20261012/data-status-start.json'
     status_hash = digest(status_path)
     status = json.loads(sources.bind(str(status_path.relative_to(ROOT)), status_hash).read_text())
+    trials = trial_accounting(sources, report_refs)
     result = dict(schema='top3_validation_publication_v1', start='2024-01-02', end='2026-10-02',
         initial_cash=1_000_000, position_count=3, created_at=datetime.now(timezone.utc).isoformat(),
         cases=cases, qualification=gates, diagnostics=diagnostics,
@@ -140,6 +169,7 @@ def summarize(paths, output):
             status='blocked_pending_unseen_and_causal_execution', simulated_fills_written=0,
             explanation='未通過者不接紙上成交；HL2 只能事後計算。原 A 線訊號價 NAV 與本研究分開。'),
         poc_reconciliation=reconciliation,
+        trial_accounting=trials,
         poc_note='目前找到的接近900%封存結果為擴大流動股池 +949.76%；未找到同期間、同定義 POC 硬篩選的900%結果。各版本同時改動規則／期間／成交模型，不能把差額全部歸因於買價。',
         historical_selection=dict(publication=old_ref['path'], sha256=old_ref['sha256'],
             old_returns={arm:old['cases'][arm]['metrics']['total_return'] for arm in ARMS}),
