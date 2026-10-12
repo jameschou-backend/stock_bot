@@ -6,7 +6,8 @@ from scripts.serve_research_terminal_share import allowed, Share
 
 
 def test_share_allows_only_public_research_and_saved_comparison_reads():
-    for path in ('/terminal/account-comparison.js','/research-terminal/api/archive',
+    for path in ('/terminal/account-comparison.js','/terminal/top3-validation.js','/research-terminal/api/archive',
+                 '/research-terminal/api/archive/top3_validation_20261012/cases/obv20_breakout_combined',
                  '/research-terminal/api/archive/all_entry_accounts_20261011/cases/momentum',
                  '/research-terminal/api/stocks/2330'):
         assert allowed(path)

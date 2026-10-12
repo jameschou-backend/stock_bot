@@ -60,9 +60,13 @@ async function loadStudies(){
  else replace('studies-list',el('p','歷史研究讀取失敗：'+results[0].reason.message,'caption'));
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
+  window.renderTop3Validation(state.archive.items?.find(x=>x.id==='top3_validation_20261012'),$('top3-validation'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderAccountComparison(state.archive.items?.find(x=>x.id==='all_entry_accounts_20261011'),$('account-comparison'),{el,tag,number,pct,api,renderAccountDetail});
   replace('backtest-archive');renderArchive($('backtest-archive'));
- }else replace('account-comparison',el('h2','31 組帳戶比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
+ }else {
+  replace('top3-validation',el('h2','前三名驗證'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
+  replace('account-comparison',el('h2','31 組帳戶比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
+ }
 }
 function renderStudies(){const raw=state.studies,rows=Array.isArray(raw)?raw:raw?.summary||raw?.rows||raw?.studies||[];const subset=rows.filter(x=>String(x.year)==='all'&&x.horizon===20).sort((a,b)=>(a.name||a.strategy_id).localeCompare(b.name||b.strategy_id,'zh-TW'));const items=subset.map(s=>{const r=el('div',undefined,'study-row'),left=el('div'),metric=el('div',pct(s.mean_excess_vs0050),'study-metric');left.append(el('strong',s.name||s.strategy_id),el('p',`${number(s.evaluated)} 筆可評估 · 持有 ${s.horizon} 日 · 勝率 ${pct(s.win_rate,1)}`));metric.append(el('small','平均超額報酬 · 非累積'));r.append(left,metric);return r;});replace('studies-list',...(items.length?items:[el('p','尚無可呈現的已保存比較。','caption')]));}
 async function runBacktest(event){event.preventDefault();const button=$('backtest-submit');button.disabled=true;$('backtest-status').hidden=false;$('backtest-status').className='alert';$('backtest-status').textContent='正在依選定期間重新彙總訊號與同期基準…';try{const payload={strategy_id:$('backtest-strategy').value,start:$('backtest-start').value,end:$('backtest-end').value,horizon:Number($('backtest-holding').value),mode:'signal_study'};let job=await api('/backtests',{method:'POST',body:JSON.stringify(payload)});for(let i=0;job.status!=='completed'&&i<120;i++){if(['failed','error'].includes(job.status))throw Error(job.error||'回測未完成');await new Promise(r=>setTimeout(r,1500));job=await api('/backtests/'+encodeURIComponent(job.job_id));}if(job.status!=='completed')throw Error('回測仍在執行，稍後可再次查詢同一份實驗。');renderBacktest(job.result||job,job.job_id);$('backtest-status').textContent='研究完成。以下為每筆訊號的結果分布，不是帳戶累積報酬。';}catch(error){$('backtest-status').className='alert error';$('backtest-status').textContent=error.message;}finally{button.disabled=false;}}
