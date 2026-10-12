@@ -1,0 +1,254 @@
+{
+  "schema": "top3_validation_acceptance_v1",
+  "created_at": "2026-10-12T01:59:08.821677+00:00",
+  "code_revision": "57540a3edb512fb9918ef12cf18c30ced0c96824",
+  "publication_sha256": "e735be1c46658f904ae229c48bb98b9e3e74224ebf40d26f8684ce7256caa781",
+  "tests": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "exit_code": 0,
+    "passed": 7262,
+    "warnings": 37,
+    "seconds": 458.2,
+    "log": ".cache/top3-make-test-v5.log",
+    "sha256": "ccbefe7291a091b0c2b0dbc5cc00c8d2d374f832b350de8651256aeab51525df"
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "log": ".cache/top3-pipeline-v5.log",
+    "sha256": "cecc586198476ef1c163d0cff7dd2f320a17a32a0a254b7aa603c0a6823d2269",
+    "idempotent_reruns_completed": true
+  },
+  "api": [
+    {
+      "endpoint": "/health",
+      "exit_code": 0,
+      "valid_json": true
+    },
+    {
+      "endpoint": "/picks",
+      "exit_code": 0,
+      "valid_json": true
+    },
+    {
+      "endpoint": "/models",
+      "exit_code": 0,
+      "valid_json": true
+    },
+    {
+      "endpoint": "/jobs?limit=10",
+      "exit_code": 0,
+      "valid_json": true
+    }
+  ],
+  "all_16_archive_details_verified": true,
+  "case_details": [
+    {
+      "case": "benchmark:combined",
+      "days": 666,
+      "trades": 22,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "entry_peer_narrow:combined",
+      "days": 666,
+      "trades": 207,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "obv20_breakout:combined",
+      "days": 666,
+      "trades": 261,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "poc_up_red:combined",
+      "days": 666,
+      "trades": 283,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "benchmark:baseline",
+      "days": 666,
+      "trades": 23,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "entry_peer_narrow:baseline",
+      "days": 666,
+      "trades": 205,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "obv20_breakout:baseline",
+      "days": 666,
+      "trades": 266,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "poc_up_red:baseline",
+      "days": 666,
+      "trades": 285,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "benchmark:fee2",
+      "days": 666,
+      "trades": 25,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 2.842170943040401e-14
+    },
+    {
+      "case": "entry_peer_narrow:fee2",
+      "days": 666,
+      "trades": 208,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "obv20_breakout:fee2",
+      "days": 666,
+      "trades": 270,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "poc_up_red:fee2",
+      "days": 666,
+      "trades": 283,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "benchmark:slip2",
+      "days": 666,
+      "trades": 23,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "entry_peer_narrow:slip2",
+      "days": 666,
+      "trades": 206,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "obv20_breakout:slip2",
+      "days": 666,
+      "trades": 262,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    },
+    {
+      "case": "poc_up_red:slip2",
+      "days": 666,
+      "trades": 282,
+      "buy_prices_hl2": true,
+      "sell_prices_low_plus_30pct_range": true,
+      "buy_signals_lagged": true,
+      "maximum_price_formula_error": 1.4210854715202004e-14
+    }
+  ],
+  "benchmark_repair_financial_parity": [
+    {
+      "case": "benchmark:baseline",
+      "old_sha256": "d153cc6cb0d1bff759a2cdaff3e1bd47dba47683bf221fa9c3da04fa2339d810",
+      "new_sha256": "3b7fe2193749c92d8dc25153e1fd34b6fd38055259a4c74dba2f8c7261f823f0",
+      "financial_journals_identical": {
+        "daily": true,
+        "trades": true,
+        "orders": true,
+        "cash_ledger": true,
+        "holdings": true,
+        "cohorts": true,
+        "corporate_actions": true,
+        "receivables": true
+      }
+    }
+  ],
+  "browser": {
+    "checks": {
+      "passed": true,
+      "observed_at": "2026-10-12T01:59:05.136980+00:00",
+      "url": "http://127.0.0.1:8000/terminal/?strategy=entry_contraction_narrow&date=2026-10-08#backtest",
+      "modes_verified": [
+        "baseline",
+        "fee2",
+        "slip2",
+        "combined"
+      ],
+      "displayed_poc_returns": [
+        269.75,
+        251.5,
+        228.56,
+        136.69
+      ],
+      "unseen_sessions": 0,
+      "historical_passes": 0,
+      "paper_enabled": 0,
+      "poc_detail_trades": 285,
+      "midpoint_price_33_275_visible": true,
+      "price_version_reconciliation_expanded": true,
+      "equity_canvas_visible": true,
+      "console_errors": [],
+      "observed_panel_width": 445,
+      "temporary_viewport_override_used": false,
+      "final_selected_mode": "baseline",
+      "screenshots": [
+        {
+          "path": ".cache/top3-validation-20261012/dashboard-overview.jpg",
+          "sha256": "ea1c123ddf68b8d0bdf0eb36b7f69803471fbd57b8b71cfe93eaf87892ec07e9"
+        },
+        {
+          "path": ".cache/top3-validation-20261012/poc-detail.jpg",
+          "sha256": "fb27f010a51fc391ee101430648091af5458a8038c127da386b2ae82588dc6b9"
+        }
+      ]
+    },
+    "path": ".cache/top3-validation-20261012/browser-checks.json",
+    "sha256": "8e8863bc92783a7b0cf21fdd15b4029da24ec1031e6c1adeb0a8559b883d87bb"
+  },
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "live_qualified": false,
+  "paper_enabled_strategies": []
+}
