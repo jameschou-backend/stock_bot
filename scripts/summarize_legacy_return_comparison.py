@@ -196,9 +196,28 @@ def summarize(paths,output,replacements=()):
     candidate_path=BASE/'candidates-v1/candidates.json'
     candidate=json.loads(sources.bind(str(candidate_path.relative_to(ROOT)),digest(candidate_path)).read_text())
     failed_setups=[]
+    unpublished=[]
+    covered={Path(r['path']).parent for r in reports}
     for p in sorted(BASE.glob('*/failure.json')):
         record=json.loads(sources.bind(str(p.relative_to(ROOT)),digest(p)).read_text())
         failed_setups.append(dict(path=str(p.relative_to(ROOT)),sha256=digest(p),failure=record))
+        if p.parent.relative_to(ROOT) in covered:continue
+        trial_path=p.parent/'trials.jsonl'
+        records=[json.loads(line) for line in sources.bind(str(trial_path.relative_to(ROOT)),digest(trial_path)).read_text().splitlines() if line]
+        for trial in records:
+            if 'params' not in trial:continue  # The terminal exception is already counted above.
+            mode,arm=trial['legacy_mode'],trial['params']['arm'];key=f'{arm}:{mode}'
+            original=Path(trial['result_path']);original=original if original.is_absolute() else ROOT/original
+            old=json.loads(sources.bind(str(original.relative_to(ROOT)),digest(original)).read_text())
+            selected=cases[key]
+            if not old.get('completed') or not selected['completed']:
+                raise ValueError('Unpublished financial attempt needs an explicit recovery policy')
+            if old['account']!=accounts[key] or old['summary']!=selected['summary']:
+                raise ValueError('Completed orphan account cannot be replaced by a different financial result')
+            trials.append(trial)
+            unpublished.append(dict(case=key,path=str(original.relative_to(ROOT)),sha256=digest(original),
+                selected_sha256=selected['sha256'],entire_account_identical=True,
+                reason='Parent batch aborted during benchmark; repeated stock account must remain identical'))
     result=dict(schema='legacy_return_comparison_v1',created_at=datetime.now(timezone.utc).isoformat(),
         start='2024-01-02',end='2026-10-02',initial_cash=1_000_000,position_count=3,
         buy_fraction=.5,sell_fraction=.3,modes={k:dict(commission=v[0],slippage=v[1]) for k,v in MODES.items()},
@@ -215,6 +234,7 @@ def summarize(paths,output,replacements=()):
             total_return=poc['arms']['poc_red']['metrics']['total_return'],publication=poc_ref)],
         trial_accounting=dict(total_recorded_attempts=len(trials)+len(failed_setups),
             incomplete_attempts=sum(r['completed'] is False for r in trials)+len(failed_setups),setup_failures=failed_setups),
+        unpublished_completed_attempt_parity=unpublished,
         differences=[
             '949%原期間2019/1/2～2026/9/9；本輪2024/1/2重置100萬開始，終點延長至10/2。不能切舊曲線冒充新帳戶。',
             '擴大股池是日均成交金額至少5000萬；POC原版還有20日成交金額中位數至少5000萬、紅K與POC優先排序。',

@@ -9,14 +9,16 @@ POC硬篩選一列來自上一輪相同口徑，清楚標為舊封存對照，�
 原949策略沒有紅K、中位數成交額或三黑K；原576策略保留這些條件與POC優先。
 原策略的訊號身分重疊，v2只為949的event_id加固定前綴並保留legacy_event_id，
 不改排序鍵中的相對順序、訊號日、股票或權重。v1的初始化失敗保留。v3補上原股池實際持有的2867→2884股份轉換，
-用原始公司PDF與交易所上市公告核對；v2的未完成帳戶仍保留。
+用原始公司PDF與交易所上市公告核對；v2的未完成帳戶仍保留。v4把換股處理限制於個股帳戶，
+保持0050原來的ETF引擎；v3佣金組的ETF失敗與已完成個股結果也保留。
+重跑時必須逐本核對已完成個股財務日誌相同，不得換成較好結果。
 
 候選已封存在 `.cache/legacy-return-comparison-20261012/candidates-v1`，
 不得覆寫；新資料版本需另行封存與核對。四個成本組各執行一次以下命令，
 將baseline換為fee2／slip2／combined，輸出目錄必須是全新路徑：
 
 ```bash
-python scripts/research_legacy_return_comparison_v3.py --mode baseline \
+python scripts/research_legacy_return_comparison_v4.py --mode baseline \
   --output .cache/legacy-return-comparison-20261012/new-baseline --fetch
 ```
 
