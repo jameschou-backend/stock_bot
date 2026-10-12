@@ -20,6 +20,7 @@ class E {
  set innerHTML(v){throw Error('Untrusted HTML injection');}
  setAttribute(k,v){this.attrs[k]=v;}
  addEventListener(k,f){this.listeners[k]=f;}
+ scrollIntoView(){this.scrolled=true;}
 }
 const context={window:{}};vm.runInNewContext(JSON.parse(require('node:fs').readFileSync(0,'utf8')),context);
 const el=(...args)=>new E(...args),host=el('section'),walk=e=>[e,...e.children.flatMap(walk)],requests=[];
