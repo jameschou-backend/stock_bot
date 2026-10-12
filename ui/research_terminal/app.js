@@ -60,10 +60,12 @@ async function loadStudies(){
  else replace('studies-list',el('p','歷史研究讀取失敗：'+results[0].reason.message,'caption'));
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
+  window.renderLegacyComparison(state.archive.items?.find(x=>x.id==='legacy_return_comparison_20261012'),$('legacy-comparison'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderTop3Validation(state.archive.items?.find(x=>x.id==='top3_validation_20261012'),$('top3-validation'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderAccountComparison(state.archive.items?.find(x=>x.id==='all_entry_accounts_20261011'),$('account-comparison'),{el,tag,number,pct,api,renderAccountDetail});
   replace('backtest-archive');renderArchive($('backtest-archive'));
  }else {
+  replace('legacy-comparison',el('h2','舊策略比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
   replace('top3-validation',el('h2','前三名驗證'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
   replace('account-comparison',el('h2','31 組帳戶比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
  }
