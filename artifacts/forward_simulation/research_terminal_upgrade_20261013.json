@@ -1,0 +1,189 @@
+{
+  "schema": "research_terminal_upgrade_acceptance_v1",
+  "created_at": "2026-10-13T00:56:57.318096+00:00",
+  "signal_date": "2026-10-12",
+  "daily_pipeline": {
+    "completed": true,
+    "idempotent_pick_payload": true,
+    "candidates": 10,
+    "price_date": "2026-10-12",
+    "feature_date": "2026-10-12",
+    "feature_stocks": 1860,
+    "official_db_crosscheck": {
+      "date": "2026-10-12",
+      "markets": {
+        "TWSE": {
+          "official_valid_ordinary_shares": 1084,
+          "db_rows": 1095,
+          "compared": 1084
+        },
+        "TPEX": {
+          "official_valid_ordinary_shares": 868,
+          "db_rows": 887,
+          "compared": 868
+        }
+      },
+      "conflicts": [],
+      "missing_valid_official_stocks": [],
+      "database_mutations": 0
+    }
+  },
+  "scanner": {
+    "stocks": 2076,
+    "entry_rules": 29,
+    "entry_context_conditions": 2,
+    "total_general_evaluators": 36,
+    "poc_up_red_matched": 12,
+    "poc_up_red_first": 10,
+    "entry_context_matched": [
+      0,
+      0
+    ],
+    "poc_tick_coordinates_acquired": 254,
+    "poc_quality_unknown": 8,
+    "unknown_reason_counts": {
+      "ordinary_tape_conflict": 7,
+      "corporate_action_or_nonconstant_price_scale": 1
+    },
+    "historical_scan_days_unchanged": 8,
+    "historical_poc_rows_unchanged": 4722
+  },
+  "interface": {
+    "analytics_cases": 28,
+    "verified_cohort_win_rate": true,
+    "payoff_ratio": true,
+    "profit_factor": true,
+    "profit_concentration": true,
+    "same_cost_0050_nav_overlay": true,
+    "drawdown_overlay": true,
+    "cost_matrix": true,
+    "separate_research_tabs": true,
+    "visible_qualification_criteria": true,
+    "desktop_width": 3440,
+    "mobile_width": 390,
+    "no_document_horizontal_overflow": true,
+    "console_errors": 0,
+    "verified_interactions": [
+      "strategy and cost selectors",
+      "historical study selector",
+      "three research tabs",
+      "curve date slider",
+      "paired same-cost account requests"
+    ]
+  },
+  "validation": {
+    "make_test_passed": 7314,
+    "make_pipeline_successful_runs": 2,
+    "api_health": "ok",
+    "api_picks": 10,
+    "api_models": 13,
+    "api_jobs": 10,
+    "focused_tests_passed": 63
+  },
+  "artifacts": {
+    "account_analytics_20261013": {
+      "path": "artifacts/forward_simulation/account_analytics_20261013.json",
+      "sha256": "0fc1a7557aaf550989d44f8fac3e8436623b9d628e34793d6a253433b227b6c2"
+    },
+    "strategy_scanner_20261013": {
+      "path": "artifacts/forward_simulation/strategy_scanner_20261013.json",
+      "sha256": "43e5cedbb062bfb2701b8605d39813a4e3e5547118fbb749de556efc14d8028a"
+    },
+    "entry_context_terminal_20261013": {
+      "path": "artifacts/forward_simulation/entry_context_terminal_20261013.json",
+      "sha256": "91f481063ddfced0a5a38d04439f0ab6109f40475c08ae44f434401ba3eea772"
+    },
+    "legacy_return_comparison_20261012": {
+      "path": "artifacts/forward_simulation/legacy_return_comparison_20261012.json",
+      "sha256": "a9be68818d890ca1d101e0d4c9c08cf46d956534f96dc568367bbc8319beae4c"
+    },
+    "top3_validation_20261012": {
+      "path": "artifacts/forward_simulation/top3_validation_20261012.json",
+      "sha256": "e735be1c46658f904ae229c48bb98b9e3e74224ebf40d26f8684ce7256caa781"
+    }
+  },
+  "evidence": [
+    {
+      "path": ".cache/dashboard-upgrade-20261013/make-test-final.log",
+      "sha256": "400d354807031993cb28f9353a4e23cf736bd8c216dd71b446bbec92dc74384f"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/pipeline.log",
+      "sha256": "ba068673f79625a4cd135b8f4415b25aea340e9c14f5ce74b0d0ab3c410f6647"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/pipeline-idempotency.log",
+      "sha256": "fbfc5137b430ac8ae5b5c06a5eca35549efd322c9cf54a1a901ec7bad36c485f"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/final-focused-tests.log",
+      "sha256": "466f68f53982263316e1825036bce136f94cdf516f8e4d67b90a2d110f475655"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/data-status-final.json",
+      "sha256": "04e364efd31fd851bb8b3f6aeb4dbcc4bbc2d18bcbd3d893f00f9c247e902321"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/mobile.png",
+      "sha256": "c7a370bf14c37aa9f9b7cd06a6fbaee0ead8694c49b4e11f6cb790d103c081e3"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/desktop.png",
+      "sha256": "c497d353315f63762f909d23e36b0d636ada16cc361d11444ad601fa151ce926"
+    },
+    {
+      "path": ".cache/scanner-20261013/db-official-crosscheck.json",
+      "sha256": "fb73ed96124234d1f69a6c9175995dea3ad6e726d8234293bad01189598a2709"
+    },
+    {
+      "path": ".cache/scanner-20261013/provider/daily-fetch-ledger.json",
+      "sha256": "6a7c99c4c7eaaa8522fb2a625682baa8d44a90d427de8606e638310f119bd8d8"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/health-final.json",
+      "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/picks-final.json",
+      "sha256": "e42bd218e9e7f7e0319fb980b259860f9696f383696198c94f26e32edee843cf"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/models-final.json",
+      "sha256": "e0278fd2d0fe50f23c5646867d845b0a3695d27be6334c54dbb99bc8518a8e6c"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/jobs-final.json",
+      "sha256": "49b3485ed860904194b6143911bd26c9a48a3a420d34b889952d2aab945db180"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/overview.json",
+      "sha256": "7d38cfb4f172f8d091260586681230a1acbdf24d5daa22c2b0f57e66051b0310"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/poc_up_red.json",
+      "sha256": "7c0a7c6931056c75409f2dc58a99b716a8e3fd0e18d83f5b45011535727cca3d"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/entry_contraction_narrow.json",
+      "sha256": "617f85fcdad909c4989495280331898c4f93d858e367f52b22e34593b0768ab8"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/entry_peer_narrow.json",
+      "sha256": "2cbeda55af36eedb3e44e02a73ee44c3e684f868ade96558749c475d76a44168"
+    },
+    {
+      "path": ".cache/dashboard-upgrade-20261013/http/archive.json",
+      "sha256": "cd0cd7fab5639ff1196a5962ca302969692cb7fc72284f7cc4ce3a402dc0b98a"
+    }
+  ],
+  "limitations": [
+    "This refresh appends daily signals through October 12, not a new account backtest period. Historical account studies remain January 2, 2024 through October 2, 2026.",
+    "A failed all-market interval fetch returned only its start date; retained but excluded. Exact day snapshots and 0050 observed sessions were used instead.",
+    "Current market identity and historical announcement timing remain provisional; POC unknown quality is not treated as a negative signal.",
+    "HL2 is a retrospective execution proxy. No unseen account track record or actual-fill qualification was added."
+  ],
+  "live_qualified": false,
+  "paper_strategies_enabled": 0,
+  "orders_submitted": false,
+  "scheduler_changed": false
+}
