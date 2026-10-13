@@ -1,0 +1,18 @@
+{
+  "schema": "poc_followup_data_completion_v1",
+  "authorization_basis": "user_requested_execution_exit_poc_correlation_and_all_missing_data",
+  "reason": "Strength ordering examines more reservable candidates than the original three selected positions. The old profile allowance has 7729 of 8000 requests used; all dispatched requests have receipts. Three unfinished strength attempts were interrupted before exhaustion, without selecting a financial result.",
+  "scope": "Only additional TaiwanStockPriceTick requests demanded by the fixed follow-up cases, for four-digit stocks and dates 2023-11-01 through 2026-10-02.",
+  "additional_profile_requests_maximum": 6000,
+  "estimate": "Demand depends on the account path. The next bounded tranche is at most 6000 missing stock-days (at least two shared hourly windows if no capacity was already consumed); it is not a claim that all possible candidates need downloading.",
+  "old_profile_maximum": 8000,
+  "combined_profile_maximum": 14000,
+  "old_attempts_and_receipts_reset": false,
+  "provider_retries": 0,
+  "gateway": "app.finmind.fetch_dataset and the existing shared hourly ledger",
+  "hourly_limit_changed": false,
+  "strategy_or_parameter_changed": false,
+  "completed_accounts_rerun": false,
+  "paper_enabled": false,
+  "live_qualified": false
+}
