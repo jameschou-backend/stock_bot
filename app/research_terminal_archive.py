@@ -112,6 +112,13 @@ def overview(root=ROOT):
                 row['execution_note'] = '普通盤／零股日內高低中間價估算；POC 優先排序，分點資料未知依原實驗規則保留。'
             else:
                 row['execution_note'] = '詳細設定與資料限制請看研究紀錄；單筆訊號結果不能當帳戶累積報酬。'
+            if identifier in ('legacy_return_comparison_20261012', 'top3_validation_20261012'):
+                from app.account_analytics import supplement
+                try:
+                    row['analytics'] = dict(status='verified_supplement',
+                        cases=supplement(identifier, report, sha, root))
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    row['analytics'] = dict(status='unavailable', reason=str(exc), cases={})
         except (OSError, ValueError, KeyError, TypeError) as exc:
             row.update(status='unavailable', note=str(exc), cases=[])
         items.append(row)
