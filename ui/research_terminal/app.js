@@ -92,12 +92,14 @@ async function loadStudies(){
  else replace('studies-list',el('p','歷史研究讀取失敗：'+results[0].reason.message,'caption'));
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
+  window.renderPocOptimization(state.archive.items?.find(x=>x.id==='poc_optimization_20261013'),$('poc-optimization'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderLegacyComparison(state.archive.items?.find(x=>x.id==='legacy_return_comparison_20261012'),$('legacy-comparison'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderTop3Validation(state.archive.items?.find(x=>x.id==='top3_validation_20261012'),$('top3-validation'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderAccountComparison(state.archive.items?.find(x=>x.id==='all_entry_accounts_20261011'),$('account-comparison'),{el,tag,number,pct,api,renderAccountDetail});
   replace('backtest-archive');renderArchive($('backtest-archive'));
  }else {
   replace('legacy-comparison',el('h2','舊策略比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
+  replace('poc-optimization',el('h2','POC 優化比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
   replace('top3-validation',el('h2','前三名驗證'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
   replace('account-comparison',el('h2','31 組帳戶比較'),el('p','研究紀錄讀取失敗：'+results[1].reason.message,'alert error'));
  }
@@ -117,10 +119,11 @@ function setupLabSections(){
   const root=$('view-backtest'),menu=el('nav',undefined,'lab-tabs');menu.setAttribute('aria-label','回測研究類型');
   const panes={accounts:el('div'),signals:el('div'),history:el('div')};
   const study=el('select');study.setAttribute('aria-label','帳戶研究版本');
-  study.append(option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
+  study.append(option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
   const selector=el('label',undefined,'study-version');selector.append(el('span','目前查看'),study);
   root.insertBefore(menu,$('legacy-comparison'));
-  panes.accounts.append(selector,$('legacy-comparison'),$('top3-validation'));
+  const optimization=el('section',undefined,'panel research-body');optimization.id='poc-optimization';
+  panes.accounts.append(selector,optimization,$('legacy-comparison'),$('top3-validation'));
   panes.signals.append(root.querySelector('.lab-layout'));
   panes.history.append($('account-comparison'),...root.querySelectorAll('section.account-replay-config'));
   for(const [id,name] of [['accounts','最新帳戶比較'],['signals','訊號研究'],['history','歷史版本']]){
@@ -128,7 +131,7 @@ function setupLabSections(){
     button.addEventListener('click',()=>{for(const [key,pane] of Object.entries(panes))pane.hidden=key!==id;for(const b of menu.children)b.setAttribute('aria-pressed',b===button?'true':'false');});
     menu.append(button);panes[id].id='lab-'+id;panes[id].hidden=id!=='accounts';root.append(panes[id]);
   }
-  function chooseStudy(){$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
+  function chooseStudy(){$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
   study.addEventListener('change',chooseStudy);chooseStudy();
   $('backtest-submit').replaceChildren(document.createTextNode('分析單筆訊號 →'));
   root.querySelector('.lab-config h2').textContent='建立訊號研究';

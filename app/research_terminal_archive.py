@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_optimization_20261013', 'POC 優化：冷卻5日與成本壓力', '2026-10-13', 'account', '兩套POC原版與冷卻版、相同成本0050及成交缺件'),
     ('legacy_return_comparison_20261012', '949%與576%：同資金、期間與成本比較', '2026-10-12', 'account', '兩套原策略與0050、四組成本、買HL2／賣30%'),
     ('top3_validation_20261012', '前三名：HL2買價、成本壓力與樣本外資格', '2026-10-12', 'account', '固定前三名與0050；紙上交易採資格關卡'),
     ('all_entry_accounts_20261011', '31 組進場條件：同資金帳戶比較', '2026-10-11', 'account', '共同本金、名額、成交與出場；含0050基準'),
@@ -84,7 +85,11 @@ def overview(root=ROOT):
                        position_count=report.get('maximum_active_stock_slots', report.get('position_count', report.get('active_slots'))),
                        note='已核對發布紀錄指紋；未於開啟頁面時重跑帳戶或核對全部歷史來源。',
                        download_url='/research-terminal/api/archive/' + identifier)
-            if identifier == 'legacy_return_comparison_20261012':
+            if identifier == 'poc_optimization_20261013':
+                from app.poc_optimization_ui import validate
+                row['optimization'] = validate(report)
+                row['execution_note'] = '同檔候選訊號冷卻5個市場交易日；原版沿用已核對的封存帳戶，冷卻版另跑四種成本。買HL2仍為事後代理價格。'
+            elif identifier == 'legacy_return_comparison_20261012':
                 from app.legacy_return_comparison_ui import validate
                 row['legacy_comparison'] = validate(report)
                 row['execution_note'] = '兩套原策略與0050同期間、100萬、買HL2／賣30%；保留各自原選股及出場。'
@@ -132,6 +137,10 @@ def publication_bytes(identifier, root=ROOT):
 
 
 def case_detail(identifier, case_id, root=ROOT):
+    if identifier == 'poc_optimization_20261013':
+        from app.poc_optimization_ui import case_detail as detail
+        publication, _, _ = _publication(identifier, root)
+        return detail(publication, case_id, root)
     if identifier == 'legacy_return_comparison_20261012':
         from app.legacy_return_comparison_ui import case_detail as detail
         publication, _, _ = _publication(identifier, root)

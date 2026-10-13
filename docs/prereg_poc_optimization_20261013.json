@@ -1,0 +1,32 @@
+{
+  "schema": "poc_optimization_spec_v1",
+  "registered_on": "2026-10-13",
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "initial_cash": 1000000,
+  "stock_slots": 3,
+  "arms": ["poc_up_red", "poc_priority"],
+  "variants": ["cooldown5"],
+  "modes": ["baseline", "fee2", "slip2", "combined"],
+  "hypothesis": "Suppressing repeated same-stock entry candidates may reduce turnover and cost sensitivity. Improvement is not assumed.",
+  "cooldown5": {
+    "clock": "common market trading sessions",
+    "rule": "Retain the first candidate. Suppress later same-stock candidates whose signal date is at most 5 market sessions after the last retained candidate signal date. Rejected candidates do not reset the clock.",
+    "scope": "Candidate admission, before ranking, cash allocation and holdings; not a post-exit cooldown and not a first-ever signal rule.",
+    "ranking": "Preserve the original relative order and all priority values of retained candidates.",
+    "boundary": "Use all sealed candidates supplied by each original strategy, including pre-period candidates if present. No invented prehistory."
+  },
+  "fixed": {
+    "buy": "T+1 daily (H+L)/2 research proxy",
+    "sell": "L+0.3*(H-L) research proxy",
+    "exit": "Original loss12, time63 and post-entry three-black rules remain unchanged, including protective exits.",
+    "accounting": "Reuse frozen account, cash, slots, corporate actions, independent execution and cost audits. Rerun the whole account separately for every cost scenario.",
+    "baseline": "Hash-verified top3_validation_20261012 and legacy_return_comparison_20261012 publications; reuse their audited original accounts and same-cost 0050 accounts. Do not rescale trades."
+  },
+  "report": ["all attempts including failures", "net return", "same-cost 0050 excess", "max drawdown", "settled-cohort win rate", "profit factor", "costs", "trade count", "annual excess", "top5 share of positive cohort P&L", "execution evidence gaps"],
+  "decision": "A research improvement must beat its own original return with no worse drawdown in all four scenarios. Historical stress qualification additionally requires positive return, positive 0050 excess and no worse drawdown than 0050 in all four scenarios. Incomplete cases fail these gates. No parameter search after observing results.",
+  "limitations": ["Already-researched historical period; not unseen validation", "Daily HL2 cannot prove an intraday fill", "Signal cooldown may discard strong continuing trends", "No paper orders or live orders are authorized by a historical result"],
+  "next_fixed_order": ["Verify ordinary and odd-lot chronological data before an opening/limit account replay", "One additional non-stop exit confirmation day, with independent exit audit", "POC strength ranking", "Historical-price correlation allocation"],
+  "live_qualified": false,
+  "paper_enabled": false
+}
