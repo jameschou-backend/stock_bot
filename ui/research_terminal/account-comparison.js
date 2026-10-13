@@ -4,7 +4,7 @@
 window.renderAccountComparison = function (item, host, helpers) {
   const {el, tag, number, pct, api, renderAccountDetail} = helpers;
   host.replaceChildren();
-  host.append(el('div', 'COMMON ACCOUNT COMPARISON', 'eyebrow'), el('h2', '31 組進場條件，同一套資金規則'));
+  host.append(el('div', 'COMMON ACCOUNT COMPARISON', 'eyebrow'), el('h2', '封存：31 組進場條件 · 買70%／賣30%'));
   if (!item?.comparison || item.status !== 'verified_publication') {
     host.append(el('p', '31 組帳戶比較尚未發布完整紀錄；完成與缺件狀態將在這裡顯示。', 'result-note'));
     return;

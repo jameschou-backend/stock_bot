@@ -7,6 +7,7 @@ import subprocess
 
 def test_stress_selector_and_detail_requests_never_imply_unseen_or_paper_success():
     script=(Path(__file__).resolve().parents[1]/'ui/research_terminal/top3-validation.js').read_text()
+    script=(Path(__file__).resolve().parents[1]/'ui/research_terminal/comparison-overview.js').read_text()+'\n'+script
     node=shutil.which('node')
     assert node, 'Install Node.js for browser renderer checks'
     harness=r'''
@@ -31,12 +32,12 @@ const report={start:'2024-01-02',end:'2026-10-02',initial_cash:1000000,completed
 const helpers={el,tag:t=>el('span',t),number:n=>n==null?'—':String(n),pct:n=>n==null?'—':`${Number((n*100).toFixed(4))}%`,api:async path=>{requests.push(path);return {name:'verified'};},renderAccountDetail:(r,h)=>h.append(el('p','verified curve'))};
 (async()=>{
  context.window.renderTop3Validation({id:'top3_validation_20261012',status:'verified_publication',validation:report},host,helpers);
- assert.match(host.textContent,/真正未見樣本0 日/);assert.match(host.textContent,/已啟用紙上交易0 套/);
+ assert.match(host.textContent,/真正未見樣本 0 日/);assert.match(host.textContent,/已啟用紙上交易 0 套/);
  assert.match(host.textContent,/\(最低＋最高\) ÷ 2/);
- const select=walk(host).find(e=>e.tagName==='select');select.value='combined';select.listeners.change();
- assert.match(host.textContent,/required source missing/);assert.match(host.textContent,/0.9%/);
- const buttons=walk(host).filter(e=>e.tagName==='button');assert.equal(buttons.length,3);
- await buttons[1].listeners.click();assert.equal(requests[0],'/archive/top3_validation_20261012/cases/obv20_breakout_combined');
+ const selects=walk(host).filter(e=>e.tagName==='select'),strategy=selects[0],select=selects[1];select.value='combined';select.listeners.change();
+ assert.match(host.textContent,/required source missing/);strategy.value='obv20_breakout';strategy.listeners.change();assert.match(host.textContent,/0.9%/);
+ const buttons=walk(host).filter(e=>e.tagName==='button');assert.equal(buttons.length,1);
+ await buttons[0].listeners.click();assert.equal(requests[0],'/archive/top3_validation_20261012/cases/obv20_breakout_combined');
  assert.match(host.textContent,/verified curve/);assert.match(host.textContent,/<img src=x>/);
  select.value='baseline';select.listeners.change();assert.doesNotMatch(host.textContent,/verified curve/);
  context.window.renderTop3Validation(null,host,helpers);assert.match(host.textContent,/尚未發布/);
