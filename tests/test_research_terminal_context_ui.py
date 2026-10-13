@@ -37,7 +37,7 @@ function mount(url='http://localhost/terminal/#signals') {
 def run_js(body):
     node = shutil.which('node')
     assert node, 'Install Node.js to validate the research terminal interactions'
-    script = SCRIPT.read_text().replace('bind();init();', '''globalThis.terminalUI={state,selectInitialStrategy,populateCatalog,populateSignalScope,renderContextSummary,renderStock,loadStock,loadSignals,backtestEntries};''')
+    script = SCRIPT.read_text().replace('bind();init();', '''globalThis.terminalUI={state,selectInitialStrategy,populateCatalog,populateSignalScope,renderContextSummary,renderStock,loadStock,loadSignals,backtestEntries,renderRows,renderSignalLifecycle,drawSignalMarker};''')
     summary = dict(market_breadth_value=.5584950029, market_breadth_threshold=.5,
                    market_breadth_coverage=.878162106, parent_candidates=3, matched=0,
                    unknown=0, not_matched=3, explanation='市場廣度 55.85%，未低於 50%，本組無新訊號。',
@@ -119,4 +119,35 @@ assert.match(element('stock-signals').textContent,/當日完整掃描未封存/)
 ui.populateSignalScope();
 assert.match(element('signal-scope').textContent,/400 日價量高點訊號/);
 assert.doesNotMatch(element('signal-scope').textContent,/原始價量/);
+''')
+
+
+def test_lifecycle_card_and_rows_identify_retrigger_without_claiming_trade_return():
+    run_js(r'''
+const {ui,element}=mount();ui.state.chartStrategy='poc_up_red';
+const lifecycle={state:'retrigger',label:'再次觸發',explanation:'前一交易日未符合，本日再次符合',previous_trigger_date:'2026-10-02',sessions_since_previous_trigger:5,previous_trigger_close:48.15,current_close:57.9,price_change_since_previous_trigger:.2024922,window_start:'2026-04-16',window_end:'2026-10-12',observed_sessions:120,prior_known_triggers:4,coverage_note:'未記錄不代表未發生'};
+const result={strategy_id:'poc_up_red',name:'POC 上移＋紅 K',status:'matched',first_signal:true,lifecycle,metrics:{poc_before:43.228125,poc_after:52.974375}};
+ui.state.rows=[{stock_id:'4927',name:'泰鼎-KY',matches:[result],first_count:1,matched_count:1}];ui.renderRows();
+assert.match(element('signal-rows').textContent,/再次觸發/);assert.match(element('signal-rows').textContent,/前次 10\/02/);assert.doesNotMatch(element('signal-rows').textContent,/新訊號/);
+ui.renderSignalLifecycle({date:'2026-10-12',results:[result],candles:[{date:'2026-10-12',open:54.5,close:57.9}]});
+const text=element('signal-lifecycle').textContent;
+assert.match(text,/相隔 5 個交易日/);assert.match(text,/20.25%/);assert.match(text,/不是策略進場報酬/);assert.match(text,/43.2281.*52.9744/);assert.match(text,/120 個交易日/);
+ui.state.chartStrategy='all';ui.renderSignalLifecycle({results:[result]});assert.equal(element('signal-lifecycle').hidden,true);
+''')
+
+
+def test_selected_rule_reasons_do_not_mix_other_rule_matches():
+    run_js(r'''
+const {ui,element}=mount();ui.state.chartStrategy='poc_up_red';
+ui.renderStock({stock_id:'4927',date:'2026-10-12',candles:[],results:[{strategy_id:'poc_up_red',name:'POC',status:'matched',reasons:['所選條件']},{strategy_id:'momentum',name:'動能',status:'matched',reasons:['另一套條件']}],coverage:{}});
+assert.match(element('stock-signals').textContent,/所選條件/);assert.doesNotMatch(element('stock-signals').textContent,/另一套條件/);
+''')
+
+
+def test_chart_lifecycle_markers_use_distinct_shapes_and_unknown_is_hollow():
+    run_js(r'''
+const {ui}=mount();function trace(type){const calls=[];const ctx=new Proxy({},{set(t,k,v){t[k]=v;return true;},get(t,k){return t[k]||((...args)=>calls.push([k,...args]));}});ui.drawSignalMarker(ctx,type,10,20);return calls;}
+const first=trace('first_observed'),repeat=trace('retrigger'),ongoing=trace('continuing'),unknown=trace('unknown');
+assert.equal(first.filter(x=>x[0]==='lineTo').length,2);assert.equal(repeat.filter(x=>x[0]==='lineTo').length,3);
+assert(ongoing.some(x=>x[0]==='arc'));assert(ongoing.some(x=>x[0]==='fill'));assert(unknown.some(x=>x[0]==='stroke'));assert(!unknown.some(x=>x[0]==='fill'));
 ''')

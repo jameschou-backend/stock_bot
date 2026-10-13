@@ -22,6 +22,8 @@ import numpy as np
 import pandas as pd
 import pyarrow.parquet as pq
 
+from app.signal_lifecycle import SignalHistory, add_price_context
+
 ROOT = Path(__file__).resolve().parents[1]
 DAILY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_20261013.json'
 DAILY_AUDIT_SHA = '43e5cedbb062bfb2701b8605d39813a4e3e5547118fbb749de556efc14d8028a'
@@ -76,6 +78,7 @@ class ResearchTerminal:
         self._study = None
         self._rally_cases = None
         self._chart_cache = {}
+        self._signal_history = None
         self._entry_context_descriptor = entry_context_descriptor
         self._entry_context_provider = None
         self.jobs_dir = self.root / '.cache/research-terminal/jobs'
@@ -276,6 +279,27 @@ class ResearchTerminal:
                     action='watch' if matches else 'wait', live_qualified=False,
                     earliest_execution='next_market_session', unknown_entry_rules=unknown)
 
+    def _history(self):
+        self._load()
+        self._load_study()
+        with self._lock:
+            if self._signal_history is None:
+                # Identity only: no future outcomes, returns or exit dates.
+                events = pd.read_parquet(self._verify(self._study_events_descriptor),
+                    columns=['stock_id', 'strategy_id', 'signal_date'], filters=[('horizon', '=', 5)])
+                records = {(r.stock_id, r.strategy_id, str(r.signal_date)[:10]): True
+                           for r in events.itertuples(index=False)}
+                for d, day in self._days.items():
+                    for stock in day['stocks']:
+                        for sid, result in stock['results'].items():
+                            key = stock['stock_id'], sid, d
+                            if result['status'] == 'matched':
+                                records[key] = result['first_signal']
+                            else:
+                                records.pop(key, None)
+                self._signal_history = SignalHistory(self._calendar, records)
+            return self._signal_history
+
     def signals(self, selected=None, strategy_id='poc_up_red', first_only=False, search=''):
         from app.entry_context_service import STRATEGY_IDS
         if strategy_id in STRATEGY_IDS:
@@ -286,6 +310,7 @@ class ResearchTerminal:
         query = search.strip().casefold()
         if len(query) > 64:
             raise ValueError('搜尋字串最多 64 字')
+        history = self._history()
         rows = []
         for stock in day['stocks']:
             if query and query not in (stock['stock_id']+' '+stock['name']).casefold():
@@ -298,7 +323,8 @@ class ResearchTerminal:
                     continue
                 if r['status'] != 'matched' or first_only and r['first_signal'] is not True:
                     continue
-                matches.append(dict(strategy_id=sid, name=self._catalog[sid]['name'], **r))
+                matches.append(dict(strategy_id=sid, name=self._catalog[sid]['name'], **r,
+                    lifecycle=history.describe(stock['stock_id'], sid, day['date'], r['first_signal'])))
             if not matches:
                 continue
             rows.append(dict(stock_id=stock['stock_id'], name=stock['name'], regime=stock['regime'],
@@ -337,7 +363,10 @@ class ResearchTerminal:
             if key in self._chart_cache:
                 return self._chart_cache[key]
         end = pd.Timestamp(day['date'])
-        calendar = self._calendar[self._calendar <= end][-sessions:]
+        display_calendar = self._calendar[self._calendar <= end][-sessions:]
+        # Include each displayed marker's full lookback for price comparisons.
+        start_pos = max(0, self._calendar.get_loc(display_calendar[0])-SignalHistory.WINDOW+1)
+        calendar = self._calendar[start_pos:self._calendar.get_loc(end)+1]
         # Read one previous observation for the same source-return check used
         # by the scanner, then remove it from the displayed as-of window.
         pos = self._calendar.get_loc(calendar[0])
@@ -368,6 +397,8 @@ class ResearchTerminal:
                    for k in ('open', 'high', 'low', 'close')}, volume=int(q.at[d, 'volume']),
                    eligible=None if pd.isna(eligible.get(d)) else bool(eligible.loc[d]))
                    for d in calendar if valid.loc[d]]
+        prices = {c['date']: c['close'] for c in candles}
+        candles = [c for c in candles if c['date'] >= str(display_calendar[0].date())]
         results, marker_map = [], {}
         found = next((s for s in day['stocks'] if s['stock_id'] == stock_id), None)
         self._load_study()
@@ -376,35 +407,43 @@ class ResearchTerminal:
         historical_events = pd.read_parquet(self._verify(self._study_events_descriptor),
             columns=['strategy_id', 'signal_date', 'stock_id'], filters=[
                 ('stock_id', '=', stock_id), ('horizon', '=', 5),
-                ('signal_date', '>=', str(calendar[0].date())), ('signal_date', '<=', selected)])
+                ('signal_date', '>=', str(display_calendar[0].date())), ('signal_date', '<=', selected)])
         for event in historical_events.to_dict('records'):
             sid = event['strategy_id']
             marker_map[(event['signal_date'], sid)] = dict(date=event['signal_date'],
                 strategy_id=sid, name=self._catalog[sid]['name'], first_signal=True,
                 coverage_type='known_first_event')
         for d, item in self._days.items():
-            if str(calendar[0].date()) <= d <= day['date']:
+            if str(display_calendar[0].date()) <= d <= day['date']:
                 item_stock = next((s for s in item['stocks'] if s['stock_id'] == stock_id), None)
                 if item_stock:
                     for sid, r in item_stock['results'].items():
                         if self._catalog[sid]['kind'] == 'entry' and r['status'] == 'matched':
                             marker_map[(d, sid)] = dict(date=d, strategy_id=sid, name=self._catalog[sid]['name'],
-                                first_signal=r['first_signal'], coverage_type='daily_snapshot')
+                                first_signal=r['first_signal'], coverage_type='daily_snapshot', metrics=r['metrics'])
+                        elif self._catalog[sid]['kind'] == 'entry':
+                            marker_map.pop((d, sid), None)
         if found:
             results = [dict(strategy_id=sid, name=self._catalog[sid]['name'],
                             kind=self._catalog[sid]['kind'], **r) for sid, r in found['results'].items()]
+        history = self._history()
+        for row in list(marker_map.values()) + results:
+            if row.get('status', 'matched') == 'matched':
+                row['lifecycle'] = add_price_context(history.describe(stock_id, row['strategy_id'],
+                    row.get('date', selected), row['first_signal']), prices)
+        display_valid = valid.reindex(display_calendar)
         result = dict(stock_id=stock_id, name=self._names.get(stock_id, stock_id), date=day['date'],
             price_basis='adjusted', price_basis_note='依每日還原收盤與原始收盤比例還原 OHLC；不是當時可掛單價格。',
             candles=candles, markers=[marker_map[k] for k in sorted(marker_map)], results=results,
             assessment=self._assessment(found) if found else (
                 dict(status='benchmark_only', label='0050 僅作比較基準', action='none') if stock_id == '0050' else
                 dict(status='historical_reference', label='歷史走勢與已封存首日訊號；沒有當日完整掃描快照', action='none')),
-            coverage=dict(start=str(calendar[0].date()), end=day['date'],
-                missing_sessions=int((~valid).sum()), requested_sessions=len(calendar),
-                missing_dates=[str(d.date()) for d in calendar if not valid.loc[d]],
+            coverage=dict(start=str(display_calendar[0].date()), end=day['date'],
+                missing_sessions=int((~display_valid).sum()), requested_sessions=len(display_calendar),
+                missing_dates=[str(d.date()) for d in display_calendar if not valid.loc[d]],
                 marker_start=self._study['start'], marker_end=day['date'],
                 daily_snapshot_available=found is not None,
-                marker_scope='2024 起已知首日事件＋最近五日每日訊號；早期無標記不代表無訊號或資料完整'),
+                marker_scope='已封存的歷史觸發事件與每日掃描；無標記不代表無訊號或資料完整。分類固定回看 120 個交易日，與圖表縮放無關。'),
             source_hashes=self.source_hashes, live_qualified=False)
         self._unchanged()
         with self._lock:

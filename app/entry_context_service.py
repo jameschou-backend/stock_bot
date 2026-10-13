@@ -15,6 +15,7 @@ import pandas as pd
 import pyarrow.parquet as pq
 
 from app.research_terminal_service import EvidenceError, ResearchTerminal, _iso
+from app.signal_lifecycle import SignalHistory, add_price_context
 
 PUBLICATION = 'artifacts/forward_simulation/entry_context_terminal_20261013.json'
 PUBLICATION_SHA256 = '91f481063ddfced0a5a38d04439f0ab6109f40475c08ae44f434401ba3eea772'
@@ -160,6 +161,10 @@ class EntryContextProvider:
             self.hashes = dict(publication=self.descriptor['sha256'], report=report_descriptor['sha256'],
                                manifest=bundle_descriptor['sha256'])
             self._publication = publication
+            self.history = SignalHistory(self.calendar, {
+                (e['stock_id'], sid, d): True
+                for d, events in self.events.items() for e in events
+                for sid, (_, field, _) in _RULES.items() if e[field] is True})
             self.evidence._unchanged()
 
     def metadata(self):
@@ -230,6 +235,7 @@ class EntryContextProvider:
                 continue
             match = {k: check[k] for k in ('strategy_id', 'status', 'first_signal', 'reasons', 'metrics', 'regime_fit')}
             match['name'] = check['strategy_name']
+            match['lifecycle'] = self.history.describe(check['stock_id'], strategy_id, selected, True)
             rows.append(dict(stock_id=check['stock_id'], name=check['name'], regime='context_research',
                 matched_count=1, first_count=1, strategy_ids=[strategy_id], matches=[match],
                 assessment=dict(status='research_candidate', label='符合研究條件，列入觀察',
@@ -266,7 +272,9 @@ class EntryContextProvider:
         if key in self._charts:
             return self._charts[key]
         end = pd.Timestamp(selected)
-        calendar = self.calendar[self.calendar <= end][-sessions:]
+        display_calendar = self.calendar[self.calendar <= end][-sessions:]
+        start_pos = max(0, self.calendar.get_loc(display_calendar[0])-SignalHistory.WINDOW+1)
+        calendar = self.calendar[start_pos:self.calendar.get_loc(end)+1]
         first = self.calendar[max(0, self.calendar.get_loc(calendar[0])-1)]
         matrices = {name: pd.read_parquet(self.bundle/name, columns=['date', stock_id],
             filters=[('date', '>=', first), ('date', '<=', end)]).set_index('date')[stock_id]
@@ -292,14 +300,21 @@ class EntryContextProvider:
                    for k in ('open', 'high', 'low', 'close')}, volume=int(q.at[d, 'volume']),
                    eligible=None if pd.isna(eligible.get(d)) else bool(eligible.loc[d]))
                    for d in calendar if valid.loc[d]]
+        prices = {c['date']: c['close'] for c in candles}
+        candles = [c for c in candles if c['date'] >= str(display_calendar[0].date())]
         markers = [dict(date=d, strategy_id=strategy_id, name=_RULES[strategy_id][0], first_signal=True,
                        coverage_type='known_first_parent_event')
-                   for d, events in self.events.items() if str(calendar[0].date()) <= d <= selected
+                   for d, events in self.events.items() if str(display_calendar[0].date()) <= d <= selected
                    for e in events if e['stock_id'] == stock_id and e[_RULES[strategy_id][1]] is True]
         event = next((e for e in self.events[selected] if e['stock_id'] == stock_id), None)
         check = self._check(event, strategy_id) if event else None
         results = [dict(strategy_id=strategy_id, name=check['strategy_name'], kind='entry',
                         **{k: check[k] for k in ('status', 'first_signal', 'reasons', 'metrics', 'regime_fit')})] if check else []
+        for row in markers + results:
+            if row.get('status', 'matched') == 'matched':
+                row['lifecycle'] = add_price_context(self.history.describe(stock_id, strategy_id,
+                    row.get('date', selected), row['first_signal']), prices)
+        display_valid = valid.reindex(display_calendar)
         status = check['status'] if check else 'no_parent_first_event'
         result = dict(stock_id=stock_id, name=self.names.get(stock_id, stock_id), date=selected,
             strategy_id=strategy_id, source_end=self._publication['end'], price_basis='adjusted',
@@ -309,8 +324,8 @@ class EntryContextProvider:
                 'unknown': '資料不足，無法判斷', 'not_matched': '當日條件未成立',
                 'no_parent_first_event': '當日沒有400 日價量高點的已知首日事件'}[status],
                 action='watch' if status == 'matched' else 'wait', live_qualified=False),
-            coverage=dict(start=str(calendar[0].date()), end=selected, missing_sessions=int((~valid).sum()),
-                requested_sessions=len(calendar), missing_dates=[str(d.date()) for d in calendar if not valid.loc[d]],
+            coverage=dict(start=str(display_calendar[0].date()), end=selected, missing_sessions=int((~display_valid).sum()),
+                requested_sessions=len(display_calendar), missing_dates=[str(d.date()) for d in display_calendar if not valid.loc[d]],
                 marker_start=self._publication['start'], marker_end=selected, daily_snapshot_available=bool(event),
                 marker_scope='所選進場情境規則的已知首日事件；沒有原始首日事件不代表全市場已評估。'),
             source_hashes=self.hashes, signal_only=True, live_qualified=False)

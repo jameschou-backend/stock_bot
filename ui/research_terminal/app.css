@@ -47,3 +47,13 @@
  .compact-comparison td:before{content:attr(data-label);color:var(--readable-muted);text-align:left;flex-shrink:0}
  .compact-comparison td:first-child{font-weight:700;margin-bottom:5px}
 }
+
+/* Signal history is explicit and independent of the visible chart range. */
+.signal-status small{display:block;font-size:8px;color:var(--muted);margin-top:3px}
+.signal-legend{display:flex;flex-wrap:wrap;gap:5px 13px;padding:0 23px 10px;color:var(--muted);font-size:10px}
+.signal-legend small{flex-basis:100%;font-size:9px}.marker-first{color:var(--teal)}.marker-repeat{color:var(--amber)}.marker-continuing{color:#627f99}
+.signal-lifecycle{margin:0 23px 18px;padding:14px 16px;background:#f8faf6;border:1px solid var(--line);border-radius:9px;font-size:11px}
+.lifecycle-heading{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}.signal-lifecycle p{margin-top:6px;overflow-wrap:anywhere}
+.lifecycle-previous{font-weight:650;color:var(--ink)}.lifecycle-checks{margin:11px 0;padding-top:10px;border-top:1px solid var(--line)}
+.chart-tooltip{max-width:min(310px,calc(100% - 8px));white-space:normal;pointer-events:none;overflow-wrap:anywhere}
+@media(max-width:580px){.signal-legend{padding:0 16px 10px;font-size:9px;gap:5px 10px}.signal-lifecycle{margin:0 15px 16px;padding:12px}.lifecycle-heading strong{font-size:10px}}

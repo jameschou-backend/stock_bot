@@ -138,6 +138,21 @@ def test_daily_and_historical_markers_are_not_duplicated(terminal):
     assert len(keys) == len(set(keys))
 
 
+def test_signal_lifecycle_matches_chart_and_does_not_change_with_chart_range(terminal):
+    row = terminal.signals('2026-10-05', 'poc_up_red')['rows'][0]['matches'][0]
+    short = terminal.stock('2308', '2026-10-05', 20)
+    long = terminal.stock('2308', '2026-10-05', 120)
+    a = next(r for r in short['results'] if r['strategy_id'] == 'poc_up_red')['lifecycle']
+    b = next(r for r in long['results'] if r['strategy_id'] == 'poc_up_red')['lifecycle']
+    assert row['lifecycle']['state'] == a['state'] == 'retrigger'
+    assert a == b
+    assert a['previous_trigger_date'] is None  # Only continuations previously known.
+    assert a['price_change_since_previous_trigger'] is None
+    earlier = terminal.stock('2308', '2026-10-02', 20)
+    assert all(r['lifecycle']['window_end'] <= '2026-10-02'
+               for r in earlier['markers'])
+
+
 @pytest.mark.parametrize('method,args', [
     ('signals', ('2026-10-06',)), ('signals', ('2026-10-05', 'future')),
     ('stock', ('../secrets',)), ('stock', ('00631L',)), ('stock', ('2308', None, 501)),
