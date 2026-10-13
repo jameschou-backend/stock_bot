@@ -1,0 +1,39 @@
+{
+  "schema": "poc_followup_spec_v1",
+  "registered_on": "2026-10-14",
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "initial_cash": 1000000,
+  "stock_slots": 3,
+  "arms": [
+    "poc_up_red",
+    "poc_priority"
+  ],
+  "modes": [
+    "baseline",
+    "fee2",
+    "slip2",
+    "combined"
+  ],
+  "order": [
+    "execution_evidence",
+    "exit_confirm",
+    "poc_strength",
+    "correlation60"
+  ],
+  "variants": {
+    "exit_confirm": "Require the existing three-black condition on two consecutive completed closes (four descending bearish candles after entry). Original loss12 and time63 retain priority and are never delayed.",
+    "poc_strength": "Rank reservable candidates by (poc_after/poc_before-1) descending, original priority then event_id for ties, retaining each original POC hard/priority gate. Quality unknown retains the original explicit policy; no invented strength.",
+    "correlation60": "Keep original ranking; refuse a new candidate if its 60 completed signal-date daily returns have Pearson correlation >0.80 with an existing held stock or an already reserved new candidate. Require 60 common finite returns and nonzero variance; missing evidence blocks admission explicitly."
+  },
+  "controls": "Immutable original accounts and same-cost 0050 from poc_optimization_20261013; no cooldown and no combined optimization variants.",
+  "execution_evidence": "Audit original planned orders against available dated ordinary prints. Do not infer chronological intraday odd fills from daily aggregates. Frozen-order diagnostics are not a rerun account, and do not produce executable net return. Causal ordinary trade-through estimates use existing 09:01-13:25 model and preplanned legal limits; own queue is unverified.",
+  "research_execution": "For isolated exit/ranking/allocation sensitivity only retain original T+1 HL2 buy and sell L+0.3*(H-L). These results cannot qualify executable trading.",
+  "decision": "All four cases must beat their own original net return with no worse drawdown to retain an optimization. Historical qualification also requires positive net return, positive same-cost 0050 excess, and no worse drawdown than 0050 in all four cases.",
+  "paper_gate": "Require complete stress matrix, historical qualification, independently causal whole-account execution verification, point-in-time/adjustment/corporate coverage, genuinely unseen version-locked 126 sessions and 30 settled cohorts with positive net/excess and no worse benchmark drawdown. Frozen-order estimates alone cannot pass.",
+  "trials": "Record successful and failed attempts. No parameter search after outcomes.",
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "paper_enabled": false,
+  "live_qualified": false
+}

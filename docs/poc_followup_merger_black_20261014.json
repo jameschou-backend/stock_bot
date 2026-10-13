@@ -1,0 +1,14 @@
+{
+  "schema": "poc_followup_merger_black_v1",
+  "reason": "A new cost path holds 2867 through the legally evidenced exchange into 2884; no original result is rewritten.",
+  "interpretation": "Preserve the original entry date, 63-session clock, loss12 economic-unit series, exchange ratio, restricted certificates and nonspendable fractional receivables. Bearish-candle confirmation for the converted holding requires a fresh complete 3-candle (or registered 4-candle confirmation) window beginning no earlier than the 2026-09-08 ordinary-share availability date. Certificate proxy prices cannot supply those candles.",
+  "source_terms": {
+    "path": "docs/legacy_2867_exchange_20261012.json",
+    "sha256": "47b380b3ec4dd523990de8dd9bc5e38ef78582fba8af5f03183c052d0d5a9cb7"
+  },
+  "parameters_reoptimized": false,
+  "posthoc_corporate_model_completion": true,
+  "unseen_validation": false,
+  "paper_enabled": false,
+  "live_qualified": false
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "poc_followup_2236_delivery_v1",
+  "event": "2236-2024-09-25",
+  "strategy_parameters_changed": false,
+  "live_qualified": false,
+  "override": {
+    "shares_per_share": 0.021397789,
+    "pay_date": "2024-10-23",
+    "ordinary_share_available_date": "2024-10-23",
+    "entitlement_announcement_date": "2024-09-09",
+    "delivery_announcement_date": "2024-09-09",
+    "listing_announcement_date": "2024-10-15",
+    "fractional_cash_per_share": 0,
+    "fractional_net_zero_verified": true,
+    "fractional_cash_rounding": "floor_ntd",
+    "fractional_cash_pay_date": null,
+    "fractional_cash_payment_date_verified": false,
+    "fractional_cash_net_amount_verified": true,
+    "fractional_cash_available_for_trading": false,
+    "fractional_cash_treatment": "net_zero_book_entry_fees_verified",
+    "use_scope": "account_settlement_only_not_selection",
+    "evidence_files": [
+      ".cache/poc-followup-20261014/notices-2236-v1/2.attempt.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/plan.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/0.source.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/minutes.source.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/2.html",
+      ".cache/poc-followup-20261014/notices-2236-v1/1.html",
+      ".cache/poc-followup-20261014/notices-2236-v1/minutes.txt",
+      ".cache/poc-followup-20261014/notices-2236-v1/2.source.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/0.html",
+      ".cache/poc-followup-20261014/notices-2236-v1/1.attempt.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/minutes.pdf",
+      ".cache/poc-followup-20261014/notices-2236-v1/1.source.json",
+      ".cache/poc-followup-20261014/notices-2236-v1/0.attempt.json"
+    ],
+    "source": "MOPS final entitlement, delivery, listing and adopted AGM minutes; fractional proceeds offset book-entry fees"
+  },
+  "evidence": {
+    "entitlement": {
+      "path": ".cache/poc-followup-20261014/notices-2236-v1/0.html",
+      "receipt_path": ".cache/poc-followup-20261014/notices-2236-v1/0.source.json"
+    },
+    "delivery": {
+      "path": ".cache/poc-followup-20261014/notices-2236-v1/2.html",
+      "receipt_path": ".cache/poc-followup-20261014/notices-2236-v1/2.source.json"
+    },
+    "listing": {
+      "path": ".cache/poc-followup-20261014/notices-2236-v1/1.html",
+      "receipt_path": ".cache/poc-followup-20261014/notices-2236-v1/1.source.json"
+    },
+    "minutes": {
+      "path": ".cache/poc-followup-20261014/notices-2236-v1/minutes.pdf",
+      "receipt_path": ".cache/poc-followup-20261014/notices-2236-v1/minutes.source.json",
+      "text_path": ".cache/poc-followup-20261014/notices-2236-v1/minutes.txt",
+      "reviewed_pdf_pages": [
+        2,
+        3
+      ]
+    }
+  },
+  "source_sha256": {
+    ".cache/poc-followup-20261014/notices-2236-v1/2.attempt.json": "d3dff03549f63c434308264925e61298d92d56ab4fcc7f05853f36c39f9cac0f",
+    ".cache/poc-followup-20261014/notices-2236-v1/plan.json": "46f0dd08c680195ec28c58717ef6165b393e3821b9ba0cbb57ac3b505d2e520c",
+    ".cache/poc-followup-20261014/notices-2236-v1/0.source.json": "47103babac1ef2d441cbb14fb73b9532a173a8a664d5adbc2338fe8b1ed1533e",
+    ".cache/poc-followup-20261014/notices-2236-v1/minutes.source.json": "5635c56b1f0c55beff86f30e5791ec5d5f2398da7057ca40780d20e65bbc9d44",
+    ".cache/poc-followup-20261014/notices-2236-v1/2.html": "b71fd6cb3d95725997ba011aa50bd0102e1c942ed5eca2bb7b98acbd75ed5469",
+    ".cache/poc-followup-20261014/notices-2236-v1/1.html": "bc480b20cea5c38c9cf914b68e5eb019348a023f2b44815cf0ee3c4cf987b9d2",
+    ".cache/poc-followup-20261014/notices-2236-v1/minutes.txt": "e889280d458f4d9fe5979719becf798e4e1d624de4d4f5c173db6073df5f939a",
+    ".cache/poc-followup-20261014/notices-2236-v1/2.source.json": "1f064a5a1a50e3357781d77392ca7f68d9e2c2c1747323b6d751133d6b434e90",
+    ".cache/poc-followup-20261014/notices-2236-v1/0.html": "c478d214d8fca3e04eb2821aa182b6e275157933b55d26e3e47b24291a21ec97",
+    ".cache/poc-followup-20261014/notices-2236-v1/1.attempt.json": "5bd17697b413e769aed0de4839f13fa14dc5c89aab3dd4dfef4b850a864a6697",
+    ".cache/poc-followup-20261014/notices-2236-v1/minutes.pdf": "418afb3fa5aa7c5c1a292e607e20baeb507ccb1be756b1e00eae05dec1f5fbb5",
+    ".cache/poc-followup-20261014/notices-2236-v1/1.source.json": "f593dea97d40670b667cddcc80040a9c0d8fa5af5cee878bc1beba9aff7da4fc",
+    ".cache/poc-followup-20261014/notices-2236-v1/0.attempt.json": "50ee1781915568674a0ead8909ad9cad458a07697500415361786c3482f80a8d"
+  }
+}
