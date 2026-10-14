@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_execution_readiness_20261014', '兩套POC原版：FinMind成交資料缺口', '2026-10-14', 'data', '重用已完成帳戶，核對FinMind逐筆與零股時序；缺資料時不產生可執行報酬'),
     ('poc_followup_20261014', 'POC 後續驗證：成交、出場、強度與相關性', '2026-10-14', 'account', '保留兩套原版，三個獨立變因與同成本0050；完整驗證前不啟用紙上交易'),
     ('poc_optimization_20261013', 'POC 優化：冷卻5日與成本壓力', '2026-10-13', 'account', '兩套POC原版與冷卻版、相同成本0050及成交缺件'),
     ('legacy_return_comparison_20261012', '949%與576%：同資金、期間與成本比較', '2026-10-12', 'account', '兩套原策略與0050、四組成本、買HL2／賣30%'),
@@ -91,6 +92,18 @@ def overview(root=ROOT):
                 from app.poc_followup_ui import validate
                 row['followup'] = validate(report)
                 row['execution_note'] = '凍結委託診斷與歷史敏感度分開呈現；成交驗證未通過，紙上交易關閉。'
+                try:
+                    from app.poc_execution_readiness import IDENTIFIER, validate as validate_execution
+                    execution, _, execution_sha = _publication(IDENTIFIER, root)
+                    row['execution_readiness'] = dict(status='verified_publication',
+                        report=validate_execution(execution, sha), source_sha256=execution_sha,
+                        download_url='/research-terminal/api/archive/'+IDENTIFIER)
+                except (OSError, ValueError, KeyError, TypeError) as exc:
+                    row['execution_readiness'] = dict(status='unavailable', reason=str(exc))
+            elif identifier == 'poc_execution_readiness_20261014':
+                from app.poc_execution_readiness import validate as validate_execution
+                validate_execution(report)
+                row['execution_note'] = 'FinMind介面與實際回傳已查核；原版帳戶未重跑，可執行成交驗證仍缺盤中零股時序。'
             elif identifier == 'poc_optimization_20261013':
                 from app.poc_optimization_ui import validate
                 row['optimization'] = validate(report)

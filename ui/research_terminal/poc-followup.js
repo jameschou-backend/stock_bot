@@ -8,6 +8,19 @@ window.renderPocFollowup=function(item,host,helpers){
  function table(parent,labels,rows){const wrap=el('div',undefined,'compact-comparison'),t=el('table'),head=el('thead'),h=el('tr'),body=el('tbody');labels.forEach(x=>h.append(el('th',x)));head.append(h);for(const cells of rows){const row=el('tr');cells.forEach((v,i)=>{const c=el('td',String(v));c.dataset.label=labels[i];row.append(c);});body.append(row);}t.append(head,body);wrap.append(t);parent.append(wrap);}
  host.append(el('p',`${r.start} → ${r.end} · 本金 ${number(r.initial_cash)} 元 · 個股 3 名額 · ${r.completed_new_accounts}/${r.expected_new_accounts} 新帳戶完成`,'caption'));
  const improved=Object.entries(r.decisions).filter(([,d])=>d.improvement_pass).map(([key])=>{const [a,v]=key.split(':');return r.cases[`${a}:original:baseline`].name+'・'+variants[v];});
+ const readiness=item.execution_readiness;
+ if(readiness?.status==='verified_publication'){
+  const q=readiness.report,box=el('section',undefined,'qualification-card');box.id='poc-execution-readiness';
+  box.append(el('h3','FinMind 已查核：原版可執行驗證仍缺零股時序'),el('p',`已重用 ${q.preserved_completed_accounts} 個完成帳戶，重跑 ${q.rerun_accounts} 個。普通盤 ${q.ordinary.available_tapes} 組逐筆可讀，其中 ${q.ordinary.totals_reconciled} 組已有日量與金額核對；盤中零股 ${q.odd.verified_chronological_coordinates}／${q.odd.required_coordinates} 組具可驗證撮合時序。`));
+  box.append(el('p',`實查 FinMind ${q.finmind.probes.length} 組上市、上櫃及0050資料，均與封存內容相同。TickType 是內外盤，不是整股／零股標記；官方支援清單未找到盤中零股逐筆資料集。可執行淨報酬仍為「未完成」。`,'result-note'));
+  table(box,['成本','硬篩原版歷史淨報酬','優先原版歷史淨報酬','0050歷史淨報酬','可執行比較'],Object.entries(modes).map(([m,n])=>[n,...['poc_up_red','poc_priority','benchmark'].map(a=>pct(q.cases[`${a}:original:${m}`].proxy_total_return)),'缺零股時序，未完成']));
+  box.append(el('p','上表沿用買HL2／賣30%日區間價的歷史估算，不能當成可執行成交結果。0050也使用相同成本，且同樣缺零股成交驗證。','caption'));
+  const more=el('details',undefined,'comparison-method');more.append(el('summary','各原版缺件、FinMind查核與紙上交易條件'));
+  table(more,['原成本帳戶','普通盤子單','缺時序零股子單','第一筆缺件'],['poc_up_red','poc_priority','benchmark'].map(a=>{const c=q.cases[`${a}:original:baseline`],f=c.first_missing_odd;return[c.name,c.board_child_orders,c.missing_odd_child_orders,`${f.date} ${f.stock_id} ${f.requested_qty}股`];}));
+  const gaps=el('ol');q.remaining.forEach(t=>gaps.append(el('li',t)));more.append(gaps);
+  for(const s of q.finmind.documents){const link=el('a',s.url.includes('openapi')?'FinMind API欄位定義 ↗':s.url.includes('DataList')?'FinMind資料集清單 ↗':'FinMind逐筆說明 ↗');link.href=s.url;link.target='_blank';link.rel='noopener';const p=el('p');p.append(link);more.append(p);}
+  const download=el('a','查看557組缺件與完整查核紀錄 ↗');download.href=readiness.download_url;download.target='_blank';download.rel='noopener';more.append(download);box.append(more);host.append(box);
+ }else if(readiness){host.append(el('p','最新成交資料查核暫不可讀；維持未驗證狀態。','alert'));}
  host.append(el('p',r.completed_new_accounts===24?(improved.length?'四種成本均改善的版本：'+improved.join('、')+'。仍須通過成交與未見樣本驗證。':'三項改動都未達四種成本下穩定改善，保留兩套原版。'):'仍有未完成案例，尚不能對整批改動作結論。','result-note'));
  const execution=el('section',undefined,'qualification-card');execution.append(el('h3','成交驗證未通過，紙上交易維持關閉'),el('p',`已檢查原版與0050的委託，重用 ${r.execution_audit.unique_ordinary_coordinates} 組普通盤逐筆資料。這是原委託的成交時序診斷，尚未完成可執行規則的整套帳戶重播。`),el('p','買入 (隔日最高＋最低) ÷ 2、賣出 L＋30%×(H−L) 都要收盤後才知道。下方數字僅用來比較歷史敏感度，不能視為實際能買到的報酬。','result-note'));
  const executionMore=el('details',undefined,'comparison-method');executionMore.append(el('summary','成交缺件與資料來源'));
