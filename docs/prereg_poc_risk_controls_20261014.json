@@ -1,0 +1,71 @@
+{
+  "schema": "poc_risk_controls_prereg_v1",
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "arms": [
+    "poc_up_red",
+    "poc_priority"
+  ],
+  "variants": [
+    "chase3",
+    "vol20"
+  ],
+  "modes": [
+    "baseline",
+    "fee2",
+    "slip2",
+    "combined"
+  ],
+  "initial_cash": 1000000,
+  "slots": 3,
+  "chase3": {
+    "max_buy_reference_multiple": 1.03,
+    "limit": "floor_to_stock_tick_and_clamp_legal_range",
+    "quantity": "unchanged_original_sized_at_legal_upper",
+    "cash_reservations": "unchanged",
+    "unfilled": "expire_end_of_day_no_retry"
+  },
+  "vol20": {
+    "lookback_returns": 20,
+    "ddof": 1,
+    "annualization": 252,
+    "target_annual_volatility": 0.3,
+    "multiplier": "min(1,0.30/sigma)",
+    "missing_history": "zero_position_explicit_unknown",
+    "cash": "original_full_slot_reserved_for_day_unused_cash_remains_idle",
+    "rebalance": false
+  },
+  "isolated": true,
+  "unchanged": [
+    "candidates",
+    "POC_selector",
+    "3_slots",
+    "12pct_stop",
+    "63_session_exit",
+    "3_black_exit",
+    "buy_HL2_sell30_daily_proxies",
+    "corporate_actions",
+    "fees_tax_slippage_by_mode"
+  ],
+  "assessment": {
+    "primary": "baseline_net_return_and_max_drawdown_vs_original_and_same_cost_0050",
+    "improvement": "higher_net_return_and_no_worse_max_drawdown_vs_original",
+    "secondary": "all_cost_modes_disclosed_fee2_not_mandatory_paper_gate",
+    "known_history": true
+  },
+  "original_publications": {
+    "artifacts/forward_simulation/top3_validation_20261012.json": "e735be1c46658f904ae229c48bb98b9e3e74224ebf40d26f8684ce7256caa781",
+    "artifacts/forward_simulation/legacy_return_comparison_20261012.json": "a9be68818d890ca1d101e0d4c9c08cf46d956534f96dc568367bbc8319beae4c",
+    "artifacts/forward_simulation/poc_optimization_20261013.json": "ff6a949d487ad880afbb4191295221eef46d80fa4df362abd1a33b3c5cc9a264",
+    "artifacts/forward_simulation/poc_followup_20261014.json": "398922e449b97ba90f5ac3eb8f52dcdb247028577e2c3aa0c27c197d25d8a335",
+    "artifacts/forward_simulation/poc_execution_readiness_20261014.json": "22fc04045ed353a023952721df73849dc75c329a8ae52618c91755dd0e359d6a"
+  },
+  "new_accounts": 16,
+  "reused_original_accounts": 8,
+  "reused_benchmark_accounts": 4,
+  "rerun_completed": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "paper_enabled": false,
+  "live_qualified": false
+}
