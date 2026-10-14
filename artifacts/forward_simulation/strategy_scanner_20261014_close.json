@@ -1,0 +1,2949 @@
+{
+  "schema": "strategy_scanner_daily_continuation_v1",
+  "created_at": "2026-10-14T13:57:25.253216+00:00",
+  "signal_date": "2026-10-14",
+  "source_end": "2026-10-14",
+  "summary": {
+    "schema": "multi_strategy_scan_v1",
+    "start": "2026-09-29",
+    "end": "2026-10-14",
+    "source_end": "2026-10-14",
+    "trading_days": 11,
+    "stocks_per_day": {
+      "2026-09-29": 2076,
+      "2026-09-30": 2076,
+      "2026-10-01": 2076,
+      "2026-10-02": 2076,
+      "2026-10-05": 2076,
+      "2026-10-06": 2076,
+      "2026-10-07": 2076,
+      "2026-10-08": 2076,
+      "2026-10-12": 2076,
+      "2026-10-13": 2076,
+      "2026-10-14": 2076
+    },
+    "active_strategies": 36,
+    "catalog_modules": 80,
+    "signals_per_strategy": {
+      "original_breakout": 294,
+      "original_red": 263,
+      "poc_red_priority": 263,
+      "poc_up_red": 150,
+      "momentum": 4071,
+      "risk_momentum": 4070,
+      "near_high": 971,
+      "contraction_breakout": 45,
+      "donchian20": 607,
+      "donchian55": 383,
+      "bollinger_reclaim": 45,
+      "ma_pullback": 512,
+      "ma20_60_cross": 110,
+      "macd12_26_cross": 234,
+      "rsi14_reclaim30": 11,
+      "stochastic14_3_cross": 177,
+      "bollinger_squeeze_breakout": 51,
+      "keltner20_breakout": 282,
+      "adx14_di_cross": 22,
+      "ichimoku_cloud_breakout": 141,
+      "obv20_breakout": 613,
+      "cmf20_cross": 283,
+      "mfi14_reclaim20": 43,
+      "atr14_volatility_breakout": 710,
+      "legacy_momentum_trend": 1776,
+      "legacy_mean_reversion": 48,
+      "legacy_course_breakout": 50,
+      "first_volume_bar_price": 113,
+      "early_rotation": 694,
+      "launch_breakout_strength": 434,
+      "launch_turnover_heat": 1867,
+      "entry_not_extended": 5932,
+      "entry_strong_close": 1704,
+      "liquidity_median50m": 6053,
+      "liquidity_prior50m": 6707,
+      "liquidity_persistent50m": 6052
+    },
+    "entry_export_strategy_count": 29,
+    "matches_include_non_entry_conditions": true,
+    "outcomes": {
+      "not_matched": 635815,
+      "matched": 45781,
+      "unknown": 85924,
+      "ineligible": 54576
+    },
+    "elapsed_seconds": 15.449,
+    "external_data_requests": 0,
+    "account_independent": true,
+    "live_qualified": false,
+    "backtest_run": false
+  },
+  "day_summary": {
+    "date": "2026-10-14",
+    "stock_count": 2076,
+    "poc_up_red": [
+      {
+        "stock_id": "1101",
+        "name": "台泥",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.05487086199382274,
+          "poc_before": 23.965625,
+          "poc_after": 26.466874999999998,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1301",
+        "name": "台塑",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.3269502200528358,
+          "poc_before": 64.905,
+          "poc_after": 80.86500000000001,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1303",
+        "name": "南亞",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.43906215044950336,
+          "poc_before": 236.99374999999998,
+          "poc_after": 313.11875,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1312",
+        "name": "國喬",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.26786240007246853,
+          "poc_before": 14.725,
+          "poc_after": 17.604999999999997,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1326",
+        "name": "台化",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.16873794728947922,
+          "poc_before": 67.81625,
+          "poc_after": 76.61375,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1409",
+        "name": "新纖",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.06735364651867548,
+          "poc_before": 24.260625,
+          "poc_after": 26.186875,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1597",
+        "name": "直得",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.04262596403463892,
+          "poc_before": 139.2625,
+          "poc_after": 148.7125,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1605",
+        "name": "華新",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.039024523458408567,
+          "poc_before": 37.053125,
+          "poc_after": 38.645625,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1609",
+        "name": "大亞",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.0009873799352131396,
+          "poc_before": 37.969375,
+          "poc_after": 38.966875,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1710",
+        "name": "東聯",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.20078922934076138,
+          "poc_before": 16.67875,
+          "poc_after": 17.646250000000002,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1714",
+        "name": "和桐",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.28303678634401863,
+          "poc_before": 15.978124999999999,
+          "poc_after": 19.728125,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "1802",
+        "name": "台玻",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.10199197848165475,
+          "poc_before": 58.295,
+          "poc_after": 65.58500000000001,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2006",
+        "name": "東和鋼鐵",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.03563771418924633,
+          "poc_before": 82.595,
+          "poc_after": 85.32499999999999,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2328",
+        "name": "廣宇",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.02796314238423947,
+          "poc_before": 47.759375000000006,
+          "poc_after": 48.353125000000006,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2347",
+        "name": "聯強",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.10247462259918838,
+          "poc_before": 89.4425,
+          "poc_after": 95.13749999999999,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2355",
+        "name": "敬鵬",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.20139163897931556,
+          "poc_before": 41.741875,
+          "poc_after": 49.608125,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2402",
+        "name": "毅嘉",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.16560404415557617,
+          "poc_before": 54.1925,
+          "poc_after": 61.8775,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2484",
+        "name": "希華",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.32260332229428457,
+          "poc_before": 73.35375,
+          "poc_after": 86.89875,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2609",
+        "name": "陽明",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.04506532361685567,
+          "poc_before": 60.06375,
+          "poc_after": 64.44375000000001,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2851",
+        "name": "中再保",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.051531541111705215,
+          "poc_before": 47.345625,
+          "poc_after": 48.141875,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2881",
+        "name": "富邦金",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.03159731014884226,
+          "poc_before": 150.34375,
+          "poc_after": 152.96875,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "3010",
+        "name": "華立",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.06725509279457653,
+          "poc_before": 124.94375,
+          "poc_after": 130.98125,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "3044",
+        "name": "健鼎",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.1377971033565093,
+          "poc_before": 510.13125,
+          "poc_after": 579.35625,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "3706",
+        "name": "神達",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.0019752468189138117,
+          "poc_before": 79.9625,
+          "poc_after": 81.85249999999999,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "4927",
+        "name": "泰鼎-KY",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.39388850294850974,
+          "poc_before": 43.696875,
+          "poc_after": 52.935625,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "6505",
+        "name": "台塑化",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.38021506666133553,
+          "poc_before": 86.3375,
+          "poc_after": 95.1125,
+          "poc_status": "up"
+        }
+      }
+    ],
+    "original_red": [
+      {
+        "stock_id": "1101",
+        "name": "台泥",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.05487086199382274
+        }
+      },
+      {
+        "stock_id": "1301",
+        "name": "台塑",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.3269502200528358
+        }
+      },
+      {
+        "stock_id": "1303",
+        "name": "南亞",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.43906215044950336
+        }
+      },
+      {
+        "stock_id": "1312",
+        "name": "國喬",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.26786240007246853
+        }
+      },
+      {
+        "stock_id": "1326",
+        "name": "台化",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.16873794728947922
+        }
+      },
+      {
+        "stock_id": "1409",
+        "name": "新纖",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.06735364651867548
+        }
+      },
+      {
+        "stock_id": "1569",
+        "name": "濱川",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.6088919961391803
+        }
+      },
+      {
+        "stock_id": "1597",
+        "name": "直得",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.04262596403463892
+        }
+      },
+      {
+        "stock_id": "1605",
+        "name": "華新",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.039024523458408567
+        }
+      },
+      {
+        "stock_id": "1609",
+        "name": "大亞",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.0009873799352131396
+        }
+      },
+      {
+        "stock_id": "1710",
+        "name": "東聯",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.20078922934076138
+        }
+      },
+      {
+        "stock_id": "1714",
+        "name": "和桐",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.28303678634401863
+        }
+      },
+      {
+        "stock_id": "1802",
+        "name": "台玻",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.10199197848165475
+        }
+      },
+      {
+        "stock_id": "2006",
+        "name": "東和鋼鐵",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.03563771418924633
+        }
+      },
+      {
+        "stock_id": "2328",
+        "name": "廣宇",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.02796314238423947
+        }
+      },
+      {
+        "stock_id": "2347",
+        "name": "聯強",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.10247462259918838
+        }
+      },
+      {
+        "stock_id": "2355",
+        "name": "敬鵬",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.20139163897931556
+        }
+      },
+      {
+        "stock_id": "2402",
+        "name": "毅嘉",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.16560404415557617
+        }
+      },
+      {
+        "stock_id": "2439",
+        "name": "美律",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.018763085549911684
+        }
+      },
+      {
+        "stock_id": "2484",
+        "name": "希華",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.32260332229428457
+        }
+      },
+      {
+        "stock_id": "2609",
+        "name": "陽明",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.04506532361685567
+        }
+      },
+      {
+        "stock_id": "2851",
+        "name": "中再保",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.051531541111705215
+        }
+      },
+      {
+        "stock_id": "2881",
+        "name": "富邦金",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.03159731014884226
+        }
+      },
+      {
+        "stock_id": "3010",
+        "name": "華立",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.06725509279457653
+        }
+      },
+      {
+        "stock_id": "3044",
+        "name": "健鼎",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.1377971033565093
+        }
+      },
+      {
+        "stock_id": "3354",
+        "name": "律勝",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.10824316568917003
+        }
+      },
+      {
+        "stock_id": "3580",
+        "name": "友威科",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.4051161524176845
+        }
+      },
+      {
+        "stock_id": "3617",
+        "name": "碩天",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.06006757985622535
+        }
+      },
+      {
+        "stock_id": "3706",
+        "name": "神達",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.0019752468189138117
+        }
+      },
+      {
+        "stock_id": "4760",
+        "name": "勤凱科技",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.4883614836760215
+        }
+      },
+      {
+        "stock_id": "4903",
+        "name": "聯光通",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.5740544635781688
+        }
+      },
+      {
+        "stock_id": "4927",
+        "name": "泰鼎-KY",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.39388850294850974
+        }
+      },
+      {
+        "stock_id": "5340",
+        "name": "建榮",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.06836780908464957
+        }
+      },
+      {
+        "stock_id": "6108",
+        "name": "競國",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.3066527530057874
+        }
+      },
+      {
+        "stock_id": "6217",
+        "name": "中探針",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.2629104414619734
+        }
+      },
+      {
+        "stock_id": "6290",
+        "name": "良維",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.0825721750771955
+        }
+      },
+      {
+        "stock_id": "6505",
+        "name": "台塑化",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.38021506666133553
+        }
+      },
+      {
+        "stock_id": "6532",
+        "name": "瑞耘",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.29735575294591166
+        }
+      },
+      {
+        "stock_id": "6834",
+        "name": "天二科技",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.5076799616138263
+        }
+      },
+      {
+        "stock_id": "8042",
+        "name": "金山電",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.36115356840341706
+        }
+      }
+    ],
+    "legacy_course_breakout": [
+      {
+        "stock_id": "1303",
+        "name": "南亞",
+        "first_signal": true,
+        "metrics": {
+          "research_highest_close400": 349.0,
+          "research_max_volume10": 175417461.0,
+          "amount20": 22661948310.225
+        }
+      },
+      {
+        "stock_id": "1312",
+        "name": "國喬",
+        "first_signal": true,
+        "metrics": {
+          "research_highest_close400": 18.9,
+          "research_max_volume10": 210154056.0,
+          "amount20": 563960423.18
+        }
+      },
+      {
+        "stock_id": "1326",
+        "name": "台化",
+        "first_signal": true,
+        "metrics": {
+          "research_highest_close400": 85.5,
+          "research_max_volume10": 103560276.0,
+          "amount20": 2628751649.125
+        }
+      },
+      {
+        "stock_id": "2881",
+        "name": "富邦金",
+        "first_signal": false,
+        "metrics": {
+          "research_highest_close400": 160.5,
+          "research_max_volume10": 28828049.0,
+          "amount20": 2518504224.525
+        }
+      },
+      {
+        "stock_id": "3034",
+        "name": "聯詠",
+        "first_signal": true,
+        "metrics": {
+          "research_highest_close400": 560.0,
+          "research_max_volume10": 5075146.0,
+          "amount20": 1697253928.5
+        }
+      },
+      {
+        "stock_id": "3044",
+        "name": "健鼎",
+        "first_signal": true,
+        "metrics": {
+          "research_highest_close400": 603.0,
+          "research_max_volume10": 5012794.0,
+          "amount20": 1592840950.25
+        }
+      },
+      {
+        "stock_id": "6505",
+        "name": "台塑化",
+        "first_signal": false,
+        "metrics": {
+          "research_highest_close400": 119.5,
+          "research_max_volume10": 139480586.0,
+          "amount20": 3558581574.8650002
+        }
+      },
+      {
+        "stock_id": "6834",
+        "name": "天二科技",
+        "first_signal": true,
+        "metrics": {
+          "research_highest_close400": 168.14419956399607,
+          "research_max_volume10": 32160538.0,
+          "amount20": 1353911565.2549999
+        }
+      }
+    ],
+    "prior_days_exact": true
+  },
+  "per_strategy_daily_summary": [
+    {
+      "strategy_id": "original_breakout",
+      "name": "原封存價量突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 42,
+      "first": 26,
+      "matched_first_unknown": 0,
+      "unknown": 45,
+      "not_matched": 1848,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "original_red",
+      "name": "原突破＋紅 K",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 40,
+      "first": 29,
+      "matched_first_unknown": 0,
+      "unknown": 45,
+      "not_matched": 1850,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "poc_red_priority",
+      "name": "POC 優先＋紅 K（原研究語意）",
+      "kind": "ranking",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 40,
+      "first": 29,
+      "matched_first_unknown": 0,
+      "unknown": 45,
+      "not_matched": 1850,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "poc_up_red",
+      "name": "POC 上移＋紅 K（獨立硬篩研究版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 26,
+      "first": 17,
+      "matched_first_unknown": 0,
+      "unknown": 57,
+      "not_matched": 1852,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "momentum",
+      "name": "中期動能",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 359,
+      "first": 29,
+      "matched_first_unknown": 0,
+      "unknown": 286,
+      "not_matched": 1290,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "risk_momentum",
+      "name": "波動調整動能",
+      "kind": "ranking",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 359,
+      "first": 29,
+      "matched_first_unknown": 0,
+      "unknown": 286,
+      "not_matched": 1290,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "near_high",
+      "name": "接近一年新高",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 106,
+      "first": 20,
+      "matched_first_unknown": 0,
+      "unknown": 425,
+      "not_matched": 1404,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "contraction_breakout",
+      "name": "收斂後帶量突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 1,
+      "first": 1,
+      "matched_first_unknown": 0,
+      "unknown": 165,
+      "not_matched": 1769,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "donchian20",
+      "name": "20 日價格通道突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 72,
+      "first": 53,
+      "matched_first_unknown": 0,
+      "unknown": 165,
+      "not_matched": 1698,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "donchian55",
+      "name": "55 日價格通道突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 48,
+      "first": 32,
+      "matched_first_unknown": 0,
+      "unknown": 239,
+      "not_matched": 1648,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "bollinger_reclaim",
+      "name": "跌出布林下軌後收回",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 23,
+      "first": 23,
+      "matched_first_unknown": 0,
+      "unknown": 165,
+      "not_matched": 1747,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "ma_pullback",
+      "name": "上升趨勢回測均線",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 68,
+      "first": 58,
+      "matched_first_unknown": 0,
+      "unknown": 242,
+      "not_matched": 1625,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "ma20_60_cross",
+      "name": "MA20／60 金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 11,
+      "first": 11,
+      "matched_first_unknown": 0,
+      "unknown": 242,
+      "not_matched": 1682,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "macd12_26_cross",
+      "name": "MACD 訊號線金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 21,
+      "first": 21,
+      "matched_first_unknown": 0,
+      "unknown": 196,
+      "not_matched": 1718,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "rsi14_reclaim30",
+      "name": "RSI14 收復 30",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1776,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "stochastic14_3_cross",
+      "name": "慢速 KD 低檔金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 25,
+      "first": 25,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1751,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "bollinger_squeeze_breakout",
+      "name": "布林收斂後上破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 5,
+      "first": 5,
+      "matched_first_unknown": 0,
+      "unknown": 298,
+      "not_matched": 1632,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "keltner20_breakout",
+      "name": "Keltner 通道上破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 32,
+      "first": 32,
+      "matched_first_unknown": 0,
+      "unknown": 169,
+      "not_matched": 1734,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "adx14_di_cross",
+      "name": "ADX 趨勢確認＋DI 金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 4,
+      "first": 4,
+      "matched_first_unknown": 0,
+      "unknown": 184,
+      "not_matched": 1747,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "ichimoku_cloud_breakout",
+      "name": "一目均衡表過雲",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 30,
+      "first": 30,
+      "matched_first_unknown": 0,
+      "unknown": 254,
+      "not_matched": 1651,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "obv20_breakout",
+      "name": "OBV 突破 20 日高點",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 67,
+      "first": 67,
+      "matched_first_unknown": 0,
+      "unknown": 169,
+      "not_matched": 1699,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "cmf20_cross",
+      "name": "CMF20 由負轉正",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 29,
+      "first": 29,
+      "matched_first_unknown": 0,
+      "unknown": 360,
+      "not_matched": 1546,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "mfi14_reclaim20",
+      "name": "MFI14 收復 20",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 6,
+      "first": 6,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1770,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "atr14_volatility_breakout",
+      "name": "超過一倍 ATR 的收盤漲幅",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 105,
+      "first": 99,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1671,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "legacy_momentum_trend",
+      "name": "舊工廠：動能趨勢（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 218,
+      "first": 65,
+      "matched_first_unknown": 0,
+      "unknown": 241,
+      "not_matched": 1476,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "legacy_mean_reversion",
+      "name": "舊工廠：均值回歸（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 6,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1770,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "legacy_course_breakout",
+      "name": "舊工廠：400日價量高點（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 8,
+      "first": 6,
+      "matched_first_unknown": 0,
+      "unknown": 536,
+      "not_matched": 1391,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "first_volume_bar_price",
+      "name": "盤整後第一根放量紅K（純價量子版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 12,
+      "first": 12,
+      "matched_first_unknown": 0,
+      "unknown": 470,
+      "not_matched": 1453,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "early_rotation",
+      "name": "成交升溫與早期相對強勢（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 72,
+      "first": 28,
+      "matched_first_unknown": 0,
+      "unknown": 281,
+      "not_matched": 1582,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "launch_breakout_strength",
+      "name": "60日收盤突破＋領先0050",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 51,
+      "first": 32,
+      "matched_first_unknown": 0,
+      "unknown": 281,
+      "not_matched": 1603,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "launch_turnover_heat",
+      "name": "近五日成交值升溫",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 176,
+      "first": 30,
+      "matched_first_unknown": 0,
+      "unknown": 281,
+      "not_matched": 1478,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "entry_not_extended",
+      "name": "進場品質：不過度乖離",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 586,
+      "first": 24,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1190,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "entry_strong_close",
+      "name": "進場品質：紅K收在高位",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 239,
+      "first": 200,
+      "matched_first_unknown": 0,
+      "unknown": 175,
+      "not_matched": 1521,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "liquidity_median50m",
+      "name": "流動性：20日成交值中位數",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 569,
+      "first": 6,
+      "matched_first_unknown": 0,
+      "unknown": 159,
+      "not_matched": 1207,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "liquidity_prior50m",
+      "name": "流動性：訊號日前20日均值",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 631,
+      "first": 12,
+      "matched_first_unknown": 0,
+      "unknown": 165,
+      "not_matched": 1139,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "liquidity_persistent50m",
+      "name": "流動性：中位數與前期均值",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 569,
+      "first": 7,
+      "matched_first_unknown": 0,
+      "unknown": 165,
+      "not_matched": 1201,
+      "ineligible": 141
+    },
+    {
+      "strategy_id": "entry_contraction_narrow",
+      "name": "前期價格收斂＋市場廣度偏弱",
+      "kind": "entry",
+      "scope": "known_first_parent_events_only",
+      "evaluated_stocks": 6,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 0,
+      "not_matched": 6,
+      "ineligible": 0
+    },
+    {
+      "strategy_id": "entry_peer_narrow",
+      "name": "價格同儕強勢＋市場廣度偏弱",
+      "kind": "entry",
+      "scope": "known_first_parent_events_only",
+      "evaluated_stocks": 6,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 0,
+      "not_matched": 6,
+      "ineligible": 0
+    }
+  ],
+  "poc_summary": {
+    "continuation_signal_count": 42,
+    "continuation_status_counts": {
+      "down": 2,
+      "unknown": 12,
+      "up": 28
+    },
+    "missing_tick_coordinates": 0,
+    "prior_profile_count": 4778,
+    "historical_prefix_verified": true,
+    "historical_profile_rows_unchanged": true,
+    "unknown_reason_counts": {
+      "ordinary_tape_conflict": 8,
+      "corporate_action_or_nonconstant_price_scale": 4
+    },
+    "unknown_rows": [
+      {
+        "stock_id": "1569",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-23",
+            "differences": {
+              "amount_cents": {
+                "official": 28216880000,
+                "tape": 28216800000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "f6b6023bb653e202a76297065988ab1b906d17c31a486e7e94e8a2e761e59f94",
+            "official_volume": 4405000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 28216800000,
+              "close_cents": 6330,
+              "first_regular_time": "0 days 09:00:09.461718",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 10000,
+              "high_cents": 6520,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6300,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1448,
+              "open_cents": 6420,
+              "raw_all_session_shares": 4415000,
+              "raw_rows": 1448,
+              "regular_message_rows": 1447,
+              "shares": 4405000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-29",
+            "differences": {
+              "amount_cents": {
+                "official": 28054420000,
+                "tape": 28054440000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "d78ad68511603e1b8635d584c20a7ad4f779d31baf1bb24f79553993cf0b45a3",
+            "official_volume": 4337000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 28054440000,
+              "close_cents": 6500,
+              "first_regular_time": "0 days 09:00:08.849665",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 15000,
+              "high_cents": 6630,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6330,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1284,
+              "open_cents": 6500,
+              "raw_all_session_shares": 4352000,
+              "raw_rows": 1284,
+              "regular_message_rows": 1283,
+              "shares": 4337000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-01",
+            "differences": {
+              "amount_cents": {
+                "official": 21549660000,
+                "tape": 21549690000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "5c22220a6e35714dc167ecb107819a2809170d6811c172ae494a7b66bbf3e3c0",
+            "official_volume": 3382000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 21549690000,
+              "close_cents": 6380,
+              "first_regular_time": "0 days 09:00:08.118934",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 13000,
+              "high_cents": 6480,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6170,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1222,
+              "open_cents": 6270,
+              "raw_all_session_shares": 3395000,
+              "raw_rows": 1222,
+              "regular_message_rows": 1221,
+              "shares": 3382000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-02",
+            "differences": {
+              "amount_cents": {
+                "official": 46409770000,
+                "tape": 46409760000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "05a1c6a0f74cda034c28ba93e3a4d4053e0d61c2e2449e98c661fde8b93d23a2",
+            "official_volume": 7021000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 46409760000,
+              "close_cents": 6650,
+              "first_regular_time": "0 days 09:00:08.661551",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 12000,
+              "high_cents": 6860,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6310,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1950,
+              "open_cents": 6400,
+              "raw_all_session_shares": 7033000,
+              "raw_rows": 1950,
+              "regular_message_rows": 1949,
+              "shares": 7021000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-05",
+            "differences": {
+              "amount_cents": {
+                "official": 51282880000,
+                "tape": 51283260000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "9ca5be84f8b37acbe2616b152280acc9769e442bb350b56411cebd7eadb7d705",
+            "official_volume": 7438000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 51283260000,
+              "close_cents": 6850,
+              "first_regular_time": "0 days 09:00:08.705194",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 49000,
+              "high_cents": 7100,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6750,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2232,
+              "open_cents": 6870,
+              "raw_all_session_shares": 7487000,
+              "raw_rows": 2232,
+              "regular_message_rows": 2231,
+              "shares": 7438000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-06",
+            "differences": {
+              "amount_cents": {
+                "official": 53837670000,
+                "tape": 53837660000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "1dfd580c19d945e343ba0ee537171113558afb5adef01179032047530ef40141",
+            "official_volume": 7641000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 53837660000,
+              "close_cents": 7000,
+              "first_regular_time": "0 days 09:00:09.003928",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 22000,
+              "high_cents": 7230,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6860,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2647,
+              "open_cents": 7000,
+              "raw_all_session_shares": 7663000,
+              "raw_rows": 2647,
+              "regular_message_rows": 2646,
+              "shares": 7641000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-07",
+            "differences": {
+              "amount_cents": {
+                "official": 44165640000,
+                "tape": 44165900000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "ad460e3598d5cc91a0cc0734a430c61e05556d29fe11a5f459758ed29f1e4316",
+            "official_volume": 6248000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 44165900000,
+              "close_cents": 7220,
+              "first_regular_time": "0 days 09:00:08.445093",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 11000,
+              "high_cents": 7270,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 6800,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2067,
+              "open_cents": 7000,
+              "raw_all_session_shares": 6259000,
+              "raw_rows": 2067,
+              "regular_message_rows": 2066,
+              "shares": 6248000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-13",
+            "differences": {
+              "amount_cents": {
+                "official": 133000570000,
+                "tape": 133000600000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "0cfc56ce9b5d5308d7beded76ac4f1cc32876da8e581f4214608633cfc3b59f7",
+            "official_volume": 17338000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "1569",
+            "tape": {
+              "amount_cents": 133000600000,
+              "close_cents": 8100,
+              "first_regular_time": "0 days 09:00:09.055570",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 26000,
+              "high_cents": 8100,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 7200,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 5090,
+              "open_cents": 7370,
+              "raw_all_session_shares": 17364000,
+              "raw_rows": 5090,
+              "regular_message_rows": 5089,
+              "shares": 17338000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "4903",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "corporate_action_or_nonconstant_price_scale",
+        "issues": null
+      },
+      {
+        "stock_id": "6834",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "corporate_action_or_nonconstant_price_scale",
+        "issues": null
+      },
+      {
+        "stock_id": "4760",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-21",
+            "differences": {
+              "amount_cents": {
+                "official": 6195750000,
+                "tape": 6195550000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "e24f0a35ee96b83f5473db3e92d3f44da6313fd6c95c1062aa8f6fcbed5a1b25",
+            "official_volume": 232000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "4760",
+            "tape": {
+              "amount_cents": 6195550000,
+              "close_cents": 26600,
+              "first_regular_time": "0 days 09:00:10.185414",
+              "fixed_price_rows": 0,
+              "fixed_price_shares": 0,
+              "high_cents": 27300,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 26400,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 150,
+              "open_cents": 26650,
+              "raw_all_session_shares": 232000,
+              "raw_rows": 150,
+              "regular_message_rows": 150,
+              "shares": 232000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-06",
+            "differences": {
+              "amount_cents": {
+                "official": 113795050000,
+                "tape": 113794950000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "1dfd580c19d945e343ba0ee537171113558afb5adef01179032047530ef40141",
+            "official_volume": 3369000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "4760",
+            "tape": {
+              "amount_cents": 113794950000,
+              "close_cents": 33500,
+              "first_regular_time": "0 days 09:00:09.806241",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 1000,
+              "high_cents": 35600,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 32000,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1881,
+              "open_cents": 33500,
+              "raw_all_session_shares": 3370000,
+              "raw_rows": 1881,
+              "regular_message_rows": 1880,
+              "shares": 3369000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "3580",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-17",
+            "differences": {
+              "amount_cents": {
+                "official": 20030380000,
+                "tape": 20030420000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "a41593459f67e03958cd685e779575c209185639c72e734b69d6562394027780",
+            "official_volume": 2090000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3580",
+            "tape": {
+              "amount_cents": 20030420000,
+              "close_cents": 9460,
+              "first_regular_time": "0 days 09:00:07.044791",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 6000,
+              "high_cents": 9950,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 9080,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1017,
+              "open_cents": 9080,
+              "raw_all_session_shares": 2096000,
+              "raw_rows": 1017,
+              "regular_message_rows": 1016,
+              "shares": 2090000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-18",
+            "differences": {
+              "amount_cents": {
+                "official": 10791540000,
+                "tape": 10791530000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "9148fbcdea6be4302bb10250da01b99beedb5360b7f90c89b122d55333dfdba8",
+            "official_volume": 1125000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3580",
+            "tape": {
+              "amount_cents": 10791530000,
+              "close_cents": 9680,
+              "first_regular_time": "0 days 09:00:06.805382",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 9000,
+              "high_cents": 9760,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 9400,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 667,
+              "open_cents": 9530,
+              "raw_all_session_shares": 1134000,
+              "raw_rows": 667,
+              "regular_message_rows": 666,
+              "shares": 1125000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-30",
+            "differences": {
+              "amount_cents": {
+                "official": 54256550000,
+                "tape": 54255600000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "f187db7751404af31b701fd903e20d6e4df1b88423310dd661dd868d1c84f9ad",
+            "official_volume": 4827000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3580",
+            "tape": {
+              "amount_cents": 54255600000,
+              "close_cents": 11050,
+              "first_regular_time": "0 days 09:00:06.592173",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 11600,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 10800,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1923,
+              "open_cents": 11200,
+              "raw_all_session_shares": 4831000,
+              "raw_rows": 1923,
+              "regular_message_rows": 1922,
+              "shares": 4827000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-01",
+            "market": "TPEX",
+            "official_source_id": "5c22220a6e35714dc167ecb107819a2809170d6811c172ae494a7b66bbf3e3c0",
+            "official_volume": 1235000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ohlc_conflict",
+            "stock_id": "3580",
+            "tape": {
+              "amount_cents": 12706550000,
+              "close_cents": 10800,
+              "first_regular_time": "0 days 09:00:06.111831",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 11200,
+              "last_regular_time": "0 days 13:24:37.910584",
+              "low_cents": 10750,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 529,
+              "open_cents": 11200,
+              "raw_all_session_shares": 1167000,
+              "raw_rows": 529,
+              "regular_message_rows": 528,
+              "shares": 1163000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-05",
+            "differences": {
+              "amount_cents": {
+                "official": 11889000000,
+                "tape": 11889050000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "9ca5be84f8b37acbe2616b152280acc9769e442bb350b56411cebd7eadb7d705",
+            "official_volume": 1092000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3580",
+            "tape": {
+              "amount_cents": 11889050000,
+              "close_cents": 10800,
+              "first_regular_time": "0 days 09:00:06.497412",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 2000,
+              "high_cents": 11150,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 10600,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 426,
+              "open_cents": 11100,
+              "raw_all_session_shares": 1094000,
+              "raw_rows": 426,
+              "regular_message_rows": 425,
+              "shares": 1092000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "8042",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "corporate_action_or_nonconstant_price_scale",
+        "issues": null
+      },
+      {
+        "stock_id": "6108",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "corporate_action_or_nonconstant_price_scale",
+        "issues": null
+      },
+      {
+        "stock_id": "6532",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-17",
+            "differences": {
+              "amount_cents": {
+                "official": 5249810000,
+                "tape": 5249790000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "a41593459f67e03958cd685e779575c209185639c72e734b69d6562394027780",
+            "official_volume": 555000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6532",
+            "tape": {
+              "amount_cents": 5249790000,
+              "close_cents": 9390,
+              "first_regular_time": "0 days 09:00:57.342260",
+              "fixed_price_rows": 0,
+              "fixed_price_shares": 0,
+              "high_cents": 9640,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 9210,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 356,
+              "open_cents": 9210,
+              "raw_all_session_shares": 555000,
+              "raw_rows": 356,
+              "regular_message_rows": 356,
+              "shares": 555000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-29",
+            "differences": {
+              "amount_cents": {
+                "official": 22976680000,
+                "tape": 22976630000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "d78ad68511603e1b8635d584c20a7ad4f779d31baf1bb24f79553993cf0b45a3",
+            "official_volume": 2166000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6532",
+            "tape": {
+              "amount_cents": 22976630000,
+              "close_cents": 10800,
+              "first_regular_time": "0 days 09:01:53.189584",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 10800,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 9960,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 585,
+              "open_cents": 9980,
+              "raw_all_session_shares": 2170000,
+              "raw_rows": 585,
+              "regular_message_rows": 584,
+              "shares": 2166000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-01",
+            "differences": {
+              "amount_cents": {
+                "official": 71288500000,
+                "tape": 71288600000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "5c22220a6e35714dc167ecb107819a2809170d6811c172ae494a7b66bbf3e3c0",
+            "official_volume": 5816000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6532",
+            "tape": {
+              "amount_cents": 71288600000,
+              "close_cents": 12250,
+              "first_regular_time": "0 days 09:00:19.757926",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 3000,
+              "high_cents": 12700,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 11550,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2129,
+              "open_cents": 12100,
+              "raw_all_session_shares": 5819000,
+              "raw_rows": 2129,
+              "regular_message_rows": 2128,
+              "shares": 5816000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-05",
+            "differences": {
+              "amount_cents": {
+                "official": 18147300000,
+                "tape": 18147250000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "9ca5be84f8b37acbe2616b152280acc9769e442bb350b56411cebd7eadb7d705",
+            "official_volume": 1583000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6532",
+            "tape": {
+              "amount_cents": 18147250000,
+              "close_cents": 11200,
+              "first_regular_time": "0 days 09:00:19.740030",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 12050,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 11100,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 700,
+              "open_cents": 12000,
+              "raw_all_session_shares": 1587000,
+              "raw_rows": 700,
+              "regular_message_rows": 699,
+              "shares": 1583000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "6217",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-15",
+            "differences": {
+              "amount_cents": {
+                "official": 46710250000,
+                "tape": 46710300000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "5468dd517ef86ada20f54c2bcc12d095e54ea5e95165e1080056baceef20864d",
+            "official_volume": 2896000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6217",
+            "tape": {
+              "amount_cents": 46710300000,
+              "close_cents": 15650,
+              "first_regular_time": "0 days 09:00:17.785272",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 2000,
+              "high_cents": 16950,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 15600,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1304,
+              "open_cents": 15900,
+              "raw_all_session_shares": 2898000,
+              "raw_rows": 1304,
+              "regular_message_rows": 1303,
+              "shares": 2896000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-02",
+            "differences": {
+              "amount_cents": {
+                "official": 75575250000,
+                "tape": 75575350000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "05a1c6a0f74cda034c28ba93e3a4d4053e0d61c2e2449e98c661fde8b93d23a2",
+            "official_volume": 4219000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6217",
+            "tape": {
+              "amount_cents": 75575350000,
+              "close_cents": 17750,
+              "first_regular_time": "0 days 09:00:17.691138",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 18400,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 17400,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1700,
+              "open_cents": 17400,
+              "raw_all_session_shares": 4223000,
+              "raw_rows": 1700,
+              "regular_message_rows": 1699,
+              "shares": 4219000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "3354",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-14",
+            "differences": {
+              "amount_cents": {
+                "official": 5183015000,
+                "tape": 5183025000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "4de3c7e19327641fa1bdd6ef5f436aa2dd2808fe5a8b78ccea43e367b8015467",
+            "official_volume": 1731000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 5183025000,
+              "close_cents": 2800,
+              "first_regular_time": "0 days 09:00:02.573211",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 10000,
+              "high_cents": 3095,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 2800,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 900,
+              "open_cents": 2960,
+              "raw_all_session_shares": 1741000,
+              "raw_rows": 900,
+              "regular_message_rows": 899,
+              "shares": 1731000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-21",
+            "differences": {
+              "amount_cents": {
+                "official": 7543965000,
+                "tape": 7543835000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "e24f0a35ee96b83f5473db3e92d3f44da6313fd6c95c1062aa8f6fcbed5a1b25",
+            "official_volume": 2476000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 7543835000,
+              "close_cents": 3040,
+              "first_regular_time": "0 days 09:00:03.365384",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 3150,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 2880,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1039,
+              "open_cents": 2970,
+              "raw_all_session_shares": 2480000,
+              "raw_rows": 1039,
+              "regular_message_rows": 1038,
+              "shares": 2476000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-22",
+            "differences": {
+              "amount_cents": {
+                "official": 4820830000,
+                "tape": 4820820000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "a8b24176bb4dd74802cc862d1bb95d3afab6634ade389df9e2218c0d81f12cfa",
+            "official_volume": 1650000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 4820820000,
+              "close_cents": 2880,
+              "first_regular_time": "0 days 09:00:03.845688",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 2000,
+              "high_cents": 3040,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 2830,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 748,
+              "open_cents": 3035,
+              "raw_all_session_shares": 1652000,
+              "raw_rows": 748,
+              "regular_message_rows": 747,
+              "shares": 1650000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-24",
+            "differences": {
+              "amount_cents": {
+                "official": 6005795000,
+                "tape": 6005755000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "8447b3a32848dca3b73003e922a1113eadf2f8e5b79291f85d50553e38d1943e",
+            "official_volume": 2037000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 6005755000,
+              "close_cents": 3000,
+              "first_regular_time": "0 days 09:00:03.242815",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 8000,
+              "high_cents": 3015,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 2800,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 825,
+              "open_cents": 2805,
+              "raw_all_session_shares": 2045000,
+              "raw_rows": 825,
+              "regular_message_rows": 824,
+              "shares": 2037000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-29",
+            "differences": {
+              "amount_cents": {
+                "official": 2217490000,
+                "tape": 2217485000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "d78ad68511603e1b8635d584c20a7ad4f779d31baf1bb24f79553993cf0b45a3",
+            "official_volume": 754000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 2217485000,
+              "close_cents": 2925,
+              "first_regular_time": "0 days 09:00:02.227330",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 2000,
+              "high_cents": 2995,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 2900,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 366,
+              "open_cents": 2970,
+              "raw_all_session_shares": 756000,
+              "raw_rows": 366,
+              "regular_message_rows": 365,
+              "shares": 754000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-30",
+            "differences": {
+              "amount_cents": {
+                "official": 8066065000,
+                "tape": 8066025000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "f187db7751404af31b701fd903e20d6e4df1b88423310dd661dd868d1c84f9ad",
+            "official_volume": 2561000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 8066025000,
+              "close_cents": 3215,
+              "first_regular_time": "0 days 09:00:02.176733",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 1000,
+              "high_cents": 3215,
+              "last_regular_time": "0 days 13:24:05.040366",
+              "low_cents": 2950,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 941,
+              "open_cents": 2970,
+              "raw_all_session_shares": 2562000,
+              "raw_rows": 941,
+              "regular_message_rows": 940,
+              "shares": 2561000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-08",
+            "differences": {
+              "amount_cents": {
+                "official": 7529090000,
+                "tape": 7529105000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "defbba39a3b7aee9a955a31ee6399ef5475bc78012968edd74f034eae4cfa26a",
+            "official_volume": 2396000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "3354",
+            "tape": {
+              "amount_cents": 7529105000,
+              "close_cents": 3200,
+              "first_regular_time": "0 days 09:00:01.884848",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 3240,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 3040,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1028,
+              "open_cents": 3050,
+              "raw_all_session_shares": 2400000,
+              "raw_rows": 1028,
+              "regular_message_rows": 1027,
+              "shares": 2396000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "6290",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-17",
+            "differences": {
+              "amount_cents": {
+                "official": 119645100000,
+                "tape": 119644950000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "a41593459f67e03958cd685e779575c209185639c72e734b69d6562394027780",
+            "official_volume": 4382000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6290",
+            "tape": {
+              "amount_cents": 119644950000,
+              "close_cents": 26600,
+              "first_regular_time": "0 days 09:00:09.451903",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 2000,
+              "high_cents": 28200,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 26600,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1848,
+              "open_cents": 26750,
+              "raw_all_session_shares": 4384000,
+              "raw_rows": 1848,
+              "regular_message_rows": 1847,
+              "shares": 4382000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-18",
+            "differences": {
+              "amount_cents": {
+                "official": 253794100000,
+                "tape": 253794050000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "9148fbcdea6be4302bb10250da01b99beedb5360b7f90c89b122d55333dfdba8",
+            "official_volume": 9008000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6290",
+            "tape": {
+              "amount_cents": 253794050000,
+              "close_cents": 28250,
+              "first_regular_time": "0 days 09:00:09.414601",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 10000,
+              "high_cents": 28800,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 27050,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2644,
+              "open_cents": 27400,
+              "raw_all_session_shares": 9018000,
+              "raw_rows": 2644,
+              "regular_message_rows": 2643,
+              "shares": 9008000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-22",
+            "differences": {
+              "amount_cents": {
+                "official": 122952150000,
+                "tape": 122952100000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "a8b24176bb4dd74802cc862d1bb95d3afab6634ade389df9e2218c0d81f12cfa",
+            "official_volume": 4359000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6290",
+            "tape": {
+              "amount_cents": 122952100000,
+              "close_cents": 27600,
+              "first_regular_time": "0 days 09:00:10.069309",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 5000,
+              "high_cents": 29150,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 27550,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1387,
+              "open_cents": 28600,
+              "raw_all_session_shares": 4364000,
+              "raw_rows": 1387,
+              "regular_message_rows": 1386,
+              "shares": 4359000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-08",
+            "differences": {
+              "amount_cents": {
+                "official": 41769400000,
+                "tape": 41769350000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "defbba39a3b7aee9a955a31ee6399ef5475bc78012968edd74f034eae4cfa26a",
+            "official_volume": 1485000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "6290",
+            "tape": {
+              "amount_cents": 41769350000,
+              "close_cents": 28050,
+              "first_regular_time": "0 days 09:00:09.711421",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 10000,
+              "high_cents": 28450,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 28000,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 544,
+              "open_cents": 28200,
+              "raw_all_session_shares": 1495000,
+              "raw_rows": 544,
+              "regular_message_rows": 543,
+              "shares": 1485000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      },
+      {
+        "stock_id": "5340",
+        "signal_date": "2026-10-14",
+        "status": "unknown",
+        "reason": "ordinary_tape_conflict",
+        "issues": [
+          {
+            "date": "2026-09-11",
+            "differences": {
+              "amount_cents": {
+                "official": 55277910000,
+                "tape": 55277890000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "8dc16c41f3dc72034bf8a0efdfab8f7ad5f989e3cff0c6e84ca261a38547f7f2",
+            "official_volume": 6425000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 55277890000,
+              "close_cents": 8590,
+              "first_regular_time": "0 days 09:00:11.105421",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 34000,
+              "high_cents": 8840,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 8330,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2226,
+              "open_cents": 8410,
+              "raw_all_session_shares": 6459000,
+              "raw_rows": 2226,
+              "regular_message_rows": 2225,
+              "shares": 6425000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-14",
+            "differences": {
+              "amount_cents": {
+                "official": 48161330000,
+                "tape": 48161320000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "4de3c7e19327641fa1bdd6ef5f436aa2dd2808fe5a8b78ccea43e367b8015467",
+            "official_volume": 5649000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 48161320000,
+              "close_cents": 8430,
+              "first_regular_time": "0 days 09:00:11.197440",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 7000,
+              "high_cents": 8700,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 8410,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 1946,
+              "open_cents": 8600,
+              "raw_all_session_shares": 5656000,
+              "raw_rows": 1946,
+              "regular_message_rows": 1945,
+              "shares": 5649000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-09-23",
+            "differences": {
+              "amount_cents": {
+                "official": 10699080000,
+                "tape": 10699140000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "f6b6023bb653e202a76297065988ab1b906d17c31a486e7e94e8a2e761e59f94",
+            "official_volume": 1296000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 10699140000,
+              "close_cents": 8200,
+              "first_regular_time": "0 days 09:00:11.472891",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 3000,
+              "high_cents": 8410,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 8180,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 582,
+              "open_cents": 8410,
+              "raw_all_session_shares": 1299000,
+              "raw_rows": 582,
+              "regular_message_rows": 581,
+              "shares": 1296000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-02",
+            "differences": {
+              "amount_cents": {
+                "official": 11447840000,
+                "tape": 11447830000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "05a1c6a0f74cda034c28ba93e3a4d4053e0d61c2e2449e98c661fde8b93d23a2",
+            "official_volume": 1391000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 11447830000,
+              "close_cents": 8320,
+              "first_regular_time": "0 days 09:00:11.271780",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 6000,
+              "high_cents": 8370,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 8060,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 572,
+              "open_cents": 8100,
+              "raw_all_session_shares": 1397000,
+              "raw_rows": 572,
+              "regular_message_rows": 571,
+              "shares": 1391000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-05",
+            "differences": {
+              "amount_cents": {
+                "official": 51404930000,
+                "tape": 51404950000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "9ca5be84f8b37acbe2616b152280acc9769e442bb350b56411cebd7eadb7d705",
+            "official_volume": 5971000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 51404950000,
+              "close_cents": 8550,
+              "first_regular_time": "0 days 09:00:11.313448",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 10000,
+              "high_cents": 8810,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 8390,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 2405,
+              "open_cents": 8420,
+              "raw_all_session_shares": 5981000,
+              "raw_rows": 2405,
+              "regular_message_rows": 2404,
+              "shares": 5971000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-07",
+            "differences": {
+              "amount_cents": {
+                "official": 88476650000,
+                "tape": 88477200000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "ad460e3598d5cc91a0cc0734a430c61e05556d29fe11a5f459758ed29f1e4316",
+            "official_volume": 9921000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 88477200000,
+              "close_cents": 9000,
+              "first_regular_time": "0 days 09:00:11.254071",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 4000,
+              "high_cents": 9210,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 8490,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 3726,
+              "open_cents": 8490,
+              "raw_all_session_shares": 9925000,
+              "raw_rows": 3726,
+              "regular_message_rows": 3725,
+              "shares": 9921000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-08",
+            "differences": {
+              "amount_cents": {
+                "official": 133681860000,
+                "tape": 133681960000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "defbba39a3b7aee9a955a31ee6399ef5475bc78012968edd74f034eae4cfa26a",
+            "official_volume": 14331000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 133681960000,
+              "close_cents": 9440,
+              "first_regular_time": "0 days 09:00:11.317009",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 36000,
+              "high_cents": 9700,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 9060,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 5570,
+              "open_cents": 9100,
+              "raw_all_session_shares": 14367000,
+              "raw_rows": 5570,
+              "regular_message_rows": 5569,
+              "shares": 14331000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          },
+          {
+            "date": "2026-10-12",
+            "differences": {
+              "amount_cents": {
+                "official": 120641090000,
+                "tape": 120641210000
+              }
+            },
+            "market": "TPEX",
+            "official_source_id": "24085a94fc307857f7b21a57a532943ae158c4765c657f6beb9437e3169acf5f",
+            "official_volume": 12378000.0,
+            "ordinary_amount_matched": false,
+            "ordinary_volume_matched": false,
+            "status": "official_ordinary_aggregate_conflict",
+            "stock_id": "5340",
+            "tape": {
+              "amount_cents": 120641210000,
+              "close_cents": 9500,
+              "first_regular_time": "0 days 09:00:11.572764",
+              "fixed_price_rows": 1,
+              "fixed_price_shares": 48000,
+              "high_cents": 10200,
+              "last_regular_time": "0 days 13:30:00",
+              "low_cents": 9250,
+              "normalization_dropped_rows": 0,
+              "normalized_rows": 4605,
+              "open_cents": 9270,
+              "raw_all_session_shares": 12426000,
+              "raw_rows": 4605,
+              "regular_message_rows": 4604,
+              "shares": 12378000,
+              "unknown_session_rows": 0,
+              "zero_volume_rows": 0
+            },
+            "tick_sequence_complete": false,
+            "volume_scope": "ordinary_session"
+          }
+        ]
+      }
+    ]
+  },
+  "finmind": {
+    "new_tick_requests": 496,
+    "tick_status_counts": {
+      "received": 496
+    },
+    "quota_after_tick_fetch": {
+      "requests_in_window": 503,
+      "window_start_time": 1791985693.269803,
+      "total_requests": 72147,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4357,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    }
+  },
+  "validation": {
+    "historical_scan_days_exact": true,
+    "unchanged_scan_dates": 10,
+    "historical_poc_rows_exact": true,
+    "unchanged_poc_profiles": 4778,
+    "new_scan_dates": [
+      "2026-10-14"
+    ],
+    "source_receipt_files_sha256_verified": true,
+    "full_suite_and_live_http_validation": "recorded_separately_by_task_acceptance"
+  },
+  "artifacts": {
+    "bundle": {
+      "path": ".cache/scanner-20261014-close/inputs-v1/manifest.json",
+      "sha256": "b2959c8933ff921bbbf85d9fed517c019650b17b4020c6cc7f281bd285e7d94d"
+    },
+    "poc": {
+      "path": ".cache/scanner-20261014-close/poc-complete-v1/report.json",
+      "sha256": "0c6d9b9a48a0a7e8920412d82af73ea60cfec808796d353af8028180bf234783"
+    },
+    "scanner": {
+      "path": ".cache/multi-strategy-scanner/20261014-close/receipt.json",
+      "sha256": "f44d4003048d6b42dec1b514ecf2c5cc03f22ec7fcc2d0b738114bc9381baa49"
+    },
+    "official": {
+      "path": ".cache/scanner-20261014-close/official-v1/report.json",
+      "sha256": "ee3b05b27e5fe0ed108264198f62120a0513b260e6151a57eb2b15040bba79a0"
+    },
+    "official_provider_crosscheck": {
+      "path": ".cache/scanner-20261014-close/official-v1/provider-crosscheck-v2.json",
+      "sha256": "cd9c98c562409e4abac013e609f3bd3ab0fd77d3d9fb399f02b29323a28a62df"
+    },
+    "db_official_crosscheck": {
+      "path": ".cache/scanner-20261014-close/db-official-crosscheck.json",
+      "sha256": "0233c65c08b46adba161b2906188a153987441abcf8b2e9e321ee2c8798b51b2"
+    },
+    "tick_requests": {
+      "path": ".cache/scanner-20261014-close/ticks-v1/report.json",
+      "sha256": "72199997e903dac62ac37686e1473f226bf303be7d8171c02ac0372fff20d7fd"
+    },
+    "entry_context": {
+      "path": "artifacts/forward_simulation/entry_context_terminal_20261014_close.json",
+      "sha256": "158ddeb5439bc0a2bb4726f03deb57cf3d85a48ded38bb5dfae9ce24e9f0ce98"
+    },
+    "previous_scanner": {
+      "path": ".cache/multi-strategy-scanner/20261014-oct13-v2/receipt.json",
+      "sha256": "9967d8f72945ac50268e021da923dd7ce5a6ed9069fd62eae19e4d7e5fade108"
+    },
+    "previous_poc": {
+      "path": ".cache/scanner-20261014/poc-complete-v2/report.json",
+      "sha256": "8f1e6f4edbd614f89ebd79df74b1ad8748070b7a68ebd748923a25d15ab4d0f3"
+    }
+  },
+  "source_sha256": {
+    ".cache/scanner-20261014-close/publish_general_audit.py": "dfd22783697919577d929d8cd2cb60208b162e9fc8667d895ea61c23b63c3ad2",
+    "scripts/extend_scanner_daily_poc.py": "4014443c7430555079ca2451a1fd8b2c4093d351de4f4a34424c7595ce8bba1f",
+    "scripts/scan_market_strategies.py": "bed7ea7010d5a78b6bc6640f34ed6a2eb01fd6e52a9bb2f067b2abec760c3425",
+    "skills/strategy_scanner/data.py": "e1841f50af0da6706a8143b04ce3ffff33d850300cf6df1dcb39110f32ad46fc"
+  },
+  "scope": "2076 frozen research stocks plus 0050 benchmark only",
+  "holdings_or_cash_used": false,
+  "signal_prices_through": "2026-10-14",
+  "stock_master_point_in_time_certified": false,
+  "complete_historical_universe": false,
+  "backtest_run": false,
+  "live_qualified": false,
+  "orders_submitted": false,
+  "scheduler_changed": false,
+  "limitations": [
+    "Current market identity snapshots remain provisional, not certified as known at the signal close.",
+    "A fresh 10/13 adjusted anchor was checked against the 4903 official distribution reference before extending 10/14; historical matrices are unchanged.",
+    "All new POC tick coordinates acquired; 12 of 42 original candidates retain unknown quality: {'ordinary_tape_conflict': 8, 'corporate_action_or_nonconstant_price_scale': 4}.",
+    "Context unknown conditions remain unknown and are not treated as negative results.",
+    "Official/FinMind OHLC agreement and authentic tick acquisition do not certify fills or strategy profitability; daily volume scopes differ.",
+    "36 general evaluators and 2 first-parent context evaluators ran. Unimplemented catalog modules remain unavailable; context screens are not included in the general all-strategies total.",
+    "Signal and context selections use completed 2026-10-14 data. Historical reconstruction does not establish real-time publication or live qualification."
+  ]
+}

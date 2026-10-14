@@ -1,0 +1,35 @@
+{
+  "schema": "market_update_acceptance_v1",
+  "date": "2026-10-14",
+  "data_ready": true,
+  "price_date": "2026-10-14",
+  "feature_date": "2026-10-14",
+  "markets": {
+    "TWSE": 1084,
+    "TPEX": 868
+  },
+  "feature_stocks": 1855,
+  "inserted_prices": 1092,
+  "preserved_existing": 868,
+  "pipeline_passed": true,
+  "idempotent": true,
+  "test_passed": 7406,
+  "test_warnings": 37,
+  "standard_http_passed": true,
+  "dashboard_http_passed": true,
+  "browser_verified": true,
+  "poc_matched": 26,
+  "poc_newly_matched": 17,
+  "completed_historical_accounts_replayed": 0,
+  "live_qualified": false,
+  "source_sha256": {
+    ".cache/scanner-20261014-close/db-official-crosscheck.json": "0233c65c08b46adba161b2906188a153987441abcf8b2e9e321ee2c8798b51b2",
+    ".cache/scanner-20261014-close/idempotence-check.json": "cf52f3e67220aceed38b8114b22d79903946d1ef88c6e4d47b5eed1361116d42",
+    ".cache/scanner-20261014-close/http-dashboard.json": "24d734c93a6e0cde457d2b9e1387234fdb3ea97a1c234cbadfc852bc1e4427ad",
+    ".cache/scanner-20261014-close/http-standard.json": "9223ef8283557de75d95dcd40d257782c34f30d2d536db5a2d67c37a1f24c4d0",
+    ".cache/scanner-20261014-close/ticks-v1/report.json": "72199997e903dac62ac37686e1473f226bf303be7d8171c02ac0372fff20d7fd",
+    ".cache/scanner-20261014-close/official-v1/provider-crosscheck-v2.json": "cd9c98c562409e4abac013e609f3bd3ab0fd77d3d9fb399f02b29323a28a62df",
+    "artifacts/forward_simulation/strategy_scanner_20261014_close.json": "dd1b215c0ddd5eae169726eb6deb159605dd34c4f23b4f1ebd222e5fca10a549",
+    "artifacts/forward_simulation/entry_context_terminal_20261014_close.json": "158ddeb5439bc0a2bb4726f03deb57cf3d85a48ded38bb5dfae9ce24e9f0ce98"
+  }
+}
