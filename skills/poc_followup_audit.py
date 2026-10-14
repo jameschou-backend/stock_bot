@@ -52,7 +52,8 @@ def audit(case, report, root):
     if variant == 'correlation60':
         close = pd.read_parquet(root/report['input_bundle']/'close-official.parquet').set_index('date')
         close.index = pd.to_datetime(close.index)
-    count, pairs, fallbacks = 0, 0, 0
+    count, pairs, fallbacks, applied_days, no_resources = 0, 0, 0, 0, 0
+    fallback_reasons = {}
     for row in logs:
         context = contexts[row['date']]
         if row['original_ids'] != context['original_event_ids']:
@@ -64,7 +65,12 @@ def audit(case, report, root):
                 if profiles[row['unresolved']]['available'] is not False:
                     raise ValueError('Strength fallback was not backed by unavailable evidence')
                 fallbacks += 1
+                reason = profiles[row['unresolved']]['reason']
+                fallback_reasons[reason] = fallback_reasons.get(reason, 0)+1
+            else:
+                no_resources += 1
             continue
+        applied_days += 1
         cert = context['certificate']
         if variant == 'poc_strength':
             scores = {}
@@ -92,6 +98,8 @@ def audit(case, report, root):
         elif variant == 'correlation60':
             if row.get('original_quality_fallback'):
                 fallbacks += 1
+                reason = row['fallback_reason']
+                fallback_reasons[reason] = fallback_reasons.get(reason, 0)+1
                 if cert.get('correlation_original_quality_fallback') is not True:
                     raise ValueError('Correlation quality fallback lost its gate')
             initial = cert['initial_state']
@@ -133,4 +141,7 @@ def audit(case, report, root):
         if not context.get('fallback_to_original') and context.get('actual_reservations_verified') is not True:
             raise ValueError('Candidate certificate was not checked against actual account reservations')
     return dict(passed=True, variant=variant, decisions_checked=count, correlation_pairs_checked=pairs,
-                explicit_quality_fallback_days=fallbacks, source_cutoff_verified=True)
+                explicit_quality_fallback_days=fallbacks, source_cutoff_verified=True,
+                decision_days=len(logs), applied_days=applied_days,
+                no_opening_resources_days=no_resources,
+                quality_fallback_reasons=fallback_reasons)

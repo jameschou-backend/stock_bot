@@ -34,7 +34,9 @@ def test_strength_independently_checks_sealed_inputs_ties_and_cutoff(tmp_path):
     row.update(scores={'1111': .01, '2222': .2}, original_priorities={'1111': 9, '2222': 8},
                ordered_ids=['2222', '1111'])
     context['certificate']['original_ordered_ids'] = row['ordered_ids']
-    assert audit(case, report, tmp_path)['decisions_checked'] == 2
+    result = audit(case, report, tmp_path)
+    assert result['decisions_checked'] == 2
+    assert (result['applied_days'], result['decision_days'], result['no_opening_resources_days']) == (1, 1, 0)
     bad = deepcopy(case); bad['account']['followup_log'][0]['scores']['2222'] = .3
     with pytest.raises(ValueError, match='score differs'):
         audit(bad, report, tmp_path)
