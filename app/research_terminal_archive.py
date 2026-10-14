@@ -8,6 +8,8 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_risk_controls_20261014', '兩套POC：限制追高與波動部位', '2026-10-14', 'account', '兩項獨立實驗，重用原版與同成本0050；以原成本報酬和回撤判斷改善'),
+    ('strategy_scanner_20261014_close', '10/14 全市場策略掃描', '2026-10-14', 'data', '只追加今日行情、POC與情境訊號；歷史資料不變'),
     ('poc_execution_readiness_20261014', '兩套POC原版：FinMind成交資料缺口', '2026-10-14', 'data', '重用已完成帳戶，核對FinMind逐筆與零股時序；缺資料時不產生可執行報酬'),
     ('poc_followup_20261014', 'POC 後續驗證：成交、出場、強度與相關性', '2026-10-14', 'account', '保留兩套原版，三個獨立變因與同成本0050；完整驗證前不啟用紙上交易'),
     ('poc_optimization_20261013', 'POC 優化：冷卻5日與成本壓力', '2026-10-13', 'account', '兩套POC原版與冷卻版、相同成本0050及成交缺件'),
@@ -88,7 +90,10 @@ def overview(root=ROOT):
                        position_count=report.get('maximum_active_stock_slots', report.get('position_count', report.get('active_slots'))),
                        note='已核對發布紀錄指紋；未於開啟頁面時重跑帳戶或核對全部歷史來源。',
                        download_url='/research-terminal/api/archive/' + identifier)
-            if identifier == 'poc_followup_20261014':
+            if identifier == 'poc_risk_controls_20261014':
+                from app.poc_risk_controls_ui import validate
+                row['risk_controls'] = validate(report)
+            elif identifier == 'poc_followup_20261014':
                 from app.poc_followup_ui import validate
                 row['followup'] = validate(report)
                 row['execution_note'] = '凍結委託診斷與歷史敏感度分開呈現；成交驗證未通過，紙上交易關閉。'
@@ -156,6 +161,10 @@ def publication_bytes(identifier, root=ROOT):
 
 
 def case_detail(identifier, case_id, root=ROOT):
+    if identifier == 'poc_risk_controls_20261014':
+        from app.poc_risk_controls_ui import case_detail as detail
+        publication, _, _ = _publication(identifier, root)
+        return detail(publication, case_id, root)
     if identifier == 'poc_followup_20261014':
         from app.poc_followup_ui import case_detail as detail
         publication, _, _ = _publication(identifier, root)
