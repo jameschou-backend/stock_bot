@@ -32,7 +32,10 @@ def validate(report):
                 or any(abs(m[k]-row['summary'][k]) > 1e-7 for k in ('total_return', 'max_drawdown', 'final_nav'))
                 or abs(m['final_nav']/initial-1-m['total_return']) > 1e-10):
             raise ValueError('分帳績效或本金不一致')
-        if row['excess_return'] != m['total_return']-cases[f"benchmark:original:{row['mode']}"]['metrics']['total_return']:
+        if row['variant'] == 'split50':
+            if row.get('excess_return') is not None or row.get('rolling252') is not None:
+                raise ValueError('50萬子帳戶不能冒充與100萬0050同本金比較')
+        elif row['excess_return'] != m['total_return']-cases[f"benchmark:original:{row['mode']}"]['metrics']['total_return']:
             raise ValueError('分帳比較未使用同成本0050')
         if row['variant'] == 'split50':
             audit = row.get('funding_audit', {})

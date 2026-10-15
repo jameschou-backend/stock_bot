@@ -118,6 +118,10 @@ def build(paths, root=ROOT):
         for field in ('data_gap_exclusions', 'profile_data_exclusions', 'selection_fallback_days'):
             cases[f'combined:combined:{mode}'][field] = sum(cases[f'{a}:split50:{mode}'][field] for a in ARMS)
     for key, row in cases.items():
+        if row['variant'] == 'split50':
+            row.update(excess_return=None, rolling252=None,
+                benchmark_comparison='not_compared_500k_sleeve_to_1m_benchmark')
+            continue
         benchmark_key = f"benchmark:original:{row['mode']}"
         base = cases[benchmark_key]['metrics']
         row['excess_return'] = row['metrics']['total_return']-base['total_return']

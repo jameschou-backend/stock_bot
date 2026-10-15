@@ -15,7 +15,7 @@ def report():
             ret=1.0 if variant=='original' else .8
             metrics=dict(initial_cash=initial,trading_days=666,total_return=ret,max_drawdown=-.3,final_nav=initial*(1+ret),profit=initial*ret)
             cases[f'{arm}:{variant}:{mode}']=dict(id=arm,variant=variant,mode=mode,completed=True,
-                metrics=metrics,summary=deepcopy(metrics),excess_return=ret-1,
+                metrics=metrics,summary=deepcopy(metrics),excess_return=None if variant=='split50' else ret-1,
                 funding_audit=dict(initial_cash=500000,independent_cash=True,rebalance=False,scaled_original_result=False),
                 aggregation_audit=dict(passed=True,days=666,cash_transfers=False,rebalance=False,method='sum_independent_nav_recompute_peak'),
                 shared_capacity=dict(capacity_collision_count=0,collisions=[],joint_capacity_pass=True,actual_fill_verified=False))
@@ -35,7 +35,7 @@ def test_exact_scope_is_accepted(report):
     assert validate(report) is report
 
 
-@pytest.mark.parametrize('mutation',['missing','capital','cost','comparison','promotion','rebalance','nan','capacity','funding','scaled'])
+@pytest.mark.parametrize('mutation',['missing','capital','cost','comparison','promotion','rebalance','nan','capacity','funding','scaled','unequal_benchmark'])
 def test_invalid_scope_or_false_improvement_is_rejected(report,mutation):
     row=report['cases']['combined:combined:baseline']
     if mutation=='missing': del report['cases']['poc_priority:split50:combined']
@@ -48,6 +48,7 @@ def test_invalid_scope_or_false_improvement_is_rejected(report,mutation):
     if mutation=='capacity': row['shared_capacity']['capacity_collision_count']=1
     if mutation=='funding': report['cases']['poc_up_red:split50:baseline']['funding_audit']['independent_cash']=False
     if mutation=='scaled': report['cases']['poc_up_red:split50:baseline']['funding_audit']['scaled_original_result']=True
+    if mutation=='unequal_benchmark': report['cases']['poc_up_red:split50:baseline']['excess_return']=0
     with pytest.raises(ValueError): validate(report)
 
 
