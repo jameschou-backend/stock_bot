@@ -92,7 +92,7 @@ async function loadStudies(){
  else replace('studies-list',el('p','歷史研究讀取失敗：'+results[0].reason.message,'caption'));
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
-  window.renderPocPaperPreparation(state.archive.items?.find(x=>x.id==='poc_original_paper_preparation_20261015'),$('poc-paper-preparation'),{el,number,pct});
+  window.renderPocPaperPreparation(state.archive.items?.find(x=>x.id==='poc_original_signal_preparation_20261015_close'),$('poc-paper-preparation'),{el,number,pct});
   window.renderPocSplitAccounts(state.archive.items?.find(x=>x.id==='poc_split_accounts_20261015'),$('poc-split-accounts'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderPocRiskControls(state.archive.items?.find(x=>x.id==='poc_risk_controls_20261014'),$('poc-risk-controls'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderPocFollowup(state.archive.items?.find(x=>x.id==='poc_followup_20261014'),$('poc-followup'),{el,tag,number,pct,api,renderAccountDetail});

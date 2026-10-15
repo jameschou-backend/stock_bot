@@ -18,7 +18,7 @@ window.renderPocPaperPreparation = function(item, host, h) {
   for(const gap of r.remaining.filter(x=>['fill_source','causal_execution','poc_account_integration'].includes(x.id))){execution.append(el('strong',gap.title),el('p',gap.detail));}host.append(execution);
   const future=r.remaining.find(x=>x.id==='forward_evidence');
   if(future)host.append(el('h3','後續績效評估'),el('p',future.detail+' 這不影響先準備訊號；不需先累積126天才能開始觀察。','result-note'));
-  host.append(el('h3','本次封存'),el('p',`${s.signal_date}：${s.matched_count}檔符合、${s.unknown_count}檔未知、${s.rank_unknown_count}檔排序資料不足。合格事前訊號日 ${counts.prospective_signal_days} 天；委託 ${counts.orders} 筆、成交 ${counts.fills} 筆。`));
+  host.append(el('h3','本次封存'),el('p',`${s.signal_date}完整股票池：${s.matched_count}檔符合、${s.unknown_count}檔資料未知；符合者中${s.rank_unknown_count}檔排序資料不足。合格事前訊號日 ${counts.prospective_signal_days} 天；委託 ${counts.orders} 筆、成交 ${counts.fills} 筆。`));
   if(!r.observation.body.eligible_observation)host.append(el('p','本次只作準備核對，未計入鎖版後事前觀察，也未回填委託。','result-note'));
   const details=el('details',undefined,'comparison-method');details.append(el('summary','查看封存候選與資料未知原因'));
   const list=el('ol');s.candidates.forEach(c=>list.append(el('li',`${c.members[0]} ${c.name} · 20日平均成交值 ${number(c.priority,0)} · ${c.first_signal?'首日符合':'持續符合'}`)));details.append(list);
