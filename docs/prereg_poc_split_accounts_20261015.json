@@ -1,0 +1,59 @@
+{
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "arms": [
+    "poc_up_red",
+    "poc_priority"
+  ],
+  "modes": [
+    "baseline",
+    "fee2",
+    "slip2",
+    "combined"
+  ],
+  "unchanged": [
+    "candidates",
+    "POC_selector",
+    "3_slots",
+    "12pct_stop",
+    "63_session_exit",
+    "3_black_exit",
+    "buy_HL2_sell30_daily_proxies",
+    "corporate_actions",
+    "fees_tax_slippage_by_mode"
+  ],
+  "original_publications": {
+    "artifacts/forward_simulation/top3_validation_20261012.json": "e735be1c46658f904ae229c48bb98b9e3e74224ebf40d26f8684ce7256caa781",
+    "artifacts/forward_simulation/legacy_return_comparison_20261012.json": "a9be68818d890ca1d101e0d4c9c08cf46d956534f96dc568367bbc8319beae4c",
+    "artifacts/forward_simulation/poc_optimization_20261013.json": "ff6a949d487ad880afbb4191295221eef46d80fa4df362abd1a33b3c5cc9a264",
+    "artifacts/forward_simulation/poc_followup_20261014.json": "398922e449b97ba90f5ac3eb8f52dcdb247028577e2c3aa0c27c197d25d8a335",
+    "artifacts/forward_simulation/poc_execution_readiness_20261014.json": "22fc04045ed353a023952721df73849dc75c329a8ae52618c91755dd0e359d6a",
+    "artifacts/forward_simulation/poc_risk_controls_20261014.json": "73b8c39674df42525e2f65e43673f074d849bbaa916145ecd08ad81a6a6889c4"
+  },
+  "schema": "poc_split_accounts_prereg_v1",
+  "initial_cash": 1000000,
+  "sleeve_initial_cash": 500000,
+  "slots_per_sleeve": 3,
+  "variants": [
+    "split50"
+  ],
+  "rebalance": false,
+  "cash_transfers": false,
+  "order_netting": false,
+  "profit_allocation": "profits_and_losses_remain_in_originating_sleeve",
+  "combined_nav": "sum_actual_daily_sleeve_nav_then_recompute_drawdown",
+  "shared_capacity": "retain_original_per_account_1pct_proxy_and_disclose_aggregate_security_channel_capacity_collisions_no_joint_fill_claim",
+  "new_accounts": 8,
+  "reused_original_accounts": 8,
+  "reused_benchmark_accounts": 4,
+  "rerun_completed": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "paper_enabled": false,
+  "live_qualified": false,
+  "assessment": {
+    "primary": "baseline_combined_return_and_drawdown_deltas_vs_both_1m_originals_and_same_cost_0050",
+    "secondary": "all_four_cost_modes_disclosed",
+    "known_history": true
+  }
+}
