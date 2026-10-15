@@ -34,7 +34,7 @@ def terminal_index():
 @router.get('/terminal/{asset}')
 def terminal_asset(asset: str):
     types = {'index.html': 'text/html', 'app.css': 'text/css',
-             'app.js': 'text/javascript', 'poc-split-accounts.js': 'text/javascript', 'poc-risk-controls.js': 'text/javascript', 'poc-followup.js': 'text/javascript', 'poc-optimization.js': 'text/javascript', 'comparison-overview.js': 'text/javascript', 'account-comparison.js': 'text/javascript', 'top3-validation.js': 'text/javascript', 'legacy-comparison.js': 'text/javascript'}
+             'app.js': 'text/javascript', 'poc-paper-preparation.js': 'text/javascript', 'poc-split-accounts.js': 'text/javascript', 'poc-risk-controls.js': 'text/javascript', 'poc-followup.js': 'text/javascript', 'poc-optimization.js': 'text/javascript', 'comparison-overview.js': 'text/javascript', 'account-comparison.js': 'text/javascript', 'top3-validation.js': 'text/javascript', 'legacy-comparison.js': 'text/javascript'}
     if asset not in types:
         raise HTTPException(404, '找不到介面檔案')
     path = ASSETS / asset

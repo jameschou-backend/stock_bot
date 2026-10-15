@@ -92,6 +92,7 @@ async function loadStudies(){
  else replace('studies-list',el('p','歷史研究讀取失敗：'+results[0].reason.message,'caption'));
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
+  window.renderPocPaperPreparation(state.archive.items?.find(x=>x.id==='poc_original_paper_preparation_20261015'),$('poc-paper-preparation'),{el,number,pct});
   window.renderPocSplitAccounts(state.archive.items?.find(x=>x.id==='poc_split_accounts_20261015'),$('poc-split-accounts'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderPocRiskControls(state.archive.items?.find(x=>x.id==='poc_risk_controls_20261014'),$('poc-risk-controls'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderPocFollowup(state.archive.items?.find(x=>x.id==='poc_followup_20261014'),$('poc-followup'),{el,tag,number,pct,api,renderAccountDetail});
@@ -123,14 +124,15 @@ function setupLabSections(){
   const root=$('view-backtest'),menu=el('nav',undefined,'lab-tabs');menu.setAttribute('aria-label','回測研究類型');
   const panes={accounts:el('div'),signals:el('div'),history:el('div')};
   const study=el('select');study.setAttribute('aria-label','帳戶研究版本');
-  study.append(option('split-accounts','兩套原版各50萬 · 不再平衡'),option('risk-controls','POC 獨立實驗 · 限制追高／波動部位'),option('followup','POC 後續驗證 · 成交／出場／強度／相關性'),option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
+  study.append(option('paper-preparation','POC硬篩＋紅K原版 · 訊號準備'),option('split-accounts','兩套原版各50萬 · 不再平衡'),option('risk-controls','POC 獨立實驗 · 限制追高／波動部位'),option('followup','POC 後續驗證 · 成交／出場／強度／相關性'),option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
   const selector=el('label',undefined,'study-version');selector.append(el('span','目前查看'),study);
   root.insertBefore(menu,$('legacy-comparison'));
   const optimization=el('section',undefined,'panel research-body');optimization.id='poc-optimization';
   const followup=el('section',undefined,'panel research-body');followup.id='poc-followup';
   const riskControls=el('section',undefined,'panel research-body');riskControls.id='poc-risk-controls';
   const splitAccounts=el('section',undefined,'panel research-body');splitAccounts.id='poc-split-accounts';
-  panes.accounts.append(selector,splitAccounts,riskControls,followup,optimization,$('legacy-comparison'),$('top3-validation'));
+  const paperPreparation=el('section',undefined,'panel research-body');paperPreparation.id='poc-paper-preparation';
+  panes.accounts.append(selector,paperPreparation,splitAccounts,riskControls,followup,optimization,$('legacy-comparison'),$('top3-validation'));
   panes.signals.append(root.querySelector('.lab-layout'));
   panes.history.append($('account-comparison'),...root.querySelectorAll('section.account-replay-config'));
   for(const [id,name] of [['accounts','最新帳戶比較'],['signals','訊號研究'],['history','歷史版本']]){
@@ -138,7 +140,7 @@ function setupLabSections(){
     button.addEventListener('click',()=>{for(const [key,pane] of Object.entries(panes))pane.hidden=key!==id;for(const b of menu.children)b.setAttribute('aria-pressed',b===button?'true':'false');});
     menu.append(button);panes[id].id='lab-'+id;panes[id].hidden=id!=='accounts';root.append(panes[id]);
   }
-  function chooseStudy(){$('poc-split-accounts').hidden=study.value!=='split-accounts';$('poc-risk-controls').hidden=study.value!=='risk-controls';$('poc-followup').hidden=study.value!=='followup';$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
+  function chooseStudy(){$('poc-paper-preparation').hidden=study.value!=='paper-preparation';$('poc-split-accounts').hidden=study.value!=='split-accounts';$('poc-risk-controls').hidden=study.value!=='risk-controls';$('poc-followup').hidden=study.value!=='followup';$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
   study.addEventListener('change',chooseStudy);chooseStudy();
   $('backtest-submit').replaceChildren(document.createTextNode('分析單筆訊號 →'));
   root.querySelector('.lab-config h2').textContent='建立訊號研究';

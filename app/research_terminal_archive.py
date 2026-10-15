@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_original_paper_preparation_20261015', 'POC硬篩＋紅K原版：訊號準備', '2026-10-15', 'data', '沿用已完成驗證，只準備訊號；使用者回報買進後才記錄'),
     ('poc_split_accounts_20261015', '兩套原版各50萬：不再平衡', '2026-10-15', 'account', '總本金100萬，兩個獨立帳戶；重用原版與同成本0050'),
     ('poc_risk_controls_20261014', '兩套POC：限制追高與波動部位', '2026-10-14', 'account', '兩項獨立實驗，重用原版與同成本0050；以原成本報酬和回撤判斷改善'),
     ('strategy_scanner_20261014_close', '10/14 全市場策略掃描', '2026-10-14', 'data', '只追加今日行情、POC與情境訊號；歷史資料不變'),
@@ -91,7 +92,11 @@ def overview(root=ROOT):
                        position_count=report.get('maximum_active_stock_slots', report.get('position_count', report.get('active_slots'))),
                        note='已核對發布紀錄指紋；未於開啟頁面時重跑帳戶或核對全部歷史來源。',
                        download_url='/research-terminal/api/archive/' + identifier)
-            if identifier == 'poc_split_accounts_20261015':
+            if identifier == 'poc_original_paper_preparation_20261015':
+                from app.poc_paper_preparation import validate
+                row['paper_preparation'] = validate(report)
+                row['execution_note'] = '目前只準備訊號；使用者回報買進後才依實際資料記錄，未建立委託或成交。'
+            elif identifier == 'poc_split_accounts_20261015':
                 from app.poc_split_accounts_ui import validate
                 row['split_accounts'] = validate(report)
             elif identifier == 'poc_risk_controls_20261014':
