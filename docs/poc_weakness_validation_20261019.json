@@ -1,0 +1,67 @@
+{
+  "schema": "poc_weakness_validation_v1",
+  "checked_at": "2026-10-19T14:41:00.800061+00:00",
+  "publication": "artifacts/forward_simulation/poc_weakness_20261019.json",
+  "publication_sha256": "51fa2a21e9d54246285391dcf1f88120ae88d08c4c3919446d2042a640ec2aad",
+  "research": {
+    "backtests_run": 0,
+    "cohorts_completed": 73,
+    "cohorts_total": 73,
+    "episodes_completed": 5,
+    "episodes_total": 5,
+    "original_black_decisions_checked": 1696,
+    "original_black_triggers_checked": 57,
+    "source_hashes_unchanged": true,
+    "publication_second_invocation": "reused_without_recomputation",
+    "strategy_changed": false,
+    "orders_or_fills_created": false
+  },
+  "targeted_tests": {
+    "passed": 16,
+    "elapsed_seconds": 0.57,
+    "log": ".cache/poc-weakness-20261019/targeted-tests.log"
+  },
+  "api": {
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs": 200,
+    "archive": 200,
+    "publication": 200,
+    "javascript": 200,
+    "download_byte_exact": true
+  },
+  "browser": {
+    "study": "weakness",
+    "first_and_fifth_episode_verified": true,
+    "renderer_all_15_selections_tested": true,
+    "screenshot": ".cache/poc-weakness-20261019/dashboard.jpg"
+  },
+  "daily_update": {
+    "date": "2026-10-19",
+    "initial_official_source_complete": false,
+    "explicit_run_price_source": "finmind",
+    "permanent_config_changed": false,
+    "command": "SPONSOR_INGEST=off INGEST_PRICES_SOURCE=finmind make pipeline",
+    "exit_code": 0,
+    "valid_close_stocks": {
+      "TWSE": 1081,
+      "TPEX": 870
+    },
+    "feature_date": "2026-10-19",
+    "feature_stocks": 2130,
+    "data_ready": true,
+    "problems": [],
+    "pipeline_log": ".cache/poc-weakness-20261019/pipeline-finmind.log",
+    "poc_sealed_signal_date": "2026-10-15",
+    "poc_signal_date_not_advanced": true
+  },
+  "full_test_suite": {
+    "command": "make test",
+    "exit_code": 0,
+    "passed": 7580,
+    "warnings": 37,
+    "elapsed_seconds": 244.55,
+    "log": ".cache/poc-weakness-20261019/make-test.log"
+  }
+}
