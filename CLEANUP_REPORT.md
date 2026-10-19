@@ -1,6 +1,27 @@
 # CLEANUP_REPORT.md
 
-> 本次清理與強化作業執行日期：2026-03-04
+## 2026-10-19：本機檔案清理與目錄說明
+
+刪除 1,431 個未受 Git 追蹤的檔案，合計 2,944,116,158 bytes（約 2.94 GB／2.74 GiB）。
+這是刪除當時的檔案大小；Python 與 pytest 快取在後續執行時會重新產生。
+
+| 刪除項目 | 檔案數 | 依據 |
+|----------|-------:|------|
+| `artifacts/features.bak_preadj/`、`artifacts/features.bak_preohlc/` | 22 | 6／7 月修復前的特徵備份；專案紀錄已標示穩定後可刪。現行 FeatureStore 指向 `artifacts/features/`，2016–2026 共 11 份 Parquet metadata 均可讀；目前程式未讀取舊備份 |
+| `artifacts/reports/all_signals_2019_20261002.xlsx.inspect.ndjson` | 1 | Excel 檢查用中間檔；同名原始 `.xlsx` 保留，程式與文件未引用中間檔 |
+| 主要 Python 目錄內的 `*.pyc` | 1,401 | 可重新產生的位元碼 |
+| 根目錄 `.pytest_cache/`、`.DS_Store` | 7 | 測試與 Finder 快取 |
+
+刪除前記錄明細與大型刪除檔的 SHA-256 至本機 `.cache/project-cleanup-20261019/manifest.json`。
+刪除後核對 19 份保留檔的 SHA-256 未變，包括 `.env`、持倉、11 年現行特徵、還原股價及相關帳本。
+未刪除研究輸入、回測結果、續跑紀錄、trial registry、模型、MCP 環境或 MySQL 資料。
+本次亦補上 README 目錄指南，並將 7 個本機資料產出目錄加入 `.gitignore`；忽略不代表可刪除。
+
+---
+
+## 2026-03-04：歷史清理與強化紀錄
+
+> 以下為當時紀錄，非目前程式與驗收狀態。
 
 ---
 

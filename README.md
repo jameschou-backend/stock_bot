@@ -2,6 +2,24 @@
 
 已有本機資料時，執行 `make workbench` 開啟新版投資工作台：候選觀察、交易計畫、紙上／實際成交記帳，以及背景回測。操作、FinMind Sponsor 額度、效能驗收與 MCP／Skills 安裝請看 [工作台說明](docs/workbench.md)。
 
+## 專案目錄與清理
+
+| 目錄 | 用途與保留原則 |
+|------|----------------|
+| `app/`、`ui/`、`templates/` | API、工作台與網頁介面 |
+| `skills/`、`pipelines/`、`scripts/` | 資料處理、研究邏輯與執行入口；`scripts/archive/` 保留歷史工具 |
+| `tests/`、`storage/migrations/` | 測試與資料庫遷移 |
+| `docs/`、`experiments/`、`memory/` | 研究規格、驗證結果、實驗設定與專案決策 |
+| `artifacts/` | 特徵、標籤、模型、行情快照、帳本與報告；多數是必要資料 |
+| `.cache/` | 同時存放研究輸入、回測結果、續跑狀態、訓練模型與 MCP 環境，不能整包清空 |
+| `outputs/`、`logs/`、`mlruns/` | 匯出成果、執行紀錄與實驗追蹤；先確認用途再清理 |
+
+可重新產生的 `__pycache__/`、`*.pyc`、`.pytest_cache/` 和 `.DS_Store` 可清除。
+舊備份與大型檢查中間檔須先確認已被替代、原始成果仍在，且沒有程式或研究紀錄依賴。
+Git 忽略規則只控制版本追蹤，不代表檔案可刪；不要使用 `git clean -fdx` 清理本專案。
+保留 `.env`、持倉與成交資料、原始行情、還原股價、trial registry、回測完成結果及續跑紀錄。
+FinMind 額度帳本位於 `~/.cache/stock-bot/finmind.sqlite3`，亦須保留。
+
 ## 快速開始
 
 1. 設定環境變數：
