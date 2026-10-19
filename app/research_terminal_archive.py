@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_market_sizing_20261019', 'POC硬篩＋紅K：大盤轉弱新買減半', '2026-10-19', 'account', '0050低於MA120只縮小新買，重用原版與同成本0050'),
     ('poc_cap40_20261019', 'POC硬篩＋紅K：單股40%減至1/3', '2026-10-19', 'account', '只新增比重減碼，重用原版與同成本0050'),
     ('poc_trailing_20261019', 'POC硬篩＋紅K：移動停利20/12', '2026-10-19', 'account', '只新增移動停利，重用原版與同成本0050'),
     ('poc_original_signal_preparation_20261015_close', '10/15 POC硬篩＋紅K原版：訊號準備', '2026-10-15', 'data', '8檔符合，按原版成交值排序；僅封存訊號，成交待使用者回報'),
@@ -100,6 +101,9 @@ def overview(root=ROOT):
                 from app.poc_paper_preparation import validate
                 row['paper_preparation'] = validate(report)
                 row['execution_note'] = '目前只準備訊號；使用者回報買進後才依實際資料記錄，未建立委託或成交。'
+            elif identifier == 'poc_market_sizing_20261019':
+                from app.poc_market_sizing_ui import validate
+                row['market_sizing'] = validate(report)
             elif identifier == 'poc_cap40_20261019':
                 from app.poc_cap40_ui import validate
                 row['cap40'] = validate(report)
@@ -181,6 +185,10 @@ def publication_bytes(identifier, root=ROOT):
 
 
 def case_detail(identifier, case_id, root=ROOT):
+    if identifier == 'poc_market_sizing_20261019':
+        from app.poc_market_sizing_ui import case_detail as detail
+        publication, _, _ = _publication(identifier, root)
+        return detail(publication, case_id, root)
     if identifier == 'poc_cap40_20261019':
         from app.poc_cap40_ui import case_detail as detail
         publication, _, _ = _publication(identifier, root)

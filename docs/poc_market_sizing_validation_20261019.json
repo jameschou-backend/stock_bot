@@ -1,0 +1,185 @@
+{
+  "schema": "poc_market_sizing_validation_v1",
+  "checked_at": "2026-10-19T07:58:10.904815+00:00",
+  "publication": {
+    "path": "artifacts/forward_simulation/poc_market_sizing_20261019.json",
+    "sha256": "531f6b65e685597eec2ed37d9d6e0c09c5e652e418c6b24297d9d52e7c06e91b"
+  },
+  "scope": {
+    "new_accounts": 4,
+    "reused_accounts": 8,
+    "completed_new_accounts": 4,
+    "failed_account_attempts": 0,
+    "rerun_completed": 0,
+    "finmind_requests": 0,
+    "network_requests": 0
+  },
+  "duration_minutes_start_to_publication": 49.4,
+  "tests": {
+    "command": "make test",
+    "passed": 7564,
+    "log": ".cache/poc-market-sizing-20261019/validation/make-test-final.log",
+    "targeted_command": "python -m pytest -q tests/test_poc_market_sizing.py tests/test_poc_market_sizing_ui.py tests/test_poc_market_sizing_render.py",
+    "targeted_passed": 31
+  },
+  "pipeline": {
+    "command": "SPONSOR_INGEST=off make pipeline",
+    "exit_code": 0,
+    "first_attempt": "existing updater lock rejected duplicate execution",
+    "successful_retry_log": ".cache/poc-market-sizing-20261019/pipeline-retry.log",
+    "jobs": ".cache/poc-market-sizing-20261019/validation/pipeline-jobs-prepublication.json"
+  },
+  "api": {
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs": 200,
+    "new_asset": 200
+  },
+  "publication_validation": {
+    "status": "passed",
+    "archive": true,
+    "download_exact_bytes": true,
+    "cases": [
+      {
+        "id": "poc_up_red__original__baseline",
+        "days": 666,
+        "trades": 285,
+        "source_sha256": "f7c573d2b08310fa6f7911c191c764304ae476f6d3bd5d9844666dbd643756be"
+      },
+      {
+        "id": "benchmark__original__baseline",
+        "days": 666,
+        "trades": 23,
+        "source_sha256": "3b7fe2193749c92d8dc25153e1fd34b6fd38055259a4c74dba2f8c7261f823f0"
+      },
+      {
+        "id": "poc_up_red__original__fee2",
+        "days": 666,
+        "trades": 283,
+        "source_sha256": "9f680827fff0407ef608cf304420fc671e953680484c8866858a972864d4ad8c"
+      },
+      {
+        "id": "benchmark__original__fee2",
+        "days": 666,
+        "trades": 25,
+        "source_sha256": "30f7f7601b9d9acd22ebf2d0a8221ff3cc85afe675e8b37b2d1ef64c9c686345"
+      },
+      {
+        "id": "poc_up_red__original__slip2",
+        "days": 666,
+        "trades": 282,
+        "source_sha256": "b8e05558a172b7e2a0ca03417e0cb5c204fc509ceef97bdb2132d5b9fa5ed240"
+      },
+      {
+        "id": "benchmark__original__slip2",
+        "days": 666,
+        "trades": 23,
+        "source_sha256": "2951b6c9a510aedee1d05f72a0fb75ef3a668710cb851bc1a3bace0f897c4fac"
+      },
+      {
+        "id": "poc_up_red__original__combined",
+        "days": 666,
+        "trades": 283,
+        "source_sha256": "472cf688b8611fe23d14474d7ca4a92b95f4ecbae7f3311875067fea10fec71e"
+      },
+      {
+        "id": "benchmark__original__combined",
+        "days": 666,
+        "trades": 22,
+        "source_sha256": "0c6ea788ca06ad6b25364b4e23e0fcf0b50f8e9a6e43e173bd08d7c985c71e0b"
+      },
+      {
+        "id": "poc_up_red__market120_half__baseline",
+        "days": 666,
+        "trades": 285,
+        "source_sha256": "547247aed65447ccec7633c22408522c35cf0072fd789df24198cf89b27a3734"
+      },
+      {
+        "id": "poc_up_red__market120_half__fee2",
+        "days": 666,
+        "trades": 283,
+        "source_sha256": "68f32bde192b3f4ff65a240550ee16531029fc173fdb8df28bda8876c00a22c5"
+      },
+      {
+        "id": "poc_up_red__market120_half__slip2",
+        "days": 666,
+        "trades": 282,
+        "source_sha256": "3e9cb49e81499011d1a1bab569ba2cfea8f2760ca02471c6bd631bb321155711"
+      },
+      {
+        "id": "poc_up_red__market120_half__combined",
+        "days": 666,
+        "trades": 283,
+        "source_sha256": "3234f7b1c1bd22e7a69b6295f740f2d8a4fd5b730929a7b509c142a012a4e7e5"
+      }
+    ],
+    "actual_publication_dom": true,
+    "cost_modes": 4,
+    "curve_actions": 12,
+    "browser_visual_verified": false
+  },
+  "source_paths_verified": 225380,
+  "market_state_check": {
+    "path": ".cache/poc-market-sizing-20261019/market-state-check.json",
+    "sessions": 666,
+    "normal": 589,
+    "weak": 72,
+    "unknown": 5,
+    "scalar_vector_state_agreement": true
+  },
+  "process_cleanup": {
+    "reason": "Successful sealed worker remained in Python exit garbage collection",
+    "account_execution_interrupted": false,
+    "workers": [
+      {
+        "mode": "baseline",
+        "pid": 81266,
+        "report_sha256": "034ffa75b9c7588c1b0889feda8de989f4827e069c381e410364d6c8d1a2a28c",
+        "evidence": ".cache/poc-market-sizing-20261019/validation/baseline-post-run.sample.txt"
+      },
+      {
+        "mode": "fee2",
+        "pid": 81351,
+        "report_sha256": "509ceef3e986dbe49abc37d90cffef4d72d05f9b8bc10753e04c83140d214e29",
+        "evidence": ".cache/poc-market-sizing-20261019/validation/fee2-post-run.sample.txt"
+      },
+      {
+        "mode": "slip2",
+        "pid": 81436,
+        "report_sha256": "ecdf7b903fff376351d33432c32258d48929089c1af0e4a38d03366136e71f6d",
+        "evidence": ".cache/poc-market-sizing-20261019/validation/slip2-post-run.sample.txt"
+      },
+      {
+        "mode": "combined",
+        "pid": 81523,
+        "report_sha256": "5bda76f9b7278186bf60974bff6424cb6c7fa7b6b16cc17f6feb358c4702aec8",
+        "evidence": ".cache/poc-market-sizing-20261019/validation/combined-post-run.sample.txt"
+      }
+    ]
+  },
+  "candidate_market_overlap": {
+    "candidate_source": {
+      "path": ".cache/all-entry-accounts-20261011/inputs-v3/poc_up_red.json",
+      "sha256": "e721cc198dcd27e38f146a31235fbfbdfa5a93ed73488be1f4eeff86e39fb988"
+    },
+    "price_source": {
+      "path": ".cache/poc-latest-20261003/inputs-v1/close-official.parquet",
+      "sha256": "e89b93249083ff581b933d8f55921bbce8332396838509dd943e5186ba07beee"
+    },
+    "candidate_count": 11211,
+    "candidate_states": {
+      "normal": 11211,
+      "weak": 0,
+      "unknown": 0
+    },
+    "scope": "original_red_candidates_before_POC_hard_filter",
+    "note": "The original candidate ledger already requires 0050 above MA120; this fixed new-buy rule has no opportunity when all candidates are normal."
+  },
+  "original_account_paths_unchanged_all_modes": true,
+  "formal_strategy_changed": false,
+  "orders_or_fills_recorded": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "live_qualified": false
+}
