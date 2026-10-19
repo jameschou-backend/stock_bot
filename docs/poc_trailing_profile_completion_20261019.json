@@ -1,0 +1,26 @@
+{
+  "schema": "poc_trailing_exact_profile_completion_v1",
+  "query": {
+    "dataset": "TaiwanStockPriceTick",
+    "data_id": "6770",
+    "start_date": "2025-10-17"
+  },
+  "maximum_new_attempts": 1,
+  "max_retries": 0,
+  "previous_failure": {
+    "path": ".cache/all-entry-accounts-20261011/profiles-v1/receipts/6770-2025-10-17.json",
+    "sha256": "63bdd801e6170e9c227c4b76159492b8caaa5043aca975c851dfd072652323fd"
+  },
+  "original_preregistration": {
+    "path": "docs/prereg_poc_trailing_20261019.json",
+    "sha256": "057c5dbf3b0f88d32a88ba9b5892e243de13eb5f6da277ee2848fde48077b457"
+  },
+  "authorization_basis": "User requested the fixed 20/12 trailing comparison and necessary data completion; explicitly retrieve this failed coordinate once while retaining the failure.",
+  "immutable_failure_preserved": true,
+  "shared_finmind_gateway": true,
+  "quota_limits_changed": false,
+  "selection_rules_changed": false,
+  "rerun_completed": false,
+  "repair_scope": "Only incomplete or not-yet-started POC trailing accounts; no completed account may be replayed.",
+  "live_qualified": false
+}

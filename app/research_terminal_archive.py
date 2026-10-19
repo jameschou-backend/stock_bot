@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_trailing_20261019', 'POC硬篩＋紅K：移動停利20/12', '2026-10-19', 'account', '只新增移動停利，重用原版與同成本0050'),
     ('poc_original_signal_preparation_20261015_close', '10/15 POC硬篩＋紅K原版：訊號準備', '2026-10-15', 'data', '8檔符合，按原版成交值排序；僅封存訊號，成交待使用者回報'),
     ('strategy_scanner_20261015_close', '10/15 POC訊號與當日掃描', '2026-10-15', 'data', '只補當日結果與225組缺漏逐筆，重用11天訊號及4820筆POC紀錄'),
     ('poc_original_paper_preparation_20261015', 'POC硬篩＋紅K原版：訊號準備', '2026-10-15', 'data', '沿用已完成驗證，只準備訊號；使用者回報買進後才記錄'),
@@ -98,6 +99,10 @@ def overview(root=ROOT):
                 from app.poc_paper_preparation import validate
                 row['paper_preparation'] = validate(report)
                 row['execution_note'] = '目前只準備訊號；使用者回報買進後才依實際資料記錄，未建立委託或成交。'
+            elif identifier == 'poc_trailing_20261019':
+                from app.poc_trailing_ui import validate
+                row['trailing'] = validate(report)
+                row['execution_note'] = '還原收盤漲20%後啟動、從最高收盤回落12%後次日起出場；未成交保留指令，原版出場規則優先。日區間價仍屬成交估算。'
             elif identifier == 'poc_split_accounts_20261015':
                 from app.poc_split_accounts_ui import validate
                 row['split_accounts'] = validate(report)
@@ -172,6 +177,10 @@ def publication_bytes(identifier, root=ROOT):
 
 
 def case_detail(identifier, case_id, root=ROOT):
+    if identifier == 'poc_trailing_20261019':
+        from app.poc_trailing_ui import case_detail as detail
+        publication, _, _ = _publication(identifier, root)
+        return detail(publication, case_id, root)
     if identifier == 'poc_split_accounts_20261015':
         from app.poc_split_accounts_ui import case_detail as detail
         publication, _, _ = _publication(identifier, root)

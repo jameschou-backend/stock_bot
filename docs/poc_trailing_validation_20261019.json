@@ -1,0 +1,56 @@
+{
+  "schema": "poc_trailing_delivery_validation_v1",
+  "verified_at": "2026-10-19T05:45:26.720249+00:00",
+  "publication": {
+    "path": "artifacts/forward_simulation/poc_trailing_20261019.json",
+    "sha256": "8f775b5d6c3409f31e0fd215ebc367a061715cd2b944de571491718937166564"
+  },
+  "account_validation": {
+    "completed_new_configurations": 4,
+    "reused_original_and_benchmark_accounts": 8,
+    "incomplete_data_attempts": 1,
+    "completed_configurations_rerun": 0,
+    "checked_publication_sources": 227419,
+    "research_wall_seconds": 3611.037,
+    "all_original_parameters_preserved": true,
+    "derived_exclusion_counts_rebuilt_separately": true
+  },
+  "tests": {
+    "command": "make test",
+    "passed": 7511,
+    "log_path": ".cache/poc-trailing-20261019/make-test-publish.log",
+    "log_sha256": "fc3abe55b17058ddf032b563c578663a167469ae0ddd336b67bdc1094aff20c7"
+  },
+  "api": {
+    "health": "ok",
+    "picks": true,
+    "models": true,
+    "jobs": true,
+    "archive_verified": true,
+    "case_details_verified": 12,
+    "publication_bytes_verified": true,
+    "served_assets_verified": [
+      "index.html",
+      "app.js",
+      "poc-trailing.js"
+    ]
+  },
+  "rendering": {
+    "actual_publication_dom_test": true,
+    "cost_modes": 4,
+    "curve_actions": 12,
+    "browser_visual_inspection": false
+  },
+  "pipeline": {
+    "command": "SPONSOR_INGEST=off make pipeline",
+    "passed": false,
+    "stage": "ingest_prices",
+    "reason": "TPEx daily quotes HTTPS read timeout after bounded retries",
+    "endpoint": "https://www.tpex.org.tw/openapi/v1/tpex_mainboard_daily_close_quotes",
+    "log_path": ".cache/poc-trailing-20261019/pipeline.log",
+    "training_started": false
+  },
+  "paper_enabled": false,
+  "actual_fill_verified": false,
+  "live_qualified": false
+}
