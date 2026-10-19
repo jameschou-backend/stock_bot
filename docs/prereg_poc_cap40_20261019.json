@@ -1,0 +1,115 @@
+{
+  "schema": "poc_cap40_prereg_v1",
+  "registered_at": "2026-10-19T06:12:13.158097+00:00",
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "arm": "poc_up_red",
+  "variant": "cap40",
+  "initial_cash": 1000000,
+  "slots": 3,
+  "modes": [
+    "baseline",
+    "fee2",
+    "slip2",
+    "combined"
+  ],
+  "new_accounts": 4,
+  "reused_accounts": 8,
+  "rule": {
+    "trigger_weight": 0.4,
+    "target_weight": 0.3333333333333333,
+    "decision": "completed_prior_close_only",
+    "denominator": "prior_full_nav",
+    "numerator": "prior_delivered_stock_market_value",
+    "target_quantity": "max(1,floor(prior_NAV/3/corporate_adjusted_prior_reference))",
+    "execution_lag_sessions": 1,
+    "original_exit_priority": [
+      "loss12",
+      "time63",
+      "three_black"
+    ],
+    "retained_core_occupies_slot": true,
+    "pending": "fixed_retained_units_until_fill_or_a_stricter_new_cap_signal",
+    "corporate_units": "ceil_proportional_split_reduction_exchange_keep; add_late_deliveries_to_keep",
+    "same_day_sale_cash_reuse": false
+  },
+  "unchanged": [
+    "daily_candidates_and_POC_hard_filter",
+    "amount20_desc_ranking",
+    "three_active_slots",
+    "original_cash_reservations",
+    "12pct_close_stop",
+    "63_session_deadline",
+    "post_entry_three_black",
+    "cash_idle",
+    "buy_HL2_sell30_daily_range_proxy",
+    "capacity_and_data_gap_policy",
+    "corporate_actions",
+    "fees_tax_slippage_by_mode"
+  ],
+  "comparison": {
+    "primary": "baseline_net_return_and_account_max_drawdown",
+    "report": [
+      "return_change_percentage_points",
+      "net_profit_retained_fraction",
+      "drawdown_reduction_percentage_points",
+      "final_nav_difference",
+      "annual_returns",
+      "same_cost_0050"
+    ],
+    "auto_promote": false
+  },
+  "reuse": {
+    "publication": {
+      "path": "artifacts/forward_simulation/poc_risk_controls_20261014.json",
+      "sha256": "73b8c39674df42525e2f65e43673f074d849bbaa916145ecd08ad81a6a6889c4"
+    },
+    "cases": {
+      "poc_up_red:original:baseline": {
+        "path": ".cache/top3-validation-20261012/baseline-v3/poc_up_red.json",
+        "sha256": "f7c573d2b08310fa6f7911c191c764304ae476f6d3bd5d9844666dbd643756be"
+      },
+      "benchmark:original:baseline": {
+        "path": ".cache/top3-validation-20261012/baseline-benchmark-v4/benchmark.json",
+        "sha256": "3b7fe2193749c92d8dc25153e1fd34b6fd38055259a4c74dba2f8c7261f823f0"
+      },
+      "poc_up_red:original:fee2": {
+        "path": ".cache/top3-validation-20261012/fee2-v3/poc_up_red.json",
+        "sha256": "9f680827fff0407ef608cf304420fc671e953680484c8866858a972864d4ad8c"
+      },
+      "benchmark:original:fee2": {
+        "path": ".cache/top3-validation-20261012/fee2-v3/benchmark.json",
+        "sha256": "30f7f7601b9d9acd22ebf2d0a8221ff3cc85afe675e8b37b2d1ef64c9c686345"
+      },
+      "poc_up_red:original:slip2": {
+        "path": ".cache/top3-validation-20261012/slip2-v3/poc_up_red.json",
+        "sha256": "b8e05558a172b7e2a0ca03417e0cb5c204fc509ceef97bdb2132d5b9fa5ed240"
+      },
+      "benchmark:original:slip2": {
+        "path": ".cache/top3-validation-20261012/slip2-v3/benchmark.json",
+        "sha256": "2951b6c9a510aedee1d05f72a0fb75ef3a668710cb851bc1a3bace0f897c4fac"
+      },
+      "poc_up_red:original:combined": {
+        "path": ".cache/top3-validation-20261012/combined-v3/poc_up_red.json",
+        "sha256": "472cf688b8611fe23d14474d7ca4a92b95f4ecbae7f3311875067fea10fec71e"
+      },
+      "benchmark:original:combined": {
+        "path": ".cache/top3-validation-20261012/combined-v3/benchmark.json",
+        "sha256": "0c6ea788ca06ad6b25364b4e23e0fcf0b50f8e9a6e43e173bd08d7c985c71e0b"
+      }
+    }
+  },
+  "historical_period_already_researched": true,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "paper_enabled": false,
+  "live_qualified": false,
+  "prior_cap_studies": {
+    "documents": [
+      "docs/prereg_partial_risk_20260929.md",
+      "docs/prereg_partial_risk_2019_20260929.md"
+    ],
+    "reusable": false,
+    "reason": "different_candidate_strategy_period_positions_and_or_original_exit_rules"
+  }
+}

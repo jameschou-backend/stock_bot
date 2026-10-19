@@ -1,0 +1,130 @@
+{
+  "schema": "poc_cap40_validation_v1",
+  "checked_at": "2026-10-19T06:49:01.232243+00:00",
+  "publication": {
+    "path": "artifacts/forward_simulation/poc_cap40_20261019.json",
+    "sha256": "4b1fd6cbcf1bafbd21253456e01f4d03839fc3210711b0806612c74f78b77387"
+  },
+  "scope": {
+    "new_accounts": 4,
+    "reused_accounts": 8,
+    "completed_new_accounts": 4,
+    "failed_account_attempts": 0,
+    "rerun_completed": 0,
+    "finmind_requests": 0,
+    "network_requests": 0
+  },
+  "duration_minutes_start_to_publication": 33.8,
+  "tests": {
+    "command": "make test",
+    "passed": 7533,
+    "log": ".cache/poc-cap40-20261019/validation/make-test-final.log"
+  },
+  "pipeline": {
+    "command": "SPONSOR_INGEST=off make pipeline",
+    "exit_code": 0,
+    "jobs": ".cache/poc-cap40-20261019/validation/pipeline-jobs.json"
+  },
+  "api": {
+    "command": "make api",
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs": 200,
+    "new_asset": 200
+  },
+  "publication_validation": {
+    "status": "passed",
+    "archive": true,
+    "download_exact_bytes": true,
+    "cases": [
+      {
+        "id": "poc_up_red__original__baseline",
+        "days": 666,
+        "trades": 285,
+        "source_sha256": "f7c573d2b08310fa6f7911c191c764304ae476f6d3bd5d9844666dbd643756be"
+      },
+      {
+        "id": "benchmark__original__baseline",
+        "days": 666,
+        "trades": 23,
+        "source_sha256": "3b7fe2193749c92d8dc25153e1fd34b6fd38055259a4c74dba2f8c7261f823f0"
+      },
+      {
+        "id": "poc_up_red__original__fee2",
+        "days": 666,
+        "trades": 283,
+        "source_sha256": "9f680827fff0407ef608cf304420fc671e953680484c8866858a972864d4ad8c"
+      },
+      {
+        "id": "benchmark__original__fee2",
+        "days": 666,
+        "trades": 25,
+        "source_sha256": "30f7f7601b9d9acd22ebf2d0a8221ff3cc85afe675e8b37b2d1ef64c9c686345"
+      },
+      {
+        "id": "poc_up_red__original__slip2",
+        "days": 666,
+        "trades": 282,
+        "source_sha256": "b8e05558a172b7e2a0ca03417e0cb5c204fc509ceef97bdb2132d5b9fa5ed240"
+      },
+      {
+        "id": "benchmark__original__slip2",
+        "days": 666,
+        "trades": 23,
+        "source_sha256": "2951b6c9a510aedee1d05f72a0fb75ef3a668710cb851bc1a3bace0f897c4fac"
+      },
+      {
+        "id": "poc_up_red__original__combined",
+        "days": 666,
+        "trades": 283,
+        "source_sha256": "472cf688b8611fe23d14474d7ca4a92b95f4ecbae7f3311875067fea10fec71e"
+      },
+      {
+        "id": "benchmark__original__combined",
+        "days": 666,
+        "trades": 22,
+        "source_sha256": "0c6ea788ca06ad6b25364b4e23e0fcf0b50f8e9a6e43e173bd08d7c985c71e0b"
+      },
+      {
+        "id": "poc_up_red__cap40__baseline",
+        "days": 666,
+        "trades": 295,
+        "source_sha256": "bbca2407c3d301ecc34da17c35091bab47d11d515343e51c442151c2dc2077b1"
+      },
+      {
+        "id": "poc_up_red__cap40__fee2",
+        "days": 666,
+        "trades": 291,
+        "source_sha256": "68b6338dacf5fdc157939346202eb3d328dfe6245ee0770e96cb376536391d04"
+      },
+      {
+        "id": "poc_up_red__cap40__slip2",
+        "days": 666,
+        "trades": 292,
+        "source_sha256": "3bcc219c7cd7b53a37f647029ecf9690ef3fd376d31a007160364e3cb61c1b03"
+      },
+      {
+        "id": "poc_up_red__cap40__combined",
+        "days": 666,
+        "trades": 296,
+        "source_sha256": "a19e793166cd33c8d5f88d51d055ddd021b6c1d1a7d094d816ba0a18ad52c310"
+      }
+    ],
+    "actual_publication_dom": true,
+    "cost_modes": 4,
+    "curve_actions": 12,
+    "browser_visual_verified": false
+  },
+  "source_paths_verified": 225722,
+  "process_cleanup": {
+    "reason": "Completed workers remained in Python exit garbage collection after sealed successful reports; SIGTERM released them after publication and API checks.",
+    "account_execution_interrupted": false,
+    "evidence": ".cache/poc-cap40-20261019/validation/post-run.sample.txt"
+  },
+  "formal_strategy_changed": false,
+  "orders_or_fills_recorded": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "live_qualified": false
+}

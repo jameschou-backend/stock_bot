@@ -13,7 +13,7 @@ function number(n,d=0){return typeof n==='number'&&Number.isFinite(n)?n.toLocale
 function pct(n,d=2){return typeof n==='number'&&Number.isFinite(n)?(n*100).toFixed(d)+'%':'—';}
 function value(v){return v==null?'未提供':typeof v==='number'?number(v,4):typeof v==='boolean'?(v?'是':'否'):typeof v==='object'?JSON.stringify(v):String(v);}
 function regime(v){return({trend_up:'上升趨勢',trend_down:'下降趨勢',range:'區間整理',sideways:'區間整理',neutral:'中性',risk_off:'風險偏高',unknown:'情境未判定'})[v]||v||'情境未判定';}
-function textReason(x){return reasons[x]||x;}function tradeReason(reason){const labels={poc_trailing12:'上漲20%後從最高還原收盤回落12%',leader_entry:'符合當日候選與資金規則進場',three_black:'進場後連續三根黑 K，還原收盤逐日降低',loss12:'入場價格訊號下跌 12%',time63:'持有滿 63 個交易日'};return labels[reason]?labels[reason]+'（'+reason+'）':reason||'—';}function precursorLabel(raw){return raw==='known first signals on episode anchor or preceding10 observed market sessions within study period'?'前置信號：研究期間內，在事後辨識的起點當日，或往前 10 個已觀測交易日出現、且當時可判定的首次訊號。':raw||'';}function executionLabel(x){return({T_plus_1_adjusted_open_proxy:'訊號次日還原開盤價估算','T+1_adjusted_open_proxy':'訊號次日還原開盤價估算','T+h_adjusted_close_proxy_including_entry_session':'持有期末還原收盤價估算，包含進場日'})[x]||value(x);}
+function textReason(x){return reasons[x]||x;}function tradeReason(reason){const labels={reduce_cap40:'單股收盤比重超過40%，隔日減至約三分之一',poc_trailing12:'上漲20%後從最高還原收盤回落12%',leader_entry:'符合當日候選與資金規則進場',three_black:'進場後連續三根黑 K，還原收盤逐日降低',loss12:'入場價格訊號下跌 12%',time63:'持有滿 63 個交易日'};return labels[reason]?labels[reason]+'（'+reason+'）':reason||'—';}function precursorLabel(raw){return raw==='known first signals on episode anchor or preceding10 observed market sessions within study period'?'前置信號：研究期間內，在事後辨識的起點當日，或往前 10 個已觀測交易日出現、且當時可判定的首次訊號。':raw||'';}function executionLabel(x){return({T_plus_1_adjusted_open_proxy:'訊號次日還原開盤價估算','T+1_adjusted_open_proxy':'訊號次日還原開盤價估算','T+h_adjusted_close_proxy_including_entry_session':'持有期末還原收盤價估算，包含進場日'})[x]||value(x);}
 function setError(message){$('global-error').hidden=!message;$('global-error').textContent=message||'';}
 async function api(path,options={}){
  const headers=new Headers(options.headers);
@@ -93,6 +93,7 @@ async function loadStudies(){
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
   window.renderPocPaperPreparation(state.archive.items?.find(x=>x.id==='poc_original_signal_preparation_20261015_close'),$('poc-paper-preparation'),{el,number,pct});
+  window.renderPocCap40(state.archive.items?.find(x=>x.id==='poc_cap40_20261019'),$('poc-cap40'),{el,number,pct,api,renderAccountDetail});
   window.renderPocTrailing(state.archive.items?.find(x=>x.id==='poc_trailing_20261019'),$('poc-trailing'),{el,number,pct,api,renderAccountDetail});
   window.renderPocSplitAccounts(state.archive.items?.find(x=>x.id==='poc_split_accounts_20261015'),$('poc-split-accounts'),{el,tag,number,pct,api,renderAccountDetail});
   window.renderPocRiskControls(state.archive.items?.find(x=>x.id==='poc_risk_controls_20261014'),$('poc-risk-controls'),{el,tag,number,pct,api,renderAccountDetail});
@@ -125,16 +126,17 @@ function setupLabSections(){
   const root=$('view-backtest'),menu=el('nav',undefined,'lab-tabs');menu.setAttribute('aria-label','回測研究類型');
   const panes={accounts:el('div'),signals:el('div'),history:el('div')};
   const study=el('select');study.setAttribute('aria-label','帳戶研究版本');
-  study.append(option('trailing','POC硬篩＋紅K · 移動停利20/12'),option('paper-preparation','POC硬篩＋紅K原版 · 訊號準備'),option('split-accounts','兩套原版各50萬 · 不再平衡'),option('risk-controls','POC 獨立實驗 · 限制追高／波動部位'),option('followup','POC 後續驗證 · 成交／出場／強度／相關性'),option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
+  study.append(option('cap40','POC硬篩＋紅K · 單股40%減至1/3'),option('trailing','POC硬篩＋紅K · 移動停利20/12'),option('paper-preparation','POC硬篩＋紅K原版 · 訊號準備'),option('split-accounts','兩套原版各50萬 · 不再平衡'),option('risk-controls','POC 獨立實驗 · 限制追高／波動部位'),option('followup','POC 後續驗證 · 成交／出場／強度／相關性'),option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
   const selector=el('label',undefined,'study-version');selector.append(el('span','目前查看'),study);
   root.insertBefore(menu,$('legacy-comparison'));
   const optimization=el('section',undefined,'panel research-body');optimization.id='poc-optimization';
   const followup=el('section',undefined,'panel research-body');followup.id='poc-followup';
   const riskControls=el('section',undefined,'panel research-body');riskControls.id='poc-risk-controls';
   const splitAccounts=el('section',undefined,'panel research-body');splitAccounts.id='poc-split-accounts';
+  const cap40=el('section',undefined,'panel research-body');cap40.id='poc-cap40';
   const trailing=el('section',undefined,'panel research-body');trailing.id='poc-trailing';
   const paperPreparation=el('section',undefined,'panel research-body');paperPreparation.id='poc-paper-preparation';
-  panes.accounts.append(selector,trailing,paperPreparation,splitAccounts,riskControls,followup,optimization,$('legacy-comparison'),$('top3-validation'));
+  panes.accounts.append(selector,cap40,trailing,paperPreparation,splitAccounts,riskControls,followup,optimization,$('legacy-comparison'),$('top3-validation'));
   panes.signals.append(root.querySelector('.lab-layout'));
   panes.history.append($('account-comparison'),...root.querySelectorAll('section.account-replay-config'));
   for(const [id,name] of [['accounts','最新帳戶比較'],['signals','訊號研究'],['history','歷史版本']]){
@@ -142,7 +144,7 @@ function setupLabSections(){
     button.addEventListener('click',()=>{for(const [key,pane] of Object.entries(panes))pane.hidden=key!==id;for(const b of menu.children)b.setAttribute('aria-pressed',b===button?'true':'false');});
     menu.append(button);panes[id].id='lab-'+id;panes[id].hidden=id!=='accounts';root.append(panes[id]);
   }
-  function chooseStudy(){$('poc-trailing').hidden=study.value!=='trailing';$('poc-paper-preparation').hidden=study.value!=='paper-preparation';$('poc-split-accounts').hidden=study.value!=='split-accounts';$('poc-risk-controls').hidden=study.value!=='risk-controls';$('poc-followup').hidden=study.value!=='followup';$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
+  function chooseStudy(){$('poc-cap40').hidden=study.value!=='cap40';$('poc-trailing').hidden=study.value!=='trailing';$('poc-paper-preparation').hidden=study.value!=='paper-preparation';$('poc-split-accounts').hidden=study.value!=='split-accounts';$('poc-risk-controls').hidden=study.value!=='risk-controls';$('poc-followup').hidden=study.value!=='followup';$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
   const requestedStudy=new URLSearchParams(location.search).get('study');
   if([...study.options].some(o=>o.value===requestedStudy))study.value=requestedStudy;
   study.addEventListener('change',chooseStudy);chooseStudy();
