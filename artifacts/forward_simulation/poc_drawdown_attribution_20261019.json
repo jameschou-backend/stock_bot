@@ -1,0 +1,1933 @@
+{
+  "schema": "poc_drawdown_attribution_v1",
+  "strategy_id": "poc_up_red",
+  "mode": "baseline",
+  "start": "2024-01-02",
+  "end": "2026-10-02",
+  "initial_cash": 1000000,
+  "position_count": 3,
+  "summary": {
+    "annual": [
+      {
+        "end_nav": 1303431.0,
+        "max_drawdown": -0.24278704492235148,
+        "partial_year": false,
+        "profit": 303431.0,
+        "start_nav": 1000000.0,
+        "total_return": 0.303431,
+        "year": "2024"
+      },
+      {
+        "end_nav": 1774416.71,
+        "max_drawdown": -0.24730910577209209,
+        "partial_year": false,
+        "profit": 470985.70999999996,
+        "start_nav": 1303431.0,
+        "total_return": 0.3613430323507727,
+        "year": "2025"
+      },
+      {
+        "end_nav": 3697472.95,
+        "max_drawdown": -0.4004092050278386,
+        "partial_year": true,
+        "profit": 1923056.2400000002,
+        "start_nav": 1774416.71,
+        "total_return": 1.0837681076617005,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 130,
+    "cagr": 0.6091661920844036,
+    "cash": 375891.95,
+    "costs": {
+      "commission": 114293.0,
+      "slippage": 359836.0,
+      "tax": 119420.0,
+      "total_cost": 593549.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "poc_up_red-2026-09-23-3605",
+        "mark_date": "2026-10-02",
+        "market_value": 980716.0,
+        "name": "宏致",
+        "price": 170.5,
+        "qty": 5752,
+        "stale": false,
+        "stock_id": "3605"
+      },
+      {
+        "date": "2026-10-02",
+        "event_id": "poc_up_red-2026-09-24-3167",
+        "mark_date": "2026-10-02",
+        "market_value": 1037898.0,
+        "name": "大量",
+        "price": 981.0,
+        "qty": 1058,
+        "stale": false,
+        "stock_id": "3167"
+      },
+      {
+        "date": "2026-10-02",
+        "event_id": "poc_up_red-2026-09-24-6672",
+        "mark_date": "2026-10-02",
+        "market_value": 1302952.0,
+        "name": "騰輝電子-KY",
+        "price": 439.0,
+        "qty": 2968,
+        "stale": false,
+        "stock_id": "6672"
+      }
+    ],
+    "final_nav": 3697472.95,
+    "final_receivables": [
+      {
+        "action_id": "4763-2024-09-12-stock-fractional-cash",
+        "amount": 8.0,
+        "event_id": "poc_up_red-2024-09-02-4763",
+        "ex_date": "2024-09-12",
+        "kind": "cash",
+        "pay_date": null,
+        "stock_id": "4763"
+      },
+      {
+        "action_id": "5871-2026-07-29-stock-fractional-cash",
+        "amount": 7.0,
+        "event_id": "poc_up_red-2026-07-21-5871",
+        "ex_date": "2026-07-29",
+        "kind": "cash",
+        "pay_date": null,
+        "stock_id": "5871"
+      }
+    ],
+    "initial_cash": 1000000.0,
+    "market_value": 3321566.0,
+    "max_drawdown": -0.4004092050278386,
+    "minimum_cash": 31530.34,
+    "partial_or_rejected_orders": {
+      "partial_range_capacity": 36,
+      "range_limit_not_crossed": 2
+    },
+    "profit": 2697472.95,
+    "receivable": 15.0,
+    "sell_count": 155,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 73,
+    "total_return": 2.6974729500000003,
+    "trade_count": 285,
+    "trading_days": 666
+  },
+  "benchmark_summary": {
+    "annual": [
+      {
+        "end_nav": 1478714.26,
+        "max_drawdown": -0.21207052044668562,
+        "partial_year": false,
+        "profit": 478714.26,
+        "start_nav": 1000000.0,
+        "total_return": 0.47871426000000006,
+        "year": "2024"
+      },
+      {
+        "end_nav": 2022759.72,
+        "max_drawdown": -0.2749609347161396,
+        "partial_year": false,
+        "profit": 544045.46,
+        "start_nav": 1478714.26,
+        "total_return": 0.367917909982149,
+        "year": "2025"
+      },
+      {
+        "end_nav": 3542492.5399999996,
+        "max_drawdown": -0.15339201240593725,
+        "partial_year": true,
+        "profit": 1519732.8199999996,
+        "start_nav": 2022759.72,
+        "total_return": 0.7513165330383382,
+        "year": "2026"
+      }
+    ],
+    "buy_count": 23,
+    "cagr": 0.5842938959186756,
+    "cash": 121.34,
+    "costs": {
+      "commission": 1843.0,
+      "slippage": 4976.0,
+      "tax": 0.0,
+      "total_cost": 6819.0
+    },
+    "end": "2026-10-02",
+    "final_holdings": [
+      {
+        "date": "2026-10-02",
+        "event_id": "benchmark",
+        "mark_date": "2026-10-02",
+        "market_value": 3542371.1999999997,
+        "name": "元大台灣50",
+        "price": 112.8,
+        "qty": 31404,
+        "stale": false,
+        "stock_id": "0050"
+      }
+    ],
+    "final_nav": 3542492.5399999996,
+    "final_receivables": [],
+    "initial_cash": 1000000.0,
+    "market_value": 3542371.1999999997,
+    "max_drawdown": -0.2749609347161396,
+    "minimum_cash": 18.76,
+    "partial_or_rejected_orders": {
+      "user_authorized_data_gap_exclusion": 1
+    },
+    "profit": 2542492.5399999996,
+    "receivable": 0.0,
+    "sell_count": 0,
+    "stale_final_holdings": 0,
+    "start": "2024-01-02",
+    "stock_cohorts": 0,
+    "total_return": 2.5424925399999996,
+    "trade_count": 23,
+    "trading_days": 666
+  },
+  "episodes": [
+    {
+      "rank": 1,
+      "peak_date": "2026-06-25",
+      "trough_date": "2026-09-29",
+      "recovery_date": null,
+      "peak_nav": 5631836.959999999,
+      "trough_nav": 3376797.6,
+      "net_change": -2255039.359999999,
+      "drawdown": -0.4004092050278386,
+      "decline_sessions": 65,
+      "recovery_sessions": null,
+      "observed_underwater_sessions": 68,
+      "components": {
+        "winner_decline": -1247643.1,
+        "other_existing_decline": 0.0,
+        "new_entry_decline": -857642.36,
+        "gain_offset": 41906.1,
+        "cost": -191660.0
+      },
+      "costs": {
+        "commission": 36716.0,
+        "tax": 39080.0,
+        "slippage": 115864.0
+      },
+      "component_loss_shares": {
+        "winner_decline": 0.5532688795285597,
+        "other_existing_decline": -0.0,
+        "new_entry_decline": 0.3803225678508779,
+        "gain_offset": -0.018583312000372366,
+        "cost": 0.08499186462093508
+      },
+      "winner_giveback": 1207069.1,
+      "winner_beyond_peak_profit": 40574.0,
+      "journal_components": {
+        "market_pnl": -2213550.5999999996,
+        "dividend_entitlement": 113435.4,
+        "execution_basis_pnl": 36735.83999999954,
+        "cost": 191660.0
+      },
+      "cohorts": [
+        {
+          "event_id": "poc_up_red-2026-04-15-2327",
+          "stock_id": "2327",
+          "name": "國巨*",
+          "entry_date": "2026-04-16",
+          "group": "existing_winner",
+          "peak_net_pnl": 2049036.27,
+          "peak_market_value": 2844000.0,
+          "peak_weight": 0.5049862096860135,
+          "trough_market_value": 0.0,
+          "market_value_change": -2844000.0,
+          "cash_change": 2307235.27,
+          "receivable_change": -15164.27,
+          "gross_pnl": -531288.0,
+          "cost": 20641.0,
+          "net_pnl": -551929.0,
+          "giveback_within_peak_profit": 531288.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-07-09",
+              "qty": 2000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-07-09",
+              "qty": 528,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-05-18-3481",
+          "stock_id": "3481",
+          "name": "群創",
+          "entry_date": "2026-05-19",
+          "group": "existing_winner",
+          "peak_net_pnl": 823951.5,
+          "peak_market_value": 1745132.6,
+          "peak_weight": 0.3098691621214831,
+          "trough_market_value": 0.0,
+          "market_value_change": -1745132.6,
+          "cash_change": 1263577.5,
+          "receivable_change": -24614.0,
+          "gross_pnl": -495012.1,
+          "cost": 11157.0,
+          "net_pnl": -506169.1,
+          "giveback_within_peak_profit": 495012.1,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-07-21",
+              "qty": 24000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-07-21",
+              "qty": 614,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-07-09-5471",
+          "stock_id": "5471",
+          "name": "松翰",
+          "entry_date": "2026-07-13",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -292748.76,
+          "receivable_change": 0.0,
+          "gross_pnl": -275239.76,
+          "cost": 17509.0,
+          "net_pnl": -292748.76,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-07-20",
+              "qty": 20000,
+              "reason": "loss12"
+            },
+            {
+              "date": "2026-07-20",
+              "qty": 212,
+              "reason": "loss12"
+            },
+            {
+              "date": "2026-07-21",
+              "qty": 5,
+              "reason": "loss12"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-07-09-2645",
+          "stock_id": "2645",
+          "name": "長榮航太",
+          "entry_date": "2026-07-13",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -251629.85,
+          "receivable_change": 0.0,
+          "gross_pnl": -231088.85,
+          "cost": 20541.0,
+          "net_pnl": -251629.85,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-07-20",
+              "qty": 6000,
+              "reason": "loss12"
+            },
+            {
+              "date": "2026-07-20",
+              "qty": 43,
+              "reason": "loss12"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-06-11-3008",
+          "stock_id": "3008",
+          "name": "大立光",
+          "entry_date": "2026-06-12",
+          "group": "existing_winner",
+          "peak_net_pnl": 180769.0,
+          "peak_market_value": 919370.0,
+          "peak_weight": 0.16324513769304858,
+          "trough_market_value": 0.0,
+          "market_value_change": -919370.0,
+          "cash_change": 691796.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -221343.0,
+          "cost": 6231.0,
+          "net_pnl": -227574.0,
+          "giveback_within_peak_profit": 180769.0,
+          "decline_beyond_peak_profit": 40574.0,
+          "sales": [
+            {
+              "date": "2026-07-08",
+              "qty": 178,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-09-04-7788",
+          "stock_id": "7788",
+          "name": "松川精密",
+          "entry_date": "2026-09-07",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 11787.5,
+          "market_value_change": 11787.5,
+          "cash_change": -144773.85,
+          "receivable_change": 0.0,
+          "gross_pnl": -117949.35,
+          "cost": 15037.0,
+          "net_pnl": -132986.35,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-09-24",
+              "qty": 3000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-09-24",
+              "qty": 149,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-09-29",
+              "qty": 198,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-07-20-6414",
+          "stock_id": "6414",
+          "name": "樺漢",
+          "entry_date": "2026-07-21",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -98026.2,
+          "receivable_change": 0.0,
+          "gross_pnl": -80816.2,
+          "cost": 17210.0,
+          "net_pnl": -98026.2,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-08-19",
+              "qty": 2000,
+              "reason": "loss12"
+            },
+            {
+              "date": "2026-08-19",
+              "qty": 756,
+              "reason": "loss12"
+            },
+            {
+              "date": "2026-08-20",
+              "qty": 72,
+              "reason": "loss12"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-08-19-2603",
+          "stock_id": "2603",
+          "name": "長榮",
+          "entry_date": "2026-08-20",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -91291.2,
+          "receivable_change": 0.0,
+          "gross_pnl": -75478.2,
+          "cost": 15813.0,
+          "net_pnl": -91291.2,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-08-27",
+              "qty": 4000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-08-27",
+              "qty": 538,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-07-21-5871",
+          "stock_id": "5871",
+          "name": "中租-KY",
+          "entry_date": "2026-07-22",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -46834.8,
+          "receivable_change": 7.0,
+          "gross_pnl": -30477.8,
+          "cost": 16350.0,
+          "net_pnl": -46827.8,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-09-04",
+              "qty": 9000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-09-04",
+              "qty": 573,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-07-20-1216",
+          "stock_id": "1216",
+          "name": "統一",
+          "entry_date": "2026-07-21",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -44493.2,
+          "receivable_change": 0.0,
+          "gross_pnl": -28223.2,
+          "cost": 16270.0,
+          "net_pnl": -44493.2,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-09-23",
+              "qty": 14000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-09-23",
+              "qty": 272,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-09-24-3167",
+          "stock_id": "3167",
+          "name": "大量",
+          "entry_date": "2026-09-29",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 955374.0,
+          "market_value_change": 955374.0,
+          "cash_change": -979135.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -17993.0,
+          "cost": 5768.0,
+          "net_pnl": -23761.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2026-09-23-3605",
+          "stock_id": "3605",
+          "name": "宏致",
+          "entry_date": "2026-09-24",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 1049740.0,
+          "market_value_change": 1049740.0,
+          "cash_change": -1056339.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -376.0,
+          "cost": 6223.0,
+          "net_pnl": -6599.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2026-08-27-3406",
+          "stock_id": "3406",
+          "name": "玉晶光",
+          "entry_date": "2026-08-28",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": 4713.1,
+          "receivable_change": 0.0,
+          "gross_pnl": 21840.1,
+          "cost": 17127.0,
+          "net_pnl": 4713.1,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2026-09-24",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2026-09-24",
+              "qty": 301,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2026-09-24-6672",
+          "stock_id": "6672",
+          "name": "騰輝電子-KY",
+          "entry_date": "2026-09-29",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 995764.0,
+          "market_value_change": 995764.0,
+          "cash_change": -981481.0,
+          "receivable_change": 0.0,
+          "gross_pnl": 20066.0,
+          "cost": 5783.0,
+          "net_pnl": 14283.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        }
+      ],
+      "child_trade_count": 46,
+      "new_cohorts": 11,
+      "benchmark_same_window_return": 0.04417057181362427,
+      "reconciliation_error": -1e-09
+    },
+    {
+      "rank": 2,
+      "peak_date": "2024-11-11",
+      "trough_date": "2025-06-20",
+      "recovery_date": "2025-08-18",
+      "peak_nav": 1629427.5899999999,
+      "trough_nav": 1049668.85,
+      "net_change": -579758.7399999999,
+      "drawdown": -0.35580515731908036,
+      "decline_sessions": 146,
+      "recovery_sessions": 187,
+      "observed_underwater_sessions": 187,
+      "components": {
+        "winner_decline": -275749.59,
+        "other_existing_decline": 0.0,
+        "new_entry_decline": -249439.6,
+        "gain_offset": 17408.45,
+        "cost": -71978.0
+      },
+      "costs": {
+        "commission": 13839.0,
+        "tax": 14561.0,
+        "slippage": 43578.0
+      },
+      "component_loss_shares": {
+        "winner_decline": 0.4756281725049976,
+        "other_existing_decline": -0.0,
+        "new_entry_decline": 0.430247243879411,
+        "gain_offset": -0.03002705918672309,
+        "cost": 0.12415164280231465
+      },
+      "winner_giveback": 245150.55,
+      "winner_beyond_peak_profit": 30599.04,
+      "journal_components": {
+        "market_pnl": -437842.4999999999,
+        "dividend_entitlement": 7917.0,
+        "execution_basis_pnl": -77855.2400000002,
+        "cost": 71978.0
+      },
+      "cohorts": [
+        {
+          "event_id": "poc_up_red-2024-10-28-3447",
+          "stock_id": "3447",
+          "name": "展達",
+          "entry_date": "2024-10-29",
+          "group": "existing_winner",
+          "peak_net_pnl": 91692.9,
+          "peak_market_value": 503499.9,
+          "peak_weight": 0.3090041577116047,
+          "trough_market_value": 0.0,
+          "market_value_change": -503499.9,
+          "cash_change": 388787.86,
+          "receivable_change": 0.0,
+          "gross_pnl": -111201.04,
+          "cost": 3511.0,
+          "net_pnl": -114712.04,
+          "giveback_within_peak_profit": 91692.9,
+          "decline_beyond_peak_profit": 19508.14,
+          "sales": [
+            {
+              "date": "2024-11-25",
+              "qty": 5000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-11-25",
+              "qty": 91,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-10-29-2354",
+          "stock_id": "2354",
+          "name": "鴻準",
+          "entry_date": "2024-10-30",
+          "group": "existing_winner",
+          "peak_net_pnl": 102369.4,
+          "peak_market_value": 545321.5,
+          "peak_weight": 0.33467059435270763,
+          "trough_market_value": 0.0,
+          "market_value_change": -545321.5,
+          "cash_change": 438858.55,
+          "receivable_change": 0.0,
+          "gross_pnl": -102509.95,
+          "cost": 3953.0,
+          "net_pnl": -106462.95,
+          "giveback_within_peak_profit": 102369.4,
+          "decline_beyond_peak_profit": 140.55,
+          "sales": [
+            {
+              "date": "2024-11-29",
+              "qty": 5000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-11-29",
+              "qty": 651,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-10-01-3081",
+          "stock_id": "3081",
+          "name": "聯亞",
+          "entry_date": "2024-10-04",
+          "group": "existing_winner",
+          "peak_net_pnl": 51088.25,
+          "peak_market_value": 454860.0,
+          "peak_weight": 0.2791532454657896,
+          "trough_market_value": 0.0,
+          "market_value_change": -454860.0,
+          "cash_change": 389313.4,
+          "receivable_change": 0.0,
+          "gross_pnl": -62038.6,
+          "cost": 3508.0,
+          "net_pnl": -65546.6,
+          "giveback_within_peak_profit": 51088.25,
+          "decline_beyond_peak_profit": 10950.35,
+          "sales": [
+            {
+              "date": "2024-11-29",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-11-29",
+              "qty": 40,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-02",
+              "qty": 85,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-03",
+              "qty": 72,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-02-12-3019",
+          "stock_id": "3019",
+          "name": "亞光",
+          "entry_date": "2025-02-13",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -65516.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -60251.0,
+          "cost": 5265.0,
+          "net_pnl": -65516.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-03-10",
+              "qty": 1000,
+              "reason": "loss12"
+            },
+            {
+              "date": "2025-03-10",
+              "qty": 945,
+              "reason": "loss12"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-02-21-8028",
+          "stock_id": "8028",
+          "name": "昇陽半導體",
+          "entry_date": "2025-02-24",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -59934.9,
+          "receivable_change": 0.0,
+          "gross_pnl": -54587.9,
+          "cost": 5347.0,
+          "net_pnl": -59934.9,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-03-05",
+              "qty": 2000,
+              "reason": "loss12"
+            },
+            {
+              "date": "2025-03-05",
+              "qty": 277,
+              "reason": "loss12"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-06-10-2345",
+          "stock_id": "2345",
+          "name": "智邦",
+          "entry_date": "2025-06-11",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -40224.6,
+          "receivable_change": 0.0,
+          "gross_pnl": -35359.6,
+          "cost": 4865.0,
+          "net_pnl": -40224.6,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-06-19",
+              "qty": 436,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-06-10-6213",
+          "stock_id": "6213",
+          "name": "聯茂",
+          "entry_date": "2025-06-11",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 314197.6,
+          "market_value_change": 314197.6,
+          "cash_change": -337709.2,
+          "receivable_change": 0.0,
+          "gross_pnl": -21521.6,
+          "cost": 1990.0,
+          "net_pnl": -23511.6,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2024-11-25-3706",
+          "stock_id": "3706",
+          "name": "神達",
+          "entry_date": "2024-11-26",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -22529.4,
+          "receivable_change": 0.0,
+          "gross_pnl": -16336.4,
+          "cost": 6193.0,
+          "net_pnl": -22529.4,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-12-11",
+              "qty": 5000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-11",
+              "qty": 13,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-11-29-4968",
+          "stock_id": "4968",
+          "name": "立積",
+          "entry_date": "2024-12-02",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -20684.25,
+          "receivable_change": 0.0,
+          "gross_pnl": -14926.25,
+          "cost": 5758.0,
+          "net_pnl": -20684.25,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-12-16",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-16",
+              "qty": 439,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-17",
+              "qty": 246,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-18",
+              "qty": 147,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-12-11-2308",
+          "stock_id": "2308",
+          "name": "台達電",
+          "entry_date": "2024-12-12",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -18200.3,
+          "receivable_change": 0.0,
+          "gross_pnl": -12339.3,
+          "cost": 5861.0,
+          "net_pnl": -18200.3,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-02-12",
+              "qty": 814,
+              "reason": "three_black"
+            },
+            {
+              "date": "2025-02-13",
+              "qty": 152,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-06-10-2383",
+          "stock_id": "2383",
+          "name": "台光電",
+          "entry_date": "2025-06-11",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 322630.0,
+          "market_value_change": 322630.0,
+          "cash_change": -339064.5,
+          "receivable_change": 0.0,
+          "gross_pnl": -14437.5,
+          "cost": 1997.0,
+          "net_pnl": -16434.5,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2024-12-17-2454",
+          "stock_id": "2454",
+          "name": "聯發科",
+          "entry_date": "2024-12-18",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -15281.5,
+          "receivable_change": 0.0,
+          "gross_pnl": -9691.5,
+          "cost": 5590.0,
+          "net_pnl": -15281.5,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-03-11",
+              "qty": 273,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-02-17-2049",
+          "stock_id": "2049",
+          "name": "上銀",
+          "entry_date": "2025-02-18",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -10062.3,
+          "receivable_change": 0.0,
+          "gross_pnl": -4222.3,
+          "cost": 5840.0,
+          "net_pnl": -10062.3,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-02-21",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2025-02-21",
+              "qty": 102,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-06-19-8210",
+          "stock_id": "8210",
+          "name": "勤誠",
+          "entry_date": "2025-06-20",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 312366.0,
+          "market_value_change": 312366.0,
+          "cash_change": -320017.25,
+          "receivable_change": 0.0,
+          "gross_pnl": -5766.25,
+          "cost": 1885.0,
+          "net_pnl": -7651.25,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2024-12-25-3450",
+          "stock_id": "3450",
+          "name": "聯鈞",
+          "entry_date": "2024-12-26",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": 2986.3,
+          "receivable_change": 0.0,
+          "gross_pnl": 8791.3,
+          "cost": 5805.0,
+          "net_pnl": 2986.3,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-02-17",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2025-02-17",
+              "qty": 322,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-11-29-2404",
+          "stock_id": "2404",
+          "name": "漢唐",
+          "entry_date": "2024-12-02",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": 4007.15,
+          "receivable_change": 0.0,
+          "gross_pnl": 8617.15,
+          "cost": 4610.0,
+          "net_pnl": 4007.15,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-12-24",
+              "qty": 388,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-25",
+              "qty": 203,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-12-26",
+              "qty": 107,
+              "reason": "three_black"
+            }
+          ]
+        }
+      ],
+      "child_trade_count": 49,
+      "new_cohorts": 13,
+      "benchmark_same_window_return": -0.04228746508291481,
+      "reconciliation_error": -1e-10
+    },
+    {
+      "rank": 3,
+      "peak_date": "2024-05-28",
+      "trough_date": "2024-09-05",
+      "recovery_date": "2024-11-11",
+      "peak_nav": 1615849.52,
+      "trough_nav": 1223542.19,
+      "net_change": -392307.33,
+      "drawdown": -0.24278704492235142,
+      "decline_sessions": 69,
+      "recovery_sessions": 111,
+      "observed_underwater_sessions": 111,
+      "components": {
+        "winner_decline": -117787.56,
+        "other_existing_decline": 0.0,
+        "new_entry_decline": -240840.55,
+        "gain_offset": 21394.78,
+        "cost": -55074.0
+      },
+      "costs": {
+        "commission": 10658.0,
+        "tax": 11108.0,
+        "slippage": 33308.0
+      },
+      "component_loss_shares": {
+        "winner_decline": 0.30024307728331256,
+        "other_existing_decline": -0.0,
+        "new_entry_decline": 0.6139078512756823,
+        "gain_offset": -0.054535764090872324,
+        "cost": 0.14038483553187753
+      },
+      "winner_giveback": 117787.56,
+      "winner_beyond_peak_profit": 0.0,
+      "journal_components": {
+        "market_pnl": -339471.29999999993,
+        "dividend_entitlement": 58863.02,
+        "execution_basis_pnl": -56625.05000000004,
+        "cost": 55074.0
+      },
+      "cohorts": [
+        {
+          "event_id": "poc_up_red-2024-05-09-2609",
+          "stock_id": "2609",
+          "name": "陽明",
+          "entry_date": "2024-05-10",
+          "group": "existing_winner",
+          "peak_net_pnl": 162072.5,
+          "peak_market_value": 620577.0,
+          "peak_weight": 0.3840561836475961,
+          "trough_market_value": 0.0,
+          "market_value_change": -620577.0,
+          "cash_change": 521647.44,
+          "receivable_change": 0.0,
+          "gross_pnl": -94371.56,
+          "cost": 4558.0,
+          "net_pnl": -98929.56,
+          "giveback_within_peak_profit": 94371.56,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-07-09",
+              "qty": 7000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-07-09",
+              "qty": 806,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-07-09-3008",
+          "stock_id": "3008",
+          "name": "大立光",
+          "entry_date": "2024-07-10",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -75240.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -69165.0,
+          "cost": 6075.0,
+          "net_pnl": -75240.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-08-06",
+              "qty": 145,
+              "reason": "loss12"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-09-02-3450",
+          "stock_id": "3450",
+          "name": "聯鈞",
+          "entry_date": "2024-09-03",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 343480.0,
+          "market_value_change": 343480.0,
+          "cash_change": -395563.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -49752.0,
+          "cost": 2331.0,
+          "net_pnl": -52083.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2024-08-19-2543",
+          "stock_id": "2543",
+          "name": "皇昌",
+          "entry_date": "2024-08-20",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -33997.42,
+          "receivable_change": 0.0,
+          "gross_pnl": -28005.42,
+          "cost": 5992.0,
+          "net_pnl": -33997.42,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-08-23",
+              "qty": 6000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-08-23",
+              "qty": 71,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-06-03-3013",
+          "stock_id": "3013",
+          "name": "晟銘電",
+          "entry_date": "2024-06-04",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -30439.28,
+          "receivable_change": 0.0,
+          "gross_pnl": -23900.28,
+          "cost": 6539.0,
+          "net_pnl": -30439.28,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-06-20",
+              "qty": 4000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-06-20",
+              "qty": 536,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-06-21",
+              "qty": 330,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-08-07-2236",
+          "stock_id": "2236",
+          "name": "百達-KY",
+          "entry_date": "2024-08-08",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -29752.75,
+          "receivable_change": 0.0,
+          "gross_pnl": -24847.75,
+          "cost": 4905.0,
+          "net_pnl": -29752.75,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-08-19",
+              "qty": 3000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-08-19",
+              "qty": 28,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-08-20",
+              "qty": 14,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-08-21",
+              "qty": 24,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-08-22",
+              "qty": 3,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-03-15-2317",
+          "stock_id": "2317",
+          "name": "鴻海",
+          "entry_date": "2024-03-18",
+          "group": "existing_winner",
+          "peak_net_pnl": 124001.0,
+          "peak_market_value": 456330.0,
+          "peak_weight": 0.2824087233073535,
+          "trough_market_value": 0.0,
+          "market_value_change": -456330.0,
+          "cash_change": 429050.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -23416.0,
+          "cost": 3864.0,
+          "net_pnl": -27280.0,
+          "giveback_within_peak_profit": 23416.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-06-03",
+              "qty": 2000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-06-03",
+              "qty": 460,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-06-20-2317",
+          "stock_id": "2317",
+          "name": "鴻海",
+          "entry_date": "2024-06-21",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": -20252.1,
+          "receivable_change": 0.0,
+          "gross_pnl": -14515.1,
+          "cost": 5737.0,
+          "net_pnl": -20252.1,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-07-19",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-07-19",
+              "qty": 869,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-09-02-4763",
+          "stock_id": "4763",
+          "name": "材料*-KY",
+          "entry_date": "2024-09-03",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 389459.0,
+          "market_value_change": 389459.0,
+          "cash_change": -408385.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -16520.0,
+          "cost": 2406.0,
+          "net_pnl": -18926.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2024-09-02-3617",
+          "stock_id": "3617",
+          "name": "碩天",
+          "entry_date": "2024-09-03",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 391282.5,
+          "market_value_change": 391282.5,
+          "cash_change": -407820.5,
+          "receivable_change": 0.0,
+          "gross_pnl": -14135.0,
+          "cost": 2403.0,
+          "net_pnl": -16538.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2024-07-19-2348",
+          "stock_id": "2348",
+          "name": "海悅",
+          "entry_date": "2024-07-22",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 0.0,
+          "market_value_change": 0.0,
+          "cash_change": 742.96,
+          "receivable_change": 0.0,
+          "gross_pnl": 6989.96,
+          "cost": 6247.0,
+          "net_pnl": 742.96,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-08-23",
+              "qty": 1000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-08-23",
+              "qty": 260,
+              "reason": "three_black"
+            },
+            {
+              "date": "2024-09-02",
+              "qty": 374,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2024-05-23-2303",
+          "stock_id": "2303",
+          "name": "聯電",
+          "entry_date": "2024-05-24",
+          "group": "existing_winner",
+          "peak_net_pnl": 8314.1,
+          "peak_market_value": 458926.8,
+          "peak_weight": 0.2840158036498349,
+          "trough_market_value": 0.0,
+          "market_value_change": -458926.8,
+          "cash_change": 469314.62,
+          "receivable_change": 0.0,
+          "gross_pnl": 14404.82,
+          "cost": 4017.0,
+          "net_pnl": 10387.82,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2024-08-26",
+              "qty": 8000,
+              "reason": "time63"
+            },
+            {
+              "date": "2024-08-26",
+              "qty": 137,
+              "reason": "time63"
+            }
+          ]
+        }
+      ],
+      "child_trade_count": 38,
+      "new_cohorts": 9,
+      "benchmark_same_window_return": 0.00030653084543796894,
+      "reconciliation_error": 0.0
+    },
+    {
+      "rank": 4,
+      "peak_date": "2025-08-29",
+      "trough_date": "2025-09-17",
+      "recovery_date": "2025-10-31",
+      "peak_nav": 1788948.94,
+      "trough_nav": 1474825.09,
+      "net_change": -314123.85,
+      "drawdown": -0.17559128881565508,
+      "decline_sessions": 13,
+      "recovery_sessions": 41,
+      "observed_underwater_sessions": 41,
+      "components": {
+        "winner_decline": -264327.95,
+        "other_existing_decline": 0.0,
+        "new_entry_decline": -28809.90000000003,
+        "gain_offset": 0.0,
+        "cost": -20986.0
+      },
+      "costs": {
+        "commission": 4017.0,
+        "tax": 4297.0,
+        "slippage": 12672.0
+      },
+      "component_loss_shares": {
+        "winner_decline": 0.8414768569785452,
+        "other_existing_decline": -0.0,
+        "new_entry_decline": 0.09171509899678114,
+        "gain_offset": -0.0,
+        "cost": 0.0668080440246737
+      },
+      "winner_giveback": 264327.95,
+      "winner_beyond_peak_profit": 0.0,
+      "journal_components": {
+        "market_pnl": -298653.20000000007,
+        "dividend_entitlement": 0.0,
+        "execution_basis_pnl": 5515.349999999989,
+        "cost": 20986.0
+      },
+      "cohorts": [
+        {
+          "event_id": "poc_up_red-2025-07-24-3715",
+          "stock_id": "3715",
+          "name": "定穎投控",
+          "entry_date": "2025-07-25",
+          "group": "existing_winner",
+          "peak_net_pnl": 246405.6,
+          "peak_market_value": 605682.0,
+          "peak_weight": 0.338568634608431,
+          "trough_market_value": 0.0,
+          "market_value_change": -605682.0,
+          "cash_change": 479840.25,
+          "receivable_change": 0.0,
+          "gross_pnl": -121520.75,
+          "cost": 4321.0,
+          "net_pnl": -125841.75,
+          "giveback_within_peak_profit": 121520.75,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-09-04",
+              "qty": 5000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2025-09-04",
+              "qty": 313,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-06-10-6213",
+          "stock_id": "6213",
+          "name": "聯茂",
+          "entry_date": "2025-06-11",
+          "group": "existing_winner",
+          "peak_net_pnl": 180847.6,
+          "peak_market_value": 511832.0,
+          "peak_weight": 0.2861076627486081,
+          "trough_market_value": 0.0,
+          "market_value_change": -511832.0,
+          "cash_change": 424918.6,
+          "receivable_change": 0.0,
+          "gross_pnl": -83086.4,
+          "cost": 3827.0,
+          "net_pnl": -86913.4,
+          "giveback_within_peak_profit": 83086.4,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-09-08",
+              "qty": 3000,
+              "reason": "time63"
+            },
+            {
+              "date": "2025-09-08",
+              "qty": 736,
+              "reason": "time63"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-07-29-4958",
+          "stock_id": "4958",
+          "name": "臻鼎-KY",
+          "entry_date": "2025-07-30",
+          "group": "existing_winner",
+          "peak_net_pnl": 207899.0,
+          "peak_market_value": 580068.0,
+          "peak_weight": 0.32425073015219763,
+          "trough_market_value": 0.0,
+          "market_value_change": -580068.0,
+          "cash_change": 515702.2,
+          "receivable_change": 0.0,
+          "gross_pnl": -59720.8,
+          "cost": 4645.0,
+          "net_pnl": -64365.8,
+          "giveback_within_peak_profit": 59720.8,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": [
+            {
+              "date": "2025-09-04",
+              "qty": 2000,
+              "reason": "three_black"
+            },
+            {
+              "date": "2025-09-04",
+              "qty": 952,
+              "reason": "three_black"
+            }
+          ]
+        },
+        {
+          "event_id": "poc_up_red-2025-09-04-8039",
+          "stock_id": "8039",
+          "name": "台虹",
+          "entry_date": "2025-09-05",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 471182.39999999997,
+          "market_value_change": 471182.39999999997,
+          "cash_change": -488498.1,
+          "receivable_change": 0.0,
+          "gross_pnl": -14437.70000000003,
+          "cost": 2878.0,
+          "net_pnl": -17315.70000000003,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2025-09-08-2449",
+          "stock_id": "2449",
+          "name": "京元電子",
+          "entry_date": "2025-09-09",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 440220.0,
+          "market_value_change": 440220.0,
+          "cash_change": -451889.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -9005.0,
+          "cost": 2664.0,
+          "net_pnl": -11669.0,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2025-09-04-1605",
+          "stock_id": "1605",
+          "name": "華新",
+          "entry_date": "2025-09-05",
+          "group": "new_entry",
+          "peak_net_pnl": 0.0,
+          "peak_market_value": 0.0,
+          "peak_weight": 0.0,
+          "trough_market_value": 441086.1,
+          "market_value_change": 441086.1,
+          "cash_change": -449104.3,
+          "receivable_change": 0.0,
+          "gross_pnl": -5367.2,
+          "cost": 2651.0,
+          "net_pnl": -8018.2,
+          "giveback_within_peak_profit": 0.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        }
+      ],
+      "child_trade_count": 12,
+      "new_cohorts": 3,
+      "benchmark_same_window_return": 0.07333109913310953,
+      "reconciliation_error": -3e-11
+    },
+    {
+      "rank": 5,
+      "peak_date": "2026-03-02",
+      "trough_date": "2026-03-09",
+      "recovery_date": "2026-03-18",
+      "peak_nav": 2554522.27,
+      "trough_nav": 2137606.47,
+      "net_change": -416915.8,
+      "drawdown": -0.16320695454340275,
+      "decline_sessions": 5,
+      "recovery_sessions": 12,
+      "observed_underwater_sessions": 12,
+      "components": {
+        "winner_decline": -416915.8,
+        "other_existing_decline": 0.0,
+        "new_entry_decline": 0.0,
+        "gain_offset": 0.0,
+        "cost": 0.0
+      },
+      "costs": {
+        "commission": 0.0,
+        "tax": 0.0,
+        "slippage": 0.0
+      },
+      "component_loss_shares": {
+        "winner_decline": 1.0,
+        "other_existing_decline": -0.0,
+        "new_entry_decline": -0.0,
+        "gain_offset": -0.0,
+        "cost": -0.0
+      },
+      "winner_giveback": 312471.7000000001,
+      "winner_beyond_peak_profit": 104444.0999999999,
+      "journal_components": {
+        "market_pnl": -416915.7999999998,
+        "dividend_entitlement": 0.0,
+        "execution_basis_pnl": 0.0,
+        "cost": 0.0
+      },
+      "cohorts": [
+        {
+          "event_id": "poc_up_red-2026-02-23-2360",
+          "stock_id": "2360",
+          "name": "致茂",
+          "entry_date": "2026-02-24",
+          "group": "existing_winner",
+          "peak_net_pnl": 155796.0,
+          "peak_market_value": 849915.0,
+          "peak_weight": 0.33270995911106305,
+          "trough_market_value": 695640.0,
+          "market_value_change": -154275.0,
+          "cash_change": 0.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -154275.0,
+          "cost": 0.0,
+          "net_pnl": -154275.0,
+          "giveback_within_peak_profit": 154275.0,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2026-02-25-1802",
+          "stock_id": "1802",
+          "name": "台玻",
+          "entry_date": "2026-02-26",
+          "group": "existing_winner",
+          "peak_net_pnl": 34239.9000000001,
+          "peak_market_value": 665683.2000000001,
+          "peak_weight": 0.26059009460113264,
+          "trough_market_value": 526999.2000000001,
+          "market_value_change": -138684.0,
+          "cash_change": 0.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -138684.0,
+          "cost": 0.0,
+          "net_pnl": -138684.0,
+          "giveback_within_peak_profit": 34239.9000000001,
+          "decline_beyond_peak_profit": 104444.0999999999,
+          "sales": []
+        },
+        {
+          "event_id": "poc_up_red-2026-01-23-2367",
+          "stock_id": "2367",
+          "name": "燿華",
+          "entry_date": "2026-01-26",
+          "group": "existing_winner",
+          "peak_net_pnl": 331243.9,
+          "peak_market_value": 998697.4,
+          "peak_weight": 0.3909527083512175,
+          "trough_market_value": 874740.6,
+          "market_value_change": -123956.8,
+          "cash_change": 0.0,
+          "receivable_change": 0.0,
+          "gross_pnl": -123956.8,
+          "cost": 0.0,
+          "net_pnl": -123956.8,
+          "giveback_within_peak_profit": 123956.8,
+          "decline_beyond_peak_profit": 0.0,
+          "sales": []
+        }
+      ],
+      "child_trade_count": 0,
+      "new_cohorts": 0,
+      "benchmark_same_window_return": -0.08400421063057606,
+      "reconciliation_error": 0.0
+    }
+  ],
+  "total_underwater_episodes": 36,
+  "trading_days": 666,
+  "daily_identity_reconciled": true,
+  "all_selected_boundaries_reconciled": true,
+  "sources": {
+    "artifacts/forward_simulation/poc_market_sizing_20261019.json": "531f6b65e685597eec2ed37d9d6e0c09c5e652e418c6b24297d9d52e7c06e91b",
+    ".cache/top3-validation-20261012/baseline-v3/poc_up_red.json": "f7c573d2b08310fa6f7911c191c764304ae476f6d3bd5d9844666dbd643756be",
+    ".cache/top3-validation-20261012/baseline-benchmark-v4/benchmark.json": "3b7fe2193749c92d8dc25153e1fd34b6fd38055259a4c74dba2f8c7261f823f0",
+    "scripts/analyze_poc_drawdowns.py": "ab4b7d29f3ff570a251708cb5aeed421177e7c596c40e3a5cd2c5e8713c295ef",
+    "skills/cohort_drawdown.py": "183e7d9a461e54742057151bf86482791c65f3ee434e93eefebccb236bffe031"
+  },
+  "backtests_run": 0,
+  "new_accounts": 0,
+  "reused_accounts": 2,
+  "finmind_requests": 0,
+  "strategy_changed": false,
+  "descriptive_only": true,
+  "counterfactual_backtest": false,
+  "actual_fill_verified": false,
+  "unseen_validation": false,
+  "paper_enabled": false,
+  "live_qualified": false,
+  "method": {
+    "selection": "five_deepest_disjoint_high_watermark_episodes",
+    "window": "peak_exclusive_trough_inclusive",
+    "winner": "cohort_net_pnl_at_peak_positive_including_prior_cash_flows_and_unpaid_rights",
+    "new_entry": "first_funded_entry_after_account_peak",
+    "pnl_identity": "holding_value_change + cash_change + receivable_change",
+    "cost_separation": "cohort_gross_pnl = net_pnl + sealed_window_cost; subtract cost once",
+    "benchmark": "0050 return over exactly the same peak-to-trough dates, not its maximum drawdown"
+  },
+  "limitations": [
+    "歷史日區間估算成交；未證明盤中可成交，帳本內應收權益沿用原估值。",
+    "舊贏家按回撤高點當時的批次累計淨獲利分類；跌價可超過既有獲利，超過部分另列。",
+    "新買批次的損益只算到本段低點；可能仍持有，不以後來的最終輸贏分類。",
+    "費稅與滑價自批次損益拆出，沒有重複扣款；加回成本只是固定持股路徑的會計拆解，非零成本回測。",
+    "回撤高低點為事後辨識，不能直接當事前交易訊號，也未證明任何新風控能保留報酬。",
+    "五段按回撤幅度排名且不重疊；跨年期間不拆開，未回復高點的期間列為尚未修復。"
+  ],
+  "findings": [
+    "五段中四段的最大負向項是高點時獲利的舊持股跌價；最深一段也伴隨大量接替新買虧損。",
+    "最深一段0050同期仍上漲，僅用大盤均線無法充分反映所持個股轉弱。",
+    "優先研究既有持股同步轉弱時的曝險與出場；接替新買的失敗累積其次。成本是放大因素，並非所有回撤的主因。",
+    "先用原帳本診斷轉弱前兆與回吐時序，再另訂單一規則驗證；本次不新增停利、減碼或新買限制。"
+  ]
+}

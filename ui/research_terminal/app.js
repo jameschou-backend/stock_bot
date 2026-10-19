@@ -93,6 +93,7 @@ async function loadStudies(){
  if(results[1].status==='fulfilled'){
   state.archive=results[1].value;
   window.renderPocPaperPreparation(state.archive.items?.find(x=>x.id==='poc_original_signal_preparation_20261015_close'),$('poc-paper-preparation'),{el,number,pct});
+  window.renderPocDrawdown(state.archive.items?.find(x=>x.id==='poc_drawdown_attribution_20261019'),$('poc-drawdown'),{el,number,pct});
   window.renderPocMarketSizing(state.archive.items?.find(x=>x.id==='poc_market_sizing_20261019'),$('poc-market-sizing'),{el,number,pct,api,renderAccountDetail});
   window.renderPocCap40(state.archive.items?.find(x=>x.id==='poc_cap40_20261019'),$('poc-cap40'),{el,number,pct,api,renderAccountDetail});
   window.renderPocTrailing(state.archive.items?.find(x=>x.id==='poc_trailing_20261019'),$('poc-trailing'),{el,number,pct,api,renderAccountDetail});
@@ -127,18 +128,19 @@ function setupLabSections(){
   const root=$('view-backtest'),menu=el('nav',undefined,'lab-tabs');menu.setAttribute('aria-label','回測研究類型');
   const panes={accounts:el('div'),signals:el('div'),history:el('div')};
   const study=el('select');study.setAttribute('aria-label','帳戶研究版本');
-  study.append(option('market-sizing','POC硬篩＋紅K · 大盤轉弱新買減半'),option('cap40','POC硬篩＋紅K · 單股40%減至1/3'),option('trailing','POC硬篩＋紅K · 移動停利20/12'),option('paper-preparation','POC硬篩＋紅K原版 · 訊號準備'),option('split-accounts','兩套原版各50萬 · 不再平衡'),option('risk-controls','POC 獨立實驗 · 限制追高／波動部位'),option('followup','POC 後續驗證 · 成交／出場／強度／相關性'),option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
+  study.append(option('drawdown','POC硬篩＋紅K原版 · 主要回撤拆解'),option('market-sizing','POC硬篩＋紅K · 大盤轉弱新買減半'),option('cap40','POC硬篩＋紅K · 單股40%減至1/3'),option('trailing','POC硬篩＋紅K · 移動停利20/12'),option('paper-preparation','POC硬篩＋紅K原版 · 訊號準備'),option('split-accounts','兩套原版各50萬 · 不再平衡'),option('risk-controls','POC 獨立實驗 · 限制追高／波動部位'),option('followup','POC 後續驗證 · 成交／出場／強度／相關性'),option('optimization','POC 優化 · 冷卻5日與成本壓力'),option('legacy','兩套原策略重跑 · 原949／576版本'),option('top3','原31組前三名 · 固定驗證'));
   const selector=el('label',undefined,'study-version');selector.append(el('span','目前查看'),study);
   root.insertBefore(menu,$('legacy-comparison'));
   const optimization=el('section',undefined,'panel research-body');optimization.id='poc-optimization';
   const followup=el('section',undefined,'panel research-body');followup.id='poc-followup';
   const riskControls=el('section',undefined,'panel research-body');riskControls.id='poc-risk-controls';
   const splitAccounts=el('section',undefined,'panel research-body');splitAccounts.id='poc-split-accounts';
+  const drawdown=el('section',undefined,'panel research-body');drawdown.id='poc-drawdown';
   const marketSizing=el('section',undefined,'panel research-body');marketSizing.id='poc-market-sizing';
   const cap40=el('section',undefined,'panel research-body');cap40.id='poc-cap40';
   const trailing=el('section',undefined,'panel research-body');trailing.id='poc-trailing';
   const paperPreparation=el('section',undefined,'panel research-body');paperPreparation.id='poc-paper-preparation';
-  panes.accounts.append(selector,marketSizing,cap40,trailing,paperPreparation,splitAccounts,riskControls,followup,optimization,$('legacy-comparison'),$('top3-validation'));
+  panes.accounts.append(selector,drawdown,marketSizing,cap40,trailing,paperPreparation,splitAccounts,riskControls,followup,optimization,$('legacy-comparison'),$('top3-validation'));
   panes.signals.append(root.querySelector('.lab-layout'));
   panes.history.append($('account-comparison'),...root.querySelectorAll('section.account-replay-config'));
   for(const [id,name] of [['accounts','最新帳戶比較'],['signals','訊號研究'],['history','歷史版本']]){
@@ -146,7 +148,7 @@ function setupLabSections(){
     button.addEventListener('click',()=>{for(const [key,pane] of Object.entries(panes))pane.hidden=key!==id;for(const b of menu.children)b.setAttribute('aria-pressed',b===button?'true':'false');});
     menu.append(button);panes[id].id='lab-'+id;panes[id].hidden=id!=='accounts';root.append(panes[id]);
   }
-  function chooseStudy(){$('poc-market-sizing').hidden=study.value!=='market-sizing';$('poc-cap40').hidden=study.value!=='cap40';$('poc-trailing').hidden=study.value!=='trailing';$('poc-paper-preparation').hidden=study.value!=='paper-preparation';$('poc-split-accounts').hidden=study.value!=='split-accounts';$('poc-risk-controls').hidden=study.value!=='risk-controls';$('poc-followup').hidden=study.value!=='followup';$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
+  function chooseStudy(){$('poc-drawdown').hidden=study.value!=='drawdown';$('poc-market-sizing').hidden=study.value!=='market-sizing';$('poc-cap40').hidden=study.value!=='cap40';$('poc-trailing').hidden=study.value!=='trailing';$('poc-paper-preparation').hidden=study.value!=='paper-preparation';$('poc-split-accounts').hidden=study.value!=='split-accounts';$('poc-risk-controls').hidden=study.value!=='risk-controls';$('poc-followup').hidden=study.value!=='followup';$('poc-optimization').hidden=study.value!=='optimization';$('legacy-comparison').hidden=study.value!=='legacy';$('top3-validation').hidden=study.value!=='top3';}
   const requestedStudy=new URLSearchParams(location.search).get('study');
   if([...study.options].some(o=>o.value===requestedStudy))study.value=requestedStudy;
   study.addEventListener('change',chooseStudy);chooseStudy();

@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('poc_drawdown_attribution_20261019', 'POC硬篩＋紅K原版：五次主要回撤拆解', '2026-10-19', 'account', '只用既有帳本拆解舊贏家跌價、新買虧損與成本，原版不變'),
     ('poc_market_sizing_20261019', 'POC硬篩＋紅K：大盤轉弱新買減半', '2026-10-19', 'account', '0050低於MA120只縮小新買，重用原版與同成本0050'),
     ('poc_cap40_20261019', 'POC硬篩＋紅K：單股40%減至1/3', '2026-10-19', 'account', '只新增比重減碼，重用原版與同成本0050'),
     ('poc_trailing_20261019', 'POC硬篩＋紅K：移動停利20/12', '2026-10-19', 'account', '只新增移動停利，重用原版與同成本0050'),
@@ -101,6 +102,9 @@ def overview(root=ROOT):
                 from app.poc_paper_preparation import validate
                 row['paper_preparation'] = validate(report)
                 row['execution_note'] = '目前只準備訊號；使用者回報買進後才依實際資料記錄，未建立委託或成交。'
+            elif identifier == 'poc_drawdown_attribution_20261019':
+                from app.poc_drawdown_ui import validate
+                row['drawdown_attribution'] = validate(report)
             elif identifier == 'poc_market_sizing_20261019':
                 from app.poc_market_sizing_ui import validate
                 row['market_sizing'] = validate(report)

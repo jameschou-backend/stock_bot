@@ -1,0 +1,97 @@
+{
+  "schema": "poc_drawdown_validation_v1",
+  "publication": "artifacts/forward_simulation/poc_drawdown_attribution_20261019.json",
+  "publication_sha256": "16b8dd5b57721cf792b8f91320ad1a83e7254cc104e66b9b7dff2ad45422dafa",
+  "source_hashes_verified": {
+    "artifacts/forward_simulation/poc_market_sizing_20261019.json": true,
+    ".cache/top3-validation-20261012/baseline-v3/poc_up_red.json": true,
+    ".cache/top3-validation-20261012/baseline-benchmark-v4/benchmark.json": true,
+    "scripts/analyze_poc_drawdowns.py": true,
+    "skills/cohort_drawdown.py": true
+  },
+  "prior_publications_unchanged": {
+    "artifacts/forward_simulation/poc_optimization_20261013.json": "ff6a949d487ad880afbb4191295221eef46d80fa4df362abd1a33b3c5cc9a264",
+    "artifacts/forward_simulation/poc_followup_20261014.json": "398922e449b97ba90f5ac3eb8f52dcdb247028577e2c3aa0c27c197d25d8a335",
+    "artifacts/forward_simulation/poc_risk_controls_20261014.json": "73b8c39674df42525e2f65e43673f074d849bbaa916145ecd08ad81a6a6889c4",
+    "artifacts/forward_simulation/poc_split_accounts_20261015.json": "6bd85bdc6927015a32d4cb17dd2819af4a9a6e128b8d2b2063c685f4c2ec21b1",
+    "artifacts/forward_simulation/poc_trailing_20261019.json": "8f775b5d6c3409f31e0fd215ebc367a061715cd2b944de571491718937166564",
+    "artifacts/forward_simulation/poc_cap40_20261019.json": "4b1fd6cbcf1bafbd21253456e01f4d03839fc3210711b0806612c74f78b77387",
+    "artifacts/forward_simulation/poc_market_sizing_20261019.json": "531f6b65e685597eec2ed37d9d6e0c09c5e652e418c6b24297d9d52e7c06e91b"
+  },
+  "backtests_run": 0,
+  "new_accounts": 0,
+  "completed_attributions": 5,
+  "total_selected_attributions": 5,
+  "source_accounts_reused": 2,
+  "independent_endpoint_check": [
+    {
+      "rank": 1,
+      "independent_endpoint_pnl": -2255039.36,
+      "difference": -9e-10
+    },
+    {
+      "rank": 2,
+      "independent_endpoint_pnl": -579758.74,
+      "difference": -1e-10
+    },
+    {
+      "rank": 3,
+      "independent_endpoint_pnl": -392307.33,
+      "difference": -1e-10
+    },
+    {
+      "rank": 4,
+      "independent_endpoint_pnl": -314123.85,
+      "difference": -1e-10
+    },
+    {
+      "rank": 5,
+      "independent_endpoint_pnl": -416915.8,
+      "difference": 2e-10
+    }
+  ],
+  "tests": {
+    "command": "make test",
+    "passed": 7572,
+    "warnings": 37,
+    "seconds": 222.69,
+    "log": ".cache/poc-drawdown-attribution-20261019/make-test.log"
+  },
+  "pipeline": {
+    "command": "SPONSOR_INGEST=off make pipeline",
+    "passed": false,
+    "reason": "Existing incomplete TWSE/TPEX daily coverage for 2026-10-19; require_market_coverage rejected before features/training/picks. Frozen attribution ends 2026-10-02 and is unaffected.",
+    "baseline_status_before_changes": "get_data_status already reported 2026-10-19 incomplete coverage before edits",
+    "log": ".cache/poc-drawdown-attribution-20261019/pipeline.log"
+  },
+  "api": {
+    "command": "make api",
+    "health": "ok",
+    "verified_http_200": [
+      "/health",
+      "/picks",
+      "/models",
+      "/jobs?limit=10",
+      "/research-terminal/api/archive",
+      "/research-terminal/api/archive/poc_drawdown_attribution_20261019",
+      "/terminal/poc-drawdown.js"
+    ],
+    "download_matches_publication_bytes": true
+  },
+  "ui": {
+    "actual_browser_verified": true,
+    "renderer_all_five_episodes_passed": true,
+    "actual_browser_selected_episodes": [
+      1,
+      5
+    ],
+    "screenshot": ".cache/poc-drawdown-attribution-20261019/dashboard.jpg",
+    "url": "http://127.0.0.1:8000/terminal/?strategy=poc_up_red&date=2026-10-15&study=drawdown#backtest"
+  },
+  "scope": {
+    "strategy_unchanged": true,
+    "no_orders_or_fills_recorded": true,
+    "actual_fill_verified": false,
+    "live_qualified": false
+  }
+}
