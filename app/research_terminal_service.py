@@ -25,8 +25,8 @@ import pyarrow.parquet as pq
 from app.signal_lifecycle import SignalHistory, add_price_context
 
 ROOT = Path(__file__).resolve().parents[1]
-DAILY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_20261015_close.json'
-DAILY_AUDIT_SHA = '8e86a8a10f5c8b0f8797b160031f7f332a9ce1b9ddc656a2c9e508a08efabf3c'
+DAILY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_20261019_close.json'
+DAILY_AUDIT_SHA = '6a80d1732859ca8fae6400831b1782bf846386d44c9c4343c3b534a896ab05a0'
 STUDY_AUDIT = 'artifacts/forward_simulation/strategy_scanner_expansion_20261005.json'
 STUDY_AUDIT_SHA = '7b5602319aeda6538728ae8f9fccfe4a0d6784d934b778950fd6cb40c30d3a64'
 RALLY_REPORT = 'artifacts/forward_simulation/strategy_rally_attribution_20261006.json'

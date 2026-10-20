@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('strategy_scanner_20261019_close', '10/19 POC訊號與當日掃描', '2026-10-19', 'data', '補上10/16與10/19及484組缺漏逐筆；重用12天訊號與4841筆POC紀錄'),
     ('poc_weakness_20261019', 'POC原版：三黑K之前的轉弱與部分減碼候選', '2026-10-19', 'data', '既有73個持股批次與五段回撤診斷；原版不變，未回測減碼績效'),
     ('poc_drawdown_attribution_20261019', 'POC硬篩＋紅K原版：五次主要回撤拆解', '2026-10-19', 'account', '只用既有帳本拆解舊贏家跌價、新買虧損與成本，原版不變'),
     ('poc_market_sizing_20261019', 'POC硬篩＋紅K：大盤轉弱新買減半', '2026-10-19', 'account', '0050低於MA120只縮小新買，重用原版與同成本0050'),
