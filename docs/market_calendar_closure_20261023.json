@@ -1,0 +1,57 @@
+{
+  "schema": "official_calendar_closure_validation_v1",
+  "date": "2026-10-23",
+  "checked_at": "2026-10-24T06:56:17.834856+00:00",
+  "reason": "Official typhoon closure overrides stale FinMind trading date; empty price response alone never determines a holiday.",
+  "official_announcement": "https://www.twse.com.tw/rwd/zh/news/newsDetail/8a8216d6a0fa351b01a1638507a10203",
+  "official_payload": {
+    "stat": "ok",
+    "date": "202610222010",
+    "head text": "N",
+    "tables": [
+      {
+        "title": "臺灣證券交易所集中交易市場115年10月23日休市一天",
+        "fields": [
+          "text",
+          "html",
+          "pdf",
+          "lang"
+        ],
+        "data": [
+          "",
+          "",
+          "/news/news/tsecnews/8a8216d6a0fa351b01a1638507940202.pdf",
+          "8a8216d6a0fa351b01a1638557450205"
+        ]
+      },
+      {
+        "title": "圖片",
+        "fields": [
+          "path",
+          "notes"
+        ],
+        "data": []
+      },
+      {
+        "title": "標籤",
+        "fields": [
+          "tags"
+        ],
+        "data": []
+      }
+    ]
+  },
+  "official_payload_sha256": "0ee4c564cac1659a6255e287e20d58bbaa780436bbd7af7e97615b8ca0668fb9",
+  "corrected_row": {
+    "trading_date": "2026-10-23",
+    "is_open": 0,
+    "session_type": "HOLIDAY",
+    "note": "Official closure: 颱風全日休市; https://www.twse.com.tw/rwd/zh/news/newsDetail/8a8216d6a0fa351b01a1638507a10203"
+  },
+  "latest_complete_session": "2026-10-22",
+  "pipeline_exit_code": 0,
+  "features_written": 0,
+  "labels_written": 0,
+  "backtests_run": 0,
+  "source_file": "skills/ingest_trading_calendar.py"
+}

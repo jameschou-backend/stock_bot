@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker
 
 from app.models import Base, RawPrice, TradingCalendar
 from skills.ingest_trading_calendar import (
+    _apply_official_closures,
+    _seed_rows,
     seed_calendar,
 )
 
@@ -43,3 +45,21 @@ class TestActualTradingDates:
         from skills.ingest_trading_calendar import _actual_trading_dates
         actual = _actual_trading_dates(session, date(2026, 1, 1), date(2026, 12, 31))
         assert actual == set()
+
+
+def test_official_typhoon_closure_overrides_stale_provider_and_seed():
+    stale = [{"trading_date": date(2026, 10, 23), "is_open": True,
+              "session_type": "FULL", "note": "FinMind TaiwanStockTradingDate"}]
+    corrected = _apply_official_closures(stale)
+    assert corrected[0]["is_open"] is False
+    assert corrected[0]["session_type"] == "HOLIDAY"
+    assert "https://www.twse.com.tw/" in corrected[0]["note"]
+    assert stale[0]["is_open"] is True
+    assert _apply_official_closures(corrected) == corrected
+    assert _seed_rows(date(2026, 10, 23), date(2026, 10, 23))[0]["is_open"] is False
+
+
+def test_official_closure_does_not_guess_other_missing_price_days():
+    rows = [{"trading_date": date(2026, 10, 22), "is_open": True,
+             "session_type": "FULL", "note": "FinMind TaiwanStockTradingDate"}]
+    assert _apply_official_closures(rows) == rows

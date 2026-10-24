@@ -15,6 +15,26 @@ from app.finmind import fetch_dataset, FinMindError
 
 logger = logging.getLogger(__name__)
 
+# Reviewed exchange announcement takes precedence over a stale provider calendar.
+# Do not infer additional closures from missing price data.
+OFFICIAL_CLOSURES = {
+    date(2026, 10, 23): {
+        "reason": "颱風全日休市",
+        "source": "https://www.twse.com.tw/rwd/zh/news/newsDetail/8a8216d6a0fa351b01a1638507a10203",
+    },
+}
+
+
+def _apply_official_closures(records: List[Dict]) -> List[Dict]:
+    result = []
+    for record in records:
+        closure = OFFICIAL_CLOSURES.get(record["trading_date"])
+        if closure:
+            record = dict(record, is_open=False, session_type="HOLIDAY",
+                          note=f"Official closure: {closure['reason']}; {closure['source']}")
+        result.append(record)
+    return result
+
 
 def _seed_rows(start_date: date, end_date: date) -> List[Dict]:
     """初始預設用 weekday heuristic。"""
@@ -31,7 +51,7 @@ def _seed_rows(start_date: date, end_date: date) -> List[Dict]:
             }
         )
         cursor += timedelta(days=1)
-    return rows
+    return _apply_official_closures(rows)
 
 
 def _actual_trading_dates(session: Session, start_date: date, end_date: date) -> Set[date]:
@@ -114,6 +134,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
                                "session_type": "FULL" if is_open else "HOLIDAY",
                                "note": "FinMind TaiwanStockTradingDate"})
             cursor += timedelta(days=1)
+        historical = _apply_official_closures(historical)
         stmt = insert(TradingCalendar).values(historical)
         db_session.execute(stmt.on_duplicate_key_update(
             is_open=stmt.inserted.is_open, session_type=stmt.inserted.session_type,
@@ -123,6 +144,8 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         logs = {
             "rows_upserted": rows,
             "rows_calibrated": fixed,
+            "official_closures": [str(day) for day in OFFICIAL_CLOSURES
+                                  if start_date <= day <= end_date],
             "start_date": start_date.isoformat(),
             "end_date": end_date.isoformat(),
             "note": "FinMind trading dates; future dates use weekday heuristic",
