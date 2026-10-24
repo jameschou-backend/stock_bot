@@ -1,0 +1,215 @@
+{
+  "schema": "scanner_daily_validation_v1",
+  "checked_at": "2026-10-24T06:59:57.246142+00:00",
+  "publication": "artifacts/forward_simulation/strategy_scanner_20261022_close.json",
+  "publication_sha256": "00be1424c636189bb034bbebf63a582a38573ffd3f0376ca84c666651add69cb",
+  "latest_session": "2026-10-22",
+  "calendar_correction": "10/23 official typhoon closure; today 10/24 Saturday",
+  "new_dates": [
+    "2026-10-20",
+    "2026-10-21",
+    "2026-10-22"
+  ],
+  "historical_scan_dates_reused": 14,
+  "historical_poc_profiles_reused": 4887,
+  "historical_scan_dates_recomputed": 0,
+  "backtests_run": 0,
+  "original_strategy_changed": false,
+  "orders_or_fills_created": false,
+  "finmind": {
+    "new_tick_requests": 238,
+    "tick_coordinates": 238,
+    "new_daily_reference_requests": 12,
+    "daily_reference_calls": 12,
+    "tick_status_counts": {
+      "received": 238
+    },
+    "quota_after_tick_fetch": {
+      "requests_in_window": 265,
+      "window_start_time": 1792824679.7044952,
+      "total_requests": 74151,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4595,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    }
+  },
+  "api": {
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs": 200,
+    "overview": 200,
+    "signals": 200,
+    "archive": 200,
+    "publication": 200,
+    "download_byte_exact": true
+  },
+  "browser": {
+    "selected_date": "2026-10-22",
+    "dates_1020_1021_1022_visible": true,
+    "matched": 8,
+    "triggered": 7,
+    "chart_date": "2026-10-22",
+    "screenshot": ".cache/scanner-20261022-close/dashboard.png"
+  },
+  "matches": [
+    {
+      "date": "2026-10-20",
+      "matched": 9,
+      "stocks": [
+        {
+          "stock_id": "1802",
+          "name": "台玻",
+          "first_signal": true
+        },
+        {
+          "stock_id": "2328",
+          "name": "廣宇",
+          "first_signal": true
+        },
+        {
+          "stock_id": "2377",
+          "name": "微星",
+          "first_signal": true
+        },
+        {
+          "stock_id": "3005",
+          "name": "神基",
+          "first_signal": true
+        },
+        {
+          "stock_id": "4566",
+          "name": "時碩工業",
+          "first_signal": true
+        },
+        {
+          "stock_id": "4720",
+          "name": "德淵",
+          "first_signal": true
+        },
+        {
+          "stock_id": "6209",
+          "name": "今國光",
+          "first_signal": false
+        },
+        {
+          "stock_id": "6269",
+          "name": "台郡",
+          "first_signal": true
+        },
+        {
+          "stock_id": "6782",
+          "name": "視陽",
+          "first_signal": true
+        }
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "matched": 7,
+      "stocks": [
+        {
+          "stock_id": "2328",
+          "name": "廣宇",
+          "first_signal": false
+        },
+        {
+          "stock_id": "4526",
+          "name": "東台",
+          "first_signal": true
+        },
+        {
+          "stock_id": "4720",
+          "name": "德淵",
+          "first_signal": false
+        },
+        {
+          "stock_id": "4770",
+          "name": "上品",
+          "first_signal": true
+        },
+        {
+          "stock_id": "4949",
+          "name": "有成精密",
+          "first_signal": true
+        },
+        {
+          "stock_id": "6491",
+          "name": "晶碩",
+          "first_signal": true
+        },
+        {
+          "stock_id": "6782",
+          "name": "視陽",
+          "first_signal": false
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "matched": 8,
+      "stocks": [
+        {
+          "stock_id": "1101",
+          "name": "台泥",
+          "first_signal": true
+        },
+        {
+          "stock_id": "1102",
+          "name": "亞泥",
+          "first_signal": true
+        },
+        {
+          "stock_id": "2412",
+          "name": "中華電",
+          "first_signal": true
+        },
+        {
+          "stock_id": "2468",
+          "name": "華經",
+          "first_signal": true
+        },
+        {
+          "stock_id": "3005",
+          "name": "神基",
+          "first_signal": true
+        },
+        {
+          "stock_id": "4526",
+          "name": "東台",
+          "first_signal": false
+        },
+        {
+          "stock_id": "4960",
+          "name": "誠美材",
+          "first_signal": true
+        },
+        {
+          "stock_id": "6214",
+          "name": "精誠",
+          "first_signal": true
+        }
+      ]
+    }
+  ],
+  "poc_unknown_counts": {
+    "ordinary_tape_conflict": 6,
+    "corporate_action_or_nonconstant_price_scale": 2
+  },
+  "pipeline": {
+    "command": "SPONSOR_INGEST=off INGEST_PRICES_SOURCE=finmind make pipeline",
+    "exit_code": 0,
+    "features_written": 0,
+    "labels_written": 0,
+    "trained": false,
+    "prices_latest": "2026-10-22",
+    "features_latest": "2026-10-22",
+    "data_ready": true
+  },
+  "tests": {
+    "full": "7582 passed, 37 warnings",
+    "focused": "57 passed"
+  }
+}
