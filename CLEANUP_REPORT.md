@@ -1,5 +1,74 @@
 # CLEANUP_REPORT.md
 
+## 2026-10-26：本機 MySQL 資料表壓縮與封存
+
+範圍為 `poyue.mysql` 的 `127.0.0.1:3307/stock_bot`（MySQL 5.7.44）。
+保留全部 39 張表的結構；本次沒有更改應用程式、排程、`.env` 或其他資料庫。
+
+### 實際處理結果
+
+以下大小使用主機檔案的 `st_blocks × 512`，單位為十進位 GB，並非資料庫估計列數或容量上限。
+
+| 項目 | 清理前 | 清理後 | 處理方式 |
+|------|-------:|-------:|----------|
+| `features.ibd` | 15.230890 GB | 3.766485 GB | 無損壓縮，保留 4,653,980 筆全部資料與原有索引 |
+| `news_sentiment.ibd` | 0.006361 GB | 0.000115 GB | 62,550 筆已停用研究資料完整封存後清空，再重建表檔 |
+| `jobs.ibd` | 0.016777 GB | 0.011534 GB | 封存、刪除 2,023 筆舊成功紀錄，再重建表檔 |
+
+三個目標表檔合計減少 **11,475,894,272 bytes（11.48 GB）**。
+保留的壓縮資料備份共 **2,704,750,674 bytes（2.70 GB）**，因此目標檔案加備份的合計占用淨減 **8.77 GB**。
+這是本次目標檔案的占用差額，不代表整台 Mac 的 `df` 可用空間增加同樣數量；全機同時有其他容器、程序及交換檔使用空間。
+
+`features` 仍有 API、資料品質檢查及歷史腳本直接讀取，不能因為已有 Parquet 就刪除。
+先取 2016–2026 各年 6,000 筆，共 66,000 筆，在獨立暫存資料庫比較壓縮設定，並驗證讀取、500 筆新增及修改。
+4 KB 設定的樣本從 281.02 MB 降至 58.72 MB，原始資料 SHA-256 相同，才執行：
+
+```sql
+ALTER TABLE stock_bot.features
+  ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=4,
+  ALGORITHM=INPLACE, LOCK=NONE;
+```
+
+這是一次性的實體儲存格式調整，沒有加入會在每次 migrate 時重建大表的 migration。
+壓縮增加部分 CPU 成本；正式表單次讀取當日 1,864 筆從 0.319 秒變成 0.458 秒，
+讀取 2330 的 2,583 筆歷史資料從 0.157 秒變成 0.162 秒，兩組結果雜湊均相同。這些是當次觀測，並非通用效能保證。
+
+### 刪除條件與保留資料
+
+- `news_sentiment` 僅由 `scripts/archive/` 的已結案腳本引用，沒有現行 runtime 使用者。資料封存後保留空表結構。
+- `jobs` 僅刪除 `status='success'`、非 `ai_assist:%`，且開始與結束時間均早於 `2026-07-28` 的紀錄。
+  刪除前在交易內鎖定候選資料並比對備份列數與 SHA-256；當時保留 7,419 筆成功與全部 343 筆失敗紀錄。
+- 持倉、成交、原始行情、新聞、調整因子、labels、模型與研究成果均保留；重疊索引亦保留。
+- `.env`、11 年現行特徵 Parquet 及其餘受保護檔案，共 13 份檔案，在清理前後 SHA-256 一致。
+
+### 備份、還原與驗收
+
+備份位於專案外的 `~/Backups/stock_bot/db-cleanup-20261026/`，包含原始 CREATE TABLE、
+JSONL gzip 資料、欄位順序、列數、SHA-256、還原程式與操作紀錄。這是受影響資料的備份，並非整個資料庫備份。
+完整解壓檢查全部備份；另實際還原全部情緒與舊工作紀錄，以及 500 筆特徵資料至獨立暫存表。
+還原程式保留 MySQL JSON 的負零數值表示，並只允許建立新的 `stock_bot_restore_*` 資料庫，不會覆寫現行表。
+
+壓縮後逐筆讀取全部 4,653,980 筆特徵，以主鍵排序後的完整序列校驗，SHA-256 與壓縮前完全一致：
+
+```text
+ac69930eca139e97159284972d678a0988b04f3ba28a01ded8ad8e0f895bb2b7
+```
+
+- `make test`：**7,582 passed**，37 warnings，256.59 秒。
+- `make pipeline`：完整執行成功，exit 0；保留現有 `SPONSOR_INGEST=off` 設定，未修改 `.env`。
+- `make api` 後 `/health`、`/picks`、`/models`、`/jobs?limit=10` 均 HTTP 200。
+- 額外查詢 `/stock/2330?date=2026-10-22`：HTTP 200，成功讀取壓縮表中的 87 個特徵欄位。
+- 暫存資料庫已移除；表結構仍為 39 張，失敗工作紀錄仍為 343 筆。
+
+本機完整證據另存於 `.cache/db-cleanup-20261026/`。Docker 官方空閒區塊回收亦已執行，
+未觀察到額外明顯縮減；沒有執行全域 container/image/volume prune。復原資料請依備份目錄內 `README.txt` 與 `restore.py` 操作。
+
+參考：[MySQL 5.7 線上 DDL](https://docs.oracle.com/cd/E17952_01/mysql-5.7-en/innodb-online-ddl-operations.html)、
+[MySQL 5.7 資料表壓縮](https://docs.oracle.com/cd/E17952_01/mysql-5.7-en/innodb-compression-usage.html)、
+[Docker Desktop 磁碟回收](https://docs.docker.com/desktop/troubleshoot-and-support/faqs/macfaqs/)。
+
+---
+
 ## 2026-10-19：本機檔案清理與目錄說明
 
 刪除 1,431 個未受 Git 追蹤的檔案，合計 2,944,116,158 bytes（約 2.94 GB／2.74 GiB）。
