@@ -9,6 +9,10 @@ import re
 
 UPSTREAM = 'http://127.0.0.1:8000'
 EXACT = {'/terminal','/terminal/','/terminal/index.html','/terminal/app.css','/terminal/app.js',
+    '/terminal/poc-paper-preparation.js', '/terminal/poc-market-sizing.js',
+    '/terminal/poc-drawdown.js', '/terminal/poc-weakness.js', '/terminal/poc-cap40.js',
+    '/terminal/poc-trailing.js', '/terminal/poc-split-accounts.js', '/terminal/poc-risk-controls.js',
+    '/terminal/poc-followup.js', '/terminal/poc-optimization.js',
     '/terminal/comparison-overview.js', '/terminal/account-comparison.js', '/terminal/top3-validation.js', '/terminal/legacy-comparison.js', '/research-terminal/api/overview',
     '/research-terminal/api/strategies','/research-terminal/api/signals',
     '/research-terminal/api/studies','/research-terminal/api/research',
