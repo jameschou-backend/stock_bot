@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 import argparse
+import gzip
 import re
 
 UPSTREAM = 'http://127.0.0.1:8000'
@@ -25,12 +26,45 @@ def allowed(path):
         r'/research-terminal/api/(?:stocks/[0-9]{4}|archive/[a-z0-9_]{1,80}(?:/cases/[a-z0-9_]{1,80})?)',path))
 
 
+def accepts_gzip(value):
+    qualities = {}
+    for entry in value.lower().split(','):
+        coding, *parameters = (part.strip() for part in entry.split(';'))
+        if coding not in {'gzip', '*'}:
+            continue
+        quality = 1.0
+        for parameter in parameters:
+            name, _, raw = parameter.partition('=')
+            if name.strip() == 'q':
+                try:
+                    quality = float(raw)
+                except ValueError:
+                    quality = 0.0
+        qualities[coding] = quality if 0 <= quality <= 1 else 0.0
+    # An explicit gzip;q=0 takes precedence over the wildcard.
+    return qualities.get('gzip', qualities.get('*', 0.0)) > 0
+
+
 class Share(BaseHTTPRequestHandler):
     def log_message(self,*args):
         pass
 
     def reply(self,status,body=b'',content_type='text/plain; charset=utf-8'):
+        encoding = None
+        media_type = content_type.split(';', 1)[0].strip().lower()
+        compressible = media_type.startswith('text/') or media_type in {
+            'application/json', 'application/javascript'}
+        if status == 200 and len(body) >= 1024 and compressible:
+            accepted = ','.join(self.headers.get_all('Accept-Encoding', []))
+            if accepts_gzip(accepted):
+                packed = gzip.compress(body, compresslevel=5, mtime=0)
+                if len(packed) < len(body):
+                    body, encoding = packed, 'gzip'
         self.send_response(status)
+        if compressible:
+            self.send_header('Vary', 'Accept-Encoding')
+        if encoding:
+            self.send_header('Content-Encoding', encoding)
         for key,value in {'Content-Type':content_type,'Content-Length':str(len(body)),
                 'Cache-Control':'no-store','X-Content-Type-Options':'nosniff',
                 'Referrer-Policy':'no-referrer', 'Content-Security-Policy':
@@ -55,7 +89,8 @@ class Share(BaseHTTPRequestHandler):
             return self.reply(400,b'Request body not allowed')
         target=UPSTREAM+parsed.path+('?' + parsed.query if parsed.query else '')
         try:
-            with urlopen(Request(target,headers={'User-Agent':'StockTerminalReadOnlyShare/2.0'}),timeout=60) as response:
+            with urlopen(Request(target,headers={'User-Agent':'StockTerminalReadOnlyShare/2.0',
+                    'Accept-Encoding':'identity'}),timeout=60) as response:
                 body=response.read();content_type=response.headers.get('Content-Type','application/octet-stream');status=response.status
             if content_type.startswith('text/html'):
                 notice='<div style="padding:10px 20px;background:#e4f4ef;color:#154d45;font:14px sans-serif;text-align:center">唯讀分享：可查看訊號、研究比較與成交明細；執行回測請使用本機工作台。</div><style>#account-run,#backtest-submit{display:none!important}</style>'
