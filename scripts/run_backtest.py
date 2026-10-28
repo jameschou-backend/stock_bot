@@ -291,9 +291,9 @@ def main():
                         dest="topn_floor",
                         help="topN 最低下限 (0=不強制；5=Change B)；與 --baseline 配合使用")
     parser.add_argument("--slippage", action="store_true",
-                        help="Change C：啟用滑價模型（ATR 的 10%%，上限 0.3%%）")
+                        help="預設啟用滑價模型（ATR 的 10%%，上限 0.3%%）")
     parser.add_argument("--no-slippage", action="store_true",
-                        help="停用滑價模型（baseline 預設已停用）")
+                        help="顯式停用滑價模型（僅供成本敏感度／舊口徑診斷）")
     parser.add_argument("--tiered-slippage", action="store_true",
                         dest="tiered_slippage",
                         help="分級滑價模型：依 amt_20 決定流動性層級（<1億 1.0%%, 1~5億 0.6%%, >5億 0.2%% 來回）")
@@ -393,7 +393,7 @@ def main():
                         dest="train_lookback_days",
                         help="訓練視窗長度（日，如 1825=5年滾動窗）；預設 None=使用全部歷史")
     parser.add_argument("--no-clip", action="store_true",
-                        help="停用單筆損失 clip -50%%（診斷用，傳入 clip_loss_pct=-1.01）")
+                        help="保留相容旗標；新回測預設不截斷虧損")
     parser.add_argument("--cap-daily-return", type=float, default=0.0,
                         dest="cap_daily_return_pct",
                         help="診斷：把持有期每日報酬對稱 winsorize 到 ±此值（如 0.10=±10%%，"
@@ -471,6 +471,9 @@ def main():
                         help="實驗名稱（用於紀錄檔名，如 'liq_weighted_v2'）")
 
     args = parser.parse_args()
+    if args.output and Path(args.output).exists():
+        parser.error('Output already exists; choose a new path to preserve previous results')
+
     config = load_config()
 
     # ── --production-baseline preset：一鍵套用生產配置 ──
@@ -541,18 +544,18 @@ def main():
         trailing = args.trailing_stop_pct  # None = 無移動停利
         time_weighting = False
         enable_complex_filter = False
-        enable_slippage = args.slippage and not args.no_slippage
+        enable_slippage = not args.no_slippage
         if args.change_a:
             feature_columns = CHANGE_A_FEATURE_COLS
         else:
             feature_columns = BASELINE_FEATURE_COLS
     else:
-        # 預設：還原原始基準（等權、無 trailing、無 slippage、無複雜過濾）
+        # 預設：還原原始基準（等權、無 trailing、含滑價、無複雜過濾）
         sizing = args.position_sizing or "equal"
         trailing = args.trailing_stop_pct  # None unless explicitly set
         time_weighting = False
         enable_complex_filter = False
-        enable_slippage = args.slippage and not args.no_slippage  # 預設關，需 --slippage 才開
+        enable_slippage = not args.no_slippage  # 明確停用時才關閉
         if args.pruned_features:
             feature_columns = PRUNED_FEATURE_COLS  # SHAP 剪枝：56→48 特徵
         else:
@@ -569,8 +572,8 @@ def main():
     else:
         enable_seasonal_filter = args.enable_seasonal_filter
 
-    # --no-clip：停用 clip（傳入 -1.01，遠低於 -100% 故永遠不觸發）
-    clip_loss_pct = -1.01 if args.no_clip else -0.50
+    # New runs keep actual losses; --no-clip remains a compatibility no-op.
+    clip_loss_pct = None
 
     # --entry-filter：進場訊號過濾
     _entry_signal_filter = None
@@ -822,7 +825,7 @@ def main():
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         output_path = str(artifacts_dir / f"backtest_{ts}.json")
 
-    with open(output_path, "w", encoding="utf-8") as f:
+    with open(output_path, "x", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2, default=str)
     print(f"\n結果已儲存: {output_path}")
 
@@ -932,5 +935,8 @@ def _log_experiment(result: dict, args, argv: list) -> None:
 
 if __name__ == "__main__":
     from app.file_lock import file_lock
-    with file_lock(Path(__file__).resolve().parents[1] / '.cache/research-or-update.lock', timeout=0):
-        main()
+    if any(arg in ('-h', '--help') for arg in sys.argv[1:]):
+        main()  # argparse exits before loading config or accessing data
+    else:
+        with file_lock(Path(__file__).resolve().parents[1] / '.cache/research-or-update.lock', timeout=0):
+            main()

@@ -39,7 +39,6 @@ try:
     _HAS_LGBM = True
 except ImportError:
     _HAS_LGBM = False
-from sklearn.ensemble import GradientBoostingRegressor
 
 
 ARTIFACT_DIR = Path(__file__).resolve().parent.parent / "artifacts" / "models"
@@ -96,28 +95,33 @@ def _liquidity_sample_weight(amt20: pd.Series) -> np.ndarray:
     return _w
 
 
+def training_data_fingerprint(features, labels, amounts, liquidity_weighting):
+    """Content-based identity: a historical correction cannot reuse a stale model."""
+    import json
+    digest = hashlib.sha256()
+    for values in (features, labels, amounts):
+        if values is not None:
+            digest.update(pd.util.hash_pandas_object(values, index=False).values.tobytes())
+    digest.update(json.dumps(dict(columns=list(features.columns), params=RANKER_PROD_PARAMS,
+                                  liquidity_weighting=liquidity_weighting), sort_keys=True).encode())
+    return digest.hexdigest()[:16]
+
+
 def _build_model(train_X, train_y, sample_weight=None):
-    """建立並訓練模型。優先使用 LightGBM，否則回退 sklearn GBR。
+    """建立並訓練模型。缺少 LightGBM 時明確失敗。
 
     P1-5 回測=部署對齊：LGBM 參數引用 skills.model_params.RANKER_PROD_PARAMS，
     與 backtest._train_model（regression 路徑）同一組：500 樹、無 early stopping。
     舊版 800 樹 + early_stopping(50) 造成「部署模型 ≠ 回測驗證過的模型」，已向回測收斂。
     無 early stopping → 訓練不再需要 val set（val 段僅用於事後評估指標）。
     """
+    if not _HAS_LGBM:
+        raise RuntimeError('LightGBM is required; install project requirements (python -m pip install -r requirements.txt)')
+
     if _HAS_LGBM:
         model = lgb.LGBMRegressor(**RANKER_PROD_PARAMS)
         model.fit(train_X, train_y, sample_weight=sample_weight)
         engine = "lightgbm"
-    else:
-        model = GradientBoostingRegressor(
-            n_estimators=300,
-            learning_rate=0.05,
-            max_depth=5,
-            subsample=0.8,
-            random_state=42,
-        )
-        model.fit(train_X, train_y, sample_weight=sample_weight)
-        engine = "sklearn_gbr"
     return model, engine
 
 
@@ -356,7 +360,11 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         feature_names = list(feature_matrix.columns)
         feature_set_hash = hashlib.sha256(",".join(sorted(feature_names)).encode("utf-8")).hexdigest()[:16]
         engine_tag = "lgbm" if _HAS_LGBM else "gbr"
-        model_id = f"ranker_{engine_tag}_{train_start:%Y%m%d}_{train_end:%Y%m%d}_{feature_set_hash}"
+        data_fingerprint = training_data_fingerprint(
+            feature_matrix, df['future_ret_h'], _amt20_raw,
+            bool(getattr(config, 'train_liq_weighting', True)),
+        )
+        model_id = f"ranker_{engine_tag}_{train_start:%Y%m%d}_{train_end:%Y%m%d}_{feature_set_hash}_{data_fingerprint}"
 
         existing = db_session.query(ModelVersion).filter(ModelVersion.model_id == model_id).first()
         if existing:
@@ -418,6 +426,7 @@ def run(config, db_session: Session, **kwargs) -> Dict:
             "final_train_rows": int(feature_matrix.shape[0]),
             "engine": engine,
             "feature_count": len(feature_names),
+            "training_data_fingerprint": data_fingerprint,
             # P1-5 對齊資訊（追溯部署模型與回測配置是否一致）
             "feature_set": "pruned" if bool(getattr(config, "train_use_pruned_features", True)) else "full",
             "liq_weighting": bool(train_sample_weight is not None),

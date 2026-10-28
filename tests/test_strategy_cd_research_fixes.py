@@ -67,12 +67,12 @@ class TestComputeTradingDayCutoff:
         cutoff = compute_trading_day_cutoff(tds, ref, 5)
         assert cutoff == tds[len(tds) - 5]
 
-    def test_insufficient_history_falls_back_to_calendar(self):
-        """交易日不足時回退日曆天（保守 fallback，與主回測一致）。"""
+    def test_insufficient_history_excludes_all_samples(self):
+        """交易日不足時 cutoff 設為第一天，嚴格 < 排除所有樣本。"""
         tds = _weekdays(date(2025, 1, 6), 10)
         ref = tds[5]
         cutoff = compute_trading_day_cutoff(tds, ref, 20)
-        assert cutoff == ref - timedelta(days=20)
+        assert cutoff == tds[0]
 
     def test_zero_buffer_returns_ref_date(self):
         tds = _weekdays(date(2025, 1, 6), 10)
@@ -216,10 +216,10 @@ def test_rotation_signal_lag_wiring():
 
     sig = inspect.signature(rot.run_rotation)
     assert "signal_lag" in sig.parameters
-    assert sig.parameters["signal_lag"].default == 0  # 預設不變（向後相容 + 對照舊數字）
+    assert sig.parameters["signal_lag"].default == 1  # 新研究預設可用資訊延遲
 
     src = Path(rot.__file__).read_text()
     assert '"--signal-lag"' in src
     assert "signal_lag=args.signal_lag" in src
-    # 決策特徵日必須依 lag 從 bt_dates 回退
-    assert "bt_dates[day_idx - signal_lag]" in src
+    # 決策特徵日依完整交易日曆回退，包含評估期前一日
+    assert "all_dates[_market_idx - signal_lag]" in src

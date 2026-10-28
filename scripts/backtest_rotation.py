@@ -45,7 +45,6 @@ try:
     _HAS_LGBM = True
 except ImportError:
     _HAS_LGBM = False
-from sklearn.ensemble import GradientBoostingRegressor
 
 
 def _train_model(train_X, train_y, sample_weight=None, fast_mode=False, groups=None):
@@ -54,6 +53,9 @@ def _train_model(train_X, train_y, sample_weight=None, fast_mode=False, groups=N
                       train_y 為 int 相關度（0-4），train_X 依 trading_date 排序。
     groups is None  → LGBMRegressor(MSE)，可搭配 rank label 或 excess label 使用。
     """
+    if not _HAS_LGBM:
+        raise RuntimeError('LightGBM is required; install project requirements (python -m pip install -r requirements.txt)')
+
     n_est = 150 if fast_mode else 500
     from skills.training_cache import fit_cached
 
@@ -64,12 +66,6 @@ def _train_model(train_X, train_y, sample_weight=None, fast_mode=False, groups=N
         model = fit_cached(model, train_X, train_y, group=groups, sample_weight=sample_weight)
     elif _HAS_LGBM:
         model = lgb.LGBMRegressor(**_params, min_child_samples=50)
-        model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
-    else:
-        model = GradientBoostingRegressor(
-            n_estimators=100 if fast_mode else 300, learning_rate=0.05,
-            max_depth=5, subsample=0.8, random_state=42,
-        )
         model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
     return model
 
@@ -92,15 +88,17 @@ def compute_trading_day_cutoff(
     all_trading_dates: 已排序的全體 distinct 交易日序列（date 物件，升冪）
     ref_date:          今日 / 訓練截止日（不必在序列內）
     buffer_days:       往前退的交易日數
-    交易日不足時回退日曆天（保守 fallback，與主回測 skills/backtest.py 一致）。
+    交易日不足時使用第一個交易日，嚴格 < cutoff 不會納入尚未成熟的標籤。
     """
     if buffer_days <= 0:
         return ref_date
     pos = bisect.bisect_left(all_trading_dates, ref_date)
     cut_idx = pos - buffer_days
-    if cut_idx > 0:
+    if cut_idx >= 0:
         return all_trading_dates[cut_idx]
-    return ref_date - timedelta(days=buffer_days)
+    if not all_trading_dates:
+        raise ValueError("No trading dates for training cutoff")
+    return all_trading_dates[0]  # strict < cutoff yields no unsafe samples
 
 
 def _load_adj_factor_df(db_session, start_date: date, end_date: date) -> Optional[pd.DataFrame]:
@@ -124,6 +122,28 @@ def _load_adj_factor_df(db_session, start_date: date, end_date: date) -> Optiona
     if not rows:
         return None
     return pd.DataFrame(rows, columns=["stock_id", "trading_date", "adj_factor"])
+
+
+def compute_benchmark_curve(price_df, trading_dates, initial_equity):
+    """Zero-cost daily equal-weight available-price universe, not a TAIEX index.
+
+    No forward-fill of absent prices. Membership requires observations on both
+    adjacent market sessions; survivorship/universe limits remain disclosed.
+    """
+    prices = price_df.pivot_table(index='trading_date', columns='stock_id', values="adj_close", aggfunc='last').sort_index()
+    returns = prices.pct_change(fill_method=None).replace([np.inf, -np.inf], np.nan).mean(axis=1)
+    equity = float(initial_equity)
+    curve = []
+    for day in trading_dates:
+        value = returns.get(day, np.nan)
+        if pd.isna(value):
+            if day == prices.index[0]:
+                value = 0.0
+            else:
+                raise ValueError(f'Benchmark has no valid adjacent-session prices at {day}')
+        equity *= 1 + float(value)
+        curve.append(dict(date=str(day), equity=equity))
+    return curve
 
 
 class Position:
@@ -355,10 +375,10 @@ def run_rotation(
     min_avg_turnover: float = 0.0,       # 20日平均成交值門檻（億元），0=停用
     max_stock_price: float = 0.0,        # 個股股價上限（原始收盤價，元），0=停用；
                                          # 對齊實盤 strategy_d_pick --max-price（資金/檔數買得起一張）
-    signal_lag: int = 0,                 # 訊號延遲（交易日）：1=用 T-1 特徵決策、T 日收盤執行
+    signal_lag: int = 1,                 # 訊號延遲（交易日）：1=用 T-1 特徵決策、T 日收盤執行
                                          # （誠實口徑，對齊實盤時序）；0=舊口徑（T 日特徵 T 日進場，
                                          # 含盤後法人資料 lookahead，僅供與歷史數字對照）
-    slippage_pct: float = 0.0,           # 每筆固定滑價（進+出各一次），0=停用
+    slippage_pct: float = 0.009,           # 每筆來回滑價（進出各半），0=顯式停用
     use_tiered_slippage: bool = False,   # 依流動性分級計算滑價
     # ── 動態流動性門檻（依市場規模自動調整）──
     dynamic_liquidity: bool = False,     # 啟用動態門檻（取代 min_avg_turnover）
@@ -420,6 +440,14 @@ def run_rotation(
         rsi_exit:              RSI 超買出場（None = 停用）
         max_hold_days:         最長持倉上限（保底）
     """
+    if fixed_train_end and eval_period_start and fixed_train_end >= eval_period_start:
+        raise ValueError("Fixed training window must end before evaluation begins")
+    if signal_lag < 0 or max_positions <= 0 or train_label_horizon < 1:
+        raise ValueError('Invalid signal lag, position count or label horizon')
+    if not 0 <= transaction_cost_pct < 1 or not 0 <= slippage_pct < 1:
+        raise ValueError('Costs must be in [0, 1)')
+    from skills.rotation_account import RotationAccount
+
     if force_exit_threshold is None:
         force_exit_threshold = min(rank_threshold * 1.5, 1.0)
 
@@ -591,11 +619,11 @@ def run_rotation(
         _alt["stock_id"] = _alt["stock_id"].astype(str)
         label_df_train = _alt
         # 保持與主程序一致：buffer 為「交易日」數（見 compute_trading_day_cutoff，P1-2）
-        _eff_buffer = label_horizon_buffer
+        _eff_buffer = max(label_horizon_buffer, train_label_horizon)
         print(f"  Alt labels: {len(label_df_train):,} rows (horizon={train_label_horizon}d)")
     else:
         label_df_train = label_df
-        _eff_buffer = label_horizon_buffer  # 交易日制 buffer（P1-2）
+        _eff_buffer = max(label_horizon_buffer, train_label_horizon)  # 交易日制 buffer（P1-2）
 
     # ── 超額報酬 label：future_ret_h - 等權市場報酬 ──
     if use_excess_label:
@@ -644,13 +672,20 @@ def run_rotation(
 
     _initial_equity = float(total_capital) if dynamic_position_sizing else 10_000.0
     equity = _initial_equity
+    account = RotationAccount(_initial_equity)
     positions: Dict[str, Position] = {}
     trades_log: List[Dict] = []
-    equity_curve: List[Dict] = []
+    if not bt_dates:
+        raise ValueError('No trading days in evaluation period')
+    _first_idx = bisect.bisect_left(all_dates, bt_dates[0])
+    _baseline_date = all_dates[max(0, _first_idx - 1)]
+    equity_curve: List[Dict] = [{"date": str(_baseline_date), "equity": _initial_equity}]
+    benchmark_curve = compute_benchmark_curve(price_df, bt_dates, _initial_equity)
     exit_reasons = defaultdict(int)
 
     # Monthly benchmark for market filter
     _monthly_bm_cache: Dict[str, float] = {}
+    _processed_months = set()
     _current_max_pos = max_positions
     _current_rank_threshold = rank_threshold  # 可能由 adaptive_rank_threshold 每月動態調整
 
@@ -751,7 +786,7 @@ def run_rotation(
                             print(f"  [{today}] Model trained ({len(y):,} rows, {_obj}{_sw_info}, {time.time()-_t:.1f}s)", flush=True)
 
         if current_model is None:
-            continue
+            raise ValueError(f"No trained model for evaluation date {today}; extend training history")
 
         # ── Today's prices ──
         # price_map：還原價（adj_close），P&L／停損／MA 比較口徑（特徵表已是還原版，口徑一致）
@@ -774,9 +809,15 @@ def run_rotation(
         # 但特徵含 T 日 16-17 點才公佈的法人資料，是資訊上不可能的口徑
         # （2026-07-10 總體檢缺陷 4：delay 口徑為先驗裁定，不掛效果量）。
         if signal_lag > 0:
-            _sig_date = bt_dates[day_idx - signal_lag] if day_idx >= signal_lag else None
+            _market_idx = bisect.bisect_left(all_dates, today)
+            _sig_date = all_dates[_market_idx - signal_lag] if _market_idx >= signal_lag else None
         else:
             _sig_date = today
+        equity = account.nav(price_map)
+        signal_price_map = dict(zip(
+            price_df.loc[price_df.trading_date == _sig_date, 'stock_id'],
+            price_df.loc[price_df.trading_date == _sig_date, 'adj_close'],
+        ))
         tf_today = (
             feat_df[feat_df["trading_date"] == _sig_date].copy()
             if _sig_date is not None else feat_df.iloc[0:0].copy()
@@ -825,7 +866,7 @@ def run_rotation(
         # vol_topn_tight 與 0.10（正常進場）的比例，等比縮減 top_entry_n
         # 例：vol_topn_tight=0.05、top_entry_n=10 → high-vol 只取 top 5
         if vol_filter:
-            _today_vol = _vol_map.get(today, 0.0)
+            _today_vol = _vol_map.get(_sig_date, 0.0)
             if _today_vol > vol_threshold:
                 _tight_n = max(1, round(top_entry_n * vol_topn_tight / 0.10))
                 _vol_entry = set(tf_today.nlargest(_tight_n, "score")["stock_id"].tolist())
@@ -844,7 +885,7 @@ def run_rotation(
 
         # ── Market filter: adjust max positions monthly ──
         _ym = f"{today.year}-{today.month:02d}"
-        if _ym not in _monthly_bm_cache:
+        if _ym not in _processed_months:
             _prev_m = (today.replace(day=1) - timedelta(days=1))
             _pm_ym = f"{_prev_m.year}-{_prev_m.month:02d}"
             if _pm_ym not in _monthly_bm_cache:
@@ -877,17 +918,19 @@ def run_rotation(
                 _current_rank_threshold = min(rank_threshold * _rank_mult, 0.50)
             else:
                 _current_rank_threshold = rank_threshold
-            _monthly_bm_cache[_ym] = 0.0  # placeholder
+            _processed_months.add(_ym)
 
         # ── Check exits ──
         for sid in list(positions.keys()):
             pos = positions[sid]
             pos.days_held += 1
+            if sid not in price_map or sid not in signal_price_map:
+                continue  # No fabricated executable quote or current information.
             exit_reason = None
 
             if exit_mode == "risk":
                 # ── 風控出場邏輯（改進版）──
-                close = price_map.get(sid, pos.entry_price)
+                close = signal_price_map.get(sid, pos.entry_price)
                 pos.peak_price = max(pos.peak_price, close)
                 ret_from_entry = close / pos.entry_price - 1
                 ret_from_peak  = close / pos.peak_price - 1
@@ -927,7 +970,7 @@ def run_rotation(
 
             elif exit_mode == "oracle":
                 # ── Oracle 訊號出場邏輯（基於事後最優出場分析）──
-                close = price_map.get(sid, pos.entry_price)
+                close = signal_price_map.get(sid, pos.entry_price)
                 ret_from_entry = close / pos.entry_price - 1
 
                 _feat = _feat_map.get(sid, {})
@@ -968,7 +1011,7 @@ def run_rotation(
                     if sid not in above_force_threshold:
                         exit_reason = "Force Exit"
                 else:
-                    _close = price_map.get(sid, pos.entry_price)
+                    _close = signal_price_map.get(sid, pos.entry_price)
                     # 更新追蹤停損用最高價
                     pos.peak_price = max(pos.peak_price, _close)
                     ret_from_entry = _close / pos.entry_price - 1
@@ -1023,12 +1066,12 @@ def run_rotation(
                 exit_px = price_map.get(sid, pos.entry_price)
                 # 實際成本 = 交易成本 + 滑價（進出各計一次）
                 _slip = (
-                    _tiered_slippage(pos.entry_amt_20) * 2
+                    _tiered_slippage(pos.entry_amt_20 * 1e8) * 2
                     if use_tiered_slippage
                     else slippage_pct
                 )
-                ret = exit_px / pos.entry_price - 1 - transaction_cost_pct - _slip
-                ret = max(ret, -0.50)
+                settlement = account.sell(sid, exit_px, transaction_cost_pct * (1 - .001425 / DEFAULT_TRANSACTION_COST) + _slip / 2)
+                ret = settlement['realized_pnl_pct']
                 weight = pos.weight if dynamic_position_sizing else 1.0 / max_positions
                 trades_log.append({
                     "stock_id": sid, "entry_date": str(pos.entry_date),
@@ -1038,13 +1081,13 @@ def run_rotation(
                     "exit_price": raw_price_map.get(sid, pos.entry_price_raw),
                     # *_adj：還原價（realized_pnl_pct 的計算口徑）
                     "entry_price_adj": pos.entry_price, "exit_price_adj": exit_px,
-                    "realized_pnl_pct": ret,
-                    "stoploss_triggered": False, "exit_reason": exit_reason,
+                    "realized_pnl_pct": ret, **settlement,
+                    "stoploss_triggered": exit_reason in ("Stop Loss", "Trailing Stop"), "exit_reason": exit_reason,
                     "score": pos.score, "days_held": pos.days_held,
                     "entry_amt_20": pos.entry_amt_20, "weight": weight,
                 })
                 exit_reasons[exit_reason] += 1
-                equity *= (1 + ret * weight)
+                equity = account.nav(price_map)
                 del positions[sid]
 
         # ── Check entries ──
@@ -1054,7 +1097,7 @@ def run_rotation(
 
             # 流動性過濾
             if _liquidity_map:
-                _eligible_today = _liquidity_map.get(today, set())
+                _eligible_today = _liquidity_map.get(_sig_date, set())
                 candidates = candidates[candidates["stock_id"].isin(_eligible_today)]
 
             # 個股股價上限（對齊實盤 D --max-price）：排名用全宇宙、過濾只套進場候選
@@ -1099,12 +1142,16 @@ def run_rotation(
             slots = _current_max_pos - len(positions)
             for _, cand in candidates.head(slots).iterrows():
                 _sid = str(cand["stock_id"])
-                if _sid in price_map:
+                if _sid in price_map and account.cash > 1e-8:
                     _entry_amt20 = float(cand.get("amt_20", 0) or 0)
                     if dynamic_position_sizing:
                         _w = _calc_position_weight(_entry_amt20, equity, max_position_pct)
                     else:
                         _w = 1.0 / max_positions
+                    _entry_slip = _tiered_slippage(_entry_amt20 * 1e8) if use_tiered_slippage else slippage_pct / 2
+                    spent = account.buy(_sid, price_map[_sid], equity * _w,
+                                transaction_cost_pct * (.001425 / DEFAULT_TRANSACTION_COST) + _entry_slip)
+                    _w = spent / equity
                     positions[_sid] = Position(
                         stock_id=_sid, entry_date=today,
                         entry_price=price_map[_sid], score=float(cand["score"]),
@@ -1112,6 +1159,7 @@ def run_rotation(
                         entry_price_raw=raw_price_map.get(_sid, price_map[_sid]),
                     )
 
+        equity = account.nav(price_map)
         equity_curve.append({"date": str(today), "equity": equity})
 
         if day_idx % 250 == 0 and day_idx > 0:
@@ -1127,14 +1175,16 @@ def run_rotation(
     lp_raw = {str(r["stock_id"]): float(r["close"]) for _, r in _lp_df.iterrows() if pd.notna(r["close"])}
     for sid in list(positions.keys()):
         pos = positions[sid]
-        exit_px = lp.get(sid, pos.entry_price)
+        if sid not in lp or lp[sid] <= 0:
+            raise ValueError(f'Missing terminal executable quote for held stock {sid}; settlement required')
+        exit_px = lp[sid]
         _slip = (
-            _tiered_slippage(pos.entry_amt_20) * 2
+            _tiered_slippage(pos.entry_amt_20 * 1e8) * 2
             if use_tiered_slippage
             else slippage_pct
         )
-        ret = exit_px / pos.entry_price - 1 - transaction_cost_pct - _slip
-        ret = max(ret, -0.50)
+        settlement = account.sell(sid, exit_px, transaction_cost_pct * (1 - .001425 / DEFAULT_TRANSACTION_COST) + _slip / 2)
+        ret = settlement['realized_pnl_pct']
         _w_eob = pos.weight if dynamic_position_sizing else 1.0 / max_positions
         trades_log.append({
             "stock_id": sid, "entry_date": str(pos.entry_date),
@@ -1144,13 +1194,16 @@ def run_rotation(
             "exit_price": lp_raw.get(sid, pos.entry_price_raw),
             # *_adj：還原價（realized_pnl_pct 的計算口徑）
             "entry_price_adj": pos.entry_price, "exit_price_adj": exit_px,
-            "realized_pnl_pct": ret,
+            "realized_pnl_pct": ret, **settlement,
             "stoploss_triggered": False, "exit_reason": "End of Backtest",
             "score": pos.score, "days_held": pos.days_held,
             "entry_amt_20": pos.entry_amt_20, "weight": _w_eob,
         })
         exit_reasons["End of Backtest"] += 1
-        equity *= (1 + ret * _w_eob)
+        equity = account.nav(lp)
+
+    # Terminal settlement costs belong in the final daily NAV and drawdown.
+    equity_curve[-1]['equity'] = equity
 
     _total = time.time() - _t_start
 
@@ -1160,7 +1213,7 @@ def run_rotation(
     ann_return = (1 + total_return) ** (1 / n_years) - 1 if n_years > 0 else 0
 
     eq_vals = [e["equity"] for e in equity_curve]
-    peak, max_dd = eq_vals[0] if eq_vals else 10000, 0.0
+    peak, max_dd = _initial_equity, 0.0
     for v in eq_vals:
         peak = max(peak, v)
         max_dd = min(max_dd, (v - peak) / peak)
@@ -1171,13 +1224,15 @@ def run_rotation(
 
     monthly_eq = {}
     for e in equity_curve:
-        monthly_eq[e["date"][:7]] = e["equity"]
+        if e["date"] >= str(bt_dates[0]):
+            monthly_eq[e["date"][:7]] = e["equity"]
     mk = sorted(monthly_eq.keys())
     monthly_rets = []
-    for i in range(1, len(mk)):
-        p, c = monthly_eq[mk[i-1]], monthly_eq[mk[i]]
-        if p > 0:
-            monthly_rets.append(c / p - 1)
+    previous_month_equity = _initial_equity
+    for month in mk:
+        current_equity = monthly_eq[month]
+        monthly_rets.append(current_equity / previous_month_equity - 1)
+        previous_month_equity = current_equity
     rf_m = 0.015 / 12
     sharpe = (np.mean(monthly_rets) - rf_m) / np.std(monthly_rets) * np.sqrt(12) if monthly_rets and np.std(monthly_rets) > 0 else 0
     calmar = ann_return / abs(max_dd) if max_dd != 0 else 0
@@ -1196,6 +1251,11 @@ def run_rotation(
         yearly_rets[yr] = yearly_eq[yr] / _pe - 1
         _pe = yearly_eq[yr]
 
+    benchmark_monthly = {}
+    for row in benchmark_curve:
+        benchmark_monthly[row['date'][:7]] = row['equity']
+    benchmark_previous = _initial_equity
+
     # Periods (monthly for review_pack compatibility)
     periods = []
     mt = defaultdict(list)
@@ -1207,15 +1267,17 @@ def run_rotation(
         _r = _eq / _pe2 - 1 if _pe2 > 0 else 0
         _tl = mt.get(ym, [])
         periods.append({
-            "rebalance_date": f"{ym}-01", "exit_date": f"{ym}-28",
-            "return": _r, "benchmark_return": 0.0,
+            "rebalance_date": str(min(d for d in bt_dates if str(d).startswith(ym))),
+            "exit_date": str(max(d for d in bt_dates if str(d).startswith(ym))),
+            "return": _r, "benchmark_return": benchmark_monthly.get(ym, benchmark_previous) / benchmark_previous - 1,
             "trades": len(_tl),
             "stock_returns": {t["stock_id"]: t["realized_pnl_pct"] for t in _tl},
-            "stoploss_triggered": 0,
+            "stoploss_triggered": sum(t["stoploss_triggered"] for t in _tl),
         })
         _pe2 = _eq
+        benchmark_previous = benchmark_monthly.get(ym, benchmark_previous)
 
-    total_cost = len(trades_log) * transaction_cost_pct
+    total_cost = account.total_cost / _initial_equity
     cost_drag = total_cost / max(n_years, 1)
 
     print(f"\n{'='*60}")
@@ -1241,11 +1303,19 @@ def run_rotation(
 
     summary = {
         "total_return": total_return, "annualized_return": ann_return,
-        "benchmark_total_return": 0.0, "max_drawdown": max_dd,
+        "benchmark_total_return": benchmark_curve[-1]['equity'] / _initial_equity - 1, "max_drawdown": max_dd,
+        "benchmark_name": "daily_equal_weight_available_price_universe",
+        "benchmark_cost_convention": "zero_cost",
+        "accounting_version": "cash_and_daily_mtm_v2",
+        "total_cost_cash": account.total_cost,
+        "stale_mark_count": account.stale_mark_count,
+        "diagnostic_only": signal_lag == 0,
+        "live_qualified": False,
+        "limitations": ["fractional_notional_not_exchange_fills", "historical_universe_and_adjustments_require_validation"],
         "sharpe_ratio": sharpe, "calmar_ratio": calmar,
         "win_rate": win_rate, "profit_factor": pf,
         "total_trades": len(trades_log), "total_periods": len(periods),
-        "stoploss_triggered": 0,
+        "stoploss_triggered": sum(t["stoploss_triggered"] for t in trades_log),
         "backtest_start": str(bt_dates[0]) if bt_dates else "",
         "backtest_end": str(bt_dates[-1]) if bt_dates else "",
         "avg_hold_days": avg_hold, "exit_reasons": dict(exit_reasons),
@@ -1321,7 +1391,7 @@ def run_rotation(
             "micro_pct": micro/total_t, "small_pct": small/total_t, "mid_large_pct": mid/total_t,
         }
 
-    return {"summary": summary, "periods": periods, "equity_curve": equity_curve, "trades_log": trades_log}
+    return {"summary": summary, "periods": periods, "equity_curve": equity_curve, "benchmark_curve": benchmark_curve, "trades_log": trades_log}
 
 
 def main():
@@ -1345,7 +1415,7 @@ def main():
     parser.add_argument("--min-hold", type=int, default=0,
                         help="最小持倉天數保護（預設 0=停用）")
     parser.add_argument("--force-exit-threshold", type=float, default=None,
-                        help="保護期間強制出場門檻，如 0.30=top30%（預設=rank_threshold×1.5）")
+                        help="保護期間強制出場門檻，如 0.30=top30%%（預設=rank_threshold×1.5）")
     parser.add_argument("--exit-mode", type=str, default="rank", choices=["rank", "risk", "oracle"],
                         help="出場模式：rank=排名出場（原始），risk=風控出場")
     parser.add_argument("--stoploss", type=float, default=-1.0,
@@ -1370,13 +1440,13 @@ def main():
                         help="Oracle 模式：5日報酬獲利了結門檻（預設 0.20）")
     parser.add_argument("--max-price", type=float, default=0.0,
                         help="個股股價上限（原始收盤價，元），0=不過濾；對齊實盤 D --max-price")
-    parser.add_argument("--signal-lag", type=int, default=0,
+    parser.add_argument("--signal-lag", type=int, default=1,
                         help="訊號延遲交易日數：1=T-1 特徵決策、T 日收盤執行（誠實口徑）；"
                              "0=舊口徑（T 日盤後特徵 T 日進場，含 lookahead）")
     parser.add_argument("--min-avg-turnover", type=float, default=0.0,
                         help="20日均成交值門檻（億元），0=停用。建議值：0.5=5千萬/日")
-    parser.add_argument("--slippage", type=float, default=0.0,
-                        help="每筆固定滑價（進出共計，預設 0）")
+    parser.add_argument("--slippage", type=float, default=0.009,
+                        help="每筆固定滑價（進出共計，預設 0.009；顯式 0 可做成本診斷）")
     parser.add_argument("--tiered-slippage", action="store_true",
                         help="依流動性分級滑價：>10億 0.1%%, 3-10億 0.2%%, 1-3億 0.4%%, <1億 0.8%%")
     parser.add_argument("--chip-exit", action="store_true",
@@ -1426,6 +1496,9 @@ def main():
     parser.add_argument("--fast", action="store_true")
     parser.add_argument("--output", type=str, default=None)
     args = parser.parse_args()
+    if args.output and Path(args.output).exists():
+        parser.error('Output already exists; choose a new path to preserve previous results')
+
 
     presets = {
         1: (0.30, 45, "loose"),
@@ -1500,9 +1573,9 @@ def main():
         from datetime import datetime
         d = ROOT / "artifacts" / "backtest"
         d.mkdir(parents=True, exist_ok=True)
-        output_path = str(d / f"rotation_c{args.config or 2}.json")
+        output_path = str(d / f"rotation_c{args.config or 2}_{datetime.now():%Y%m%d_%H%M%S_%f}.json")
 
-    with open(output_path, "w", encoding="utf-8") as f:
+    with open(output_path, "x", encoding="utf-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2, default=str)
     print(f"\nSaved: {output_path}")
 

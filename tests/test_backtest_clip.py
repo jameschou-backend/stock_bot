@@ -201,35 +201,18 @@ def test_clip_parameter_overridable_disabled():
     assert ret < DEFAULT_CLIP, "停用 clip 模式應保留原始嚴重虧損，不被 -50% 截斷。"
 
 
-# ── 不變式 5：預設 clip_loss_pct 維持 -0.50（不被靜默移除或改寬） ──────────
-
+# Legacy clipping remains explicit for diagnostics; new runs retain actual losses.
 def test_calc_stock_return_signature_has_clip_param():
-    """`_calc_stock_return` 簽章必須仍有 `clip_loss_pct` 參數，且不可預設為 None。"""
-    sig = inspect.signature(_calc_stock_return)
-    assert "clip_loss_pct" in sig.parameters, (
-        "`_calc_stock_return` 缺少 clip_loss_pct 參數，"
-        "退市股保護機制可能已被移除。"
-    )
+    assert "clip_loss_pct" in inspect.signature(_calc_stock_return).parameters
 
 
-def test_default_clip_loss_pct_in_run_backtest_is_minus_50pct():
-    """run_backtest() 的 clip_loss_pct 預設必須 == -0.50。"""
-    sig = inspect.signature(run_backtest)
-    if "clip_loss_pct" not in sig.parameters:
-        pytest.fail("run_backtest() 缺少 clip_loss_pct 參數")
-    default = sig.parameters["clip_loss_pct"].default
-    assert default == pytest.approx(-0.50, abs=EPS), (
-        f"run_backtest() 預設 clip_loss_pct={default}，應為 -0.50。"
-        f"放寬此 clip 會讓退市股拖垮組合（10y 累積 +1216% → +338%）。"
-    )
+def test_default_clip_loss_pct_in_run_backtest_is_disabled():
+    assert inspect.signature(run_backtest).parameters["clip_loss_pct"].default is None
+    assert _calc_stock_return(100, 10, .00585, .009, None) == pytest.approx(-.91485)
 
 
-def test_default_clip_loss_pct_in_walkforward_config_is_minus_50pct():
-    """WalkForwardConfig.clip_loss_pct 預設必須 == -0.50。"""
-    cfg = WalkForwardConfig()
-    assert cfg.clip_loss_pct == pytest.approx(-0.50, abs=EPS), (
-        f"WalkForwardConfig.clip_loss_pct={cfg.clip_loss_pct}，應為 -0.50。"
-    )
+def test_default_clip_loss_pct_in_walkforward_config_is_disabled():
+    assert WalkForwardConfig().clip_loss_pct is None
 
 
 def test_clip_source_contains_max_ret_guard():

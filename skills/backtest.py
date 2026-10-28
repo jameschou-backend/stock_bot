@@ -55,7 +55,6 @@ try:
     _HAS_LGBM = True
 except ImportError:
     _HAS_LGBM = False
-from sklearn.ensemble import GradientBoostingRegressor
 
 
 def _get_process_memory_gb() -> float:
@@ -133,6 +132,9 @@ def _train_model(
       - train_groups 為每個 query（日期）的樣本數陣列
       - 直接優化 top-20 排名一致性（NDCG@20），比 regression 更貼近選股目標
     """
+    if not _HAS_LGBM:
+        raise RuntimeError('LightGBM is required; install project requirements (python -m pip install -r requirements.txt)')
+
     from skills.training_cache import fit_cached
 
     n_est = 150 if fast_mode else 500
@@ -161,13 +163,6 @@ def _train_model(
             # （skills/model_params.py），改參數只能改常數，不可在兩處各寫一份。
             model = lgb.LGBMRegressor(**{**RANKER_PROD_PARAMS, "n_estimators": n_est})
             model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
-    else:
-        n_est_gbr = 100 if fast_mode else 300
-        model = GradientBoostingRegressor(
-            n_estimators=n_est_gbr, learning_rate=0.05, max_depth=5,
-            subsample=0.8, random_state=42,
-        )
-        model = fit_cached(model, train_X, train_y, sample_weight=sample_weight)
     return model
 
 
@@ -723,10 +718,10 @@ def _calc_stock_return(
     exit_px: float,
     transaction_cost_pct: float,
     slippage_pct: float,
-    clip_loss_pct: float,
+    clip_loss_pct: Optional[float],
     gross_ret_override: Optional[float] = None,
 ) -> float:
-    """計算單筆股票報酬（扣除交易成本與滑價，並套用 clip 防止退市股拖垮組合）。
+    """計算單筆股票報酬（扣除交易成本與滑價，僅顯式診斷時套用 clip）。
 
     gross_ret_override：若提供（cap-daily-return 診斷用），以此取代 exit/entry-1 作為
     持有期毛報酬（已對單日報酬做 ±cap winsorize），用來中和未還原的減資/停牌假跳動。
@@ -735,7 +730,7 @@ def _calc_stock_return(
         ret = gross_ret_override - transaction_cost_pct - slippage_pct
     else:
         ret = exit_px / entry_px - 1 - transaction_cost_pct - slippage_pct
-    return max(ret, clip_loss_pct)
+    return ret if clip_loss_pct is None else max(ret, clip_loss_pct)
 
 
 def _simulate_period(
@@ -751,7 +746,7 @@ def _simulate_period(
     atr_df: Optional[pd.DataFrame] = None,
     atr_stoploss_multiplier: Optional[float] = None,
     enable_slippage: bool = True,
-    clip_loss_pct: float = -0.50,
+    clip_loss_pct: Optional[float] = None,
     per_stock_entry_dates: Optional[Dict[str, date]] = None,
     per_stock_stoploss_override: Optional[Dict[str, float]] = None,
     tiered_slippage_map: Optional[Dict[str, float]] = None,  # 預計算的分級滑價（來回），優先於 ATR 模型
@@ -775,7 +770,7 @@ def _simulate_period(
         atr_df: 預先計算的 ATR DataFrame（stock_id, trading_date, atr）
         atr_stoploss_multiplier: ATR 倍數停損（如 2.5），覆蓋全局 stoploss_pct
         enable_slippage: 是否套用滑價模型（ATR 的 10%，上限 0.3%，適用進出場各一次）
-        clip_loss_pct: 單筆最大損失 clip（預設 -50%；診斷可傳 -1.01 停用）
+        clip_loss_pct: 單筆損失 clip（預設 None 不截斷；指定數值僅供舊口徑診斷）
         per_stock_stoploss_override: 外部預算的個股停損 dict（覆蓋 stoploss_pct）
 
     Returns:
@@ -1026,7 +1021,7 @@ class WalkForwardConfig:
     train_lookback_days: Optional[int] = None
 
     # ── 進出場設定 ──
-    entry_delay_days: int = 0
+    entry_delay_days: int = 1
     risk_free_rate: float = 0.015
     # ── benchmark 成本口徑（2026-07-10 缺陷 3 修復）──
     # 舊行為（benchmark_with_cost=True）：等權 benchmark 每期扣 transaction_cost_pct，
@@ -1046,7 +1041,7 @@ class WalkForwardConfig:
     atr_period: int = 14
     rebalance_freq: str = "M"
     label_horizon_buffer: int = 20
-    enable_slippage: bool = False
+    enable_slippage: bool = True
     enable_tiered_slippage: bool = False
     # 悲觀敏感度：滑價倍率（tiered / ATR 模型皆套用；1.0 = 不縮放）
     slippage_multiplier: float = 1.0
@@ -1062,7 +1057,7 @@ class WalkForwardConfig:
     # 0 = 不過濾（預設，機構口徑）。benchmark 不套此過濾（只套 min_avg_turnover）。
     max_stock_price: float = 0.0
     fast_mode: bool = False
-    clip_loss_pct: float = -0.50
+    clip_loss_pct: Optional[float] = None
     cap_daily_return_pct: float = 0.0  # 診斷：>0 winsorize 持有期每日報酬到 ±cap（中和減資/停牌假跳動）
 
     # ── 特徵與訓練設定 ──
@@ -1593,7 +1588,7 @@ class BacktestPipeline:
         - 成功時回傳 dict（model, feature_names, last_train_date, train_secs, n_samples）。
         - model_buf：傳入的 ensemble buffer（in-place 更新）。
         """
-        label_horizon_buffer   = self.label_horizon_buffer
+        label_horizon_buffer   = max(self.label_horizon_buffer, getattr(self.config, "label_horizon_days", 20))
         train_lookback_days    = self.train_lookback_days
         min_avg_turnover       = self.min_avg_turnover
         min_train_days         = self.min_train_days
@@ -1615,10 +1610,12 @@ class BacktestPipeline:
             _all_tds = np.sort(pd.to_datetime(pd.unique(feat_df["trading_date"])).values)
         _rb_pos = int(np.searchsorted(_all_tds, np.datetime64(pd.Timestamp(rb_date)), side="left"))
         _cut_idx = _rb_pos - label_horizon_buffer
-        if _cut_idx > 0:
+        if _cut_idx >= 0:
             label_cutoff = pd.Timestamp(_all_tds[_cut_idx]).date()
         else:
-            label_cutoff = rb_date - timedelta(days=label_horizon_buffer)  # 交易日不足時保守 fallback
+            if not len(_all_tds):
+                raise ValueError("No trading dates for training cutoff")
+            label_cutoff = pd.Timestamp(_all_tds[0]).date()
 
         if self._train_merged is not None and not train_lookback_days:
             # ── 發現 2：預先 merge 的常駐訓練表 + searchsorted 切片 ──
@@ -2028,7 +2025,7 @@ class BacktestPipeline:
 
         從 day_feat 估 top-N picks（依 score / model_score），用
         skills.vol_targeting.compute_vol_scaler_for_picks 算 scaler。
-        任何錯誤 silently fallback 0（不縮減）。
+        計算失敗必須中止，不能悄悄取消風控。
         """
         try:
             from skills.vol_targeting import compute_vol_scaler_for_picks
@@ -2049,9 +2046,12 @@ class BacktestPipeline:
                 target_vol=float(self.vol_target_pct),
                 lookback_days=int(self.vol_target_lookback_days),
             )
-            return float(vt.get("cash_share", 0.0))
-        except Exception:
-            return 0.0
+            cash_share = float(vt["cash_share"])
+            if not np.isfinite(cash_share) or not 0 <= cash_share <= 1:
+                raise ValueError('Invalid cash_share')
+            return cash_share
+        except Exception as exc:
+            raise RuntimeError(f"volatility targeting failed at {rb_date}") from exc
 
     # ── Helper：進場訊號過濾 + topN 選股 ──
     def _apply_entry_signal_filter(
@@ -2884,6 +2884,9 @@ class BacktestPipeline:
             "total_return": round(total_return, 4),
             "annualized_return": round(annualized_return, 4),
             "benchmark_total_return": round(benchmark_total, 4),
+            "live_qualified": False,
+            "diagnostic_only": entry_delay_days < 1 or clip_loss_pct is not None or self.cap_daily_return_pct > 0,
+            "loss_clip": clip_loss_pct,
             "benchmark_annualized_return": round(benchmark_annualized, 4),
             "excess_return": round(total_return - benchmark_total, 4),
             "max_drawdown": round(max_dd, 4),
@@ -3086,7 +3089,7 @@ def run_backtest(
     eval_start: Optional[date] = None,
     eval_end: Optional[date] = None,
     train_lookback_days: Optional[int] = None,
-    entry_delay_days: int = 0,
+    entry_delay_days: int = 1,
     risk_free_rate: float = 0.015,
     benchmark_with_cost: bool = False,  # DEPRECATED：預設 zero_cost；見 WalkForwardConfig 註解
     benchmark_tc_pct: float = 0.0,
@@ -3097,7 +3100,7 @@ def run_backtest(
     atr_period: int = 14,
     rebalance_freq: str = "M",
     label_horizon_buffer: int = 20,
-    enable_slippage: bool = False,
+    enable_slippage: bool = True,
     enable_tiered_slippage: bool = False,
     slippage_multiplier: float = 1.0,
     enable_odd_lot_costs: bool = False,
@@ -3109,7 +3112,7 @@ def run_backtest(
     enable_complex_filter: bool = False,
     enable_seasonal_filter: bool = False,
     topn_floor: int = 0,
-    clip_loss_pct: float = -0.50,
+    clip_loss_pct: Optional[float] = None,
     cap_daily_return_pct: float = 0.0,
     enable_breakthrough_entry: bool = False,
     breakthrough_max_wait: int = 10,
