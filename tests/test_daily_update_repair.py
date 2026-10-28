@@ -66,3 +66,11 @@ def test_daily_ingest_end_cannot_fetch_unpublished_today(monkeypatch):
     monkeypatch.setenv('DAILY_DATA_END_DATE', '2026-10-29')
     with pytest.raises(ValueError):
         resolve_ingest_end_date(date(2026, 10, 28))
+
+
+def test_institutional_normalizer_excludes_warrants_without_allowlist():
+    import pandas as pd
+    from skills.ingest_institutional import _normalize_institutional
+    raw = pd.DataFrame([dict(stock_id=sid, date='2026-10-27', name='Foreign_Investor', buy=100, sell=50)
+                        for sid in ['2330','00400A','123456']])
+    assert _normalize_institutional(raw).stock_id.tolist() == ['2330']

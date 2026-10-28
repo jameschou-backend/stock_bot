@@ -190,6 +190,15 @@ def run(config, db_session: Session, **kwargs) -> Dict:
         else:
             target_start = last_label_date + timedelta(days=1)
 
+        # Historical price repairs also change labels *before* the repaired day.
+        # Callers must choose a recompute boundary covering the forward horizon;
+        # upsert only, so a failed repair does not delete existing labels.
+        recompute_from = kwargs.get('recompute_from')
+        if recompute_from is not None:
+            if recompute_from > max_price_date:
+                raise ValueError('Label recompute_from cannot exceed the latest price date')
+            target_start = min(target_start, recompute_from) if target_start else recompute_from
+
         if target_start is None:
             finish_job(db_session, job_id, "success", logs={"rows": 0})
             return {"rows": 0}

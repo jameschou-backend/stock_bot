@@ -85,6 +85,7 @@ def _normalize_institutional(
         return pd.DataFrame(columns=["stock_id", "trading_date"])
 
     df["stock_id"] = df["stock_id"].astype(str)
+    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]
     if allowed_stock_ids:
         df = df[df["stock_id"].isin(allowed_stock_ids)]
         if df.empty:
