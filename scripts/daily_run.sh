@@ -1,6 +1,6 @@
 #!/bin/bash
 # 每日自動執行：pipeline → D pick(紙上) → ipo scan → paper nav → TG 誠實日報 → 哨兵 → 營收爬蟲
-# launchd: ~/Library/LaunchAgents/com.jameschou.stockbot.daily.plist (週一~週五 18:00)
+# launchd: ~/Library/LaunchAgents/com.jameschou.stockbot.daily.plist (週一~週五 21:30（等候 FinMind 融資／法人資料發布）)
 #
 # 推播口徑（2026-07-18 起）：每日推「誠實日報」（telegram_bot.py --push --strategy daily-brief）。
 # D 訊號推播已降級為手動（--strategy d / listen 模式 /signal d），不再每日自動推。
@@ -60,7 +60,7 @@ echo ">>> [1/7] make pipeline" | tee -a "$LOG"
 PIPELINE_OK=false
 for try in 1 2 3; do
     echo "    [pipeline] attempt $try/3" | tee -a "$LOG"
-    if $PYTHON scripts/run_daily.py >> "$LOG" 2>&1; then
+    if $PYTHON scripts/run_daily.py --market-data-source finmind >> "$LOG" 2>&1; then
         PIPELINE_OK=true
         break
     fi

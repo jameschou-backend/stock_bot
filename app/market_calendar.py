@@ -125,7 +125,9 @@ def get_latest_trading_day(session: Session) -> Optional[date]:
 
     # Daily data is actionable only after the local evening publication window.
     now = datetime.now(ZoneInfo("Asia/Taipei"))
-    today = now.date() if now.hour >= 18 else now.date() - timedelta(days=1)
+    # FinMind margin/institution data may publish at 21:00; a complete daily
+    # research batch must use the same cutoff as the scheduled 21:30 update.
+    today = now.date() if now.hour >= 21 else now.date() - timedelta(days=1)
     try:
         latest = (
             session.query(func.max(TradingCalendar.trading_date))
@@ -138,7 +140,7 @@ def get_latest_trading_day(session: Session) -> Optional[date]:
     except Exception:
         pass
 
-    return session.query(func.max(RawPrice.trading_date)).scalar()
+    return session.query(func.max(RawPrice.trading_date)).filter(RawPrice.trading_date <= today).scalar()
 
 
 def get_trading_days_set(

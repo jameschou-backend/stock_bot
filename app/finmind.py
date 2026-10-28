@@ -287,7 +287,8 @@ def fetch_dataset_by_stocks(
         raise ValueError("batch_size must be positive")
     stock_ids = list(dict.fromkeys(stock_ids))
     # Documented Sponsor all-market daily endpoints; never guess comma-separated IDs.
-    bulk_datasets = {"TaiwanStockPrice", "TaiwanStockPriceAdj", "TaiwanStockPER", "TaiwanStockMonthRevenue"}
+    bulk_datasets = {"TaiwanStockPrice", "TaiwanStockPriceAdj", "TaiwanStockPER", "TaiwanStockMonthRevenue",
+                     "TaiwanStockMarginPurchaseShortSale", "TaiwanStockInstitutionalInvestorsBuySell"}
     days = (end_date - start_date).days + 1
     if days <= 0:
         raise ValueError("end_date must not precede start_date")

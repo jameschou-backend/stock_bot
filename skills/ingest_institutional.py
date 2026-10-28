@@ -30,6 +30,7 @@ from app.finmind import (
     fetch_stock_list,
     probe_dataset_has_data,
 )
+from app.ingest_dates import resolve_ingest_end_date
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawInstitutional, Stock
 from app.twse_client import TWSEClient, TWSEError
@@ -227,7 +228,7 @@ def _run_twse(config, db_session: Session) -> Dict:
         today = datetime.now(ZoneInfo(config.tz)).date()
         default_start = today - timedelta(days=365 * config.train_lookback_years)
         start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
+        end_date = resolve_ingest_end_date(today)
         logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
 
         if start_date > end_date:
@@ -300,7 +301,7 @@ def _run_finmind(config, db_session: Session) -> Dict:
         today = datetime.now(ZoneInfo(config.tz)).date()
         default_start = today - timedelta(days=365 * config.train_lookback_years)
         start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
+        end_date = resolve_ingest_end_date(today)
         logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
 
         if start_date > end_date:

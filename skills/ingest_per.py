@@ -24,7 +24,9 @@ from sqlalchemy.orm import Session
 from app.finmind import (
     FinMindError,
     fetch_dataset,
+    fetch_dataset_by_stocks,
 )
+from app.ingest_dates import resolve_ingest_end_date
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawPER, Stock
 from app.twse_client import TWSEClient, TWSEError
@@ -122,7 +124,7 @@ def _run_twse(config, db_session: Session) -> Dict:
         today = datetime.now(ZoneInfo(config.tz)).date()
         default_start = today - timedelta(days=365 * config.train_lookback_years)
         start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
+        end_date = resolve_ingest_end_date(today)
         logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
 
         if start_date > end_date:
@@ -208,7 +210,7 @@ def _run_finmind(config, db_session: Session, **kwargs) -> Dict:
             date(2010, 1, 1),
         )
         start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
+        end_date = resolve_ingest_end_date(today)
 
         logs["start_date"] = start_date.isoformat()
         logs["end_date"] = end_date.isoformat()
@@ -229,56 +231,22 @@ def _run_finmind(config, db_session: Session, **kwargs) -> Dict:
         logs["stocks"] = len(stock_ids)
         logger.info("[ingest_per] %s ~ %s，%d 檔", start_date, end_date, len(stock_ids))
 
-        # TaiwanStockPER 支援 data_id + 日期區間 → 每檔股票一次 API call
-        # 為避免 10 年資料量過大單次超時，若超過 365 天改為 chunk
-        CHUNK_DAYS = 365
         total_rows = 0
-        commit_buffer: List[Dict] = []
+        def write_page(df):
+            nonlocal total_rows
+            normalized = _normalize_per(df)
+            if not normalized.empty:
+                records = normalized.astype(object).where(normalized.notna(), None).to_dict('records')
+                _flush(db_session, records)
+                total_rows += len(records)
+            return len(normalized)
 
-        date_ranges: List[tuple] = []
-        cur = start_date
-        while cur <= end_date:
-            chunk_end = min(cur + timedelta(days=CHUNK_DAYS - 1), end_date)
-            date_ranges.append((cur, chunk_end))
-            cur = chunk_end + timedelta(days=1)
-
-        for i, stock_id in enumerate(stock_ids, 1):
-            if i % 200 == 0:
-                update_job(
-                    db_session, job_id,
-                    logs={**logs, "progress": f"{i}/{len(stock_ids)}", "rows": total_rows},
-                    commit=True,
-                )
-                logger.info("[%d/%d] rows=%d", i, len(stock_ids), total_rows)
-
-            for range_start, range_end in date_ranges:
-                df = fetch_dataset(
-                    dataset=DATASET,
-                    start_date=range_start,
-                    end_date=range_end,
-                    token=config.finmind_token,
-                    data_id=stock_id,
-                    requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
-                    max_retries=getattr(config, "finmind_retry_max", 3),
-                    backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
-                )
-                if df is None or df.empty:
-                    continue
-
-                normalized = _normalize_per(df)
-                if normalized.empty:
-                    continue
-
-                commit_buffer.extend(normalized.to_dict("records"))
-
-                if len(commit_buffer) >= 5000:
-                    _flush(db_session, commit_buffer)
-                    total_rows += len(commit_buffer)
-                    commit_buffer.clear()
-
-        if commit_buffer:
-            _flush(db_session, commit_buffer)
-            total_rows += len(commit_buffer)
+        fetch_dataset_by_stocks(
+            DATASET, start_date, end_date, stock_ids, token=config.finmind_token,
+            requests_per_hour=config.finmind_requests_per_hour,
+            max_retries=config.finmind_retry_max, backoff_seconds=config.finmind_retry_backoff,
+            batch_size=1, batch_delay=0, batch_write_callback=write_page,
+        )
 
         logs["rows"] = total_rows
         logger.info("ingest_per: %d 筆", total_rows)

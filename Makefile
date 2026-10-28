@@ -3,8 +3,10 @@
 migrate:
 	python scripts/migrate.py
 
+DAILY_MARKET_SOURCE ?= finmind
+
 pipeline:
-	python scripts/run_daily.py
+	python scripts/run_daily.py --market-data-source $(DAILY_MARKET_SOURCE)
 
 # 跳過抓資料，只跑 data_quality + features/labels/train/pick
 pipeline-build:
@@ -24,7 +26,7 @@ migrate-features:
 
 # 每日選股（Strategy A：月頻 + Strategy C：日頻輪動 + Telegram 推送）
 daily:
-	python scripts/run_daily.py
+	python scripts/run_daily.py --market-data-source $(DAILY_MARKET_SOURCE)
 	python scripts/strategy_c_pick.py
 	python scripts/daily_signal.py
 	python scripts/telegram_bot.py --push

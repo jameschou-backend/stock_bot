@@ -29,6 +29,7 @@ from app.finmind import (
     fetch_stock_list,
     probe_dataset_has_data,
 )
+from app.ingest_dates import resolve_ingest_end_date
 from app.job_utils import finish_job, start_job, update_job
 from app.models import RawPrice
 from app.twse_client import TWSEClient, TWSEError
@@ -86,7 +87,9 @@ def _resolve_start_date(session: Session, default_start: date) -> date:
     if max_date is None:
         return default_start
     from skills.price_coverage import recent_market_counts, incomplete_dates
-    gaps = incomplete_dates(recent_market_counts(session, max_date))
+    from app.market_calendar import get_trading_days_from_db
+    required = get_trading_days_from_db(session, max(default_start, max_date - timedelta(days=7)), max_date)
+    gaps = incomplete_dates(recent_market_counts(session, max_date), required_dates=required)
     recent_gaps = [day for day in gaps if day >= max_date - timedelta(days=7)]
     if recent_gaps:
         return min(recent_gaps)
@@ -150,7 +153,7 @@ def _run_twse(config, db_session: Session) -> Dict:
         today = datetime.now(ZoneInfo(config.tz)).date()
         default_start = today - timedelta(days=365 * config.train_lookback_years)
         start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
+        end_date = resolve_ingest_end_date(today)
         days_gap = (end_date - start_date).days
         logs.update({
             "start_date": start_date.isoformat(),
@@ -230,7 +233,7 @@ def _run_finmind(config, db_session: Session) -> Dict:
         today = datetime.now(ZoneInfo(config.tz)).date()
         default_start = today - timedelta(days=365 * config.train_lookback_years)
         start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
+        end_date = resolve_ingest_end_date(today)
         logs.update({"start_date": start_date.isoformat(), "end_date": end_date.isoformat()})
 
         if start_date > end_date:

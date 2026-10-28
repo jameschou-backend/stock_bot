@@ -218,10 +218,15 @@ class TWSEClient:
     # ── 1. OHLCV ───────────────────────────────────
     def fetch_prices_latest(self) -> List[Dict[str, Any]]:
         """TWSE + TPEx OpenAPI 最新一日全市場 OHLCV。"""
-        rows: List[Dict[str, Any]] = []
-        rows.extend(self._parse_twse_oapi_stock_day(self._get_json(TWSE_OAPI_STOCK_DAY_ALL)))
-        rows.extend(self._parse_tpex_oapi_quotes(self._get_json(TPEX_OAPI_DAILY_QUOTES)))
-        return rows
+        twse = self._parse_twse_oapi_stock_day(self._get_json(TWSE_OAPI_STOCK_DAY_ALL))
+        tpex = self._parse_tpex_oapi_quotes(self._get_json(TPEX_OAPI_DAILY_QUOTES))
+        dates = [{row['trading_date'] for row in rows} for rows in (twse, tpex)]
+        if any(len(days) != 1 for days in dates) or dates[0] != dates[1]:
+            raise TWSEError(
+                'Latest market quotes are incomplete or have different dates; '
+                'use the explicit FinMind daily source to repair historical gaps'
+            )
+        return twse + tpex
 
     def fetch_prices_history(self, trading_date: date) -> List[Dict[str, Any]]:
         """TWSE + TPEx Legacy 指定 date 全市場 OHLCV。
