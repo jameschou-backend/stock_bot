@@ -1,0 +1,17 @@
+{
+  "reference": {
+    "held_close_observations": 4003,
+    "missing_exit_ma_observations": 11,
+    "affected_trades": 1
+  },
+  "exit_ma50": {
+    "held_close_observations": 5211,
+    "missing_exit_ma_observations": 55,
+    "affected_trades": 2
+  },
+  "market_ma200_exit_ma20": {
+    "held_close_observations": 3829,
+    "missing_exit_ma_observations": 21,
+    "affected_trades": 1
+  }
+}

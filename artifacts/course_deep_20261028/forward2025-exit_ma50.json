@@ -1,0 +1,73 @@
+{
+  "config": {
+    "weights": 1,
+    "threshold": 80,
+    "exit_ma": 10,
+    "entries": "breakout",
+    "baseline": false
+  },
+  "summary": {
+    "start": "2025-01-02",
+    "end": "2025-12-31",
+    "total_return": -0.18581849015732366,
+    "cagr": -0.18685526470922698,
+    "max_drawdown": -0.33571963864220733,
+    "sharpe": -0.6237761742466515,
+    "completed_trades": 52,
+    "win_rate": 0.1346153846153846,
+    "initial_nav": 1000000.0,
+    "final_net_nav": 814181.5098426763,
+    "commissions_and_taxes": 48479.590193155476,
+    "traded_notional": 17049159.694169,
+    "annual_one_way_turnover": 10.224853123544728,
+    "average_positions": 3.9917695473251027,
+    "blocked_orders": 1,
+    "gap_rejections": 13,
+    "stop_exits": 40,
+    "verified_halt_hold_days": 0,
+    "terminal_positions": 5,
+    "terminal_liquidation_cost_estimate": 4299.029508005627
+  },
+  "holdings": [
+    {
+      "stock_id": "2885",
+      "units": 4989.899738633304,
+      "entry_outlay": 166548.50462176994,
+      "stop": 30.996555656452642,
+      "entry_date": "2025-11-21",
+      "signal_date": "2025-11-20"
+    },
+    {
+      "stock_id": "2890",
+      "units": 6064.704475176101,
+      "entry_outlay": 155926.2890500861,
+      "stop": 23.876695416831684,
+      "entry_date": "2025-11-21",
+      "signal_date": "2025-11-20"
+    },
+    {
+      "stock_id": "3105",
+      "units": 538.978736879426,
+      "entry_outlay": 78013.75771439387,
+      "stop": 134.42005983263599,
+      "entry_date": "2025-12-01",
+      "signal_date": "2025-11-28"
+    },
+    {
+      "stock_id": "3260",
+      "units": 682.2101985347252,
+      "entry_outlay": 158813.11517768138,
+      "stop": 216.18854399999998,
+      "entry_date": "2025-12-30",
+      "signal_date": "2025-12-29"
+    },
+    {
+      "stock_id": "8021",
+      "units": 862.7203446638658,
+      "entry_outlay": 158813.11517768138,
+      "stop": 170.9546209677446,
+      "entry_date": "2025-12-30",
+      "signal_date": "2025-12-29"
+    }
+  ]
+}

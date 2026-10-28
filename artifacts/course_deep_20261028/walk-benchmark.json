@@ -1,0 +1,41 @@
+{
+  "config": {
+    "weights": 1,
+    "threshold": 80,
+    "exit_ma": 10,
+    "entries": "breakout",
+    "baseline": false
+  },
+  "summary": {
+    "start": "2023-01-03",
+    "end": "2026-10-22",
+    "total_return": 3.311291806684606,
+    "cagr": 0.46891253322818627,
+    "max_drawdown": -0.2748498980954953,
+    "sharpe": 1.7801468283109498,
+    "completed_trades": 0,
+    "win_rate": null,
+    "initial_nav": 1000000.0,
+    "final_net_nav": 4311291.806684606,
+    "commissions_and_taxes": 1422.9722645230547,
+    "traded_notional": 998577.027735477,
+    "annual_one_way_turnover": 0.0629892266558882,
+    "average_positions": 1.0,
+    "blocked_orders": 0,
+    "gap_rejections": 0,
+    "stop_exits": 0,
+    "verified_halt_hold_days": 5,
+    "terminal_positions": 1,
+    "terminal_liquidation_cost_estimate": 14806.395554528604
+  },
+  "holdings": [
+    {
+      "stock_id": "0050",
+      "units": 40468.64548399564,
+      "entry_outlay": 1000000.0,
+      "stop": 22.94805335556048,
+      "entry_date": "2023-01-03",
+      "signal_date": "2022-12-30"
+    }
+  ]
+}

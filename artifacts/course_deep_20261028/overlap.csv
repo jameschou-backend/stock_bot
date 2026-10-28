@@ -1,0 +1,8 @@
+,volume_momentum,trust_near_breakout,trust_consecutive,foreign_first,foreign_trust,price_volume_400,near_breakout
+volume_momentum,3544,591,1280,783,805,944,940
+trust_near_breakout,591,1601,385,147,381,243,1601
+trust_consecutive,1280,385,1280,275,624,345,385
+foreign_first,783,147,275,783,242,179,237
+foreign_trust,805,381,624,242,1147,298,381
+price_volume_400,944,243,345,179,298,1409,341
+near_breakout,940,1601,385,237,381,341,2248

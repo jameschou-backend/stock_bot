@@ -1,0 +1,26 @@
+{
+  "reason": "Resolve a genuine 3260 one-day official halt that caused four arms to abort; preserve original quotations and all strategy parameters.",
+  "halt": {
+    "stock_id": "3260",
+    "start": "2025-10-01",
+    "end": "2025-10-02",
+    "end_exclusive": true
+  },
+  "sources": [
+    {
+      "path": ".cache/course-deep-research-20261028/tpex-3260-halt-20250930.html",
+      "url": "https://www.tpex.org.tw/storage/eb_data/11409/11402023641.html",
+      "sha256": "39e901f19a8389105a7c4fe64101ce128f5eb886a8e80732affb0bdf42f09641"
+    },
+    {
+      "path": ".cache/course-deep-research-20261028/taifex-3260-resume-20251001.pdf",
+      "url": "https://www.taifex.com.tw/file/taifex/CHINESE/11/attach/%E5%8F%B0%E6%9C%9F%E4%BA%A4%E5%AD%97%E7%AC%AC1140202102%E8%99%9F%E5%87%BD.pdf",
+      "sha256": "23b0b36bee0fe81040ef26380cf17e0131db8bbbc89b0d1692f33d1d599c67c5"
+    }
+  ],
+  "before_repair_report": ".cache/course-deep-research-20261028/run-f9d377373afe96a4/report.json",
+  "before_repair_sha256": "87b1e636821d58387b546edf3ff91e5489df66ca5942d33214ce0a942bd44fbb",
+  "before_repair_evaluations": 103,
+  "before_repair_blocked": 8,
+  "retrieved": "2026-10-28"
+}

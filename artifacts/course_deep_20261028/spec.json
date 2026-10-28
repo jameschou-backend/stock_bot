@@ -1,0 +1,49 @@
+{
+  "experiment": "course_deep_20261028",
+  "parent": "course_momentum_bundle_20261028",
+  "status": "exploratory_after_prior_period_exposure",
+  "purpose": "Diagnose overlapping filters, costs and exit churn, then compare a bounded set of mechanism changes. Do not reverse-engineer the original author or promote live qualification.",
+  "period": ["2021-10-25", "2026-10-22"],
+  "base_config": {"weights": 1, "threshold": 80, "exit_ma": 10, "entries": "breakout", "baseline": false},
+  "arms": [
+    "reference", "exit_ma10_confirm2", "exit_ma20", "exit_ma20_confirm2", "exit_ma50",
+    "market_ma60", "market_ma200", "market_ma200_exit_ma20", "first_signal_10",
+    "rank_momentum", "rank_membership_count", "momentum_60", "institutions_delayed1",
+    "family_volume_momentum", "family_trust_near_breakout", "family_trust_consecutive",
+    "family_foreign_first", "family_foreign_trust", "family_price_volume_400", "family_near_breakout"
+  ],
+  "arm_definitions": {
+    "reference": "Exact prior selected configuration; unchanged engine and frozen inputs; summary and trade stream must match archived v1.",
+    "exit_ma10_confirm2": "Require two consecutive closes below MA10 before scheduling next-open trend exit. Intraday 7% hard stop remains immediate.",
+    "exit_ma20": "Replace the MA10 close exit with MA20; leave all other rules unchanged.",
+    "exit_ma20_confirm2": "Predeclared interaction: MA20 and two closes, immediate fixed hard stop unchanged.",
+    "exit_ma50": "Replace the MA10 close exit with MA50; slower research alternative, not claimed as original course rule.",
+    "market_ma60": "Add 0050 close above its last 60 valid close average to the existing market gate; entry only, no forced market exit.",
+    "market_ma200": "As above, 200 valid observations. Known ETF halt days cannot issue signals.",
+    "market_ma200_exit_ma20": "Predeclared interaction of the market MA200 entry gate and MA20 exit.",
+    "first_signal_10": "Only first eligible entry signal in the trailing 10 sessions per stock, regardless of whether earlier signals were executed.",
+    "rank_momentum": "Same candidate union, pure M ranking, removing institutional rank bonuses.",
+    "rank_membership_count": "Same candidate union, number of satisfied family flags first, M as tie-break. Explicitly tests naive more-is-better hypothesis.",
+    "momentum_60": "Use 60-session return and MA60 bias for momentum/trend instead of 20; amount ratio remains 20-session. Recompute all percentiles on the common fully known 60-session universe.",
+    "institutions_delayed1": "Sensitivity only: shift institutional availability by one trading session before feature construction; excluded from adaptive strategy selection.",
+    "family_*": "Keep a single family from the original signal union; same ranking, market, entry and exit. Family populations can overlap; comparisons are not randomized causal estimates."
+  },
+  "invariants": "Same liquidity threshold, actual turnover, five slots, 7% immediate hard stop, cash-only next-open fills, gap bounds, fee/tax/slippage and terminal-cost handling as parent. No global trading-account changes.",
+  "diagnostics": [
+    "Pair recorded trades and exactly reconcile same-units gross price PnL, commissions, taxes, slippage and net PnL; this is attribution, not a frictionless reinvested account.",
+    "Report holding durations, entry market regime, exits, yearly losses and winning-trade concentration.",
+    "Count family overlap and leave-one-family-out candidate differences; detect constant ranking bonuses.",
+    "Measure 5- and 20-session next-open to horizon-close returns for eligible signals by score bucket and membership count, with same-period 0050 excess. State sample censoring and overlap; no calibrated future probabilities.",
+    "Report every arm, failed run and stress result; no unreported iterative parameter search."
+  ],
+  "walk_forward": {
+    "years": [2023, 2024, 2025, 2026],
+    "training_start": "2021-10-25",
+    "selection": "Expanding training ends the last trading day of the preceding year. From the 19 non-sensitivity arms require at least 20 closed trades and positive net CAGR; select max CAGR minus 0.5*absolute max drawdown, tie by name. If none passes, select cash. No next-year outcome is read by the selection function.",
+    "account": "Each evaluation year starts with independent standard capital and ends net of estimated liquidation costs. Report year-by-year and compounded normalized research segments, explicitly not a continuous real settlement ledger.",
+    "label": "Retrospective chronological replay on previously seen data; not a new untouched OOS test."
+  },
+  "cost_stress": "Re-run reference and the fixed market_ma200_exit_ma20 interaction with 0.3% slippage per side, without reselection; report both.",
+  "uncertainty": "For all full-period arms, paired daily return differences against reference use fixed-seed circular block bootstrap, 20 sessions per block, 1000 replicates, 95% interval of annualized arithmetic mean difference. Intervals are descriptive and not adjusted for multiple testing; they do not establish causality or future profitability.",
+  "stopping_rule": "Run the 20 predeclared arms and four annual selection rounds once; diagnosis can motivate later preregistered work, but do not extend the search after seeing these returns. All existing data/adjustment/publication/fill limitations remain."
+}

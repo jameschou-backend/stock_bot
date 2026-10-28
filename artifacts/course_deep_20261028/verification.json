@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-28",
+  "tests": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "result": "7653 passed, 40 warnings in 217.15s",
+    "log_sha256": "428452befdfc09ad3384493d716bb46368dee561a91a9c967d2111b440c1e09c",
+    "targeted": "25 passed"
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "published_cutoff": "2026-10-28",
+    "log_sha256": "cfbb9efcabbad127f75a8fd8a29d45883c6405d2596dc1acdaa032db489779ad"
+  },
+  "api": {
+    "server": "existing make api service on localhost:8000",
+    "health": 200,
+    "picks": 200,
+    "models": 200,
+    "jobs": 200
+  },
+  "research": {
+    "frozen_end": "2026-10-22",
+    "arms": 20,
+    "before_repair_evaluations": 103,
+    "before_repair_blocked": 8,
+    "final_evaluations": 103,
+    "final_blocked": 0,
+    "prior_successes_preserved_exactly": 95,
+    "baseline_trade_stream_exact_match": true,
+    "exported_account_ledger_audits": 27,
+    "checks": [
+      "input hashes",
+      "output hashes",
+      "NAV return",
+      "maximum drawdown",
+      "fee/tax reconciliation",
+      "cash nonnegative",
+      "signal before execution",
+      "annual compounding",
+      "all local report links"
+    ],
+    "replay": "Existing completed output hashes verified without additional trials"
+  },
+  "visual": {
+    "findings.png": "visually inspected",
+    "HTML": "source and links verified; no browser-layout acceptance claim"
+  },
+  "source_sha256": {
+    "skills/course_deep_research.py": "c8c188349639019d7fe38c045ce7031451d3c776797421535b48674d5b35a8f3",
+    "scripts/research_course_deep.py": "86f0adb269d9b220245306850244a5175f8aac359adac088874199757886da03",
+    "tests/test_course_deep_research.py": "76a494ef68173d309fac44b231a6f8f396181128f74f768a74ed6ae1d599cdae",
+    "docs/course_deep_findings_20261028.md": "b4a693dfba6e0f18cd4b600bc7af93584383a49c126d41b5b3cb6f53ca0d8a0a"
+  }
+}

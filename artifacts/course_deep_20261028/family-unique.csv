@@ -1,0 +1,8 @@
+family,eligible_stock_days,unique_stock_days,removal_changes_union
+volume_momentum,3544,837,True
+trust_near_breakout,1601,0,False
+trust_consecutive,1280,0,False
+foreign_first,783,0,False
+foreign_trust,1147,121,True
+price_volume_400,1409,205,True
+near_breakout,2248,246,True

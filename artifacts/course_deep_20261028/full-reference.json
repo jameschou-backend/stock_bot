@@ -1,0 +1,32 @@
+{
+  "config": {
+    "weights": 1,
+    "threshold": 80,
+    "exit_ma": 10,
+    "entries": "breakout",
+    "baseline": false
+  },
+  "summary": {
+    "start": "2021-10-25",
+    "end": "2026-10-22",
+    "total_return": -0.20666136661830325,
+    "cagr": -0.045324291473590295,
+    "max_drawdown": -0.676426182191102,
+    "sharpe": 0.007036058203159305,
+    "completed_trades": 573,
+    "win_rate": 0.2914485165794066,
+    "initial_nav": 1000000.0,
+    "final_net_nav": 793338.6333816968,
+    "commissions_and_taxes": 440532.43305677274,
+    "traded_notional": 150489444.9426033,
+    "annual_one_way_turnover": 22.396313888997216,
+    "average_positions": 3.300082440230833,
+    "blocked_orders": 3,
+    "gap_rejections": 133,
+    "stop_exits": 225,
+    "verified_halt_hold_days": 1,
+    "terminal_positions": 0,
+    "terminal_liquidation_cost_estimate": 0.0
+  },
+  "holdings": []
+}

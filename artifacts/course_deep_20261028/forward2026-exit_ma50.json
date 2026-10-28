@@ -1,0 +1,49 @@
+{
+  "config": {
+    "weights": 1,
+    "threshold": 80,
+    "exit_ma": 10,
+    "entries": "breakout",
+    "baseline": false
+  },
+  "summary": {
+    "start": "2026-01-02",
+    "end": "2026-10-22",
+    "total_return": 0.5897048976990436,
+    "cagr": 0.7822086747845034,
+    "max_drawdown": -0.2992856336282551,
+    "sharpe": 1.5473843117762303,
+    "completed_trades": 37,
+    "win_rate": 0.1891891891891892,
+    "initial_nav": 1000000.0,
+    "final_net_nav": 1589704.8976990436,
+    "commissions_and_taxes": 63101.849997651385,
+    "traded_notional": 21567155.31572083,
+    "annual_one_way_turnover": 8.054461331404314,
+    "average_positions": 4.335051546391752,
+    "blocked_orders": 0,
+    "gap_rejections": 20,
+    "stop_exits": 27,
+    "verified_halt_hold_days": 0,
+    "terminal_positions": 2,
+    "terminal_liquidation_cost_estimate": 3492.760376713336
+  },
+  "holdings": [
+    {
+      "stock_id": "2615",
+      "units": 4378.069157067917,
+      "entry_outlay": 373916.5765921046,
+      "stop": 79.315236,
+      "entry_date": "2026-07-22",
+      "signal_date": "2026-07-21"
+    },
+    {
+      "stock_id": "3016",
+      "units": 835.6766277595392,
+      "entry_outlay": 123561.38932710495,
+      "stop": 137.312175,
+      "entry_date": "2026-09-24",
+      "signal_date": "2026-09-23"
+    }
+  ]
+}
