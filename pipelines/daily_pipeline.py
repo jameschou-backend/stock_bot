@@ -209,8 +209,13 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
         from skills import ingest_per
         _run_optional_skill("ingest_per", ingest_per.run)
 
+        # Borrowing transactions use one documented all-market request per day.
+        # Independent of SPONSOR_INGEST: no per-stock multi-year download.
+        from skills import ingest_securities_lending
+        _run_optional_skill("ingest_securities_lending", ingest_securities_lending.run)
+
         # Per-stock 重型 sponsor ingest（受 SPONSOR_INGEST 開關控制；預設 on 保留原行為）
-        # 設 SPONSOR_INGEST=off 跳過下列 5 個，每日省 ~10,000 FinMind API calls
+        # 設 SPONSOR_INGEST=off 跳過下列 4 個，每日省 ~10,000 FinMind API calls
         if _should_run_sponsor_ingest():
             # 10. 分點券商聚合（TaiwanStockTradingDailyReport）
             from skills import ingest_broker_trades
@@ -224,17 +229,13 @@ def run_daily_pipeline(skip_ingest: bool = False) -> None:
             from skills import ingest_kbar_features
             _run_optional_skill("ingest_kbar_features", ingest_kbar_features.run)
 
-            # 16. 借券餘額聚合（TaiwanStockSecuritiesLending，Sponsor）
-            from skills import ingest_securities_lending
-            _run_optional_skill("ingest_securities_lending", ingest_securities_lending.run)
-
             # 17. 季報財務摘要（BalanceSheet + FinancialStatements + CashFlow，Sponsor，60天延遲）
             from skills import ingest_quarterly_fundamental
             _run_optional_skill("ingest_quarterly_fundamental", ingest_quarterly_fundamental.run)
         else:
             logger.info(
-                "[skip-sponsor-ingest] SPONSOR_INGEST=off，跳過 5 個 per-stock 重型 sponsor ingest "
-                "(broker_trades / holding_dist / kbar_features / securities_lending / "
+                "[skip-sponsor-ingest] SPONSOR_INGEST=off，跳過 4 個 per-stock 重型 sponsor ingest "
+                "(broker_trades / holding_dist / kbar_features / "
                 "quarterly_fundamental)。預估省 ~10,000 FinMind API calls/day。"
             )
     else:

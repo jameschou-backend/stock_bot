@@ -451,14 +451,10 @@ class RawPER(Base):
 # Priority 7：借券餘額聚合（TaiwanStockSecuritiesLending）
 # ─────────────────────────────────────────────────────────────
 class RawSecuritiesLending(Base):
-    """每日借券餘額聚合（Sponsor 專屬）
+    """Legacy mislabeled transaction aggregates, retained for audit only.
 
-    借券餘額持續增加代表機構投資人放空意願上升（看空信號）。
-    高借券費率表示稀缺的可借股票（放空需求旺盛）。
-
-    - lending_balance:          借券餘額（張）
-    - lending_fee_rate:         加權平均借券費率（% 年率）
-    - lending_transaction_count: 當日借出筆數（市場參與度）
+    Do not use these columns as balances or feature inputs. Corrected daily
+    transactions are stored separately in SecuritiesLendingDaily.
     """
     __tablename__ = "raw_securities_lending"
 
@@ -469,6 +465,37 @@ class RawSecuritiesLending(Base):
     lending_transaction_count   = Column(BigInteger)         # 借出筆數
 
     __table_args__ = (Index("idx_raw_securities_lending_date", "trading_date"),)
+
+
+class SecuritiesLendingDay(Base):
+    """Atomic all-market ingestion checkpoint and original provider response.
+
+    payload_json is evidence (including excluded securities), not stock rows.
+    observed_at is ingestion time, not a claimed historical publication time.
+    """
+    __tablename__ = 'securities_lending_days'
+    trading_date = Column(Date, primary_key=True)
+    observed_at = Column(DateTime, nullable=False)
+    source_rows = Column(BigInteger, nullable=False)
+    stock_rows = Column(BigInteger, nullable=False)
+    payload_sha256 = Column(String(64), nullable=False)
+    payload_json = Column(JSON, nullable=False)
+
+
+class SecuritiesLendingDaily(Base):
+    """Borrowing transactions, never outstanding loan/short-sale balance.
+
+    Volume retains FinMind's reported unit; do not divide by shares or turnover
+    until its unit has independently been reconciled. No PIT availability claim.
+    """
+    __tablename__ = 'securities_lending_daily'
+    stock_id = Column(String(16), primary_key=True)
+    trading_date = Column(Date, primary_key=True)
+    transaction_volume = Column(BigInteger, nullable=False)
+    transaction_count = Column(BigInteger, nullable=False)
+    fee_rate = Column(DECIMAL(14, 8), nullable=False)
+    methods_json = Column(JSON, nullable=False)
+    __table_args__ = (Index('idx_lending_daily_date', 'trading_date'),)
 
 
 # ─────────────────────────────────────────────────────────────

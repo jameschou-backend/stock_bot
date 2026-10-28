@@ -47,7 +47,6 @@ from app.models import (
     RawPER,
     RawPrice,
     QuarterlyFundamentalSnapshot,
-    RawSecuritiesLending,
     RawThemeFlow,
     Stock,
 )
@@ -1341,41 +1340,12 @@ def _fetch_data(session: Session, start_date: date, end_date: date) -> pd.DataFr
             how="left",
         )
 
-    # ── 借券餘額（SecuritiesLending，Sponsor，每日）──
-    t0 = time.perf_counter()
-    try:
-        lending_stmt = (
-            select(
-                RawSecuritiesLending.stock_id,
-                RawSecuritiesLending.trading_date,
-                RawSecuritiesLending.lending_balance,
-                RawSecuritiesLending.lending_fee_rate,
-            )
-            .where(RawSecuritiesLending.trading_date.between(start_date, end_date))
-        )
-        lending_df = pd.read_sql(lending_stmt, session.get_bind())
-    except Exception:
-        lending_df = pd.DataFrame()
-    elapsed = time.perf_counter() - t0
-    logger.info(f"[PERF] fetch_securities_lending: {elapsed:.2f}s（{len(lending_df):,}列）")
-
-    if lending_df.empty:
-        price_df["lending_balance_raw"] = np.nan
-        price_df["lending_fee_rate_raw"] = np.nan
-    else:
-        lending_df["stock_id"] = lending_df["stock_id"].astype(str)
-        lending_df["trading_date"] = pd.to_datetime(lending_df["trading_date"], errors="coerce")
-        for col in ["lending_balance", "lending_fee_rate"]:
-            lending_df[col] = pd.to_numeric(lending_df[col], errors="coerce")
-        lending_df = lending_df.rename(columns={
-            "lending_balance": "lending_balance_raw",
-            "lending_fee_rate": "lending_fee_rate_raw",
-        })
-        price_df = price_df.merge(
-            lending_df[["stock_id", "trading_date", "lending_balance_raw", "lending_fee_rate_raw"]],
-            on=["stock_id", "trading_date"],
-            how="left",
-        )
+    # The old table mislabeled transaction flows as outstanding balances.
+    # Keep the legacy schema, but never feed those values to a model. The new
+    # securities_lending_daily observations require a separately validated PIT
+    # research feature; no default production features are added here.
+    price_df["lending_balance_raw"] = np.nan
+    price_df["lending_fee_rate_raw"] = np.nan
 
     # Verified observations only; legacy report_date + 60 days is not publication evidence.
     from skills.quarterly_validation import align_prices

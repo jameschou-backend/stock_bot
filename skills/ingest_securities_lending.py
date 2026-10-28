@@ -1,261 +1,134 @@
-"""Priority 7：借券餘額聚合（TaiwanStockSecuritiesLending）
+"""FinMind borrowing transactions: resumable, bounded, all-market daily ingestion.
 
-從 FinMind 抓取逐筆借券資料，彙整成每日每股借券餘額/費率指標，
-寫入 raw_securities_lending 表。
-
-Dataset: TaiwanStockSecuritiesLending
-Fields:  date, stock_id, transaction_type, volume, fee_rate,
-         original_return_date, original_lending_period
-頻率：   逐筆（每日多筆，按 transaction_type 區分借入/還券）
-限制：   Sponsor 計劃
-
-聚合邏輯：
-- 只計「借出」（transaction_type 含 "lending" 或 "borrow"）累計餘額
-- 以今日借出量 - 今日還券量 計算淨變動，並與前日餘額累計
-- lending_fee_rate：加權平均借券費率（以 volume 加權）
-- lending_transaction_count：當日借出筆數
+Official schema: https://finmind.github.io/tutor/TaiwanMarket/Chip/#taiwanstocksecuritieslending
+transaction_type is a trading method (競價/議借/定價), not lend/return direction.
+These flows cannot reconstruct outstanding balances or actual return dates.
 """
 from __future__ import annotations
 
-import logging
+import hashlib
+import json
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Optional, Set
 from zoneinfo import ZoneInfo
 
+import numpy as np
 import pandas as pd
-from sqlalchemy import func
-from sqlalchemy.dialects.mysql import insert
-from sqlalchemy.orm import Session
+from sqlalchemy import select
 
-from app.finmind import (
-    FinMindError,
-    fetch_dataset,
-)
+from app.finmind import FinMindError, fetch_dataset
+from app.ingest_dates import resolve_ingest_end_date
 from app.job_utils import finish_job, start_job, update_job
-from app.models import RawSecuritiesLending, Stock
+from app.market_calendar import get_latest_trading_day
+from app.models import SecuritiesLendingDaily, SecuritiesLendingDay, TradingCalendar
 
-logger = logging.getLogger(__name__)
-
-DATASET = "TaiwanStockSecuritiesLending"
-UPDATE_COLS = ["lending_balance", "lending_fee_rate", "lending_transaction_count"]
-
-# 借出交易類型關鍵字（FinMind 原始資料用中文標記）
-_LEND_KEYWORDS = ["借出", "lending", "borrow"]
-_RETURN_KEYWORDS = ["還券", "return", "returned"]
-
-
-def _resolve_start_date(session: Session, default_start: date) -> date:
-    max_date = session.query(func.max(RawSecuritiesLending.trading_date)).scalar()
-    if max_date is None:
-        return default_start
-    return max_date + timedelta(days=1)
-
-
-def _load_stock_ids(session: Session) -> List[str]:
-    rows = (
-        session.query(Stock.stock_id)
-        .filter(Stock.is_listed == True)
-        .filter(Stock.security_type == "stock")
-        .order_by(Stock.stock_id)
-        .all()
-    )
-    return [row[0] for row in rows]
+DATASET = 'TaiwanStockSecuritiesLending'
+COLUMN_MAP = {'date': 'trading_date', 'stock_id': 'stock_id', 'volume': 'transaction_volume',
+              'fee_rate': 'fee_rate', 'transaction_type': 'transaction_type'}
+METHODS = {'競價', '議借', '定價'}
+MAX_REQUESTS_PER_RUN = 90
 
 
 def _aggregate_lending(df: pd.DataFrame) -> pd.DataFrame:
-    """將逐筆借券資料彙整成每日每股摘要指標。
-
-    Returns DataFrame with: stock_id, trading_date, lending_balance,
-        lending_fee_rate, lending_transaction_count
-    """
     if df.empty:
         return pd.DataFrame()
-
-    df = df.copy()
-    rename = {"date": "trading_date"}
-    df = df.rename(columns=rename)
-
-    df["trading_date"] = pd.to_datetime(df["trading_date"], errors="coerce").dt.date
-    df["stock_id"] = df["stock_id"].astype(str)
-    df = df.dropna(subset=["stock_id", "trading_date"])
-    df = df[df["stock_id"].str.fullmatch(r"\d{4}")]
-
-    vol_col = next((c for c in ["volume", "Volume", "quantity"] if c in df.columns), None)
-    fee_col = next((c for c in ["fee_rate", "FeeRate", "lending_fee_rate", "rate"] if c in df.columns), None)
-    type_col = next((c for c in ["transaction_type", "TransactionType", "type"] if c in df.columns), None)
-
-    if vol_col is None:
-        return pd.DataFrame()
-
-    df["volume_n"] = pd.to_numeric(df[vol_col], errors="coerce").fillna(0)
-    df["fee_n"] = pd.to_numeric(df[fee_col], errors="coerce").fillna(0) if fee_col else 0
-
-    # 區分借出 vs 還券（若 type_col 存在）
-    if type_col is not None:
-        type_lower = df[type_col].astype(str).str.lower()
-        is_lend = type_lower.str.contains("|".join(_LEND_KEYWORDS), na=False)
-        is_return = type_lower.str.contains("|".join(_RETURN_KEYWORDS), na=False)
-        df["net_vol"] = df["volume_n"] * is_lend.astype(int) - df["volume_n"] * is_return.astype(int)
-        df["is_lend"] = is_lend
-    else:
-        # 若無法區分類型，全部視為借出
-        df["net_vol"] = df["volume_n"]
-        df["is_lend"] = True
-
-    results = []
-    for (stock_id, trading_date), grp in df.groupby(["stock_id", "trading_date"]):
-        lend_grp = grp[grp["is_lend"]]
-        net_balance = int(grp["net_vol"].sum())
-        lend_count = int(lend_grp["is_lend"].sum())
-
-        # 加權平均費率（以借出量加權）
-        total_vol = lend_grp["volume_n"].sum()
-        if total_vol > 0:
-            fee_rate = float((lend_grp["fee_n"] * lend_grp["volume_n"]).sum() / total_vol)
-        else:
-            fee_rate = float(grp["fee_n"].mean()) if not grp.empty else 0.0
-
-        results.append({
-            "stock_id": stock_id,
-            "trading_date": trading_date,
-            "lending_balance": net_balance,
-            "lending_fee_rate": fee_rate,
-            "lending_transaction_count": lend_count,
-        })
-
-    return pd.DataFrame(results) if results else pd.DataFrame()
+    missing = set(COLUMN_MAP) - set(df.columns)
+    if missing:
+        raise FinMindError(f'{DATASET}: missing columns {sorted(missing)}')
+    frame = df.rename(columns=COLUMN_MAP).copy()
+    frame['stock_id'] = frame.stock_id.astype(str)
+    frame = frame[frame.stock_id.str.fullmatch(r'\d{4}')].copy()
+    frame['trading_date'] = pd.to_datetime(frame.trading_date, errors='coerce').dt.date
+    for c in ('transaction_volume', 'fee_rate'):
+        frame[c] = pd.to_numeric(frame[c], errors='coerce')
+    invalid = (frame.trading_date.isna() | ~frame.transaction_type.isin(METHODS)
+               | ~np.isfinite(frame.transaction_volume) | (frame.transaction_volume <= 0)
+               | (frame.transaction_volume % 1 != 0)
+               | ~np.isfinite(frame.fee_rate) | (frame.fee_rate < 0))
+    if invalid.any():
+        raise FinMindError(f'{DATASET}: invalid date, volume, fee or transaction method')
+    records = []
+    for (sid, day), g in frame.groupby(['stock_id', 'trading_date']):
+        volume = int(g.transaction_volume.sum())
+        records.append(dict(stock_id=sid, trading_date=day,
+                            transaction_volume=volume, transaction_count=len(g),
+                            fee_rate=float((g.transaction_volume * g.fee_rate).sum() / volume),
+                            methods_json=g.transaction_type.value_counts().astype(int).to_dict()))
+    return pd.DataFrame(records)
 
 
-def run(config, db_session: Session, **kwargs) -> Dict:
-    job_id = start_job(db_session, "ingest_securities_lending", commit=True)
-    logs: Dict = {}
+def run(config, db_session, *, start_date=None, end_date=None, max_requests=MAX_REQUESTS_PER_RUN, **kwargs):
+    today = datetime.now(ZoneInfo(config.tz)).date()
+    published = get_latest_trading_day(db_session)
+    end_date = end_date or min(resolve_ingest_end_date(today), published or today - timedelta(days=1))
+    start_date = start_date or end_date - timedelta(days=89)
+    if start_date > end_date or (published is not None and end_date > published):
+        raise ValueError('Lending range must be ordered and end on a published trading day')
+    if not 1 <= max_requests <= MAX_REQUESTS_PER_RUN:
+        raise ValueError(f'max_requests must be 1..{MAX_REQUESTS_PER_RUN}')
+    days = db_session.execute(select(TradingCalendar.trading_date).where(
+        TradingCalendar.is_open.is_(True), TradingCalendar.trading_date.between(start_date, end_date)
+    ).order_by(TradingCalendar.trading_date)).scalars().all()
+    if not days:
+        raise FinMindError('No open trading days in lending range; populate the calendar first')
+    completed = set(db_session.execute(select(SecuritiesLendingDay.trading_date).where(
+        SecuritiesLendingDay.trading_date.between(start_date, end_date))).scalars())
+    pending = [day for day in days if day not in completed]
+    if len(pending) > max_requests:
+        raise ValueError(f'Lending needs {len(pending)} requests; split the range (budget {max_requests})')
+    job = start_job(db_session, 'ingest_securities_lending', commit=True)
+    logs = dict(start_date=str(start_date), end_date=str(end_date), dataset=DATASET,
+                planned_requests=len(pending), requests=0, rows=0, completed_days=len(completed),
+                semantics='transactions_not_balances', volume_unit='finmind_reported',
+                historical_publication_verified=False)
     try:
-        today = datetime.now(ZoneInfo(config.tz)).date()
-        default_start = max(
-            today - timedelta(days=365 * config.train_lookback_years),
-            date(2010, 1, 1),
-        )
-        start_date = _resolve_start_date(db_session, default_start)
-        end_date = today
-
-        logs["start_date"] = start_date.isoformat()
-        logs["end_date"] = end_date.isoformat()
-
-        if start_date > end_date:
-            logs["rows"] = 0
-            logs["skip_reason"] = "already_up_to_date"
-            finish_job(db_session, job_id, "success", logs=logs)
-            return {"rows": 0}
-
-        stock_ids = _load_stock_ids(db_session)
-        if not stock_ids:
-            logs["rows"] = 0
-            finish_job(db_session, job_id, "success", logs=logs)
-            return {"rows": 0}
-
-        logs["stocks"] = len(stock_ids)
-        logger.info(
-            "[ingest_securities_lending] %s ~ %s，%d 檔",
-            start_date, end_date, len(stock_ids),
-        )
-
-        # SecuritiesLending 資料量大（逐筆），使用 90 天 chunk 避免超時
-        CHUNK_DAYS = 90
-        total_rows = 0
-        commit_buffer: List[Dict] = []
-
-        date_ranges: List[tuple] = []
-        cur = start_date
-        while cur <= end_date:
-            chunk_end = min(cur + timedelta(days=CHUNK_DAYS - 1), end_date)
-            date_ranges.append((cur, chunk_end))
-            cur = chunk_end + timedelta(days=1)
-
-        for i, stock_id in enumerate(stock_ids, 1):
-            if i % 200 == 0:
-                update_job(
-                    db_session, job_id,
-                    logs={**logs, "progress": f"{i}/{len(stock_ids)}", "rows": total_rows},
-                    commit=True,
-                )
-                logger.info("[%d/%d] rows=%d", i, len(stock_ids), total_rows)
-
-            for range_start, range_end in date_ranges:
-                try:
-                    df = fetch_dataset(
-                        dataset=DATASET,
-                        start_date=range_start,
-                        end_date=range_end,
-                        token=config.finmind_token,
-                        data_id=stock_id,
-                        requests_per_hour=getattr(config, "finmind_requests_per_hour", 600),
-                        max_retries=getattr(config, "finmind_retry_max", 3),
-                        backoff_seconds=getattr(config, "finmind_retry_backoff", 5),
-                        timeout=120,
-                    )
-                except FinMindError as exc:
-                    # 配額錯誤（402/429）→ 後續所有股票都會失敗，立即中止整個 ingest
-                    msg = str(exc)
-                    is_quota = (
-                        "402" in msg or "429" in msg
-                        or "quota" in msg.lower()
-                        or "超過" in msg
-                    )
-                    if is_quota:
-                        logger.error(
-                            "[ingest_securities_lending] FinMind 配額錯誤 stock_id=%s "
-                            "range=%s~%s: %s",
-                            stock_id, range_start, range_end, exc,
-                        )
-                        raise
-                    # 其他單股暫時錯誤（資料量大可能超時）：警告後繼續下一個 range/stock
-                    logger.warning(
-                        "[ingest_securities_lending] %s %s~%s 抓取失敗（跳過此區間）: %s",
-                        stock_id, range_start, range_end, exc,
-                    )
-                    continue
-
-                if df is None or df.empty:
-                    continue
-
-                agg = _aggregate_lending(df)
-                if agg.empty:
-                    continue
-
-                commit_buffer.extend(agg.to_dict("records"))
-
-                if len(commit_buffer) >= 5000:
-                    _flush(db_session, commit_buffer)
-                    total_rows += len(commit_buffer)
-                    commit_buffer.clear()
-
-        if commit_buffer:
-            _flush(db_session, commit_buffer)
-            total_rows += len(commit_buffer)
-
-        logs["rows"] = total_rows
-        logger.info("ingest_securities_lending: %d 筆", total_rows)
-        finish_job(db_session, job_id, "success", logs=logs)
-        return {"rows": total_rows}
-
+        for day in pending:
+            df = fetch_dataset(dataset=DATASET, start_date=day, end_date=day, data_id=None,
+                               token=config.finmind_token,
+                               requests_per_hour=config.finmind_requests_per_hour,
+                               max_retries=config.finmind_retry_max,
+                               backoff_seconds=config.finmind_retry_backoff, timeout=120)
+            logs['requests'] += 1
+            if df.empty:
+                raise FinMindError(f'{DATASET}: empty published market day {day}; retry later')
+            if 'date' not in df or set(pd.to_datetime(df['date'], errors='coerce').dt.date) != {day}:
+                raise FinMindError(f'{DATASET}: unexpected response date for {day}')
+            rows = _aggregate_lending(df)
+            if rows.empty:
+                raise FinMindError(f'{DATASET}: no valid four-digit securities for {day}')
+            # Preserve duplicate trades and non-stock source evidence exactly. Only
+            # normalized four-digit codes become SecuritiesLendingDaily stock rows.
+            payload = json.loads(df.to_json(orient='records', force_ascii=False))
+            canonical = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(',', ':'))
+            db_session.add_all(SecuritiesLendingDaily(**row) for row in rows.to_dict('records'))
+            db_session.add(SecuritiesLendingDay(trading_date=day, observed_at=datetime.utcnow(),
+                source_rows=len(df), stock_rows=len(rows), payload_json=payload,
+                payload_sha256=hashlib.sha256(canonical.encode()).hexdigest()))
+            logs['rows'] += len(rows)
+            logs['last_completed_day'] = str(day)
+            update_job(db_session, job, logs=logs)
+            db_session.commit()  # checkpoint and rows succeed/fail together
+        finish_job(db_session, job, 'success', logs=logs)
+        db_session.commit()
+        return logs
     except Exception as exc:
-        logger.error("[ingest_securities_lending] 失敗: %s", exc, exc_info=True)
-        try:
-            db_session.rollback()
-        except Exception as rb_exc:
-            logger.warning("[ingest_securities_lending] rollback 失敗: %s", rb_exc)
-        try:
-            finish_job(db_session, job_id, "failed", error_text=str(exc), logs=logs)
-        except Exception as finish_exc:
-            logger.warning(
-                "[ingest_securities_lending] finish_job 寫入失敗（保留原始例外）: %s",
-                finish_exc,
-            )
+        db_session.rollback()
+        finish_job(db_session, job, 'failed', error_text=str(exc), logs=logs)
+        db_session.commit()
         raise
 
 
-def _flush(session: Session, buffer: List[Dict]) -> None:
-    stmt = insert(RawSecuritiesLending).values(buffer)
-    stmt = stmt.on_duplicate_key_update({col: stmt.inserted[col] for col in UPDATE_COLS})
-    session.execute(stmt)
-    session.commit()
+if __name__ == '__main__':
+    import argparse
+    from pathlib import Path
+    from app.config import load_config
+    from app.db import get_session
+    from app.file_lock import file_lock
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--start', type=date.fromisoformat)
+    parser.add_argument('--end', type=date.fromisoformat)
+    parser.add_argument('--max-requests', type=int, default=MAX_REQUESTS_PER_RUN)
+    args = parser.parse_args()
+    with file_lock(Path('.cache/research-or-update.lock'), timeout=0):
+        with get_session() as session:
+            print(json.dumps(run(load_config(), session, start_date=args.start, end_date=args.end,
+                                 max_requests=args.max_requests), ensure_ascii=False, indent=2))
