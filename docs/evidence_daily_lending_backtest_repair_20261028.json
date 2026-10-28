@@ -1,0 +1,201 @@
+{
+  "schema": "daily_lending_backtest_repair_acceptance_v1",
+  "observed_at": "2026-10-28T07:36:55.095539+00:00",
+  "scope": [
+    "Taiwan daily data update",
+    "securities lending transaction ingestion",
+    "research backtest correctness"
+  ],
+  "excluded_scope": [
+    "US equities",
+    "original POC changes",
+    "sealed result regeneration",
+    "live trading qualification"
+  ],
+  "code_commits": [
+    "f0726cb fix: repair daily market coverage and bound FinMind updates",
+    "ab2a896 fix: ingest lending transactions with resumable daily checkpoints",
+    "3944b08 fix: rebuild historical labels and validate institutional stock codes",
+    "7868e2a fix: enforce realistic backtest accounting and execution defaults"
+  ],
+  "daily_update": {
+    "provider": "finmind",
+    "publication_cutoff_taipei_hour": 21,
+    "weekday_schedule_taipei": "21:30",
+    "latest_published_date": "2026-10-27",
+    "current_market_coverage": {
+      "TWSE": 1088,
+      "TPEX": 872
+    },
+    "data_ready": true,
+    "fixes": [
+      "reject mismatched TWSE/TPEX latest dates",
+      "repair dates absent from both markets",
+      "use one explicit published end date",
+      "use documented all-market chip/PER queries",
+      "reject non-four-digit institutional stock records"
+    ]
+  },
+  "historical_repair": {
+    "days": [
+      "2026-05-21",
+      "2026-05-22",
+      "2026-07-24",
+      "2026-07-27",
+      "2026-07-29",
+      "2026-07-30",
+      "2026-08-14",
+      "2026-08-17"
+    ],
+    "datasets": [
+      "TaiwanStockPrice",
+      "TaiwanStockInstitutionalInvestorsBuySell",
+      "TaiwanStockMarginPurchaseShortSale",
+      "TaiwanStockPER"
+    ],
+    "completed_all_market_requests": 32,
+    "feature_rows_rebuilt": 332223,
+    "label_rows_rebuilt": 302925,
+    "label_recompute_from": "2026-03-01",
+    "new_model_id": "ranker_lgbm_20210826_20260825_8f02bc28e47710bf_f732728f1b561a05",
+    "new_model_identity": "training input content and parameters fingerprint; old model artifacts retained"
+  },
+  "lending": {
+    "dataset": "TaiwanStockSecuritiesLending",
+    "source_reference": "https://finmind.github.io/tutor/TaiwanMarket/Chip/#taiwanstocksecuritieslending",
+    "start": "2026-07-30",
+    "end": "2026-10-27",
+    "trading_days": 59,
+    "aggregate_rows": 24057,
+    "backfill_requests": 59,
+    "rerun_requests": 0,
+    "semantics": "borrowing transaction flows, not outstanding balances",
+    "transaction_methods": [
+      "競價",
+      "議借",
+      "定價"
+    ],
+    "volume_unit": "finmind_reported; not normalized to shares",
+    "original_response_retained": true,
+    "historical_publication_verified": false,
+    "default_production_features_added": false,
+    "legacy_table_preserved": true
+  },
+  "backtest_fixes": [
+    "default next-session signals and nonzero slippage",
+    "cash-conserving daily mark-to-market rotation accounting",
+    "remove default -50% loss clipping",
+    "include terminal settlement in final NAV",
+    "actual zero-cost equal-weight benchmark instead of zero placeholders",
+    "respect label horizon in training cutoff and exclude insufficient history",
+    "explicit LightGBM/risk-control failures",
+    "content-based model identity",
+    "unique output names and refuse evidence overwrite",
+    "CLI help renders while a data update holds the lock"
+  ],
+  "validation": {
+    "make_test": {
+      "passed": 7628,
+      "warnings": 40,
+      "seconds": 246.8
+    },
+    "make_pipeline_with_new_training": "passed",
+    "make_pipeline_rerun": "passed",
+    "idempotency_equal": true,
+    "idempotency_tables": {
+      "raw_prices": {
+        "max_date": "2026-10-27",
+        "latest_rows": 2359,
+        "total_rows": 5348635,
+        "latest_sha256": "b906632bc7755ecb0aee959062be2200ff93ae59de91eceb1b80bde25becd924"
+      },
+      "raw_institutional": {
+        "max_date": "2026-10-27",
+        "latest_rows": 1863,
+        "total_rows": 3841214,
+        "latest_sha256": "9778870cc6fc52a2088ffe278d7a2f3536cb49e28795bcf6c2e7ae1bb6352e09"
+      },
+      "raw_margin_short": {
+        "max_date": "2026-10-27",
+        "latest_rows": 1871,
+        "total_rows": 4109248,
+        "latest_sha256": "08921d31a1d37d52667cb2c9e962a94deb9874d50976020c040b6226e13c8085"
+      },
+      "raw_per": {
+        "max_date": "2026-10-27",
+        "latest_rows": 1981,
+        "total_rows": 656984,
+        "latest_sha256": "da7723b009f6acee8d6507bf4a5567f0cc4b522a2a78844bcd4a31c3c48ba750"
+      },
+      "features": {
+        "max_date": "2026-10-27",
+        "latest_rows": 2125,
+        "total_rows": 4666275,
+        "latest_sha256": "b6d5941b34d4bf2ab13bc409bf0241ec763fd936b402a94024455e388974ada2"
+      },
+      "labels": {
+        "max_date": "2026-09-22",
+        "latest_rows": 1867,
+        "total_rows": 5132094,
+        "latest_sha256": "d5956442901ea4b84180a0411d43d544518b2cb0a9c454e2bcaa7d4578709cbd"
+      },
+      "picks": {
+        "max_date": "2026-10-27",
+        "latest_rows": 5,
+        "total_rows": 452,
+        "latest_sha256": "6fa70ebe895b83f1af5ad7388ae4c12242ca8d54a130911901891d79a2c70ea2"
+      },
+      "securities_lending_daily": {
+        "max_date": "2026-10-27",
+        "latest_rows": 486,
+        "total_rows": 24057,
+        "latest_sha256": "dfd5f9ffb7febfa85901ba8533bfa0d63e79138db8106367640c254ca7427981"
+      },
+      "securities_lending_days": {
+        "max_date": "2026-10-27",
+        "latest_rows": 1,
+        "total_rows": 59,
+        "latest_sha256": "514d912f133d64baa00a65e3f78126acb11f83270e84d6f67beb7302fd9ece8d"
+      },
+      "model_versions": {
+        "count": 17,
+        "latest_id": "ranker_lgbm_20210826_20260825_8f02bc28e47710bf_f732728f1b561a05"
+      }
+    },
+    "make_api": "passed",
+    "curl": {
+      "/health": "200 ok",
+      "/picks": "200; 5 picks",
+      "/models": "200; 17 model versions",
+      "/jobs?limit=10": "200; 10 jobs"
+    },
+    "real_data_smoke": {
+      "dates": [
+        "2026-08-03",
+        "2026-08-31"
+      ],
+      "specified_stocks": 20,
+      "trades": 9,
+      "nav_observations": 22,
+      "cash_and_costs_reconciled": true,
+      "purpose": "engineering verification; not a newly qualified strategy"
+    },
+    "synthetic_account_test": "80% unsold drawdown is visible, losses are not clipped, cash cannot be spent twice"
+  },
+  "preservation": {
+    "protected_files": 1192,
+    "changed_protected_files": 0,
+    "env_unchanged": true,
+    "original_poc_and_sealed_results_reexecuted": false,
+    "unrelated_untracked_file_untouched": "artifacts/quant_system_gap_analysis_20260710.md"
+  },
+  "remaining_validation_limits": [
+    "Corporate-action/adjusted-price reconciliation remains incomplete; factor_missing_ratio was 0.2419344386 in the feature rebuild input window. Coverage freshness is not adjustment certification.",
+    "Borrowing volume unit and historical actual availability need independent reconciliation before adding trading features.",
+    "Historical point-in-time universe, unseen validation, exchange fills/lot sizes/price-limit capacity and full trial accounting are not certified by these engineering checks.",
+    "Legacy non-four-digit institutional rows outside repaired dates were not changed."
+  ],
+  "strategy_ready": false,
+  "live_qualified": false,
+  "local_backup_and_logs": ".cache/maintenance/daily_lending_backtest_20261028"
+}
