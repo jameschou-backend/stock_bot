@@ -1,0 +1,10 @@
+[
+  {
+    "signal_date": "2024-12-31",
+    "execution_date": "2025-01-02",
+    "stock_id": "0050",
+    "rank_score": null,
+    "previous_nav": 1000000.0,
+    "target_budget": 1000000.0
+  }
+]

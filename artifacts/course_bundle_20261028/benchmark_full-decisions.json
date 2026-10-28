@@ -1,0 +1,10 @@
+[
+  {
+    "signal_date": "2021-10-22",
+    "execution_date": "2021-10-25",
+    "stock_id": "0050",
+    "rank_score": null,
+    "previous_nav": 1000000.0,
+    "target_budget": 1000000.0
+  }
+]

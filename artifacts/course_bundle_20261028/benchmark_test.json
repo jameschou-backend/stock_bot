@@ -1,0 +1,56 @@
+{
+  "config": {
+    "weights": 1,
+    "threshold": 80,
+    "exit_ma": 10,
+    "entries": "breakout",
+    "baseline": false
+  },
+  "summary": {
+    "start": "2025-01-02",
+    "end": "2026-10-22",
+    "total_return": 1.2633356572672572,
+    "cagr": 0.573685791846595,
+    "max_drawdown": -0.2748498980954953,
+    "sharpe": 1.836788673182974,
+    "completed_trades": 0,
+    "win_rate": null,
+    "initial_nav": 1000000.0,
+    "final_net_nav": 2263335.657267257,
+    "commissions_and_taxes": 1422.9722645230547,
+    "traded_notional": 998577.027735477,
+    "annual_one_way_turnover": 0.18718262616826717,
+    "average_positions": 1.0,
+    "blocked_orders": 0,
+    "gap_rejections": 0,
+    "stop_exits": 0,
+    "verified_halt_hold_days": 5,
+    "terminal_positions": 1,
+    "terminal_liquidation_cost_estimate": 7773.039849032785
+  },
+  "trades": [
+    {
+      "date": "2025-01-02",
+      "stock_id": "0050",
+      "side": "BUY",
+      "signal_date": "2024-12-31",
+      "adjusted_price": 47.00254303127993,
+      "adjusted_units": 21245.17022559672,
+      "notional": 998577.027735477,
+      "fee": 1422.9722645230547,
+      "tax": 0.0,
+      "net_pnl": null,
+      "reason": "benchmark"
+    }
+  ],
+  "holdings": [
+    {
+      "stock_id": "0050",
+      "units": 21245.17022559672,
+      "entry_outlay": 1000000.0,
+      "stop": 43.712365019090335,
+      "entry_date": "2025-01-02",
+      "signal_date": "2024-12-31"
+    }
+  ]
+}

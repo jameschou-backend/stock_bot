@@ -1,0 +1,4586 @@
+[
+  {
+    "signal_date": "2021-10-22",
+    "execution_date": "2021-10-25",
+    "stock_id": "3035",
+    "rank_score": 95.55405405405405,
+    "previous_nav": 1000000.0,
+    "target_budget": 200000.0
+  },
+  {
+    "signal_date": "2021-10-22",
+    "execution_date": "2021-10-25",
+    "stock_id": "3443",
+    "rank_score": 90.82432432432432,
+    "previous_nav": 1000000.0,
+    "target_budget": 200000.0
+  },
+  {
+    "signal_date": "2021-10-22",
+    "execution_date": "2021-10-25",
+    "stock_id": "4927",
+    "rank_score": 89.12162162162161,
+    "previous_nav": 1000000.0,
+    "target_budget": 200000.0
+  },
+  {
+    "signal_date": "2021-10-22",
+    "execution_date": "2021-10-25",
+    "stock_id": "2498",
+    "rank_score": 88.86486486486487,
+    "previous_nav": 1000000.0,
+    "target_budget": 200000.0
+  },
+  {
+    "signal_date": "2021-10-22",
+    "execution_date": "2021-10-25",
+    "stock_id": "3141",
+    "rank_score": 88.17567567567566,
+    "previous_nav": 1000000.0,
+    "target_budget": 200000.0
+  },
+  {
+    "signal_date": "2021-10-26",
+    "execution_date": "2021-10-27",
+    "stock_id": "4739",
+    "rank_score": 97.29411764705881,
+    "previous_nav": 1014118.6795072929,
+    "target_budget": 184728.5348877849
+  },
+  {
+    "signal_date": "2021-11-05",
+    "execution_date": "2021-11-08",
+    "stock_id": "2409",
+    "rank_score": 83.80392156862744,
+    "previous_nav": 1128640.0187924318,
+    "target_budget": 181479.70034090435
+  },
+  {
+    "signal_date": "2021-11-08",
+    "execution_date": "2021-11-09",
+    "stock_id": "2618",
+    "rank_score": 93.63636363636363,
+    "previous_nav": 1121053.3373903753,
+    "target_budget": 224210.66747807508
+  },
+  {
+    "signal_date": "2021-11-08",
+    "execution_date": "2021-11-09",
+    "stock_id": "2610",
+    "rank_score": 91.63636363636363,
+    "previous_nav": 1121053.3373903753,
+    "target_budget": 224210.66747807508
+  },
+  {
+    "signal_date": "2021-11-08",
+    "execution_date": "2021-11-09",
+    "stock_id": "3515",
+    "rank_score": 83.45454545454544,
+    "previous_nav": 1121053.3373903753,
+    "target_budget": 190400.61947824818
+  },
+  {
+    "signal_date": "2021-11-15",
+    "execution_date": "2021-11-16",
+    "stock_id": "2436",
+    "rank_score": 94.7185628742515,
+    "previous_nav": 1285836.2613937794,
+    "target_budget": 173582.1309843492
+  },
+  {
+    "signal_date": "2021-12-01",
+    "execution_date": "2021-12-02",
+    "stock_id": "3483",
+    "rank_score": 96.96666666666665,
+    "previous_nav": 1199684.5541047768,
+    "target_budget": 239936.91082095535
+  },
+  {
+    "signal_date": "2021-12-01",
+    "execution_date": "2021-12-02",
+    "stock_id": "3217",
+    "rank_score": 96.42222222222222,
+    "previous_nav": 1199684.5541047768,
+    "target_budget": 239936.91082095535
+  },
+  {
+    "signal_date": "2021-12-01",
+    "execution_date": "2021-12-02",
+    "stock_id": "3680",
+    "rank_score": 91.05555555555556,
+    "previous_nav": 1199684.5541047768,
+    "target_budget": 239936.91082095535
+  },
+  {
+    "signal_date": "2021-12-01",
+    "execution_date": "2021-12-02",
+    "stock_id": "2303",
+    "rank_score": 80.16666666666666,
+    "previous_nav": 1199684.5541047768,
+    "target_budget": 239936.91082095535
+  },
+  {
+    "signal_date": "2021-12-01",
+    "execution_date": "2021-12-02",
+    "stock_id": "2355",
+    "rank_score": 73.93333333333332,
+    "previous_nav": 1199684.5541047768,
+    "target_budget": 239936.9108209553
+  },
+  {
+    "signal_date": "2021-12-06",
+    "execution_date": "2021-12-07",
+    "stock_id": "3508",
+    "rank_score": 88.15789473684208,
+    "previous_nav": 1202986.072846726,
+    "target_budget": 221615.9700072809
+  },
+  {
+    "signal_date": "2021-12-08",
+    "execution_date": "2021-12-09",
+    "stock_id": "3624",
+    "rank_score": 94.01315789473684,
+    "previous_nav": 1188883.9223225466,
+    "target_budget": 234540.57464044608
+  },
+  {
+    "signal_date": "2021-12-09",
+    "execution_date": "2021-12-10",
+    "stock_id": "2615",
+    "rank_score": 92.0253164556962,
+    "previous_nav": 1221304.5200050306,
+    "target_budget": 222164.55752310564
+  },
+  {
+    "signal_date": "2021-12-16",
+    "execution_date": "2021-12-17",
+    "stock_id": "3491",
+    "rank_score": 92.55555555555554,
+    "previous_nav": 1157861.4833236625,
+    "target_budget": 231572.2966647325
+  },
+  {
+    "signal_date": "2021-12-16",
+    "execution_date": "2021-12-17",
+    "stock_id": "8069",
+    "rank_score": 90.22222222222221,
+    "previous_nav": 1157861.4833236625,
+    "target_budget": 231572.2966647325
+  },
+  {
+    "signal_date": "2021-12-16",
+    "execution_date": "2021-12-17",
+    "stock_id": "3141",
+    "rank_score": 84.1111111111111,
+    "previous_nav": 1157861.4833236625,
+    "target_budget": 202301.1422415144
+  },
+  {
+    "signal_date": "2021-12-17",
+    "execution_date": "2021-12-20",
+    "stock_id": "2014",
+    "rank_score": 92.75862068965516,
+    "previous_nav": 1123775.6280608159,
+    "target_budget": 224755.12561216316
+  },
+  {
+    "signal_date": "2021-12-17",
+    "execution_date": "2021-12-20",
+    "stock_id": "3035",
+    "rank_score": 91.69655172413792,
+    "previous_nav": 1123775.6280608159,
+    "target_budget": 224125.21496433765
+  },
+  {
+    "signal_date": "2021-12-21",
+    "execution_date": "2021-12-22",
+    "stock_id": "2606",
+    "rank_score": 90.33333333333333,
+    "previous_nav": 1108238.205768668,
+    "target_budget": 221647.64115373362
+  },
+  {
+    "signal_date": "2021-12-21",
+    "execution_date": "2021-12-22",
+    "stock_id": "2103",
+    "rank_score": 87.66666666666666,
+    "previous_nav": 1108238.205768668,
+    "target_budget": 184336.4290101122
+  },
+  {
+    "signal_date": "2021-12-27",
+    "execution_date": "2021-12-28",
+    "stock_id": "6266",
+    "rank_score": 86.74418604651163,
+    "previous_nav": 1075972.2550599256,
+    "target_budget": 215194.45101198513
+  },
+  {
+    "signal_date": "2021-12-27",
+    "execution_date": "2021-12-28",
+    "stock_id": "2340",
+    "rank_score": 85.984496124031,
+    "previous_nav": 1075972.2550599256,
+    "target_budget": 214541.8977621573
+  },
+  {
+    "signal_date": "2021-12-28",
+    "execution_date": "2021-12-29",
+    "stock_id": "1560",
+    "rank_score": 89.33846153846153,
+    "previous_nav": 1086924.9460993279,
+    "target_budget": 217384.9892198656
+  },
+  {
+    "signal_date": "2021-12-30",
+    "execution_date": "2022-01-03",
+    "stock_id": "3624",
+    "rank_score": 86.87603305785123,
+    "previous_nav": 1087004.3770773164,
+    "target_budget": 217400.8754154633
+  },
+  {
+    "signal_date": "2021-12-30",
+    "execution_date": "2022-01-03",
+    "stock_id": "6235",
+    "rank_score": 86.06611570247932,
+    "previous_nav": 1087004.3770773164,
+    "target_budget": 170438.16726894578
+  },
+  {
+    "signal_date": "2022-01-03",
+    "execution_date": "2022-01-04",
+    "stock_id": "6781",
+    "rank_score": 93.10294117647058,
+    "previous_nav": 1062336.3462869183,
+    "target_budget": 212467.26925738365
+  },
+  {
+    "signal_date": "2022-01-03",
+    "execution_date": "2022-01-04",
+    "stock_id": "8069",
+    "rank_score": 87.85294117647058,
+    "previous_nav": 1062336.3462869183,
+    "target_budget": 170771.2518159942
+  },
+  {
+    "signal_date": "2022-01-12",
+    "execution_date": "2022-01-13",
+    "stock_id": "6438",
+    "rank_score": 95.27152317880794,
+    "previous_nav": 1022285.1793617436,
+    "target_budget": 204457.03587234873
+  },
+  {
+    "signal_date": "2022-01-12",
+    "execution_date": "2022-01-13",
+    "stock_id": "5258",
+    "rank_score": 85.45695364238411,
+    "previous_nav": 1022285.1793617436,
+    "target_budget": 204457.03587234873
+  },
+  {
+    "signal_date": "2022-01-12",
+    "execution_date": "2022-01-13",
+    "stock_id": "5880",
+    "rank_score": 81.82781456953643,
+    "previous_nav": 1022285.1793617436,
+    "target_budget": 204457.03587234873
+  },
+  {
+    "signal_date": "2022-01-12",
+    "execution_date": "2022-01-13",
+    "stock_id": "2881",
+    "rank_score": 78.3046357615894,
+    "previous_nav": 1022285.1793617436,
+    "target_budget": 204457.03587234873
+  },
+  {
+    "signal_date": "2022-01-12",
+    "execution_date": "2022-01-13",
+    "stock_id": "2884",
+    "rank_score": 76.35761589403972,
+    "previous_nav": 1022285.1793617436,
+    "target_budget": 203545.19766973282
+  },
+  {
+    "signal_date": "2022-01-13",
+    "execution_date": "2022-01-14",
+    "stock_id": "2882",
+    "rank_score": 89.79166666666666,
+    "previous_nav": 1014083.5604528452,
+    "target_budget": 188845.24342099132
+  },
+  {
+    "signal_date": "2022-01-17",
+    "execution_date": "2022-01-18",
+    "stock_id": "8155",
+    "rank_score": 94.94736842105262,
+    "previous_nav": 981906.4087901554,
+    "target_budget": 188845.24342099135
+  },
+  {
+    "signal_date": "2022-02-08",
+    "execution_date": "2022-02-09",
+    "stock_id": "3526",
+    "rank_score": 95.8688524590164,
+    "previous_nav": 950417.1097713545,
+    "target_budget": 190083.4219542709
+  },
+  {
+    "signal_date": "2022-02-08",
+    "execution_date": "2022-02-09",
+    "stock_id": "3324",
+    "rank_score": 94.0327868852459,
+    "previous_nav": 950417.1097713545,
+    "target_budget": 190083.4219542709
+  },
+  {
+    "signal_date": "2022-02-08",
+    "execution_date": "2022-02-09",
+    "stock_id": "2886",
+    "rank_score": 90.70491803278688,
+    "previous_nav": 950417.1097713545,
+    "target_budget": 190083.4219542709
+  },
+  {
+    "signal_date": "2022-02-08",
+    "execution_date": "2022-02-09",
+    "stock_id": "5880",
+    "rank_score": 88.63934426229507,
+    "previous_nav": 950417.1097713545,
+    "target_budget": 190083.4219542709
+  },
+  {
+    "signal_date": "2022-02-08",
+    "execution_date": "2022-02-09",
+    "stock_id": "3231",
+    "rank_score": 87.49180327868851,
+    "previous_nav": 950417.1097713545,
+    "target_budget": 190083.42195427083
+  },
+  {
+    "signal_date": "2022-02-10",
+    "execution_date": "2022-02-11",
+    "stock_id": "1760",
+    "rank_score": 87.13636363636363,
+    "previous_nav": 915545.8124195389,
+    "target_budget": 183109.16248390777
+  },
+  {
+    "signal_date": "2022-02-10",
+    "execution_date": "2022-02-11",
+    "stock_id": "3661",
+    "rank_score": 85.75757575757575,
+    "previous_nav": 915545.8124195389,
+    "target_budget": 172549.58552668383
+  },
+  {
+    "signal_date": "2022-02-16",
+    "execution_date": "2022-02-17",
+    "stock_id": "5321",
+    "rank_score": 89.31372549019608,
+    "previous_nav": 919290.333376481,
+    "target_budget": 175569.16022034537
+  },
+  {
+    "signal_date": "2022-02-18",
+    "execution_date": "2022-02-21",
+    "stock_id": "8299",
+    "rank_score": 90.51612903225806,
+    "previous_nav": 921911.3752490138,
+    "target_budget": 184382.27504980276
+  },
+  {
+    "signal_date": "2022-02-18",
+    "execution_date": "2022-02-21",
+    "stock_id": "3260",
+    "rank_score": 90.29032258064515,
+    "previous_nav": 921911.3752490138,
+    "target_budget": 184382.27504980276
+  },
+  {
+    "signal_date": "2022-03-01",
+    "execution_date": "2022-03-02",
+    "stock_id": "3035",
+    "rank_score": 96.63999999999999,
+    "previous_nav": 878955.1943911285,
+    "target_budget": 175791.0388782257
+  },
+  {
+    "signal_date": "2022-03-01",
+    "execution_date": "2022-03-02",
+    "stock_id": "2603",
+    "rank_score": 92.16,
+    "previous_nav": 878955.1943911285,
+    "target_budget": 175791.0388782257
+  },
+  {
+    "signal_date": "2022-03-01",
+    "execution_date": "2022-03-02",
+    "stock_id": "1773",
+    "rank_score": 83.32666666666665,
+    "previous_nav": 878955.1943911285,
+    "target_budget": 175791.0388782257
+  },
+  {
+    "signal_date": "2022-03-01",
+    "execution_date": "2022-03-02",
+    "stock_id": "1605",
+    "rank_score": 82.92,
+    "previous_nav": 878955.1943911285,
+    "target_budget": 150534.6625034352
+  },
+  {
+    "signal_date": "2022-03-10",
+    "execution_date": "2022-03-11",
+    "stock_id": "2637",
+    "rank_score": 95.91666666666667,
+    "previous_nav": 843448.3705315749,
+    "target_budget": 168689.67410631498
+  },
+  {
+    "signal_date": "2022-03-10",
+    "execution_date": "2022-03-11",
+    "stock_id": "2606",
+    "rank_score": 91.95,
+    "previous_nav": 843448.3705315749,
+    "target_budget": 168689.67410631498
+  },
+  {
+    "signal_date": "2022-03-11",
+    "execution_date": "2022-03-14",
+    "stock_id": "8440",
+    "rank_score": 89.6793893129771,
+    "previous_nav": 838380.8906547963,
+    "target_budget": 167676.17813095925
+  },
+  {
+    "signal_date": "2022-03-14",
+    "execution_date": "2022-03-15",
+    "stock_id": "3218",
+    "rank_score": 89.18181818181819,
+    "previous_nav": 830795.5146219174,
+    "target_budget": 166159.10292438348
+  },
+  {
+    "signal_date": "2022-03-14",
+    "execution_date": "2022-03-15",
+    "stock_id": "2006",
+    "rank_score": 78.29090909090908,
+    "previous_nav": 830795.5146219174,
+    "target_budget": 166159.10292438348
+  },
+  {
+    "signal_date": "2022-03-14",
+    "execution_date": "2022-03-15",
+    "stock_id": "4938",
+    "rank_score": 75.05454545454545,
+    "previous_nav": 830795.5146219174,
+    "target_budget": 157979.30848650087
+  },
+  {
+    "signal_date": "2022-03-17",
+    "execution_date": "2022-03-18",
+    "stock_id": "1560",
+    "rank_score": 95.5609756097561,
+    "previous_nav": 795049.0638586207,
+    "target_budget": 159009.81277172413
+  },
+  {
+    "signal_date": "2022-03-17",
+    "execution_date": "2022-03-18",
+    "stock_id": "3707",
+    "rank_score": 90.89430894308941,
+    "previous_nav": 795049.0638586207,
+    "target_budget": 159009.81277172413
+  },
+  {
+    "signal_date": "2022-03-17",
+    "execution_date": "2022-03-18",
+    "stock_id": "5425",
+    "rank_score": 85.3170731707317,
+    "previous_nav": 795049.0638586207,
+    "target_budget": 151231.22276139096
+  },
+  {
+    "signal_date": "2022-03-25",
+    "execution_date": "2022-03-28",
+    "stock_id": "3558",
+    "rank_score": 87.0,
+    "previous_nav": 819875.8150861972,
+    "target_budget": 163975.16301723945
+  },
+  {
+    "signal_date": "2022-03-30",
+    "execution_date": "2022-03-31",
+    "stock_id": "2351",
+    "rank_score": 92.65,
+    "previous_nav": 837788.9409481222,
+    "target_budget": 167557.78818962444
+  },
+  {
+    "signal_date": "2022-03-30",
+    "execution_date": "2022-03-31",
+    "stock_id": "3675",
+    "rank_score": 89.61666666666667,
+    "previous_nav": 837788.9409481222,
+    "target_budget": 147300.35919333703
+  },
+  {
+    "signal_date": "2022-04-13",
+    "execution_date": "2022-04-14",
+    "stock_id": "8183",
+    "rank_score": 96.69291338582677,
+    "previous_nav": 842462.9814860984,
+    "target_budget": 168492.5962972197
+  },
+  {
+    "signal_date": "2022-04-13",
+    "execution_date": "2022-04-14",
+    "stock_id": "2029",
+    "rank_score": 82.28346456692913,
+    "previous_nav": 842462.9814860984,
+    "target_budget": 168492.5962972197
+  },
+  {
+    "signal_date": "2022-04-13",
+    "execution_date": "2022-04-14",
+    "stock_id": "2030",
+    "rank_score": 80.85039370078738,
+    "previous_nav": 842462.9814860984,
+    "target_budget": 168492.5962972197
+  },
+  {
+    "signal_date": "2022-04-14",
+    "execution_date": "2022-04-15",
+    "stock_id": "4736",
+    "rank_score": 95.54545454545455,
+    "previous_nav": 818642.9773850283,
+    "target_budget": 105916.61192018044
+  },
+  {
+    "signal_date": "2022-04-20",
+    "execution_date": "2022-04-21",
+    "stock_id": "1605",
+    "rank_score": 96.625,
+    "previous_nav": 814220.7859296093,
+    "target_budget": 162844.15718592185
+  },
+  {
+    "signal_date": "2022-04-20",
+    "execution_date": "2022-04-21",
+    "stock_id": "4931",
+    "rank_score": 83.75,
+    "previous_nav": 814220.7859296093,
+    "target_budget": 148409.74734832218
+  },
+  {
+    "signal_date": "2022-04-21",
+    "execution_date": "2022-04-22",
+    "stock_id": "2605",
+    "rank_score": 88.92086330935251,
+    "previous_nav": 779432.5768343923,
+    "target_budget": 155886.51536687845
+  },
+  {
+    "signal_date": "2022-04-21",
+    "execution_date": "2022-04-22",
+    "stock_id": "3374",
+    "rank_score": 88.71942446043165,
+    "previous_nav": 779432.5768343923,
+    "target_budget": 155886.51536687845
+  },
+  {
+    "signal_date": "2022-04-29",
+    "execution_date": "2022-05-03",
+    "stock_id": "4904",
+    "rank_score": 91.82399999999998,
+    "previous_nav": 719844.6784397772,
+    "target_budget": 143968.93568795544
+  },
+  {
+    "signal_date": "2022-05-16",
+    "execution_date": "2022-05-17",
+    "stock_id": "3533",
+    "rank_score": 88.29565217391304,
+    "previous_nav": 715593.5635713474,
+    "target_budget": 143118.71271426947
+  },
+  {
+    "signal_date": "2022-05-17",
+    "execution_date": "2022-05-18",
+    "stock_id": "3535",
+    "rank_score": 90.0,
+    "previous_nav": 715423.1820690235,
+    "target_budget": 143084.6364138047
+  },
+  {
+    "signal_date": "2022-05-20",
+    "execution_date": "2022-05-23",
+    "stock_id": "3443",
+    "rank_score": 85.96396396396396,
+    "previous_nav": 717923.8775852986,
+    "target_budget": 143584.77551705972
+  },
+  {
+    "signal_date": "2022-05-23",
+    "execution_date": "2022-05-24",
+    "stock_id": "4915",
+    "rank_score": 82.88888888888889,
+    "previous_nav": 710787.9654379108,
+    "target_budget": 142157.59308758215
+  },
+  {
+    "signal_date": "2022-05-25",
+    "execution_date": "2022-05-26",
+    "stock_id": "2317",
+    "rank_score": 80.07207207207207,
+    "previous_nav": 720737.9923059169,
+    "target_budget": 144147.59846118337
+  },
+  {
+    "signal_date": "2022-05-27",
+    "execution_date": "2022-05-30",
+    "stock_id": "8069",
+    "rank_score": 93.80530973451327,
+    "previous_nav": 723140.8265614569,
+    "target_budget": 138697.17829355842
+  },
+  {
+    "signal_date": "2022-05-31",
+    "execution_date": "2022-06-01",
+    "stock_id": "5272",
+    "rank_score": 87.97101449275361,
+    "previous_nav": 721661.4092195618,
+    "target_budget": 138967.88393137165
+  },
+  {
+    "signal_date": "2022-06-21",
+    "execution_date": "2022-06-22",
+    "stock_id": "2201",
+    "rank_score": 94.80303030303031,
+    "previous_nav": 683656.6184191504,
+    "target_budget": 136731.32368383007
+  },
+  {
+    "signal_date": "2022-06-21",
+    "execution_date": "2022-06-22",
+    "stock_id": "1560",
+    "rank_score": 94.27272727272728,
+    "previous_nav": 683656.6184191504,
+    "target_budget": 136731.32368383007
+  },
+  {
+    "signal_date": "2022-06-21",
+    "execution_date": "2022-06-22",
+    "stock_id": "6461",
+    "rank_score": 88.93939393939394,
+    "previous_nav": 683656.6184191504,
+    "target_budget": 136731.32368383007
+  },
+  {
+    "signal_date": "2022-06-27",
+    "execution_date": "2022-06-28",
+    "stock_id": "2736",
+    "rank_score": 89.16239316239316,
+    "previous_nav": 680194.8855747874,
+    "target_budget": 136038.97711495747
+  },
+  {
+    "signal_date": "2022-06-27",
+    "execution_date": "2022-06-28",
+    "stock_id": "4551",
+    "rank_score": 86.11965811965813,
+    "previous_nav": 680194.8855747874,
+    "target_budget": 136038.97711495747
+  },
+  {
+    "signal_date": "2022-06-28",
+    "execution_date": "2022-06-29",
+    "stock_id": "1319",
+    "rank_score": 94.71929824561403,
+    "previous_nav": 654400.4026507214,
+    "target_budget": 127675.57862465217
+  },
+  {
+    "signal_date": "2022-07-07",
+    "execution_date": "2022-07-08",
+    "stock_id": "3665",
+    "rank_score": 91.84347826086957,
+    "previous_nav": 634456.9740637116,
+    "target_budget": 126891.39481274232
+  },
+  {
+    "signal_date": "2022-07-07",
+    "execution_date": "2022-07-08",
+    "stock_id": "3008",
+    "rank_score": 90.62608695652173,
+    "previous_nav": 634456.9740637116,
+    "target_budget": 126891.39481274232
+  },
+  {
+    "signal_date": "2022-07-07",
+    "execution_date": "2022-07-08",
+    "stock_id": "1216",
+    "rank_score": 90.38260869565218,
+    "previous_nav": 634456.9740637116,
+    "target_budget": 126891.39481274232
+  },
+  {
+    "signal_date": "2022-07-07",
+    "execution_date": "2022-07-08",
+    "stock_id": "8454",
+    "rank_score": 84.76521739130435,
+    "previous_nav": 634456.9740637116,
+    "target_budget": 126891.39481274232
+  },
+  {
+    "signal_date": "2022-07-08",
+    "execution_date": "2022-07-11",
+    "stock_id": "6279",
+    "rank_score": 95.57264957264957,
+    "previous_nav": 618956.8065633981,
+    "target_budget": 123791.36131267963
+  },
+  {
+    "signal_date": "2022-07-08",
+    "execution_date": "2022-07-11",
+    "stock_id": "5388",
+    "rank_score": 91.98290598290599,
+    "previous_nav": 618956.8065633981,
+    "target_budget": 120302.34076818955
+  },
+  {
+    "signal_date": "2022-07-13",
+    "execution_date": "2022-07-14",
+    "stock_id": "2912",
+    "rank_score": 87.94444444444444,
+    "previous_nav": 606532.6004903401,
+    "target_budget": 121306.52009806802
+  },
+  {
+    "signal_date": "2022-07-19",
+    "execution_date": "2022-07-20",
+    "stock_id": "1514",
+    "rank_score": 89.05084745762711,
+    "previous_nav": 620484.0645936748,
+    "target_budget": 124096.81291873497
+  },
+  {
+    "signal_date": "2022-07-19",
+    "execution_date": "2022-07-20",
+    "stock_id": "3362",
+    "rank_score": 78.22033898305084,
+    "previous_nav": 620484.0645936748,
+    "target_budget": 123763.95350507769
+  },
+  {
+    "signal_date": "2022-07-21",
+    "execution_date": "2022-07-22",
+    "stock_id": "6133",
+    "rank_score": 89.5625,
+    "previous_nav": 614307.0467979033,
+    "target_budget": 114621.11217360727
+  },
+  {
+    "signal_date": "2022-07-22",
+    "execution_date": "2022-07-25",
+    "stock_id": "4915",
+    "rank_score": 91.02564102564102,
+    "previous_nav": 618132.976790273,
+    "target_budget": 116632.37074075101
+  },
+  {
+    "signal_date": "2022-07-25",
+    "execution_date": "2022-07-26",
+    "stock_id": "5243",
+    "rank_score": 89.41732283464566,
+    "previous_nav": 619451.2685535522,
+    "target_budget": 123890.25371071044
+  },
+  {
+    "signal_date": "2022-07-29",
+    "execution_date": "2022-08-01",
+    "stock_id": "2419",
+    "rank_score": 89.3,
+    "previous_nav": 641548.4351089015,
+    "target_budget": 126596.04944534662
+  },
+  {
+    "signal_date": "2022-08-05",
+    "execution_date": "2022-08-08",
+    "stock_id": "6285",
+    "rank_score": 91.93939393939392,
+    "previous_nav": 632831.355059115,
+    "target_budget": 126566.271011823
+  },
+  {
+    "signal_date": "2022-08-05",
+    "execution_date": "2022-08-08",
+    "stock_id": "6414",
+    "rank_score": 91.65656565656565,
+    "previous_nav": 632831.355059115,
+    "target_budget": 126566.271011823
+  },
+  {
+    "signal_date": "2022-08-05",
+    "execution_date": "2022-08-08",
+    "stock_id": "3558",
+    "rank_score": 83.77777777777777,
+    "previous_nav": 632831.355059115,
+    "target_budget": 106080.61639435356
+  },
+  {
+    "signal_date": "2022-08-08",
+    "execution_date": "2022-08-09",
+    "stock_id": "3293",
+    "rank_score": 95.15384615384615,
+    "previous_nav": 619170.1420443648,
+    "target_budget": 123834.02840887297
+  },
+  {
+    "signal_date": "2022-08-12",
+    "execution_date": "2022-08-15",
+    "stock_id": "1477",
+    "rank_score": 98.17886178861788,
+    "previous_nav": 616979.6374719327,
+    "target_budget": 123395.92749438653
+  },
+  {
+    "signal_date": "2022-08-12",
+    "execution_date": "2022-08-15",
+    "stock_id": "9921",
+    "rank_score": 87.8211382113821,
+    "previous_nav": 616979.6374719327,
+    "target_budget": 111141.09671867176
+  },
+  {
+    "signal_date": "2022-08-15",
+    "execution_date": "2022-08-16",
+    "stock_id": "6472",
+    "rank_score": 95.02479338842974,
+    "previous_nav": 611156.3529810023,
+    "target_budget": 122231.27059620045
+  },
+  {
+    "signal_date": "2022-08-26",
+    "execution_date": "2022-08-29",
+    "stock_id": "4743",
+    "rank_score": 87.77570093457943,
+    "previous_nav": 627902.7597637987,
+    "target_budget": 125580.55195275974
+  },
+  {
+    "signal_date": "2022-08-26",
+    "execution_date": "2022-08-29",
+    "stock_id": "4128",
+    "rank_score": 84.89719626168224,
+    "previous_nav": 627902.7597637987,
+    "target_budget": 125580.55195275974
+  },
+  {
+    "signal_date": "2022-08-26",
+    "execution_date": "2022-08-29",
+    "stock_id": "6550",
+    "rank_score": 84.50467289719626,
+    "previous_nav": 627902.7597637987,
+    "target_budget": 125580.55195275974
+  },
+  {
+    "signal_date": "2022-08-26",
+    "execution_date": "2022-08-29",
+    "stock_id": "2313",
+    "rank_score": 63.364485981308405,
+    "previous_nav": 627902.7597637987,
+    "target_budget": 100888.5996108717
+  },
+  {
+    "signal_date": "2022-09-12",
+    "execution_date": "2022-09-13",
+    "stock_id": "1736",
+    "rank_score": 96.76923076923077,
+    "previous_nav": 614961.2530178778,
+    "target_budget": 122992.25060357557
+  },
+  {
+    "signal_date": "2022-09-12",
+    "execution_date": "2022-09-13",
+    "stock_id": "3680",
+    "rank_score": 80.84615384615384,
+    "previous_nav": 614961.2530178778,
+    "target_budget": 122992.25060357557
+  },
+  {
+    "signal_date": "2022-09-12",
+    "execution_date": "2022-09-13",
+    "stock_id": "2376",
+    "rank_score": 80.07692307692308,
+    "previous_nav": 614961.2530178778,
+    "target_budget": 122992.25060357557
+  },
+  {
+    "signal_date": "2022-09-12",
+    "execution_date": "2022-09-13",
+    "stock_id": "2890",
+    "rank_score": 72.26923076923077,
+    "previous_nav": 614961.2530178778,
+    "target_budget": 122992.25060357557
+  },
+  {
+    "signal_date": "2022-09-13",
+    "execution_date": "2022-09-14",
+    "stock_id": "6279",
+    "rank_score": 92.2935779816514,
+    "previous_nav": 612905.4751212414,
+    "target_budget": 122581.09502424828
+  },
+  {
+    "signal_date": "2022-09-20",
+    "execution_date": "2022-09-21",
+    "stock_id": "1605",
+    "rank_score": 88.17777777777778,
+    "previous_nav": 604618.0327978806,
+    "target_budget": 120923.60655957612
+  },
+  {
+    "signal_date": "2022-09-20",
+    "execution_date": "2022-09-21",
+    "stock_id": "3046",
+    "rank_score": 87.66666666666666,
+    "previous_nav": 604618.0327978806,
+    "target_budget": 111460.34789641114
+  },
+  {
+    "signal_date": "2022-10-05",
+    "execution_date": "2022-10-06",
+    "stock_id": "3017",
+    "rank_score": 95.67010309278349,
+    "previous_nav": 574487.402977709,
+    "target_budget": 114897.4805955418
+  },
+  {
+    "signal_date": "2022-10-05",
+    "execution_date": "2022-10-06",
+    "stock_id": "8996",
+    "rank_score": 82.49484536082474,
+    "previous_nav": 574487.402977709,
+    "target_budget": 114897.4805955418
+  },
+  {
+    "signal_date": "2022-10-06",
+    "execution_date": "2022-10-07",
+    "stock_id": "2308",
+    "rank_score": 90.13333333333333,
+    "previous_nav": 574252.8976062816,
+    "target_budget": 114850.57952125631
+  },
+  {
+    "signal_date": "2022-10-07",
+    "execution_date": "2022-10-11",
+    "stock_id": "5009",
+    "rank_score": 98.86046511627906,
+    "previous_nav": 563754.2263001649,
+    "target_budget": 112750.84526003299
+  },
+  {
+    "signal_date": "2022-10-14",
+    "execution_date": "2022-10-17",
+    "stock_id": "2408",
+    "rank_score": 97.39215686274508,
+    "previous_nav": 543714.5120496071,
+    "target_budget": 108742.90240992143
+  },
+  {
+    "signal_date": "2022-10-27",
+    "execution_date": "2022-10-28",
+    "stock_id": "2009",
+    "rank_score": 89.8108108108108,
+    "previous_nav": 544269.6809707176,
+    "target_budget": 108853.93619414352
+  },
+  {
+    "signal_date": "2022-10-27",
+    "execution_date": "2022-10-28",
+    "stock_id": "6150",
+    "rank_score": 79.24324324324324,
+    "previous_nav": 544269.6809707176,
+    "target_budget": 108853.93619414352
+  },
+  {
+    "signal_date": "2022-10-31",
+    "execution_date": "2022-11-01",
+    "stock_id": "2465",
+    "rank_score": 79.3,
+    "previous_nav": 533946.0732798349,
+    "target_budget": 106789.21465596699
+  },
+  {
+    "signal_date": "2022-11-01",
+    "execution_date": "2022-11-02",
+    "stock_id": "8358",
+    "rank_score": 89.17647058823529,
+    "previous_nav": 544188.0384779559,
+    "target_budget": 108837.60769559117
+  },
+  {
+    "signal_date": "2022-11-01",
+    "execution_date": "2022-11-02",
+    "stock_id": "4931",
+    "rank_score": 84.44117647058823,
+    "previous_nav": 544188.0384779559,
+    "target_budget": 108837.60769559117
+  },
+  {
+    "signal_date": "2022-11-01",
+    "execution_date": "2022-11-02",
+    "stock_id": "3289",
+    "rank_score": 79.70588235294116,
+    "previous_nav": 544188.0384779559,
+    "target_budget": 102639.51928484405
+  },
+  {
+    "signal_date": "2022-11-07",
+    "execution_date": "2022-11-08",
+    "stock_id": "8996",
+    "rank_score": 90.87640449438203,
+    "previous_nav": 570011.437314041,
+    "target_budget": 94802.24009537895
+  },
+  {
+    "signal_date": "2022-11-09",
+    "execution_date": "2022-11-10",
+    "stock_id": "3034",
+    "rank_score": 87.50980392156863,
+    "previous_nav": 541359.4779344528,
+    "target_budget": 108271.89558689056
+  },
+  {
+    "signal_date": "2022-11-09",
+    "execution_date": "2022-11-10",
+    "stock_id": "4961",
+    "rank_score": 84.37254901960783,
+    "previous_nav": 541359.4779344528,
+    "target_budget": 84657.76833295044
+  },
+  {
+    "signal_date": "2022-11-11",
+    "execution_date": "2022-11-14",
+    "stock_id": "6643",
+    "rank_score": 96.37037037037037,
+    "previous_nav": 537519.0068404182,
+    "target_budget": 107503.80136808364
+  },
+  {
+    "signal_date": "2022-11-14",
+    "execution_date": "2022-11-15",
+    "stock_id": "1590",
+    "rank_score": 93.58333333333334,
+    "previous_nav": 548929.3965289743,
+    "target_budget": 82354.22147486133
+  },
+  {
+    "signal_date": "2022-12-01",
+    "execution_date": "2022-12-02",
+    "stock_id": "4979",
+    "rank_score": 99.90070921985816,
+    "previous_nav": 551965.2308517196,
+    "target_budget": 110393.04617034392
+  },
+  {
+    "signal_date": "2022-12-01",
+    "execution_date": "2022-12-02",
+    "stock_id": "2338",
+    "rank_score": 96.12765957446808,
+    "previous_nav": 551965.2308517196,
+    "target_budget": 110393.04617034392
+  },
+  {
+    "signal_date": "2022-12-01",
+    "execution_date": "2022-12-02",
+    "stock_id": "6223",
+    "rank_score": 96.02836879432624,
+    "previous_nav": 551965.2308517196,
+    "target_budget": 110393.04617034392
+  },
+  {
+    "signal_date": "2022-12-01",
+    "execution_date": "2022-12-02",
+    "stock_id": "2707",
+    "rank_score": 95.9290780141844,
+    "previous_nav": 551965.2308517196,
+    "target_budget": 94617.17133180717
+  },
+  {
+    "signal_date": "2022-12-14",
+    "execution_date": "2022-12-15",
+    "stock_id": "6643",
+    "rank_score": 93.26923076923077,
+    "previous_nav": 529937.1123743063,
+    "target_budget": 105987.42247486126
+  },
+  {
+    "signal_date": "2022-12-14",
+    "execution_date": "2022-12-15",
+    "stock_id": "3027",
+    "rank_score": 87.4423076923077,
+    "previous_nav": 529937.1123743063,
+    "target_budget": 105987.42247486126
+  },
+  {
+    "signal_date": "2022-12-14",
+    "execution_date": "2022-12-15",
+    "stock_id": "6806",
+    "rank_score": 85.82692307692307,
+    "previous_nav": 529937.1123743063,
+    "target_budget": 105987.42247486126
+  },
+  {
+    "signal_date": "2022-12-14",
+    "execution_date": "2022-12-15",
+    "stock_id": "2371",
+    "rank_score": 81.69230769230768,
+    "previous_nav": 529937.1123743063,
+    "target_budget": 105987.42247486126
+  },
+  {
+    "signal_date": "2022-12-14",
+    "execution_date": "2022-12-15",
+    "stock_id": "3693",
+    "rank_score": 79.19230769230768,
+    "previous_nav": 529937.1123743063,
+    "target_budget": 105987.42247486126
+  },
+  {
+    "signal_date": "2022-12-22",
+    "execution_date": "2022-12-23",
+    "stock_id": "9910",
+    "rank_score": 92.55045871559632,
+    "previous_nav": 516286.78189058654,
+    "target_budget": 103257.35637811731
+  },
+  {
+    "signal_date": "2022-12-22",
+    "execution_date": "2022-12-23",
+    "stock_id": "2615",
+    "rank_score": 83.8348623853211,
+    "previous_nav": 516286.78189058654,
+    "target_budget": 103257.35637811731
+  },
+  {
+    "signal_date": "2022-12-22",
+    "execution_date": "2022-12-23",
+    "stock_id": "2606",
+    "rank_score": 81.52293577981652,
+    "previous_nav": 516286.78189058654,
+    "target_budget": 91863.54393230163
+  },
+  {
+    "signal_date": "2022-12-26",
+    "execution_date": "2022-12-27",
+    "stock_id": "3479",
+    "rank_score": 95.45,
+    "previous_nav": 513290.347587157,
+    "target_budget": 87294.52325780352
+  },
+  {
+    "signal_date": "2023-01-03",
+    "execution_date": "2023-01-04",
+    "stock_id": "4763",
+    "rank_score": 93.12280701754385,
+    "previous_nav": 512868.98478366795,
+    "target_budget": 102573.7969567336
+  },
+  {
+    "signal_date": "2023-01-03",
+    "execution_date": "2023-01-04",
+    "stock_id": "1513",
+    "rank_score": 88.7017543859649,
+    "previous_nav": 512868.98478366795,
+    "target_budget": 102573.7969567336
+  },
+  {
+    "signal_date": "2023-01-03",
+    "execution_date": "2023-01-04",
+    "stock_id": "3034",
+    "rank_score": 88.45614035087719,
+    "previous_nav": 512868.98478366795,
+    "target_budget": 94493.2865820459
+  },
+  {
+    "signal_date": "2023-01-06",
+    "execution_date": "2023-01-09",
+    "stock_id": "8299",
+    "rank_score": 94.7843137254902,
+    "previous_nav": 521487.37383528217,
+    "target_budget": 104297.47476705644
+  },
+  {
+    "signal_date": "2023-01-11",
+    "execution_date": "2023-01-12",
+    "stock_id": "8454",
+    "rank_score": 98.37894736842105,
+    "previous_nav": 536255.5687809398,
+    "target_budget": 95140.73282072599
+  },
+  {
+    "signal_date": "2023-01-13",
+    "execution_date": "2023-01-16",
+    "stock_id": "5321",
+    "rank_score": 88.18823529411765,
+    "previous_nav": 527366.918044277,
+    "target_budget": 99808.32541331198
+  },
+  {
+    "signal_date": "2023-02-23",
+    "execution_date": "2023-02-24",
+    "stock_id": "5258",
+    "rank_score": 93.48837209302326,
+    "previous_nav": 550021.0829148097,
+    "target_budget": 110004.21658296193
+  },
+  {
+    "signal_date": "2023-02-23",
+    "execution_date": "2023-02-24",
+    "stock_id": "6290",
+    "rank_score": 91.31782945736434,
+    "previous_nav": 550021.0829148097,
+    "target_budget": 110004.21658296193
+  },
+  {
+    "signal_date": "2023-02-23",
+    "execution_date": "2023-02-24",
+    "stock_id": "6732",
+    "rank_score": 87.82945736434108,
+    "previous_nav": 550021.0829148097,
+    "target_budget": 110004.21658296193
+  },
+  {
+    "signal_date": "2023-02-23",
+    "execution_date": "2023-02-24",
+    "stock_id": "5274",
+    "rank_score": 87.62790697674419,
+    "previous_nav": 550021.0829148097,
+    "target_budget": 103354.25669269386
+  },
+  {
+    "signal_date": "2023-02-24",
+    "execution_date": "2023-03-01",
+    "stock_id": "6515",
+    "rank_score": 92.5625,
+    "previous_nav": 541364.2734283681,
+    "target_budget": 101604.58880424566
+  },
+  {
+    "signal_date": "2023-03-03",
+    "execution_date": "2023-03-06",
+    "stock_id": "5608",
+    "rank_score": 80.08849557522123,
+    "previous_nav": 540854.6088621339,
+    "target_budget": 104834.82254460218
+  },
+  {
+    "signal_date": "2023-03-07",
+    "execution_date": "2023-03-08",
+    "stock_id": "3362",
+    "rank_score": 88.46875,
+    "previous_nav": 537973.1704723462,
+    "target_budget": 100777.17828664389
+  },
+  {
+    "signal_date": "2023-03-17",
+    "execution_date": "2023-03-20",
+    "stock_id": "5269",
+    "rank_score": 97.57024793388429,
+    "previous_nav": 515319.87773660006,
+    "target_budget": 103063.97554732
+  },
+  {
+    "signal_date": "2023-03-17",
+    "execution_date": "2023-03-20",
+    "stock_id": "6679",
+    "rank_score": 86.57851239669421,
+    "previous_nav": 515319.87773660006,
+    "target_budget": 103063.97554732
+  },
+  {
+    "signal_date": "2023-03-17",
+    "execution_date": "2023-03-20",
+    "stock_id": "3661",
+    "rank_score": 85.83471074380165,
+    "previous_nav": 515319.87773660006,
+    "target_budget": 103063.97554732
+  },
+  {
+    "signal_date": "2023-03-17",
+    "execution_date": "2023-03-20",
+    "stock_id": "2449",
+    "rank_score": 85.42148760330579,
+    "previous_nav": 515319.87773660006,
+    "target_budget": 103063.97554732
+  },
+  {
+    "signal_date": "2023-03-17",
+    "execution_date": "2023-03-20",
+    "stock_id": "3680",
+    "rank_score": 80.62809917355372,
+    "previous_nav": 515319.87773660006,
+    "target_budget": 103063.97554732
+  },
+  {
+    "signal_date": "2023-03-21",
+    "execution_date": "2023-03-22",
+    "stock_id": "3231",
+    "rank_score": 86.75,
+    "previous_nav": 516370.7172433416,
+    "target_budget": 95194.28601283461
+  },
+  {
+    "signal_date": "2023-03-27",
+    "execution_date": "2023-03-28",
+    "stock_id": "3653",
+    "rank_score": 91.7037037037037,
+    "previous_nav": 518722.0438480448,
+    "target_budget": 103744.40876960897
+  },
+  {
+    "signal_date": "2023-03-27",
+    "execution_date": "2023-03-28",
+    "stock_id": "3324",
+    "rank_score": 86.57777777777778,
+    "previous_nav": 518722.0438480448,
+    "target_budget": 92137.9687303582
+  },
+  {
+    "signal_date": "2023-03-31",
+    "execution_date": "2023-04-06",
+    "stock_id": "2731",
+    "rank_score": 91.15200000000002,
+    "previous_nav": 514878.75587905495,
+    "target_budget": 102975.75117581099
+  },
+  {
+    "signal_date": "2023-04-14",
+    "execution_date": "2023-04-17",
+    "stock_id": "1752",
+    "rank_score": 92.0,
+    "previous_nav": 548940.5475028672,
+    "target_budget": 109788.10950057344
+  },
+  {
+    "signal_date": "2023-04-14",
+    "execution_date": "2023-04-17",
+    "stock_id": "6732",
+    "rank_score": 88.81818181818181,
+    "previous_nav": 548940.5475028672,
+    "target_budget": 101631.42070121488
+  },
+  {
+    "signal_date": "2023-04-28",
+    "execution_date": "2023-05-02",
+    "stock_id": "6741",
+    "rank_score": 94.73504273504273,
+    "previous_nav": 538936.7113585933,
+    "target_budget": 107787.34227171866
+  },
+  {
+    "signal_date": "2023-04-28",
+    "execution_date": "2023-05-02",
+    "stock_id": "2353",
+    "rank_score": 83.60683760683762,
+    "previous_nav": 538936.7113585933,
+    "target_budget": 107787.34227171866
+  },
+  {
+    "signal_date": "2023-04-28",
+    "execution_date": "2023-05-02",
+    "stock_id": "4572",
+    "rank_score": 83.53846153846155,
+    "previous_nav": 538936.7113585933,
+    "target_budget": 107787.34227171866
+  },
+  {
+    "signal_date": "2023-04-28",
+    "execution_date": "2023-05-02",
+    "stock_id": "3363",
+    "rank_score": 78.32478632478632,
+    "previous_nav": 538936.7113585933,
+    "target_budget": 97874.65316545742
+  },
+  {
+    "signal_date": "2023-05-02",
+    "execution_date": "2023-05-03",
+    "stock_id": "4763",
+    "rank_score": 87.3953488372093,
+    "previous_nav": 526854.1142182418,
+    "target_budget": 90401.20640952524
+  },
+  {
+    "signal_date": "2023-05-04",
+    "execution_date": "2023-05-05",
+    "stock_id": "3017",
+    "rank_score": 88.28846153846155,
+    "previous_nav": 528700.381887017,
+    "target_budget": 99556.98908651398
+  },
+  {
+    "signal_date": "2023-05-05",
+    "execution_date": "2023-05-08",
+    "stock_id": "6111",
+    "rank_score": 87.875,
+    "previous_nav": 520105.5877421688,
+    "target_budget": 104021.11754843376
+  },
+  {
+    "signal_date": "2023-05-05",
+    "execution_date": "2023-05-08",
+    "stock_id": "3479",
+    "rank_score": 76.25,
+    "previous_nav": 520105.5877421688,
+    "target_budget": 104021.11754843376
+  },
+  {
+    "signal_date": "2023-05-16",
+    "execution_date": "2023-05-17",
+    "stock_id": "8076",
+    "rank_score": 86.13793103448275,
+    "previous_nav": 501185.3166528188,
+    "target_budget": 100237.06333056376
+  },
+  {
+    "signal_date": "2023-05-16",
+    "execution_date": "2023-05-17",
+    "stock_id": "3661",
+    "rank_score": 81.49425287356321,
+    "previous_nav": 501185.3166528188,
+    "target_budget": 100237.06333056376
+  },
+  {
+    "signal_date": "2023-05-16",
+    "execution_date": "2023-05-17",
+    "stock_id": "2376",
+    "rank_score": 74.22988505747125,
+    "previous_nav": 501185.3166528188,
+    "target_budget": 100237.06333056376
+  },
+  {
+    "signal_date": "2023-05-17",
+    "execution_date": "2023-05-18",
+    "stock_id": "1795",
+    "rank_score": 92.50877192982455,
+    "previous_nav": 506999.7334513569,
+    "target_budget": 93639.8807150483
+  },
+  {
+    "signal_date": "2023-05-26",
+    "execution_date": "2023-05-29",
+    "stock_id": "3653",
+    "rank_score": 90.11764705882352,
+    "previous_nav": 539693.4874973838,
+    "target_budget": 107938.69749947677
+  },
+  {
+    "signal_date": "2023-05-26",
+    "execution_date": "2023-05-29",
+    "stock_id": "3231",
+    "rank_score": 85.05882352941175,
+    "previous_nav": 539693.4874973838,
+    "target_budget": 101973.57902549261
+  },
+  {
+    "signal_date": "2023-05-30",
+    "execution_date": "2023-05-31",
+    "stock_id": "8210",
+    "rank_score": 96.02836879432624,
+    "previous_nav": 555173.0618683118,
+    "target_budget": 96888.59005232254
+  },
+  {
+    "signal_date": "2023-06-07",
+    "execution_date": "2023-06-08",
+    "stock_id": "6187",
+    "rank_score": 85.72222222222221,
+    "previous_nav": 580513.4076060221,
+    "target_budget": 113157.86238655807
+  },
+  {
+    "signal_date": "2023-06-12",
+    "execution_date": "2023-06-13",
+    "stock_id": "3515",
+    "rank_score": 98.04195804195804,
+    "previous_nav": 584542.1503368852,
+    "target_budget": 116908.43006737705
+  },
+  {
+    "signal_date": "2023-06-12",
+    "execution_date": "2023-06-13",
+    "stock_id": "6510",
+    "rank_score": 77.27272727272728,
+    "previous_nav": 584542.1503368852,
+    "target_budget": 116908.43006737705
+  },
+  {
+    "signal_date": "2023-06-12",
+    "execution_date": "2023-06-13",
+    "stock_id": "3680",
+    "rank_score": 75.23076923076923,
+    "previous_nav": 584542.1503368852,
+    "target_budget": 76896.26116272925
+  },
+  {
+    "signal_date": "2023-06-14",
+    "execution_date": "2023-06-15",
+    "stock_id": "6235",
+    "rank_score": 93.20467836257308,
+    "previous_nav": 571565.6782900133,
+    "target_budget": 107981.61501188812
+  },
+  {
+    "signal_date": "2023-07-03",
+    "execution_date": "2023-07-04",
+    "stock_id": "8996",
+    "rank_score": 93.86861313868613,
+    "previous_nav": 567716.2164912727,
+    "target_budget": 113543.24329825453
+  },
+  {
+    "signal_date": "2023-07-03",
+    "execution_date": "2023-07-04",
+    "stock_id": "6669",
+    "rank_score": 93.05109489051095,
+    "previous_nav": 567716.2164912727,
+    "target_budget": 113543.24329825453
+  },
+  {
+    "signal_date": "2023-07-03",
+    "execution_date": "2023-07-04",
+    "stock_id": "3035",
+    "rank_score": 91.82481751824818,
+    "previous_nav": 567716.2164912727,
+    "target_budget": 113543.24329825453
+  },
+  {
+    "signal_date": "2023-07-03",
+    "execution_date": "2023-07-04",
+    "stock_id": "8050",
+    "rank_score": 86.71532846715328,
+    "previous_nav": 567716.2164912727,
+    "target_budget": 113543.24329825453
+  },
+  {
+    "signal_date": "2023-07-04",
+    "execution_date": "2023-07-05",
+    "stock_id": "3374",
+    "rank_score": 92.26315789473684,
+    "previous_nav": 573134.0005300215,
+    "target_budget": 110085.36331436032
+  },
+  {
+    "signal_date": "2023-07-05",
+    "execution_date": "2023-07-06",
+    "stock_id": "2329",
+    "rank_score": 94.07058823529411,
+    "previous_nav": 561430.3931121043,
+    "target_budget": 104873.38490446932
+  },
+  {
+    "signal_date": "2023-07-11",
+    "execution_date": "2023-07-12",
+    "stock_id": "3515",
+    "rank_score": 88.26760563380282,
+    "previous_nav": 567260.6919377298,
+    "target_budget": 113452.13838754597
+  },
+  {
+    "signal_date": "2023-07-11",
+    "execution_date": "2023-07-12",
+    "stock_id": "6285",
+    "rank_score": 83.09859154929578,
+    "previous_nav": 567260.6919377298,
+    "target_budget": 93100.78590517977
+  },
+  {
+    "signal_date": "2023-07-25",
+    "execution_date": "2023-07-26",
+    "stock_id": "6274",
+    "rank_score": 87.23456790123456,
+    "previous_nav": 696454.7083872773,
+    "target_budget": 85991.85888582598
+  },
+  {
+    "signal_date": "2023-07-26",
+    "execution_date": "2023-07-27",
+    "stock_id": "1476",
+    "rank_score": 70.97752808988764,
+    "previous_nav": 671470.3254654284,
+    "target_budget": 117419.73781904114
+  },
+  {
+    "signal_date": "2023-07-27",
+    "execution_date": "2023-07-28",
+    "stock_id": "3014",
+    "rank_score": 88.14117647058823,
+    "previous_nav": 680786.2416272573,
+    "target_budget": 136157.24832545145
+  },
+  {
+    "signal_date": "2023-07-27",
+    "execution_date": "2023-07-28",
+    "stock_id": "6203",
+    "rank_score": 79.32941176470588,
+    "previous_nav": 680786.2416272573,
+    "target_budget": 136157.24832545145
+  },
+  {
+    "signal_date": "2023-08-01",
+    "execution_date": "2023-08-02",
+    "stock_id": "3587",
+    "rank_score": 95.0253807106599,
+    "previous_nav": 669177.6406332932,
+    "target_budget": 133835.52812665864
+  },
+  {
+    "signal_date": "2023-08-01",
+    "execution_date": "2023-08-02",
+    "stock_id": "4746",
+    "rank_score": 91.04568527918781,
+    "previous_nav": 669177.6406332932,
+    "target_budget": 102832.30854631666
+  },
+  {
+    "signal_date": "2023-08-07",
+    "execution_date": "2023-08-08",
+    "stock_id": "2383",
+    "rank_score": 88.79136690647482,
+    "previous_nav": 655297.6422622455,
+    "target_budget": 131059.5284524491
+  },
+  {
+    "signal_date": "2023-08-22",
+    "execution_date": "2023-08-23",
+    "stock_id": "1519",
+    "rank_score": 97.3076923076923,
+    "previous_nav": 630831.7347956817,
+    "target_budget": 126166.34695913634
+  },
+  {
+    "signal_date": "2023-08-22",
+    "execution_date": "2023-08-23",
+    "stock_id": "2345",
+    "rank_score": 84.07692307692307,
+    "previous_nav": 630831.7347956817,
+    "target_budget": 126166.34695913634
+  },
+  {
+    "signal_date": "2023-08-22",
+    "execution_date": "2023-08-23",
+    "stock_id": "2449",
+    "rank_score": 83.3076923076923,
+    "previous_nav": 630831.7347956817,
+    "target_budget": 126166.34695913634
+  },
+  {
+    "signal_date": "2023-08-23",
+    "execution_date": "2023-08-24",
+    "stock_id": "6170",
+    "rank_score": 89.13274336283185,
+    "previous_nav": 639258.8366670716,
+    "target_budget": 127851.76733341432
+  },
+  {
+    "signal_date": "2023-08-23",
+    "execution_date": "2023-08-24",
+    "stock_id": "6139",
+    "rank_score": 83.80530973451327,
+    "previous_nav": 639258.8366670716,
+    "target_budget": 124480.92658485839
+  },
+  {
+    "signal_date": "2023-08-24",
+    "execution_date": "2023-08-25",
+    "stock_id": "3587",
+    "rank_score": 87.81481481481481,
+    "previous_nav": 648292.9642336566,
+    "target_budget": 118089.34831157792
+  },
+  {
+    "signal_date": "2023-08-30",
+    "execution_date": "2023-08-31",
+    "stock_id": "3715",
+    "rank_score": 99.32692307692308,
+    "previous_nav": 639344.7966173228,
+    "target_budget": 120154.53850821302
+  },
+  {
+    "signal_date": "2023-09-04",
+    "execution_date": "2023-09-05",
+    "stock_id": "2204",
+    "rank_score": 90.38983050847457,
+    "previous_nav": 630104.1974863079,
+    "target_budget": 126020.8394972616
+  },
+  {
+    "signal_date": "2023-09-04",
+    "execution_date": "2023-09-05",
+    "stock_id": "6732",
+    "rank_score": 87.77966101694915,
+    "previous_nav": 630104.1974863079,
+    "target_budget": 126020.8394972616
+  },
+  {
+    "signal_date": "2023-09-04",
+    "execution_date": "2023-09-05",
+    "stock_id": "8086",
+    "rank_score": 84.33898305084745,
+    "previous_nav": 630104.1974863079,
+    "target_budget": 103806.7106055321
+  },
+  {
+    "signal_date": "2023-09-12",
+    "execution_date": "2023-09-13",
+    "stock_id": "2458",
+    "rank_score": 91.03125,
+    "previous_nav": 620630.3097593193,
+    "target_budget": 124126.06195186386
+  },
+  {
+    "signal_date": "2023-09-12",
+    "execution_date": "2023-09-13",
+    "stock_id": "3264",
+    "rank_score": 87.3125,
+    "previous_nav": 620630.3097593193,
+    "target_budget": 124126.06195186386
+  },
+  {
+    "signal_date": "2023-09-12",
+    "execution_date": "2023-09-13",
+    "stock_id": "2327",
+    "rank_score": 81.296875,
+    "previous_nav": 620630.3097593193,
+    "target_budget": 124126.06195186386
+  },
+  {
+    "signal_date": "2023-09-28",
+    "execution_date": "2023-10-02",
+    "stock_id": "3715",
+    "rank_score": 88.36893203883494,
+    "previous_nav": 603841.0103501311,
+    "target_budget": 120768.20207002622
+  },
+  {
+    "signal_date": "2023-09-28",
+    "execution_date": "2023-10-02",
+    "stock_id": "6139",
+    "rank_score": 85.92233009708737,
+    "previous_nav": 603841.0103501311,
+    "target_budget": 120768.20207002622
+  },
+  {
+    "signal_date": "2023-09-28",
+    "execution_date": "2023-10-02",
+    "stock_id": "6806",
+    "rank_score": 85.45631067961165,
+    "previous_nav": 603841.0103501311,
+    "target_budget": 120768.20207002622
+  },
+  {
+    "signal_date": "2023-09-28",
+    "execution_date": "2023-10-02",
+    "stock_id": "1618",
+    "rank_score": 83.6116504854369,
+    "previous_nav": 603841.0103501311,
+    "target_budget": 114566.78615176928
+  },
+  {
+    "signal_date": "2023-10-02",
+    "execution_date": "2023-10-03",
+    "stock_id": "3548",
+    "rank_score": 93.0,
+    "previous_nav": 586169.2402182209,
+    "target_budget": 111546.6651471395
+  },
+  {
+    "signal_date": "2023-10-03",
+    "execution_date": "2023-10-04",
+    "stock_id": "3006",
+    "rank_score": 93.40495867768595,
+    "previous_nav": 578602.4674856421,
+    "target_budget": 115720.49349712841
+  },
+  {
+    "signal_date": "2023-10-03",
+    "execution_date": "2023-10-04",
+    "stock_id": "3032",
+    "rank_score": 87.33884297520662,
+    "previous_nav": 578602.4674856421,
+    "target_budget": 113974.28949529178
+  },
+  {
+    "signal_date": "2023-10-05",
+    "execution_date": "2023-10-06",
+    "stock_id": "6187",
+    "rank_score": 97.44347826086957,
+    "previous_nav": 565060.4390636036,
+    "target_budget": 111546.66514713949
+  },
+  {
+    "signal_date": "2023-10-11",
+    "execution_date": "2023-10-12",
+    "stock_id": "5274",
+    "rank_score": 94.28571428571429,
+    "previous_nav": 570296.144223731,
+    "target_budget": 114059.2288447462
+  },
+  {
+    "signal_date": "2023-10-11",
+    "execution_date": "2023-10-12",
+    "stock_id": "3443",
+    "rank_score": 89.0,
+    "previous_nav": 570296.144223731,
+    "target_budget": 94241.54884320845
+  },
+  {
+    "signal_date": "2023-11-02",
+    "execution_date": "2023-11-03",
+    "stock_id": "3034",
+    "rank_score": 90.19999999999999,
+    "previous_nav": 552740.5016719466,
+    "target_budget": 110548.10033438932
+  },
+  {
+    "signal_date": "2023-11-02",
+    "execution_date": "2023-11-03",
+    "stock_id": "8054",
+    "rank_score": 79.71999999999998,
+    "previous_nav": 552740.5016719466,
+    "target_budget": 110548.10033438932
+  },
+  {
+    "signal_date": "2023-11-02",
+    "execution_date": "2023-11-03",
+    "stock_id": "4967",
+    "rank_score": 77.05999999999999,
+    "previous_nav": 552740.5016719466,
+    "target_budget": 110548.10033438932
+  },
+  {
+    "signal_date": "2023-11-02",
+    "execution_date": "2023-11-03",
+    "stock_id": "3548",
+    "rank_score": 76.97999999999999,
+    "previous_nav": 552740.5016719466,
+    "target_budget": 110548.10033438932
+  },
+  {
+    "signal_date": "2023-11-02",
+    "execution_date": "2023-11-03",
+    "stock_id": "2454",
+    "rank_score": 73.47999999999999,
+    "previous_nav": 552740.5016719466,
+    "target_budget": 110548.10033438932
+  },
+  {
+    "signal_date": "2023-11-16",
+    "execution_date": "2023-11-17",
+    "stock_id": "2385",
+    "rank_score": 93.32941176470587,
+    "previous_nav": 610220.3037366824,
+    "target_budget": 122044.06074733648
+  },
+  {
+    "signal_date": "2023-11-16",
+    "execution_date": "2023-11-17",
+    "stock_id": "2618",
+    "rank_score": 92.83529411764704,
+    "previous_nav": 610220.3037366824,
+    "target_budget": 122044.06074733648
+  },
+  {
+    "signal_date": "2023-11-16",
+    "execution_date": "2023-11-17",
+    "stock_id": "3376",
+    "rank_score": 87.77647058823528,
+    "previous_nav": 610220.3037366824,
+    "target_budget": 87049.0359970259
+  },
+  {
+    "signal_date": "2023-12-08",
+    "execution_date": "2023-12-11",
+    "stock_id": "1514",
+    "rank_score": 89.28662420382166,
+    "previous_nav": 650227.5147633555,
+    "target_budget": 130045.5029526711
+  },
+  {
+    "signal_date": "2023-12-08",
+    "execution_date": "2023-12-11",
+    "stock_id": "6462",
+    "rank_score": 88.03821656050954,
+    "previous_nav": 650227.5147633555,
+    "target_budget": 130045.5029526711
+  },
+  {
+    "signal_date": "2023-12-08",
+    "execution_date": "2023-12-11",
+    "stock_id": "3443",
+    "rank_score": 81.00636942675158,
+    "previous_nav": 650227.5147633555,
+    "target_budget": 130045.5029526711
+  },
+  {
+    "signal_date": "2023-12-08",
+    "execution_date": "2023-12-11",
+    "stock_id": "2458",
+    "rank_score": 75.03184713375796,
+    "previous_nav": 650227.5147633555,
+    "target_budget": 130045.5029526711
+  },
+  {
+    "signal_date": "2023-12-08",
+    "execution_date": "2023-12-11",
+    "stock_id": "2368",
+    "rank_score": 69.4140127388535,
+    "previous_nav": 650227.5147633555,
+    "target_budget": 130045.5029526711
+  },
+  {
+    "signal_date": "2023-12-11",
+    "execution_date": "2023-12-12",
+    "stock_id": "8112",
+    "rank_score": 94.32432432432432,
+    "previous_nav": 639957.3791341913,
+    "target_budget": 120115.57614596025
+  },
+  {
+    "signal_date": "2023-12-15",
+    "execution_date": "2023-12-18",
+    "stock_id": "6239",
+    "rank_score": 98.40217391304347,
+    "previous_nav": 621543.3547079127,
+    "target_budget": 124308.67094158253
+  },
+  {
+    "signal_date": "2023-12-18",
+    "execution_date": "2023-12-19",
+    "stock_id": "2603",
+    "rank_score": 97.04522613065326,
+    "previous_nav": 608895.7882871442,
+    "target_budget": 121779.15765742883
+  },
+  {
+    "signal_date": "2023-12-18",
+    "execution_date": "2023-12-19",
+    "stock_id": "3515",
+    "rank_score": 96.06030150753769,
+    "previous_nav": 608895.7882871442,
+    "target_budget": 121779.15765742883
+  },
+  {
+    "signal_date": "2023-12-18",
+    "execution_date": "2023-12-19",
+    "stock_id": "2353",
+    "rank_score": 86.35175879396984,
+    "previous_nav": 608895.7882871442,
+    "target_budget": 112700.65560943876
+  },
+  {
+    "signal_date": "2023-12-20",
+    "execution_date": "2023-12-21",
+    "stock_id": "2357",
+    "rank_score": 91.23926380368098,
+    "previous_nav": 619357.7837066425,
+    "target_budget": 120115.5761459602
+  },
+  {
+    "signal_date": "2023-12-26",
+    "execution_date": "2023-12-27",
+    "stock_id": "6679",
+    "rank_score": 96.5,
+    "previous_nav": 643038.9485416479,
+    "target_budget": 119585.5135587743
+  },
+  {
+    "signal_date": "2023-12-28",
+    "execution_date": "2023-12-29",
+    "stock_id": "3653",
+    "rank_score": 92.28985507246377,
+    "previous_nav": 649751.4676594525,
+    "target_budget": 120404.87362741535
+  },
+  {
+    "signal_date": "2024-01-09",
+    "execution_date": "2024-01-10",
+    "stock_id": "6223",
+    "rank_score": 96.38333333333333,
+    "previous_nav": 609492.3855889571,
+    "target_budget": 121898.47711779142
+  },
+  {
+    "signal_date": "2024-01-09",
+    "execution_date": "2024-01-10",
+    "stock_id": "5269",
+    "rank_score": 92.41666666666666,
+    "previous_nav": 609492.3855889571,
+    "target_budget": 121898.47711779142
+  },
+  {
+    "signal_date": "2024-01-09",
+    "execution_date": "2024-01-10",
+    "stock_id": "3228",
+    "rank_score": 84.28333333333333,
+    "previous_nav": 609492.3855889571,
+    "target_budget": 121898.47711779142
+  },
+  {
+    "signal_date": "2024-01-09",
+    "execution_date": "2024-01-10",
+    "stock_id": "2498",
+    "rank_score": 81.83333333333334,
+    "previous_nav": 609492.3855889571,
+    "target_budget": 121898.47711779142
+  },
+  {
+    "signal_date": "2024-01-09",
+    "execution_date": "2024-01-10",
+    "stock_id": "2371",
+    "rank_score": 79.46666666666667,
+    "previous_nav": 609492.3855889571,
+    "target_budget": 121898.47711779142
+  },
+  {
+    "signal_date": "2024-01-15",
+    "execution_date": "2024-01-16",
+    "stock_id": "9958",
+    "rank_score": 90.375,
+    "previous_nav": 626640.792682409,
+    "target_budget": 114850.67818789161
+  },
+  {
+    "signal_date": "2024-01-19",
+    "execution_date": "2024-01-22",
+    "stock_id": "4746",
+    "rank_score": 92.890625,
+    "previous_nav": 608487.3938641688,
+    "target_budget": 121697.47877283375
+  },
+  {
+    "signal_date": "2024-01-19",
+    "execution_date": "2024-01-22",
+    "stock_id": "2059",
+    "rank_score": 89.390625,
+    "previous_nav": 608487.3938641688,
+    "target_budget": 98405.25624126797
+  },
+  {
+    "signal_date": "2024-01-23",
+    "execution_date": "2024-01-24",
+    "stock_id": "6669",
+    "rank_score": 90.703125,
+    "previous_nav": 613639.3657160201,
+    "target_budget": 122727.87314320402
+  },
+  {
+    "signal_date": "2024-01-25",
+    "execution_date": "2024-01-26",
+    "stock_id": "3694",
+    "rank_score": 82.68656716417911,
+    "previous_nav": 594819.5016492191,
+    "target_budget": 118963.90032984382
+  },
+  {
+    "signal_date": "2024-01-25",
+    "execution_date": "2024-01-26",
+    "stock_id": "2330",
+    "rank_score": 71.92537313432834,
+    "previous_nav": 594819.5016492191,
+    "target_budget": 118963.90032984382
+  },
+  {
+    "signal_date": "2024-02-15",
+    "execution_date": "2024-02-16",
+    "stock_id": "3376",
+    "rank_score": 93.546875,
+    "previous_nav": 634504.0056930108,
+    "target_budget": 126900.80113860215
+  },
+  {
+    "signal_date": "2024-02-15",
+    "execution_date": "2024-02-16",
+    "stock_id": "2383",
+    "rank_score": 91.03125,
+    "previous_nav": 634504.0056930108,
+    "target_budget": 126900.80113860215
+  },
+  {
+    "signal_date": "2024-02-15",
+    "execution_date": "2024-02-16",
+    "stock_id": "3081",
+    "rank_score": 88.625,
+    "previous_nav": 634504.0056930108,
+    "target_budget": 126900.80113860215
+  },
+  {
+    "signal_date": "2024-02-15",
+    "execution_date": "2024-02-16",
+    "stock_id": "2368",
+    "rank_score": 87.203125,
+    "previous_nav": 634504.0056930108,
+    "target_budget": 69597.38742138456
+  },
+  {
+    "signal_date": "2024-02-19",
+    "execution_date": "2024-02-20",
+    "stock_id": "3362",
+    "rank_score": 94.17977528089888,
+    "previous_nav": 617807.8327012147,
+    "target_budget": 113722.83179390218
+  },
+  {
+    "signal_date": "2024-02-23",
+    "execution_date": "2024-02-26",
+    "stock_id": "6290",
+    "rank_score": 94.86666666666666,
+    "previous_nav": 605191.3693396307,
+    "target_budget": 121038.27386792614
+  },
+  {
+    "signal_date": "2024-02-23",
+    "execution_date": "2024-02-26",
+    "stock_id": "3689",
+    "rank_score": 93.46666666666665,
+    "previous_nav": 605191.3693396307,
+    "target_budget": 121038.27386792614
+  },
+  {
+    "signal_date": "2024-02-23",
+    "execution_date": "2024-02-26",
+    "stock_id": "6526",
+    "rank_score": 89.5,
+    "previous_nav": 605191.3693396307,
+    "target_budget": 98795.99998126978
+  },
+  {
+    "signal_date": "2024-03-04",
+    "execution_date": "2024-03-05",
+    "stock_id": "3376",
+    "rank_score": 95.30810810810812,
+    "previous_nav": 610274.4677047895,
+    "target_budget": 111796.1149848423
+  },
+  {
+    "signal_date": "2024-03-07",
+    "execution_date": "2024-03-08",
+    "stock_id": "5234",
+    "rank_score": 97.01041666666666,
+    "previous_nav": 608854.3738037674,
+    "target_budget": 121770.87476075348
+  },
+  {
+    "signal_date": "2024-03-07",
+    "execution_date": "2024-03-08",
+    "stock_id": "6805",
+    "rank_score": 94.53125,
+    "previous_nav": 608854.3738037674,
+    "target_budget": 121770.87476075348
+  },
+  {
+    "signal_date": "2024-03-07",
+    "execution_date": "2024-03-08",
+    "stock_id": "2360",
+    "rank_score": 91.17708333333333,
+    "previous_nav": 608854.3738037674,
+    "target_budget": 118688.16144255362
+  },
+  {
+    "signal_date": "2024-03-08",
+    "execution_date": "2024-03-11",
+    "stock_id": "2404",
+    "rank_score": 97.23853211009174,
+    "previous_nav": 562876.3314258845,
+    "target_budget": 112575.2662851769
+  },
+  {
+    "signal_date": "2024-03-08",
+    "execution_date": "2024-03-11",
+    "stock_id": "3293",
+    "rank_score": 83.64220183486239,
+    "previous_nav": 562876.3314258845,
+    "target_budget": 112575.2662851769
+  },
+  {
+    "signal_date": "2024-03-08",
+    "execution_date": "2024-03-11",
+    "stock_id": "6121",
+    "rank_score": 79.78899082568806,
+    "previous_nav": 562876.3314258845,
+    "target_budget": 112575.2662851769
+  },
+  {
+    "signal_date": "2024-03-08",
+    "execution_date": "2024-03-11",
+    "stock_id": "5483",
+    "rank_score": 77.71559633027522,
+    "previous_nav": 562876.3314258845,
+    "target_budget": 112575.2662851769
+  },
+  {
+    "signal_date": "2024-03-21",
+    "execution_date": "2024-03-22",
+    "stock_id": "3706",
+    "rank_score": 96.73333333333332,
+    "previous_nav": 544518.3207978846,
+    "target_budget": 108903.66415957692
+  },
+  {
+    "signal_date": "2024-03-21",
+    "execution_date": "2024-03-22",
+    "stock_id": "2317",
+    "rank_score": 94.39999999999999,
+    "previous_nav": 544518.3207978846,
+    "target_budget": 108903.66415957692
+  },
+  {
+    "signal_date": "2024-03-21",
+    "execution_date": "2024-03-22",
+    "stock_id": "9904",
+    "rank_score": 84.98888888888888,
+    "previous_nav": 544518.3207978846,
+    "target_budget": 108903.66415957692
+  },
+  {
+    "signal_date": "2024-03-21",
+    "execution_date": "2024-03-22",
+    "stock_id": "2308",
+    "rank_score": 84.28888888888889,
+    "previous_nav": 544518.3207978846,
+    "target_budget": 93472.11642708031
+  },
+  {
+    "signal_date": "2024-03-22",
+    "execution_date": "2024-03-25",
+    "stock_id": "8996",
+    "rank_score": 96.18848167539267,
+    "previous_nav": 534099.2935358497,
+    "target_budget": 100588.07162055008
+  },
+  {
+    "signal_date": "2024-04-02",
+    "execution_date": "2024-04-03",
+    "stock_id": "6213",
+    "rank_score": 96.39999999999999,
+    "previous_nav": 527616.3368491144,
+    "target_budget": 105523.26736982288
+  },
+  {
+    "signal_date": "2024-04-02",
+    "execution_date": "2024-04-03",
+    "stock_id": "3583",
+    "rank_score": 91.36,
+    "previous_nav": 527616.3368491144,
+    "target_budget": 105523.26736982288
+  },
+  {
+    "signal_date": "2024-04-02",
+    "execution_date": "2024-04-03",
+    "stock_id": "6197",
+    "rank_score": 88.64,
+    "previous_nav": 527616.3368491144,
+    "target_budget": 85357.03635136878
+  },
+  {
+    "signal_date": "2024-04-08",
+    "execution_date": "2024-04-09",
+    "stock_id": "2009",
+    "rank_score": 86.27218934911242,
+    "previous_nav": 528688.5516492211,
+    "target_budget": 105737.71032984422
+  },
+  {
+    "signal_date": "2024-04-18",
+    "execution_date": "2024-04-19",
+    "stock_id": "1608",
+    "rank_score": 88.35754189944133,
+    "previous_nav": 515318.6954578122,
+    "target_budget": 103063.73909156244
+  },
+  {
+    "signal_date": "2024-04-18",
+    "execution_date": "2024-04-19",
+    "stock_id": "1612",
+    "rank_score": 87.73184357541899,
+    "previous_nav": 515318.6954578122,
+    "target_budget": 103063.73909156244
+  },
+  {
+    "signal_date": "2024-04-18",
+    "execution_date": "2024-04-19",
+    "stock_id": "2348",
+    "rank_score": 86.63687150837988,
+    "previous_nav": 515318.6954578122,
+    "target_budget": 103063.73909156244
+  },
+  {
+    "signal_date": "2024-04-18",
+    "execution_date": "2024-04-19",
+    "stock_id": "3017",
+    "rank_score": 86.23463687150837,
+    "previous_nav": 515318.6954578122,
+    "target_budget": 88975.87044633368
+  },
+  {
+    "signal_date": "2024-04-24",
+    "execution_date": "2024-04-25",
+    "stock_id": "2618",
+    "rank_score": 85.74390243902438,
+    "previous_nav": 475603.92594087677,
+    "target_budget": 95120.78518817536
+  },
+  {
+    "signal_date": "2024-04-24",
+    "execution_date": "2024-04-25",
+    "stock_id": "2610",
+    "rank_score": 69.59756097560975,
+    "previous_nav": 475603.92594087677,
+    "target_budget": 95120.78518817536
+  },
+  {
+    "signal_date": "2024-04-25",
+    "execution_date": "2024-04-26",
+    "stock_id": "2101",
+    "rank_score": 86.81437125748504,
+    "previous_nav": 473358.53948670236,
+    "target_budget": 94671.70789734047
+  },
+  {
+    "signal_date": "2024-04-26",
+    "execution_date": "2024-04-29",
+    "stock_id": "6143",
+    "rank_score": 90.4969696969697,
+    "previous_nav": 490034.76469221583,
+    "target_budget": 98006.95293844317
+  },
+  {
+    "signal_date": "2024-04-26",
+    "execution_date": "2024-04-29",
+    "stock_id": "6177",
+    "rank_score": 83.55151515151516,
+    "previous_nav": 490034.76469221583,
+    "target_budget": 92683.69472874241
+  },
+  {
+    "signal_date": "2024-04-29",
+    "execution_date": "2024-04-30",
+    "stock_id": "6223",
+    "rank_score": 83.0,
+    "previous_nav": 486626.45455261366,
+    "target_budget": 90523.40412567346
+  },
+  {
+    "signal_date": "2024-05-06",
+    "execution_date": "2024-05-07",
+    "stock_id": "2520",
+    "rank_score": 95.56435643564356,
+    "previous_nav": 497972.36215397756,
+    "target_budget": 83611.2790859526
+  },
+  {
+    "signal_date": "2024-05-08",
+    "execution_date": "2024-05-09",
+    "stock_id": "2615",
+    "rank_score": 91.34299516908212,
+    "previous_nav": 482563.9171916944,
+    "target_budget": 96512.78343833887
+  },
+  {
+    "signal_date": "2024-05-08",
+    "execution_date": "2024-05-09",
+    "stock_id": "3260",
+    "rank_score": 88.97584541062801,
+    "previous_nav": 482563.9171916944,
+    "target_budget": 73976.23387812404
+  },
+  {
+    "signal_date": "2024-05-09",
+    "execution_date": "2024-05-10",
+    "stock_id": "3044",
+    "rank_score": 93.11229946524062,
+    "previous_nav": 472298.80272975,
+    "target_budget": 94459.76054595
+  },
+  {
+    "signal_date": "2024-05-09",
+    "execution_date": "2024-05-10",
+    "stock_id": "2357",
+    "rank_score": 85.55080213903744,
+    "previous_nav": 472298.80272975,
+    "target_budget": 94459.76054595
+  },
+  {
+    "signal_date": "2024-05-09",
+    "execution_date": "2024-05-10",
+    "stock_id": "2882",
+    "rank_score": 75.74331550802138,
+    "previous_nav": 472298.80272975,
+    "target_budget": 76377.41077320551
+  },
+  {
+    "signal_date": "2024-05-10",
+    "execution_date": "2024-05-13",
+    "stock_id": "6670",
+    "rank_score": 97.45454545454545,
+    "previous_nav": 477901.0006567963,
+    "target_budget": 95580.20013135926
+  },
+  {
+    "signal_date": "2024-05-13",
+    "execution_date": "2024-05-14",
+    "stock_id": "2609",
+    "rank_score": 98.48863636363636,
+    "previous_nav": 486751.30531078426,
+    "target_budget": 93160.23722722351
+  },
+  {
+    "signal_date": "2024-05-22",
+    "execution_date": "2024-05-23",
+    "stock_id": "9958",
+    "rank_score": 95.08900523560209,
+    "previous_nav": 493433.09418686887,
+    "target_budget": 98686.61883737377
+  },
+  {
+    "signal_date": "2024-05-22",
+    "execution_date": "2024-05-23",
+    "stock_id": "1815",
+    "rank_score": 94.94240837696334,
+    "previous_nav": 493433.09418686887,
+    "target_budget": 88566.37792120053
+  },
+  {
+    "signal_date": "2024-05-23",
+    "execution_date": "2024-05-24",
+    "stock_id": "2392",
+    "rank_score": 89.3063063063063,
+    "previous_nav": 491701.4663820866,
+    "target_budget": 77781.2513284776
+  },
+  {
+    "signal_date": "2024-06-06",
+    "execution_date": "2024-06-07",
+    "stock_id": "2615",
+    "rank_score": 99.03191489361701,
+    "previous_nav": 523012.33989450376,
+    "target_budget": 104602.46797890075
+  },
+  {
+    "signal_date": "2024-06-06",
+    "execution_date": "2024-06-07",
+    "stock_id": "4566",
+    "rank_score": 89.25531914893617,
+    "previous_nav": 523012.33989450376,
+    "target_budget": 104602.46797890075
+  },
+  {
+    "signal_date": "2024-06-06",
+    "execution_date": "2024-06-07",
+    "stock_id": "2609",
+    "rank_score": 86.35106382978724,
+    "previous_nav": 523012.33989450376,
+    "target_budget": 104602.46797890075
+  },
+  {
+    "signal_date": "2024-06-06",
+    "execution_date": "2024-06-07",
+    "stock_id": "5274",
+    "rank_score": 85.68085106382979,
+    "previous_nav": 523012.33989450376,
+    "target_budget": 104602.46797890075
+  },
+  {
+    "signal_date": "2024-06-11",
+    "execution_date": "2024-06-12",
+    "stock_id": "3374",
+    "rank_score": 93.82564102564103,
+    "previous_nav": 513444.99447195826,
+    "target_budget": 102688.99889439165
+  },
+  {
+    "signal_date": "2024-06-11",
+    "execution_date": "2024-06-12",
+    "stock_id": "3376",
+    "rank_score": 83.32307692307691,
+    "previous_nav": 513444.99447195826,
+    "target_budget": 94459.61076836764
+  },
+  {
+    "signal_date": "2024-06-13",
+    "execution_date": "2024-06-14",
+    "stock_id": "6706",
+    "rank_score": 96.65555555555555,
+    "previous_nav": 539456.8162929777,
+    "target_budget": 97758.80126589873
+  },
+  {
+    "signal_date": "2024-06-18",
+    "execution_date": "2024-06-19",
+    "stock_id": "2476",
+    "rank_score": 88.50279329608938,
+    "previous_nav": 562516.6527947444,
+    "target_budget": 87421.26804842697
+  },
+  {
+    "signal_date": "2024-07-04",
+    "execution_date": "2024-07-05",
+    "stock_id": "6643",
+    "rank_score": 91.53225806451613,
+    "previous_nav": 552549.0046532041,
+    "target_budget": 110509.80093064082
+  },
+  {
+    "signal_date": "2024-07-04",
+    "execution_date": "2024-07-05",
+    "stock_id": "3583",
+    "rank_score": 88.99193548387096,
+    "previous_nav": 552549.0046532041,
+    "target_budget": 110509.80093064082
+  },
+  {
+    "signal_date": "2024-07-04",
+    "execution_date": "2024-07-05",
+    "stock_id": "3450",
+    "rank_score": 86.61290322580645,
+    "previous_nav": 552549.0046532041,
+    "target_budget": 110509.80093064082
+  },
+  {
+    "signal_date": "2024-07-04",
+    "execution_date": "2024-07-05",
+    "stock_id": "1513",
+    "rank_score": 86.4516129032258,
+    "previous_nav": 552549.0046532041,
+    "target_budget": 110509.80093064082
+  },
+  {
+    "signal_date": "2024-07-04",
+    "execution_date": "2024-07-05",
+    "stock_id": "3374",
+    "rank_score": 83.62096774193547,
+    "previous_nav": 552549.0046532041,
+    "target_budget": 110509.80093064079
+  },
+  {
+    "signal_date": "2024-07-08",
+    "execution_date": "2024-07-09",
+    "stock_id": "3008",
+    "rank_score": 87.76422764227641,
+    "previous_nav": 551071.2510591258,
+    "target_budget": 110214.25021182516
+  },
+  {
+    "signal_date": "2024-07-08",
+    "execution_date": "2024-07-09",
+    "stock_id": "3362",
+    "rank_score": 81.73170731707317,
+    "previous_nav": 551071.2510591258,
+    "target_budget": 93928.8859547553
+  },
+  {
+    "signal_date": "2024-08-01",
+    "execution_date": "2024-08-02",
+    "stock_id": "4513",
+    "rank_score": 88.98795180722891,
+    "previous_nav": 546634.1279395798,
+    "target_budget": 109326.82558791596
+  },
+  {
+    "signal_date": "2024-08-01",
+    "execution_date": "2024-08-02",
+    "stock_id": "2524",
+    "rank_score": 88.14457831325299,
+    "previous_nav": 546634.1279395798,
+    "target_budget": 109326.82558791596
+  },
+  {
+    "signal_date": "2024-08-01",
+    "execution_date": "2024-08-02",
+    "stock_id": "9906",
+    "rank_score": 88.06024096385542,
+    "previous_nav": 546634.1279395798,
+    "target_budget": 109326.82558791596
+  },
+  {
+    "signal_date": "2024-08-01",
+    "execution_date": "2024-08-02",
+    "stock_id": "9921",
+    "rank_score": 87.6024096385542,
+    "previous_nav": 546634.1279395798,
+    "target_budget": 109326.82558791596
+  },
+  {
+    "signal_date": "2024-08-01",
+    "execution_date": "2024-08-02",
+    "stock_id": "2442",
+    "rank_score": 81.90361445783134,
+    "previous_nav": 546634.1279395798,
+    "target_budget": 109326.82558791596
+  },
+  {
+    "signal_date": "2024-08-07",
+    "execution_date": "2024-08-08",
+    "stock_id": "2912",
+    "rank_score": 91.89814814814815,
+    "previous_nav": 501131.6474386732,
+    "target_budget": 100226.32948773463
+  },
+  {
+    "signal_date": "2024-08-09",
+    "execution_date": "2024-08-12",
+    "stock_id": "3131",
+    "rank_score": 93.64417177914109,
+    "previous_nav": 502680.8674802566,
+    "target_budget": 100536.17349605131
+  },
+  {
+    "signal_date": "2024-08-13",
+    "execution_date": "2024-08-14",
+    "stock_id": "8096",
+    "rank_score": 97.51898734177215,
+    "previous_nav": 498843.89758844086,
+    "target_budget": 99768.77951768818
+  },
+  {
+    "signal_date": "2024-08-14",
+    "execution_date": "2024-08-15",
+    "stock_id": "4576",
+    "rank_score": 85.82608695652173,
+    "previous_nav": 500228.41800778284,
+    "target_budget": 100045.68360155656
+  },
+  {
+    "signal_date": "2024-08-14",
+    "execution_date": "2024-08-15",
+    "stock_id": "5880",
+    "rank_score": 84.26086956521738,
+    "previous_nav": 500228.41800778284,
+    "target_budget": 100045.68360155656
+  },
+  {
+    "signal_date": "2024-08-14",
+    "execution_date": "2024-08-15",
+    "stock_id": "1708",
+    "rank_score": 82.34782608695653,
+    "previous_nav": 500228.41800778284,
+    "target_budget": 92659.70007331089
+  },
+  {
+    "signal_date": "2024-08-15",
+    "execution_date": "2024-08-16",
+    "stock_id": "3227",
+    "rank_score": 90.66666666666666,
+    "previous_nav": 504722.02325553854,
+    "target_budget": 100154.60132362612
+  },
+  {
+    "signal_date": "2024-08-28",
+    "execution_date": "2024-08-29",
+    "stock_id": "3450",
+    "rank_score": 92.0909090909091,
+    "previous_nav": 515519.7447933281,
+    "target_budget": 103103.94895866563
+  },
+  {
+    "signal_date": "2024-08-28",
+    "execution_date": "2024-08-29",
+    "stock_id": "3550",
+    "rank_score": 89.45454545454544,
+    "previous_nav": 515519.7447933281,
+    "target_budget": 87424.09063834682
+  },
+  {
+    "signal_date": "2024-09-12",
+    "execution_date": "2024-09-13",
+    "stock_id": "6515",
+    "rank_score": 92.94573643410853,
+    "previous_nav": 494256.860071391,
+    "target_budget": 98851.3720142782
+  },
+  {
+    "signal_date": "2024-09-12",
+    "execution_date": "2024-09-13",
+    "stock_id": "4977",
+    "rank_score": 88.80620155038758,
+    "previous_nav": 494256.860071391,
+    "target_budget": 98851.3720142782
+  },
+  {
+    "signal_date": "2024-09-12",
+    "execution_date": "2024-09-13",
+    "stock_id": "6530",
+    "rank_score": 79.24031007751938,
+    "previous_nav": 494256.860071391,
+    "target_budget": 98851.3720142782
+  },
+  {
+    "signal_date": "2024-09-13",
+    "execution_date": "2024-09-16",
+    "stock_id": "5234",
+    "rank_score": 96.22695035460993,
+    "previous_nav": 493546.5649958189,
+    "target_budget": 98709.31299916378
+  },
+  {
+    "signal_date": "2024-09-13",
+    "execution_date": "2024-09-16",
+    "stock_id": "6187",
+    "rank_score": 94.1418439716312,
+    "previous_nav": 493546.5649958189,
+    "target_budget": 98709.31299916378
+  },
+  {
+    "signal_date": "2024-09-23",
+    "execution_date": "2024-09-24",
+    "stock_id": "3167",
+    "rank_score": 87.22641509433961,
+    "previous_nav": 517056.71413884195,
+    "target_budget": 94646.62171782154
+  },
+  {
+    "signal_date": "2024-09-24",
+    "execution_date": "2024-09-25",
+    "stock_id": "2615",
+    "rank_score": 87.49438202247191,
+    "previous_nav": 509059.8211866397,
+    "target_budget": 91303.34561922497
+  },
+  {
+    "signal_date": "2024-09-26",
+    "execution_date": "2024-09-27",
+    "stock_id": "3293",
+    "rank_score": 93.46666666666667,
+    "previous_nav": 517410.56488623336,
+    "target_budget": 103482.11297724667
+  },
+  {
+    "signal_date": "2024-10-07",
+    "execution_date": "2024-10-08",
+    "stock_id": "6438",
+    "rank_score": 96.16666666666667,
+    "previous_nav": 522884.1398896269,
+    "target_budget": 104576.82797792538
+  },
+  {
+    "signal_date": "2024-10-07",
+    "execution_date": "2024-10-08",
+    "stock_id": "1590",
+    "rank_score": 92.58333333333331,
+    "previous_nav": 522884.1398896269,
+    "target_budget": 89581.59818242841
+  },
+  {
+    "signal_date": "2024-10-09",
+    "execution_date": "2024-10-11",
+    "stock_id": "3363",
+    "rank_score": 96.36708860759494,
+    "previous_nav": 513872.7356012864,
+    "target_budget": 82366.0298466162
+  },
+  {
+    "signal_date": "2024-10-11",
+    "execution_date": "2024-10-14",
+    "stock_id": "6830",
+    "rank_score": 91.50666666666666,
+    "previous_nav": 522084.07475884375,
+    "target_budget": 104416.81495176876
+  },
+  {
+    "signal_date": "2024-10-18",
+    "execution_date": "2024-10-21",
+    "stock_id": "6231",
+    "rank_score": 78.02649006622516,
+    "previous_nav": 532342.7701695183,
+    "target_budget": 106468.55403390367
+  },
+  {
+    "signal_date": "2024-10-18",
+    "execution_date": "2024-10-21",
+    "stock_id": "2885",
+    "rank_score": 74.03973509933775,
+    "previous_nav": 532342.7701695183,
+    "target_budget": 84488.63309197902
+  },
+  {
+    "signal_date": "2024-11-04",
+    "execution_date": "2024-11-05",
+    "stock_id": "6768",
+    "rank_score": 97.74496644295301,
+    "previous_nav": 516502.95483704295,
+    "target_budget": 103300.59096740859
+  },
+  {
+    "signal_date": "2024-11-04",
+    "execution_date": "2024-11-05",
+    "stock_id": "2354",
+    "rank_score": 86.24161073825503,
+    "previous_nav": 516502.95483704295,
+    "target_budget": 103300.59096740859
+  },
+  {
+    "signal_date": "2024-11-04",
+    "execution_date": "2024-11-05",
+    "stock_id": "2328",
+    "rank_score": 65.15436241610738,
+    "previous_nav": 516502.95483704295,
+    "target_budget": 103300.59096740859
+  },
+  {
+    "signal_date": "2024-11-05",
+    "execution_date": "2024-11-06",
+    "stock_id": "3231",
+    "rank_score": 88.03418803418803,
+    "previous_nav": 511471.6038542108,
+    "target_budget": 102294.32077084217
+  },
+  {
+    "signal_date": "2024-11-05",
+    "execution_date": "2024-11-06",
+    "stock_id": "2603",
+    "rank_score": 86.47863247863248,
+    "previous_nav": 511471.6038542108,
+    "target_budget": 102294.32077084217
+  },
+  {
+    "signal_date": "2024-11-19",
+    "execution_date": "2024-11-20",
+    "stock_id": "1442",
+    "rank_score": 96.54666666666667,
+    "previous_nav": 524209.6820926374,
+    "target_budget": 104841.93641852748
+  },
+  {
+    "signal_date": "2024-11-19",
+    "execution_date": "2024-11-20",
+    "stock_id": "3706",
+    "rank_score": 87.66666666666667,
+    "previous_nav": 524209.6820926374,
+    "target_budget": 104841.93641852748
+  },
+  {
+    "signal_date": "2024-11-19",
+    "execution_date": "2024-11-20",
+    "stock_id": "2347",
+    "rank_score": 75.44,
+    "previous_nav": 524209.6820926374,
+    "target_budget": 104841.93641852748
+  },
+  {
+    "signal_date": "2024-11-19",
+    "execution_date": "2024-11-20",
+    "stock_id": "3032",
+    "rank_score": 75.14666666666666,
+    "previous_nav": 524209.6820926374,
+    "target_budget": 98957.32547941111
+  },
+  {
+    "signal_date": "2024-11-25",
+    "execution_date": "2024-11-26",
+    "stock_id": "4979",
+    "rank_score": 88.28571428571428,
+    "previous_nav": 542388.3968190094,
+    "target_budget": 108477.67936380189
+  },
+  {
+    "signal_date": "2024-11-25",
+    "execution_date": "2024-11-26",
+    "stock_id": "6558",
+    "rank_score": 88.28571428571428,
+    "previous_nav": 542388.3968190094,
+    "target_budget": 98894.45139156243
+  },
+  {
+    "signal_date": "2024-12-16",
+    "execution_date": "2024-12-17",
+    "stock_id": "2368",
+    "rank_score": 88.97058823529412,
+    "previous_nav": 561620.41851453,
+    "target_budget": 112324.083702906
+  },
+  {
+    "signal_date": "2024-12-16",
+    "execution_date": "2024-12-17",
+    "stock_id": "3443",
+    "rank_score": 87.85294117647058,
+    "previous_nav": 561620.41851453,
+    "target_budget": 112324.083702906
+  },
+  {
+    "signal_date": "2024-12-16",
+    "execution_date": "2024-12-17",
+    "stock_id": "3019",
+    "rank_score": 87.2205882352941,
+    "previous_nav": 561620.41851453,
+    "target_budget": 112324.083702906
+  },
+  {
+    "signal_date": "2024-12-16",
+    "execution_date": "2024-12-17",
+    "stock_id": "2374",
+    "rank_score": 79.5,
+    "previous_nav": 561620.41851453,
+    "target_budget": 112324.083702906
+  },
+  {
+    "signal_date": "2024-12-16",
+    "execution_date": "2024-12-17",
+    "stock_id": "3045",
+    "rank_score": 68.19117647058823,
+    "previous_nav": 561620.41851453,
+    "target_budget": 111809.11000952934
+  },
+  {
+    "signal_date": "2024-12-23",
+    "execution_date": "2024-12-24",
+    "stock_id": "2348",
+    "rank_score": 89.39175257731958,
+    "previous_nav": 596766.7456439736,
+    "target_budget": 109021.21474303867
+  },
+  {
+    "signal_date": "2024-12-24",
+    "execution_date": "2024-12-25",
+    "stock_id": "2049",
+    "rank_score": 97.73652694610777,
+    "previous_nav": 599383.0535685911,
+    "target_budget": 119876.61071371823
+  },
+  {
+    "signal_date": "2024-12-24",
+    "execution_date": "2024-12-25",
+    "stock_id": "6215",
+    "rank_score": 88.40718562874251,
+    "previous_nav": 599383.0535685911,
+    "target_budget": 92595.08431344703
+  },
+  {
+    "signal_date": "2024-12-27",
+    "execution_date": "2024-12-30",
+    "stock_id": "6683",
+    "rank_score": 96.15853658536585,
+    "previous_nav": 606647.3875868644,
+    "target_budget": 85524.77131516994
+  },
+  {
+    "signal_date": "2025-01-06",
+    "execution_date": "2025-01-07",
+    "stock_id": "6789",
+    "rank_score": 96.28571428571428,
+    "previous_nav": 568398.2699938606,
+    "target_budget": 113679.65399877212
+  },
+  {
+    "signal_date": "2025-01-06",
+    "execution_date": "2025-01-07",
+    "stock_id": "3163",
+    "rank_score": 83.99999999999999,
+    "previous_nav": 568398.2699938606,
+    "target_budget": 113679.65399877212
+  },
+  {
+    "signal_date": "2025-01-06",
+    "execution_date": "2025-01-07",
+    "stock_id": "2454",
+    "rank_score": 83.80952380952381,
+    "previous_nav": 568398.2699938606,
+    "target_budget": 113679.65399877212
+  },
+  {
+    "signal_date": "2025-01-06",
+    "execution_date": "2025-01-07",
+    "stock_id": "6005",
+    "rank_score": 82.47619047619048,
+    "previous_nav": 568398.2699938606,
+    "target_budget": 113679.65399877212
+  },
+  {
+    "signal_date": "2025-01-06",
+    "execution_date": "2025-01-07",
+    "stock_id": "2327",
+    "rank_score": 82.1904761904762,
+    "previous_nav": 568398.2699938606,
+    "target_budget": 113679.65399877209
+  },
+  {
+    "signal_date": "2025-01-16",
+    "execution_date": "2025-01-17",
+    "stock_id": "3374",
+    "rank_score": 89.03875968992247,
+    "previous_nav": 543953.4979230786,
+    "target_budget": 108790.69958461572
+  },
+  {
+    "signal_date": "2025-01-16",
+    "execution_date": "2025-01-17",
+    "stock_id": "4772",
+    "rank_score": 88.5891472868217,
+    "previous_nav": 543953.4979230786,
+    "target_budget": 108790.69958461572
+  },
+  {
+    "signal_date": "2025-01-16",
+    "execution_date": "2025-01-17",
+    "stock_id": "3005",
+    "rank_score": 86.43410852713177,
+    "previous_nav": 543953.4979230786,
+    "target_budget": 108790.69958461572
+  },
+  {
+    "signal_date": "2025-01-16",
+    "execution_date": "2025-01-17",
+    "stock_id": "3081",
+    "rank_score": 86.2015503875969,
+    "previous_nav": 543953.4979230786,
+    "target_budget": 108790.69958461572
+  },
+  {
+    "signal_date": "2025-01-20",
+    "execution_date": "2025-01-21",
+    "stock_id": "2498",
+    "rank_score": 95.97122302158273,
+    "previous_nav": 548209.5790154882,
+    "target_budget": 109641.91580309763
+  },
+  {
+    "signal_date": "2025-01-20",
+    "execution_date": "2025-01-21",
+    "stock_id": "2472",
+    "rank_score": 93.0503597122302,
+    "previous_nav": 548209.5790154882,
+    "target_budget": 99632.5164999342
+  },
+  {
+    "signal_date": "2025-02-05",
+    "execution_date": "2025-02-06",
+    "stock_id": "3264",
+    "rank_score": 95.42138364779875,
+    "previous_nav": 517054.18103512755,
+    "target_budget": 103410.83620702551
+  },
+  {
+    "signal_date": "2025-02-05",
+    "execution_date": "2025-02-06",
+    "stock_id": "3376",
+    "rank_score": 93.30817610062893,
+    "previous_nav": 517054.18103512755,
+    "target_budget": 103410.83620702551
+  },
+  {
+    "signal_date": "2025-02-05",
+    "execution_date": "2025-02-06",
+    "stock_id": "2395",
+    "rank_score": 93.22012578616352,
+    "previous_nav": 517054.18103512755,
+    "target_budget": 89819.05670528044
+  },
+  {
+    "signal_date": "2025-02-06",
+    "execution_date": "2025-02-07",
+    "stock_id": "3088",
+    "rank_score": 97.10344827586206,
+    "previous_nav": 521671.3243720294,
+    "target_budget": 104334.26487440588
+  },
+  {
+    "signal_date": "2025-02-11",
+    "execution_date": "2025-02-12",
+    "stock_id": "6206",
+    "rank_score": 98.39189189189189,
+    "previous_nav": 521578.34952945326,
+    "target_budget": 104315.66990589065
+  },
+  {
+    "signal_date": "2025-02-17",
+    "execution_date": "2025-02-18",
+    "stock_id": "1536",
+    "rank_score": 94.3267973856209,
+    "previous_nav": 539698.0520352055,
+    "target_budget": 93097.54815218007
+  },
+  {
+    "signal_date": "2025-02-19",
+    "execution_date": "2025-02-20",
+    "stock_id": "2408",
+    "rank_score": 97.06586826347305,
+    "previous_nav": 562672.9876512613,
+    "target_budget": 112534.59753025226
+  },
+  {
+    "signal_date": "2025-02-19",
+    "execution_date": "2025-02-20",
+    "stock_id": "8028",
+    "rank_score": 96.64670658682635,
+    "previous_nav": 562672.9876512613,
+    "target_budget": 100473.4762020081
+  },
+  {
+    "signal_date": "2025-02-21",
+    "execution_date": "2025-02-24",
+    "stock_id": "2408",
+    "rank_score": 97.58620689655172,
+    "previous_nav": 568295.8395185334,
+    "target_budget": 103941.75662975016
+  },
+  {
+    "signal_date": "2025-03-17",
+    "execution_date": "2025-03-18",
+    "stock_id": "3260",
+    "rank_score": 94.9673202614379,
+    "previous_nav": 513449.23883063364,
+    "target_budget": 102689.84776612672
+  },
+  {
+    "signal_date": "2025-03-17",
+    "execution_date": "2025-03-18",
+    "stock_id": "3481",
+    "rank_score": 91.03267973856208,
+    "previous_nav": 513449.23883063364,
+    "target_budget": 102689.84776612672
+  },
+  {
+    "signal_date": "2025-03-17",
+    "execution_date": "2025-03-18",
+    "stock_id": "3528",
+    "rank_score": 87.34640522875816,
+    "previous_nav": 513449.23883063364,
+    "target_budget": 102689.84776612672
+  },
+  {
+    "signal_date": "2025-03-17",
+    "execution_date": "2025-03-18",
+    "stock_id": "4303",
+    "rank_score": 86.33986928104574,
+    "previous_nav": 513449.23883063364,
+    "target_budget": 102689.84776612672
+  },
+  {
+    "signal_date": "2025-03-17",
+    "execution_date": "2025-03-18",
+    "stock_id": "1524",
+    "rank_score": 83.86928104575163,
+    "previous_nav": 513449.23883063364,
+    "target_budget": 102689.8477661267
+  },
+  {
+    "signal_date": "2025-03-24",
+    "execution_date": "2025-03-25",
+    "stock_id": "8383",
+    "rank_score": 88.28888888888888,
+    "previous_nav": 510360.33727540367,
+    "target_budget": 102072.06745508073
+  },
+  {
+    "signal_date": "2025-03-24",
+    "execution_date": "2025-03-25",
+    "stock_id": "2634",
+    "rank_score": 85.25555555555556,
+    "previous_nav": 510360.33727540367,
+    "target_budget": 87625.38380178189
+  },
+  {
+    "signal_date": "2025-03-25",
+    "execution_date": "2025-03-26",
+    "stock_id": "6140",
+    "rank_score": 88.20512820512819,
+    "previous_nav": 513892.2267610529,
+    "target_budget": 94278.11736972108
+  },
+  {
+    "signal_date": "2025-03-26",
+    "execution_date": "2025-03-27",
+    "stock_id": "3078",
+    "rank_score": 91.33333333333333,
+    "previous_nav": 502474.68832825177,
+    "target_budget": 87079.29246843602
+  },
+  {
+    "signal_date": "2025-04-25",
+    "execution_date": "2025-04-28",
+    "stock_id": "2471",
+    "rank_score": 97.0962962962963,
+    "previous_nav": 474295.10571205337,
+    "target_budget": 94859.02114241067
+  },
+  {
+    "signal_date": "2025-04-28",
+    "execution_date": "2025-04-29",
+    "stock_id": "5201",
+    "rank_score": 89.49640287769783,
+    "previous_nav": 473248.5499993935,
+    "target_budget": 94649.7099998787
+  },
+  {
+    "signal_date": "2025-04-29",
+    "execution_date": "2025-04-30",
+    "stock_id": "5251",
+    "rank_score": 87.5,
+    "previous_nav": 475342.88611005805,
+    "target_budget": 95068.5772220116
+  },
+  {
+    "signal_date": "2025-04-29",
+    "execution_date": "2025-04-30",
+    "stock_id": "3356",
+    "rank_score": 74.125,
+    "previous_nav": 475342.88611005805,
+    "target_budget": 95068.5772220116
+  },
+  {
+    "signal_date": "2025-05-05",
+    "execution_date": "2025-05-06",
+    "stock_id": "2383",
+    "rank_score": 95.26896551724137,
+    "previous_nav": 445306.36122841644,
+    "target_budget": 89061.27224568329
+  },
+  {
+    "signal_date": "2025-05-09",
+    "execution_date": "2025-05-12",
+    "stock_id": "6757",
+    "rank_score": 86.42424242424242,
+    "previous_nav": 454817.3549794326,
+    "target_budget": 90963.47099588651
+  },
+  {
+    "signal_date": "2025-05-09",
+    "execution_date": "2025-05-12",
+    "stock_id": "9907",
+    "rank_score": 77.6969696969697,
+    "previous_nav": 454817.3549794326,
+    "target_budget": 90963.47099588651
+  },
+  {
+    "signal_date": "2025-05-09",
+    "execution_date": "2025-05-12",
+    "stock_id": "2890",
+    "rank_score": 57.43939393939394,
+    "previous_nav": 454817.3549794326,
+    "target_budget": 90963.47099588651
+  },
+  {
+    "signal_date": "2025-05-12",
+    "execution_date": "2025-05-13",
+    "stock_id": "6596",
+    "rank_score": 89.42068965517241,
+    "previous_nav": 444554.2514259296,
+    "target_budget": 88910.85028518592
+  },
+  {
+    "signal_date": "2025-05-12",
+    "execution_date": "2025-05-13",
+    "stock_id": "6669",
+    "rank_score": 74.70344827586206,
+    "previous_nav": 444554.2514259296,
+    "target_budget": 78461.56933677582
+  },
+  {
+    "signal_date": "2025-06-04",
+    "execution_date": "2025-06-05",
+    "stock_id": "2408",
+    "rank_score": 96.77697841726618,
+    "previous_nav": 457620.5046378765,
+    "target_budget": 91524.1009275753
+  },
+  {
+    "signal_date": "2025-06-04",
+    "execution_date": "2025-06-05",
+    "stock_id": "6805",
+    "rank_score": 94.86330935251797,
+    "previous_nav": 457620.5046378765,
+    "target_budget": 91524.1009275753
+  },
+  {
+    "signal_date": "2025-06-04",
+    "execution_date": "2025-06-05",
+    "stock_id": "8210",
+    "rank_score": 90.83453237410072,
+    "previous_nav": 457620.5046378765,
+    "target_budget": 91524.1009275753
+  },
+  {
+    "signal_date": "2025-06-04",
+    "execution_date": "2025-06-05",
+    "stock_id": "1815",
+    "rank_score": 87.07913669064749,
+    "previous_nav": 457620.5046378765,
+    "target_budget": 69813.49275732205
+  },
+  {
+    "signal_date": "2025-06-25",
+    "execution_date": "2025-06-26",
+    "stock_id": "4991",
+    "rank_score": 97.46198830409355,
+    "previous_nav": 534993.7722644133,
+    "target_budget": 106998.75445288265
+  },
+  {
+    "signal_date": "2025-06-25",
+    "execution_date": "2025-06-26",
+    "stock_id": "6187",
+    "rank_score": 93.61403508771929,
+    "previous_nav": 534993.7722644133,
+    "target_budget": 106998.75445288265
+  },
+  {
+    "signal_date": "2025-06-25",
+    "execution_date": "2025-06-26",
+    "stock_id": "3211",
+    "rank_score": 90.5029239766082,
+    "previous_nav": 534993.7722644133,
+    "target_budget": 106998.75445288265
+  },
+  {
+    "signal_date": "2025-06-25",
+    "execution_date": "2025-06-26",
+    "stock_id": "8021",
+    "rank_score": 87.62573099415204,
+    "previous_nav": 534993.7722644133,
+    "target_budget": 78386.79187157791
+  },
+  {
+    "signal_date": "2025-07-03",
+    "execution_date": "2025-07-04",
+    "stock_id": "6223",
+    "rank_score": 89.89403973509934,
+    "previous_nav": 535927.6651769694,
+    "target_budget": 98828.61572449433
+  },
+  {
+    "signal_date": "2025-07-10",
+    "execution_date": "2025-07-11",
+    "stock_id": "4991",
+    "rank_score": 97.19999999999999,
+    "previous_nav": 558459.5790203785,
+    "target_budget": 111691.9158040757
+  },
+  {
+    "signal_date": "2025-07-10",
+    "execution_date": "2025-07-11",
+    "stock_id": "5536",
+    "rank_score": 92.44,
+    "previous_nav": 558459.5790203785,
+    "target_budget": 93102.71108857576
+  },
+  {
+    "signal_date": "2025-07-17",
+    "execution_date": "2025-07-18",
+    "stock_id": "8358",
+    "rank_score": 97.26829268292683,
+    "previous_nav": 560451.3329605313,
+    "target_budget": 98072.22152320333
+  },
+  {
+    "signal_date": "2025-07-31",
+    "execution_date": "2025-08-01",
+    "stock_id": "5371",
+    "rank_score": 96.32624113475177,
+    "previous_nav": 586737.9162858626,
+    "target_budget": 117347.58325717252
+  },
+  {
+    "signal_date": "2025-07-31",
+    "execution_date": "2025-08-01",
+    "stock_id": "1303",
+    "rank_score": 94.73758865248226,
+    "previous_nav": 586737.9162858626,
+    "target_budget": 117347.58325717252
+  },
+  {
+    "signal_date": "2025-07-31",
+    "execution_date": "2025-08-01",
+    "stock_id": "1815",
+    "rank_score": 92.65248226950354,
+    "previous_nav": 586737.9162858626,
+    "target_budget": 117347.58325717252
+  },
+  {
+    "signal_date": "2025-07-31",
+    "execution_date": "2025-08-01",
+    "stock_id": "4766",
+    "rank_score": 90.36879432624113,
+    "previous_nav": 586737.9162858626,
+    "target_budget": 93652.82181630639
+  },
+  {
+    "signal_date": "2025-08-05",
+    "execution_date": "2025-08-06",
+    "stock_id": "8028",
+    "rank_score": 90.44137931034483,
+    "previous_nav": 580402.04628793,
+    "target_budget": 108387.23563859919
+  },
+  {
+    "signal_date": "2025-08-08",
+    "execution_date": "2025-08-11",
+    "stock_id": "2421",
+    "rank_score": 88.5524861878453,
+    "previous_nav": 592497.8126243324,
+    "target_budget": 100111.07620027768
+  },
+  {
+    "signal_date": "2025-08-11",
+    "execution_date": "2025-08-12",
+    "stock_id": "2449",
+    "rank_score": 92.92708333333333,
+    "previous_nav": 613854.5461007634,
+    "target_budget": 86501.74281116533
+  },
+  {
+    "signal_date": "2025-08-25",
+    "execution_date": "2025-08-26",
+    "stock_id": "2233",
+    "rank_score": 85.61963190184049,
+    "previous_nav": 730492.3417430702,
+    "target_budget": 146098.46834861403
+  },
+  {
+    "signal_date": "2025-08-25",
+    "execution_date": "2025-08-26",
+    "stock_id": "3706",
+    "rank_score": 84.11042944785277,
+    "previous_nav": 730492.3417430702,
+    "target_budget": 146098.46834861403
+  },
+  {
+    "signal_date": "2025-08-25",
+    "execution_date": "2025-08-26",
+    "stock_id": "3653",
+    "rank_score": 81.53374233128835,
+    "previous_nav": 730492.3417430702,
+    "target_budget": 36682.353266186255
+  },
+  {
+    "signal_date": "2025-09-04",
+    "execution_date": "2025-09-05",
+    "stock_id": "3707",
+    "rank_score": 84.28048780487805,
+    "previous_nav": 758631.4771298673,
+    "target_budget": 151726.29542597345
+  },
+  {
+    "signal_date": "2025-09-04",
+    "execution_date": "2025-09-05",
+    "stock_id": "4976",
+    "rank_score": 80.0,
+    "previous_nav": 758631.4771298673,
+    "target_budget": 124266.78665199122
+  },
+  {
+    "signal_date": "2025-09-08",
+    "execution_date": "2025-09-09",
+    "stock_id": "2231",
+    "rank_score": 97.82758620689654,
+    "previous_nav": 774232.7153873865,
+    "target_budget": 154846.5430774773
+  },
+  {
+    "signal_date": "2025-09-08",
+    "execution_date": "2025-09-09",
+    "stock_id": "2208",
+    "rank_score": 86.62068965517241,
+    "previous_nav": 774232.7153873865,
+    "target_budget": 136030.4049299141
+  },
+  {
+    "signal_date": "2025-09-09",
+    "execution_date": "2025-09-10",
+    "stock_id": "3264",
+    "rank_score": 81.28342245989305,
+    "previous_nav": 781173.9195611528,
+    "target_budget": 143022.87517570332
+  },
+  {
+    "signal_date": "2025-09-12",
+    "execution_date": "2025-09-15",
+    "stock_id": "3305",
+    "rank_score": 98.94835680751173,
+    "previous_nav": 770209.4349511195,
+    "target_budget": 46193.9122453763
+  },
+  {
+    "signal_date": "2025-09-15",
+    "execution_date": "2025-09-16",
+    "stock_id": "6239",
+    "rank_score": 93.4941176470588,
+    "previous_nav": 744112.9818125135,
+    "target_budget": 148822.59636250272
+  },
+  {
+    "signal_date": "2025-09-15",
+    "execution_date": "2025-09-16",
+    "stock_id": "3324",
+    "rank_score": 87.81176470588234,
+    "previous_nav": 744112.9818125135,
+    "target_budget": 143029.5563881739
+  },
+  {
+    "signal_date": "2025-09-23",
+    "execution_date": "2025-09-24",
+    "stock_id": "2344",
+    "rank_score": 98.30769230769229,
+    "previous_nav": 737434.5965225007,
+    "target_budget": 147486.91930450016
+  },
+  {
+    "signal_date": "2025-09-23",
+    "execution_date": "2025-09-24",
+    "stock_id": "3450",
+    "rank_score": 96.69230769230768,
+    "previous_nav": 737434.5965225007,
+    "target_budget": 147486.91930450016
+  },
+  {
+    "signal_date": "2025-09-23",
+    "execution_date": "2025-09-24",
+    "stock_id": "6739",
+    "rank_score": 94.53846153846153,
+    "previous_nav": 737434.5965225007,
+    "target_budget": 142126.30846451456
+  },
+  {
+    "signal_date": "2025-10-02",
+    "execution_date": "2025-10-03",
+    "stock_id": "1504",
+    "rank_score": 97.73913043478261,
+    "previous_nav": 735770.2628980704,
+    "target_budget": 147154.05257961407
+  },
+  {
+    "signal_date": "2025-10-02",
+    "execution_date": "2025-10-03",
+    "stock_id": "8021",
+    "rank_score": 95.7391304347826,
+    "previous_nav": 735770.2628980704,
+    "target_budget": 147154.05257961407
+  },
+  {
+    "signal_date": "2025-10-02",
+    "execution_date": "2025-10-03",
+    "stock_id": "3430",
+    "rank_score": 88.6086956521739,
+    "previous_nav": 735770.2628980704,
+    "target_budget": 125011.48728912385
+  },
+  {
+    "signal_date": "2025-10-09",
+    "execution_date": "2025-10-13",
+    "stock_id": "4967",
+    "rank_score": 88.45398773006134,
+    "previous_nav": 692304.5801491749,
+    "target_budget": 138460.91602983497
+  },
+  {
+    "signal_date": "2025-10-09",
+    "execution_date": "2025-10-13",
+    "stock_id": "5289",
+    "rank_score": 88.31901840490798,
+    "previous_nav": 692304.5801491749,
+    "target_budget": 126137.62271669038
+  },
+  {
+    "signal_date": "2025-10-16",
+    "execution_date": "2025-10-17",
+    "stock_id": "8996",
+    "rank_score": 98.58333333333333,
+    "previous_nav": 673757.5455374002,
+    "target_budget": 134751.50910748003
+  },
+  {
+    "signal_date": "2025-10-16",
+    "execution_date": "2025-10-17",
+    "stock_id": "3189",
+    "rank_score": 97.16666666666666,
+    "previous_nav": 673757.5455374002,
+    "target_budget": 134751.50910748003
+  },
+  {
+    "signal_date": "2025-10-16",
+    "execution_date": "2025-10-17",
+    "stock_id": "8271",
+    "rank_score": 89.33333333333331,
+    "previous_nav": 673757.5455374002,
+    "target_budget": 105967.93509715277
+  },
+  {
+    "signal_date": "2025-10-27",
+    "execution_date": "2025-10-28",
+    "stock_id": "8112",
+    "rank_score": 98.74999999999999,
+    "previous_nav": 670733.0358242365,
+    "target_budget": 134146.6071648473
+  },
+  {
+    "signal_date": "2025-10-27",
+    "execution_date": "2025-10-28",
+    "stock_id": "3090",
+    "rank_score": 90.33333333333333,
+    "previous_nav": 670733.0358242365,
+    "target_budget": 88192.14406977125
+  },
+  {
+    "signal_date": "2025-10-29",
+    "execution_date": "2025-10-30",
+    "stock_id": "2408",
+    "rank_score": 97.32584269662921,
+    "previous_nav": 634392.9351547334,
+    "target_budget": 126878.58703094667
+  },
+  {
+    "signal_date": "2025-10-29",
+    "execution_date": "2025-10-30",
+    "stock_id": "2449",
+    "rank_score": 87.65168539325842,
+    "previous_nav": 634392.9351547334,
+    "target_budget": 126878.58703094667
+  },
+  {
+    "signal_date": "2025-10-29",
+    "execution_date": "2025-10-30",
+    "stock_id": "8096",
+    "rank_score": 84.17977528089887,
+    "previous_nav": 634392.9351547334,
+    "target_budget": 126878.58703094667
+  },
+  {
+    "signal_date": "2025-10-30",
+    "execution_date": "2025-10-31",
+    "stock_id": "8299",
+    "rank_score": 87.88826815642457,
+    "previous_nav": 620854.9671821645,
+    "target_budget": 124170.99343643291
+  },
+  {
+    "signal_date": "2025-10-31",
+    "execution_date": "2025-11-03",
+    "stock_id": "6274",
+    "rank_score": 90.13471502590673,
+    "previous_nav": 613519.064352759,
+    "target_budget": 122703.8128705518
+  },
+  {
+    "signal_date": "2025-11-12",
+    "execution_date": "2025-11-13",
+    "stock_id": "1815",
+    "rank_score": 94.68156424581005,
+    "previous_nav": 590788.8391575592,
+    "target_budget": 118157.76783151184
+  },
+  {
+    "signal_date": "2025-11-12",
+    "execution_date": "2025-11-13",
+    "stock_id": "6505",
+    "rank_score": 93.97765363128491,
+    "previous_nav": 590788.8391575592,
+    "target_budget": 118157.76783151184
+  },
+  {
+    "signal_date": "2025-11-12",
+    "execution_date": "2025-11-13",
+    "stock_id": "3715",
+    "rank_score": 90.22346368715083,
+    "previous_nav": 590788.8391575592,
+    "target_budget": 118157.76783151184
+  },
+  {
+    "signal_date": "2025-11-12",
+    "execution_date": "2025-11-13",
+    "stock_id": "3167",
+    "rank_score": 85.84357541899439,
+    "previous_nav": 590788.8391575592,
+    "target_budget": 118157.76783151184
+  },
+  {
+    "signal_date": "2025-11-12",
+    "execution_date": "2025-11-13",
+    "stock_id": "8021",
+    "rank_score": 85.45251396648044,
+    "previous_nav": 590788.8391575592,
+    "target_budget": 118157.76783151181
+  },
+  {
+    "signal_date": "2025-11-20",
+    "execution_date": "2025-11-21",
+    "stock_id": "2885",
+    "rank_score": 77.40350877192984,
+    "previous_nav": 563688.307275201,
+    "target_budget": 112737.66145504019
+  },
+  {
+    "signal_date": "2025-11-20",
+    "execution_date": "2025-11-21",
+    "stock_id": "2890",
+    "rank_score": 74.94736842105263,
+    "previous_nav": 563688.307275201,
+    "target_budget": 112737.66145504019
+  },
+  {
+    "signal_date": "2025-11-25",
+    "execution_date": "2025-11-26",
+    "stock_id": "6442",
+    "rank_score": 97.59763313609467,
+    "previous_nav": 547558.2230911636,
+    "target_budget": 109511.6446182327
+  },
+  {
+    "signal_date": "2025-11-25",
+    "execution_date": "2025-11-26",
+    "stock_id": "6291",
+    "rank_score": 88.1775147928994,
+    "previous_nav": 547558.2230911636,
+    "target_budget": 109511.6446182327
+  },
+  {
+    "signal_date": "2025-11-25",
+    "execution_date": "2025-11-26",
+    "stock_id": "3443",
+    "rank_score": 87.51479289940828,
+    "previous_nav": 547558.2230911636,
+    "target_budget": 109511.6446182327
+  },
+  {
+    "signal_date": "2025-11-25",
+    "execution_date": "2025-11-26",
+    "stock_id": "2368",
+    "rank_score": 86.76923076923077,
+    "previous_nav": 547558.2230911636,
+    "target_budget": 109511.6446182327
+  },
+  {
+    "signal_date": "2025-11-26",
+    "execution_date": "2025-11-27",
+    "stock_id": "2606",
+    "rank_score": 93.49677419354839,
+    "previous_nav": 545245.0529732546,
+    "target_budget": 109049.01059465091
+  },
+  {
+    "signal_date": "2025-11-28",
+    "execution_date": "2025-12-01",
+    "stock_id": "3653",
+    "rank_score": 95.60946745562129,
+    "previous_nav": 537814.1538041972,
+    "target_budget": 107562.83076083944
+  },
+  {
+    "signal_date": "2025-11-28",
+    "execution_date": "2025-12-01",
+    "stock_id": "3105",
+    "rank_score": 94.698224852071,
+    "previous_nav": 537814.1538041972,
+    "target_budget": 95380.67422161983
+  },
+  {
+    "signal_date": "2025-12-03",
+    "execution_date": "2025-12-04",
+    "stock_id": "1303",
+    "rank_score": 97.32484076433121,
+    "previous_nav": 523770.1896161218,
+    "target_budget": 104754.03792322436
+  },
+  {
+    "signal_date": "2025-12-04",
+    "execution_date": "2025-12-05",
+    "stock_id": "6706",
+    "rank_score": 87.46249999999999,
+    "previous_nav": 524518.1667864935,
+    "target_budget": 99206.92347960948
+  },
+  {
+    "signal_date": "2025-12-08",
+    "execution_date": "2025-12-09",
+    "stock_id": "3491",
+    "rank_score": 96.08695652173914,
+    "previous_nav": 538939.1293962189,
+    "target_budget": 107787.82587924378
+  },
+  {
+    "signal_date": "2025-12-08",
+    "execution_date": "2025-12-09",
+    "stock_id": "3037",
+    "rank_score": 95.21739130434781,
+    "previous_nav": 538939.1293962189,
+    "target_budget": 107280.59953365935
+  },
+  {
+    "signal_date": "2025-12-19",
+    "execution_date": "2025-12-22",
+    "stock_id": "4764",
+    "rank_score": 88.65868263473054,
+    "previous_nav": 539092.5523611448,
+    "target_budget": 107818.51047222895
+  },
+  {
+    "signal_date": "2025-12-19",
+    "execution_date": "2025-12-22",
+    "stock_id": "4927",
+    "rank_score": 88.4071856287425,
+    "previous_nav": 539092.5523611448,
+    "target_budget": 107818.51047222895
+  },
+  {
+    "signal_date": "2025-12-19",
+    "execution_date": "2025-12-22",
+    "stock_id": "6788",
+    "rank_score": 87.23353293413173,
+    "previous_nav": 539092.5523611448,
+    "target_budget": 107818.51047222895
+  },
+  {
+    "signal_date": "2025-12-19",
+    "execution_date": "2025-12-22",
+    "stock_id": "3030",
+    "rank_score": 82.2874251497006,
+    "previous_nav": 539092.5523611448,
+    "target_budget": 101457.2605037415
+  },
+  {
+    "signal_date": "2025-12-29",
+    "execution_date": "2025-12-30",
+    "stock_id": "3260",
+    "rank_score": 94.0233918128655,
+    "previous_nav": 543825.5600679384,
+    "target_budget": 108765.11201358768
+  },
+  {
+    "signal_date": "2025-12-29",
+    "execution_date": "2025-12-30",
+    "stock_id": "8021",
+    "rank_score": 92.3859649122807,
+    "previous_nav": 543825.5600679384,
+    "target_budget": 90406.44271959383
+  },
+  {
+    "signal_date": "2026-01-02",
+    "execution_date": "2026-01-05",
+    "stock_id": "2408",
+    "rank_score": 90.69230769230768,
+    "previous_nav": 564602.6389249624,
+    "target_budget": 112920.52778499248
+  },
+  {
+    "signal_date": "2026-01-05",
+    "execution_date": "2026-01-06",
+    "stock_id": "8028",
+    "rank_score": 92.35121951219512,
+    "previous_nav": 562634.6121954072,
+    "target_budget": 104278.52745873434
+  },
+  {
+    "signal_date": "2026-01-19",
+    "execution_date": "2026-01-20",
+    "stock_id": "8046",
+    "rank_score": 87.94444444444443,
+    "previous_nav": 583755.2475475479,
+    "target_budget": 116751.04950950958
+  },
+  {
+    "signal_date": "2026-01-19",
+    "execution_date": "2026-01-20",
+    "stock_id": "3691",
+    "rank_score": 85.88888888888889,
+    "previous_nav": 583755.2475475479,
+    "target_budget": 116751.04950950958
+  },
+  {
+    "signal_date": "2026-01-19",
+    "execution_date": "2026-01-20",
+    "stock_id": "3189",
+    "rank_score": 84.55555555555556,
+    "previous_nav": 583755.2475475479,
+    "target_budget": 96320.76596450002
+  },
+  {
+    "signal_date": "2026-02-09",
+    "execution_date": "2026-02-10",
+    "stock_id": "2383",
+    "rank_score": 91.65517241379311,
+    "previous_nav": 624342.0548406497,
+    "target_budget": 124868.41096812995
+  },
+  {
+    "signal_date": "2026-02-09",
+    "execution_date": "2026-02-10",
+    "stock_id": "5386",
+    "rank_score": 89.24137931034483,
+    "previous_nav": 624342.0548406497,
+    "target_budget": 124868.41096812995
+  },
+  {
+    "signal_date": "2026-02-09",
+    "execution_date": "2026-02-10",
+    "stock_id": "7734",
+    "rank_score": 86.27586206896551,
+    "previous_nav": 624342.0548406497,
+    "target_budget": 124868.41096812995
+  },
+  {
+    "signal_date": "2026-02-09",
+    "execution_date": "2026-02-10",
+    "stock_id": "3324",
+    "rank_score": 85.72413793103448,
+    "previous_nav": 624342.0548406497,
+    "target_budget": 124868.41096812995
+  },
+  {
+    "signal_date": "2026-02-11",
+    "execution_date": "2026-02-23",
+    "stock_id": "7769",
+    "rank_score": 90.97938144329896,
+    "previous_nav": 655337.0458733327,
+    "target_budget": 118009.92009058282
+  },
+  {
+    "signal_date": "2026-03-11",
+    "execution_date": "2026-03-12",
+    "stock_id": "3036",
+    "rank_score": 85.6764705882353,
+    "previous_nav": 827756.9539334523,
+    "target_budget": 165551.39078669046
+  },
+  {
+    "signal_date": "2026-03-11",
+    "execution_date": "2026-03-12",
+    "stock_id": "8271",
+    "rank_score": 84.42156862745098,
+    "previous_nav": 827756.9539334523,
+    "target_budget": 165551.39078669046
+  },
+  {
+    "signal_date": "2026-03-11",
+    "execution_date": "2026-03-12",
+    "stock_id": "3645",
+    "rank_score": 83.82352941176471,
+    "previous_nav": 827756.9539334523,
+    "target_budget": 165551.39078669046
+  },
+  {
+    "signal_date": "2026-03-11",
+    "execution_date": "2026-03-12",
+    "stock_id": "3481",
+    "rank_score": 83.8235294117647,
+    "previous_nav": 827756.9539334523,
+    "target_budget": 34560.95167379017
+  },
+  {
+    "signal_date": "2026-03-17",
+    "execution_date": "2026-03-18",
+    "stock_id": "3702",
+    "rank_score": 94.87500000000001,
+    "previous_nav": 943473.2264386269,
+    "target_budget": 31921.969835133983
+  },
+  {
+    "signal_date": "2026-03-25",
+    "execution_date": "2026-03-26",
+    "stock_id": "6187",
+    "rank_score": 88.55793991416309,
+    "previous_nav": 854036.8615381735,
+    "target_budget": 170807.3723076347
+  },
+  {
+    "signal_date": "2026-03-25",
+    "execution_date": "2026-03-26",
+    "stock_id": "2467",
+    "rank_score": 82.24892703862659,
+    "previous_nav": 854036.8615381735,
+    "target_budget": 170807.3723076347
+  },
+  {
+    "signal_date": "2026-03-25",
+    "execution_date": "2026-03-26",
+    "stock_id": "9933",
+    "rank_score": 81.34763948497853,
+    "previous_nav": 854036.8615381735,
+    "target_budget": 170807.3723076347
+  },
+  {
+    "signal_date": "2026-03-25",
+    "execution_date": "2026-03-26",
+    "stock_id": "8027",
+    "rank_score": 80.50643776824035,
+    "previous_nav": 854036.8615381735,
+    "target_budget": 170807.3723076347
+  },
+  {
+    "signal_date": "2026-04-01",
+    "execution_date": "2026-04-02",
+    "stock_id": "7734",
+    "rank_score": 83.47239263803681,
+    "previous_nav": 861856.4996385894,
+    "target_budget": 172371.2999277179
+  },
+  {
+    "signal_date": "2026-04-01",
+    "execution_date": "2026-04-02",
+    "stock_id": "6213",
+    "rank_score": 80.29447852760737,
+    "previous_nav": 861856.4996385894,
+    "target_budget": 172371.2999277179
+  },
+  {
+    "signal_date": "2026-04-07",
+    "execution_date": "2026-04-08",
+    "stock_id": "2351",
+    "rank_score": 70.4,
+    "previous_nav": 878178.084886742,
+    "target_budget": 175635.6169773484
+  },
+  {
+    "signal_date": "2026-04-08",
+    "execution_date": "2026-04-09",
+    "stock_id": "7751",
+    "rank_score": 98.26732673267327,
+    "previous_nav": 888316.6269389575,
+    "target_budget": 177663.3253877915
+  },
+  {
+    "signal_date": "2026-04-08",
+    "execution_date": "2026-04-09",
+    "stock_id": "3037",
+    "rank_score": 91.61386138613861,
+    "previous_nav": 888316.6269389575,
+    "target_budget": 134801.69286910025
+  },
+  {
+    "signal_date": "2026-04-15",
+    "execution_date": "2026-04-16",
+    "stock_id": "1785",
+    "rank_score": 97.27777777777779,
+    "previous_nav": 918019.8166366952,
+    "target_budget": 172125.3439590809
+  },
+  {
+    "signal_date": "2026-04-16",
+    "execution_date": "2026-04-17",
+    "stock_id": "3443",
+    "rank_score": 90.04761904761904,
+    "previous_nav": 932809.6070147146,
+    "target_budget": 164097.42901089264
+  },
+  {
+    "signal_date": "2026-04-27",
+    "execution_date": "2026-04-28",
+    "stock_id": "2383",
+    "rank_score": 95.93243243243244,
+    "previous_nav": 1064646.1556408852,
+    "target_budget": 212929.23112817705
+  },
+  {
+    "signal_date": "2026-05-04",
+    "execution_date": "2026-05-05",
+    "stock_id": "6789",
+    "rank_score": 96.5,
+    "previous_nav": 1134476.8967103772,
+    "target_budget": 226895.37934207544
+  },
+  {
+    "signal_date": "2026-05-07",
+    "execution_date": "2026-05-08",
+    "stock_id": "6488",
+    "rank_score": 93.57232704402514,
+    "previous_nav": 1183616.3848810662,
+    "target_budget": 228013.7087442339
+  },
+  {
+    "signal_date": "2026-05-21",
+    "execution_date": "2026-05-22",
+    "stock_id": "3090",
+    "rank_score": 99.49820788530465,
+    "previous_nav": 1116325.5014126236,
+    "target_budget": 223265.1002825247
+  },
+  {
+    "signal_date": "2026-05-21",
+    "execution_date": "2026-05-22",
+    "stock_id": "6742",
+    "rank_score": 84.93189964157706,
+    "previous_nav": 1116325.5014126236,
+    "target_budget": 223265.1002825247
+  },
+  {
+    "signal_date": "2026-05-21",
+    "execution_date": "2026-05-22",
+    "stock_id": "6147",
+    "rank_score": 84.02867383512545,
+    "previous_nav": 1116325.5014126236,
+    "target_budget": 223265.1002825247
+  },
+  {
+    "signal_date": "2026-05-21",
+    "execution_date": "2026-05-22",
+    "stock_id": "3033",
+    "rank_score": 83.2258064516129,
+    "previous_nav": 1116325.5014126236,
+    "target_budget": 223265.1002825247
+  },
+  {
+    "signal_date": "2026-05-21",
+    "execution_date": "2026-05-22",
+    "stock_id": "6209",
+    "rank_score": 81.82078853046593,
+    "previous_nav": 1116325.5014126236,
+    "target_budget": 223265.1002825247
+  },
+  {
+    "signal_date": "2026-05-25",
+    "execution_date": "2026-05-26",
+    "stock_id": "2472",
+    "rank_score": 84.26900584795321,
+    "previous_nav": 1143055.3136654235,
+    "target_budget": 206217.17433382582
+  },
+  {
+    "signal_date": "2026-05-26",
+    "execution_date": "2026-05-27",
+    "stock_id": "8926",
+    "rank_score": 89.32596685082873,
+    "previous_nav": 1171056.46677398,
+    "target_budget": 206217.17433382582
+  },
+  {
+    "signal_date": "2026-05-29",
+    "execution_date": "2026-06-01",
+    "stock_id": "2356",
+    "rank_score": 81.3541076487252,
+    "previous_nav": 1240178.6477324935,
+    "target_budget": 206217.17433382582
+  },
+  {
+    "signal_date": "2026-06-03",
+    "execution_date": "2026-06-04",
+    "stock_id": "6548",
+    "rank_score": 86.71508379888267,
+    "previous_nav": 1234896.7839040782,
+    "target_budget": 237340.04973577787
+  },
+  {
+    "signal_date": "2026-06-12",
+    "execution_date": "2026-06-15",
+    "stock_id": "2484",
+    "rank_score": 87.15333333333334,
+    "previous_nav": 1104908.9674392042,
+    "target_budget": 220981.79348784086
+  },
+  {
+    "signal_date": "2026-06-12",
+    "execution_date": "2026-06-15",
+    "stock_id": "2834",
+    "rank_score": 60.88,
+    "previous_nav": 1104908.9674392042,
+    "target_budget": 220981.79348784086
+  },
+  {
+    "signal_date": "2026-06-15",
+    "execution_date": "2026-06-16",
+    "stock_id": "3008",
+    "rank_score": 88.94736842105263,
+    "previous_nav": 1116300.6529824531,
+    "target_budget": 223260.13059649064
+  },
+  {
+    "signal_date": "2026-06-15",
+    "execution_date": "2026-06-16",
+    "stock_id": "6173",
+    "rank_score": 88.23157894736842,
+    "previous_nav": 1116300.6529824531,
+    "target_budget": 223260.13059649064
+  },
+  {
+    "signal_date": "2026-06-15",
+    "execution_date": "2026-06-16",
+    "stock_id": "4958",
+    "rank_score": 83.36842105263156,
+    "previous_nav": 1116300.6529824531,
+    "target_budget": 216425.11927054136
+  },
+  {
+    "signal_date": "2026-06-16",
+    "execution_date": "2026-06-17",
+    "stock_id": "3624",
+    "rank_score": 95.81879194630874,
+    "previous_nav": 1120333.6174586955,
+    "target_budget": 206212.58411972618
+  },
+  {
+    "signal_date": "2026-06-23",
+    "execution_date": "2026-06-24",
+    "stock_id": "6715",
+    "rank_score": 91.87605633802818,
+    "previous_nav": 1117741.9469726083,
+    "target_budget": 204108.21473941946
+  },
+  {
+    "signal_date": "2026-06-30",
+    "execution_date": "2026-07-01",
+    "stock_id": "6446",
+    "rank_score": 96.55384615384617,
+    "previous_nav": 1061513.6621303388,
+    "target_budget": 212302.73242606776
+  },
+  {
+    "signal_date": "2026-06-30",
+    "execution_date": "2026-07-01",
+    "stock_id": "6409",
+    "rank_score": 95.63846153846154,
+    "previous_nav": 1061513.6621303388,
+    "target_budget": 212302.73242606776
+  },
+  {
+    "signal_date": "2026-06-30",
+    "execution_date": "2026-07-01",
+    "stock_id": "2634",
+    "rank_score": 91.38461538461537,
+    "previous_nav": 1061513.6621303388,
+    "target_budget": 212302.73242606776
+  },
+  {
+    "signal_date": "2026-06-30",
+    "execution_date": "2026-07-01",
+    "stock_id": "3717",
+    "rank_score": 83.43076923076924,
+    "previous_nav": 1061513.6621303388,
+    "target_budget": 202909.57831294148
+  },
+  {
+    "signal_date": "2026-07-01",
+    "execution_date": "2026-07-02",
+    "stock_id": "5483",
+    "rank_score": 82.0414937759336,
+    "previous_nav": 1061830.8193437657,
+    "target_budget": 212366.16386875315
+  },
+  {
+    "signal_date": "2026-07-15",
+    "execution_date": "2026-07-16",
+    "stock_id": "6505",
+    "rank_score": 96.05369127516778,
+    "previous_nav": 1178968.071909723,
+    "target_budget": 235793.61438194462
+  },
+  {
+    "signal_date": "2026-07-15",
+    "execution_date": "2026-07-16",
+    "stock_id": "1303",
+    "rank_score": 89.10738255033556,
+    "previous_nav": 1178968.071909723,
+    "target_budget": 235793.61438194462
+  },
+  {
+    "signal_date": "2026-07-15",
+    "execution_date": "2026-07-16",
+    "stock_id": "1301",
+    "rank_score": 85.02013422818793,
+    "previous_nav": 1178968.071909723,
+    "target_budget": 150148.54769095677
+  },
+  {
+    "signal_date": "2026-07-21",
+    "execution_date": "2026-07-22",
+    "stock_id": "2615",
+    "rank_score": 93.90322580645162,
+    "previous_nav": 1109538.0326313751,
+    "target_budget": 221907.60652627502
+  },
+  {
+    "signal_date": "2026-07-21",
+    "execution_date": "2026-07-22",
+    "stock_id": "5871",
+    "rank_score": 89.38709677419354,
+    "previous_nav": 1109538.0326313751,
+    "target_budget": 221907.60652627502
+  },
+  {
+    "signal_date": "2026-07-21",
+    "execution_date": "2026-07-22",
+    "stock_id": "2634",
+    "rank_score": 88.70161290322581,
+    "previous_nav": 1109538.0326313751,
+    "target_budget": 221907.60652627502
+  },
+  {
+    "signal_date": "2026-07-21",
+    "execution_date": "2026-07-22",
+    "stock_id": "2801",
+    "rank_score": 88.48387096774192,
+    "previous_nav": 1109538.0326313751,
+    "target_budget": 174177.19206188634
+  },
+  {
+    "signal_date": "2026-07-22",
+    "execution_date": "2026-07-23",
+    "stock_id": "2377",
+    "rank_score": 92.90582959641256,
+    "previous_nav": 1093121.8403685896,
+    "target_budget": 204963.33517026922
+  },
+  {
+    "signal_date": "2026-07-31",
+    "execution_date": "2026-08-03",
+    "stock_id": "2207",
+    "rank_score": 99.0497737556561,
+    "previous_nav": 1037497.9993228316,
+    "target_budget": 207499.59986456632
+  },
+  {
+    "signal_date": "2026-07-31",
+    "execution_date": "2026-08-03",
+    "stock_id": "2886",
+    "rank_score": 95.6289592760181,
+    "previous_nav": 1037497.9993228316,
+    "target_budget": 207499.59986456632
+  },
+  {
+    "signal_date": "2026-07-31",
+    "execution_date": "2026-08-03",
+    "stock_id": "2892",
+    "rank_score": 95.62895927601808,
+    "previous_nav": 1037497.9993228316,
+    "target_budget": 207499.59986456632
+  },
+  {
+    "signal_date": "2026-08-04",
+    "execution_date": "2026-08-05",
+    "stock_id": "3231",
+    "rank_score": 98.68316831683168,
+    "previous_nav": 1010375.9820114805,
+    "target_budget": 202075.1964022961
+  },
+  {
+    "signal_date": "2026-08-06",
+    "execution_date": "2026-08-07",
+    "stock_id": "8271",
+    "rank_score": 98.27234042553191,
+    "previous_nav": 991171.8704327093,
+    "target_budget": 198234.37408654188
+  },
+  {
+    "signal_date": "2026-08-06",
+    "execution_date": "2026-08-07",
+    "stock_id": "3017",
+    "rank_score": 97.85531914893616,
+    "previous_nav": 991171.8704327093,
+    "target_budget": 198234.37408654188
+  },
+  {
+    "signal_date": "2026-08-06",
+    "execution_date": "2026-08-07",
+    "stock_id": "3081",
+    "rank_score": 97.2595744680851,
+    "previous_nav": 991171.8704327093,
+    "target_budget": 198234.37408654188
+  },
+  {
+    "signal_date": "2026-08-07",
+    "execution_date": "2026-08-10",
+    "stock_id": "3022",
+    "rank_score": 92.81896551724138,
+    "previous_nav": 961994.2971258515,
+    "target_budget": 189222.18208963066
+  },
+  {
+    "signal_date": "2026-08-10",
+    "execution_date": "2026-08-11",
+    "stock_id": "5351",
+    "rank_score": 80.78787878787878,
+    "previous_nav": 989944.1547198354,
+    "target_budget": 197629.71240531513
+  },
+  {
+    "signal_date": "2026-08-11",
+    "execution_date": "2026-08-12",
+    "stock_id": "9914",
+    "rank_score": 96.44166666666666,
+    "previous_nav": 974407.1464729492,
+    "target_budget": 181269.64817497847
+  },
+  {
+    "signal_date": "2026-08-13",
+    "execution_date": "2026-08-14",
+    "stock_id": "3017",
+    "rank_score": 97.18777292576418,
+    "previous_nav": 969911.844889694,
+    "target_budget": 193982.3689779388
+  },
+  {
+    "signal_date": "2026-08-13",
+    "execution_date": "2026-08-14",
+    "stock_id": "2376",
+    "rank_score": 91.07423580786025,
+    "previous_nav": 969911.844889694,
+    "target_budget": 193982.3689779388
+  },
+  {
+    "signal_date": "2026-08-13",
+    "execution_date": "2026-08-14",
+    "stock_id": "7711",
+    "rank_score": 89.14410480349345,
+    "previous_nav": 969911.844889694,
+    "target_budget": 144584.0843460315
+  },
+  {
+    "signal_date": "2026-08-26",
+    "execution_date": "2026-08-27",
+    "stock_id": "8103",
+    "rank_score": 85.43157894736842,
+    "previous_nav": 959026.6124285029,
+    "target_budget": 191805.32248570057
+  },
+  {
+    "signal_date": "2026-08-26",
+    "execution_date": "2026-08-27",
+    "stock_id": "2301",
+    "rank_score": 81.45263157894736,
+    "previous_nav": 959026.6124285029,
+    "target_budget": 191805.32248570057
+  },
+  {
+    "signal_date": "2026-08-26",
+    "execution_date": "2026-08-27",
+    "stock_id": "6830",
+    "rank_score": 81.08421052631579,
+    "previous_nav": 959026.6124285029,
+    "target_budget": 191805.32248570057
+  },
+  {
+    "signal_date": "2026-08-26",
+    "execution_date": "2026-08-27",
+    "stock_id": "2426",
+    "rank_score": 78.96842105263158,
+    "previous_nav": 959026.6124285029,
+    "target_budget": 117622.62031466854
+  },
+  {
+    "signal_date": "2026-08-28",
+    "execution_date": "2026-08-31",
+    "stock_id": "3406",
+    "rank_score": 98.83817427385891,
+    "previous_nav": 942190.3919764464,
+    "target_budget": 108641.27160195464
+  },
+  {
+    "signal_date": "2026-09-01",
+    "execution_date": "2026-09-02",
+    "stock_id": "3324",
+    "rank_score": 94.29411764705883,
+    "previous_nav": 972802.3170764137,
+    "target_budget": 177159.58103231285
+  },
+  {
+    "signal_date": "2026-09-04",
+    "execution_date": "2026-09-07",
+    "stock_id": "7711",
+    "rank_score": 87.62809917355371,
+    "previous_nav": 974277.792531525,
+    "target_budget": 194855.558506305
+  },
+  {
+    "signal_date": "2026-09-07",
+    "execution_date": "2026-09-08",
+    "stock_id": "2454",
+    "rank_score": 88.02631578947368,
+    "previous_nav": 960578.9865674837,
+    "target_budget": 192115.79731349676
+  },
+  {
+    "signal_date": "2026-09-08",
+    "execution_date": "2026-09-09",
+    "stock_id": "6620",
+    "rank_score": 99.00884955752211,
+    "previous_nav": 920417.3924631742,
+    "target_budget": 184083.47849263484
+  },
+  {
+    "signal_date": "2026-09-17",
+    "execution_date": "2026-09-18",
+    "stock_id": "7799",
+    "rank_score": 95.76585365853659,
+    "previous_nav": 873101.7043109862,
+    "target_budget": 174620.34086219725
+  },
+  {
+    "signal_date": "2026-09-17",
+    "execution_date": "2026-09-18",
+    "stock_id": "6291",
+    "rank_score": 84.8780487804878,
+    "previous_nav": 873101.7043109862,
+    "target_budget": 174620.34086219725
+  },
+  {
+    "signal_date": "2026-09-17",
+    "execution_date": "2026-09-18",
+    "stock_id": "2801",
+    "rank_score": 79.20975609756098,
+    "previous_nav": 873101.7043109862,
+    "target_budget": 174620.34086219725
+  },
+  {
+    "signal_date": "2026-09-17",
+    "execution_date": "2026-09-18",
+    "stock_id": "2891",
+    "rank_score": 76.78048780487805,
+    "previous_nav": 873101.7043109862,
+    "target_budget": 174620.34086219725
+  },
+  {
+    "signal_date": "2026-09-17",
+    "execution_date": "2026-09-18",
+    "stock_id": "1709",
+    "rank_score": 76.65365853658537,
+    "previous_nav": 873101.7043109862,
+    "target_budget": 174620.34086219725
+  },
+  {
+    "signal_date": "2026-09-18",
+    "execution_date": "2026-09-21",
+    "stock_id": "6147",
+    "rank_score": 93.5625,
+    "previous_nav": 844906.9655365029,
+    "target_budget": 161286.79864539654
+  },
+  {
+    "signal_date": "2026-09-23",
+    "execution_date": "2026-09-24",
+    "stock_id": "3605",
+    "rank_score": 97.0,
+    "previous_nav": 820612.4839328247,
+    "target_budget": 164122.49678656494
+  },
+  {
+    "signal_date": "2026-09-23",
+    "execution_date": "2026-09-24",
+    "stock_id": "3016",
+    "rank_score": 86.23529411764706,
+    "previous_nav": 820612.4839328247,
+    "target_budget": 164122.49678656494
+  },
+  {
+    "signal_date": "2026-09-23",
+    "execution_date": "2026-09-24",
+    "stock_id": "6526",
+    "rank_score": 86.05882352941177,
+    "previous_nav": 820612.4839328247,
+    "target_budget": 164122.49678656494
+  },
+  {
+    "signal_date": "2026-09-23",
+    "execution_date": "2026-09-24",
+    "stock_id": "2404",
+    "rank_score": 85.76470588235294,
+    "previous_nav": 820612.4839328247,
+    "target_budget": 143929.39053257275
+  },
+  {
+    "signal_date": "2026-10-05",
+    "execution_date": "2026-10-06",
+    "stock_id": "3105",
+    "rank_score": 91.74672489082968,
+    "previous_nav": 848226.6818452348,
+    "target_budget": 151590.54186753664
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "universe_stocks": 2076,
+  "calendar_start": "2020-02-10",
+  "calendar_end": "2026-10-22",
+  "price_observations": 2912395,
+  "actual_turnover_observations": 2288488,
+  "turnover_quote_mismatch": 102539,
+  "institutional_known_observations": 1976618,
+  "liquid_known_observations": 197505,
+  "missing_institutional_liquid": 4952,
+  "historical_halt_quote_conflicts": 69
+}

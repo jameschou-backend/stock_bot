@@ -1,0 +1,73 @@
+{
+  "date": "2026-10-28",
+  "full_suite": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "result": "7642 passed, 40 warnings in 231.17s",
+    "log_sha256": "38c2f9149f3f917f58b01a1a5bd66dba8ef214128d8a86d61a7259af618a1928"
+  },
+  "targeted_cases": 14,
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "completed_runs": 2,
+    "exit_code": 0,
+    "log_sha256": "33c253c5ce088aaf13b54fccddef29dbf1a8a200452c5a67c9f1065aaac0a662"
+  },
+  "api": {
+    "started_with": "make api",
+    "http_status": {
+      "health": 200,
+      "picks": 200,
+      "models": 200,
+      "jobs?limit=10": 200
+    },
+    "health": "ok",
+    "last_10_job_statuses": [
+      {
+        "name": "export_report",
+        "status": "success"
+      },
+      {
+        "name": "daily_pick",
+        "status": "success"
+      },
+      {
+        "name": "build_labels",
+        "status": "success"
+      },
+      {
+        "name": "build_features",
+        "status": "success"
+      },
+      {
+        "name": "ingest_per",
+        "status": "success"
+      },
+      {
+        "name": "ingest_gov_bank",
+        "status": "success"
+      },
+      {
+        "name": "ingest_securities_lending",
+        "status": "success"
+      },
+      {
+        "name": "data_quality_check",
+        "status": "success"
+      },
+      {
+        "name": "ingest_fear_greed",
+        "status": "success"
+      },
+      {
+        "name": "ingest_margin_short",
+        "status": "success"
+      }
+    ]
+  },
+  "replay": "Frozen inputs verified without fetching; completed result verified against output hashes",
+  "arithmetic_audit": "8 cases reconciled: return, drawdown, cash, fee/tax, trades, timing, annual compounding; no terminal holdings in strategy cases",
+  "unchanged_strategy_results": "0050 halt repair and report presentation changes preserve earlier full/test case files exactly",
+  "chart_review": "equity.png visually inspected; local HTML links checked",
+  "visual_scope": "HTML source and links checked; no rendered browser-layout acceptance claimed",
+  "report_sha256": "126b67e2deabadbf39fecbd81d1730bbf7fced3b49e2ce33ce9942ddf4a398c4"
+}

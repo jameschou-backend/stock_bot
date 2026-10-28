@@ -1,0 +1,2 @@
+date,stock_id,side,signal_date,adjusted_price,adjusted_units,notional,fee,tax,net_pnl,reason
+2025-01-02,0050,BUY,2024-12-31,47.00254303127993,21245.17022559672,998577.027735477,1422.9722645230547,0.0,,benchmark

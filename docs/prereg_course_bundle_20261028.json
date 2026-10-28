@@ -1,0 +1,49 @@
+{
+  "experiment": "course_momentum_bundle_20261028",
+  "purpose": "User-authorized daily long-only course-derived bundle, five-year exploratory research; no original-formula reconstruction or live qualification.",
+  "source_bundle": ".cache/scanner-20261022-close/inputs-v1",
+  "start": "2021-10-25",
+  "end": "2026-10-22",
+  "train": ["2021-10-25", "2023-12-29"],
+  "validation": ["2024-01-02", "2024-12-31"],
+  "test": ["2025-01-02", "2026-10-22"],
+  "selection": "Run 24 configurations on train only; shortlist the five highest CAGR-minus-0.5*absolute-drawdown with at least 20 completed trades. Select greatest validation net total return, then smaller drawdown, then lower turnover, then config ID. Test winner once, with independent cash start. If no training candidate qualifies, report no winner. Full five-year winner replay is retrospective, not an out-of-sample return.",
+  "prior_exposure": "These historical dates have been used in other project research; the split is new-experiment chronological separation, not genuinely unseen project data.",
+  "score": {
+    "scale": "0-100 cross-sectional average-tie percentile among that day's eligible, fully known stocks with actual previous-session turnover > 500 million TWD; no relation to the author's 7.5 scale",
+    "components": ["20-session adjusted return", "adjusted close / 20-session average - 1", "today's actual turnover / previous 20-session mean turnover"],
+    "weight_sets": [[0.4, 0.4, 0.2], [0.6, 0.2, 0.2], [0.3, 0.3, 0.4]],
+    "thresholds": [70, 80],
+    "ranking": "0.7*momentum + 10*(trust net buy today) + 10*(foreign net buy today) + 10*(volume >= 1.2*prior20 mean); unknown institutional observations excluded from the common-known research universe, never zero-filled"
+  },
+  "course_memberships": [
+    "volume_momentum: momentum >= threshold",
+    "trust_near_breakout: close within +/-2% of prior40 adjusted high, any positive trust net in last3 complete sessions",
+    "trust_consecutive: momentum >= threshold and trust net positive for 2 sessions",
+    "foreign_first: momentum >= threshold and foreign net positive after a nonpositive prior session",
+    "foreign_trust: momentum >= threshold-10 and foreign net shares*raw close >=50m and trust net shares*raw close >=20m; dollar amounts are explicitly estimates",
+    "price_volume_400: close > prior400 adjusted high and volume >= prior9-session maximum; daily adaptation of intraday course filter",
+    "near_breakout: close within +/-2% of prior40 adjusted high"
+  ],
+  "common_gate": "Historical eligible ordinary share, usable OHLCV/adjustment, positive20 return, close>MA20, actual yesterday turnover>500m, complete price/volume histories and 3-session institutional observations. 0050 is benchmark only. Use 0050 close>MA5 and rising MACD(12,26,9) histogram as explicitly disclosed market proxy; no macro/news/fundamental hindsight inputs.",
+  "entry": {
+    "breakout": "Signal close>prior40 high, red body, volume>=1.2*prior20 average",
+    "pullback": "Signal low<=MA10*1.02, close>=MA10 and <=MA10*1.03, red body, close>prior close and rising MACD histogram",
+    "modes": ["breakout", "both"],
+    "execution": "T close signal, T+1 adjusted open proxy. Precommitted reject if raw-equivalent opening gap exceeds +3% or is below -3%. No execution-day close or volume determines ranking or target budget. Daily single-price bars are conservatively unfilled. No same-day reinvestment of stop proceeds. No pyramiding."
+  },
+  "risk": {
+    "slots": 5,
+    "initial_nav_twd_for_reporting_only": 1000000,
+    "sizing": "At most prior close NAV/5 per entry; cash-only, no leverage, fractional adjusted units; this is a total-return NAV model, not an integer-share/corporate-settlement ledger",
+    "hard_stop": 0.07,
+    "stop_execution": "Fixed adjusted entry-price stop active immediately, including entry day. Gap below stop fills at open with adverse slippage; otherwise low crossing stop fills at stop with adverse slippage. Stop never waits for minimum holding period.",
+    "trend_exit_ma": [5, 10],
+    "trend_exit": "Close below selected MA schedules next-session open exit; blocked exits remain pending. No delayed stop or simultaneous MA5/MA10/MA20 OR rule.",
+    "end": "Terminal holdings marked to market with explicit estimated liquidation fees; raw terminal gross NAV also retained."
+  },
+  "cost": {"commission_each_side": 0.001425, "stock_sell_tax": 0.003, "etf_sell_tax": 0.001, "slippage_each_side": 0.001, "stress_slippage_each_side": 0.003, "minimum_commission_twd": 20},
+  "benchmarks": ["0050 same-period adjusted buy-and-hold with costs", "fixed momentum-only baseline: weights0, threshold70, MA10, both entries"],
+  "reports": ["all 24 train trials", "all 5 validation trials", "selected independent test", "retrospective full five years", "yearly net returns", "CAGR", "max drawdown", "win rate and completed trades", "turnover and costs", "0050 comparison", "cost stress", "daily NAV and transactions", "source hashes, missingness, exclusions and limitations"],
+  "limitations": ["Incomplete historical universe and publication archive inherited from sealed data", "Adjusted returns model implicit corporate-action reinvestment, not pay-date cash or delivered shares", "Daily OHLC cannot establish queue position, exact fills, stop liquidity or execution capacity", "Institutional money uses net shares*close estimate", "No intraday or short-sale simulation", "No claim of global optimum; no optimization on final test", "Trading definitions and score weights are course-derived research assumptions"]
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "purpose": "Data correction for benchmark valuation only; no strategy-parameter change",
+    "stock_id": "0050",
+    "start": "2025-06-11",
+    "end": "2025-06-18",
+    "end_exclusive": true,
+    "reason": "ETF unit split, four new units per old unit",
+    "source_url": "https://www.twse.com.tw/zh/ETFortune/announcement?company=A00005&date=20250617&fund=0050&seq=1&type=other",
+    "source_path": ".cache/course-bundle-20261028/twse-0050-split-20250617.html",
+    "source_sha256": "f4de1fb6598ec234b38e34dcbd45d2ec753c93aafaee68e8c8dccb2525216521",
+    "published": "2025-06-17",
+    "retrieved": "2026-10-28"
+  }
+]
