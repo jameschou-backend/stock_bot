@@ -1,0 +1,927 @@
+{
+  "schema": "strategy_scanner_daily_continuation_v1",
+  "created_at": "2026-10-29T14:56:28.737573+00:00",
+  "signal_date": "2026-10-29",
+  "source_end": "2026-10-29",
+  "summary": {
+    "schema": "multi_strategy_scan_v1",
+    "start": "2026-09-29",
+    "end": "2026-10-29",
+    "source_end": "2026-10-29",
+    "trading_days": 20,
+    "stocks_per_day": {
+      "2026-09-29": 2076,
+      "2026-09-30": 2076,
+      "2026-10-01": 2076,
+      "2026-10-02": 2076,
+      "2026-10-05": 2076,
+      "2026-10-06": 2076,
+      "2026-10-07": 2076,
+      "2026-10-08": 2076,
+      "2026-10-12": 2076,
+      "2026-10-13": 2076,
+      "2026-10-14": 2076,
+      "2026-10-15": 2076,
+      "2026-10-16": 2076,
+      "2026-10-19": 2076,
+      "2026-10-20": 2076,
+      "2026-10-21": 2076,
+      "2026-10-22": 2076,
+      "2026-10-27": 2076,
+      "2026-10-28": 2076,
+      "2026-10-29": 2076
+    },
+    "active_strategies": 36,
+    "catalog_modules": 80,
+    "signals_per_strategy": {
+      "original_breakout": 446,
+      "original_red": 395,
+      "poc_red_priority": 395,
+      "poc_up_red": 231,
+      "momentum": 6696,
+      "risk_momentum": 6695,
+      "near_high": 1627,
+      "contraction_breakout": 59,
+      "donchian20": 802,
+      "donchian55": 536,
+      "bollinger_reclaim": 162,
+      "ma_pullback": 845,
+      "ma20_60_cross": 156,
+      "macd12_26_cross": 340,
+      "rsi14_reclaim30": 37,
+      "stochastic14_3_cross": 612,
+      "bollinger_squeeze_breakout": 58,
+      "keltner20_breakout": 384,
+      "adx14_di_cross": 50,
+      "ichimoku_cloud_breakout": 223,
+      "obv20_breakout": 854,
+      "cmf20_cross": 412,
+      "mfi14_reclaim20": 81,
+      "atr14_volatility_breakout": 1125,
+      "legacy_momentum_trend": 3010,
+      "legacy_mean_reversion": 176,
+      "legacy_course_breakout": 72,
+      "first_volume_bar_price": 156,
+      "early_rotation": 997,
+      "launch_breakout_strength": 669,
+      "launch_turnover_heat": 3006,
+      "entry_not_extended": 11580,
+      "entry_strong_close": 2761,
+      "liquidity_median50m": 11270,
+      "liquidity_prior50m": 12540,
+      "liquidity_persistent50m": 11268
+    },
+    "entry_export_strategy_count": 29,
+    "matches_include_non_entry_conditions": true,
+    "outcomes": {
+      "not_matched": 1157505,
+      "matched": 80726,
+      "unknown": 157129,
+      "ineligible": 99360
+    },
+    "external_data_requests": 0,
+    "account_independent": true,
+    "live_qualified": false,
+    "backtest_run": false,
+    "historical_days_reused": 19,
+    "historical_days_recomputed": 0,
+    "appended_dates": [
+      "2026-10-29"
+    ]
+  },
+  "day_summary": {
+    "date": "2026-10-29",
+    "stock_count": 2076,
+    "poc_up_red": [
+      {
+        "stock_id": "2352",
+        "name": "佳世達",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.1768529880966988,
+          "poc_before": 28.990625,
+          "poc_after": 29.603125,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2465",
+        "name": "麗臺",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.3169096189488768,
+          "poc_before": 92.86,
+          "poc_after": 95.97999999999999,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "2892",
+        "name": "第一金",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.17113496103428083,
+          "poc_before": 38.580000000000005,
+          "poc_after": 41.519999999999996,
+          "poc_status": "up"
+        }
+      },
+      {
+        "stock_id": "4526",
+        "name": "東台",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.7088106313223302,
+          "poc_before": 34.5375,
+          "poc_after": 41.9775,
+          "poc_status": "up"
+        }
+      }
+    ],
+    "original_red": [
+      {
+        "stock_id": "2352",
+        "name": "佳世達",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.1768529880966988
+        }
+      },
+      {
+        "stock_id": "2465",
+        "name": "麗臺",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.3169096189488768
+        }
+      },
+      {
+        "stock_id": "2892",
+        "name": "第一金",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.17113496103428083
+        }
+      },
+      {
+        "stock_id": "3035",
+        "name": "智原",
+        "first_signal": true,
+        "metrics": {
+          "original_priority": 0.16688388064074167
+        }
+      },
+      {
+        "stock_id": "4526",
+        "name": "東台",
+        "first_signal": false,
+        "metrics": {
+          "original_priority": 0.7088106313223302
+        }
+      }
+    ],
+    "prior_days_exact": true
+  },
+  "daily_summaries": [
+    {
+      "date": "2026-10-29",
+      "stock_count": 2076,
+      "poc_up_red": [
+        {
+          "stock_id": "2352",
+          "name": "佳世達",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.1768529880966988,
+            "poc_before": 28.990625,
+            "poc_after": 29.603125,
+            "poc_status": "up"
+          }
+        },
+        {
+          "stock_id": "2465",
+          "name": "麗臺",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.3169096189488768,
+            "poc_before": 92.86,
+            "poc_after": 95.97999999999999,
+            "poc_status": "up"
+          }
+        },
+        {
+          "stock_id": "2892",
+          "name": "第一金",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.17113496103428083,
+            "poc_before": 38.580000000000005,
+            "poc_after": 41.519999999999996,
+            "poc_status": "up"
+          }
+        },
+        {
+          "stock_id": "4526",
+          "name": "東台",
+          "first_signal": false,
+          "metrics": {
+            "original_priority": 0.7088106313223302,
+            "poc_before": 34.5375,
+            "poc_after": 41.9775,
+            "poc_status": "up"
+          }
+        }
+      ],
+      "original_red": [
+        {
+          "stock_id": "2352",
+          "name": "佳世達",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.1768529880966988
+          }
+        },
+        {
+          "stock_id": "2465",
+          "name": "麗臺",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.3169096189488768
+          }
+        },
+        {
+          "stock_id": "2892",
+          "name": "第一金",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.17113496103428083
+          }
+        },
+        {
+          "stock_id": "3035",
+          "name": "智原",
+          "first_signal": true,
+          "metrics": {
+            "original_priority": 0.16688388064074167
+          }
+        },
+        {
+          "stock_id": "4526",
+          "name": "東台",
+          "first_signal": false,
+          "metrics": {
+            "original_priority": 0.7088106313223302
+          }
+        }
+      ]
+    }
+  ],
+  "per_strategy_daily_summary": [
+    {
+      "strategy_id": "original_breakout",
+      "name": "原封存價量突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 10,
+      "first": 8,
+      "matched_first_unknown": 0,
+      "unknown": 70,
+      "not_matched": 1860,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "original_red",
+      "name": "原突破＋紅 K",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 5,
+      "first": 4,
+      "matched_first_unknown": 0,
+      "unknown": 70,
+      "not_matched": 1865,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "poc_red_priority",
+      "name": "POC 優先＋紅 K（原研究語意）",
+      "kind": "ranking",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 5,
+      "first": 4,
+      "matched_first_unknown": 0,
+      "unknown": 70,
+      "not_matched": 1865,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "poc_up_red",
+      "name": "POC 上移＋紅 K（獨立硬篩研究版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 4,
+      "first": 3,
+      "matched_first_unknown": 0,
+      "unknown": 70,
+      "not_matched": 1866,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "momentum",
+      "name": "中期動能",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 288,
+      "first": 13,
+      "matched_first_unknown": 0,
+      "unknown": 299,
+      "not_matched": 1353,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "risk_momentum",
+      "name": "波動調整動能",
+      "kind": "ranking",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 288,
+      "first": 13,
+      "matched_first_unknown": 0,
+      "unknown": 302,
+      "not_matched": 1350,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "near_high",
+      "name": "接近一年新高",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 67,
+      "first": 6,
+      "matched_first_unknown": 0,
+      "unknown": 421,
+      "not_matched": 1452,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "contraction_breakout",
+      "name": "收斂後帶量突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 180,
+      "not_matched": 1760,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "donchian20",
+      "name": "20 日價格通道突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 13,
+      "first": 6,
+      "matched_first_unknown": 0,
+      "unknown": 180,
+      "not_matched": 1747,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "donchian55",
+      "name": "55 日價格通道突破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 12,
+      "first": 7,
+      "matched_first_unknown": 0,
+      "unknown": 253,
+      "not_matched": 1675,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "bollinger_reclaim",
+      "name": "跌出布林下軌後收回",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 180,
+      "not_matched": 1760,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "ma_pullback",
+      "name": "上升趨勢回測均線",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 23,
+      "first": 19,
+      "matched_first_unknown": 0,
+      "unknown": 259,
+      "not_matched": 1658,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "ma20_60_cross",
+      "name": "MA20／60 金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 2,
+      "first": 2,
+      "matched_first_unknown": 0,
+      "unknown": 259,
+      "not_matched": 1679,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "macd12_26_cross",
+      "name": "MACD 訊號線金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 12,
+      "first": 12,
+      "matched_first_unknown": 0,
+      "unknown": 216,
+      "not_matched": 1712,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "rsi14_reclaim30",
+      "name": "RSI14 收復 30",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1763,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "stochastic14_3_cross",
+      "name": "慢速 KD 低檔金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 40,
+      "first": 40,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1723,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "bollinger_squeeze_breakout",
+      "name": "布林收斂後上破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 309,
+      "not_matched": 1631,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "keltner20_breakout",
+      "name": "Keltner 通道上破",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 6,
+      "first": 6,
+      "matched_first_unknown": 0,
+      "unknown": 182,
+      "not_matched": 1752,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "adx14_di_cross",
+      "name": "ADX 趨勢確認＋DI 金叉",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 1,
+      "first": 1,
+      "matched_first_unknown": 0,
+      "unknown": 196,
+      "not_matched": 1743,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "ichimoku_cloud_breakout",
+      "name": "一目均衡表過雲",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 2,
+      "first": 2,
+      "matched_first_unknown": 0,
+      "unknown": 274,
+      "not_matched": 1664,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "obv20_breakout",
+      "name": "OBV 突破 20 日高點",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 20,
+      "first": 20,
+      "matched_first_unknown": 0,
+      "unknown": 182,
+      "not_matched": 1738,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "cmf20_cross",
+      "name": "CMF20 由負轉正",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 8,
+      "first": 8,
+      "matched_first_unknown": 0,
+      "unknown": 346,
+      "not_matched": 1586,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "mfi14_reclaim20",
+      "name": "MFI14 收復 20",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 8,
+      "first": 8,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1755,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "atr14_volatility_breakout",
+      "name": "超過一倍 ATR 的收盤漲幅",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 12,
+      "first": 4,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1751,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "legacy_momentum_trend",
+      "name": "舊工廠：動能趨勢（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 92,
+      "first": 7,
+      "matched_first_unknown": 1,
+      "unknown": 258,
+      "not_matched": 1590,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "legacy_mean_reversion",
+      "name": "舊工廠：均值回歸（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 9,
+      "first": 4,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1754,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "legacy_course_breakout",
+      "name": "舊工廠：400日價量高點（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 3,
+      "first": 2,
+      "matched_first_unknown": 0,
+      "unknown": 539,
+      "not_matched": 1398,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "first_volume_bar_price",
+      "name": "盤整後第一根放量紅K（純價量子版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 3,
+      "first": 3,
+      "matched_first_unknown": 0,
+      "unknown": 467,
+      "not_matched": 1470,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "early_rotation",
+      "name": "成交升溫與早期相對強勢（日掃描版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 10,
+      "first": 4,
+      "matched_first_unknown": 0,
+      "unknown": 297,
+      "not_matched": 1633,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "launch_breakout_strength",
+      "name": "60日收盤突破＋領先0050",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 23,
+      "first": 13,
+      "matched_first_unknown": 0,
+      "unknown": 297,
+      "not_matched": 1620,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "launch_turnover_heat",
+      "name": "近五日成交值升溫",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 80,
+      "first": 13,
+      "matched_first_unknown": 0,
+      "unknown": 297,
+      "not_matched": 1563,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "entry_not_extended",
+      "name": "進場品質：不過度乖離",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 634,
+      "first": 15,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1129,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "entry_strong_close",
+      "name": "進場品質：紅K收在高位",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 60,
+      "first": 45,
+      "matched_first_unknown": 1,
+      "unknown": 199,
+      "not_matched": 1681,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "liquidity_median50m",
+      "name": "流動性：20日成交值中位數",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 576,
+      "first": 1,
+      "matched_first_unknown": 0,
+      "unknown": 177,
+      "not_matched": 1187,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "liquidity_prior50m",
+      "name": "流動性：訊號日前20日均值",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 651,
+      "first": 5,
+      "matched_first_unknown": 0,
+      "unknown": 180,
+      "not_matched": 1109,
+      "ineligible": 136
+    },
+    {
+      "strategy_id": "liquidity_persistent50m",
+      "name": "流動性：中位數與前期均值",
+      "kind": "filter",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 576,
+      "first": 1,
+      "matched_first_unknown": 0,
+      "unknown": 180,
+      "not_matched": 1184,
+      "ineligible": 136
+    }
+  ],
+  "poc_summary": {
+    "continuation_signal_count": 10,
+    "continuation_status_counts": {
+      "down": 3,
+      "unknown": 1,
+      "up": 6
+    },
+    "missing_tick_coordinates": 0,
+    "prior_profile_count": 4962,
+    "historical_prefix_verified": true,
+    "historical_profile_rows_unchanged": true,
+    "unknown_reason_counts": {
+      "corporate_action_or_nonconstant_price_scale": 1
+    },
+    "unknown_rows": [
+      {
+        "stock_id": "3691",
+        "signal_date": "2026-10-29",
+        "status": "unknown",
+        "reason": "corporate_action_or_nonconstant_price_scale"
+      }
+    ]
+  },
+  "finmind": {
+    "new_tick_requests": 95,
+    "tick_coordinates": 95,
+    "new_daily_reference_requests": 3,
+    "daily_reference_calls": 4,
+    "tick_status_counts": {
+      "received": 95
+    },
+    "quota_after_tick_fetch": {
+      "requests_in_window": 102,
+      "window_start_time": 1793285473.411144,
+      "total_requests": 77860,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4758,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    }
+  },
+  "calendar": {
+    "latest_session": "2026-10-29",
+    "new_market_sessions": [
+      "2026-10-29"
+    ],
+    "source": {
+      "path": ".cache/scanner-20261029-close/inputs-v1/raw-close.parquet",
+      "sha256": "575e9f1f2cc4f77b831a6c2467b93b929da76a84e48c678bef76bb0ef138644d"
+    },
+    "closed_dates_not_inferred_from_missing_quotes": true
+  },
+  "daily_data_checks": {
+    "2026-10-29": {
+      "date": "2026-10-29",
+      "frozen_cohort_counts": {
+        "matched": 1938,
+        "invalid_price_excluded": 30,
+        "missing_both": 108,
+        "missing_finmind": 1
+      },
+      "ohlc_conflicts": [],
+      "volume_scopes_not_equated": true,
+      "corporate_action_event_count": 3,
+      "adjustment_bridge_independently_certified": false,
+      "source_sha256": {
+        ".cache/scanner-20261029-close/provider/TaiwanStockPrice-2026-10-29.parquet": "0ba13a09b8bbd3f4a71ce8c6ab24ffb804580b6056bda7ae5cbb2ef4f98f4496",
+        ".cache/scanner-20261029-close/official-v1/normalized/official-normalized.parquet": "e24285a80b78c27e51e00c3a7eaccbd451adb15fb113c0f4830b9c983156b2a5"
+      }
+    }
+  },
+  "validation": {
+    "historical_scan_days_exact": true,
+    "unchanged_scan_dates": 19,
+    "historical_scan_days_recomputed": 0,
+    "historical_poc_rows_exact": true,
+    "unchanged_poc_profiles": 4962,
+    "new_scan_dates": [
+      "2026-10-29"
+    ],
+    "source_receipt_files_sha256_verified": true
+  },
+  "artifacts": {
+    "bundle": {
+      "path": ".cache/scanner-20261029-close/inputs-v1/manifest.json",
+      "sha256": "b73972ca2a581a672ad8bbf34fc0fcf4af693a625c0dec8011c524f4a804f804"
+    },
+    "poc": {
+      "path": ".cache/scanner-20261029-close/poc-complete-v1/report.json",
+      "sha256": "ee88db251144278d622f854fd44b3017c02e39818b846bae529fb152a4099b30"
+    },
+    "scanner": {
+      "path": ".cache/multi-strategy-scanner/20261029-close/receipt.json",
+      "sha256": "3289f9662a9aeb6cd347d86ff2a4099e90399c60d07d89cc1093e2484ce0c126"
+    },
+    "tick_requests": {
+      "path": ".cache/scanner-20261029-close/ticks-v1/report.json",
+      "sha256": "11a70fe40d49f69db2a62506e656bbb5eddc034230a5d9d3fe45be5685cf028d"
+    },
+    "previous_scanner": {
+      "path": ".cache/multi-strategy-scanner/20261028-close/receipt.json",
+      "sha256": "4b9c030b78aef41bb01bd42cbf8950ae3cd5fddf92465ee9e08ba3f39398ac76"
+    },
+    "previous_poc": {
+      "path": ".cache/scanner-20261028-candidate-review/poc-complete-v1/report.json",
+      "sha256": "957777a9060ae99b3230c78b5ffa74afcaf94ad2b259db56067cd0c7163949a4"
+    },
+    "new_day_scanner": {
+      "path": ".cache/multi-strategy-scanner/20261029-addition/receipt.json",
+      "sha256": "af388039b8742e82101dd5a8be962acbaf1c4ece3094d1f8aca55941b57e0d69"
+    },
+    "candidate_review": {
+      "path": ".cache/scanner-20261029-close/candidates.json",
+      "sha256": "b346638ed0d836f7914000f6535307a89461c05ea798af42c2335f89f4a89296"
+    },
+    "observed_calendar": {
+      "path": ".cache/scanner-20261029-close/inputs-v1/raw-close.parquet",
+      "sha256": "575e9f1f2cc4f77b831a6c2467b93b929da76a84e48c678bef76bb0ef138644d"
+    },
+    "official_2026-10-29": {
+      "path": ".cache/scanner-20261029-close/official-v1/report.json",
+      "sha256": "1d009e4f4ff9089b6c8b8890329237734e5e439d0f9e343ef179f8b15e2c15ca"
+    },
+    "crosscheck_2026-10-29": {
+      "path": ".cache/scanner-20261029-close/provider-crosscheck.json",
+      "sha256": "203a41d7aeac329f4a0ba62a33f774c9644ebca0c486d94fa6b4505b43257c06"
+    },
+    "inputs_2026-10-29": {
+      "path": ".cache/scanner-20261029-close/inputs-v1/manifest.json",
+      "sha256": "b73972ca2a581a672ad8bbf34fc0fcf4af693a625c0dec8011c524f4a804f804"
+    },
+    "master_review_2026-10-29": {
+      "path": ".cache/scanner-20261029-close/provider/market-snapshot-review.json",
+      "sha256": "7c2183a63600ac348c07328b20931c1edb4dfd83208237cd62ec8adc4a6e6b37"
+    },
+    "provider_scanner-20261029-close_TaiwanStockPriceAdj-2026-10-28-fresh.source": {
+      "path": ".cache/scanner-20261029-close/provider/TaiwanStockPriceAdj-2026-10-28-fresh.source.json",
+      "sha256": "63b890d01af1dcc28421ff67573e5a20765b1c9267e0f56c1e0ebc591b65a30e"
+    },
+    "provider_scanner-20261029-close_TaiwanStockPriceAdj-2026-10-29.source": {
+      "path": ".cache/scanner-20261029-close/provider/TaiwanStockPriceAdj-2026-10-29.source.json",
+      "sha256": "e6785a7e16d45a28aa11532624c029bc2b74a91f821e97b1e7b5c58bd085e541"
+    },
+    "provider_scanner-20261029-close_TaiwanStockPrice-2026-10-29.source": {
+      "path": ".cache/scanner-20261029-close/provider/TaiwanStockPrice-2026-10-29.source.json",
+      "sha256": "f06070d51ef42a849c31c3b6a7ae7c2f4c9b5cbc348802e39ea4b2b732f127f4"
+    },
+    "provider_scanner-20261029-close_TaiwanStockInfo-2026-10-29.source": {
+      "path": ".cache/scanner-20261029-close/provider/TaiwanStockInfo-2026-10-29.source.json",
+      "sha256": "6091ab970927e553b40455b794d2ff677459134af9649e1f9b965558310f959c"
+    }
+  },
+  "source_sha256": {
+    ".cache/scanner-20261029-close/publish_audit.py": "5a1a86c291cc279c2cd9727ead3b106745be243825d36c1da353b2343ef41ac7",
+    "scripts/append_scanner_daily.py": "4a51370f15de6b9e70ef1e4dd06ab5b1d2a058f02ce76c8a853d85a7ff9a47f4",
+    "scripts/scan_market_strategies.py": "bed7ea7010d5a78b6bc6640f34ed6a2eb01fd6e52a9bb2f067b2abec760c3425",
+    "scripts/extend_scanner_daily_poc.py": "4014443c7430555079ca2451a1fd8b2c4093d351de4f4a34424c7595ce8bba1f",
+    "skills/strategy_scanner/engine.py": "df16fc4688c96472dbc3df849e8de7b9300ecf0cf0cad196b04e69d0e80f8442",
+    "skills/strategy_scanner/data.py": "e1841f50af0da6706a8143b04ce3ffff33d850300cf6df1dcb39110f32ad46fc"
+  },
+  "scope": "2076 frozen research stocks plus 0050 benchmark only",
+  "holdings_or_cash_used": false,
+  "signal_prices_through": "2026-10-29",
+  "stock_master_point_in_time_certified": false,
+  "complete_historical_universe": false,
+  "backtest_run": false,
+  "live_qualified": false,
+  "orders_submitted": false,
+  "scheduler_changed": false,
+  "limitations": [
+    "Historical published scans and POC profiles were reused unchanged; only 10/29 was appended.",
+    "Frozen cohort and current metadata extensions do not certify all historical listings.",
+    "Missing adjustment anchors and conflicting tapes remain unknown; no missing tick coordinate remains.",
+    "TWSE provider ticks pass the original diagnostic policy but ordinary-session amount and volume are not fully reconciled to all-session daily totals.",
+    "Supplementary entry-context studies retain their own older source dates.",
+    "10/29 was published after the close; no intraday availability or actual-fill claim is made."
+  ]
+}
