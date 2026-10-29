@@ -1,0 +1,209 @@
+{
+  "schema": "scanner_daily_validation_v1",
+  "checked_at": "2026-10-29T00:38:18.890383+00:00",
+  "publication": "artifacts/forward_simulation/strategy_scanner_20261028_close.json",
+  "publication_sha256": "a14284ba56bd33622a57978111be7c6ee9103b2e8858f9aa5553602496e6cffb",
+  "latest_session": "2026-10-28",
+  "new_dates": [
+    "2026-10-27",
+    "2026-10-28"
+  ],
+  "historical_scan_dates_reused": 17,
+  "historical_poc_profiles_reused": 4926,
+  "historical_scan_dates_recomputed": 0,
+  "protected_tracked_archive_and_scanner_files_unchanged": 852,
+  "backtests_run": 0,
+  "original_strategy_changed": false,
+  "orders_or_fills_created": false,
+  "api": {
+    "health": {
+      "path": "/health",
+      "status": 200,
+      "response_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+    },
+    "picks": {
+      "path": "/picks",
+      "status": 200,
+      "response_sha256": "4200a18ba2d2b528a80b6536bdc80c68e9c82c091417277d24e0151daca97ff9"
+    },
+    "models": {
+      "path": "/models",
+      "status": 200,
+      "response_sha256": "68a5d2e019354903cce766c874e6285c890ca87ea7eca829c8df2cfcd16c8dbe"
+    },
+    "jobs": {
+      "path": "/jobs?limit=10",
+      "status": 200,
+      "response_sha256": "f55f26f9731cdd82fe77088383ee6626fab12298ad4506d63e938d68bbef8af9"
+    },
+    "overview": {
+      "path": "/research-terminal/api/overview",
+      "status": 200,
+      "response_sha256": "6f6994f5ae7fb8ac94079ca601204f1a1d898e3f96f55bf3d4400e83bb78a244"
+    },
+    "signals": {
+      "path": "/research-terminal/api/signals?date=2026-10-28&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "49f26f75a7945c684888304614350a94d9334caf3be3794cffa921c89efdfa6f"
+    },
+    "archive": {
+      "path": "/research-terminal/api/archive",
+      "status": 200,
+      "response_sha256": "d0bb2005e3ea9fd37487e9a145c7de6734e89420b254250561550a2a4981af86"
+    },
+    "stock-2328": {
+      "path": "/research-terminal/api/stocks/2328?date=2026-10-28&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "4b0a632de9a6bd5f6283993bd880bf4df8917c304e0addf38d3a2ca25412eda2"
+    },
+    "stock-4526": {
+      "path": "/research-terminal/api/stocks/4526?date=2026-10-28&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "69cf81b7e1c5d00734eebd38ec598134bd343a25c5c7844c244bb333120f57bc"
+    },
+    "stock-6415": {
+      "path": "/research-terminal/api/stocks/6415?date=2026-10-28&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "f7381c52c3375293dce387f66ecfec05ac29076828b31629cadde80f25a6892c"
+    },
+    "publication": {
+      "path": "/research-terminal/api/archive/strategy_scanner_20261028_close",
+      "status": 200,
+      "response_sha256": "a14284ba56bd33622a57978111be7c6ee9103b2e8858f9aa5553602496e6cffb"
+    },
+    "previous-signals": {
+      "path": "/research-terminal/api/signals?date=2026-10-22&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "71fbfd7ae710728898461ecd9396a79d96a08787f34fd1d2a3b84829550f18c2"
+    }
+  },
+  "download_byte_exact": true,
+  "previous_1022_matches_unchanged": 8,
+  "browser": {
+    "selected_date": "2026-10-28",
+    "selected_strategy": "poc_up_red",
+    "dates_1027_1028_visible": true,
+    "matched": 4,
+    "triggered": 2,
+    "chart_stock": "2328",
+    "chart_date": "2026-10-28",
+    "chart_close": 56.7,
+    "screenshot": ".cache/scanner-20261028-candidate-review/terminal-20261028.png",
+    "screenshot_sha256": "35f247f7a7ef6d2ae6c034935e2b57f6f0fc047cd0f98a0810ad205e1dda43ef"
+  },
+  "matches": [
+    {
+      "stock_id": "2328",
+      "name": "廣宇",
+      "first_signal": false,
+      "metrics": {
+        "original_priority": 0.23761445284953253,
+        "poc_before": 48.24,
+        "poc_after": 54.4,
+        "poc_status": "up"
+      }
+    },
+    {
+      "stock_id": "2393",
+      "name": "億光",
+      "first_signal": true,
+      "metrics": {
+        "original_priority": 0.1431175556410209,
+        "poc_before": 66.97625,
+        "poc_after": 68.01375000000002,
+        "poc_status": "up"
+      }
+    },
+    {
+      "stock_id": "4526",
+      "name": "東台",
+      "first_signal": false,
+      "metrics": {
+        "original_priority": 0.6251389506447309,
+        "poc_before": 34.39875,
+        "poc_after": 44.973749999999995,
+        "poc_status": "up"
+      }
+    },
+    {
+      "stock_id": "6415",
+      "name": "矽力*-KY",
+      "first_signal": true,
+      "metrics": {
+        "original_priority": 0.2661871629957602,
+        "poc_before": 410.49375,
+        "poc_after": 477.05625,
+        "poc_status": "up"
+      }
+    }
+  ],
+  "last_candles": {
+    "2328": {
+      "date": "2026-10-28",
+      "open": 54.0,
+      "high": 57.5,
+      "low": 53.9,
+      "close": 56.7,
+      "volume": 20182764,
+      "eligible": true
+    },
+    "4526": {
+      "date": "2026-10-28",
+      "open": 46.35,
+      "high": 49.65,
+      "low": 45.45,
+      "close": 49.65,
+      "volume": 74182102,
+      "eligible": true
+    },
+    "6415": {
+      "date": "2026-10-28",
+      "open": 503.0,
+      "high": 525.0,
+      "low": 495.0,
+      "close": 525.0,
+      "volume": 7419295,
+      "eligible": true
+    }
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "features_written": 0,
+    "labels_written": 0,
+    "lending_requests": 0,
+    "completed_lending_days": 59,
+    "data_quality_passed": true,
+    "reference_trading_date": "2026-10-28",
+    "reused_existing_model": "ranker_lgbm_20210826_20260825_8f02bc28e47710bf_f732728f1b561a05",
+    "job_statuses": {
+      "export_report": "success",
+      "daily_pick": "success",
+      "build_labels": "success",
+      "build_features": "success",
+      "ingest_per": "success",
+      "ingest_securities_lending": "success",
+      "data_quality_check": "success",
+      "ingest_gov_bank": "success",
+      "ingest_institutional": "success",
+      "ingest_theme_flow": "success"
+    },
+    "log_sha256": "9db35c5e682ec0cf35d1f7b64ef922e0229255d9eb7919c212067ce0d17d461c"
+  },
+  "tests": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "exit_code": 0,
+    "full": "7653 passed, 40 warnings",
+    "duration_seconds": 224.91,
+    "log_sha256": "b34acb31cc3610245babef65d49b6353c08578a6428bb31dce8999c98690e733"
+  },
+  "live_qualified": false,
+  "limitations": [
+    "Historical published scans and POC profiles were reused unchanged; only 10/27 and 10/28 were appended.",
+    "Frozen cohort and current metadata extensions do not certify all historical listings.",
+    "Missing adjustment anchors and conflicting tapes remain unknown; no missing tick coordinate remains.",
+    "TWSE provider ticks pass the original diagnostic policy but ordinary-session amount and volume are not fully reconciled to all-session daily totals.",
+    "Supplementary entry-context studies retain their own older source dates.",
+    "10/27 was backfilled on 10/29; no historical publication-time or actual-fill claim is made."
+  ]
+}
