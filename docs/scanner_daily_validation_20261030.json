@@ -1,0 +1,467 @@
+{
+  "schema": "scanner_daily_validation_v1",
+  "checked_at": "2026-10-31T06:16:29.379075+00:00",
+  "publication": "artifacts/forward_simulation/strategy_scanner_20261030_close.json",
+  "publication_sha256": "9192acfc3f28c61d8d65fe71daced80e0b0ace443dfdfdda2ff51a1eabc47145",
+  "latest_session": "2026-10-30",
+  "new_dates": [
+    "2026-10-30"
+  ],
+  "historical_scan_dates_reused": 20,
+  "historical_poc_profiles_reused": 4972,
+  "historical_scan_dates_recomputed": 0,
+  "protected_tracked_archive_and_scanner_files_unchanged": 856,
+  "base_commit": "0ec6a2b1542966b3c39db8ec97a341a7a29a9fe2",
+  "backtests_run": 0,
+  "original_strategy_changed": false,
+  "orders_or_fills_created": false,
+  "finmind": {
+    "new_tick_requests": 0,
+    "tick_coordinates": 0,
+    "new_daily_reference_requests": 3,
+    "daily_reference_calls": 4,
+    "tick_status_counts": {},
+    "quota_after_tick_fetch": {
+      "requests_in_window": 8,
+      "window_start_time": 1793426858.1262531,
+      "total_requests": 77885,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4852,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    }
+  },
+  "api": {
+    "health": {
+      "path": "/health",
+      "status": 200,
+      "response_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+    },
+    "picks": {
+      "path": "/picks",
+      "status": 200,
+      "response_sha256": "dd0b6c6e1c60e186168e7238a1c4fe511b4facc363cf1bb515016a6c12c4b3eb"
+    },
+    "models": {
+      "path": "/models",
+      "status": 200,
+      "response_sha256": "68a5d2e019354903cce766c874e6285c890ca87ea7eca829c8df2cfcd16c8dbe"
+    },
+    "jobs": {
+      "path": "/jobs?limit=10",
+      "status": 200,
+      "response_sha256": "c934c5e45f83a50721a0ab7791f58a863393b8b3cd6a3a5b2aefb3ee53c3bdbc"
+    },
+    "status": {
+      "path": "/workbench/status",
+      "status": 200,
+      "response_sha256": "43a5d9550e7605345feafec44025586566ea8c80da68c47fd8d432983d0488d4"
+    },
+    "overview": {
+      "path": "/research-terminal/api/overview",
+      "status": 200,
+      "response_sha256": "242e88032611cc6fffdfea6db5aee7eb67ddede15c70b8556e916bd0f5efb7c3"
+    },
+    "signals": {
+      "path": "/research-terminal/api/signals?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "e24b63e9dee76861274a860bc6a0c9a72ebdbfd325e7ba9a35d103009ca54612"
+    },
+    "archive": {
+      "path": "/research-terminal/api/archive",
+      "status": 200,
+      "response_sha256": "f44ddc7dce23f2967dd66a7439f54aeee11186616e2bb0c5791aeeb4b6de60f0"
+    },
+    "publication": {
+      "path": "/research-terminal/api/archive/strategy_scanner_20261030_close",
+      "status": 200,
+      "response_sha256": "9192acfc3f28c61d8d65fe71daced80e0b0ace443dfdfdda2ff51a1eabc47145"
+    },
+    "previous-signals": {
+      "path": "/research-terminal/api/signals?date=2026-10-29&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "6f8c09a70d0c366ef20e5d8706a2bafe6773b8afcf0296f7bdaca708eb6f7ac5"
+    },
+    "stock-2352": {
+      "path": "/research-terminal/api/stocks/2352?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "c76f339eecb12a679ee5d0a9e21eccac5432febbf1bc206f2e20526bced9644f"
+    },
+    "stock-2465": {
+      "path": "/research-terminal/api/stocks/2465?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "7b9fe4de27e5c97045e4aac5ccc4023fa1e2a0c8cea1ebbaf892abe95f840afc"
+    },
+    "stock-2892": {
+      "path": "/research-terminal/api/stocks/2892?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "1bcc0d602e3bb12418a40519f9db674734e266061c8f6690df75650b637e0a06"
+    },
+    "stock-4526": {
+      "path": "/research-terminal/api/stocks/4526?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "53dc4e292408a8f0e2b28f64431bcc1276404523047e4f8e07b5701cded77120"
+    },
+    "stock-2328": {
+      "path": "/research-terminal/api/stocks/2328?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "6fef7012afee5907d658097e794a67c5c78ce43ac21947b4725fae5b6a3adc7b"
+    },
+    "stock-6415": {
+      "path": "/research-terminal/api/stocks/6415?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "response_sha256": "f0d029598dfa9c8093a3737a5637e9cac32b8a9bb41ef89a8f341b79ce784b63"
+    },
+    "jobs-after-rerun": {
+      "path": "/jobs?limit=20",
+      "status": 200,
+      "response_sha256": "e8cd59571fec121df99a1a6ec1baf4ddc04709c8e514b987bb8285983da3950e"
+    },
+    "status-after-rerun": {
+      "path": "/workbench/status",
+      "status": 200,
+      "response_sha256": "a0425eadf9958a606641ada5f07f763b6d763b5c4250e3d15bf2b69576cc8f7c"
+    }
+  },
+  "download_byte_exact": true,
+  "previous_1029_matches_unchanged": 4,
+  "browser": {
+    "selected_date": "2026-10-30",
+    "selected_strategy": "poc_up_red",
+    "date_option_present": true,
+    "matched": 0,
+    "triggered": 0,
+    "signal_empty_visible": true,
+    "chart_empty_visible": true,
+    "screenshot": ".cache/scanner-20261030-close/terminal-20261030.png",
+    "screenshot_sha256": "216ba6afd33f16d471d8114a119301e0e99cef80807b18baee5c295085f43729"
+  },
+  "matches": [],
+  "market_gate": {
+    "signal_date": "2026-10-30",
+    "strategy_id": "poc_up_red",
+    "original_gate": "0050_adjusted_close_strictly_above_ma120",
+    "previous_state": "ON",
+    "state": "OFF",
+    "adjusted_close": 104.95,
+    "ma120": 104.99482190860216,
+    "price_basis": "frozen adjusted close series, same basis for current close and moving average",
+    "source": ".cache/scanner-20261030-close/inputs-v1/close-official.parquet",
+    "source_sha256": "0f7e1355172b009de6c0c475825d96d6f586114452ff1987d54792a434de0922",
+    "original_strategy_changed": false
+  },
+  "scan_status_counts": {
+    "strategy_id": "poc_up_red",
+    "name": "POC 上移＋紅 K（獨立硬篩研究版）",
+    "kind": "entry",
+    "scope": "general_frozen_stock_universe",
+    "evaluated_stocks": 2076,
+    "matched": 0,
+    "first": 0,
+    "matched_first_unknown": 0,
+    "unknown": 58,
+    "not_matched": 1879,
+    "ineligible": 139
+  },
+  "last_candles": {
+    "2352": {
+      "date": "2026-10-30",
+      "open": 31.0,
+      "high": 34.5,
+      "low": 29.55,
+      "close": 33.8,
+      "volume": 79259674,
+      "eligible": true
+    },
+    "2465": {
+      "date": "2026-10-30",
+      "open": 109.0,
+      "high": 110.0,
+      "low": 102.0,
+      "close": 102.0,
+      "volume": 12870646,
+      "eligible": true
+    },
+    "2892": {
+      "date": "2026-10-30",
+      "open": 44.3,
+      "high": 44.7,
+      "low": 43.85,
+      "close": 44.6,
+      "volume": 30759009,
+      "eligible": true
+    },
+    "4526": {
+      "date": "2026-10-30",
+      "open": 50.2,
+      "high": 56.0,
+      "low": 48.75,
+      "close": 56.0,
+      "volume": 14661995,
+      "eligible": true
+    },
+    "2328": {
+      "date": "2026-10-30",
+      "open": 53.1,
+      "high": 53.5,
+      "low": 50.2,
+      "close": 50.6,
+      "volume": 7917463,
+      "eligible": true
+    },
+    "6415": {
+      "date": "2026-10-30",
+      "open": 500.0,
+      "high": 526.0,
+      "low": 486.5,
+      "close": 502.0,
+      "volume": 7275527,
+      "eligible": true
+    }
+  },
+  "data_status": {
+    "price_date": "2026-10-30",
+    "expected_date": "2026-10-30",
+    "feature_date": "2026-10-30",
+    "feature_stocks": 2123,
+    "markets": [
+      {
+        "market": "TPEX",
+        "date": "2026-10-30",
+        "stocks": 874
+      },
+      {
+        "market": "TWSE",
+        "date": "2026-10-30",
+        "stocks": 1086
+      }
+    ],
+    "data_ready": true,
+    "problems": [],
+    "strategy_ready": false
+  },
+  "dataset_market_counts": {
+    "raw_prices": [
+      {
+        "trading_date": "2026-10-29",
+        "market": "EMERGING",
+        "stocks": 365
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TPEX",
+        "stocks": 893
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TWSE",
+        "stocks": 1091
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "EMERGING",
+        "stocks": 367
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TPEX",
+        "stocks": 893
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TWSE",
+        "stocks": 1091
+      }
+    ],
+    "raw_institutional": [
+      {
+        "trading_date": "2026-10-29",
+        "market": "EMERGING",
+        "stocks": 133
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TPEX",
+        "stocks": 760
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TWSE",
+        "stocks": 1076
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "EMERGING",
+        "stocks": 140
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TPEX",
+        "stocks": 796
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TWSE",
+        "stocks": 1078
+      }
+    ],
+    "raw_margin_short": [
+      {
+        "trading_date": "2026-10-29",
+        "market": "TPEX",
+        "stocks": 802
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TWSE",
+        "stocks": 1061
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TPEX",
+        "stocks": 802
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TWSE",
+        "stocks": 1061
+      }
+    ],
+    "raw_per": [
+      {
+        "trading_date": "2026-10-29",
+        "market": "TPEX",
+        "stocks": 891
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TWSE",
+        "stocks": 1086
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TPEX",
+        "stocks": 892
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TWSE",
+        "stocks": 1087
+      }
+    ],
+    "securities_lending_daily": [
+      {
+        "trading_date": "2026-10-29",
+        "market": "TPEX",
+        "stocks": 86
+      },
+      {
+        "trading_date": "2026-10-29",
+        "market": "TWSE",
+        "stocks": 285
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TPEX",
+        "stocks": 123
+      },
+      {
+        "trading_date": "2026-10-30",
+        "market": "TWSE",
+        "stocks": 306
+      }
+    ]
+  },
+  "dataset_counts_note": "Distinct stock IDs including zero-trade/invalid quote rows; positive-price coverage is separately reported by data_status.",
+  "lending_completed_days": [
+    {
+      "trading_date": "2026-10-29",
+      "source_rows": 1073,
+      "stock_rows": 372,
+      "payload_sha256": "f36de92e69b46e37e034bb60d9469ca1882909cc7cd254e56a823a02609fa769"
+    },
+    {
+      "trading_date": "2026-10-30",
+      "source_rows": 1388,
+      "stock_rows": 430,
+      "payload_sha256": "0af899a3249965ff9b4b6eae771a024aad9399bd3d957efead50a1ec45d648e2"
+    }
+  ],
+  "lending_semantics": "securities_lending_daily records transaction flow, not an outstanding balance; legacy raw_securities_lending is not an active source",
+  "calendar": [
+    {
+      "trading_date": "2026-10-29",
+      "is_open": 1
+    },
+    {
+      "trading_date": "2026-10-30",
+      "is_open": 1
+    },
+    {
+      "trading_date": "2026-10-31",
+      "is_open": 0
+    },
+    {
+      "trading_date": "2026-11-01",
+      "is_open": 0
+    },
+    {
+      "trading_date": "2026-11-02",
+      "is_open": 1
+    }
+  ],
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "successful_runs": 2,
+    "exit_codes": [
+      0,
+      0
+    ],
+    "features_written_on_rerun": 0,
+    "labels_written_on_rerun": 0,
+    "lending_requests_on_rerun": 0,
+    "data_quality_passed": true,
+    "reference_trading_date": "2026-10-30",
+    "job_statuses": {
+      "export_report": "success",
+      "daily_pick": "success",
+      "build_labels": "success",
+      "build_features": "success",
+      "ingest_securities_lending": "success",
+      "ingest_per": "success",
+      "data_quality_check": "success",
+      "ingest_corporate_actions": "success",
+      "ingest_prices": "success",
+      "ingest_fundamental": "success",
+      "ingest_gov_bank": "success",
+      "ingest_theme_flow": "success",
+      "ingest_institutional": "success",
+      "ingest_fear_greed": "success",
+      "ingest_margin_short": "success",
+      "ingest_stock_master": "success",
+      "ingest_trading_calendar": "success",
+      "bootstrap_history": "success"
+    },
+    "log_sha256": {
+      "pipeline.log": "493c76cd2366fcd935d65eba0e048be148b857bf6a8675b692b1810427a70de2",
+      "pipeline-rerun.log": "149b03c634eab6488010d9c30a94080c91c0fa3b16ad720ff993b629ac582760"
+    }
+  },
+  "tests": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "exit_code": 0,
+    "full": "7653 passed, 40 warnings",
+    "duration_seconds": 268.93,
+    "log_sha256": "1642fb5837b0faa35c490f30138482da48ac6b163c1ff58ffb4d5ea8dd349dc7"
+  },
+  "live_qualified": false,
+  "limitations": [
+    "Historical published scans and POC profiles were reused unchanged; only 10/30 was appended.",
+    "Frozen cohort and current metadata extensions do not certify all historical listings.",
+    "Missing adjustment anchors and conflicting tapes remain unknown; no missing tick coordinate remains.",
+    "TWSE provider ticks pass the original diagnostic policy but ordinary-session amount and volume are not fully reconciled to all-session daily totals.",
+    "Supplementary entry-context studies retain their own older source dates.",
+    "10/30 was backfilled on 10/31; no historical publication-time, intraday availability, or actual-fill claim is made."
+  ]
+}
