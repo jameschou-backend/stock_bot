@@ -1,0 +1,128 @@
+{
+  "schema": "poc_market_gate_validation_v1",
+  "checked_at": "2026-10-31T06:29:51.268855+00:00",
+  "publication": "artifacts/forward_simulation/poc_market_gate_comparison_20261030.json",
+  "publication_sha256": "fc8ff320b80dd152f2a47920c7f0c909013b787fcb42d8680d8d188340ffa066",
+  "base_commit": "47b746e0023eecfe0435a8c70c11b26e97bbf820",
+  "protected_existing_files_unchanged": 857,
+  "same_original_stock_statuses": 2076,
+  "baseline_matches": 0,
+  "variant_matches": 4,
+  "unknown": 58,
+  "profiles_with_exact_prior_20_sessions": 4,
+  "usable_profile_stock_sessions": 80,
+  "missing_tick_coordinates": 0,
+  "original_strategy_changed": false,
+  "original_terminal_changed": false,
+  "orders_or_fills_created": false,
+  "targeted_tests": {
+    "passed": 7,
+    "log_sha256": "445b84b608bd3f5d201fed24766d92a9056803b79ebdb73d9321eb54ffe38738"
+  },
+  "tests": {
+    "command": "AI_ASSIST_ENABLED=0 make test",
+    "exit_code": 0,
+    "passed": 7660,
+    "warnings": 40,
+    "duration_seconds": 255.43,
+    "log_sha256": "2a4ede4a83a127392ffc0b01b59c19fd2a82821891365533f41351647fb6d1db"
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "rerun_wrote_no_new_prices_features_labels_or_lending": true,
+    "lending_requests": 0,
+    "data_quality_passed": true,
+    "log_sha256": "af3a082bd4e42fa50e7c1aa71c9c4e6a27e00af196b63fcfdb3f7b1e90fed3f5"
+  },
+  "api": {
+    "start_command": "AI_ASSIST_ENABLED=0 API_HOST=127.0.0.1 API_PORT=8001 make api",
+    "original_service_port": 8000,
+    "temporary_acceptance_port": 8001,
+    "checks": {
+      "8000-health": {
+        "path": "/health",
+        "status": 200,
+        "response_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      "8000-picks": {
+        "path": "/picks",
+        "status": 200,
+        "response_sha256": "dd0b6c6e1c60e186168e7238a1c4fe511b4facc363cf1bb515016a6c12c4b3eb"
+      },
+      "8000-models": {
+        "path": "/models",
+        "status": 200,
+        "response_sha256": "68a5d2e019354903cce766c874e6285c890ca87ea7eca829c8df2cfcd16c8dbe"
+      },
+      "8000-jobs": {
+        "path": "/jobs?limit=20",
+        "status": 200,
+        "response_sha256": "c301d7f889d9530ce8b75be34bf3cfbd95768566197e2d548864aa4407f5b32e"
+      },
+      "8000-signals": {
+        "path": "/research-terminal/api/signals?date=2026-10-30&strategy_id=poc_up_red",
+        "status": 200,
+        "response_sha256": "e24b63e9dee76861274a860bc6a0c9a72ebdbfd325e7ba9a35d103009ca54612"
+      },
+      "8000-archive": {
+        "path": "/research-terminal/api/archive",
+        "status": 200,
+        "response_sha256": "f44ddc7dce23f2967dd66a7439f54aeee11186616e2bb0c5791aeeb4b6de60f0"
+      },
+      "8001-health": {
+        "path": "/health",
+        "status": 200,
+        "response_sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+      },
+      "8001-picks": {
+        "path": "/picks",
+        "status": 200,
+        "response_sha256": "dd0b6c6e1c60e186168e7238a1c4fe511b4facc363cf1bb515016a6c12c4b3eb"
+      },
+      "8001-models": {
+        "path": "/models",
+        "status": 200,
+        "response_sha256": "68a5d2e019354903cce766c874e6285c890ca87ea7eca829c8df2cfcd16c8dbe"
+      },
+      "8001-jobs": {
+        "path": "/jobs?limit=20",
+        "status": 200,
+        "response_sha256": "c301d7f889d9530ce8b75be34bf3cfbd95768566197e2d548864aa4407f5b32e"
+      },
+      "8001-signals": {
+        "path": "/research-terminal/api/signals?date=2026-10-30&strategy_id=poc_up_red",
+        "status": 200,
+        "response_sha256": "e24b63e9dee76861274a860bc6a0c9a72ebdbfd325e7ba9a35d103009ca54612"
+      },
+      "8001-archive": {
+        "path": "/research-terminal/api/archive",
+        "status": 200,
+        "response_sha256": "f44ddc7dce23f2967dd66a7439f54aeee11186616e2bb0c5791aeeb4b6de60f0"
+      }
+    }
+  },
+  "full_report": {
+    "path": ".cache/poc-market-gate-20261030/complete-v1/comparison.json",
+    "sha256": "5af5d9ec864ccf50faf80080526a7029dd15257112045e4ee9a8e89fbd1477df"
+  },
+  "finmind": {
+    "status_counts": {
+      "received": 24
+    },
+    "actual_network_calls": 24,
+    "quota_after": {
+      "requests_in_window": 33,
+      "window_start_time": 1793426858.1262531,
+      "total_requests": 77910,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4827,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    },
+    "source_sha256": "33b068d18d48b8eb9b1b07596395f85a7ec6910773e1091a5b72dc59cfdab4f4"
+  },
+  "backtest_run": false,
+  "live_qualified": false
+}
