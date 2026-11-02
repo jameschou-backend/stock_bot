@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <meta name="color-scheme" content="light">
+ <title>籌碼穩定研究｜Stock Bot</title>
+ <link rel="stylesheet" href="/terminal/holder-stability/app.css">
+ <script defer src="/terminal/holder-stability/app.js"></script>
+</head>
+<body>
+ <aside class="sidebar">
+  <a class="brand" href="/terminal/"><span class="brand-mark" aria-hidden="true">▥</span><span>Stock Bot<small>RESEARCH TERMINAL</small></span></a>
+  <div class="nav-label">研究工作台</div>
+  <nav aria-label="主要導覽">
+   <a href="/terminal/#signals"><span aria-hidden="true">◫</span>今日訊號</a>
+   <a href="/terminal/#stock"><span aria-hidden="true">⌁</span>個股觀察</a>
+   <a href="/terminal/#backtest"><span aria-hidden="true">▥</span>回測實驗室</a>
+   <a href="/terminal/#research"><span aria-hidden="true">↗</span>飆股研究</a>
+   <a class="active" href="/terminal/holder-stability/" aria-current="page"><span aria-hidden="true">◎</span>籌碼穩定研究</a>
+   <a href="/terminal/#catalog"><span aria-hidden="true">▦</span>策略資料庫</a>
+  </nav>
+  <div class="sidebar-bottom"><span class="status-dot"></span> 本機研究環境<p>獨立研究 · 尚未實戰認證</p></div>
+ </aside>
+ <main>
+  <header class="topbar"><div>工作台 <span>/</span> 獨立研究 <span>/</span> <strong>籌碼穩定</strong></div><a href="/terminal/?strategy=poc_up_red&amp;date=2026-10-30#signals">回到 POC 訊號 ↗</a></header>
+  <div class="content">
+   <div class="heading"><div><div class="eyebrow">HOLDER STABILITY · INDEPENDENT STUDY</div><h1>跌深了，籌碼還在嗎<span>？</span></h1><p>觀察股價回落時，600 張級距持股是否仍然穩定。</p></div><div class="asof"><span class="tag">獨立觀察研究</span><p>行情截止 <strong>2026 / 10 / 30</strong></p></div></div>
+   <nav class="section-nav" aria-label="頁面章節"><a href="#findings">研究結論</a><a href="#watchlist">觀察名單 ↓</a><a href="#method">方法與限制</a></nav>
+   <div id="loading" class="panel loading" role="status">正在核對研究結果與觀察名單…</div>
+   <div id="error" class="panel error" role="alert" hidden><h2>研究資料暫時無法顯示</h2><p id="error-text"></p><button id="retry" type="button">重新讀取</button></div>
+   <noscript><div class="panel">請啟用 JavaScript，才能載入已封存的研究與搜尋名單。</div></noscript>
+   <div id="study" hidden>
+    <section class="stats" aria-label="研究概況">
+     <div class="stat-card"><div class="stat-label">持股穩定觀察池 <span>01</span></div><div class="stat-number"><span id="watch-count">—</span><small>檔</small></div><p>主設定 · 資料延遲 8 個日曆日</p></div>
+     <div class="stat-card amber"><div class="stat-label">通過止跌確認 <span>02</span></div><div class="stat-number"><span id="confirmed-count">—</span><small>檔</small></div><p>收盤突破此前 5 日最高收盤</p></div>
+     <div class="stat-card"><div class="stat-label">歷史持股資料 <span>03</span></div><div class="stat-number"><span id="week-count">—</span><small>週</small></div><p>研究期間 2022 / 01 — 2026 / 10</p></div>
+    </section>
+    <section id="findings" class="panel findings">
+     <div class="eyebrow">WHAT THE EVIDENCE SAYS</div>
+     <h2 class="large-heading">可以列入觀察，尚未看到穩定的進場優勢。</h2>
+     <p class="lead">「持股沒明顯減少」不足以判斷見底。同日期、同產業的配對比較，也尚未支持可重複的報酬優勢。</p>
+     <div class="finding-metrics"><div><span>穩定組 · 20 日平均淨報酬</span><strong id="headline-return">—</strong></div><div><span>相對同期 0050</span><strong id="headline-excess">—</strong></div><p>2025 年起的已見歷史<br>8 日延遲・主成本・有效事件 <b id="headline-events">—</b> 次</p></div>
+     <div class="notice">逐次訊號的事件研究，包含重疊持有；不能視為帳戶複利報酬。原 POC、進場濾網與既有封存維持原樣。</div>
+     <details><summary>查看同日期、同產業的配對證據</summary><p class="footnote">固定呈現 2025 年起、持有 20 日、主成本的穩定／減少組配對。各日期先取平均再等權比較，區間由日期重抽得到，未校正重疊事件及多重研究；四組描述區間均跨零。</p><div class="table-scroll"><table><caption class="sr-only">固定後段20日配對比較</caption><thead><tr><th>資料延遲／確認狀態</th><th>有效配對／日期</th><th>日期平均報酬差</th><th>描述95%區間</th></tr></thead><tbody id="paired-rows"></tbody></table></div></details>
+    </section>
+    <section class="case-section" aria-labelledby="case-title"><div class="section-heading"><div><div class="eyebrow">YOUR TWO EXAMPLES</div><h2 id="case-title">光聖與旺矽，放回同一把尺上看。</h2></div><span class="muted">指定案例 · 不計入歷史主統計</span></div><div class="cases" id="case-cards"></div></section>
+    <section class="panel comparisons" aria-labelledby="comparison-title">
+     <div class="section-heading"><div><div class="eyebrow">SAME ENTRY, SAME EXIT, SAME COSTS</div><h2 id="comparison-title">把條件拆開，才看得見增量。</h2></div><span class="tag neutral">96 項固定比較</span></div>
+     <div class="controls">
+      <label>歷史期間<select id="period"><option value="2025_2026">2025 起 — 2026/10/30</option><option value="2022_2024">2022 — 2024</option><option value="all">全部期間（含跨界）</option><option value="boundary">跨界事件</option></select></label>
+      <label>出場方式<select id="exit"><option value="20">持有 20 日</option><option value="5">持有 5 日</option><option value="60">持有 60 日</option><option value="stop20">固定停損／20 日上限</option></select></label>
+      <label>持股資料延遲<select id="lag"><option value="8">8 個日曆日（主設定）</option><option value="15">15 個日曆日（敏感度）</option></select></label>
+      <label>交易成本<select id="cost"><option value="main">主設定 · 單邊滑價 0.45%</option><option value="stress">壓力設定 · 單邊滑價 0.9%</option></select></label>
+     </div>
+     <p id="comparison-context" class="muted" aria-live="polite"></p>
+     <div class="table-scroll"><table class="comparison-table"><caption class="sr-only">各組條件的事件回測比較</caption><thead><tr><th scope="col">條件組別</th><th scope="col">有效／觸發</th><th scope="col">平均淨報酬</th><th scope="col">0050 超額</th><th scope="col">中位數</th><th scope="col">勝率</th><th scope="col">最差單次 MAE</th></tr></thead><tbody id="comparison-rows"></tbody></table></div>
+     <div id="increment" class="increment" aria-live="polite"></div>
+     <p class="footnote">超額單位為百分點；MAE 是單次持有期的最大不利價格變化，並非帳戶最大回撤。缺價、未知與未成熟事件未填成零報酬。</p>
+     <details><summary>有效樣本與資料缺口</summary><div id="coverage"></div></details>
+    </section>
+    <section id="watchlist" class="panel watchlist" aria-labelledby="watch-title">
+     <div class="section-heading"><div><div class="eyebrow">THE OBSERVATION LIST · 2026 / 10 / 30</div><h2 id="watch-title">112 檔觀察名單</h2><p class="muted">固定主設定名單，與上方歷史比較選項分開。</p></div><span class="tag amber-tag">全數尚未止跌確認</span></div>
+     <p class="list-context">使用 10/22 持股快照，對照 9/24；10/30 最新週資料沒有倒填進當日訊號。15 日延遲欄則使用 10/8 對照 9/11。</p>
+     <div class="list-controls">
+      <label class="search-label">尋找股票<input id="search" type="search" placeholder="輸入名稱或代碼，例如 光聖、6442" autocomplete="off"></label>
+      <label>顯示範圍<select id="scope"><option value="all">全部 112 檔</option><option value="named">光聖、旺矽</option><option value="both">15 日假設也穩定</option><option value="different">15 日假設判定不同</option></select></label>
+      <label>排序<select id="sort"><option value="liquidity">20 日成交值由高到低</option><option value="stock">股票代碼</option><option value="drawdown">跌幅由深到淺</option><option value="holder">持股占比增幅由高到低</option></select></label>
+      <button id="clear" type="button" class="secondary">清除篩選</button>
+     </div>
+     <div class="list-summary"><span id="list-count" role="status" aria-live="polite"></span><span>表格可左右捲動 · 排序不代表預期報酬或勝率</span></div>
+     <div class="table-scroll watch-scroll" tabindex="0" role="region" aria-label="觀察股表格，可上下及左右捲動"><table><caption class="sr-only">10/30 主設定持股穩定觀察股；全部尚未止跌確認</caption><thead><tr><th scope="col">股票</th><th scope="col">10/30 收盤</th><th scope="col">距60日高收盤</th><th scope="col">持股占比變動<small>百分點</small></th><th scope="col">該級距股數變動</th><th scope="col">15日延遲判定</th></tr></thead><tbody id="candidate-rows"></tbody></table><div id="empty" class="empty" hidden>沒有符合搜尋條件的觀察股，請調整或清除篩選。</div></div>
+     <p class="footnote">「穩定」容許小幅減少：四週占比下降不超過 0.5 個百分點，而且級距股數下降不超過 1%。15 日欄的「混合」表示兩項門檻只有一項符合；未知不當成穩定。</p>
+    </section>
+    <section id="method" class="panel method" aria-labelledby="method-title">
+     <div class="eyebrow">HOW TO READ THIS STUDY</div><h2 id="method-title">先看規則，也看資料能說到哪裡。</h2>
+     <div class="method-grid"><div><h3>跌深與持股穩定</h3><p>距近 60 日最高還原收盤至少跌 20%；掛牌至少 126 市場日、60 日資料完整，20 日平均估計成交值至少 5,000 萬元。</p><p>600 張級距採可觀測的 600,001 股以上三級合計，連續五期檢查總股數、比例與四週變化；無法單獨辨識恰好 600,000 股。</p></div><div><h3>資料時間與出場</h3><p>每週最後市場交易日觀察，持股資料延遲 8／15 個日曆日才使用，最早下一交易日開盤參考進場。</p><p>共同停損使用訊號日前五日最低收盤；開盤已不高於該價則跳過。持有期收盤跌破後於次日開盤退出，否則滿 20 日再於次日開盤退出。跳空無法保證按參考價成交。</p></div><div><h3>比例費用與公平比較</h3><p>每側手續費 0.1425%，股票賣出稅 0.3%、0050 為 0.1%；單邊滑價 0.45%，壓力設定 0.9%。</p><p>共同母體限持股已知的跌深事件；另依同日期、產業、確認狀態及跌幅／成交值配對。所有比較固定後才運算，未挑選最佳參數。</p></div><div><h3>目前還不能推論的事</h3><p>持股級距總量穩定，不等於同一批大戶沒賣，也不能證明吸籌或護盤。股價仍可能持續下跌。</p><p>凍結股票池與歷史公告時間仍有限制；0050 分割停牌附近的路徑保留未知。未驗證有限資金、名額、整股與實際成交容量，尚未取得實盤資格。</p></div></div>
+     <p class="source-links">資料說明：<a href="https://www.tdcc.com.tw/portal/zh/smWeb/qryStock" target="_blank" rel="noopener noreferrer">TDCC 集保戶股權分散表 ↗</a><a href="https://finmind.github.io/tutor/TaiwanMarket/Chip/" target="_blank" rel="noopener noreferrer">FinMind 持股分級資料 ↗</a></p>
+    </section>
+   </div>
+   <footer><span>STOCK BOT · INDEPENDENT RESEARCH</span><span>研究結果、觀察條件與實際交易資格分開呈現。</span></footer>
+  </div>
+ </main>
+</body>
+</html>

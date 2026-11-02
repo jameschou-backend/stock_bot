@@ -573,5 +573,7 @@ app.include_router(workbench_router)
 # The integrated stock terminal reads sealed research through small local APIs.
 from app.research_terminal_api import router as research_terminal_router
 from app.research_terminal_web import router as research_terminal_web_router
+from app.holder_stability_web import router as holder_stability_web_router
 app.include_router(research_terminal_router)
+app.include_router(holder_stability_web_router)
 app.include_router(research_terminal_web_router)
