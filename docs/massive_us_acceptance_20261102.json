@@ -1,0 +1,88 @@
+{
+  "schema": "massive_us_isolated_acceptance_v1",
+  "date": "2026-11-02",
+  "implementation_commits": ["bb8e4a2", "747c0c9", "d4dc756"],
+  "status": "offline_and_local_integration_passed_live_provider_pending",
+  "taiwan_preservation": {
+    "files": {
+      "unchanged": true,
+      "checked_files": 877536,
+      "checked_bytes": 132320003243,
+      "differences": [],
+      "baseline": ".cache/tw-baseline-protection/massive-20261102-v2",
+      "inventory_sha256": "9a669d795f7a92f3d663008352a04c40ef67e84305888bf784092046d584a42b",
+      "verification_receipt": ".cache/tw-baseline-protection/file-verification-after-20261102.json"
+    },
+    "database": {
+      "target": "127.0.0.1:3307/stock_bot",
+      "method": "consistent read-only snapshot, all rows ordered by primary key, row and schema SHA-256",
+      "unchanged": true,
+      "tables": 41,
+      "rows": 35363377,
+      "changed_tables": [],
+      "before_receipt": ".cache/tw-baseline-protection/database-before-20261102.json",
+      "before_receipt_sha256": "35b3694116e2f261daf1acff6b815c8e87d09ff7b5f66d2f81d53aed50283eba",
+      "after_receipt": ".cache/tw-baseline-protection/database-after-20261102.json",
+      "after_receipt_sha256": "665848491c6c901ad7ba2bfa8ce871f04dfdce7c85ce895e55d0892d19262ffc"
+    },
+    "is_backup": false,
+    "is_write_lock": false,
+    "legacy_data_deleted": false,
+    "legacy_pipeline_run": false,
+    "historical_backtests_replayed": false,
+    "env_file_changed": false,
+    "note": "Existing results preserved by content comparison; legacy pipeline intentionally not run because it writes Taiwan data, features and models."
+  },
+  "tests": {
+    "command": "DB_NAME='stock_bot?init_command=SET%20SESSION%20TRANSACTION%20READ%20ONLY' FINMIND_TOKEN='' OPENAI_API_KEY='' AI_ASSIST_ENABLED=false PYTHONDONTWRITEBYTECODE=1 make test",
+    "passed": 7732,
+    "warnings": 40,
+    "duration_seconds": 240.13,
+    "new_guard_and_us_tests_passed": 32,
+    "taiwan_mysql_session_read_only_verified": true
+  },
+  "us_pipeline": {
+    "command": "make -C us_market pipeline",
+    "source_kind": "synthetic_fixture",
+    "datasets": ["daily", "trades", "tickers", "splits", "dividends"],
+    "snapshot_count": 5,
+    "repeat_run_requests": 0,
+    "repeat_run_manifests_unchanged": true,
+    "missing_key_rejected_before_storage_creation": true,
+    "file_storage_bytes_at_acceptance": 27076,
+    "file_storage_limit_bytes": 10737418240,
+    "host_free_space_reserve_bytes": 42949672960,
+    "quota_excludes_mysql_docker_volume": true,
+    "storage": "canonical JSON gzip plus Zstandard Parquet"
+  },
+  "us_catalog": {
+    "target": "127.0.0.1:3308/stock_bot_us",
+    "compose_project": "stock-bot-us-v1",
+    "container": "stock-bot-us-v1-mysql-1",
+    "volume": "stock-bot-us-v1_us_mysql_data",
+    "account": "us_market",
+    "account_grants_only_us_schema": true,
+    "synthetic_snapshot_rows_after_repeated_mirror": 5,
+    "stores_market_rows": false,
+    "credentials_outside_repository": true
+  },
+  "us_api": {
+    "base_url": "http://127.0.0.1:8001",
+    "routes": {
+      "/health": {"http_status": 200, "snapshot_count": 5},
+      "/picks": {"http_status": 200, "status": "strategy_not_implemented"},
+      "/models": {"http_status": 200, "status": "training_not_implemented"},
+      "/jobs?limit=10": {"http_status": 200, "source_kind": "synthetic_fixture"}
+    }
+  },
+  "live_provider_verified": false,
+  "live_provider_requests": 0,
+  "subscription_entitlements_verified": false,
+  "strategy_ready": false,
+  "live_qualified": false,
+  "pending": [
+    "User-provided Massive key in a private external file or process environment",
+    "Bounded real-provider smoke check and subscription entitlement verification",
+    "Separate future US calendar, trade-condition, correction, corporate-action and historical-universe qualification before strategy/backtest implementation"
+  ]
+}

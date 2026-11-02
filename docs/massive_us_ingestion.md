@@ -146,9 +146,11 @@ historical universe**. Use a new revision to intentionally refresh a snapshot;
 old responses and research references stay intact.
 
 Per invocation defaults: at most 20 network requests, 100 pages, 32 MiB per HTTP
-response, 10 GiB total US storage and 40 GiB free-space reserve. Bounds include
-partial/orphaned files. Page receipts are committed only after source and Parquet
-objects exist. Incomplete pagination is never published as complete. Resume
+response, 10 GiB in the US file directory and 40 GiB host free-space reserve.
+The directory quota includes partial/orphaned files but excludes the separate
+MySQL Docker volume; SQL contains only small manifest records. Page receipts are
+committed only after source and Parquet objects exist. Incomplete pagination is
+never published as complete. Resume
 checks every cached object's hash. Provider pagination is not guaranteed to be
 a single historical revision; this limitation remains in every manifest.
 
@@ -176,6 +178,13 @@ Before US POC/backtesting: verify an exchange calendar, session/condition rules,
 correction handling, dated listing identity, splits/dividends and source volume
 reconciliation. Then implement a separate US strategy and account model. The
 existing Taiwan POC's Taipei timestamps and fee/market rules remain unchanged.
+
+## Recorded acceptance
+
+See [2026-11-02 acceptance](massive_us_acceptance_20261102.json) for the file/DB
+integrity receipts, full test result and isolated synthetic pipeline/API checks.
+Real Massive authentication and subscription entitlement checks remain pending
+the user-provided API key. The fixture checks do not certify real provider data.
 
 ## Official references (checked 2026-11-02)
 
