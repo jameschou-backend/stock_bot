@@ -53,3 +53,24 @@ def safe_root(root: Path) -> Path:
     if root.is_relative_to(REPO) and not root.is_relative_to(DEFAULT_ROOT):
         raise ValueError("Inside this repository US writes are restricted to .cache/us-market-v1")
     return root
+
+
+def alpaca_credentials() -> tuple[str, str]:
+    """Read a complete key pair from one source; never mix environment and file."""
+    names = ("ALPACA_API_KEY", "ALPACA_SECRET_KEY")
+    if any(name in os.environ for name in names):
+        values = os.environ
+    else:
+        path = REPO / ".env.us"
+        if path.is_symlink():
+            raise ValueError("US .env.us must not be a symbolic link")
+        values = {}
+        if path.exists():
+            info = path.stat()
+            if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077:
+                raise ValueError("US .env.us must have mode 600; run chmod 600 .env.us")
+            values = dotenv_values(path, interpolate=False)
+    pair = tuple((values.get(name) or "").strip() for name in names)
+    if any(not value or any(c.isspace() for c in value) for value in pair):
+        raise ValueError("Set both ALPACA_API_KEY and ALPACA_SECRET_KEY in .env.us (mode 600) or the process environment")
+    return pair

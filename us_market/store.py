@@ -14,7 +14,6 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from .config import GIB, safe_root
-from .client import safe_url
 
 
 def encoded(value):
@@ -121,7 +120,7 @@ class Store:
         out = pa.BufferOutputStream()
         pq.write_table(table,out,compression="zstd",row_group_size=100_000)
         parquet = self.put(f"{folder}/data-{index:06d}.parquet",out.getvalue().to_pybytes())
-        receipt = dict(query=query.descriptor(),index=index,url=safe_url(url),source=source,
+        receipt = dict(query=query.descriptor(),index=index,url=query.validate_url(url),source=source,
                        parquet=parquet,rows=table.num_rows,retrieved_at=datetime.now(timezone.utc).isoformat(),
                        source_encoding="canonical JSON; exact decimal values represented as strings")
         self.put(f"{folder}/page-{index:06d}.json",encoded(receipt))
@@ -134,6 +133,7 @@ class Store:
                       snapshot_consistency="provider pagination; not guaranteed point-in-time revisions",
                       corporate_actions_reconciled=False,historical_universe_verified=False,
                       calendar_verified=False,live_qualified=False,strategy_ready=False)
+        result.update(query.publication_fields())
         ref = self.put(f"snapshots/{query.key}.json",encoded(result))
         return result, ref
 

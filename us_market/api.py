@@ -22,6 +22,7 @@ def create_app(store: Store):
     @app.get("/jobs")
     def jobs(limit: int=Query(default=10,ge=1,le=100)):
         return [dict(snapshot_id=s["snapshot_id"],dataset=s["query"]["dataset"],ticker=s["query"]["ticker"],
+                     provider=s["query"]["provider"],feed=s["query"].get("feed"),
                      rows=s["rows"],status=s["data_status"],live_qualified=False)
                 for s in store.snapshots()[-limit:]]
 

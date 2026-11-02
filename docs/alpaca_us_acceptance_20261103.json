@@ -1,0 +1,79 @@
+{
+  "schema": "alpaca_us_isolated_acceptance_v1",
+  "date": "2026-11-03",
+  "status": "offline_and_local_integration_passed_live_provider_pending",
+  "provider": "alpaca",
+  "feed": "sip",
+  "focused_tests": {
+    "command": "make -C us_market test",
+    "passed": 70
+  },
+  "pipeline": {
+    "command": "make -C us_market pipeline PROVIDER=alpaca",
+    "source_kind": "synthetic_fixture",
+    "snapshots": 2,
+    "rows": {
+      "daily": 1,
+      "trades": 2
+    },
+    "first_run_requests": 2,
+    "repeat_run_requests": 0,
+    "same_manifests_on_replay": true
+  },
+  "catalog": {
+    "target": "127.0.0.1:3308/stock_bot_us",
+    "before_rows": 9,
+    "after_rows": 11,
+    "existing_manifest_hashes_unchanged": true,
+    "repeated_insert_idempotent": true,
+    "market_rows_stored_in_mysql": false
+  },
+  "api": {
+    "base_url": "http://127.0.0.1:8001",
+    "http_status": {
+      "/health": 200,
+      "/picks": 200,
+      "/models": 200,
+      "/jobs?limit=10": 200
+    },
+    "snapshot_count": 2,
+    "picks_status": "strategy_not_implemented",
+    "models_status": "training_not_implemented",
+    "stopped_after_acceptance": true
+  },
+  "preservation": {
+    "taiwan_env_sha256_unchanged": true,
+    "massive_existing_files_sha256_unchanged": 38,
+    "real_massive_snapshots_replayed_offline": 4,
+    "taiwan_pipeline_run": false,
+    "taiwan_strategy_or_backtest_changed": false,
+    "old_data_deleted": false,
+    "full_taiwan_database_fingerprint_repeated_this_run": false,
+    "prior_baseline_reference": "docs/massive_us_acceptance_20261102.json"
+  },
+  "diagnostic": {
+    "source_kind": "synthetic_fixture",
+    "raw_volume_equal": true,
+    "poc_ready": false,
+    "relative_path": "diagnostics/1cbad2afee43e2a8670a9900370d3c73f3ce32d3bf3afed60de07f0785431ca6.json",
+    "store_root": ".cache/us-market-v1/alpaca-acceptance"
+  },
+  "live_provider_verified": false,
+  "live_provider_requests": 0,
+  "subscription_entitlements_verified": false,
+  "strategy_ready": false,
+  "live_qualified": false,
+  "pending": [
+    "Alpaca Paper API key pair in ignored .env.us",
+    "Bounded real historical SIP smoke check, at most 20 requests",
+    "Separate calendar, trade-condition, correction and corporate-action qualification before POC/backtests"
+  ],
+  "full_regression": {
+    "command": "make test",
+    "passed": 7774,
+    "warnings": 40,
+    "duration_seconds": 253.99,
+    "taiwan_mysql_session_forced_read_only": true,
+    "finmind_and_openai_tokens_disabled": true
+  }
+}

@@ -27,3 +27,23 @@ class FixtureClient:
         else:
             raise ValueError("Unexpected synthetic endpoint")
         return dict(status="OK",results=result,adjusted=False,synthetic_fixture=True)
+
+
+class AlpacaFixtureClient:
+    def __init__(self):
+        self.requests = 0
+
+    def page(self, url):
+        from .alpaca import _parts
+        path, params = _parts(url)
+        self.requests += 1
+        if params["symbols"] != "AAPL" or not params["start"].startswith("2026-10-29") or "page_token" in params:
+            raise ValueError("Unexpected Alpaca synthetic query")
+        if path.endswith("/bars"):
+            field = "bars"
+            rows = [dict(t="2026-10-29T04:00:00Z",o=100,h=100,l=100,c=100,v="10.25")]
+        else:
+            field = "trades"
+            rows = [dict(t="2026-10-29T14:00:00.123456789Z",p=100,s=10,i=1,x="V",c=["@"],z="C"),
+                    dict(t="2026-10-29T14:00:00.123456789Z",p=100,s="0.25",i=2,x="D",c=["I"],z="C")]
+        return {field:{"AAPL":rows},"next_page_token":None,"synthetic_fixture":True}

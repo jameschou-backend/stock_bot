@@ -6,6 +6,9 @@ import hashlib
 import json
 import re
 from urllib.parse import urlencode, quote
+from urllib.parse import urlsplit
+
+from .client import MassiveError, safe_url
 
 DATASETS = ("daily", "trades", "tickers", "splits", "dividends")
 NY = ZoneInfo("America/New_York")
@@ -13,6 +16,7 @@ NY = ZoneInfo("America/New_York")
 
 @dataclass(frozen=True)
 class Query:
+    error_type = MassiveError
     dataset: str
     ticker: str
     start: str
@@ -38,6 +42,30 @@ class Query:
 
     def descriptor(self):
         return dict(schema="massive_us_query_v1", market="US", provider="massive", adjusted=False, **asdict(self))
+
+    def validate_url(self, url):
+        return safe_url(url, expected_path=urlsplit(self.url()).path)
+
+    def normalize_page(self, payload):
+        from .normalize import normalize
+        return normalize(self, payload)
+
+    def next_url(self, payload):
+        url = payload.get("next_url")
+        if url and not payload["results"]:
+            raise ValueError("Empty page with a continuation cursor")
+        return self.validate_url(url) if url else None
+
+    def row_identity(self, row):
+        if self.dataset == "daily":
+            return (row["timestamp_ns"],)
+        if self.dataset == "trades":
+            return (row["timestamp_ns"], row["exchange"], row["trade_id"], row["sequence_number"])
+        return None
+
+    def publication_fields(self):
+        # Preserve every existing Massive manifest byte and query identity.
+        return {}
 
     @property
     def key(self):
