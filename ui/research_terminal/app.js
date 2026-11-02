@@ -20,12 +20,23 @@ async function api(path,options={}){
  if(!headers.has('Content-Type'))headers.set('Content-Type','application/json');
  // ngrok otherwise returns its HTML interstitial with HTTP 200 to mobile fetches.
  headers.set('ngrok-skip-browser-warning','1');
- const response=await fetch(API+path,{...options,headers});
- let data;
- try{data=await response.json();}
- catch{throw Error(`伺服器未回傳有效資料（HTTP ${response.status}），請重新整理；若持續發生，請檢查分享連線與研究 API。`);}
- if(!response.ok){let msg=data.detail||data.error||data.message||`HTTP ${response.status}`;if(typeof msg==='object')msg=JSON.stringify(msg);throw Error(msg);}
- return data;
+ const controller=new AbortController(),upstream=options.signal;
+ const abort=()=>controller.abort(upstream.reason);
+ if(upstream?.aborted)abort();else upstream?.addEventListener('abort',abort,{once:true});
+ let timedOut=false;
+ // Bound read requests; an already submitted research job keeps its existing lifecycle.
+ const timer=(options.method||'GET').toUpperCase()==='GET'?setTimeout(()=>{timedOut=true;controller.abort();},30000):null;
+ try{
+  const response=await fetch(API+path,{...options,headers,signal:controller.signal});
+  let data;
+  try{data=await response.json();}
+  catch(error){if(controller.signal.aborted)throw error;throw Error(`伺服器未回傳有效資料（HTTP ${response.status}），請重新整理；若持續發生，請檢查分享連線與研究 API。`);}
+  if(!response.ok){let msg=data.detail||data.error||data.message||`HTTP ${response.status}`;if(typeof msg==='object')msg=JSON.stringify(msg);throw Error(msg);}
+  return data;
+ }catch(error){
+  if(timedOut)throw Error('讀取研究資料逾時（30 秒），請按右上角重新載入。');
+  throw error;
+ }finally{clearTimeout(timer);upstream?.removeEventListener('abort',abort);}
 }
 function option(value,label){const o=el('option',label);o.value=value;return o;}
 function tag(label,style='neutral'){return el('span',label,'tag '+style);}
@@ -158,6 +169,25 @@ function setupLabSections(){
   root.querySelector('.lab-config h2').textContent='建立訊號研究';
 }
 function bind() {setupLabSections();document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>nav(b.dataset.view)));window.addEventListener('hashchange',()=>nav(location.hash.slice(1)));$('refresh').addEventListener('click',init);$('scan-date').addEventListener('change',()=>{state.date=$('scan-date').value;syncSelectionUrl();loadSignals();});$('strategy-filter').addEventListener('change',()=>{state.strategy=$('strategy-filter').value;populateSignalScope();loadSignals();});$('first-only').addEventListener('change',()=>{state.first=$('first-only').checked;loadSignals();});let searchTimer;$('stock-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{state.search=$('stock-search').value.trim();loadSignals();},250);});$('sort-order').addEventListener('change',()=>{state.sort=$('sort-order').value;state.page=0;renderRows();});$('page-prev').addEventListener('click',()=>{state.page=Math.max(0,state.page-1);renderRows();});$('page-next').addEventListener('click',()=>{state.page++;renderRows();});document.querySelectorAll('[data-range]').forEach(b=>b.addEventListener('click',()=>{state.range=Number(b.dataset.range);document.querySelectorAll('[data-range]').forEach(x=>x.classList.toggle('active',x===b));if(state.selected)loadStock(state.selected,state.chart?.date||state.date,state.chartStrategy);}));document.querySelectorAll('[data-detail]').forEach(b=>b.addEventListener('click',()=>{state.detail=b.dataset.detail;$('stock-signals').hidden=state.detail!=='signals';$('stock-data').hidden=state.detail!=='data';document.querySelectorAll('[data-detail]').forEach(x=>x.classList.toggle('active',x===b));}));$('price-chart').addEventListener('pointermove',handleChartMove);$('price-chart').addEventListener('click',handleChartMove);$('price-chart').addEventListener('pointerleave',()=>{chartHover=null;$('chart-tooltip').hidden=true;drawChart();});new ResizeObserver(()=>requestAnimationFrame(drawChart)).observe($('chart-container'));$('stock-lookup-form').addEventListener('submit',event=>{event.preventDefault();const id=$('stock-lookup-id').value.trim();if(!/^\d{4}$/.test(id)){setError('請輸入四碼個股代碼。');return;}setError('');loadStock(id);});$('backtest-form').addEventListener('submit',runBacktest);$('account-replay-form').addEventListener('submit',runAccount);for(const id of ['catalog-search','catalog-status','catalog-family'])$(id).addEventListener(id==='catalog-search'?'input':'change',renderCatalog);}
-async function init(){setError('');state.studies=null;state.research=null;state.archive=null;try{const [overview,catalog]=await Promise.all([api('/overview'),api('/strategies')]);state.overview=overview;state.catalog=catalog.catalog||catalog.strategies||[];selectInitialStrategy();populateCatalog();populateOverview();await loadSignals();nav(location.hash.slice(1)||state.view);}catch(error){setError('無法連接研究資料：'+error.message);$('connection-status').textContent='連線未就緒';}}
+let initializing=false;
+async function init(){
+ if(initializing)return;initializing=true;
+ const filters=['scan-date','strategy-filter','stock-search','first-only','sort-order'];
+ filters.forEach(id=>{$(id).disabled=true;});$('refresh').disabled=true;
+ $('startup-status').hidden=false;$('startup-status').textContent='正在讀取掃描日期與策略，完成後即可篩選股票。';
+ $('connection-status').textContent='載入研究資料中';
+ setError('');state.studies=null;state.research=null;state.archive=null;
+ try{
+  const [overview,catalog]=await Promise.all([api('/overview'),api('/strategies')]);
+  state.overview=overview;state.catalog=catalog.catalog||catalog.strategies||[];
+  selectInitialStrategy();populateCatalog();populateOverview();
+  filters.forEach(id=>{$(id).disabled=false;});$('first-only').disabled=contextStrategy();
+  $('startup-status').hidden=true;
+  await loadSignals();nav(location.hash.slice(1)||state.view);
+ }catch(error){
+  setError('無法連接研究資料：'+error.message);$('connection-status').textContent='連線未就緒';
+  if(!state.overview)replace('scan-date',option('','載入失敗，請重試'));
+ }finally{$('startup-status').hidden=true;$('refresh').disabled=false;initializing=false;}
+}
 bind();init();
 })();

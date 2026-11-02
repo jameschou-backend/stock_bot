@@ -12,8 +12,9 @@ const assert=require('node:assert/strict'),vm=require('node:vm');
 const input=JSON.parse(require('node:fs').readFileSync(0,'utf8'));
 const iphone='Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Version/18.0 Mobile/15E148 Safari/604.1';
 function mount(url='https://example.ngrok-free.dev/terminal/', responder) {
- const location=new URL(url),requests=[];
- const context={location,navigator:{userAgent:iphone},URL,URLSearchParams,Headers,console,
+ const location=new URL(url),requests=[],timers=new Map();let timerId=0;
+ const context={location,navigator:{userAgent:iphone},URL,URLSearchParams,Headers,console,AbortController,
+  setTimeout:(fn,ms)=>{timers.set(++timerId,{fn,ms});return timerId;},clearTimeout:id=>timers.delete(id),
   fetch:async(path,options={})=>{
    const request={url:new URL(path,location),...options,headers:new Headers(options.headers)};
    requests.push(request);
@@ -24,7 +25,7 @@ function mount(url='https://example.ngrok-free.dev/terminal/', responder) {
    return Response.json({source_end:'2026-10-07',total:12});
   }};
  vm.runInNewContext(input.script,context);
- return {api:context.terminalTransport.api,requests};
+ return {api:context.terminalTransport.api,requests,timers};
 }
 '''
 
@@ -123,4 +124,36 @@ for(const status of [200,502]){
   return true;
  });
 }
+''')
+
+
+def test_stalled_request_or_body_reports_timeout_and_allows_retry():
+    run_js(r'''
+for(const stalledBody of [false,true]){
+ let stall=true;
+ const mounted=mount('http://localhost/terminal/',request=>{
+  if(!stall)return Response.json({source_end:'2026-10-30'});
+  const pending=new Promise((resolve,reject)=>request.signal?.addEventListener('abort',()=>reject(new DOMException('Aborted','AbortError')),{once:true}));
+  return stalledBody?{ok:true,status:200,json:()=>pending}:pending;
+ });
+ const pending=mounted.api('/overview');
+ const verdict=assert.rejects(pending,error=>/逾時.*30.*重新載入/.test(error.message));
+ await Promise.resolve();
+ assert.equal(mounted.timers.size,1,'A stalled startup must have a bounded timeout');
+ const timeout=[...mounted.timers.values()][0];assert.equal(timeout.ms,30000);timeout.fn();
+ await verdict;assert.equal(mounted.requests[0].signal.aborted,true);assert.equal(mounted.timers.size,0);
+ stall=false;assert.equal((await mounted.api('/overview')).source_end,'2026-10-30');assert.equal(mounted.timers.size,0);
+}
+''')
+
+
+def test_upstream_abort_is_preserved_and_does_not_abort_other_requests():
+    run_js(r'''
+const controller=new AbortController();
+const mounted=mount(undefined,request=>new Promise((resolve,reject)=>request.signal.addEventListener('abort',()=>reject(new DOMException('Aborted','AbortError')),{once:true})));
+const a=mounted.api('/overview',{signal:controller.signal}),b=mounted.api('/strategies');
+const first=assert.rejects(a,error=>error.name==='AbortError');controller.abort();await first;
+assert.equal(mounted.requests[1].signal.aborted,false);
+const second=assert.rejects(b,error=>/逾時/.test(error.message));[...mounted.timers.values()][0].fn();await second;
+assert.equal(mounted.timers.size,0);
 ''')

@@ -1,0 +1,127 @@
+{
+  "schema": "holder_watchlist_terminal_validation_v1",
+  "completed": true,
+  "created_at_utc": "2026-11-02T03:34:15.856631+00:00",
+  "base_commit": "41df9b14e03d7e9554c10a2588c5a2bbe958249b",
+  "source_sha256": {
+    "ui/research_terminal/app.js": "585dd7265bceb6604d1a4ecb0a9130ad1e4b186b973b61b5364af0acf55f11f7",
+    "ui/research_terminal/index.html": "f5859d658d368da616e2dcc27d91b30d78f098c88e48185184d114b9d4cba19c",
+    "tests/test_research_terminal_transport_ui.py": "00911451739cc72ca78bc3aff26eafd473ad14156555f26873b05a634f0d538f",
+    "tests/test_research_terminal_context_ui.py": "2159d703806190d73db67db133b8161ee3e8067453fce2d16358d1f84faafdf5",
+    "tests/test_research_terminal_startup_ui.py": "104037b72101bf0200ff38153bcc128354273a349644b2be8c0997c9e7bb01fb",
+    "artifacts/forward_simulation/holder_stability_positive_top10_20261102.json": "a1bbd33cb536fdc918e5b4241ba1a09a5b702f3a2d22f286bc61b766b0ed526a",
+    "artifacts/forward_simulation/holder_stability_positive_top10_20261102.sha256": "d543d44f384f7f88b687574f56a3359f65c7284ffbdf01ae3d87824774159856"
+  },
+  "diagnosis": {
+    "original_strategy_and_archives_unchanged": true,
+    "preserved_files": 874,
+    "intentional_display_change": [
+      "ui/research_terminal/app.js"
+    ],
+    "cold_overview_seconds": 5.161116,
+    "warm_overview_seconds": 0.043,
+    "warm_strategies_seconds": 0.011,
+    "health_seconds": 0.0038,
+    "initial_permanent_outage_reproduced": false,
+    "regression_probes": {
+      "cold_load_empty_date_control": "reproduced before fix",
+      "stalled_request_and_json_body": "missing deadline reproduced with actual JS and controlled stalled transport"
+    }
+  },
+  "fix": [
+    "read requests time out at 30 seconds, including response-body stalls",
+    "visible startup status and disabled date/strategy controls until metadata is ready",
+    "refresh remains available after failure",
+    "existing POST job lifecycle unchanged"
+  ],
+  "verification": {
+    "make_test": {
+      "passed": 7697,
+      "warnings": 40,
+      "exit_code": 0
+    },
+    "targeted_tests": {
+      "passed": 19
+    },
+    "make_pipeline": {
+      "exit_code": 0,
+      "published_cutoff": "2026-10-30"
+    },
+    "make_api": "running; see HTTP and browser evidence",
+    "http": {
+      "health": {
+        "http": 200,
+        "seconds": 0.012
+      },
+      "picks": {
+        "http": 200,
+        "seconds": 0.166
+      },
+      "models": {
+        "http": 200,
+        "seconds": 0.033
+      },
+      "jobs": {
+        "http": 200,
+        "seconds": 0.018,
+        "all_success": true
+      },
+      "overview": {
+        "http": 200,
+        "seconds": 0.017,
+        "unchanged": true
+      },
+      "strategies": {
+        "http": 200,
+        "seconds": 0.011,
+        "unchanged": true
+      },
+      "poc": {
+        "http": 200,
+        "seconds": 0.01,
+        "unchanged": true
+      },
+      "poc1029": {
+        "http": 200,
+        "seconds": 0.014
+      }
+    },
+    "browser": {
+      "date": "2026-10-29",
+      "errorHidden": true,
+      "latestOption": "2026-10-30",
+      "loadingHidden": true,
+      "matched": "4檔",
+      "rows": "佳世達2352POC 上移＋紅 K（獨立硬篩研究版）再次觸發前次 07/06麗臺2465POC 上移＋紅 K（獨立硬篩研究版）再次觸發前次 08/12第一金2892POC 上移＋紅 K（獨立硬篩研究版）再次觸發前次 10/27東台4526POC 上移＋紅 K（獨立硬篩研究版）持續符合前次 10/21",
+      "status": "資料已連接",
+      "strategy": "poc_up_red"
+    },
+    "browser_initial_loading": {
+      "date_disabled": true,
+      "date_option": "讀取日期中…",
+      "loading_visible": true
+    },
+    "ranking": {
+      "members": 112,
+      "increasing_ratio": 58,
+      "top_count": 10,
+      "price_confirmed": 0,
+      "below_prior_five_session_low_close": 10,
+      "verified_against_frozen_price_and_weekly_chart_data": true
+    }
+  },
+  "evidence_sha256": {
+    "timeout-red.log": "517f8e19ccf258c80ce2fb315f7dc0c16b74e2507676a8c6e829be045d66358f",
+    "startup-red.log": "e4edaa11b4bff9bd7fdb6fc146cc8b75dce252e47a81e30558a42c606245c950",
+    "targeted-tests.log": "4a29a03ab563cb4aded78f5301e9988d7a84d2d7b4ab35019b248b63cb72be4a",
+    "make-test.log": "45f2529e57b5060924b6285bccb57748ac6003d5e799ec9b7739258258971d46",
+    "make-pipeline.log": "109d6f887f2f393d28805e40f490c4321196056256e74136149a9220416b4d14",
+    "http-validation.json": "3893a1d20d227ee2091261ac67f0249b21e79d2389a7e40e7e4b013a90b58f1c",
+    "browser-verified.json": "bd490cc4960bd8d2cb59a70861cc026b726b6bb0774f2e629c82d11f136957f8",
+    "signals-restored.jpg": "308d20aabb09a041e26937161dd4980457b107872efa480e54c6dc9dc9a2cd9b",
+    "preservation-before.json": "9ce5f6b1d79b8d81ac942308f2501f7d1513f0dd3c512ef32c72320d10ebab06"
+  },
+  "original_strategy_changed": false,
+  "existing_archives_changed": false,
+  "live_qualified": false
+}
