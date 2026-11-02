@@ -1,0 +1,32 @@
+name: stock-bot-us-v1
+services:
+  mysql:
+    image: mysql:8.4
+    ports:
+      - "127.0.0.1:3308:3306"
+    environment:
+      MYSQL_DATABASE: stock_bot_us
+      MYSQL_USER: us_market
+      MYSQL_PASSWORD_FILE: /run/secrets/us_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/root_password
+    secrets:
+      - us_password
+      - root_password
+    volumes:
+      - us_mysql_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/001-us.sql:ro
+    command: ["--innodb-buffer-pool-size=134217728", "--skip-log-bin"]
+    mem_limit: 768m
+    cpus: 1.0
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+secrets:
+  us_password:
+    file: ${US_MYSQL_PASSWORD_FILE:?Set external private secret path}
+  root_password:
+    file: ${US_MYSQL_ROOT_PASSWORD_FILE:?Set external private secret path}
+volumes:
+  us_mysql_data:
