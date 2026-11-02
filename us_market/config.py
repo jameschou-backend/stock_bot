@@ -4,13 +4,19 @@ import os
 from pathlib import Path
 import stat
 
+from dotenv import dotenv_values
+
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_ROOT = REPO / ".cache/us-market-v1"
 GIB = 1024 ** 3
 
 
 def api_key(key_file: Path | None = None) -> str:
-    """Read a process secret or a private file outside the repository; never .env."""
+    """Explicit key file > process environment > repo .env.us; never Taiwan .env.
+
+    Read only MASSIVE_API_KEY without interpolation or changing os.environ, so
+    US configuration cannot replace Taiwan DB/settings in the current process.
+    """
     if key_file is not None:
         path = key_file.expanduser().absolute()
         if path.is_symlink() or path.resolve().is_relative_to(REPO):
@@ -19,10 +25,21 @@ def api_key(key_file: Path | None = None) -> str:
         if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077:
             raise ValueError("API key file must have mode 600")
         value = path.read_text().strip()
-    else:
+    elif "MASSIVE_API_KEY" in os.environ:
         value = os.environ.get("MASSIVE_API_KEY", "").strip()
+    else:
+        path = REPO / ".env.us"
+        if path.is_symlink():
+            raise ValueError("US .env.us must be a regular private file, not a symbolic link")
+        if path.exists():
+            info = path.stat()
+            if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077:
+                raise ValueError("US .env.us must have mode 600; run chmod 600 .env.us")
+            value = (dotenv_values(path, interpolate=False).get("MASSIVE_API_KEY") or "").strip()
+        else:
+            value = ""
     if not value or any(c.isspace() for c in value):
-        raise ValueError("Set MASSIVE_API_KEY or pass --api-key-file pointing to a private file outside the repository")
+        raise ValueError("Set MASSIVE_API_KEY in the process environment or repository .env.us (mode 600), or pass --api-key-file for a private external file")
     return value
 
 

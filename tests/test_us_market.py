@@ -208,13 +208,66 @@ def test_response_budget_and_unknown_status_fail_closed():
         MassiveClient("KEY",session=Session(Response(b'{"status":"ERROR","results":[]}'))).page(query().url())
 
 
-def test_api_key_is_never_loaded_from_repository_env(monkeypatch,tmp_path):
+def test_api_key_is_never_loaded_from_taiwan_env(monkeypatch,tmp_path):
+    monkeypatch.setattr("us_market.config.REPO",tmp_path/"repo")
+    (tmp_path/"repo").mkdir()
+    (tmp_path/"repo/.env").write_text("MASSIVE_API_KEY=taiwan-must-not-be-read\n")
     monkeypatch.delenv("MASSIVE_API_KEY",raising=False)
     with pytest.raises(ValueError,match="Set MASSIVE_API_KEY"): api_key()
     key=tmp_path/"key";key.write_text("example_private_key");key.chmod(0o600)
     assert api_key(key)=="example_private_key"
     key.chmod(0o644)
     with pytest.raises(ValueError,match="600"): api_key(key)
+
+
+def test_us_dotenv_uses_repo_path_without_environment_mutation_or_interpolation(monkeypatch,tmp_path):
+    import os
+    repo=tmp_path/"repo";repo.mkdir()
+    path=repo/".env.us"
+    path.write_text('MASSIVE_API_KEY="literal-${DB_NAME}"\nDB_NAME=must-not-replace-taiwan\n')
+    path.chmod(0o600)
+    monkeypatch.setattr("us_market.config.REPO",repo)
+    monkeypatch.delenv("MASSIVE_API_KEY",raising=False)
+    monkeypatch.setenv("DB_NAME","stock_bot")
+    # A different working directory must not choose a different .env.us.
+    monkeypatch.chdir(tmp_path)
+    (tmp_path/".env.us").write_text("MASSIVE_API_KEY=wrong-directory\n")
+    before=dict(os.environ)
+    assert api_key()=="literal-${DB_NAME}"
+    assert dict(os.environ)==before
+
+
+def test_us_key_source_precedence_is_explicit(monkeypatch,tmp_path):
+    repo=tmp_path/"repo";repo.mkdir()
+    path=repo/".env.us";path.write_text("MASSIVE_API_KEY=dotenv-key\n");path.chmod(0o600)
+    key=tmp_path/"key";key.write_text("explicit-file-key");key.chmod(0o600)
+    monkeypatch.setattr("us_market.config.REPO",repo)
+    monkeypatch.delenv("MASSIVE_API_KEY",raising=False)
+    assert api_key()=="dotenv-key"
+    monkeypatch.setenv("MASSIVE_API_KEY","process-key")
+    assert api_key()=="process-key"
+    assert api_key(key)=="explicit-file-key"
+    # An explicitly empty process setting is an error, not a different key.
+    monkeypatch.setenv("MASSIVE_API_KEY","")
+    with pytest.raises(ValueError,match="Set MASSIVE_API_KEY"): api_key()
+
+
+@pytest.mark.parametrize("content",["", "MASSIVE_API_KEY=\n", 'MASSIVE_API_KEY="private invalid key"\n'])
+def test_invalid_us_dotenv_does_not_expose_key(monkeypatch,tmp_path,content):
+    path=tmp_path/".env.us";path.write_text(content);path.chmod(0o600)
+    monkeypatch.setattr("us_market.config.REPO",tmp_path)
+    monkeypatch.delenv("MASSIVE_API_KEY",raising=False)
+    with pytest.raises(ValueError,match="Set MASSIVE_API_KEY") as error: api_key()
+    assert "private invalid key" not in str(error.value)
+
+
+def test_us_dotenv_rejects_public_permissions_and_symlinks(monkeypatch,tmp_path):
+    path=tmp_path/".env.us";path.write_text("MASSIVE_API_KEY=example-key\n");path.chmod(0o644)
+    monkeypatch.setattr("us_market.config.REPO",tmp_path)
+    monkeypatch.delenv("MASSIVE_API_KEY",raising=False)
+    with pytest.raises(ValueError,match="600"): api_key()
+    path.unlink();path.symlink_to(tmp_path/".env")
+    with pytest.raises(ValueError,match="symbolic"): api_key()
 
 
 def test_us_modules_have_no_taiwan_runtime_dependency():

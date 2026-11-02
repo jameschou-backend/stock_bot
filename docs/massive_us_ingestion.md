@@ -11,10 +11,11 @@ separate from transport/fixture acceptance.
   strategy/backtest modules are unchanged.
 - `us_market/` does not import `app`, `skills` or `pipelines`. US ticker validation
   is separate from the existing four-digit Taiwan validator.
-- Repository-local US writes are allowed only under `.cache/us-market-v1/`.
+- Repository-local US data writes are allowed only under `.cache/us-market-v1/`.
   A new external directory is also allowed; an existing unmarked directory, a
   Taiwan directory, or a symlink is rejected. Runtime files are already covered
-  by the existing `.cache/` ignore rule.
+  by the existing `.cache/` ignore rule. User-managed credentials may be placed
+  in the separately ignored root `.env.us`, read only by US provider ingestion.
 - The optional catalog is a dedicated Compose project `stock-bot-us-v1`, MySQL
   8.4, `127.0.0.1:3308/stock_bot_us`, account `us_market`, separate volume. It is
   not a new schema on the Taiwan instance. Only manifest metadata is put in SQL.
@@ -99,8 +100,9 @@ python -m us_market.setup
 
 Setup creates random credentials in `~/.config/stock_bot/us-market-v1/`, with
 directory mode 700 and file mode 600. It refuses to overwrite credentials or
-reuse an existing orphaned US volume. Neither passwords nor key values belong
-in the repository, `.env`, terminal arguments or chat.
+reuse an existing orphaned US volume. Credentials must never be committed to
+Git or included in terminal arguments or chat. The original Taiwan `.env` is
+not used by US commands.
 
 To restart an existing US installation:
 
@@ -126,16 +128,34 @@ python -m us_market.cli fixture \
 
 ## Real provider sample (requires user-supplied key)
 
-Use a process `MASSIVE_API_KEY`, or a private mode-600 key file outside the
-repository, recommended `~/.config/stock_bot/massive_api_key`. The US module never
-reads `.env`. Without `--fetch`, an incomplete snapshot fails without network
-access. Network access is GET-only to `https://api.massive.com`, bearer-header
-authentication, no redirects, retries or fallback provider.
+Use the repository-root **`.env.us`** (ignored by Git). Create it from
+`.env.us.example` if it does not already exist, then edit it:
+
+```sh
+test -e .env.us || (umask 077; cp .env.us.example .env.us)
+chmod 600 .env.us
+nano .env.us
+```
+
+Set `MASSIVE_API_KEY=your_key` in that file. The loader uses the repository path,
+independent of the working directory, and reads only `MASSIVE_API_KEY`. It does
+not interpolate other variables, populate `os.environ`, or read Taiwan `.env`.
+Only `ingest --fetch` reads credentials; fixtures, API status and offline runs
+do not need a key.
+
+Precedence is explicit `--api-key-file` (a private file outside the repository),
+then process `MASSIVE_API_KEY`, then `.env.us`. An explicitly empty process key
+is an error; unset it to use `.env.us`. Key files must be regular files with
+mode 600. An absent/empty `.env.us` results in a setup error before data writes.
+
+Without `--fetch`, an incomplete snapshot fails without network access. Network
+access is GET-only to `https://api.massive.com`, bearer-header authentication,
+no redirects, retries or fallback provider.
 
 ```sh
 python -m us_market.cli ingest --dataset daily --ticker AAPL \
   --start 2026-10-01 --end 2026-10-30 --revision provider-smoke-v1 \
-  --fetch --api-key-file "$HOME/.config/stock_bot/massive_api_key" \
+  --fetch \
   --mysql-config "$HOME/.config/stock_bot/us-market-v1/db.json"
 ```
 
