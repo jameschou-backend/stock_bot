@@ -68,7 +68,7 @@ def normalize(query: Query, payload):
                 row.update(price=number(record["price"],positive=True),
                            shares=number(record.get("decimal_size",record.get("size"))),
                            trade_id=record["id"],exchange=integer(record["exchange"]),
-                           conditions=record.get("conditions",[]),correction=record.get("correction"),
+                           conditions=record.get("conditions"),correction=record.get("correction"),
                            sequence_number=record.get("sequence_number"))
             rows.append(row)
         return pa.Table.from_pylist(rows,schema=pa.schema(fields))

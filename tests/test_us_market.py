@@ -78,6 +78,12 @@ def test_duplicate_page_identity_is_not_silently_dropped(store):
     assert store.snapshots()==[]
 
 
+def test_missing_trade_conditions_remain_unknown_not_empty(store):
+    result,_=ingest(query(),store,Pages([payload([trade(),trade("two",conditions=[])])]))
+    table=pq.read_table(store.root/result["pages"][0]["parquet"]["path"])
+    assert table["conditions"].to_pylist()==[None,[]]
+
+
 def test_corrupt_cache_fails_without_fetching(store):
     q=query();result,_=ingest(q,store,Pages([payload([trade()])]))
     (store.root/result["pages"][0]["parquet"]["path"]).write_bytes(b"bad")
