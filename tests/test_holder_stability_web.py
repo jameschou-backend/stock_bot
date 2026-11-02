@@ -75,7 +75,7 @@ HARNESS = r'''
 const assert=require('node:assert/strict'),vm=require('node:vm');
 const input=JSON.parse(require('node:fs').readFileSync(0,'utf8'));
 class Element {
- constructor(tag='div'){this.tagName=tag;this.children=[];this._text='';this.listeners={};this.value='';this.hidden=false;this.className='';}
+ constructor(tag='div'){this.tagName=tag;this.children=[];this._text='';this.listeners={};this.value='';this.hidden=false;this.className='';this.classes=new Set();this.classList={toggle:(name,on)=>on?this.classes.add(name):this.classes.delete(name)};}
  get textContent(){return this._text+this.children.map(x=>x.textContent).join('');}
  set textContent(v){this._text=String(v);this.children=[];}
  get innerHTML(){throw Error('HTML injection');} set innerHTML(v){throw Error('HTML injection');}
@@ -84,11 +84,12 @@ class Element {
  replaceChildren(...rows){this._text='';this.children=[...rows];}
  addEventListener(k,fn){this.listeners[k]=fn;}
  fire(k){return this.listeners[k]?.({target:this});}
+ scrollIntoView(){this.scrolled=true;}
 }
 const map=new Map(),element=id=>{if(!map.has(id))map.set(id,new Element());return map.get(id);};
 const opened=[], chartCalls={clear:0,bind:0};
 const context={document:{getElementById:element,createElement:tag=>new Element(tag)},Intl,AbortController,setTimeout,clearTimeout,
- URLSearchParams,location:{search:''},HolderChart:{open:(...args)=>opened.push(args),clear:()=>chartCalls.clear++,bind:()=>chartCalls.bind++},
+ URL,URLSearchParams,location:new URL('http://localhost/terminal/holder-stability/'),history:{replaceState:(a,b,url)=>{context.location=new URL(String(url));}},HolderChart:{open:(...args)=>opened.push(args),clear:()=>chartCalls.clear++,bind:()=>chartCalls.bind++},
  fetch:async()=>({ok:true,json:async()=>input.payload})};
 vm.runInNewContext(input.script,context);
 const ui=context.holderUI;
@@ -102,7 +103,8 @@ def run_js(body):
     assert node, 'Install Node.js to validate the research page interactions'
     script = SCRIPT.read_text().replace('bind(); load();', 'globalThis.holderUI={bind,load};')
     result = subprocess.run([node, '-e', HARNESS + '\n' + body],
-                            input=json.dumps(dict(script=script, payload=web.study_view())),
+                            input=json.dumps(dict(script=script, payload=web.study_view(),
+                                ranking=json.loads((web.ROOT/'artifacts/forward_simulation/holder_stability_positive_top10_20261102.json').read_text()))),
                             capture_output=True, text=True, timeout=30)
     assert result.returncode == 0, result.stderr
 
@@ -169,5 +171,60 @@ def test_stock_buttons_and_member_deep_links_open_the_requested_chart():
  context.location.search='?stock=6442';await ui.load();assert.deepEqual(opened.pop(),['6442',true]);
  context.location.search='?stock=9999';await ui.load();assert.equal(opened.length,0);
  assert.equal(chartCalls.clear,3);
+})().catch(e=>{console.error(e);process.exitCode=1;});
+''')
+
+
+def test_increasing_filter_matches_published_top_ten_values_and_chart_targets():
+    run_js(r'''
+(async()=>{
+ await ui.load();element('scope').value='increasing_top10';element('scope').fire('change');
+ const rows=element('candidate-rows').children;
+ assert.equal(rows.length,10);assert.equal(element('sort').disabled,true);
+ assert.equal(element('watch-table').classes.has('positive-top10'),true);
+ assert.match(element('list-count').textContent,/10.*58.*112/);
+ for(let i=0;i<10;i++){
+  const expected=input.ranking.rows[i],cells=rows[i].children;
+  assert.match(cells[0].textContent,new RegExp(expected.stock_id+' · 第 '+(i+1)+' 名'));
+  assert.equal(cells[2].textContent,(expected.drawdown60*100).toFixed(2)+'%');
+  assert.equal(cells[3].textContent,(expected.prior_ratio*100).toFixed(2)+'% →'+(expected.large_pct*100).toFixed(2)+'%');
+  assert.equal(cells[4].textContent,'+'+(expected.large_pct_delta4*100).toFixed(2));
+  assert.equal(cells[5].textContent,'尚未確認');
+  cells[0].children[0].fire('click');assert.deepEqual(opened.pop(),[expected.stock_id,true]);
+ }
+ element('lag').value='15';element('lag').fire('change');assert.equal(element('candidate-rows').children.length,10);
+ assert.equal(element('candidate-rows').children[0].children[0].textContent.includes('6209'),true);
+})().catch(e=>{console.error(e);process.exitCode=1;});
+''')
+
+
+def test_search_stays_within_fixed_top_ten_and_clear_restores_all_members():
+    run_js(r'''
+(async()=>{
+ await ui.load();element('scope').value='increasing_top10';element('scope').fire('change');
+ element('search').value='3265';element('search').fire('input');assert.equal(element('candidate-rows').children.length,1);
+ assert.match(element('candidate-rows').textContent,/第 7 名/);
+ element('search').value='6442';element('search').fire('input');assert.equal(element('candidate-rows').children.length,0);
+ assert.equal(element('empty').hidden,false);assert.match(element('empty').textContent,/前 10 檔內/);
+ element('clear').fire('click');assert.equal(element('candidate-rows').children.length,112);
+ assert.equal(element('sort').disabled,false);assert.equal(element('sort').value,'liquidity');
+ assert.equal(element('watch-table').classes.has('positive-top10'),false);
+ assert.equal(element('positive-filter-note').hidden,true);assert.equal(context.location.searchParams.has('scope'),false);
+ assert.equal(input.payload.candidates.length,112);
+})().catch(e=>{console.error(e);process.exitCode=1;});
+''')
+
+
+def test_filter_deep_link_and_stock_link_preserve_scope_on_reload():
+    run_js(r'''
+(async()=>{
+ context.location=new URL('http://localhost/terminal/holder-stability/?scope=increasing_top10#watchlist');
+ await ui.load();assert.equal(element('candidate-rows').children.length,10);assert.equal(element('watchlist').scrolled,true);
+ context.location.searchParams.set('stock','6209');context.location.hash='stock-chart';await ui.load();
+ assert.equal(element('candidate-rows').children.length,10);assert.deepEqual(opened.pop(),['6209',true]);
+ assert.equal(context.location.searchParams.get('scope'),'increasing_top10');
+ context.fetch=async()=>({ok:false});await ui.load();assert.equal(element('study').hidden,true);
+ context.fetch=async()=>({ok:true,json:async()=>input.payload});await element('retry').fire('click');
+ assert.equal(element('candidate-rows').children.length,10);assert.equal(element('study').hidden,false);
 })().catch(e=>{console.error(e);process.exitCode=1;});
 ''')

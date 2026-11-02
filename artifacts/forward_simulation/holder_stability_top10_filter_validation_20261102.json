@@ -1,0 +1,178 @@
+{
+  "schema": "holder_stability_top10_filter_validation_v1",
+  "completed": true,
+  "created_at_utc": "2026-11-02T04:37:33.135984+00:00",
+  "base_commit": "646abe36392158a7c848e9745250521a3b125b12",
+  "study_end": "2026-10-30",
+  "watchlist_size": 112,
+  "positive_ratio_count": 58,
+  "filter": "drawdown60 <= -0.20 and large_pct_delta4 > 0 within original 112 members; fixed top 10 before text search",
+  "ranking": [
+    "large_pct_delta4 descending",
+    "drawdown60 ascending",
+    "amount20 descending",
+    "stock_id ascending"
+  ],
+  "holding_period": {
+    "from_observed_date": "2026-09-24",
+    "to_observed_date": "2026-10-22",
+    "assumed_lag_calendar_days": 8,
+    "available_date": "2026-10-30"
+  },
+  "confirmation_definition": "known adjusted close strictly exceeds highest adjusted close of prior five market sessions",
+  "stock_ids": [
+    "6209",
+    "6278",
+    "4720",
+    "2340",
+    "8086",
+    "2484",
+    "3265",
+    "6269",
+    "6271",
+    "3701"
+  ],
+  "published_top10_sha256": "a1bbd33cb536fdc918e5b4241ba1a09a5b702f3a2d22f286bc61b766b0ed526a",
+  "source_sha256": {
+    "ui/research_terminal/holder-stability/app.js": "812b6f418bb9441cd678c67230b7830da08144bceca9d049f1f169c0d7711741",
+    "ui/research_terminal/holder-stability/app.css": "c9b3bfd2f9f8012f1a623c680b26421fba1f91b6fe6a71a2e47f1a3b46b90b01",
+    "ui/research_terminal/holder-stability/index.html": "4ab47151435c9fb5027adcb35c79715b52dd2ceca9c2fcf09900f24ba8e8f11a",
+    "tests/test_holder_stability_web.py": "1137ccaf25466e92c95e5a021765db60fa40bb235fc46d3e974a5b8518d84a1d"
+  },
+  "preservation": {
+    "files_checked": 883,
+    "changed": [],
+    "manifest_sha256": "3725686d3a949b789fd9db7b5ffc20a636d229438da03ac6c062283faa49165b"
+  },
+  "tests": {
+    "make_test": {
+      "exit_code": 0,
+      "passed": 7700,
+      "warnings": 40,
+      "seconds": 215.64
+    },
+    "targeted": {
+      "passed": 24
+    },
+    "node_syntax_check": "passed"
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "cutoff": "2026-10-30"
+  },
+  "api": {
+    "command": "AI_ASSIST_ENABLED=0 make api",
+    "http_after_pipeline": {
+      "health": {
+        "http": 200,
+        "count": null,
+        "body": {
+          "status": "ok"
+        }
+      },
+      "picks": {
+        "http": 200,
+        "count": 5
+      },
+      "models": {
+        "http": 200,
+        "count": 18
+      },
+      "jobs": {
+        "http": 200,
+        "count": 10
+      },
+      "job_statuses": [
+        {
+          "job_name": "export_report",
+          "status": "success"
+        },
+        {
+          "job_name": "daily_pick",
+          "status": "success"
+        },
+        {
+          "job_name": "train_ranker",
+          "status": "success"
+        },
+        {
+          "job_name": "build_labels",
+          "status": "success"
+        },
+        {
+          "job_name": "build_features",
+          "status": "success"
+        },
+        {
+          "job_name": "ingest_per",
+          "status": "success"
+        },
+        {
+          "job_name": "ingest_fear_greed",
+          "status": "success"
+        },
+        {
+          "job_name": "data_quality_check",
+          "status": "success"
+        },
+        {
+          "job_name": "ingest_securities_lending",
+          "status": "success"
+        },
+        {
+          "job_name": "ingest_institutional",
+          "status": "success"
+        }
+      ]
+    }
+  },
+  "browser": {
+    "proof": {
+      "count": "顯示 10 / 前 10 檔 · 共 58 / 112 檔符合條件",
+      "horizontalOverflow": false,
+      "rows": [
+        "今國光 ↗\n6209 · 第 1 名\n\t-22.32%\t\n36.08% →\n51.51%\n\t+15.43\t尚未確認",
+        "台表科 ↗\n6278 · 第 2 名\n\t-20.22%\t\n61.94% →\n73.07%\n\t+11.12\t尚未確認",
+        "德淵 ↗\n4720 · 第 3 名\n\t-20.59%\t\n34.85% →\n42.03%\n\t+7.18\t尚未確認",
+        "台亞 ↗\n2340 · 第 4 名\n\t-23.56%\t\n36.00% →\n41.50%\n\t+5.51\t尚未確認",
+        "宏捷科 ↗\n8086 · 第 5 名\n\t-25.97%\t\n41.06% →\n46.11%\n\t+5.05\t尚未確認",
+        "希華 ↗\n2484 · 第 6 名\n\t-22.84%\t\n21.71% →\n25.75%\n\t+4.04\t尚未確認",
+        "台星科 ↗\n3265 · 第 7 名\n\t-33.16%\t\n65.25% →\n69.11%\n\t+3.86\t尚未確認",
+        "台郡 ↗\n6269 · 第 8 名\n\t-21.86%\t\n28.42% →\n32.11%\n\t+3.70\t尚未確認",
+        "同欣電 ↗\n6271 · 第 9 名\n\t-20.40%\t\n45.97% →\n49.20%\n\t+3.22\t尚未確認",
+        "大眾控 ↗\n3701 · 第 10 名\n\t-21.79%\t\n71.80% →\n74.92%\n\t+3.12\t尚未確認"
+      ],
+      "scope": "increasing_top10",
+      "title": "跌深＋持股比例增加",
+      "url": "http://127.0.0.1:8000/terminal/holder-stability/?scope=increasing_top10#watchlist",
+      "visibleHeaders": [
+        "股票",
+        "距60日高點",
+        "持股比例\n9/24 → 10/22",
+        "占比變動\n百分點",
+        "止跌狀態"
+      ]
+    },
+    "chart_clicked": "6209",
+    "chart_sessions": 120,
+    "chart_ratio": "51.51%",
+    "chart_delta": "15.43 percentage points",
+    "search_3265_preserved_rank": 7,
+    "clear_restored_members": 112,
+    "deep_link_reloaded": true,
+    "console_errors_or_warnings": [],
+    "screenshots": {
+      ".cache/holder-top10-filter-20261102/top10-filter.jpg": "b7c0307f5f3183228b0202df1b95a343692a9fdf9da9affc09d316cbf380e475",
+      ".cache/holder-top10-filter-20261102/chart-6209.jpg": "f0a54bfe33057483a8baf30d2e60669a2fdf412ef518ccdc7ed48a4702a1c56f"
+    }
+  },
+  "logs_sha256": {
+    ".cache/holder-top10-filter-20261102/make-test.log": "4a9dc29d44343ce709052aa03e176a62699592db05a8e4b95c2b3fd94ead8052",
+    ".cache/holder-top10-filter-20261102/targeted-tests.log": "a3893a678e2ba8a6006a69e4f3b67a81f5a3f91cc72b10bfbd55fee0a5a7ee13",
+    ".cache/holder-top10-filter-20261102/make-pipeline.log": "8dada64f2d2c60d4ed9acf82b84164397f3f5e4e15cb88f129c6f620c0c642c7",
+    ".cache/holder-top10-filter-20261102/http-proof.json": "53fc787bd04378fc52a0c2ebfe3233e482f2cbe9ab58e3082a4204f07be01427",
+    ".cache/holder-top10-filter-20261102/browser-proof.json": "cdaca448c43d43afcd6fd738bc1bfd780d0b4b8ecb4c2bb2672bad7947952cc3"
+  },
+  "scope": "Independent holder-stability page only; original POC, scanners, readmodels, charts and preexisting forward-simulation artifacts unchanged."
+}

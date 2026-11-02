@@ -11,6 +11,11 @@
   let generation = 0;
   function openStock(row) { globalThis.HolderChart.open(row.stock_id, true); }
   const pct = (value, suffix='%') => Number.isFinite(value) ? `${value>0?'+':''}${(value*100).toFixed(2)}${suffix}` : '未知';
+  const ratio = value => Number.isFinite(value) ? `${(value*100).toFixed(2)}%` : '未知';
+  const increasing = row => Number.isFinite(row.drawdown60) && row.drawdown60 <= -.2 &&
+    Number.isFinite(row.large_pct_delta4) && row.large_pct_delta4 > 0;
+  const increasingOrder = (a,b) => b.large_pct_delta4-a.large_pct_delta4 || a.drawdown60-b.drawdown60 ||
+    b.amount20-a.amount20 || a.stock_id.localeCompare(b.stock_id);
   const text = (tag, value, className='') => {
     const element = document.createElement(tag);
     element.textContent = value;
@@ -19,6 +24,9 @@
   };
   function candidateRows(rows, search, scope, sort) {
     const query = search.trim().toLocaleLowerCase();
+    // Freeze the top ten before searching; search must not promote another member.
+    if (scope === 'increasing_top10') return rows.filter(increasing).sort(increasingOrder).slice(0,10)
+      .filter(row => !query || `${row.name} ${row.stock_id}`.toLocaleLowerCase().includes(query));
     return rows.filter(row => (!query || `${row.name} ${row.stock_id}`.toLocaleLowerCase().includes(query)) &&
       (scope === 'all' || scope === 'named' && row.named_case || scope === 'both' && row.delayed_state === 'stable' ||
         scope === 'different' && row.delayed_state !== 'stable')).sort((a,b) => {
@@ -69,6 +77,13 @@
   }
   function watchlist() {
     if (!data) return;
+    const positive = $('scope').value === 'increasing_top10';
+    if (positive) $('sort').value='holder';
+    $('sort').disabled=positive;
+    $('watch-table').classList.toggle('positive-top10',positive);
+    $('positive-filter-note').hidden=!positive;
+    $('watch-title').textContent=positive?'跌深＋持股比例增加':'112 檔觀察名單';
+    const ranked = positive ? candidateRows(data.candidates,'','increasing_top10','holder') : [];
     const rows = candidateRows(data.candidates,$('search').value,$('scope').value,$('sort').value);
     $('candidate-rows').replaceChildren();
     for (const row of rows) {
@@ -76,16 +91,28 @@
       const name = text('td','');
       const button = text('button',row.name+' ↗','stock-name stock-open');
       button.type = 'button'; button.addEventListener('click',() => openStock(row));
-      name.append(button,text('span',`${row.stock_id}${row.named_case?' · 指定案例':''}`,'stock-code'));
+      name.append(button,text('span',`${row.stock_id}${positive?' · 第 '+(ranked.findIndex(r=>r.stock_id===row.stock_id)+1)+' 名':row.named_case?' · 指定案例':''}`,'stock-code'));
       tr.append(name);
-      for (const value of [Number.isFinite(row.close)?number.format(row.close):'未知',pct(row.drawdown60),pct(row.large_pct_delta4,''),pct(row.large_units_relative4)]) tr.append(text('td',value));
-      const delayed = text('td','');
+      tr.append(text('td',Number.isFinite(row.close)?number.format(row.close):'未知','watch-general'),text('td',pct(row.drawdown60)));
+      const holding = text('td','','watch-positive');
+      const prior = Number.isFinite(row.large_pct) && Number.isFinite(row.large_pct_delta4) ? row.large_pct-row.large_pct_delta4 : null;
+      holding.append(text('span',ratio(prior)+' →','ratio-before'),text('strong',ratio(row.large_pct),'ratio-now'));
+      tr.append(holding,text('td',pct(row.large_pct_delta4,'')));
+      const confirmation = text('td','','watch-positive');
+      confirmation.append(text('span',row.price_confirmed===true?'已確認':row.price_confirmed===false?'尚未確認':'資料未知',
+        'state '+(row.price_confirmed===true?'state-stable':'state-mixed')));
+      tr.append(confirmation,text('td',pct(row.large_units_relative4),'watch-general'));
+      const delayed = text('td','','watch-general');
       const state = Object.hasOwn(states,row.delayed_state)?row.delayed_state:'unknown';
       delayed.append(text('span',states[state],`state state-${state}`));tr.append(delayed);
       $('candidate-rows').append(tr);
     }
-    $('list-count').textContent = `顯示 ${rows.length} / ${data.candidates.length} 檔`;
+    $('list-count').textContent = positive ? `顯示 ${rows.length} / 前 10 檔 · 共 ${data.candidates.filter(increasing).length} / ${data.candidates.length} 檔符合條件` : `顯示 ${rows.length} / ${data.candidates.length} 檔`;
     $('empty').hidden = rows.length !== 0;
+    $('empty').textContent=positive?'前 10 檔內沒有符合搜尋的股票，請調整搜尋或清除篩選。':'沒有符合搜尋條件的觀察股，請調整或清除篩選。';
+    const url=new URL(location.href);
+    if(positive)url.searchParams.set('scope','increasing_top10');else url.searchParams.delete('scope');
+    history.replaceState(null,'',url);
   }
   async function load() {
     const current = ++generation, controller = new AbortController();
@@ -115,9 +142,12 @@
           pct(pair.date_mean_delta,' pp'),`${pct(pair.descriptive_low,'')} ～ ${pct(pair.descriptive_high,' pp')}`]) row.append(text('td',value));
         $('paired-rows').append(row);
       }
+      const params = new URLSearchParams(location.search);
+      if(params.get('scope')==='increasing_top10') $('scope').value='increasing_top10';
       cases(); comparison(); watchlist(); $('study').hidden = false;
-      const selected = new URLSearchParams(location.search).get('stock');
+      const selected = params.get('stock');
       if (selected && data.candidates.some(row => row.stock_id === selected)) globalThis.HolderChart.open(selected, true);
+      else if(params.get('scope')==='increasing_top10' && location.hash==='#watchlist') $('watchlist').scrollIntoView({block:'start',behavior:'auto'});
     } catch (error) {
       if (current !== generation) return;
       data = null; $('study').hidden = true; $('error').hidden = false;

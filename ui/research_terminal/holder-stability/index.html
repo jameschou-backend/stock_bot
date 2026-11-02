@@ -65,12 +65,13 @@
      <p class="list-context">使用 10/22 持股快照，對照 9/24；10/30 最新週資料沒有倒填進當日訊號。15 日延遲欄則使用 10/8 對照 9/11。</p>
      <div class="list-controls">
       <label class="search-label">尋找股票<input id="search" type="search" placeholder="輸入名稱或代碼，例如 光聖、6442" autocomplete="off"></label>
-      <label>顯示範圍<select id="scope"><option value="all">全部 112 檔</option><option value="named">光聖、旺矽</option><option value="both">15 日假設也穩定</option><option value="different">15 日假設判定不同</option></select></label>
+      <label>顯示範圍<select id="scope" aria-label="觀察名單篩選"><option value="all">全部 112 檔</option><option value="increasing_top10">跌深＋持股比例增加（前 10 檔）</option><option value="named">光聖、旺矽</option><option value="both">15 日假設也穩定</option><option value="different">15 日假設判定不同</option></select></label>
       <label>排序<select id="sort"><option value="liquidity">20 日成交值由高到低</option><option value="stock">股票代碼</option><option value="drawdown">跌幅由深到淺</option><option value="holder">持股占比增幅由高到低</option></select></label>
       <button id="clear" type="button" class="secondary">清除篩選</button>
      </div>
+     <p id="positive-filter-note" class="positive-filter-note" hidden>距 60 日最高還原收盤跌逾或等於 20%，且 600 張級距持股比例四週增加；依增加百分點固定取前 10 檔。搜尋只在前 10 檔內進行。持股比較 9/24 → 10/22，使用 8 日延遲設定；止跌確認為 10/30 還原收盤突破前五日最高收盤。</p>
      <div class="list-summary"><span id="list-count" role="status" aria-live="polite"></span><span>表格可左右捲動 · 排序不代表預期報酬或勝率</span></div>
-     <div class="table-scroll watch-scroll" tabindex="0" role="region" aria-label="觀察股表格，可上下及左右捲動"><table><caption class="sr-only">10/30 主設定持股穩定觀察股；全部尚未止跌確認</caption><thead><tr><th scope="col">股票</th><th scope="col">10/30 收盤</th><th scope="col">距60日高收盤</th><th scope="col">持股占比變動<small>百分點</small></th><th scope="col">該級距股數變動</th><th scope="col">15日延遲判定</th></tr></thead><tbody id="candidate-rows"></tbody></table><div id="empty" class="empty" hidden>沒有符合搜尋條件的觀察股，請調整或清除篩選。</div></div>
+     <div class="table-scroll watch-scroll" tabindex="0" role="region" aria-label="觀察股表格，可上下及左右捲動"><table id="watch-table"><caption class="sr-only">10/30 主設定持股穩定觀察股；全部尚未止跌確認</caption><thead><tr><th scope="col">股票</th><th scope="col" class="watch-general">10/30 收盤</th><th scope="col">距60日高點</th><th scope="col" class="watch-positive">持股比例<small>9/24 → 10/22</small></th><th scope="col">占比變動<small>百分點</small></th><th scope="col" class="watch-positive">止跌狀態</th><th scope="col" class="watch-general">該級距股數變動</th><th scope="col" class="watch-general">15日延遲判定</th></tr></thead><tbody id="candidate-rows"></tbody></table><div id="empty" class="empty" hidden>沒有符合搜尋條件的觀察股，請調整或清除篩選。</div></div>
      <p class="footnote">「穩定」容許小幅減少：四週占比下降不超過 0.5 個百分點，而且級距股數下降不超過 1%。15 日欄的「混合」表示兩項門檻只有一項符合；未知不當成穩定。</p>
     </section>
     <section id="stock-chart" class="panel stock-chart" aria-labelledby="chart-title">
