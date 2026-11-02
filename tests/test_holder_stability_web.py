@@ -48,7 +48,7 @@ def test_local_routes_are_read_only_and_assets_use_existing_security_headers():
         assert page.status_code == 200 and '112 檔觀察名單' in page.text
         assert "script-src 'self'" in page.headers['content-security-policy']
         assert page.headers['cache-control'] == 'no-store'
-        for name in ['app.css','app.js']:
+        for name in ['app.css','app.js','charts.js']:
             assert c.get('/terminal/holder-stability/'+name).status_code == 200
         assert c.get('/terminal/holder-stability/.env').status_code == 404
         assert c.get('/terminal/holder-stability/private/report.json').status_code == 404
@@ -86,7 +86,9 @@ class Element {
  fire(k){return this.listeners[k]?.({target:this});}
 }
 const map=new Map(),element=id=>{if(!map.has(id))map.set(id,new Element());return map.get(id);};
+const opened=[], chartCalls={clear:0,bind:0};
 const context={document:{getElementById:element,createElement:tag=>new Element(tag)},Intl,AbortController,setTimeout,clearTimeout,
+ URLSearchParams,location:{search:''},HolderChart:{open:(...args)=>opened.push(args),clear:()=>chartCalls.clear++,bind:()=>chartCalls.bind++},
  fetch:async()=>({ok:true,json:async()=>input.payload})};
 vm.runInNewContext(input.script,context);
 const ui=context.holderUI;
@@ -151,5 +153,21 @@ def test_failed_reload_hides_stale_data_and_untrusted_names_stay_text_only():
  assert.equal(element('study').hidden,true);assert.equal(element('error').hidden,false);
  context.fetch=async()=>({ok:true,json:async()=>input.payload});await element('retry').fire('click');
  assert.equal(element('study').hidden,false);assert.equal(element('error').hidden,true);
+})().catch(e=>{console.error(e);process.exitCode=1;});
+''')
+
+
+def test_stock_buttons_and_member_deep_links_open_the_requested_chart():
+    run_js(r'''
+(async()=>{
+ await ui.load();assert.equal(chartCalls.bind,1);assert.equal(chartCalls.clear,1);
+ element('search').value='6223';element('search').fire('input');
+ element('candidate-rows').children[0].children[0].children[0].fire('click');
+ assert.deepEqual(opened.pop(),['6223',true]);
+ element('case-cards').children[0].children[0].children[0].fire('click');
+ assert.deepEqual(opened.pop(),['6442',true]);
+ context.location.search='?stock=6442';await ui.load();assert.deepEqual(opened.pop(),['6442',true]);
+ context.location.search='?stock=9999';await ui.load();assert.equal(opened.length,0);
+ assert.equal(chartCalls.clear,3);
 })().catch(e=>{console.error(e);process.exitCode=1;});
 ''')

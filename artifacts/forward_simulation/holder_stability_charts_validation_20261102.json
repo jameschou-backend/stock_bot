@@ -1,0 +1,164 @@
+{
+  "schema": "holder_stability_chart_validation_v1",
+  "completed": true,
+  "created_at_utc": "2026-11-02T02:16:38.111056+00:00",
+  "base_commit": "16a8e0fb510ca63bc18aa75b6dc611a3b046bb2f",
+  "study_end": "2026-10-30",
+  "members": 112,
+  "chart_sessions": [
+    60,
+    120,
+    240
+  ],
+  "holder_lags": [
+    8,
+    15
+  ],
+  "price_basis": "adjusted",
+  "valid_candles": 26476,
+  "missing_candles": 404,
+  "source_sha256": {
+    "app/holder_stability_web.py": "6199ec2ef44afd20ef57e08e6d23b32050ca00916cce3711e5f396890364e940",
+    "app/holder_stability_charts.py": "2e5341bb5ab5987e04ea657899202cb3bd57b48d12b8c731ed4f756105974abd",
+    "scripts/prepare_holder_stability_charts.py": "26371ba413d5d55dec2cbd08dd3c24571bbb7d28470bc03fe40a672dad9a4b90",
+    "tests/test_holder_stability_web.py": "5f7accd5c1d08cdeb470fe7552bf03a4aa21c2daf9db5d0c0e397bf410651959",
+    "tests/test_holder_stability_charts.py": "05d9d817a28352dadbb102da71e34ad47d3d74e709e9275d88eeb38669b76392",
+    "ui/research_terminal/holder-stability/index.html": "0db3f08ca74a80ec95320816f065d8662d847354d902d5d710496ed30f1265bd",
+    "ui/research_terminal/holder-stability/app.js": "1950f32187181217a517dd739b57765ef3c800bd8a4eebcfc35a757bb15455e8",
+    "ui/research_terminal/holder-stability/app.css": "509fe9d6cfb58236ed0ffc83060b38e021f2ab79241ea6357a4de088eeff3896",
+    "ui/research_terminal/holder-stability/charts.js": "c6ec27f589bde4efd8e5300ed63d2f3cf4d425b4e7d230351577e50203e72f49",
+    "docs/holder_stability_charts.md": "df8d51bf35ccfd411f176b775cd73e4343cd12f6eff5c5d81ca822525594e06d",
+    "artifacts/forward_simulation/holder_stability_charts_20261102.json.gz": "e9b230f77b09076a0ae0b660550c752980f63169e93b1d1531ea35338feacca0",
+    "artifacts/forward_simulation/holder_stability_charts_20261102.json.sha256": "cade9b674c65011d3668b580f8302c5773520d81f400cdd6c1dd88a3b1f2a1ff"
+  },
+  "preservation": {
+    "files_checked": 872,
+    "changed": [],
+    "manifest_sha256": "5e5905ad9d2d547006e8703515f0d7f4cf4f32f0d6dd8e200a701e6c010babbd"
+  },
+  "generator_replay": {
+    "bit_identical": true,
+    "sha256": "e9b230f77b09076a0ae0b660550c752980f63169e93b1d1531ea35338feacca0",
+    "network_requests": 0,
+    "database_writes": 0
+  },
+  "tests": {
+    "make_test": {
+      "exit_code": 0,
+      "passed": 7693,
+      "warnings": 40
+    },
+    "targeted": {
+      "passed": 21
+    },
+    "node_syntax_checks": "passed"
+  },
+  "pipeline": {
+    "command": "AI_ASSIST_ENABLED=0 make pipeline",
+    "exit_code": 0,
+    "cutoff": "2026-10-30"
+  },
+  "http_after_pipeline": {
+    "health": {
+      "http": 200,
+      "count": null
+    },
+    "picks": {
+      "http": 200,
+      "count": 5
+    },
+    "models": {
+      "http": 200,
+      "count": 18
+    },
+    "jobs": {
+      "http": 200,
+      "count": 10
+    },
+    "job_statuses": [
+      {
+        "job_name": "export_report",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:54"
+      },
+      {
+        "job_name": "daily_pick",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:53"
+      },
+      {
+        "job_name": "train_ranker",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:21"
+      },
+      {
+        "job_name": "build_labels",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:20"
+      },
+      {
+        "job_name": "build_features",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:18"
+      },
+      {
+        "job_name": "ingest_fear_greed",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:14"
+      },
+      {
+        "job_name": "ingest_per",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:14"
+      },
+      {
+        "job_name": "ingest_gov_bank",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:14"
+      },
+      {
+        "job_name": "data_quality_check",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:14"
+      },
+      {
+        "job_name": "ingest_securities_lending",
+        "status": "success",
+        "started_at": "2026-11-02T02:15:14"
+      }
+    ]
+  },
+  "browser": {
+    "url": "http://127.0.0.1:8000/terminal/holder-stability/?stock=6442#stock-chart",
+    "evidence": {
+      "candles": 240,
+      "delta": "+0.29 百分點",
+      "holdingPath": 4216,
+      "ratio": "48.59%",
+      "readout": "2026-10-30開 1,245　高 1,265　低 1,185　收 1,230成交量 1,839.47 張600 張級距占比 48.59%觀察 2026-10-22 · 假設可用 2026-10-30依假設可用時間對齊 · 四週變動 +0.29 百分點",
+      "subtitle": "2026-05-07 → 2026-10-30 · 120 個交易日 · 持股觀察日後 8 個日曆日假設可用",
+      "svg": "光聖 6442 還原 K 線、成交量與 600 張級距持股比例，2026-05-07 至 2026-10-30",
+      "title": "光聖 6442 · K 線與籌碼",
+      "watchlist": "顯示 112 / 112 檔"
+    },
+    "verified_actions": [
+      "watchlist search and stock click",
+      "6442 to 6223 switch",
+      "60/120/240 sessions",
+      "8/15 calendar day lags",
+      "Home key synchronized readout",
+      "deep-link reload preserves selected stock and 112 members"
+    ],
+    "screenshot_sha256": "966cef2fc2baf86621f5112a059f0506fa40d3227e9c90c0696f9cde1c5eecbe"
+  },
+  "log_sha256": {
+    "make-test.log": "dfb703b1734805d1d8b4024c0d8778a4c318b6b9daf2b704c77cee53e41db49d",
+    "targeted-tests.log": "ac4ff950676557cb8edcf8ec661774cf8b0df06e740fc98984a01a0a1cf574bb",
+    "make-pipeline.log": "549bc16ab7fdca3c108ebb1864b99954c9b9ba5bfb8a190d93d62bd3b70b0ee6",
+    "replay.log": "256e28b81066e9e58a791143d64ef08d8dd82987f5e3d8201564037a6d30bee4"
+  },
+  "original_strategy_changed": false,
+  "archived_results_changed": false,
+  "live_qualified": false,
+  "historical_publication_verified": false
+}

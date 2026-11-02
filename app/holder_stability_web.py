@@ -3,7 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Path as ApiPath, Query
 from fastapi.responses import FileResponse, RedirectResponse
 
 from app.research_terminal_web import HEADERS
@@ -20,8 +20,8 @@ CANDIDATE_FIELDS = ('stock_id', 'name', 'close', 'drawdown60', 'amount20',
                     'observed_date', 'available_date', 'named_case', 'price_confirmed')
 
 
-def study_view():
-    """Expose display fields only, never local paths, source receipts or live state."""
+def read_report():
+    """Read the pinned study without modifying its original publication."""
     raw = REPORT.read_bytes()
     if hashlib.sha256(raw).hexdigest() != EXPECTED_SHA256:
         raise ValueError('Study integrity mismatch')
@@ -30,6 +30,12 @@ def study_view():
             or report['end'] != '2026-10-30' or report['live_qualified']
             or report['adopted']):
         raise ValueError('Unexpected study identity or qualification')
+    return report
+
+
+def study_view():
+    """Expose display fields only, never local paths, source receipts or live state."""
+    report = read_report()
     latest = report['latest']
     main = [row for row in latest if row['holder_lag'] == 8 and row['stable']]
     delayed = {row['stock_id']: row for row in latest if row['holder_lag'] == 15}
@@ -64,6 +70,21 @@ def redirect():
     return RedirectResponse('/terminal/holder-stability/', status_code=307)
 
 
+@router.get('/research-terminal/api/holder-stability/stocks/{stock_id}')
+def stock_chart(stock_id: str = ApiPath(pattern=r'^[1-9]\d{3}$'),
+                sessions: int = Query(default=120, ge=60, le=240),
+                holder_lag: int = Query(default=8, ge=8, le=15)):
+    if sessions not in (60, 120, 240) or holder_lag not in (8, 15):
+        raise HTTPException(422, '請使用 60／120／240 日及 8／15 日延遲')
+    from app.holder_stability_charts import chart_view, NotWatchlistMember
+    try:
+        return chart_view(stock_id, sessions, holder_lag)
+    except NotWatchlistMember:
+        raise HTTPException(404, '這檔股票不在本次 112 檔觀察名單') from None
+    except (OSError, ValueError, TypeError, KeyError):
+        raise HTTPException(503, '個股圖表來源尚未通過核對，請確認獨立圖表資料完整後重試。') from None
+
+
 @router.get('/terminal/holder-stability/', include_in_schema=False)
 def index():
     return asset('index.html')
@@ -71,7 +92,8 @@ def index():
 
 @router.get('/terminal/holder-stability/{name}', include_in_schema=False)
 def asset(name: str):
-    types = {'index.html': 'text/html', 'app.css': 'text/css', 'app.js': 'text/javascript'}
+    types = {'index.html': 'text/html', 'app.css': 'text/css', 'app.js': 'text/javascript',
+             'charts.js': 'text/javascript'}
     if name not in types:
         raise HTTPException(404, '找不到介面檔案')
     path = ASSETS / name

@@ -9,6 +9,7 @@
   const number = new Intl.NumberFormat('zh-TW', {maximumFractionDigits:2});
   let data = null;
   let generation = 0;
+  function openStock(row) { globalThis.HolderChart.open(row.stock_id, true); }
   const pct = (value, suffix='%') => Number.isFinite(value) ? `${value>0?'+':''}${(value*100).toFixed(2)}${suffix}` : '未知';
   const text = (tag, value, className='') => {
     const element = document.createElement(tag);
@@ -33,7 +34,8 @@
       if (!row) continue;
       const card = text('article','', 'case-card');
       const header = text('div','', 'case-header');
-      const name = text('div',row.name,'case-name');
+      const name = text('button',row.name,'case-name stock-open');
+      name.type = 'button'; name.addEventListener('click',() => openStock(row));
       name.append(text('small',row.stock_id));
       header.append(name, text('span',row.price_confirmed?'已確認':'持股穩定 · 未止跌確認','tag amber-tag'));
       const values = text('div','', 'case-numbers');
@@ -72,7 +74,9 @@
     for (const row of rows) {
       const tr = text('tr','');
       const name = text('td','');
-      name.append(text('span',row.name,'stock-name'),text('span',`${row.stock_id}${row.named_case?' · 指定案例':''}`,'stock-code'));
+      const button = text('button',row.name+' ↗','stock-name stock-open');
+      button.type = 'button'; button.addEventListener('click',() => openStock(row));
+      name.append(button,text('span',`${row.stock_id}${row.named_case?' · 指定案例':''}`,'stock-code'));
       tr.append(name);
       for (const value of [Number.isFinite(row.close)?number.format(row.close):'未知',pct(row.drawdown60),pct(row.large_pct_delta4,''),pct(row.large_units_relative4)]) tr.append(text('td',value));
       const delayed = text('td','');
@@ -86,6 +90,7 @@
   async function load() {
     const current = ++generation, controller = new AbortController();
     data = null; $('study').hidden = true; $('error').hidden = true; $('loading').hidden = false;
+    globalThis.HolderChart.clear();
     const timer = setTimeout(() => controller.abort(),30000);
     try {
       const response = await fetch('/research-terminal/api/holder-stability',{cache:'no-store',signal:controller.signal});
@@ -111,6 +116,8 @@
         $('paired-rows').append(row);
       }
       cases(); comparison(); watchlist(); $('study').hidden = false;
+      const selected = new URLSearchParams(location.search).get('stock');
+      if (selected && data.candidates.some(row => row.stock_id === selected)) globalThis.HolderChart.open(selected, true);
     } catch (error) {
       if (current !== generation) return;
       data = null; $('study').hidden = true; $('error').hidden = false;
@@ -120,6 +127,8 @@
     }
   }
   function bind() {
+    if (!globalThis.HolderChart) throw new Error('圖表元件尚未載入，請重新載入完整介面');
+    globalThis.HolderChart.bind();
     for (const id of ['period','exit','lag','cost']) $(id).addEventListener('change',comparison);
     $('search').addEventListener('input',watchlist);
     for (const id of ['scope','sort']) $(id).addEventListener('change',watchlist);

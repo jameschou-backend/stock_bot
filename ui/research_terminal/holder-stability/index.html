@@ -6,6 +6,7 @@
  <meta name="color-scheme" content="light">
  <title>籌碼穩定研究｜Stock Bot</title>
  <link rel="stylesheet" href="/terminal/holder-stability/app.css">
+ <script defer src="/terminal/holder-stability/charts.js"></script>
  <script defer src="/terminal/holder-stability/app.js"></script>
 </head>
 <body>
@@ -60,7 +61,7 @@
      <details><summary>有效樣本與資料缺口</summary><div id="coverage"></div></details>
     </section>
     <section id="watchlist" class="panel watchlist" aria-labelledby="watch-title">
-     <div class="section-heading"><div><div class="eyebrow">THE OBSERVATION LIST · 2026 / 10 / 30</div><h2 id="watch-title">112 檔觀察名單</h2><p class="muted">固定主設定名單，與上方歷史比較選項分開。</p></div><span class="tag amber-tag">全數尚未止跌確認</span></div>
+     <div class="section-heading"><div><div class="eyebrow">THE OBSERVATION LIST · 2026 / 10 / 30</div><h2 id="watch-title">112 檔觀察名單</h2><p class="muted">點選股票，對照下方 K 線與籌碼；名單固定採主設定。</p></div><span class="tag amber-tag">全數尚未止跌確認</span></div>
      <p class="list-context">使用 10/22 持股快照，對照 9/24；10/30 最新週資料沒有倒填進當日訊號。15 日延遲欄則使用 10/8 對照 9/11。</p>
      <div class="list-controls">
       <label class="search-label">尋找股票<input id="search" type="search" placeholder="輸入名稱或代碼，例如 光聖、6442" autocomplete="off"></label>
@@ -71,6 +72,22 @@
      <div class="list-summary"><span id="list-count" role="status" aria-live="polite"></span><span>表格可左右捲動 · 排序不代表預期報酬或勝率</span></div>
      <div class="table-scroll watch-scroll" tabindex="0" role="region" aria-label="觀察股表格，可上下及左右捲動"><table><caption class="sr-only">10/30 主設定持股穩定觀察股；全部尚未止跌確認</caption><thead><tr><th scope="col">股票</th><th scope="col">10/30 收盤</th><th scope="col">距60日高收盤</th><th scope="col">持股占比變動<small>百分點</small></th><th scope="col">該級距股數變動</th><th scope="col">15日延遲判定</th></tr></thead><tbody id="candidate-rows"></tbody></table><div id="empty" class="empty" hidden>沒有符合搜尋條件的觀察股，請調整或清除篩選。</div></div>
      <p class="footnote">「穩定」容許小幅減少：四週占比下降不超過 0.5 個百分點，而且級距股數下降不超過 1%。15 日欄的「混合」表示兩項門檻只有一項符合；未知不當成穩定。</p>
+    </section>
+    <section id="stock-chart" class="panel stock-chart" aria-labelledby="chart-title">
+     <div class="section-heading"><div><div class="eyebrow">PRICE &amp; LARGE HOLDERS · SAME TIMELINE</div><h2 id="chart-title">個股 K 線與籌碼</h2><p id="chart-subtitle" class="muted">從觀察名單點選股票，或點選上方光聖、旺矽案例。</p></div><span class="tag neutral">截至 2026 / 10 / 30</span></div>
+     <div class="chart-controls"><label>顯示區間<select id="chart-range" aria-label="K 線顯示區間"><option value="60">60 個交易日</option><option value="120" selected>120 個交易日</option><option value="240">240 個交易日</option></select></label><label>籌碼可用時間<select id="chart-lag" aria-label="圖表持股資料延遲"><option value="8">觀察日後 8 日（主設定）</option><option value="15">觀察日後 15 日</option></select></label><span class="muted">只切換圖表，不改觀察名單及回測條件。</span></div>
+     <p id="chart-empty" class="chart-placeholder">點選股票名稱，即可展開價量與持股比例。</p>
+     <p id="chart-loading" class="chart-placeholder" role="status" hidden>正在核對個股圖表資料…</p>
+     <div id="chart-error" class="error" role="alert" hidden><p>個股圖表無法載入，請確認來源完整後重試。</p><button id="chart-retry" type="button">重試圖表</button></div>
+     <div id="chart-content" hidden>
+      <div class="chart-summary"><div><span>還原收盤</span><strong id="chart-close">—</strong></div><div><span>600 張級距持股比例</span><strong id="chart-ratio">—</strong></div><div><span>四週占比變動</span><strong id="chart-delta">—</strong></div></div>
+      <div class="chart-legend"><span><i class="legend-red"></i>紅漲</span><span><i class="legend-green"></i>綠跌</span><span><i class="legend-holder"></i>600 張級距持股比例</span><span>日 K、成交量、持股比例共用日期軸</span></div>
+      <div id="stock-chart-plot" class="stock-chart-plot" tabindex="0" role="group" aria-label="個股 K 線、成交量與持股比例同步圖，點選或使用左右方向鍵查看日期"></div>
+      <div id="chart-readout" class="chart-readout" aria-live="polite"></div>
+      <p id="chart-coverage" class="footnote"></p>
+      <p class="footnote">K 線為還原價，非當時掛單價；成交量為原始股數換算張數。持股級距合計 600,001 股以上，依假設可用日對齊，階梯線不代表每日都有新資料。缺漏、失效或過期區間留空；歷史首次公告時間尚未完整核實。</p>
+      <details><summary>查看逐週持股比例與假設可用日</summary><div class="table-scroll"><table><caption class="sr-only">圖中可用的持股週資料</caption><thead><tr><th>觀察日期</th><th>假設可用日</th><th>600張級距占比</th><th>四週變動</th></tr></thead><tbody id="chart-weeks"></tbody></table></div></details>
+     </div>
     </section>
     <section id="method" class="panel method" aria-labelledby="method-title">
      <div class="eyebrow">HOW TO READ THIS STUDY</div><h2 id="method-title">先看規則，也看資料能說到哪裡。</h2>
