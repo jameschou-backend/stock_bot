@@ -1,0 +1,444 @@
+{
+  "schema": "scanner_daily_validation_v1",
+  "checked_at": "2026-11-04T10:39:51.466421+00:00",
+  "publication": "artifacts/forward_simulation/strategy_scanner_20261104_close.json",
+  "publication_sha256": "78c341c1c196a6980b11dc6038778325256ce8766ed5385f521cd07c3abe9f41",
+  "latest_session": "2026-11-04",
+  "new_dates": [
+    "2026-11-02",
+    "2026-11-03",
+    "2026-11-04"
+  ],
+  "historical_scan_dates_reused": 21,
+  "historical_poc_profiles_reused": 4972,
+  "historical_scan_dates_recomputed": 0,
+  "protected_tracked_archive_and_scanner_files_unchanged": 876,
+  "original_strategy_changed": false,
+  "backtests_run": 0,
+  "orders_or_fills_created": false,
+  "finmind": {
+    "new_tick_requests": 0,
+    "tick_coordinates": 0,
+    "new_daily_reference_requests": 11,
+    "daily_reference_calls": 12,
+    "tick_status_counts": {},
+    "quota_after_tick_fetch": {
+      "requests_in_window": 18,
+      "window_start_time": 1793788203.1111958,
+      "total_requests": 78012,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4842,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    }
+  },
+  "daily_scans": [
+    {
+      "date": "2026-11-02",
+      "gate": "OFF",
+      "adjusted_0050": 104.1,
+      "ma120": 105.05307963709677,
+      "poc_matches": 0,
+      "obv_matches": 13,
+      "obv_ids": [
+        "1102",
+        "1528",
+        "1590",
+        "1907",
+        "2207",
+        "2603",
+        "3147",
+        "4577",
+        "5013",
+        "6214",
+        "6234",
+        "6870",
+        "9933"
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "gate": "OFF",
+      "adjusted_0050": 100.6,
+      "ma120": 105.08796875,
+      "poc_matches": 0,
+      "obv_matches": 3,
+      "obv_ids": [
+        "2465",
+        "2618",
+        "3287"
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "gate": "OFF",
+      "adjusted_0050": 99.85,
+      "ma120": 105.11743615591398,
+      "poc_matches": 0,
+      "obv_matches": 10,
+      "obv_ids": [
+        "1528",
+        "2033",
+        "3147",
+        "4533",
+        "4577",
+        "4720",
+        "5880",
+        "6150",
+        "6446",
+        "6672"
+      ]
+    }
+  ],
+  "daily_data_checks": {
+    "2026-11-02": {
+      "date": "2026-11-02",
+      "frozen_cohort_counts": {
+        "matched": 1934,
+        "missing_both": 108,
+        "invalid_price_excluded": 35
+      },
+      "ohlc_conflicts": [],
+      "volume_scopes_not_equated": true,
+      "corporate_action_event_count": 1,
+      "adjustment_bridge_independently_certified": false,
+      "source_sha256": {
+        ".cache/scanner-20261102-close/provider/TaiwanStockPrice-2026-11-02.parquet": "9bbe1cc4d1ff10e4c76ad1cf531ce2fac3ea9e4b8d0531ee7bd34d2843c53fb2",
+        ".cache/scanner-20261102-close/official-v1/normalized/official-normalized.parquet": "7b96fd4d5c9192f7edbb3e303da4b56a90ebf944035a8366ed3de57fdef5f19a"
+      }
+    },
+    "2026-11-03": {
+      "date": "2026-11-03",
+      "frozen_cohort_counts": {
+        "matched": 1943,
+        "invalid_price_excluded": 26,
+        "missing_both": 108
+      },
+      "ohlc_conflicts": [],
+      "volume_scopes_not_equated": true,
+      "corporate_action_event_count": 0,
+      "adjustment_bridge_independently_certified": false,
+      "source_sha256": {
+        ".cache/scanner-20261103-close/provider/TaiwanStockPrice-2026-11-03.parquet": "27bfd5f5df3d04bbc300d2aa1bd6c376526715349038a23a758d7b12b351b77c",
+        ".cache/scanner-20261103-close/official-v1/normalized/official-normalized.parquet": "e5b86f4f2c8887ea1faf5a7ea7bd833682d79a234b18fab48bd760629a5803a4"
+      }
+    },
+    "2026-11-04": {
+      "date": "2026-11-04",
+      "frozen_cohort_counts": {
+        "matched": 1957,
+        "missing_both": 108,
+        "invalid_price_excluded": 12
+      },
+      "ohlc_conflicts": [],
+      "volume_scopes_not_equated": true,
+      "corporate_action_event_count": 1,
+      "adjustment_bridge_independently_certified": false,
+      "source_sha256": {
+        ".cache/scanner-20261104-close/provider/TaiwanStockPrice-2026-11-04.parquet": "d7830bfca9e415715b99083eaa8947e2dfe7cae38a6dbd5c53358890a44ae292",
+        ".cache/scanner-20261104-close/official-v1/normalized/official-normalized.parquet": "25a5b5b30cb3b778ae84a2f09471586632888064ebded3004b8a3aaea1b6c04f"
+      }
+    }
+  },
+  "scan_status_counts": [
+    {
+      "strategy_id": "poc_up_red",
+      "name": "POC 上移＋紅 K（獨立硬篩研究版）",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 0,
+      "first": 0,
+      "matched_first_unknown": 0,
+      "unknown": 50,
+      "not_matched": 1887,
+      "ineligible": 139
+    },
+    {
+      "strategy_id": "obv20_breakout",
+      "name": "OBV 突破 20 日高點",
+      "kind": "entry",
+      "scope": "general_frozen_stock_universe",
+      "evaluated_stocks": 2076,
+      "matched": 10,
+      "first": 10,
+      "matched_first_unknown": 0,
+      "unknown": 180,
+      "not_matched": 1747,
+      "ineligible": 139
+    }
+  ],
+  "database_cutoff_note": "After the close, verified official prices and scanner inputs cover 2026-11-04. The configured evening full-data cutoff before 21:00 Asia/Taipei is 2026-11-03.",
+  "data_readiness": {
+    "price_date": "2026-11-03",
+    "expected_date": "2026-11-03",
+    "feature_date": "2026-11-03",
+    "feature_stocks": 2120,
+    "markets": [
+      {
+        "market": "TPEX",
+        "date": "2026-11-03",
+        "stocks": 873
+      },
+      {
+        "market": "TWSE",
+        "date": "2026-11-03",
+        "stocks": 1086
+      }
+    ],
+    "data_ready": true,
+    "problems": []
+  },
+  "dataset_market_counts": {
+    "raw_prices": [
+      {
+        "trading_date": "2026-11-02",
+        "market": "EMERGING",
+        "stocks": 367
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TPEX",
+        "stocks": 893
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TWSE",
+        "stocks": 1092
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "EMERGING",
+        "stocks": 367
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TPEX",
+        "stocks": 893
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TWSE",
+        "stocks": 1092
+      }
+    ],
+    "raw_institutional": [
+      {
+        "trading_date": "2026-11-02",
+        "market": "EMERGING",
+        "stocks": 143
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TPEX",
+        "stocks": 763
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TWSE",
+        "stocks": 1079
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "EMERGING",
+        "stocks": 169
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TPEX",
+        "stocks": 795
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TWSE",
+        "stocks": 1080
+      }
+    ],
+    "raw_margin_short": [
+      {
+        "trading_date": "2026-11-02",
+        "market": "TPEX",
+        "stocks": 802
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TWSE",
+        "stocks": 1061
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TPEX",
+        "stocks": 802
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TWSE",
+        "stocks": 1062
+      }
+    ],
+    "raw_per": [
+      {
+        "trading_date": "2026-11-02",
+        "market": "TPEX",
+        "stocks": 892
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TWSE",
+        "stocks": 1088
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TPEX",
+        "stocks": 892
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TWSE",
+        "stocks": 1088
+      }
+    ],
+    "securities_lending_daily": [
+      {
+        "trading_date": "2026-11-02",
+        "market": "TPEX",
+        "stocks": 107
+      },
+      {
+        "trading_date": "2026-11-02",
+        "market": "TWSE",
+        "stocks": 353
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TPEX",
+        "stocks": 106
+      },
+      {
+        "trading_date": "2026-11-03",
+        "market": "TWSE",
+        "stocks": 330
+      }
+    ]
+  },
+  "dataset_counts_note": "Distinct stock IDs including zero-trade/invalid quote rows; positive-price coverage is separately reported by data_status.",
+  "lending_completed_days": [
+    {
+      "trading_date": "2026-11-02",
+      "source_rows": 1492,
+      "stock_rows": 462,
+      "payload_sha256": "cdcaeee435c9bd685877eb490e209009075f8a244f59da7681b8ab75c0b8c6ed"
+    },
+    {
+      "trading_date": "2026-11-03",
+      "source_rows": 1396,
+      "stock_rows": 436,
+      "payload_sha256": "1a78bed8dbcd6f53276c8a58ccecbc77415a2a090c36daf6061b288524ce2ead"
+    }
+  ],
+  "api": {
+    "health": {
+      "route": "/health",
+      "status": 200,
+      "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+    },
+    "picks": {
+      "route": "/picks",
+      "status": 200,
+      "sha256": "28882222ad2bb914dbf0a65ec080f6b3d6102498ef29935114e492ab0f814ecf"
+    },
+    "models": {
+      "route": "/models",
+      "status": 200,
+      "sha256": "6d598c23b479ee930d8a95b1fa2e7a6e553a90097dbcaa167263c6583d5558e1"
+    },
+    "jobs": {
+      "route": "/jobs?limit=10",
+      "status": 200,
+      "sha256": "807f932617c2fac53781940296c6608e75b80533220e10843f1ed29f392fbb3c"
+    },
+    "data": {
+      "route": "/workbench/status",
+      "status": 200,
+      "sha256": "88b85bdc777b5d06e66e0940bcbd0f534166620ac3c76cb3dc8cb25ac40046d7"
+    },
+    "overview": {
+      "route": "/research-terminal/api/overview",
+      "status": 200,
+      "sha256": "a5a461270512516358a0f298c28eaeffd7a0b0245c887d63b6df8bb046e5e112"
+    },
+    "archive": {
+      "route": "/research-terminal/api/archive/strategy_scanner_20261104_close",
+      "status": 200,
+      "sha256": "78c341c1c196a6980b11dc6038778325256ce8766ed5385f521cd07c3abe9f41"
+    },
+    "2026-11-02-poc_up_red": {
+      "route": "/research-terminal/api/signals?date=2026-11-02&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "1d61de283ce06618993f76967f4c611ef4ec85b8c1f6cdb854892d34f9a43e03"
+    },
+    "2026-11-02-obv20_breakout": {
+      "route": "/research-terminal/api/signals?date=2026-11-02&strategy_id=obv20_breakout",
+      "status": 200,
+      "sha256": "fab621ef30922e4dc1f9d2ab7e401289075f8f411931bf6f23d590c073d88314"
+    },
+    "2026-11-03-poc_up_red": {
+      "route": "/research-terminal/api/signals?date=2026-11-03&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "cb16a3fcb61815730e531e88f46149947cacd80163bd3ea29485bb6f121c659c"
+    },
+    "2026-11-03-obv20_breakout": {
+      "route": "/research-terminal/api/signals?date=2026-11-03&strategy_id=obv20_breakout",
+      "status": 200,
+      "sha256": "16d2991882b7a19711df3ba23c0b02d3fb8d7f5f2df2881c8f8d7782b3c3ecaf"
+    },
+    "2026-11-04-poc_up_red": {
+      "route": "/research-terminal/api/signals?date=2026-11-04&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "fc2ce1c54741a3ebbf83e8d1496da538f3739a098ed7f1bedb07b4fbd08c274c"
+    },
+    "2026-11-04-obv20_breakout": {
+      "route": "/research-terminal/api/signals?date=2026-11-04&strategy_id=obv20_breakout",
+      "status": 200,
+      "sha256": "fa4c0d9efe83a25d70b39fd419e9c36afeb476746d6e0d7fd33f04e95117ad77"
+    },
+    "prior-2026-10-29": {
+      "route": "/research-terminal/api/signals?date=2026-10-29&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "6f8c09a70d0c366ef20e5d8706a2bafe6773b8afcf0296f7bdaca708eb6f7ac5"
+    },
+    "prior-2026-10-30": {
+      "route": "/research-terminal/api/signals?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "e24b63e9dee76861274a860bc6a0c9a72ebdbfd325e7ba9a35d103009ca54612"
+    },
+    "chart-1528": {
+      "route": "/research-terminal/api/stocks/1528?date=2026-11-04&strategy_id=obv20_breakout",
+      "status": 200,
+      "sha256": "8f2de12e6fe3d89bc5c89ffe61909e3162294f1c5fbf3a94349a620aafd4afab"
+    }
+  },
+  "download_byte_exact": true,
+  "browser": {
+    "date": "2026-11-04",
+    "matched": "10檔",
+    "rows": 10,
+    "strategy": "obv20_breakout",
+    "triggered": "10檔"
+  },
+  "pipeline": {
+    "successful_runs": 2,
+    "reference_trading_date": "2026-11-03",
+    "data_quality_passed": true,
+    "features_written_on_rerun": 0,
+    "labels_written_on_rerun": 0,
+    "lending_requests_on_rerun": 0
+  },
+  "tests": {
+    "passed": 7777,
+    "warnings": 40,
+    "seconds": 226.76
+  },
+  "live_qualified": false
+}
