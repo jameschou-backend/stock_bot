@@ -25,6 +25,7 @@ def diagnose(store, daily, trades):
     volume, bar_rows, trade_rows, unknown = Decimal(0), 0, 0, 0
     raw_volume, first, last = Decimal(0), None, None
     exchanges, tapes = set(), set()
+    seen_ids, repeated_ids = set(), set()
     for snapshot in (daily,trades):
         for page in snapshot["pages"]:
             # Verify stored bytes before reading the normalized data.
@@ -38,6 +39,11 @@ def diagnose(store, daily, trades):
                     raw_volume += row["shares"]
                     unknown += row["conditions"] is None
                     exchanges.add(row["exchange"])
+                    venue_id = (row["exchange"], row["tape"], row["trade_id"])
+                    if venue_id in seen_ids:
+                        repeated_ids.add(venue_id)
+                    else:
+                        seen_ids.add(venue_id)
                     if row["tape"] is not None:
                         tapes.add(row["tape"])
                     stamp = row["timestamp_ns"]
@@ -49,6 +55,7 @@ def diagnose(store, daily, trades):
                 daily_rows=bar_rows,trade_rows=trade_rows,daily_volume=str(volume),raw_trade_shares=str(raw_volume),
                 raw_volume_equal=(raw_volume == volume) if bar_rows == 1 and trade_rows else None,
                 unknown_trade_conditions=unknown,exchanges=sorted(exchanges),tapes=sorted(tapes),
+                repeated_venue_trade_id_groups=len(repeated_ids),
                 first_timestamp_ns=first,last_timestamp_ns=last,
                 comparison_scope="Unfiltered raw trades; bar volume eligibility differs by sale condition. Equality is not completeness proof.",
                 calendar_verified=False,trade_conditions_reconciled=False,corrections_reconciled=False,

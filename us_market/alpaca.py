@@ -181,8 +181,9 @@ class AlpacaQuery:
     def row_identity(self, row):
         if self.dataset == "daily":
             return (row["timestamp_ns"],)
-        # Same-time/same-price prints with different IDs remain independent.
-        return (row["session_date"],row["exchange"],row["tape"],row["trade_id"])
+        # SIP reports from multiple venues can repeat an ID at different times.
+        # Keep the observations for reconciliation, retaining the overlap check.
+        return (row["exchange"], row["tape"], row["trade_id"], row["timestamp_ns"])
 
     def publication_fields(self):
         return dict(schema="alpaca_us_snapshot_v1",feed="sip",symbol_mapping="asof=-",

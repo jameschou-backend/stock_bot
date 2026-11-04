@@ -102,10 +102,24 @@ def test_resume_empty_continuation_and_offline_replay_are_idempotent(store):
     assert size==store.capacity()["used_bytes"]
 
 
-def test_repeated_identity_with_different_timestamp_is_a_conflict(store):
+def test_same_timestamp_and_venue_identity_with_different_size_is_a_conflict(store):
     with pytest.raises(ValueError,match="Duplicate"):
-        ingest(query(),store,Pages([page([trade()],"two"),page([dict(trade(),t="2026-10-29T14:00:01Z")])]))
+        ingest(query(),store,Pages([page([trade()],"two"),page([dict(trade(),s=50)])]))
     assert not store.snapshots()
+
+
+@pytest.mark.parametrize("venue", ["D", "T", "N"])
+def test_trade_id_can_recur_at_different_nanoseconds(store, venue):
+    first = dict(trade(), x=venue)
+    later = dict(first, t="2026-10-29T14:00:00.123456790Z", s="50")
+    result, ref = ingest(query(), store, Pages([page([first], "two"), page([later])]))
+    assert result["rows"] == 2 and ingest(query(), store) == (result, ref)
+
+    bar = dict(t="2026-10-29T04:00:00Z", o=100, h=101, l=99, c=100, v=50)
+    daily, _ = ingest(query("daily"), store, Pages([{"bars": {"AAPL": [bar]}}]))
+    report = diagnose(store, daily, result)
+    assert report["repeated_venue_trade_id_groups"] == 1
+    assert not report["poc_ready"]
 
 
 def test_page_budget_and_loop_never_publish_partial(store):

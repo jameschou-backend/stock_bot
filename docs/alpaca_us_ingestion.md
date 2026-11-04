@@ -57,7 +57,7 @@ of 20 HTTP requests across daily bars and trades. It checks offline replay and
 writes an immutable diagnostic receipt:
 
 ```sh
-python -m us_market.alpaca_smoke --ticker KO --date 2026-10-29 --fetch
+python -m us_market.alpaca_smoke --ticker KO --date 2019-11-29 --fetch
 ```
 
 No `--fetch` means offline-only. If a symbol needs more than the request budget,
@@ -94,8 +94,11 @@ directory remains needed to resolve the manifest's relative path.
   acquisition waits until at least 15 minutes after the NY date has ended.
 - Retain native alphabetic exchanges/conditions, tape, trade ID, timestamps,
   exact fractional shares and prices. Unknown conditions remain null. Do not
-  interpret these as Massive numeric enums. Missing identity or duplicate
-  identities fail rather than silently dropping prints.
+  interpret these as Massive numeric enums. SIP reports from the same venue
+  can repeat a trade ID at different timestamps. Preserve both observations
+  and count repeated venue/tape/ID groups in the diagnostic for review before
+  using their volume. A repeated venue/tape/ID at the same nanosecond or a
+  missing identity stops publication for review.
 - Complete pagination means every continuation token was exhausted. It does
   not prove market completeness, stable point-in-time revisions, corporate
   action consistency, correction/cancellation reconciliation or POC readiness.
