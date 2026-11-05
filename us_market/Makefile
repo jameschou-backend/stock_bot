@@ -6,7 +6,7 @@ PORT ?= 8001
 PYTHON ?= python
 .PHONY: test pipeline api
 test:
-	cd "$(REPO)" && $(PYTHON) -m pytest -q tests/test_us_market.py tests/test_alpaca_market.py
+	cd "$(REPO)" && $(PYTHON) -m pytest -q tests/test_us_market.py tests/test_alpaca_market.py tests/test_us_research.py
 pipeline:
 	cd "$(REPO)" && $(PYTHON) -m us_market.cli fixture --provider "$(PROVIDER)" --root "$(DATA_ROOT)"
 api:
