@@ -1,0 +1,324 @@
+{
+  "schema": "scanner_daily_validation_v1",
+  "checked_at": "2026-11-06T00:12:58.134598+00:00",
+  "publication": "artifacts/forward_simulation/strategy_scanner_20261105_close.json",
+  "publication_sha256": "6ef64aca8449cd9b02bc1a1f2a2a24d417cb562d1001e6c8a17bf9d9d4655064",
+  "latest_session": "2026-11-05",
+  "new_dates": [
+    "2026-11-05"
+  ],
+  "historical_scan_dates_reused": 24,
+  "historical_poc_profiles_reused": 4972,
+  "historical_scan_dates_recomputed": 0,
+  "protected_strategy_and_archive_files_unchanged": 1347,
+  "preservation_manifest": "artifacts/backtest/holder_obv_incremental_20261106/protected-before.json",
+  "original_strategy_changed": false,
+  "orders_or_fills_created": false,
+  "finmind": {
+    "new_tick_requests": 0,
+    "tick_coordinates": 0,
+    "new_daily_reference_requests": 3,
+    "daily_reference_calls": 4,
+    "tick_status_counts": {},
+    "quota_after_tick_fetch": {
+      "requests_in_window": 10,
+      "window_start_time": 1793923260.0272388,
+      "total_requests": 78273,
+      "total_wait_time": 0.0,
+      "effective_limit": 4860,
+      "remaining_requests": 4850,
+      "retry_after_seconds": 0.0,
+      "cooldown_until": 0.0
+    }
+  },
+  "daily_scans": [
+    {
+      "date": "2026-11-05",
+      "gate": "OFF",
+      "adjusted_0050": 97.15,
+      "ma120": 105.12481770833332,
+      "poc_matches": 0,
+      "obv_matches": 5,
+      "obv_ids": [
+        "1736",
+        "2610",
+        "4755",
+        "7711",
+        "9921"
+      ]
+    }
+  ],
+  "daily_data_checks": {
+    "2026-11-05": {
+      "date": "2026-11-05",
+      "frozen_cohort_counts": {
+        "matched": 1955,
+        "invalid_price_excluded": 12,
+        "missing_both": 110
+      },
+      "ohlc_conflicts": [],
+      "volume_scopes_not_equated": true,
+      "corporate_action_event_count": 2,
+      "adjustment_bridge_independently_certified": false,
+      "source_sha256": {
+        ".cache/scanner-20261105-close/provider/TaiwanStockPrice-2026-11-05.parquet": "3aeb66437eae55f7922e94e669e08881529802e92d6ff6c3cf969daf57033553",
+        ".cache/scanner-20261105-close/official-v1/normalized/official-normalized.parquet": "c223f9a9115936d763f09389ba53461acc95d51229bcb6eb2267105a12f34c83"
+      }
+    }
+  },
+  "data_readiness": {
+    "price_date": "2026-11-05",
+    "expected_date": "2026-11-05",
+    "feature_date": "2026-11-05",
+    "feature_stocks": 2122,
+    "markets": [
+      {
+        "market": "TPEX",
+        "date": "2026-11-05",
+        "stocks": 882
+      },
+      {
+        "market": "TWSE",
+        "date": "2026-11-05",
+        "stocks": 1089
+      }
+    ],
+    "data_ready": true,
+    "problems": []
+  },
+  "dataset_market_counts": {
+    "raw_prices": [
+      {
+        "trading_date": "2026-11-05",
+        "market": "EMERGING",
+        "stocks": 367
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TPEX",
+        "stocks": 892
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TWSE",
+        "stocks": 1091
+      }
+    ],
+    "raw_institutional": [
+      {
+        "trading_date": "2026-11-05",
+        "market": "EMERGING",
+        "stocks": 168
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TPEX",
+        "stocks": 789
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TWSE",
+        "stocks": 1083
+      }
+    ],
+    "raw_margin_short": [
+      {
+        "trading_date": "2026-11-05",
+        "market": "TPEX",
+        "stocks": 802
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TWSE",
+        "stocks": 1062
+      }
+    ],
+    "raw_per": [
+      {
+        "trading_date": "2026-11-05",
+        "market": "TPEX",
+        "stocks": 891
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TWSE",
+        "stocks": 1087
+      }
+    ],
+    "securities_lending_daily": [
+      {
+        "trading_date": "2026-11-05",
+        "market": "TPEX",
+        "stocks": 120
+      },
+      {
+        "trading_date": "2026-11-05",
+        "market": "TWSE",
+        "stocks": 385
+      }
+    ]
+  },
+  "dataset_counts_note": "Distinct stock IDs including zero-trade/invalid quote rows; positive-price coverage is separately reported by data_status.",
+  "lending_completed_days": [
+    {
+      "trading_date": "2026-11-05",
+      "source_rows": 1651,
+      "stock_rows": 507,
+      "payload_sha256": "ee1269759a614b48ab19f4fad63751218fed634125236ce4581bb8580d358fb0"
+    }
+  ],
+  "api": {
+    "health": {
+      "route": "/health",
+      "status": 200,
+      "sha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288"
+    },
+    "picks": {
+      "route": "/picks",
+      "status": 200,
+      "sha256": "2e4818c8882332d95ff9bd49d175cd409cb1f12221e2e8c1f6f9df1d1dc2b0e2"
+    },
+    "models": {
+      "route": "/models",
+      "status": 200,
+      "sha256": "6d598c23b479ee930d8a95b1fa2e7a6e553a90097dbcaa167263c6583d5558e1"
+    },
+    "jobs": {
+      "route": "/jobs?limit=10",
+      "status": 200,
+      "sha256": "9c3b430bf360be38f1921229cf80d75c664e9caae973995927f845535e2c7380"
+    },
+    "data": {
+      "route": "/workbench/status",
+      "status": 200,
+      "sha256": "d6c2d1fb9df10f76af920c371c1c4ea507631db955763978351c92b665123c99"
+    },
+    "overview": {
+      "route": "/research-terminal/api/overview",
+      "status": 200,
+      "sha256": "990ef399a5e73d2c057317d28af3ebcf9599dee3b98038d405eaa36e6051a80c"
+    },
+    "archive": {
+      "route": "/research-terminal/api/archive/strategy_scanner_20261105_close",
+      "status": 200,
+      "sha256": "6ef64aca8449cd9b02bc1a1f2a2a24d417cb562d1001e6c8a17bf9d9d4655064"
+    },
+    "2026-11-05-poc_up_red": {
+      "route": "/research-terminal/api/signals?date=2026-11-05&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "04889fbc77725a94bdd3e03354d1f38590fbef735083b87fea4028d9675ba9e1"
+    },
+    "2026-11-05-obv20_breakout": {
+      "route": "/research-terminal/api/signals?date=2026-11-05&strategy_id=obv20_breakout",
+      "status": 200,
+      "sha256": "651b0c0122b16d289565bcc306c0f0c60abed73a075dba5955007df07bc5adaa"
+    },
+    "prior-2026-10-29": {
+      "route": "/research-terminal/api/signals?date=2026-10-29&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "6f8c09a70d0c366ef20e5d8706a2bafe6773b8afcf0296f7bdaca708eb6f7ac5"
+    },
+    "prior-2026-10-30": {
+      "route": "/research-terminal/api/signals?date=2026-10-30&strategy_id=poc_up_red",
+      "status": 200,
+      "sha256": "e24b63e9dee76861274a860bc6a0c9a72ebdbfd325e7ba9a35d103009ca54612"
+    },
+    "chart-1736": {
+      "route": "/research-terminal/api/stocks/1736?date=2026-11-05&strategy_id=obv20_breakout",
+      "status": 200,
+      "sha256": "707b10ad39dfeec2d8da21351153f263e0207525b088e6e276960f02bb34531b"
+    }
+  },
+  "download_byte_exact": true,
+  "browser": {
+    "date": "2026-11-05",
+    "strategy": "obv20_breakout",
+    "matched": 5,
+    "stock_chart": "1736",
+    "screenshot": ".cache/scanner-20261105-close/browser-obv.jpg",
+    "screenshot_sha256": "f9744efe47e49551321d9b309daae8043da2649e0d4a2b23b2a125247925106a"
+  },
+  "pipeline": {
+    "successful_runs": 2,
+    "reference_trading_date": "2026-11-05",
+    "data_quality_passed": true,
+    "features_written_on_rerun": 0,
+    "labels_written_on_rerun": 0,
+    "lending_requests_on_rerun": 0,
+    "logs": [
+      {
+        "path": "artifacts/backtest/holder_obv_incremental_20261106/pipeline-1.log",
+        "sha256": "c030a227b2aa6319b38d1a3752940aa7e8418b482c0255579f65683c9dd0adb1"
+      },
+      {
+        "path": "artifacts/backtest/holder_obv_incremental_20261106/pipeline-2.log",
+        "sha256": "d8663391a941686206b9dd3fc91078240f5fbe65562b81f892f355a15a9c9b39"
+      }
+    ]
+  },
+  "tests": {
+    "passed": 7795,
+    "warnings": 40,
+    "seconds": 215.15,
+    "log": "artifacts/backtest/holder_obv_incremental_20261106/make-test-final.log",
+    "sha256": "cd90a4a3ab887a54230e5fd99808f3287c7472642038aa3e0a51fe53f7bed525"
+  },
+  "independent_obv_research": {
+    "report": "artifacts/backtest/holder_obv_incremental_20261106/report.md",
+    "report_sha256": "9e1535fae9bc68d853b4b6a5d937f66322bd657577e663a1fc05ef1d81bbe2ac",
+    "manifest": "artifacts/backtest/holder_obv_incremental_20261106/sha256.json",
+    "manifest_sha256": "33769be61e4ea62c17fabe1da3ed06c11f6aca6e70b6e9b5c2dbeeb9cd20a8e4",
+    "research_only": true,
+    "unseen_validation": false,
+    "audit": {
+      "cashflow_checks": [
+        {
+          "arm": "all",
+          "trades": 349,
+          "reconciled": true
+        },
+        {
+          "arm": "obv_on",
+          "trades": 161,
+          "reconciled": true
+        },
+        {
+          "arm": "obv_off",
+          "trades": 347,
+          "reconciled": true
+        }
+      ],
+      "source_truncation_checks": [
+        {
+          "cutoff": "2024-12-31",
+          "events": 3014,
+          "unchanged": true
+        },
+        {
+          "cutoff": "2025-12-31",
+          "events": 4635,
+          "unchanged": true
+        }
+      ],
+      "protected_files_unchanged": 1347,
+      "paired_controls_no_reuse": true,
+      "prior_diagnostic_exception": {
+        "path": ".cache/scanner-20261104-close/data-audit.json",
+        "expected_sha256": "396389d95dffff321340b6440b4b8934f75acc17a3e83134a6382a5c373dc54d",
+        "observed_sha256": "efaf9d8f331c3901d819acd0038d650c5884c96f9ce37616862cb283c0dbda83",
+        "reason": "Prior dated DB audit script was inadvertently executed and overwrote its runtime data-audit.json with current database status. Historical frozen report JSON and price, holder and POC input files were not modified. This ancillary source cannot pass the old report reference hash.",
+        "restoration_verified": false
+      },
+      "research_only": true,
+      "unseen_validation": false
+    }
+  },
+  "prior_diagnostic_exception": {
+    "path": ".cache/scanner-20261104-close/data-audit.json",
+    "expected_sha256": "396389d95dffff321340b6440b4b8934f75acc17a3e83134a6382a5c373dc54d",
+    "observed_sha256": "efaf9d8f331c3901d819acd0038d650c5884c96f9ce37616862cb283c0dbda83",
+    "reason": "Prior dated DB audit script was inadvertently executed and overwrote its runtime data-audit.json with current database status. Historical frozen report JSON and price, holder and POC input files were not modified. This ancillary source cannot pass the old report reference hash.",
+    "restoration_verified": false
+  },
+  "live_qualified": false
+}

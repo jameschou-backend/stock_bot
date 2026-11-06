@@ -8,6 +8,7 @@ import re
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLICATIONS = (
+    ('strategy_scanner_20261105_close', '11/5 POC 與 OBV 收盤訊號', '2026-11-05', 'data', '追加 11/5 收盤資料。原版 POC 0 檔，OBV 突破 20 日高點 5 檔。'),
     ('strategy_scanner_20261104_close', '11/4 POC 與 OBV 收盤訊號', '2026-11-04', 'data', '追加 11/2 至 11/4 三個交易日。11/4 原版 POC 0 檔，OBV 突破 20 日高點 10 檔。'),
     ('strategy_scanner_20261030_close', '10/30 POC訊號與當日掃描', '2026-10-30', 'data', '補上10/30；原版0050均線濾網轉OFF，POC無新候選；重用20天訊號與4972筆POC紀錄'),
     ('strategy_scanner_20261029_close', '10/29 POC訊號與當日掃描', '2026-10-29', 'data', '補上10/29及95組逐筆；重用19天訊號與4962筆POC紀錄，原策略不變'),
